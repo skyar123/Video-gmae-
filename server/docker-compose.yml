@@ -1,0 +1,26 @@
+services:
+  kimi-audio:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    ports:
+      - "8000:8000"
+    environment:
+      # Lock this to your Netlify origin once you know it.
+      KIMI_ALLOWED_ORIGINS: "*"
+      # Uncomment to require a bearer token on /v1/generate.
+      # KIMI_API_KEY: "change-me"
+      KIMI_LOAD_DETOKENIZER: "1"
+    volumes:
+      # Persist the ~15GB checkpoint across container rebuilds.
+      - hf-cache:/root/.cache/huggingface
+    deploy:
+      resources:
+        reservations:
+          devices:
+            - driver: nvidia
+              count: 1
+              capabilities: [gpu]
+
+volumes:
+  hf-cache:

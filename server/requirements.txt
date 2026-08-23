@@ -1,0 +1,7 @@
+# Server layer only. Kimi-Audio's own dependencies come from the upstream
+# repo's requirements.txt, installed alongside these in the Dockerfile.
+fastapi==0.115.6
+uvicorn[standard]==0.34.0
+pydantic==2.10.4
+python-multipart==0.0.20
+soundfile

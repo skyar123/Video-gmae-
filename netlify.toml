@@ -1,0 +1,31 @@
+# Netlify configuration — Kimi-Audio Console
+# The static console in ./public is what Netlify hosts.
+# The Kimi-Audio model itself runs on a GPU backend (see ./server).
+
+[build]
+  publish  = "public"
+  functions = "netlify/functions"
+  # No bundler step: the console is dependency-free vanilla JS.
+  command  = "echo 'static console — nothing to build'"
+
+[build.environment]
+  NODE_VERSION = "22"
+
+[functions]
+  node_bundler = "esbuild"
+
+# /api/* routes are declared by each function's exported `config.path`.
+
+# SPA-ish fallback so deep links land on the console.
+[[redirects]]
+  from   = "/*"
+  to     = "/index.html"
+  status = 200
+
+[[headers]]
+  for = "/*"
+  [headers.values]
+    X-Frame-Options         = "SAMEORIGIN"
+    X-Content-Type-Options  = "nosniff"
+    Referrer-Policy         = "strict-origin-when-cross-origin"
+    Permissions-Policy      = "microphone=(self)"

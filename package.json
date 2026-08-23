@@ -1,0 +1,16 @@
+{
+  "name": "kimi-audio-netlify",
+  "version": "1.0.0",
+  "private": true,
+  "type": "module",
+  "description": "Netlify-hosted web console for Kimi-Audio (MoonshotAI), plus the GPU backend service it drives.",
+  "scripts": {
+    "dev": "netlify dev",
+    "deploy": "netlify deploy --build --prod",
+    "deploy:preview": "netlify deploy --build"
+  },
+  "engines": {
+    "node": ">=20"
+  },
+  "license": "MIT"
+}
