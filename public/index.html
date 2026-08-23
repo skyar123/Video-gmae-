@@ -3,160 +3,179 @@
 <head>
 <meta charset="utf-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1" />
-<title>Kimi-Audio Console</title>
-<meta name="description" content="Web console for Kimi-Audio (MoonshotAI) — transcribe, ask, and chat with audio against your own GPU backend." />
-<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🎧</text></svg>" />
+<title>Whisper Studio</title>
+<meta name="description" content="Transcribe audio with OpenAI Whisper — free, in your browser with WebGPU or via Groq's free tier. No account required." />
+<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🎙️</text></svg>" />
 <link rel="stylesheet" href="/styles.css" />
 </head>
 <body>
 
 <header class="topbar">
   <div class="brand">
-    <span class="brand-mark">🎧</span>
+    <span class="brand-mark">🎙️</span>
     <div>
-      <h1>Kimi-Audio Console</h1>
-      <p class="brand-sub">MoonshotAI Kimi-Audio-7B-Instruct</p>
+      <h1>Whisper Studio</h1>
+      <p class="brand-sub">Speech to text · free · nothing to install</p>
     </div>
   </div>
   <div class="topbar-right">
-    <span id="statusPill" class="pill pill-idle" role="status" aria-live="polite">
-      <span class="dot"></span><span id="statusText">Not connected</span>
-    </span>
-    <button id="connBtn" class="btn btn-ghost" type="button" aria-expanded="false" aria-controls="connPanel">
-      Connection
-    </button>
+    <span id="enginePill" class="pill pill-idle"><span class="dot"></span><span id="engineText">In-browser</span></span>
+    <button id="settingsBtn" class="btn btn-ghost" type="button" aria-expanded="false" aria-controls="settings">Settings</button>
   </div>
 </header>
 
-<!-- ── Connection panel ─────────────────────────────────────── -->
-<section id="connPanel" class="panel panel-conn" hidden>
+<!-- ── Settings ─────────────────────────────────────────────── -->
+<section id="settings" class="panel" hidden>
   <div class="panel-inner">
-    <div class="field">
-      <label for="backendUrl">Backend URL</label>
-      <input id="backendUrl" type="url" spellcheck="false" autocomplete="off"
-             placeholder="https://your-gpu-box.example.com" />
-      <p class="hint">Where your Kimi-Audio server from <code>./server</code> is running.</p>
-    </div>
 
-    <div class="field">
-      <label for="apiKey">API key <span class="opt">optional</span></label>
-      <input id="apiKey" type="password" spellcheck="false" autocomplete="off"
-             placeholder="Sent as: Authorization: Bearer …" />
-      <p class="hint">Stored in this browser only. For a shared site, set <code>KIMI_API_KEY</code> in Netlify instead and use Proxy mode.</p>
-    </div>
-
-    <fieldset class="field">
-      <legend>Request mode</legend>
+    <fieldset class="field field-wide">
+      <legend>Engine</legend>
       <label class="radio">
-        <input type="radio" name="mode" value="direct" checked />
+        <input type="radio" name="engine" value="browser" checked />
         <span>
-          <strong>Direct</strong>
-          <em>Browser → your GPU box. No time or size cap. Backend must allow CORS.</em>
+          <strong>In your browser</strong>
+          <em>Whisper runs on your own machine with WebGPU. No key, no account, no upload — the audio never leaves your device. One-time model download.</em>
         </span>
       </label>
       <label class="radio">
-        <input type="radio" name="mode" value="proxy" />
+        <input type="radio" name="engine" value="groq" />
         <span>
-          <strong>Proxy</strong>
-          <em>Browser → Netlify function → GPU box. Hides the key; capped at 26s and 5MB.</em>
+          <strong>Groq <span class="tag">free tier</span></strong>
+          <em>Roughly 100× faster and works on any device. Needs a free API key; audio is uploaded to Groq.</em>
         </span>
       </label>
     </fieldset>
 
+    <!-- Browser engine options -->
+    <div class="field engine-opts" data-engine="browser">
+      <label for="browserModel">Model</label>
+      <select id="browserModel"></select>
+      <p class="hint" id="browserModelNote"></p>
+    </div>
+
+    <div class="field engine-opts" data-engine="browser">
+      <label for="quality">Precision</label>
+      <select id="quality">
+        <option value="balanced" selected>Balanced — smaller download, faster</option>
+        <option value="accurate">Accurate — larger download, better quality</option>
+      </select>
+      <p class="hint" id="deviceNote">Checking for WebGPU…</p>
+    </div>
+
+    <!-- Groq engine options -->
+    <div class="field engine-opts" data-engine="groq" hidden>
+      <label for="groqModel">Model</label>
+      <select id="groqModel"></select>
+      <p class="hint" id="groqModelNote"></p>
+    </div>
+
+    <div class="field engine-opts" data-engine="groq" hidden>
+      <label for="groqKey">Groq API key</label>
+      <input id="groqKey" type="password" spellcheck="false" autocomplete="off" placeholder="gsk_…" />
+      <p class="hint">
+        Free at <a href="https://console.groq.com/keys" target="_blank" rel="noopener noreferrer">console.groq.com/keys</a>.
+        Kept in this browser only.
+      </p>
+    </div>
+
     <div class="panel-actions">
-      <button id="testBtn" class="btn btn-primary" type="button">Test connection</button>
+      <button id="closeSettings" class="btn btn-primary" type="button">Done</button>
       <button id="forgetBtn" class="btn btn-ghost" type="button">Forget settings</button>
-      <span id="connResult" class="conn-result"></span>
+      <span id="settingsNote" class="settings-note"></span>
     </div>
   </div>
 </section>
 
 <main class="layout">
 
-  <!-- ── Left: input ────────────────────────────────────────── -->
-  <section class="col col-input" aria-labelledby="inputHead">
-    <h2 id="inputHead" class="col-head">Input</h2>
+  <!-- ── Input ─────────────────────────────────────────────── -->
+  <section class="col col-input">
+    <h2 class="col-head">Audio</h2>
 
-    <div class="card">
-      <div class="tabs" role="tablist" aria-label="Task">
-        <button class="tab is-active" role="tab" aria-selected="true"  data-task="asr">Transcribe</button>
-        <button class="tab"           role="tab" aria-selected="false" data-task="qa">Ask</button>
-        <button class="tab"           role="tab" aria-selected="false" data-task="chat">Voice chat</button>
+    <div id="dropZone" class="drop" tabindex="0" role="button"
+         aria-label="Choose an audio file, or drop one here">
+      <span class="drop-icon">⇪</span>
+      <p class="drop-title">Drop audio here</p>
+      <p class="drop-sub">or <span class="drop-link">choose a file</span> · MP3, WAV, M4A, FLAC, OGG, MP4</p>
+      <input id="fileInput" type="file" accept="audio/*,video/mp4,video/webm" hidden />
+    </div>
+
+    <div class="or-row"><span>or</span></div>
+
+    <button id="recBtn" class="btn btn-rec" type="button">
+      <span class="rec-dot"></span><span id="recLabel">Record from microphone</span>
+      <span id="recTimer" class="rec-timer"></span>
+    </button>
+
+    <div id="clipCard" class="card clip-card" hidden>
+      <div class="clip-top">
+        <div class="clip-name" id="clipName"></div>
+        <button id="clipRemove" class="link-btn" type="button">Remove</button>
       </div>
-      <p id="taskBlurb" class="task-blurb">Convert speech in the audio to text.</p>
+      <audio id="clipPlayer" controls preload="metadata"></audio>
+      <p class="clip-meta" id="clipMeta"></p>
     </div>
 
     <div class="card">
-      <h3 class="card-head">Audio</h3>
-
-      <div class="audio-actions">
-        <button id="recBtn" class="btn btn-rec" type="button">
-          <span class="rec-dot"></span><span id="recLabel">Record</span>
-        </button>
-        <span id="recTimer" class="rec-timer" aria-live="polite">0:00</span>
-        <label class="btn btn-ghost file-btn">
-          Upload file
-          <input id="fileInput" type="file" accept="audio/*" hidden />
-        </label>
+      <div class="field">
+        <label for="language">Language</label>
+        <select id="language"></select>
       </div>
-
-      <div id="clipBox" class="clip" hidden>
-        <audio id="clipPlayer" controls preload="metadata"></audio>
-        <div class="clip-meta">
-          <span id="clipInfo"></span>
-          <button id="clearClip" class="link-btn" type="button">Remove</button>
-        </div>
+      <div class="field">
+        <label for="task">Output</label>
+        <select id="task">
+          <option value="transcribe" selected>Transcribe — keep the original language</option>
+          <option value="translate">Translate to English</option>
+        </select>
       </div>
-
-      <p id="audioEmpty" class="empty">No audio yet — record or upload a clip.</p>
+      <label class="check">
+        <input type="checkbox" id="timestamps" checked />
+        <span>Include timestamps <em>needed for subtitle export</em></span>
+      </label>
     </div>
 
-    <div class="card">
-      <h3 class="card-head">
-        <label for="promptBox">Text prompt <span class="opt" id="promptOpt">optional</span></label>
-      </h3>
-      <textarea id="promptBox" rows="3"
-        placeholder="e.g. Summarise what the speaker is asking for."></textarea>
-    </div>
+    <button id="runBtn" class="btn btn-run" type="button" disabled>Transcribe</button>
 
-    <details class="card card-adv">
-      <summary>Sampling parameters</summary>
-      <div class="grid-params">
-        <label>audio_temperature <input type="number" id="p_audio_temp"  value="0.8" step="0.05" min="0" max="2" /></label>
-        <label>audio_top_k       <input type="number" id="p_audio_topk"  value="10"  step="1"    min="1" max="100" /></label>
-        <label>text_temperature  <input type="number" id="p_text_temp"   value="0.0" step="0.05" min="0" max="2" /></label>
-        <label>text_top_k        <input type="number" id="p_text_topk"   value="5"   step="1"    min="1" max="100" /></label>
-        <label>audio_rep_penalty <input type="number" id="p_audio_rep"   value="1.0" step="0.05" min="0.5" max="2" /></label>
-        <label>text_rep_penalty  <input type="number" id="p_text_rep"    value="1.0" step="0.05" min="0.5" max="2" /></label>
+    <div id="progress" class="progress" hidden>
+      <div class="progress-head">
+        <span id="progressLabel">Working…</span>
+        <span id="progressPct" class="progress-pct"></span>
       </div>
-      <button id="resetParams" class="link-btn" type="button">Reset to Kimi defaults</button>
-    </details>
-
-    <div class="run-row">
-      <button id="runBtn" class="btn btn-run" type="button" disabled>Run</button>
-      <span id="runTimer" class="run-timer"></span>
+      <div class="progress-track"><div id="progressBar" class="progress-bar"></div></div>
+      <p id="progressNote" class="progress-note"></p>
     </div>
   </section>
 
-  <!-- ── Right: output ──────────────────────────────────────── -->
-  <section class="col col-output" aria-labelledby="outHead">
+  <!-- ── Output ────────────────────────────────────────────── -->
+  <section class="col col-output">
     <div class="col-head-row">
-      <h2 id="outHead" class="col-head">Conversation</h2>
-      <button id="clearConv" class="link-btn" type="button" hidden>Clear</button>
+      <h2 class="col-head">Transcript</h2>
+      <div id="resultTools" class="result-tools" hidden>
+        <select id="viewMode" aria-label="View">
+          <option value="paragraphs">Paragraphs</option>
+          <option value="segments">Timestamped</option>
+          <option value="plain">Plain</option>
+        </select>
+        <button id="copyBtn" class="btn btn-ghost btn-sm" type="button">Copy</button>
+        <select id="exportFormat" aria-label="Download format"></select>
+        <button id="downloadBtn" class="btn btn-ghost btn-sm" type="button">Download</button>
+      </div>
     </div>
 
-    <div id="turns" class="turns">
+    <div id="statsRow" class="stats" hidden></div>
+
+    <div id="result" class="result">
       <div class="placeholder">
-        <p class="placeholder-title">Nothing yet</p>
-        <p>Connect a backend, add a clip, and hit <strong>Run</strong>. Voice-chat turns are kept as context for the next request.</p>
+        <p class="placeholder-title">No transcript yet</p>
+        <p>Add audio and press <strong>Transcribe</strong>. The first in-browser run downloads the model — after that it's cached and works offline.</p>
       </div>
     </div>
   </section>
 </main>
 
 <footer class="foot">
-  <span>Console hosted on Netlify · model runs on your own GPU</span>
-  <a href="https://github.com/MoonshotAI/Kimi-Audio" rel="noopener noreferrer" target="_blank">Kimi-Audio ↗</a>
+  <span>Whisper by OpenAI · runs in your browser via <a href="https://github.com/huggingface/transformers.js" target="_blank" rel="noopener noreferrer">transformers.js</a></span>
+  <span id="footNote"></span>
 </footer>
 
 <script src="/app.js" type="module"></script>

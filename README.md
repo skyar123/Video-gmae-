@@ -1,224 +1,155 @@
-# Kimi-Audio on Netlify
+# Whisper Studio
 
-A web console for [Kimi-Audio](https://github.com/MoonshotAI/Kimi-Audio) (MoonshotAI's
-7B audio-language model) that deploys to Netlify, plus the GPU server it drives.
+Free speech-to-text on Netlify. Transcribe audio with OpenAI's Whisper — either
+entirely inside your browser on your own GPU, or through Groq's free tier.
 
-Record or upload a clip, and transcribe it, ask questions about it, or hold a spoken
-back-and-forth where Kimi answers in both text and synthesised speech.
+**No paid API required.** No account required for the in-browser engine.
 
 ---
 
-## Read this first: the model does not run on Netlify
+## Why there are two engines
 
-Kimi-Audio-7B-Instruct needs an NVIDIA GPU. Upstream's own Dockerfile starts from
-`nvidia/cuda:12.8.1-cudnn-devel`, and the install pulls `torch`, `flash-attn`, and
-`deepspeed` before downloading roughly 15 GB of weights.
+Whisper is a model, not a service, so something has to run it. Netlify serves
+static files and short-lived functions — it has no GPU and a 26-second function
+ceiling, so the model cannot run *on* Netlify. Both engines here work around
+that in different ways.
 
-Netlify serves static assets and short-lived Lambda functions — no GPU, a 50 MB bundle
-ceiling, and a 26-second execution cap. There is no configuration that makes a 7B
-audio model run there.
-
-So this repo splits the job in two:
-
-| Piece | Where it runs | What it does |
+| | **In your browser** | **Groq** |
 | --- | --- | --- |
-| `public/` + `netlify/` | **Netlify** | The console UI and a thin API proxy. |
-| `server/` | **Your GPU box** | FastAPI wrapper around `kimia_infer` that holds the model. |
+| Cost | Free, always | Free tier |
+| API key | None | Free key required |
+| Privacy | Audio never leaves your device | Audio uploaded to Groq |
+| Speed | Depends on your GPU | ~100× realtime |
+| First use | Downloads the model once | Instant |
+| Offline | Yes, once cached | No |
+| Best model | `whisper-large-v3-turbo` | `whisper-large-v3-turbo` |
 
-The Netlify site is the part you share and bookmark. Point it at a backend and it works.
+The in-browser engine uses [transformers.js](https://github.com/huggingface/transformers.js)
+with WebGPU, falling back to WASM. The model is fetched from the Hugging Face
+CDN on first run and cached by the browser thereafter.
 
-```
-┌─────────────┐   Direct: audio + prompt    ┌──────────────────┐
-│   Browser   │ ──────────────────────────► │  server/app.py   │
-│  (Netlify-  │ ◄────────────────────────── │  Kimi-Audio 7B   │
-│   hosted)   │      text + WAV reply       │  on your GPU     │
-└──────┬──────┘                             └────────▲─────────┘
-       │                                             │
-       │  Proxy: keeps KIMI_API_KEY server-side      │
-       └────────► Netlify Function /api/generate ────┘
-                  (26s + 5MB cap applies)
-```
+### About the OpenAI API
+
+OpenAI's hosted Whisper endpoint costs $0.006/minute — it is not free, and this
+project does not use it. **Groq is the free equivalent**: same `whisper-large-v3`
+family, an OpenAI-compatible API, and a free tier that covers ordinary personal
+use. Get a key at [console.groq.com/keys](https://console.groq.com/keys).
 
 ---
 
-## Deploy the console
+## Deploy
 
 ```bash
 npm install -g netlify-cli
 netlify login
-netlify init          # link or create a site
+netlify init
 netlify deploy --build --prod
 ```
 
-There is no bundler — `public/` is vanilla HTML, CSS, and ES modules, and the three
-functions in `netlify/functions/` are bundled by esbuild at deploy time.
+No build step and no dependencies — `public/` is vanilla HTML, CSS, and ES
+modules. It runs on Netlify's free tier.
 
 ### Optional environment variables
 
-Set these under **Site configuration → Environment variables** so visitors don't have
-to type a URL:
-
 | Variable | Effect |
 | --- | --- |
-| `KIMI_BACKEND_URL` | Console auto-connects to this backend on load. |
-| `KIMI_API_KEY` | Sent as `Authorization: Bearer …` by the proxy. Never exposed to the browser. |
+| `GROQ_API_KEY` | Lets visitors use Groq without their own key, via `/api/transcribe`. |
 
-Without them, the console opens its Connection panel and asks for a backend URL, which
-it remembers in `localStorage`.
+Leave it unset for personal use: the console talks to Groq directly from the
+browser with a key the visitor supplies, which avoids Netlify's function limits
+entirely. Set it only when you're hosting for other people and want to supply
+the quota yourself — note that the proxy path inherits Netlify's 26-second and
+~5 MB caps, so it suits short clips only.
 
 ---
 
-## Run the model
+## Using it
 
-You need a CUDA GPU with roughly **24 GB VRAM** for text and audio output. Setting
-`KIMI_LOAD_DETOKENIZER=0` drops the speech synthesiser and fits in less, but then only
-`output_type="text"` works.
+Drop in a file (MP3, WAV, M4A, FLAC, OGG, MP4) or record from the microphone,
+then press **Transcribe**. Everything is decoded to 16 kHz mono in the browser
+first, which is the format Whisper expects.
 
-### Docker (recommended)
+- **Language** — auto-detect, or pin it when you already know.
+- **Translate to English** — available on `whisper-large-v3`; the turbo variants
+  are transcription-only.
+- **Timestamps** — on by default, and required for subtitle export.
+- **Views** — paragraphs (split on speech pauses), timestamped segments
+  (click a timestamp to play from that point), or plain text.
+- **Export** — plain text, paragraphs, SRT, WebVTT, Markdown, or JSON.
 
-```bash
-cd server
-docker compose up --build
-```
+Ctrl/Cmd+Enter runs the current input. Settings persist in `localStorage`.
 
-Or plain Docker:
+### Picking an in-browser model
 
-```bash
-docker build -t kimi-audio-server ./server
-docker run --gpus all -p 8000:8000 \
-  -v $HOME/.cache/huggingface:/root/.cache/huggingface \
-  -e KIMI_ALLOWED_ORIGINS="https://your-site.netlify.app" \
-  kimi-audio-server
-```
-
-Mount the Hugging Face cache — otherwise every container rebuild re-downloads ~15 GB.
-First boot takes a while; `/health` returns 503 with a reason until the model is ready.
-
-### Without Docker
-
-```bash
-git clone --recursive https://github.com/MoonshotAI/Kimi-Audio.git
-pip install -r Kimi-Audio/requirements.txt
-pip install flash-attn --no-build-isolation
-pip install -r server/requirements.txt
-
-export PYTHONPATH=/path/to/Kimi-Audio
-uvicorn app:app --host 0.0.0.0 --port 8000   # from inside server/
-```
-
-### Server environment variables
-
-| Variable | Default | Notes |
+| Model | Download | Notes |
 | --- | --- | --- |
-| `KIMI_MODEL_PATH` | `moonshotai/Kimi-Audio-7B-Instruct` | HF id or local checkpoint path. |
-| `KIMI_API_KEY` | *(unset)* | When set, `/v1/generate` requires a matching bearer token. |
-| `KIMI_LOAD_DETOKENIZER` | `1` | `0` saves VRAM but disables audio output. |
-| `KIMI_ALLOWED_ORIGINS` | `*` | Comma-separated CORS origins. Lock to your Netlify URL. |
-| `KIMI_MAX_AUDIO_BYTES` | `52428800` | Per-clip upload ceiling. |
+| Tiny | 92 MB | Fastest. Fine for clear speech. |
+| Base | 136 MB | Good default on modest hardware. |
+| Small | 285 MB | Noticeably better on accents and noise. |
+| Large v3 Turbo | 724 MB | Best accuracy. Wants a real GPU. |
 
-### Exposing it to the console
+Sizes are the q4-quantised weights, downloaded once and then cached. On a
+machine without WebGPU the WASM fallback still works but is much slower — the
+Settings panel tells you which backend you got.
 
-The browser needs to reach the backend over HTTPS. Any of these work:
-
-- **RunPod / Vast.ai / Lambda Labs** — deploy the Dockerfile, use the provided HTTPS proxy URL.
-- **A cloud VM with a GPU** — put Caddy or nginx with TLS in front of port 8000.
-- **A local GPU** — `cloudflared tunnel --url http://localhost:8000` gives you a public HTTPS URL.
-
-A browser on an HTTPS page cannot call a plain `http://` backend, so a bare IP and port
-will be blocked as mixed content. Use one of the above, or the Proxy mode described below.
-
----
-
-## Using the console
-
-**Transcribe** turns speech into text. **Ask** answers a question about the clip in text.
-**Voice chat** returns spoken audio plus text and keeps previous turns as context.
-
-Clips are decoded with WebAudio and re-encoded to 16 kHz mono WAV in the browser before
-being sent, so any format the browser can open (WAV, MP3, M4A, FLAC, OGG) is fine.
-Ctrl/Cmd+Enter runs the current input.
-
-### Direct vs Proxy mode
-
-**Direct** (default) — the browser calls your backend. No time or size limit, so this is
-the right choice for audio-to-audio generation, which routinely takes longer than a
-minute. Requires CORS on the backend, which `server/app.py` handles.
-
-**Proxy** — the browser calls `/api/generate`, which forwards the request with
-`KIMI_API_KEY` attached. Use this when the site is shared and the key must stay secret.
-It inherits Netlify's 26-second and ~5 MB request limits; the console reports a clear
-error and tells you to switch modes when either is hit.
-
----
-
-## API
-
-`POST /v1/generate`
-
-```jsonc
-{
-  "messages": [
-    { "role": "user", "message_type": "text",  "content": "Transcribe this." },
-    { "role": "user", "message_type": "audio", "content": {
-        "format": "wav", "data_base64": "UklGRi..." } }
-  ],
-  "output_type": "text",        // or "both" for text + speech
-  "sampling_params": { "text_top_k": 5 }
-}
-```
-
-```jsonc
-{
-  "text": "…",
-  "audio": { "format": "wav", "sample_rate": 24000, "data_base64": "…" },  // null unless "both"
-  "elapsed_ms": 8421,
-  "model": "moonshotai/Kimi-Audio-7B-Instruct"
-}
-```
-
-Assistant turns in a multi-turn history use `"message_type": "audio-text"` with
-`content: [audioObject, "text"]`, mirroring Kimi-Audio's own message format.
-Sampling parameters not recognised by Kimi-Audio are dropped rather than forwarded.
-
-`GET /health` reports the model id, device, and whether the detokenizer is loaded.
-
----
-
-## Tests
-
-```bash
-python server/test_app.py      # server contract, model stubbed — no GPU needed
-netlify dev                    # console + functions at localhost:8888
-```
-
-`server/test_app.py` covers auth, base64↔file translation, sampling-param filtering,
-multi-turn message shaping, and error mapping with `kimia_infer` and `torch` stubbed,
-so it runs on any machine.
+Long audio is handled automatically: the in-browser engine uses Whisper's own
+30-second windowing, and the Groq engine splits anything over ten minutes and
+stitches the timestamps back together.
 
 ---
 
 ## Layout
 
 ```
-public/            Console UI (no build step)
+public/
   index.html
   styles.css
-  app.js           Recording, WAV encoding, API client
-netlify/
-  functions/       status, health, generate
-  lib/backend.mjs  Shared backend helpers
-server/
-  app.py           FastAPI wrapper around kimia_infer
-  test_app.py      Contract tests, model stubbed
-  Dockerfile       CUDA 12.8 + Kimi-Audio + server
-  docker-compose.yml
+  app.js            UI controller
+  worker.js         In-browser Whisper (Web Worker, so the UI stays responsive)
+  lib/
+    audio.mjs       Decode / resample / WAV encode / windowing
+    engines.mjs     BrowserEngine + GroqEngine behind one interface
+    export.mjs      TXT, SRT, VTT, Markdown, JSON serialisers
+netlify/functions/
+  status.mjs        Reports how this deployment is configured
+  transcribe.mjs    Optional Groq proxy for shared deployments
 netlify.toml
+server/             Optional: Kimi-Audio GPU backend (see below)
+```
+
+Inference runs in a Web Worker. On the main thread it would freeze the page for
+the duration of the transcription.
+
+---
+
+## Also in this repo: Kimi-Audio
+
+`server/` holds a FastAPI wrapper around
+[Kimi-Audio](https://github.com/MoonshotAI/Kimi-Audio), MoonshotAI's 7B
+audio-language model. It does things Whisper cannot — spoken question answering
+and voice-to-voice conversation — but needs a CUDA GPU with ~24 GB VRAM, so it
+cannot run on Netlify and is not wired into the console.
+
+```bash
+cd server && docker compose up --build
+python server/test_app.py    # contract tests, model stubbed — no GPU needed
+```
+
+See the comments in `server/app.py` for the API and environment variables.
+
+---
+
+## Tests
+
+```bash
+netlify dev                  # http://localhost:8888
+python server/test_app.py    # Kimi-Audio server contract tests
 ```
 
 ---
 
 ## Licence
 
-The console and server wrapper in this repo are MIT. Kimi-Audio itself is licensed by
-MoonshotAI — see [their repository](https://github.com/MoonshotAI/Kimi-Audio) for model
-weights and terms.
+MIT for the code here. Whisper is MIT-licensed by OpenAI; the ONNX weights are
+published by [onnx-community](https://huggingface.co/onnx-community).
+Kimi-Audio is licensed separately by MoonshotAI.
