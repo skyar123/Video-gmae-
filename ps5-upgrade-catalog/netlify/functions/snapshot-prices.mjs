@@ -1,11 +1,17 @@
 import catalog from '../../src/games.json' with { type: 'json' };
-import { CHUNK_SIZE, resolveMany } from '../../api/steam.mjs';
-import { recordAndSummarize } from '../../api/history.mjs';
+import { CHUNK_SIZE, REVIEW_KEY_PREFIX, resolveMany } from '../../api/steam.mjs';
+import { recordAndSummarize, saveBlob } from '../../api/history.mjs';
+import { loadReviewSignal } from '../../api/reviews.mjs';
 
 /**
- * Nightly price snapshot. Visits record history too, but only for chunks
- * somebody actually loaded; this makes sure every game gets a daily reading
- * whether or not it was viewed, which is what the drop predictor learns from.
+ * Nightly maintenance.
+ *
+ * Prices: visits record history too, but only for chunks somebody loaded.
+ * This makes sure every game gets a daily reading, which is what the drop
+ * predictor learns from.
+ *
+ * Ratings: player scores and the pros and cons drawn from reviews ship baked
+ * into the catalog. Refreshing them here keeps them current between deploys.
  *
  * Scheduled functions only run on published deploys.
  */
@@ -15,8 +21,10 @@ export default async () => {
     .map((region) => region.trim().toUpperCase())
     .filter(Boolean);
 
+  const chunkCount = Math.ceil(catalog.length / CHUNK_SIZE);
+
   for (const countryCode of regions) {
-    for (let chunk = 0; chunk * CHUNK_SIZE < catalog.length; chunk += 1) {
+    for (let chunk = 0; chunk < chunkCount; chunk += 1) {
       const slice = catalog.slice(chunk * CHUNK_SIZE, (chunk + 1) * CHUNK_SIZE);
       const resolved = await resolveMany(slice, countryCode, 2);
       const games = resolved.map((game, index) => ({ ...game, id: slice[index].id }));
@@ -24,6 +32,27 @@ export default async () => {
     }
     console.log(`Recorded prices for ${catalog.length} games in ${countryCode}`);
   }
+
+  // Ratings are region-independent, so they only need one pass.
+  const asOf = new Date().toISOString().slice(0, 10);
+  for (let chunk = 0; chunk < chunkCount; chunk += 1) {
+    const slice = catalog.slice(chunk * CHUNK_SIZE, (chunk + 1) * CHUNK_SIZE);
+    const entries = {};
+    for (const game of slice) {
+      if (!game.steamAppId) continue;
+      const signal = await loadReviewSignal(game.steamAppId);
+      if (!signal) continue;
+      entries[game.id] = {
+        critic: game.ratings?.critic ?? null,
+        user: signal.userScore,
+        pros: signal.pros,
+        cons: signal.cons,
+        asOf,
+      };
+    }
+    await saveBlob(`${REVIEW_KEY_PREFIX}${chunk}`, entries);
+  }
+  console.log('Refreshed review ratings');
 };
 
 export const config = { schedule: '@daily' };

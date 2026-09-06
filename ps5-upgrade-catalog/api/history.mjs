@@ -58,33 +58,38 @@ async function writeLocalFile(all) {
 
 const keyFor = (chunk, countryCode) => `${countryCode}/chunk-${chunk}`;
 
-export async function loadChunk(chunk, countryCode) {
+/** Read one JSON blob, falling back to the local file off-platform. */
+export async function loadBlob(key) {
   const store = await getBlobStore();
   if (store) {
     try {
-      return (await store.get(keyFor(chunk, countryCode), { type: 'json' })) ?? {};
+      return (await store.get(key, { type: 'json' })) ?? {};
     } catch {
       return {};
     }
   }
   const all = await readLocalFile();
-  return all[keyFor(chunk, countryCode)] ?? {};
+  return all[key] ?? {};
 }
 
-async function saveChunk(chunk, countryCode, data) {
+/** Write one JSON blob. Never throws: this data is always an enhancement. */
+export async function saveBlob(key, data) {
   const store = await getBlobStore();
   if (store) {
     try {
-      await store.setJSON(keyFor(chunk, countryCode), data);
+      await store.setJSON(key, data);
     } catch {
-      // Losing one day's point is not worth failing a request over.
+      // Losing one update is not worth failing a request over.
     }
     return;
   }
   const all = await readLocalFile();
-  all[keyFor(chunk, countryCode)] = data;
+  all[key] = data;
   await writeLocalFile(all);
 }
+
+export const loadChunk = (chunk, countryCode) => loadBlob(keyFor(chunk, countryCode));
+const saveChunk = (chunk, countryCode, data) => saveBlob(keyFor(chunk, countryCode), data);
 
 const today = (now = new Date()) => now.toISOString().slice(0, 10);
 

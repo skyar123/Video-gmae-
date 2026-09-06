@@ -19,7 +19,11 @@ import {
   Search,
   SlidersHorizontal,
   Sparkles,
+  Star,
+  ThumbsDown,
+  ThumbsUp,
   TrendingDown,
+  Users,
   X,
 } from 'lucide-react';
 import gamesData from './games.json';
@@ -278,6 +282,91 @@ function VerdictBadge({ prediction, className = '' }) {
   );
 }
 
+/** Green for strong, amber for mixed, rose for poor. */
+function scoreTone(value) {
+  if (value >= 80) return 'bg-emerald-50 text-emerald-700 ring-emerald-600/20';
+  if (value >= 60) return 'bg-amber-50 text-amber-700 ring-amber-600/20';
+  return 'bg-rose-50 text-rose-700 ring-rose-600/20';
+}
+
+/**
+ * Critic score and player score side by side. Both are omitted rather than
+ * guessed when the storefront has no figure.
+ */
+function RatingChips({ ratings, size = 'sm' }) {
+  const critic = ratings?.critic ?? null;
+  const user = ratings?.user ?? null;
+  if (critic == null && user == null) return null;
+
+  const pad = size === 'lg' ? 'px-2.5 py-1 text-sm' : 'px-2 py-0.5 text-xs';
+  return (
+    <div className="flex flex-wrap items-center gap-1.5">
+      {critic != null && (
+        <span
+          title="Metacritic critic score"
+          className={`inline-flex items-center gap-1 rounded-md font-semibold ring-1 ring-inset ${pad} ${scoreTone(critic)}`}
+        >
+          <Star className="h-3.5 w-3.5" aria-hidden="true" />
+          {critic}
+          <span className="font-normal opacity-70">critics</span>
+        </span>
+      )}
+      {user != null && (
+        <span
+          title={`${user.total.toLocaleString()} player reviews${user.label ? ` — ${user.label}` : ''}`}
+          className={`inline-flex items-center gap-1 rounded-md font-semibold ring-1 ring-inset ${pad} ${scoreTone(user.percentPositive)}`}
+        >
+          <Users className="h-3.5 w-3.5" aria-hidden="true" />
+          {user.percentPositive}%
+          <span className="font-normal opacity-70">players</span>
+        </span>
+      )}
+    </div>
+  );
+}
+
+/** Pros and cons, counted across the review sample rather than written by us. */
+function ProsAndCons({ ratings }) {
+  const pros = ratings?.pros ?? [];
+  const cons = ratings?.cons ?? [];
+  if (pros.length === 0 && cons.length === 0) return null;
+
+  const column = (title, items, tone, Icon, empty) => (
+    <div>
+      <h4 className={`mb-2 flex items-center gap-1.5 text-xs font-semibold uppercase tracking-wider ${tone}`}>
+        <Icon className="h-3.5 w-3.5" />
+        {title}
+      </h4>
+      {items.length === 0 ? (
+        <p className="text-sm text-slate-400">{empty}</p>
+      ) : (
+        <ul className="space-y-1.5 text-sm text-slate-600">
+          {items.map((item) => (
+            <li key={item.label} className="flex items-baseline justify-between gap-3">
+              <span>{item.label}</span>
+              <span className="shrink-0 text-xs text-slate-400">{item.mentions}</span>
+            </li>
+          ))}
+        </ul>
+      )}
+    </div>
+  );
+
+  return (
+    <div className="mt-4 rounded-xl border border-slate-200 p-4">
+      <div className="grid gap-6 sm:grid-cols-2">
+        {column('What players praise', pros, 'text-emerald-700', ThumbsUp, 'No clear pattern.')}
+        {column('What they complain about', cons, 'text-rose-700', ThumbsDown, 'No recurring complaints.')}
+      </div>
+      <p className="mt-4 text-xs text-slate-400">
+        Themes counted across a sample of player reviews — the number is how many mentioned it.
+        Praise is counted only in positive reviews and complaints only in negative ones.
+        {ratings.asOf && ` Sampled ${ratings.asOf}.`}
+      </p>
+    </div>
+  );
+}
+
 /** Cover art, or a lettered gradient when the game has no storefront match. */
 function CoverArt({ game, live, className = '' }) {
   const [failed, setFailed] = useState(false);
@@ -405,6 +494,9 @@ function GameModal({ game, live, wishlisted, onToggleWishlist, onClose }) {
   const [selected, setSelected] = useState(null);
   const closeRef = useRef(null);
 
+  // Ratings ship with the catalog; the nightly refresh overrides them.
+  const ratings = live?.ratings ?? game.ratings;
+
   const videos = live?.videos ?? [];
   const screenshots = live?.screenshots ?? [];
 
@@ -522,7 +614,7 @@ function GameModal({ game, live, wishlisted, onToggleWishlist, onClose }) {
             <WishlistButton wishlisted={wishlisted} onToggle={onToggleWishlist} withLabel />
           </div>
 
-          <div className="mt-5 grid grid-cols-2 gap-4 sm:grid-cols-4">
+          <div className="mt-5 grid grid-cols-3 gap-4">
             {[
               ['Genre', game.genre],
               ['Protagonist', game.protagonist],
@@ -535,18 +627,18 @@ function GameModal({ game, live, wishlisted, onToggleWishlist, onClose }) {
                 <span className="font-medium text-slate-800">{value}</span>
               </div>
             ))}
-            <div>
-              <span className="mb-1 block text-xs font-semibold uppercase tracking-wider text-slate-400">
-                PS5 Status
-              </span>
-              <UpgradeBadge value={game.ps5Upgrade} />
-            </div>
+          </div>
+
+          <div className="mt-4 flex flex-wrap items-center gap-2">
+            <UpgradeBadge value={game.ps5Upgrade} className="whitespace-nowrap" />
+            <RatingChips ratings={ratings} size="lg" />
           </div>
 
           <div className="mt-6 rounded-xl border border-slate-100 bg-slate-50 p-4">
             <p className="leading-relaxed text-slate-700">{game.description}</p>
           </div>
 
+          <ProsAndCons ratings={ratings} />
           <PricePanel live={live} />
           <PredictionPanel live={live} />
 
@@ -727,6 +819,7 @@ function WishlistButton({ wishlisted, onToggle, withLabel = false }) {
 
 function GameCard({ game, live, wishlisted, onToggleWishlist, onOpen }) {
   const prediction = live?.prediction;
+  const ratings = live?.ratings ?? game.ratings;
   const showVerdict = prediction && (prediction.verdict === 'buy-now' || prediction.verdict === 'wait');
 
   return (
@@ -759,6 +852,11 @@ function GameCard({ game, live, wishlisted, onToggleWishlist, onOpen }) {
             <UpgradeBadge value={game.ps5Upgrade} />
             {showVerdict && <VerdictBadge prediction={prediction} />}
           </div>
+          {ratings && (
+            <div className="mb-3">
+              <RatingChips ratings={ratings} />
+            </div>
+          )}
           <p className="line-clamp-3 text-sm text-slate-600">{game.description}</p>
           {live?.price && (
             <p className="mt-4 flex items-baseline gap-2 border-t border-slate-100 pt-3 text-sm">

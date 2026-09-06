@@ -1,15 +1,19 @@
 # PS4 to PS5 Upgrade Catalog
 
-A filterable catalog of 229 PlayStation games — 190 PS4 titles with a PS5 upgrade
-path, plus 39 PS5-only titles — with live artwork, trailers and sale prices pulled
+A filterable catalog of 245 PlayStation games — 199 PS4 titles with a PS5 upgrade
+path, plus 46 PS5-only titles — with live artwork, trailers and sale prices pulled
 in at runtime.
 
 ## What it does
 
-- **229 games** in `src/games.json`, each with `id`, `title`, `genre`, `artStyle`,
+- **245 games** in `src/games.json`, each with `id`, `title`, `genre`, `artStyle`,
   `protagonist`, `ps5Upgrade` and `description`, plus `platform` (`PS4` or `PS5`),
-  `tags` for the curated collections, and a `steamAppId` used to load artwork
-  before the live request lands.
+  `tags` for the curated collections, a `steamAppId` used to load artwork before
+  the live request lands, and `ratings` (critic score, player score, pros, cons).
+- **Two ratings side by side**: the critic score and the percentage of players
+  rating it positively, on every card and in the detail view.
+- **Pros and cons pulled from reviews** rather than written by hand, with a count
+  of how many reviews raised each point.
 - **Curated collections**: Best deals (computed live from current discounts,
   deepest cut first), Best graphics, Online & social, and Cozy. The last three come
   from tags in the data; every collection composes with the filters below.
@@ -116,6 +120,33 @@ history are suppressed until there is enough of it — on day one every price is
 trivially the lowest ever seen, so the "lowest we have tracked" verdict needs at
 least two weeks of observation behind it.
 
+## Ratings, pros and cons
+
+Two numbers sit beside each other on every card: the **critic score** from
+Metacritic (as carried by the storefront) and the **player score**, the share of
+all player reviews that are positive, with the total review count in the tooltip.
+Either is omitted rather than guessed when the storefront has no figure. Of the
+245 games, 234 have a player score and 148 a critic score.
+
+Pros and cons are counted from the review corpus, not written by us:
+
+- Praise is tallied **only inside positive reviews** and complaints **only inside
+  negative ones**, so "great story, awful performance" cannot file story under
+  complaints.
+- Complaints get their own review sample. The default feed skews so heavily
+  positive that a well-liked game would otherwise report no cons at all.
+- A theme needs at least three mentions to appear, and each bullet shows its
+  count, so a weak signal reads as a weak signal.
+- Reviews shorter than 80 characters are dropped — "10/10" carries no theme.
+
+The themes are a fixed vocabulary, so nothing is generated and no review text is
+republished. Cyberpunk 2077, for example, comes back with story, soundtrack and
+combat as praise, and bugs and crashes as its top complaint by a wide margin.
+
+Ratings ship baked into `src/games.json`, so a card is never blank on first
+paint and costs no request. The nightly function refreshes them into blob
+storage, and anything it has overrides the baked values.
+
 ## Price history
 
 Nobody publishes a usable price-history feed, so the app keeps its own. Two things
@@ -139,12 +170,13 @@ nightly. It defaults to `US`.
 ```
 api/steam.mjs              storefront client: matching, caching, normalising
 api/predict.mjs            the price-drop heuristic
+api/reviews.mjs            player ratings and review-derived pros and cons
 api/history.mjs            recorded price history (Netlify Blobs, or a local file)
 netlify/functions/games.mjs            /api/games in production
 netlify/functions/snapshot-prices.mjs  nightly price snapshot
 vite.config.js             the same route during development
 src/App.jsx                the entire UI
-src/games.json             the 229-game catalog, each entry carrying its store id
+src/games.json             the 245-game catalog, each entry carrying its store id
 ```
 
 ## Adding games
@@ -161,4 +193,5 @@ match is caught while baking rather than shipped to readers. An entry with
 `steamAppId: null` renders a lettered gradient and no price, which is correct for
 console exclusives and for games sold outside Steam. Eleven of the 229 are in that
 state: PlayStation exclusives such as Astro Bot, Demon's Souls and Gran Turismo 7,
-and Epic-store titles such as Rocket League, Fall Guys and Genshin Impact.
+and Epic-store titles such as Rocket League, Fall Guys and Genshin Impact. Those
+also have no ratings, since the ratings come from the same storefront.

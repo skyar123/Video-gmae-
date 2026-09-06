@@ -11,7 +11,7 @@
  * environments serve byte-identical responses.
  */
 
-import { recordAndSummarize } from './history.mjs';
+import { loadBlob, recordAndSummarize } from './history.mjs';
 import { predictPriceDrop } from './predict.mjs';
 
 const SEARCH_URL = 'https://store.steampowered.com/api/storesearch/';
@@ -21,6 +21,8 @@ const DETAILS_URL = 'https://store.steampowered.com/api/appdetails';
 const CACHE_TTL_MS = 30 * 60 * 1000;
 /** Games handed back per chunk request. Keeps URLs cache-friendly and small. */
 export const CHUNK_SIZE = 15;
+/** Blob key prefix for nightly-refreshed review data. */
+export const REVIEW_KEY_PREFIX = 'reviews/chunk-';
 
 const cache = new Map();
 const inFlight = new Map();
@@ -302,6 +304,15 @@ export async function handleGamesRequest(url, catalog) {
     // History is an enhancement; never fail the response over it.
   }
 
+  // Ratings ship baked into the catalog so a card is never blank. The nightly
+  // job refreshes them into blob storage; anything it has wins.
+  let ratings = {};
+  try {
+    ratings = await loadBlob(`${REVIEW_KEY_PREFIX}${chunkParam}`);
+  } catch {
+    ratings = {};
+  }
+
   return {
     status: 200,
     body: {
@@ -310,7 +321,12 @@ export async function handleGamesRequest(url, catalog) {
       chunkCount,
       games: games.map((game) => {
         const history = histories[game.id] ?? null;
-        return { ...game, history, prediction: predictPriceDrop(game, history) };
+        return {
+          ...game,
+          history,
+          ratings: ratings[game.id] ?? null,
+          prediction: predictPriceDrop(game, history),
+        };
       }),
     },
   };
