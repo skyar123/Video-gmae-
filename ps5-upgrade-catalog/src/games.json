@@ -11,7 +11,19 @@
       "graphics"
     ],
     "steamAppId": 753640,
-    "description": "Explore a miniature, handcrafted solar system caught in a 22-minute time loop, translating ancient texts and piecing together a massive mystery.",
+    "ageRating": {
+      "tier": "everyone10",
+      "source": "ESRB",
+      "rating": "E10",
+      "official": true,
+      "esrb": "E10",
+      "pegi": "7",
+      "descriptors": [
+        "Alcohol Reference",
+        "Fantasy Violence"
+      ],
+      "notes": null
+    },
     "ratings": {
       "critic": 85,
       "user": {
@@ -48,7 +60,8 @@
         }
       ],
       "asOf": "2026-09-06"
-    }
+    },
+    "description": "Explore a miniature, handcrafted solar system caught in a 22-minute time loop, translating ancient texts and piecing together a massive mystery."
   },
   {
     "id": "disco-elysium",
@@ -62,7 +75,16 @@
       "graphics"
     ],
     "steamAppId": 632470,
-    "description": "A wildly unique isometric RPG where you play an amnesiac detective solving a murder through deep dialogue trees and internal psychological skill checks.",
+    "ageRating": {
+      "tier": "mature",
+      "source": "USK",
+      "rating": "16",
+      "official": true,
+      "esrb": null,
+      "pegi": null,
+      "descriptors": [],
+      "notes": "The game contains instances of substance abuse and exploration of crime scenes."
+    },
     "ratings": {
       "critic": 97,
       "user": {
@@ -95,7 +117,8 @@
         }
       ],
       "asOf": "2026-09-06"
-    }
+    },
+    "description": "A wildly unique isometric RPG where you play an amnesiac detective solving a murder through deep dialogue trees and internal psychological skill checks."
   },
   {
     "id": "no-mans-sky",
@@ -110,7 +133,19 @@
       "social"
     ],
     "steamAppId": 275850,
-    "description": "The ultimate limitless exploration game where you seamlessly travel between procedurally generated planets, build bases, and upgrade your ship.",
+    "ageRating": {
+      "tier": "teen",
+      "source": "ESRB",
+      "rating": "T",
+      "official": true,
+      "esrb": "T",
+      "pegi": null,
+      "descriptors": [
+        "Fantasy Violence",
+        "Animated Blood"
+      ],
+      "notes": null
+    },
     "ratings": {
       "critic": 61,
       "user": {
@@ -155,7 +190,8 @@
         }
       ],
       "asOf": "2026-09-06"
-    }
+    },
+    "description": "The ultimate limitless exploration game where you seamlessly travel between procedurally generated planets, build bases, and upgrade your ship."
   },
   {
     "id": "subnautica",
@@ -169,7 +205,19 @@
       "graphics"
     ],
     "steamAppId": 264710,
-    "description": "Crash-land on an alien ocean planet and explore its depths, scan wildlife, and build underwater habitats to survive.",
+    "ageRating": {
+      "tier": "everyone10",
+      "source": "ESRB",
+      "rating": "E10",
+      "official": true,
+      "esrb": "E10",
+      "pegi": null,
+      "descriptors": [
+        "Fantasy Violence",
+        "Mild Language"
+      ],
+      "notes": null
+    },
     "ratings": {
       "critic": 87,
       "user": {
@@ -202,7 +250,8 @@
         }
       ],
       "asOf": "2026-09-06"
-    }
+    },
+    "description": "Crash-land on an alien ocean planet and explore its depths, scan wildlife, and build underwater habitats to survive."
   },
   {
     "id": "deaths-door",
@@ -214,7 +263,21 @@
     "platform": "PS4",
     "tags": [],
     "steamAppId": 894020,
-    "description": "Play as a soul-reaping crow in a bleak but beautiful world filled with secrets, environmental puzzles, and challenging boss fights.",
+    "ageRating": {
+      "tier": "teen",
+      "source": "ESRB",
+      "rating": "T",
+      "official": true,
+      "esrb": "T",
+      "pegi": "12",
+      "descriptors": [
+        "Blood",
+        "Language",
+        "Use of Alcohol and Tobacco",
+        "Fantasy Violence"
+      ],
+      "notes": null
+    },
     "ratings": {
       "critic": 85,
       "user": {
@@ -242,7 +305,8 @@
       ],
       "cons": [],
       "asOf": "2026-09-06"
-    }
+    },
+    "description": "Play as a soul-reaping crow in a bleak but beautiful world filled with secrets, environmental puzzles, and challenging boss fights."
   },
   {
     "id": "tunic",
@@ -254,7 +318,16 @@
     "platform": "PS4",
     "tags": [],
     "steamAppId": 553420,
-    "description": "Guide a small fox across an island filled with forgotten ruins, deciphering mechanics using lost pages of an authentic retro instruction manual.",
+    "ageRating": {
+      "tier": "everyone10",
+      "source": "DJCTQ",
+      "rating": "10",
+      "official": true,
+      "esrb": null,
+      "pegi": null,
+      "descriptors": [],
+      "notes": null
+    },
     "ratings": {
       "critic": 85,
       "user": {
@@ -299,7 +372,8 @@
         }
       ],
       "asOf": "2026-09-06"
-    }
+    },
+    "description": "Guide a small fox across an island filled with forgotten ruins, deciphering mechanics using lost pages of an authentic retro instruction manual."
   },
   {
     "id": "stray",
@@ -313,7 +387,19 @@
       "graphics"
     ],
     "steamAppId": 1332010,
-    "description": "Play as an agile stray cat separated from its pack, roaming the vertical alleys and rooftops of a decaying, neon-lit cyberpunk city.",
+    "ageRating": {
+      "tier": "everyone10",
+      "source": "ESRB",
+      "rating": "E10",
+      "official": true,
+      "esrb": "E10",
+      "pegi": "12",
+      "descriptors": [
+        "Fantasy Violence",
+        "Animated Blood"
+      ],
+      "notes": null
+    },
     "ratings": {
       "critic": 82,
       "user": {
@@ -346,7 +432,8 @@
         }
       ],
       "asOf": "2026-09-06"
-    }
+    },
+    "description": "Play as an agile stray cat separated from its pack, roaming the vertical alleys and rooftops of a decaying, neon-lit cyberpunk city."
   },
   {
     "id": "sea-of-stars",
@@ -360,7 +447,20 @@
       "cozy"
     ],
     "steamAppId": 1244090,
-    "description": "A turn-based RPG inspired by 1990s classics that blends turn-based combat with seamless traversal, swimming, and climbing.",
+    "ageRating": {
+      "tier": "everyone10",
+      "source": "ESRB",
+      "rating": "E10",
+      "official": true,
+      "esrb": "E10",
+      "pegi": "7",
+      "descriptors": [
+        "Fantasy Violence",
+        "Mild Blood",
+        "Mild Language"
+      ],
+      "notes": null
+    },
     "ratings": {
       "critic": 87,
       "user": {
@@ -397,7 +497,8 @@
         }
       ],
       "asOf": "2026-09-06"
-    }
+    },
+    "description": "A turn-based RPG inspired by 1990s classics that blends turn-based combat with seamless traversal, swimming, and climbing."
   },
   {
     "id": "the-pathless",
@@ -412,7 +513,18 @@
       "graphics"
     ],
     "steamAppId": 1492680,
-    "description": "Explore a vast, misty wilderness with an eagle companion, relying on high-speed kinetic archery movement rather than mini-maps.",
+    "ageRating": {
+      "tier": "everyone10",
+      "source": "ESRB",
+      "rating": "E10",
+      "official": true,
+      "esrb": "E10",
+      "pegi": "12",
+      "descriptors": [
+        "Fantasy Violence"
+      ],
+      "notes": null
+    },
     "ratings": {
       "critic": 81,
       "user": {
@@ -440,7 +552,8 @@
       ],
       "cons": [],
       "asOf": "2026-09-06"
-    }
+    },
+    "description": "Explore a vast, misty wilderness with an eagle companion, relying on high-speed kinetic archery movement rather than mini-maps."
   },
   {
     "id": "solar-ash",
@@ -454,7 +567,20 @@
       "graphics"
     ],
     "steamAppId": 1867530,
-    "description": "Glide across surreal, gravity-defying terrain inside a massive black hole and climb massive, multi-tiered leviathans.",
+    "ageRating": {
+      "tier": "teen",
+      "source": "ESRB",
+      "rating": "T",
+      "official": true,
+      "esrb": "T",
+      "pegi": "12",
+      "descriptors": [
+        "Fantasy Violence",
+        "Blood",
+        "Mild Language"
+      ],
+      "notes": null
+    },
     "ratings": {
       "critic": null,
       "user": {
@@ -465,7 +591,8 @@
       "pros": [],
       "cons": [],
       "asOf": "2026-09-06"
-    }
+    },
+    "description": "Glide across surreal, gravity-defying terrain inside a massive black hole and climb massive, multi-tiered leviathans."
   },
   {
     "id": "horizon-forbidden-west",
@@ -479,7 +606,21 @@
       "graphics"
     ],
     "steamAppId": 2420110,
-    "description": "Explore photorealistic biomes ranging from dense jungles to submerged ruins, uncovering lost human history and fighting robotic wildlife.",
+    "ageRating": {
+      "tier": "teen",
+      "source": "ESRB",
+      "rating": "T",
+      "official": true,
+      "esrb": "T",
+      "pegi": "16",
+      "descriptors": [
+        "Violence",
+        "Blood",
+        "Language",
+        "Use of Alcohol"
+      ],
+      "notes": null
+    },
     "ratings": {
       "critic": null,
       "user": {
@@ -524,7 +665,8 @@
         }
       ],
       "asOf": "2026-09-06"
-    }
+    },
+    "description": "Explore photorealistic biomes ranging from dense jungles to submerged ruins, uncovering lost human history and fighting robotic wildlife."
   },
   {
     "id": "elden-ring",
@@ -539,7 +681,21 @@
       "social"
     ],
     "steamAppId": 1245620,
-    "description": "An open-ended, non-linear fantasy world design driven entirely by curiosity without map markers or clutter.",
+    "ageRating": {
+      "tier": "mature",
+      "source": "ESRB",
+      "rating": "M",
+      "official": true,
+      "esrb": "M",
+      "pegi": "16",
+      "descriptors": [
+        "Blood and Gore",
+        "Language",
+        "Suggestive Themes",
+        "Violence"
+      ],
+      "notes": null
+    },
     "ratings": {
       "critic": 94,
       "user": {
@@ -576,7 +732,8 @@
         }
       ],
       "asOf": "2026-09-06"
-    }
+    },
+    "description": "An open-ended, non-linear fantasy world design driven entirely by curiosity without map markers or clutter."
   },
   {
     "id": "deliver-us-mars",
@@ -590,7 +747,19 @@
       "graphics"
     ],
     "steamAppId": 1345890,
-    "description": "Explore derelict space stations, scale steep Martian canyons with climbing picks, and solve environmental puzzles to recover colony ships.",
+    "ageRating": {
+      "tier": "teen",
+      "source": "ESRB",
+      "rating": "T",
+      "official": true,
+      "esrb": "T",
+      "pegi": "12",
+      "descriptors": [
+        "Violence",
+        "Mild Blood"
+      ],
+      "notes": null
+    },
     "ratings": {
       "critic": null,
       "user": {
@@ -606,7 +775,8 @@
       ],
       "cons": [],
       "asOf": "2026-09-06"
-    }
+    },
+    "description": "Explore derelict space stations, scale steep Martian canyons with climbing picks, and solve environmental puzzles to recover colony ships."
   },
   {
     "id": "season-letter",
@@ -621,7 +791,16 @@
       "graphics"
     ],
     "steamAppId": 695330,
-    "description": "Ride a bicycle through a tranquil valley, recording ambient audio, snapping photographs, and journaling before a cataclysm reshapes the world.",
+    "ageRating": {
+      "tier": "everyone",
+      "source": "PEGI",
+      "rating": "3",
+      "official": true,
+      "esrb": null,
+      "pegi": "3",
+      "descriptors": [],
+      "notes": null
+    },
     "ratings": {
       "critic": 80,
       "user": {
@@ -641,7 +820,8 @@
       ],
       "cons": [],
       "asOf": "2026-09-06"
-    }
+    },
+    "description": "Ride a bicycle through a tranquil valley, recording ambient audio, snapping photographs, and journaling before a cataclysm reshapes the world."
   },
   {
     "id": "eastshade",
@@ -655,7 +835,16 @@
       "cozy"
     ],
     "steamAppId": 715560,
-    "description": "Capture the artistic spirit as a traveling painter exploring a peaceful island, setting up an easel to paint specific landscapes for the locals.",
+    "ageRating": {
+      "tier": "everyone",
+      "source": "DJCTQ",
+      "rating": "L",
+      "official": false,
+      "esrb": null,
+      "pegi": null,
+      "descriptors": [],
+      "notes": null
+    },
     "ratings": {
       "critic": 78,
       "user": {
@@ -683,7 +872,8 @@
       ],
       "cons": [],
       "asOf": "2026-09-06"
-    }
+    },
+    "description": "Capture the artistic spirit as a traveling painter exploring a peaceful island, setting up an easel to paint specific landscapes for the locals."
   },
   {
     "id": "firewatch",
@@ -695,7 +885,16 @@
     "platform": "PS4",
     "tags": [],
     "steamAppId": 383870,
-    "description": "Work as a fire lookout in 1989 Wyoming, navigating the wilderness entirely via handheld map, compass, and radio conversations.",
+    "ageRating": {
+      "tier": "mature",
+      "source": "DJCTQ",
+      "rating": "16",
+      "official": true,
+      "esrb": null,
+      "pegi": null,
+      "descriptors": [],
+      "notes": null
+    },
     "ratings": {
       "critic": 81,
       "user": {
@@ -732,7 +931,8 @@
         }
       ],
       "asOf": "2026-09-06"
-    }
+    },
+    "description": "Work as a fire lookout in 1989 Wyoming, navigating the wilderness entirely via handheld map, compass, and radio conversations."
   },
   {
     "id": "alba-wildlife",
@@ -746,7 +946,16 @@
       "cozy"
     ],
     "steamAppId": 1337010,
-    "description": "Visit a Mediterranean island to stop a hotel development by using a smartphone to identify and photograph native bird and animal species.",
+    "ageRating": {
+      "tier": "everyone",
+      "source": "DJCTQ",
+      "rating": "L",
+      "official": true,
+      "esrb": null,
+      "pegi": null,
+      "descriptors": [],
+      "notes": null
+    },
     "ratings": {
       "critic": 79,
       "user": {
@@ -774,7 +983,8 @@
       ],
       "cons": [],
       "asOf": "2026-09-06"
-    }
+    },
+    "description": "Visit a Mediterranean island to stop a hotel development by using a smartphone to identify and photograph native bird and animal species."
   },
   {
     "id": "life-is-strange-true-colors",
@@ -786,7 +996,23 @@
     "platform": "PS4",
     "tags": [],
     "steamAppId": 936790,
-    "description": "Explore a scenic Colorado mountain valley utilizing psychic empathy powers to solve a mystery through deliberate, character-driven conversations.",
+    "ageRating": {
+      "tier": "mature",
+      "source": "ESRB",
+      "rating": "M",
+      "official": true,
+      "esrb": "M",
+      "pegi": "16",
+      "descriptors": [
+        "Blood",
+        "Drug Reference",
+        "Strong Language",
+        "Suggestive Themes",
+        "Use of Alcohol",
+        "Violence"
+      ],
+      "notes": "Life is Strange: True Colors is a narrative adventure featuring Alex Chen, a young woman with an astonishing supernatural power, through which she can experience the strong emotions of others. While Alex’s power will lead to moments of great Joy, it also brings her into the orbit of violent Anger, world-altering Sadness, and irrepressible Fear. As she probes the mysteries of Haven Springs, revealing its secrets, Alex will discover moments of quiet transcendence – but also be drawn into moments of sudden, bloody violence - with lasting consequences. The game also features strong language, drug reference, some suggestive themes, and the use of alcohol."
+    },
     "ratings": {
       "critic": null,
       "user": {
@@ -819,7 +1045,8 @@
         }
       ],
       "asOf": "2026-09-06"
-    }
+    },
+    "description": "Explore a scenic Colorado mountain valley utilizing psychic empathy powers to solve a mystery through deliberate, character-driven conversations."
   },
   {
     "id": "a-short-hike",
@@ -833,7 +1060,16 @@
       "cozy"
     ],
     "steamAppId": 1055540,
-    "description": "Guide Claire, a young bird visiting a provincial park, hiking toward the mountain summit, fishing, and gliding from high cliffs.",
+    "ageRating": {
+      "tier": "everyone",
+      "source": "ESRB",
+      "rating": "E",
+      "official": true,
+      "esrb": "E",
+      "pegi": "3",
+      "descriptors": [],
+      "notes": null
+    },
     "ratings": {
       "critic": 82,
       "user": {
@@ -861,7 +1097,8 @@
       ],
       "cons": [],
       "asOf": "2026-09-06"
-    }
+    },
+    "description": "Guide Claire, a young bird visiting a provincial park, hiking toward the mountain summit, fishing, and gliding from high cliffs."
   },
   {
     "id": "lake",
@@ -875,7 +1112,16 @@
       "cozy"
     ],
     "steamAppId": 1118240,
-    "description": "Fill in for your father as the local mail carrier in 1986 Oregon, driving a mail truck around a tranquil lake and catching up with old friends.",
+    "ageRating": {
+      "tier": "teen",
+      "source": "DJCTQ",
+      "rating": "14",
+      "official": true,
+      "esrb": null,
+      "pegi": null,
+      "descriptors": [],
+      "notes": null
+    },
     "ratings": {
       "critic": 70,
       "user": {
@@ -908,7 +1154,8 @@
         }
       ],
       "asOf": "2026-09-06"
-    }
+    },
+    "description": "Fill in for your father as the local mail carrier in 1986 Oregon, driving a mail truck around a tranquil lake and catching up with old friends."
   },
   {
     "id": "sandrock",
@@ -922,7 +1169,18 @@
       "cozy"
     ],
     "steamAppId": 1084600,
-    "description": "Rebuild a rugged desert town, craft massive machines, and socialize with locals in a deep farming and builder simulation.",
+    "ageRating": {
+      "tier": "everyone10",
+      "source": "PEGI",
+      "rating": "7",
+      "official": true,
+      "esrb": null,
+      "pegi": "7",
+      "descriptors": [
+        "Violence"
+      ],
+      "notes": null
+    },
     "ratings": {
       "critic": 80,
       "user": {
@@ -955,7 +1213,8 @@
         }
       ],
       "asOf": "2026-09-06"
-    }
+    },
+    "description": "Rebuild a rugged desert town, craft massive machines, and socialize with locals in a deep farming and builder simulation."
   },
   {
     "id": "paleo-pines",
@@ -969,7 +1228,16 @@
       "cozy"
     ],
     "steamAppId": 1202200,
-    "description": "Build a vast ranch, farm crops, and tame a sanctuary of brightly colored, rideable dinosaurs.",
+    "ageRating": {
+      "tier": "everyone",
+      "source": "DJCTQ",
+      "rating": "L",
+      "official": true,
+      "esrb": null,
+      "pegi": null,
+      "descriptors": [],
+      "notes": null
+    },
     "ratings": {
       "critic": null,
       "user": {
@@ -993,7 +1261,8 @@
       ],
       "cons": [],
       "asOf": "2026-09-06"
-    }
+    },
+    "description": "Build a vast ranch, farm crops, and tame a sanctuary of brightly colored, rideable dinosaurs."
   },
   {
     "id": "bugsnax",
@@ -1007,7 +1276,18 @@
       "cozy"
     ],
     "steamAppId": 674140,
-    "description": "Explore an island to catch bizarre half-bug, half-snack creatures and rebuild a quirky settlement of fuzzy inhabitants.",
+    "ageRating": {
+      "tier": "everyone10",
+      "source": "ESRB",
+      "rating": "E10",
+      "official": true,
+      "esrb": "E10",
+      "pegi": "3",
+      "descriptors": [
+        "Animated Blood, Crude Humor, Fantasy Violence, Suggestive Themes"
+      ],
+      "notes": null
+    },
     "ratings": {
       "critic": null,
       "user": {
@@ -1027,7 +1307,8 @@
       ],
       "cons": [],
       "asOf": "2026-09-06"
-    }
+    },
+    "description": "Explore an island to catch bizarre half-bug, half-snack creatures and rebuild a quirky settlement of fuzzy inhabitants."
   },
   {
     "id": "dreamlight-valley",
@@ -1042,7 +1323,18 @@
       "social"
     ],
     "steamAppId": 1401590,
-    "description": "A massive life-simulation where you design a town, decorate your home, and complete quests alongside classic animated characters.",
+    "ageRating": {
+      "tier": "everyone",
+      "source": "ESRB",
+      "rating": "E",
+      "official": true,
+      "esrb": "E",
+      "pegi": "3",
+      "descriptors": [
+        "In-Game Purchases"
+      ],
+      "notes": null
+    },
     "ratings": {
       "critic": null,
       "user": {
@@ -1075,7 +1367,8 @@
         }
       ],
       "asOf": "2026-09-06"
-    }
+    },
+    "description": "A massive life-simulation where you design a town, decorate your home, and complete quests alongside classic animated characters."
   },
   {
     "id": "cult-of-the-lamb",
@@ -1089,7 +1382,16 @@
       "graphics"
     ],
     "steamAppId": 1313140,
-    "description": "Play as a cute possessed lamb managing a woodland cult, balancing base-building with fast-paced dungeon crawling.",
+    "ageRating": {
+      "tier": "teen",
+      "source": "USK",
+      "rating": "12",
+      "official": true,
+      "esrb": null,
+      "pegi": null,
+      "descriptors": [],
+      "notes": "Cartoon Violence"
+    },
     "ratings": {
       "critic": 82,
       "user": {
@@ -1130,7 +1432,8 @@
         }
       ],
       "asOf": "2026-09-06"
-    }
+    },
+    "description": "Play as a cute possessed lamb managing a woodland cult, balancing base-building with fast-paced dungeon crawling."
   },
   {
     "id": "roots-of-pacha",
@@ -1145,7 +1448,16 @@
       "social"
     ],
     "steamAppId": 1245560,
-    "description": "A cooperative farming and life simulation game set in the Stone Age. Discover crops, invent early technology, and tame animals.",
+    "ageRating": {
+      "tier": "everyone10",
+      "source": "DJCTQ",
+      "rating": "10",
+      "official": false,
+      "esrb": null,
+      "pegi": null,
+      "descriptors": [],
+      "notes": null
+    },
     "ratings": {
       "critic": null,
       "user": {
@@ -1161,7 +1473,8 @@
       ],
       "cons": [],
       "asOf": "2026-09-06"
-    }
+    },
+    "description": "A cooperative farming and life simulation game set in the Stone Age. Discover crops, invent early technology, and tame animals."
   },
   {
     "id": "spiritfarer",
@@ -1176,7 +1489,19 @@
       "graphics"
     ],
     "steamAppId": 972660,
-    "description": "A gentle journey where you navigate an uncharted ocean, dock at hidden islands, and cook for eccentric animal spirits before helping them move on.",
+    "ageRating": {
+      "tier": "teen",
+      "source": "PEGI",
+      "rating": "12",
+      "official": true,
+      "esrb": null,
+      "pegi": "12",
+      "descriptors": [
+        "Mild Swearing",
+        "Sexual Innuendo"
+      ],
+      "notes": "Spiritfarer's narrative sometimes deals with mature subject matter. While we treat these themes with sensitivity and care, we recommend parental guidance to help younger players understand topics such as: death, physical disability, mental illness, and suicide."
+    },
     "ratings": {
       "critic": 84,
       "user": {
@@ -1217,7 +1542,8 @@
         }
       ],
       "asOf": "2026-09-06"
-    }
+    },
+    "description": "A gentle journey where you navigate an uncharted ocean, dock at hidden islands, and cook for eccentric animal spirits before helping them move on."
   },
   {
     "id": "gris",
@@ -1232,7 +1558,16 @@
       "graphics"
     ],
     "steamAppId": 683320,
-    "description": "Devoid of danger, the world begins as a stark, monochromatic canvas and gradually blooms with watercolor tones as you solve light spatial puzzles.",
+    "ageRating": {
+      "tier": "everyone",
+      "source": "ESRB",
+      "rating": "E",
+      "official": true,
+      "esrb": "E",
+      "pegi": null,
+      "descriptors": [],
+      "notes": null
+    },
     "ratings": {
       "critic": 84,
       "user": {
@@ -1260,7 +1595,8 @@
       ],
       "cons": [],
       "asOf": "2026-09-06"
-    }
+    },
+    "description": "Devoid of danger, the world begins as a stark, monochromatic canvas and gradually blooms with watercolor tones as you solve light spatial puzzles."
   },
   {
     "id": "toem",
@@ -1274,7 +1610,16 @@
       "cozy"
     ],
     "steamAppId": 1307580,
-    "description": "A delightful, hand-drawn black-and-white adventure focused entirely on solving puzzles by taking photographs for quirky locals.",
+    "ageRating": {
+      "tier": "everyone",
+      "source": "ESRB",
+      "rating": "E",
+      "official": true,
+      "esrb": "E",
+      "pegi": null,
+      "descriptors": [],
+      "notes": null
+    },
     "ratings": {
       "critic": 79,
       "user": {
@@ -1302,7 +1647,8 @@
       ],
       "cons": [],
       "asOf": "2026-09-06"
-    }
+    },
+    "description": "A delightful, hand-drawn black-and-white adventure focused entirely on solving puzzles by taking photographs for quirky locals."
   },
   {
     "id": "dredge",
@@ -1314,7 +1660,16 @@
     "platform": "PS4",
     "tags": [],
     "steamAppId": 1562430,
-    "description": "A fishing exploration game where you upgrade your trawler and catalog ocean life, mixed with light, eerie cosmic horror.",
+    "ageRating": {
+      "tier": "teen",
+      "source": "USK",
+      "rating": "12",
+      "official": true,
+      "esrb": null,
+      "pegi": null,
+      "descriptors": [],
+      "notes": null
+    },
     "ratings": {
       "critic": null,
       "user": {
@@ -1347,7 +1702,8 @@
         }
       ],
       "asOf": "2026-09-06"
-    }
+    },
+    "description": "A fishing exploration game where you upgrade your trawler and catalog ocean life, mixed with light, eerie cosmic horror."
   },
   {
     "id": "oxenfree-2",
@@ -1359,7 +1715,16 @@
     "platform": "PS4",
     "tags": [],
     "steamAppId": 1574310,
-    "description": "Play as Riley, an environmental researcher investigating strange radio frequencies and time anomalies in a coastal town.",
+    "ageRating": {
+      "tier": "mature",
+      "source": "DJCTQ",
+      "rating": "16",
+      "official": false,
+      "esrb": null,
+      "pegi": null,
+      "descriptors": [],
+      "notes": "Self Harm | Suicide\r\nWhile possessed by ghosts, characters may take actions that would be harmful to their well-being, such as jumping off cliffs or bridges.\r\n\r\nMental Health | Emotional Abuse | Trauma | Verbal Abuse\r\nThroughout the game, characters grapple with issues resulting from complex family relationships, particularly between parents and children. As a result, characters and the player make choices in the game that impact their future. Characters may use hurtful nicknames or manipulative language depending on their relationships with other characters."
+    },
     "ratings": {
       "critic": null,
       "user": {
@@ -1379,7 +1744,8 @@
       ],
       "cons": [],
       "asOf": "2026-09-06"
-    }
+    },
+    "description": "Play as Riley, an environmental researcher investigating strange radio frequencies and time anomalies in a coastal town."
   },
   {
     "id": "night-in-the-woods",
@@ -1393,7 +1759,16 @@
       "cozy"
     ],
     "steamAppId": 481510,
-    "description": "Play as Mae, a college dropout cat who returns to her struggling rust-belt hometown to reconnect with friends.",
+    "ageRating": {
+      "tier": "teen",
+      "source": "DJCTQ",
+      "rating": "12",
+      "official": false,
+      "esrb": null,
+      "pegi": null,
+      "descriptors": [],
+      "notes": null
+    },
     "ratings": {
       "critic": 88,
       "user": {
@@ -1426,7 +1801,8 @@
         }
       ],
       "asOf": "2026-09-06"
-    }
+    },
+    "description": "Play as Mae, a college dropout cat who returns to her struggling rust-belt hometown to reconnect with friends."
   },
   {
     "id": "roki",
@@ -1440,7 +1816,19 @@
       "cozy"
     ],
     "steamAppId": 1067540,
-    "description": "Play as Tove, a young girl exploring a snow-covered Scandinavian wilderness filled with ancient folklore creatures.",
+    "ageRating": {
+      "tier": "everyone10",
+      "source": "ESRB",
+      "rating": "E10",
+      "official": true,
+      "esrb": "E10",
+      "pegi": "12",
+      "descriptors": [
+        "Animated Blood",
+        "Fantasy Violence"
+      ],
+      "notes": null
+    },
     "ratings": {
       "critic": 76,
       "user": {
@@ -1460,7 +1848,8 @@
       ],
       "cons": [],
       "asOf": "2026-09-06"
-    }
+    },
+    "description": "Play as Tove, a young girl exploring a snow-covered Scandinavian wilderness filled with ancient folklore creatures."
   },
   {
     "id": "kena",
@@ -1474,7 +1863,18 @@
       "graphics"
     ],
     "steamAppId": 1954200,
-    "description": "Play as a young female spirit guide who fights with a staff and collects adorable fuzzy companions called the Rot.",
+    "ageRating": {
+      "tier": "teen",
+      "source": "ESRB",
+      "rating": "T",
+      "official": true,
+      "esrb": "T",
+      "pegi": "12",
+      "descriptors": [
+        "Fantasy Violence"
+      ],
+      "notes": null
+    },
     "ratings": {
       "critic": 83,
       "user": {
@@ -1511,7 +1911,8 @@
         }
       ],
       "asOf": "2026-09-06"
-    }
+    },
+    "description": "Play as a young female spirit guide who fights with a staff and collects adorable fuzzy companions called the Rot."
   },
   {
     "id": "chicory",
@@ -1526,7 +1927,18 @@
       "graphics"
     ],
     "steamAppId": 1123450,
-    "description": "Play as a dog with a magical paintbrush, restoring color to a black-and-white world while solving environmental puzzles.",
+    "ageRating": {
+      "tier": "everyone10",
+      "source": "ESRB",
+      "rating": "E10",
+      "official": true,
+      "esrb": "E10",
+      "pegi": null,
+      "descriptors": [
+        "Comic Mischief, Mild Fantasy Violence, Mild Suggestive Themes"
+      ],
+      "notes": null
+    },
     "ratings": {
       "critic": 90,
       "user": {
@@ -1537,7 +1949,8 @@
       "pros": [],
       "cons": [],
       "asOf": "2026-09-06"
-    }
+    },
+    "description": "Play as a dog with a magical paintbrush, restoring color to a black-and-white world while solving environmental puzzles."
   },
   {
     "id": "cassette-beasts",
@@ -1552,7 +1965,16 @@
       "social"
     ],
     "steamAppId": 1321440,
-    "description": "A monster-taming RPG where you record beasts on cassette tapes and fuse them together to fight in a nostalgic 2000s town.",
+    "ageRating": {
+      "tier": "everyone",
+      "source": "DJCTQ",
+      "rating": "L",
+      "official": true,
+      "esrb": null,
+      "pegi": null,
+      "descriptors": [],
+      "notes": null
+    },
     "ratings": {
       "critic": null,
       "user": {
@@ -1580,7 +2002,8 @@
       ],
       "cons": [],
       "asOf": "2026-09-06"
-    }
+    },
+    "description": "A monster-taming RPG where you record beasts on cassette tapes and fuse them together to fight in a nostalgic 2000s town."
   },
   {
     "id": "dave-the-diver",
@@ -1594,7 +2017,16 @@
       "cozy"
     ],
     "steamAppId": 1868140,
-    "description": "Scuba dive to spearfish by day, and manage the finances and menu of a bustling sushi restaurant by night.",
+    "ageRating": {
+      "tier": "everyone",
+      "source": "DJCTQ",
+      "rating": "L",
+      "official": true,
+      "esrb": null,
+      "pegi": null,
+      "descriptors": [],
+      "notes": null
+    },
     "ratings": {
       "critic": 90,
       "user": {
@@ -1631,7 +2063,8 @@
         }
       ],
       "asOf": "2026-09-06"
-    }
+    },
+    "description": "Scuba dive to spearfish by day, and manage the finances and menu of a bustling sushi restaurant by night."
   },
   {
     "id": "tinykin",
@@ -1645,7 +2078,16 @@
       "cozy"
     ],
     "steamAppId": 1599020,
-    "description": "Play as a tiny astronaut exploring a massive 1990s house, using hundreds of small alien creatures to carry objects and build ladders.",
+    "ageRating": {
+      "tier": "everyone",
+      "source": "DJCTQ",
+      "rating": "L",
+      "official": true,
+      "esrb": null,
+      "pegi": null,
+      "descriptors": [],
+      "notes": null
+    },
     "ratings": {
       "critic": null,
       "user": {
@@ -1673,7 +2115,8 @@
       ],
       "cons": [],
       "asOf": "2026-09-06"
-    }
+    },
+    "description": "Play as a tiny astronaut exploring a massive 1990s house, using hundreds of small alien creatures to carry objects and build ladders."
   },
   {
     "id": "balatro",
@@ -1687,7 +2130,16 @@
       "social"
     ],
     "steamAppId": 2379780,
-    "description": "An endlessly addictive poker roguelike where you buy illegal Joker cards to break the rules of standard poker and score massive multipliers.",
+    "ageRating": {
+      "tier": "everyone",
+      "source": "DJCTQ",
+      "rating": "L",
+      "official": false,
+      "esrb": null,
+      "pegi": null,
+      "descriptors": [],
+      "notes": null
+    },
     "ratings": {
       "critic": 90,
       "user": {
@@ -1715,7 +2167,8 @@
       ],
       "cons": [],
       "asOf": "2026-09-06"
-    }
+    },
+    "description": "An endlessly addictive poker roguelike where you buy illegal Joker cards to break the rules of standard poker and score massive multipliers."
   },
   {
     "id": "teenage-exocolonist",
@@ -1729,7 +2182,16 @@
       "cozy"
     ],
     "steamAppId": 1148760,
-    "description": "Grow up on an alien planet, making choices over ten years that shape your skills, friendships, and the colony's survival.",
+    "ageRating": {
+      "tier": "teen",
+      "source": "DJCTQ",
+      "rating": "14",
+      "official": true,
+      "esrb": null,
+      "pegi": null,
+      "descriptors": [],
+      "notes": null
+    },
     "ratings": {
       "critic": 91,
       "user": {
@@ -1757,7 +2219,8 @@
       ],
       "cons": [],
       "asOf": "2026-09-06"
-    }
+    },
+    "description": "Grow up on an alien planet, making choices over ten years that shape your skills, friendships, and the colony's survival."
   },
   {
     "id": "tchia",
@@ -1772,7 +2235,16 @@
       "graphics"
     ],
     "steamAppId": 1496590,
-    "description": "Sail a custom boat, play a fully functional ukulele, and soul-jump into any animal or object in a physics-driven tropical sandbox.",
+    "ageRating": {
+      "tier": "everyone10",
+      "source": "DJCTQ",
+      "rating": "10",
+      "official": true,
+      "esrb": null,
+      "pegi": null,
+      "descriptors": [],
+      "notes": null
+    },
     "ratings": {
       "critic": null,
       "user": {
@@ -1783,7 +2255,8 @@
       "pros": [],
       "cons": [],
       "asOf": "2026-09-06"
-    }
+    },
+    "description": "Sail a custom boat, play a fully functional ukulele, and soul-jump into any animal or object in a physics-driven tropical sandbox."
   },
   {
     "id": "hollow-knight",
@@ -1797,7 +2270,19 @@
       "graphics"
     ],
     "steamAppId": 367520,
-    "description": "Descend as a tiny nail-wielding bug into Hallownest, a vast hand-drawn ruin of insect kingdoms, secret arenas and hidden charms.",
+    "ageRating": {
+      "tier": "everyone10",
+      "source": "ESRB",
+      "rating": "E10",
+      "official": true,
+      "esrb": "E10",
+      "pegi": null,
+      "descriptors": [
+        "Fantasy Violence",
+        "Mild Blood"
+      ],
+      "notes": null
+    },
     "ratings": {
       "critic": 87,
       "user": {
@@ -1830,7 +2315,8 @@
         }
       ],
       "asOf": "2026-09-06"
-    }
+    },
+    "description": "Descend as a tiny nail-wielding bug into Hallownest, a vast hand-drawn ruin of insect kingdoms, secret arenas and hidden charms."
   },
   {
     "id": "ender-lilies",
@@ -1844,7 +2330,19 @@
       "graphics"
     ],
     "steamAppId": 1369630,
-    "description": "A white priestess purifies fallen knights in a rain-soaked watercolor kingdom, binding their spirits to fight for her.",
+    "ageRating": {
+      "tier": "teen",
+      "source": "ESRB",
+      "rating": "T",
+      "official": true,
+      "esrb": "T",
+      "pegi": "12",
+      "descriptors": [
+        "Blood",
+        "Violence"
+      ],
+      "notes": null
+    },
     "ratings": {
       "critic": 86,
       "user": {
@@ -1872,7 +2370,8 @@
       ],
       "cons": [],
       "asOf": "2026-09-06"
-    }
+    },
+    "description": "A white priestess purifies fallen knights in a rain-soaked watercolor kingdom, binding their spirits to fight for her."
   },
   {
     "id": "blasphemous",
@@ -1884,7 +2383,16 @@
     "platform": "PS4",
     "tags": [],
     "steamAppId": 774361,
-    "description": "A brutal pixel-art pilgrimage through a land of baroque religious guilt, packed with grotesque bosses and hidden penances.",
+    "ageRating": {
+      "tier": "mature",
+      "source": "DJCTQ",
+      "rating": "18",
+      "official": true,
+      "esrb": null,
+      "pegi": null,
+      "descriptors": [],
+      "notes": null
+    },
     "ratings": {
       "critic": 77,
       "user": {
@@ -1929,7 +2437,8 @@
         }
       ],
       "asOf": "2026-09-06"
-    }
+    },
+    "description": "A brutal pixel-art pilgrimage through a land of baroque religious guilt, packed with grotesque bosses and hidden penances."
   },
   {
     "id": "dead-cells",
@@ -1941,7 +2450,20 @@
     "platform": "PS4",
     "tags": [],
     "steamAppId": 588650,
-    "description": "A roguelike metroidvania built on razor-sharp movement, where every death reshuffles the castle and every run unlocks new permanent routes.",
+    "ageRating": {
+      "tier": "teen",
+      "source": "ESRB",
+      "rating": "T",
+      "official": true,
+      "esrb": "T",
+      "pegi": "16",
+      "descriptors": [
+        "Violence",
+        "Blood and Gore",
+        "Language"
+      ],
+      "notes": "This is an action-platformer in which players control a reanimated corpse trying to escape an island prison. From a side-scrolling perspective, players explore platform environments while engaging in frenetic melee-style combat against fantastical creatures (e.g., skeletons, giant leeches, goblins). Players use punches, kicks, and gadgets (e.g., flame-thrower traps, grenades, arrow turrets) to kill enemies. Enemies emit large splatters of blood when injured/killed and sometimes break apart into bloody pieces; blood also stains the floors and walls of some areas."
+    },
     "ratings": {
       "critic": 89,
       "user": {
@@ -1974,7 +2496,8 @@
         }
       ],
       "asOf": "2026-09-06"
-    }
+    },
+    "description": "A roguelike metroidvania built on razor-sharp movement, where every death reshuffles the castle and every run unlocks new permanent routes."
   },
   {
     "id": "guacamelee-2",
@@ -1986,7 +2509,20 @@
     "platform": "PS4",
     "tags": [],
     "steamAppId": 534550,
-    "description": "A luchador brawls through a bright Mexican folklore world, swapping between the living and dead realms to solve platforming puzzles.",
+    "ageRating": {
+      "tier": "everyone10",
+      "source": "ESRB",
+      "rating": "E10",
+      "official": true,
+      "esrb": "E10",
+      "pegi": "12",
+      "descriptors": [
+        "Fantasy Violence",
+        "Mild Language",
+        "Alcohol Reference"
+      ],
+      "notes": null
+    },
     "ratings": {
       "critic": 84,
       "user": {
@@ -1997,7 +2533,8 @@
       "pros": [],
       "cons": [],
       "asOf": "2026-09-06"
-    }
+    },
+    "description": "A luchador brawls through a bright Mexican folklore world, swapping between the living and dead realms to solve platforming puzzles."
   },
   {
     "id": "momodora",
@@ -2009,7 +2546,16 @@
     "platform": "PS4",
     "tags": [],
     "steamAppId": 428550,
-    "description": "A priestess armed with a maple leaf explores a cursed kingdom in a compact, elegant pixel-art metroidvania.",
+    "ageRating": {
+      "tier": "everyone",
+      "source": "DJCTQ",
+      "rating": "L",
+      "official": true,
+      "esrb": null,
+      "pegi": null,
+      "descriptors": [],
+      "notes": null
+    },
     "ratings": {
       "critic": 82,
       "user": {
@@ -2020,7 +2566,8 @@
       "pros": [],
       "cons": [],
       "asOf": "2026-09-06"
-    }
+    },
+    "description": "A priestess armed with a maple leaf explores a cursed kingdom in a compact, elegant pixel-art metroidvania."
   },
   {
     "id": "salt-and-sanctuary",
@@ -2032,7 +2579,20 @@
     "platform": "PS4",
     "tags": [],
     "steamAppId": 283640,
-    "description": "A side-on soulslike with deep class building, punishing bosses and a sprawling interconnected island to unlock.",
+    "ageRating": {
+      "tier": "mature",
+      "source": "ESRB",
+      "rating": "M",
+      "official": true,
+      "esrb": "M",
+      "pegi": "16",
+      "descriptors": [
+        "Blood and Gore",
+        "Partial Nudity",
+        "Violence"
+      ],
+      "notes": null
+    },
     "ratings": {
       "critic": 84,
       "user": {
@@ -2056,7 +2616,8 @@
       ],
       "cons": [],
       "asOf": "2026-09-06"
-    }
+    },
+    "description": "A side-on soulslike with deep class building, punishing bosses and a sprawling interconnected island to unlock."
   },
   {
     "id": "deedlit-wonder-labyrinth",
@@ -2068,7 +2629,16 @@
     "platform": "PS4",
     "tags": [],
     "steamAppId": 1203630,
-    "description": "Deedlit the elf swaps between wind and fire spirits to absorb attacks in a loving tribute to classic Igavania design.",
+    "ageRating": {
+      "tier": "teen",
+      "source": "DJCTQ",
+      "rating": "14",
+      "official": true,
+      "esrb": null,
+      "pegi": null,
+      "descriptors": [],
+      "notes": null
+    },
     "ratings": {
       "critic": null,
       "user": {
@@ -2079,7 +2649,8 @@
       "pros": [],
       "cons": [],
       "asOf": "2026-09-06"
-    }
+    },
+    "description": "Deedlit the elf swaps between wind and fire spirits to absorb attacks in a loving tribute to classic Igavania design."
   },
   {
     "id": "afterimage",
@@ -2093,7 +2664,16 @@
       "graphics"
     ],
     "steamAppId": 1701520,
-    "description": "Renee explores a huge hand-painted world of floating ruins with dozens of weapon types and a sprawling skill tree.",
+    "ageRating": {
+      "tier": "everyone",
+      "source": "DJCTQ",
+      "rating": "L",
+      "official": true,
+      "esrb": null,
+      "pegi": null,
+      "descriptors": [],
+      "notes": null
+    },
     "ratings": {
       "critic": null,
       "user": {
@@ -2121,7 +2701,8 @@
       ],
       "cons": [],
       "asOf": "2026-09-06"
-    }
+    },
+    "description": "Renee explores a huge hand-painted world of floating ruins with dozens of weapon types and a sprawling skill tree."
   },
   {
     "id": "grime",
@@ -2133,7 +2714,19 @@
     "platform": "PS4",
     "tags": [],
     "steamAppId": 1123050,
-    "description": "A living black hole absorbs enemy attacks in a surreal world of sculpted stone and flesh, rewarding perfectly timed parries.",
+    "ageRating": {
+      "tier": "teen",
+      "source": "ESRB",
+      "rating": "T",
+      "official": true,
+      "esrb": "T",
+      "pegi": null,
+      "descriptors": [
+        "Fantasy Violence",
+        "Animated Blood"
+      ],
+      "notes": null
+    },
     "ratings": {
       "critic": 81,
       "user": {
@@ -2153,7 +2746,8 @@
       ],
       "cons": [],
       "asOf": "2026-09-06"
-    }
+    },
+    "description": "A living black hole absorbs enemy attacks in a surreal world of sculpted stone and flesh, rewarding perfectly timed parries."
   },
   {
     "id": "ghost-song",
@@ -2165,7 +2759,16 @@
     "platform": "PS4",
     "tags": [],
     "steamAppId": 347800,
-    "description": "A deadsuit wakes on a moon of bioluminescent caves and derelict ships, uncovering what happened to the crew that left it behind.",
+    "ageRating": {
+      "tier": "teen",
+      "source": "DJCTQ",
+      "rating": "12",
+      "official": true,
+      "esrb": null,
+      "pegi": null,
+      "descriptors": [],
+      "notes": null
+    },
     "ratings": {
       "critic": 79,
       "user": {
@@ -2176,7 +2779,8 @@
       "pros": [],
       "cons": [],
       "asOf": "2026-09-06"
-    }
+    },
+    "description": "A deadsuit wakes on a moon of bioluminescent caves and derelict ships, uncovering what happened to the crew that left it behind."
   },
   {
     "id": "haiku-the-robot",
@@ -2188,7 +2792,18 @@
     "platform": "PS4",
     "tags": [],
     "steamAppId": 1231880,
-    "description": "A small repair robot rolls through the rusted mechanical body of a dead world, restoring the machines still clinging to life.",
+    "ageRating": {
+      "tier": "everyone10",
+      "source": "PEGI",
+      "rating": "7",
+      "official": true,
+      "esrb": null,
+      "pegi": "7",
+      "descriptors": [
+        "Mild Violence"
+      ],
+      "notes": null
+    },
     "ratings": {
       "critic": null,
       "user": {
@@ -2216,7 +2831,8 @@
       ],
       "cons": [],
       "asOf": "2026-09-06"
-    }
+    },
+    "description": "A small repair robot rolls through the rusted mechanical body of a dead world, restoring the machines still clinging to life."
   },
   {
     "id": "infernax",
@@ -2228,7 +2844,16 @@
     "platform": "PS4",
     "tags": [],
     "steamAppId": 374190,
-    "description": "An 8-bit style crusade with branching good and evil paths, chunky combat and a map that opens up through blunt force.",
+    "ageRating": {
+      "tier": "mature",
+      "source": "DJCTQ",
+      "rating": "16",
+      "official": true,
+      "esrb": null,
+      "pegi": null,
+      "descriptors": [],
+      "notes": "THIS GAME CONTAINS MATURE THEMES THAT MAY NOT BE SUITABLE FOR EVERYONE, RANGING FROM SAUCY LANGUAGE, ACTS OF VIOLENCE IN THE NAME OF JUSTICE, COPIOUS AMOUNTS OF GORE, AND HALF CLOTHED DEMON PEOPLE OF VARYING DEGREES OF ATTRACTIVENESS. \r\n\r\nBY INSTALLING THIS GAME YOU HEREBY AGREE THAT YOU ARE COOL WITH THIS. COOL? COOL."
+    },
     "ratings": {
       "critic": 84,
       "user": {
@@ -2239,7 +2864,8 @@
       "pros": [],
       "cons": [],
       "asOf": "2026-09-06"
-    }
+    },
+    "description": "An 8-bit style crusade with branching good and evil paths, chunky combat and a map that opens up through blunt force."
   },
   {
     "id": "astalon",
@@ -2251,7 +2877,19 @@
     "platform": "PS4",
     "tags": [],
     "steamAppId": 1046400,
-    "description": "Three adventurers trade places mid-run inside a tower that resets on death but keeps every upgrade you bought with your life.",
+    "ageRating": {
+      "tier": "teen",
+      "source": "PEGI",
+      "rating": "12",
+      "official": true,
+      "esrb": null,
+      "pegi": "12",
+      "descriptors": [
+        "Moderate Violence",
+        "Horror"
+      ],
+      "notes": null
+    },
     "ratings": {
       "critic": 84,
       "user": {
@@ -2275,7 +2913,8 @@
       ],
       "cons": [],
       "asOf": "2026-09-06"
-    }
+    },
+    "description": "Three adventurers trade places mid-run inside a tower that resets on death but keeps every upgrade you bought with your life."
   },
   {
     "id": "rain-world",
@@ -2287,7 +2926,16 @@
     "platform": "PS4",
     "tags": [],
     "steamAppId": 312520,
-    "description": "Survive as a slugcat in a crumbling ecosystem where every other creature is hunting, hiding and learning alongside you.",
+    "ageRating": {
+      "tier": "everyone10",
+      "source": "USK",
+      "rating": "6",
+      "official": true,
+      "esrb": null,
+      "pegi": null,
+      "descriptors": [],
+      "notes": null
+    },
     "ratings": {
       "critic": 66,
       "user": {
@@ -2328,7 +2976,8 @@
         }
       ],
       "asOf": "2026-09-06"
-    }
+    },
+    "description": "Survive as a slugcat in a crumbling ecosystem where every other creature is hunting, hiding and learning alongside you."
   },
   {
     "id": "carrion",
@@ -2340,7 +2989,16 @@
     "platform": "PS4",
     "tags": [],
     "steamAppId": 953490,
-    "description": "A reverse-horror metroidvania where you are the amorphous red monster tearing through a research facility.",
+    "ageRating": {
+      "tier": "mature",
+      "source": "USK",
+      "rating": "16",
+      "official": true,
+      "esrb": null,
+      "pegi": null,
+      "descriptors": [],
+      "notes": "CARRION contains frequent graphic violence and gore."
+    },
     "ratings": {
       "critic": 75,
       "user": {
@@ -2373,7 +3031,8 @@
         }
       ],
       "asOf": "2026-09-06"
-    }
+    },
+    "description": "A reverse-horror metroidvania where you are the amorphous red monster tearing through a research facility."
   },
   {
     "id": "prince-of-persia-lost-crown",
@@ -2385,7 +3044,20 @@
     "platform": "PS4",
     "tags": [],
     "steamAppId": 2751000,
-    "description": "Sargon dashes and rewinds through Mount Qaf in a fast, combo-heavy metroidvania with a brilliant screenshot-pinning map.",
+    "ageRating": {
+      "tier": "teen",
+      "source": "ESRB",
+      "rating": "T",
+      "official": true,
+      "esrb": "T",
+      "pegi": "16",
+      "descriptors": [
+        "Violence",
+        "Blood",
+        "Mild Language"
+      ],
+      "notes": null
+    },
     "ratings": {
       "critic": 85,
       "user": {
@@ -2413,7 +3085,8 @@
       ],
       "cons": [],
       "asOf": "2026-09-06"
-    }
+    },
+    "description": "Sargon dashes and rewinds through Mount Qaf in a fast, combo-heavy metroidvania with a brilliant screenshot-pinning map."
   },
   {
     "id": "bloodstained",
@@ -2425,7 +3098,20 @@
     "platform": "PS4",
     "tags": [],
     "steamAppId": 692850,
-    "description": "Miriam explores a demon castle packed with craftable gear and shard abilities harvested from every enemy she defeats.",
+    "ageRating": {
+      "tier": "teen",
+      "source": "ESRB",
+      "rating": "T",
+      "official": true,
+      "esrb": "T",
+      "pegi": "12",
+      "descriptors": [
+        "Blood",
+        "Violence",
+        "Partial Nudity"
+      ],
+      "notes": null
+    },
     "ratings": {
       "critic": null,
       "user": {
@@ -2453,7 +3139,8 @@
       ],
       "cons": [],
       "asOf": "2026-09-06"
-    }
+    },
+    "description": "Miriam explores a demon castle packed with craftable gear and shard abilities harvested from every enemy she defeats."
   },
   {
     "id": "unsighted",
@@ -2465,7 +3152,16 @@
     "platform": "PS4",
     "tags": [],
     "steamAppId": 1062110,
-    "description": "An automaton races a countdown that permanently kills off the friends she cannot reach in time, making every hour spent a real choice.",
+    "ageRating": {
+      "tier": "teen",
+      "source": "DJCTQ",
+      "rating": "14",
+      "official": true,
+      "esrb": null,
+      "pegi": null,
+      "descriptors": [],
+      "notes": null
+    },
     "ratings": {
       "critic": 84,
       "user": {
@@ -2493,7 +3189,8 @@
       ],
       "cons": [],
       "asOf": "2026-09-06"
-    }
+    },
+    "description": "An automaton races a countdown that permanently kills off the friends she cannot reach in time, making every hour spent a real choice."
   },
   {
     "id": "vernal-edge",
@@ -2505,7 +3202,16 @@
     "platform": "PS4",
     "tags": [],
     "steamAppId": 1546710,
-    "description": "Vernal hunts her father across a shattered sky-island world with an aggressive juggling combat system built for style.",
+    "ageRating": {
+      "tier": "everyone10",
+      "source": "DJCTQ",
+      "rating": "10",
+      "official": true,
+      "esrb": null,
+      "pegi": null,
+      "descriptors": [],
+      "notes": null
+    },
     "ratings": {
       "critic": null,
       "user": {
@@ -2529,7 +3235,8 @@
       ],
       "cons": [],
       "asOf": "2026-09-06"
-    }
+    },
+    "description": "Vernal hunts her father across a shattered sky-island world with an aggressive juggling combat system built for style."
   },
   {
     "id": "ultros",
@@ -2543,7 +3250,16 @@
       "graphics"
     ],
     "steamAppId": 2386310,
-    "description": "A psychedelic riot of color inside a cosmic womb, where you plant and tend gardens across loops of the same map.",
+    "ageRating": {
+      "tier": "teen",
+      "source": "DJCTQ",
+      "rating": "14",
+      "official": false,
+      "esrb": null,
+      "pegi": null,
+      "descriptors": [],
+      "notes": "The game features fantasy violence and blood, and light nudity depicted in an artistic manner."
+    },
     "ratings": {
       "critic": 81,
       "user": {
@@ -2563,7 +3279,8 @@
       ],
       "cons": [],
       "asOf": "2026-09-06"
-    }
+    },
+    "description": "A psychedelic riot of color inside a cosmic womb, where you plant and tend gardens across loops of the same map."
   },
   {
     "id": "slay-the-spire",
@@ -2575,7 +3292,20 @@
     "platform": "PS4",
     "tags": [],
     "steamAppId": 646570,
-    "description": "The genre-defining roguelike deckbuilder: climb a shifting spire, refine a deck of attacks and relics, and try not to get greedy.",
+    "ageRating": {
+      "tier": "everyone10",
+      "source": "ESRB",
+      "rating": "E10",
+      "official": true,
+      "esrb": "E10",
+      "pegi": null,
+      "descriptors": [
+        "Fantasy Violence",
+        "Use of Tobacco",
+        "Alcohol Reference"
+      ],
+      "notes": null
+    },
     "ratings": {
       "critic": 89,
       "user": {
@@ -2603,7 +3333,8 @@
       ],
       "cons": [],
       "asOf": "2026-09-06"
-    }
+    },
+    "description": "The genre-defining roguelike deckbuilder: climb a shifting spire, refine a deck of attacks and relics, and try not to get greedy."
   },
   {
     "id": "inscryption",
@@ -2615,7 +3346,16 @@
     "platform": "PS4",
     "tags": [],
     "steamAppId": 1092790,
-    "description": "A card battler played across a candlelit table that keeps breaking its own rules in ways best left unspoiled.",
+    "ageRating": {
+      "tier": "teen",
+      "source": "USK",
+      "rating": "12",
+      "official": true,
+      "esrb": null,
+      "pegi": null,
+      "descriptors": [],
+      "notes": null
+    },
     "ratings": {
       "critic": 85,
       "user": {
@@ -2648,7 +3388,8 @@
         }
       ],
       "asOf": "2026-09-06"
-    }
+    },
+    "description": "A card battler played across a candlelit table that keeps breaking its own rules in ways best left unspoiled."
   },
   {
     "id": "roguebook",
@@ -2660,7 +3401,16 @@
     "platform": "PS4",
     "tags": [],
     "steamAppId": 1076200,
-    "description": "Paint your way across a blank watercolor map with a two-hero party, merging both characters' cards into a single deck.",
+    "ageRating": {
+      "tier": "everyone10",
+      "source": "DJCTQ",
+      "rating": "10",
+      "official": true,
+      "esrb": null,
+      "pegi": null,
+      "descriptors": [],
+      "notes": null
+    },
     "ratings": {
       "critic": 78,
       "user": {
@@ -2680,7 +3430,8 @@
       ],
       "cons": [],
       "asOf": "2026-09-06"
-    }
+    },
+    "description": "Paint your way across a blank watercolor map with a two-hero party, merging both characters' cards into a single deck."
   },
   {
     "id": "griftlands",
@@ -2692,7 +3443,16 @@
     "platform": "PS4",
     "tags": [],
     "steamAppId": 601840,
-    "description": "Every character remembers how you treated them, and you carry two decks at once: one for fighting, one for arguing.",
+    "ageRating": {
+      "tier": "teen",
+      "source": "DJCTQ",
+      "rating": "14",
+      "official": true,
+      "esrb": null,
+      "pegi": null,
+      "descriptors": [],
+      "notes": "Cartoon and stylized violence depicted.  Implied and direct references to non-glorified violence in dialog."
+    },
     "ratings": {
       "critic": 84,
       "user": {
@@ -2716,7 +3476,8 @@
       ],
       "cons": [],
       "asOf": "2026-09-06"
-    }
+    },
+    "description": "Every character remembers how you treated them, and you carry two decks at once: one for fighting, one for arguing."
   },
   {
     "id": "fights-in-tight-spaces",
@@ -2728,7 +3489,16 @@
     "platform": "PS4",
     "tags": [],
     "steamAppId": 1265820,
-    "description": "Play cards to choreograph spy-movie fistfights in elevators and corridors, where positioning matters more than damage.",
+    "ageRating": {
+      "tier": "teen",
+      "source": "DJCTQ",
+      "rating": "14",
+      "official": false,
+      "esrb": null,
+      "pegi": null,
+      "descriptors": [],
+      "notes": null
+    },
     "ratings": {
       "critic": null,
       "user": {
@@ -2739,7 +3509,8 @@
       "pros": [],
       "cons": [],
       "asOf": "2026-09-06"
-    }
+    },
+    "description": "Play cards to choreograph spy-movie fistfights in elevators and corridors, where positioning matters more than damage."
   },
   {
     "id": "astrea-six-sided-oracles",
@@ -2751,7 +3522,16 @@
     "platform": "PS4",
     "tags": [],
     "steamAppId": 1755830,
-    "description": "A dice-building roguelike where corruption is also a resource, forcing you to poison yourself to purify everything else.",
+    "ageRating": {
+      "tier": "teen",
+      "source": "USK",
+      "rating": "12",
+      "official": true,
+      "esrb": null,
+      "pegi": null,
+      "descriptors": [],
+      "notes": null
+    },
     "ratings": {
       "critic": 85,
       "user": {
@@ -2762,7 +3542,8 @@
       "pros": [],
       "cons": [],
       "asOf": "2026-09-06"
-    }
+    },
+    "description": "A dice-building roguelike where corruption is also a resource, forcing you to poison yourself to purify everything else."
   },
   {
     "id": "monster-sanctuary",
@@ -2776,7 +3557,16 @@
       "cozy"
     ],
     "steamAppId": 814370,
-    "description": "A monster-taming metroidvania where your collected creatures also grant the traversal abilities that open the map.",
+    "ageRating": {
+      "tier": "everyone10",
+      "source": "DJCTQ",
+      "rating": "10",
+      "official": true,
+      "esrb": null,
+      "pegi": null,
+      "descriptors": [],
+      "notes": null
+    },
     "ratings": {
       "critic": 81,
       "user": {
@@ -2809,7 +3599,8 @@
         }
       ],
       "asOf": "2026-09-06"
-    }
+    },
+    "description": "A monster-taming metroidvania where your collected creatures also grant the traversal abilities that open the map."
   },
   {
     "id": "nexomon-extinction",
@@ -2823,7 +3614,16 @@
       "cozy"
     ],
     "steamAppId": 1196630,
-    "description": "Catch and evolve over 380 nexomon across a world where the monsters are winning, told with a self-aware sense of humor.",
+    "ageRating": {
+      "tier": "everyone",
+      "source": "DJCTQ",
+      "rating": "L",
+      "official": true,
+      "esrb": null,
+      "pegi": null,
+      "descriptors": [],
+      "notes": null
+    },
     "ratings": {
       "critic": null,
       "user": {
@@ -2834,7 +3634,8 @@
       "pros": [],
       "cons": [],
       "asOf": "2026-09-06"
-    }
+    },
+    "description": "Catch and evolve over 380 nexomon across a world where the monsters are winning, told with a self-aware sense of humor."
   },
   {
     "id": "coromon",
@@ -2848,7 +3649,16 @@
       "cozy"
     ],
     "steamAppId": 1218210,
-    "description": "A polished retro monster-taming RPG with adjustable difficulty, stat potentials and puzzle-filled research facilities.",
+    "ageRating": {
+      "tier": "everyone10",
+      "source": "DJCTQ",
+      "rating": "10",
+      "official": true,
+      "esrb": null,
+      "pegi": null,
+      "descriptors": [],
+      "notes": null
+    },
     "ratings": {
       "critic": 73,
       "user": {
@@ -2877,7 +3687,8 @@
         }
       ],
       "asOf": "2026-09-06"
-    }
+    },
+    "description": "A polished retro monster-taming RPG with adjustable difficulty, stat potentials and puzzle-filled research facilities."
   },
   {
     "id": "slime-rancher",
@@ -2891,7 +3702,16 @@
       "cozy"
     ],
     "steamAppId": 433340,
-    "description": "Beatrix vacuums up wobbling slimes on a far-off frontier planet and farms their plorts for profit.",
+    "ageRating": {
+      "tier": "everyone",
+      "source": "DJCTQ",
+      "rating": "L",
+      "official": false,
+      "esrb": null,
+      "pegi": null,
+      "descriptors": [],
+      "notes": null
+    },
     "ratings": {
       "critic": 81,
       "user": {
@@ -2919,7 +3739,8 @@
       ],
       "cons": [],
       "asOf": "2026-09-06"
-    }
+    },
+    "description": "Beatrix vacuums up wobbling slimes on a far-off frontier planet and farms their plorts for profit."
   },
   {
     "id": "siralim-ultimate",
@@ -2931,7 +3752,16 @@
     "platform": "PS4",
     "tags": [],
     "steamAppId": 1289810,
-    "description": "An absurdly deep monster-fusing roguelike with over 1,200 creatures and build combinations that never stop unfolding.",
+    "ageRating": {
+      "tier": "teen",
+      "source": "DJCTQ",
+      "rating": "12",
+      "official": true,
+      "esrb": null,
+      "pegi": null,
+      "descriptors": [],
+      "notes": null
+    },
     "ratings": {
       "critic": null,
       "user": {
@@ -2942,7 +3772,8 @@
       "pros": [],
       "cons": [],
       "asOf": "2026-09-06"
-    }
+    },
+    "description": "An absurdly deep monster-fusing roguelike with over 1,200 creatures and build combinations that never stop unfolding."
   },
   {
     "id": "stardew-valley",
@@ -2957,7 +3788,22 @@
       "social"
     ],
     "steamAppId": 413150,
-    "description": "Inherit a overgrown farm and rebuild it season by season, mining, fishing and befriending an entire valley of neighbors.",
+    "ageRating": {
+      "tier": "everyone10",
+      "source": "ESRB",
+      "rating": "E10",
+      "official": true,
+      "esrb": "E10",
+      "pegi": "12",
+      "descriptors": [
+        "Fantasy Violence",
+        "Mild Blood",
+        "Mild Language",
+        "Use of Alcohol and Tobacco",
+        "Simulated Gambling"
+      ],
+      "notes": null
+    },
     "ratings": {
       "critic": 89,
       "user": {
@@ -2990,7 +3836,8 @@
         }
       ],
       "asOf": "2026-09-06"
-    }
+    },
+    "description": "Inherit a overgrown farm and rebuild it season by season, mining, fishing and befriending an entire valley of neighbors."
   },
   {
     "id": "my-time-at-portia",
@@ -3004,7 +3851,18 @@
       "cozy"
     ],
     "steamAppId": 666140,
-    "description": "Restore your father's workshop in a post-apocalyptic town rebuilt on farming, crafting commissions and small-town friendships.",
+    "ageRating": {
+      "tier": "everyone10",
+      "source": "PEGI",
+      "rating": "7",
+      "official": true,
+      "esrb": null,
+      "pegi": "7",
+      "descriptors": [
+        "Violence"
+      ],
+      "notes": null
+    },
     "ratings": {
       "critic": 73,
       "user": {
@@ -3015,7 +3873,8 @@
       "pros": [],
       "cons": [],
       "asOf": "2026-09-06"
-    }
+    },
+    "description": "Restore your father's workshop in a post-apocalyptic town rebuilt on farming, crafting commissions and small-town friendships."
   },
   {
     "id": "potion-permit",
@@ -3029,7 +3888,19 @@
       "cozy"
     ],
     "steamAppId": 1337760,
-    "description": "Move to a suspicious town as its new chemist, diagnosing residents and brewing the cures that slowly win them over.",
+    "ageRating": {
+      "tier": "everyone",
+      "source": "ESRB",
+      "rating": "E",
+      "official": true,
+      "esrb": "E",
+      "pegi": "12",
+      "descriptors": [
+        "Alcohol reference",
+        "Mild fantasy violence"
+      ],
+      "notes": null
+    },
     "ratings": {
       "critic": 72,
       "user": {
@@ -3062,7 +3933,8 @@
         }
       ],
       "asOf": "2026-09-06"
-    }
+    },
+    "description": "Move to a suspicious town as its new chemist, diagnosing residents and brewing the cures that slowly win them over."
   },
   {
     "id": "cozy-grove",
@@ -3076,7 +3948,16 @@
       "cozy"
     ],
     "steamAppId": 1458100,
-    "description": "Camp on a haunted island that gives you a handful of gentle tasks each real day, coloring the world in as ghosts find peace.",
+    "ageRating": {
+      "tier": "everyone10",
+      "source": "DJCTQ",
+      "rating": "10",
+      "official": false,
+      "esrb": null,
+      "pegi": null,
+      "descriptors": [],
+      "notes": null
+    },
     "ratings": {
       "critic": null,
       "user": {
@@ -3097,7 +3978,8 @@
         }
       ],
       "asOf": "2026-09-06"
-    }
+    },
+    "description": "Camp on a haunted island that gives you a handful of gentle tasks each real day, coloring the world in as ghosts find peace."
   },
   {
     "id": "garden-story",
@@ -3111,7 +3993,18 @@
       "cozy"
     ],
     "steamAppId": 1062140,
-    "description": "Concord the grape becomes guardian of a village of fruit, splitting days between repairs, harvests and clearing rot.",
+    "ageRating": {
+      "tier": "everyone10",
+      "source": "PEGI",
+      "rating": "7",
+      "official": true,
+      "esrb": null,
+      "pegi": "7",
+      "descriptors": [
+        "Mild Violence, Fear"
+      ],
+      "notes": null
+    },
     "ratings": {
       "critic": 70,
       "user": {
@@ -3122,7 +4015,8 @@
       "pros": [],
       "cons": [],
       "asOf": "2026-09-06"
-    }
+    },
+    "description": "Concord the grape becomes guardian of a village of fruit, splitting days between repairs, harvests and clearing rot."
   },
   {
     "id": "the-sims-4",
@@ -3136,7 +4030,20 @@
       "cozy"
     ],
     "steamAppId": 1222670,
-    "description": "Build people and houses from the ground up, then watch the lives you designed go exactly as wrong as you hoped.",
+    "ageRating": {
+      "tier": "teen",
+      "source": "ESRB",
+      "rating": "T",
+      "official": true,
+      "esrb": "T",
+      "pegi": "12",
+      "descriptors": [
+        "Violence",
+        "Sexual Themes",
+        "Crude Humor"
+      ],
+      "notes": null
+    },
     "ratings": {
       "critic": null,
       "user": {
@@ -3177,7 +4084,8 @@
         }
       ],
       "asOf": "2026-09-06"
-    }
+    },
+    "description": "Build people and houses from the ground up, then watch the lives you designed go exactly as wrong as you hoped."
   },
   {
     "id": "everdream-valley",
@@ -3191,7 +4099,16 @@
       "cozy"
     ],
     "steamAppId": 1403650,
-    "description": "Spend a summer restoring your grandparents' farm by day and dreaming yourself into the bodies of its animals by night.",
+    "ageRating": {
+      "tier": "everyone",
+      "source": "DJCTQ",
+      "rating": "L",
+      "official": true,
+      "esrb": null,
+      "pegi": null,
+      "descriptors": [],
+      "notes": null
+    },
     "ratings": {
       "critic": null,
       "user": {
@@ -3207,7 +4124,8 @@
         }
       ],
       "asOf": "2026-09-06"
-    }
+    },
+    "description": "Spend a summer restoring your grandparents' farm by day and dreaming yourself into the bodies of its animals by night."
   },
   {
     "id": "kitaria-fables",
@@ -3221,7 +4139,16 @@
       "cozy"
     ],
     "steamAppId": 1356280,
-    "description": "A cat knight defends a valley of animal villagers, alternating between sword-and-spell combat and running the family farm.",
+    "ageRating": {
+      "tier": "everyone10",
+      "source": "USK",
+      "rating": "6",
+      "official": true,
+      "esrb": null,
+      "pegi": null,
+      "descriptors": [],
+      "notes": null
+    },
     "ratings": {
       "critic": null,
       "user": {
@@ -3232,7 +4159,8 @@
       "pros": [],
       "cons": [],
       "asOf": "2026-09-06"
-    }
+    },
+    "description": "A cat knight defends a valley of animal villagers, alternating between sword-and-spell combat and running the family farm."
   },
   {
     "id": "calico",
@@ -3246,7 +4174,16 @@
       "cozy"
     ],
     "steamAppId": 1112890,
-    "description": "Rebuild the town's cat cafe, stuff every seat with animals, bake pastries and ride a very large capybara around town.",
+    "ageRating": {
+      "tier": "everyone",
+      "source": "DJCTQ",
+      "rating": "L",
+      "official": true,
+      "esrb": null,
+      "pegi": null,
+      "descriptors": [],
+      "notes": null
+    },
     "ratings": {
       "critic": null,
       "user": {
@@ -3262,7 +4199,8 @@
       ],
       "cons": [],
       "asOf": "2026-09-06"
-    }
+    },
+    "description": "Rebuild the town's cat cafe, stuff every seat with animals, bake pastries and ride a very large capybara around town."
   },
   {
     "id": "graveyard-keeper",
@@ -3274,7 +4212,16 @@
     "platform": "PS4",
     "tags": [],
     "steamAppId": 599140,
-    "description": "Run a medieval cemetery as a business, with a pitch-dark sense of humor about where the resources come from.",
+    "ageRating": {
+      "tier": "teen",
+      "source": "DJCTQ",
+      "rating": "12",
+      "official": true,
+      "esrb": null,
+      "pegi": null,
+      "descriptors": [],
+      "notes": null
+    },
     "ratings": {
       "critic": 69,
       "user": {
@@ -3315,7 +4262,8 @@
         }
       ],
       "asOf": "2026-09-06"
-    }
+    },
+    "description": "Run a medieval cemetery as a business, with a pitch-dark sense of humor about where the resources come from."
   },
   {
     "id": "moonlighter",
@@ -3329,7 +4277,16 @@
       "cozy"
     ],
     "steamAppId": 606150,
-    "description": "Raid dungeons at night and sell the loot in your own shop by day, setting prices by reading what customers will tolerate.",
+    "ageRating": {
+      "tier": "everyone10",
+      "source": "DJCTQ",
+      "rating": "10",
+      "official": true,
+      "esrb": null,
+      "pegi": null,
+      "descriptors": [],
+      "notes": null
+    },
     "ratings": {
       "critic": 74,
       "user": {
@@ -3374,7 +4331,8 @@
         }
       ],
       "asOf": "2026-09-06"
-    }
+    },
+    "description": "Raid dungeons at night and sell the loot in your own shop by day, setting prices by reading what customers will tolerate."
   },
   {
     "id": "powerwash-simulator",
@@ -3389,7 +4347,16 @@
       "social"
     ],
     "steamAppId": 1290000,
-    "description": "Blast years of grime off vans, playgrounds and mars rovers in the most quietly satisfying job simulator on the platform.",
+    "ageRating": {
+      "tier": "everyone",
+      "source": "ESRB",
+      "rating": "E",
+      "official": true,
+      "esrb": "E",
+      "pegi": null,
+      "descriptors": [],
+      "notes": null
+    },
     "ratings": {
       "critic": null,
       "user": {
@@ -3417,7 +4384,8 @@
       ],
       "cons": [],
       "asOf": "2026-09-06"
-    }
+    },
+    "description": "Blast years of grime off vans, playgrounds and mars rovers in the most quietly satisfying job simulator on the platform."
   },
   {
     "id": "two-point-campus",
@@ -3431,7 +4399,18 @@
       "cozy"
     ],
     "steamAppId": 1649080,
-    "description": "Build an absurd university around courses like knight school and gastronomy, then keep the students fed, taught and happy.",
+    "ageRating": {
+      "tier": "teen",
+      "source": "ESRB",
+      "rating": "T",
+      "official": true,
+      "esrb": "T",
+      "pegi": "3",
+      "descriptors": [
+        "Crude Humor, Mild Suggestive Themes"
+      ],
+      "notes": null
+    },
     "ratings": {
       "critic": 83,
       "user": {
@@ -3451,7 +4430,8 @@
       ],
       "cons": [],
       "asOf": "2026-09-06"
-    }
+    },
+    "description": "Build an absurd university around courses like knight school and gastronomy, then keep the students fed, taught and happy."
   },
   {
     "id": "islanders",
@@ -3465,7 +4445,16 @@
       "cozy"
     ],
     "steamAppId": 1046030,
-    "description": "A minimalist city builder with no fail state beyond running out of buildings: place well, score points, unlock the next island.",
+    "ageRating": {
+      "tier": "everyone",
+      "source": "DJCTQ",
+      "rating": "L",
+      "official": false,
+      "esrb": null,
+      "pegi": null,
+      "descriptors": [],
+      "notes": null
+    },
     "ratings": {
       "critic": 82,
       "user": {
@@ -3481,7 +4470,8 @@
       ],
       "cons": [],
       "asOf": "2026-09-06"
-    }
+    },
+    "description": "A minimalist city builder with no fail state beyond running out of buildings: place well, score points, unlock the next island."
   },
   {
     "id": "townscaper",
@@ -3495,7 +4485,16 @@
       "cozy"
     ],
     "steamAppId": 1291340,
-    "description": "Click on water to grow impossible pastel coastal towns, with no goals, no timers and a very clever building algorithm.",
+    "ageRating": {
+      "tier": "everyone",
+      "source": "DJCTQ",
+      "rating": "L",
+      "official": true,
+      "esrb": null,
+      "pegi": null,
+      "descriptors": [],
+      "notes": null
+    },
     "ratings": {
       "critic": null,
       "user": {
@@ -3511,7 +4510,8 @@
       ],
       "cons": [],
       "asOf": "2026-09-06"
-    }
+    },
+    "description": "Click on water to grow impossible pastel coastal towns, with no goals, no timers and a very clever building algorithm."
   },
   {
     "id": "celeste",
@@ -3523,7 +4523,16 @@
     "platform": "PS4",
     "tags": [],
     "steamAppId": 504230,
-    "description": "Madeline climbs a mountain and her own anxiety in a precision platformer with some of the kindest accessibility options ever shipped.",
+    "ageRating": {
+      "tier": "everyone10",
+      "source": "Steam Germany",
+      "rating": "6",
+      "official": false,
+      "esrb": null,
+      "pegi": null,
+      "descriptors": [],
+      "notes": null
+    },
     "ratings": {
       "critic": 88,
       "user": {
@@ -3551,7 +4560,8 @@
       ],
       "cons": [],
       "asOf": "2026-09-06"
-    }
+    },
+    "description": "Madeline climbs a mountain and her own anxiety in a precision platformer with some of the kindest accessibility options ever shipped."
   },
   {
     "id": "sackboy",
@@ -3563,7 +4573,18 @@
     "platform": "PS4",
     "tags": [],
     "steamAppId": 1599660,
-    "description": "A knitted, tactile 3D platformer built around musical set pieces and four-player chaos.",
+    "ageRating": {
+      "tier": "everyone",
+      "source": "ESRB",
+      "rating": "E",
+      "official": true,
+      "esrb": "E",
+      "pegi": "7",
+      "descriptors": [
+        "Mild Cartoon Violence, Mild Lyrics"
+      ],
+      "notes": null
+    },
     "ratings": {
       "critic": null,
       "user": {
@@ -3583,7 +4604,8 @@
       ],
       "cons": [],
       "asOf": "2026-09-06"
-    }
+    },
+    "description": "A knitted, tactile 3D platformer built around musical set pieces and four-player chaos."
   },
   {
     "id": "little-nightmares-2",
@@ -3597,7 +4619,18 @@
       "graphics"
     ],
     "steamAppId": 860510,
-    "description": "Mono and Six creep through a broadcast-poisoned city of hunters and mannequins in a beautifully grim puzzle platformer.",
+    "ageRating": {
+      "tier": "teen",
+      "source": "ESRB",
+      "rating": "T",
+      "official": true,
+      "esrb": "T",
+      "pegi": "16",
+      "descriptors": [
+        "Blood, Violence"
+      ],
+      "notes": null
+    },
     "ratings": {
       "critic": 83,
       "user": {
@@ -3630,7 +4663,8 @@
         }
       ],
       "asOf": "2026-09-06"
-    }
+    },
+    "description": "Mono and Six creep through a broadcast-poisoned city of hunters and mannequins in a beautifully grim puzzle platformer."
   },
   {
     "id": "little-nightmares",
@@ -3642,7 +4676,19 @@
     "platform": "PS4",
     "tags": [],
     "steamAppId": 424840,
-    "description": "Six, in her yellow raincoat, escapes a drowning vessel of grotesque appetites that are all much larger than she is.",
+    "ageRating": {
+      "tier": "teen",
+      "source": "ESRB",
+      "rating": "T",
+      "official": true,
+      "esrb": "T",
+      "pegi": "16",
+      "descriptors": [
+        "Blood",
+        "Violence"
+      ],
+      "notes": null
+    },
     "ratings": {
       "critic": 81,
       "user": {
@@ -3670,7 +4716,8 @@
       ],
       "cons": [],
       "asOf": "2026-09-06"
-    }
+    },
+    "description": "Six, in her yellow raincoat, escapes a drowning vessel of grotesque appetites that are all much larger than she is."
   },
   {
     "id": "planet-of-lana",
@@ -3684,7 +4731,16 @@
       "graphics"
     ],
     "steamAppId": 1608230,
-    "description": "A girl and a small catlike companion cross painted alien vistas, solving puzzles that depend on directing each other.",
+    "ageRating": {
+      "tier": "everyone10",
+      "source": "DJCTQ",
+      "rating": "10",
+      "official": true,
+      "esrb": null,
+      "pegi": null,
+      "descriptors": [],
+      "notes": null
+    },
     "ratings": {
       "critic": 80,
       "user": {
@@ -3712,7 +4768,8 @@
       ],
       "cons": [],
       "asOf": "2026-09-06"
-    }
+    },
+    "description": "A girl and a small catlike companion cross painted alien vistas, solving puzzles that depend on directing each other."
   },
   {
     "id": "unravel-two",
@@ -3724,7 +4781,18 @@
     "platform": "PS4",
     "tags": [],
     "steamAppId": 1225570,
-    "description": "Two yarn creatures tied together swing and knot their way through a warm, tactile Scandinavian landscape.",
+    "ageRating": {
+      "tier": "everyone",
+      "source": "ESRB",
+      "rating": "E",
+      "official": true,
+      "esrb": "E",
+      "pegi": "7",
+      "descriptors": [
+        "Mild Fantasy Violence"
+      ],
+      "notes": null
+    },
     "ratings": {
       "critic": 76,
       "user": {
@@ -3744,7 +4812,8 @@
       ],
       "cons": [],
       "asOf": "2026-09-06"
-    }
+    },
+    "description": "Two yarn creatures tied together swing and knot their way through a warm, tactile Scandinavian landscape."
   },
   {
     "id": "cuphead",
@@ -3758,7 +4827,20 @@
       "graphics"
     ],
     "steamAppId": 268910,
-    "description": "A punishing run-and-gun boss rush drawn and inked in the style of 1930s rubber-hose cartoons.",
+    "ageRating": {
+      "tier": "everyone10",
+      "source": "ESRB",
+      "rating": "E10",
+      "official": true,
+      "esrb": "E10",
+      "pegi": "7",
+      "descriptors": [
+        "Fantasy Violence",
+        "Mild Language",
+        "Use of Alcohol And Tobacco"
+      ],
+      "notes": null
+    },
     "ratings": {
       "critic": 88,
       "user": {
@@ -3791,7 +4873,8 @@
         }
       ],
       "asOf": "2026-09-06"
-    }
+    },
+    "description": "A punishing run-and-gun boss rush drawn and inked in the style of 1930s rubber-hose cartoons."
   },
   {
     "id": "yooka-laylee-impossible-lair",
@@ -3803,7 +4886,18 @@
     "platform": "PS4",
     "tags": [],
     "steamAppId": 846870,
-    "description": "A chameleon and a bat run a sharp 2D platformer whose final level is open from minute one, if you think you are ready.",
+    "ageRating": {
+      "tier": "everyone",
+      "source": "ESRB",
+      "rating": "E",
+      "official": true,
+      "esrb": "E",
+      "pegi": "3",
+      "descriptors": [
+        "Mild cartoon violence"
+      ],
+      "notes": null
+    },
     "ratings": {
       "critic": 81,
       "user": {
@@ -3814,7 +4908,8 @@
       "pros": [],
       "cons": [],
       "asOf": "2026-09-06"
-    }
+    },
+    "description": "A chameleon and a bat run a sharp 2D platformer whose final level is open from minute one, if you think you are ready."
   },
   {
     "id": "new-supers-luckys-tale",
@@ -3826,7 +4921,18 @@
     "platform": "PS4",
     "tags": [],
     "steamAppId": 1038300,
-    "description": "A cheerful fox platformer that mixes 3D worlds, 2D side-scrolling stages and rolling puzzle levels.",
+    "ageRating": {
+      "tier": "everyone",
+      "source": "ESRB",
+      "rating": "E",
+      "official": true,
+      "esrb": "E",
+      "pegi": "3",
+      "descriptors": [
+        "Mild Cartoon Violence"
+      ],
+      "notes": null
+    },
     "ratings": {
       "critic": null,
       "user": {
@@ -3842,7 +4948,8 @@
       ],
       "cons": [],
       "asOf": "2026-09-06"
-    }
+    },
+    "description": "A cheerful fox platformer that mixes 3D worlds, 2D side-scrolling stages and rolling puzzle levels."
   },
   {
     "id": "pumpkin-jack",
@@ -3854,7 +4961,16 @@
     "platform": "PS4",
     "tags": [],
     "steamAppId": 1186640,
-    "description": "A pumpkin-headed devil's champion romps through Halloween-flavored levels in an unabashed love letter to sixth-gen platformers.",
+    "ageRating": {
+      "tier": "teen",
+      "source": "PEGI",
+      "rating": "12",
+      "official": true,
+      "esrb": null,
+      "pegi": "12",
+      "descriptors": [],
+      "notes": null
+    },
     "ratings": {
       "critic": 71,
       "user": {
@@ -3878,7 +4994,8 @@
       ],
       "cons": [],
       "asOf": "2026-09-06"
-    }
+    },
+    "description": "A pumpkin-headed devil's champion romps through Halloween-flavored levels in an unabashed love letter to sixth-gen platformers."
   },
   {
     "id": "kaze-and-the-wild-masks",
@@ -3890,7 +5007,16 @@
     "platform": "PS4",
     "tags": [],
     "steamAppId": 829280,
-    "description": "A rabbit wearing animal masks tears through 16-bit style stages built with obvious affection for Donkey Kong Country.",
+    "ageRating": {
+      "tier": "everyone",
+      "source": "DJCTQ",
+      "rating": "L",
+      "official": true,
+      "esrb": null,
+      "pegi": null,
+      "descriptors": [],
+      "notes": null
+    },
     "ratings": {
       "critic": 82,
       "user": {
@@ -3901,7 +5027,8 @@
       "pros": [],
       "cons": [],
       "asOf": "2026-09-06"
-    }
+    },
+    "description": "A rabbit wearing animal masks tears through 16-bit style stages built with obvious affection for Donkey Kong Country."
   },
   {
     "id": "rayman-legends",
@@ -3915,7 +5042,19 @@
       "graphics"
     ],
     "steamAppId": 242550,
-    "description": "Still the gold standard for 2D platforming feel, with hand-painted worlds and levels choreographed to music.",
+    "ageRating": {
+      "tier": "everyone10",
+      "source": "ESRB",
+      "rating": "E10",
+      "official": true,
+      "esrb": "E10",
+      "pegi": "7",
+      "descriptors": [
+        "Cartoon Violence",
+        "Comic Mischief"
+      ],
+      "notes": null
+    },
     "ratings": {
       "critic": 89,
       "user": {
@@ -3935,7 +5074,8 @@
       ],
       "cons": [],
       "asOf": "2026-09-06"
-    }
+    },
+    "description": "Still the gold standard for 2D platforming feel, with hand-painted worlds and levels choreographed to music."
   },
   {
     "id": "crash-bandicoot-4",
@@ -3949,7 +5089,21 @@
       "graphics"
     ],
     "steamAppId": 1378990,
-    "description": "A genuinely demanding return for the marsupial, with quantum masks that rewrite the rules of each obstacle course.",
+    "ageRating": {
+      "tier": "everyone10",
+      "source": "ESRB",
+      "rating": "E10",
+      "official": true,
+      "esrb": "E10",
+      "pegi": "12",
+      "descriptors": [
+        "Alcohol Reference",
+        "Cartoon Violence",
+        "Comic Mischief",
+        "Language"
+      ],
+      "notes": null
+    },
     "ratings": {
       "critic": null,
       "user": {
@@ -3974,7 +5128,8 @@
         }
       ],
       "asOf": "2026-09-06"
-    }
+    },
+    "description": "A genuinely demanding return for the marsupial, with quantum masks that rewrite the rules of each obstacle course."
   },
   {
     "id": "neon-white",
@@ -3988,7 +5143,22 @@
       "graphics"
     ],
     "steamAppId": 1533420,
-    "description": "A first-person speedrunning platformer where every gun is also a movement card you discard to jump, dash or blink.",
+    "ageRating": {
+      "tier": "teen",
+      "source": "ESRB",
+      "rating": "T",
+      "official": true,
+      "esrb": "T",
+      "pegi": "12",
+      "descriptors": [
+        "Fantasy Violence",
+        "Mild Blood",
+        "Mild Suggestive Themes",
+        "Language",
+        "Use of Tobacco"
+      ],
+      "notes": null
+    },
     "ratings": {
       "critic": 89,
       "user": {
@@ -4016,7 +5186,8 @@
       ],
       "cons": [],
       "asOf": "2026-09-06"
-    }
+    },
+    "description": "A first-person speedrunning platformer where every gun is also a movement card you discard to jump, dash or blink."
   },
   {
     "id": "the-artful-escape",
@@ -4030,7 +5201,21 @@
       "graphics"
     ],
     "steamAppId": 1122680,
-    "description": "A teenage guitarist invents a cosmic stage persona across neon alien worlds built entirely around a shredding solo.",
+    "ageRating": {
+      "tier": "everyone10",
+      "source": "ESRB",
+      "rating": "E10",
+      "official": true,
+      "esrb": "E10",
+      "pegi": "12",
+      "descriptors": [
+        "Language",
+        "Alcohol Reference",
+        "Use of Tobacco",
+        "Mild Suggestive Themes"
+      ],
+      "notes": null
+    },
     "ratings": {
       "critic": 80,
       "user": {
@@ -4054,7 +5239,8 @@
       ],
       "cons": [],
       "asOf": "2026-09-06"
-    }
+    },
+    "description": "A teenage guitarist invents a cosmic stage persona across neon alien worlds built entirely around a shredding solo."
   },
   {
     "id": "what-remains-of-edith-finch",
@@ -4066,7 +5252,21 @@
     "platform": "PS4",
     "tags": [],
     "steamAppId": 501300,
-    "description": "Walk through a house of sealed bedrooms, playing out each relative's last day in a different, perfectly judged mechanic.",
+    "ageRating": {
+      "tier": "teen",
+      "source": "ESRB",
+      "rating": "T",
+      "official": true,
+      "esrb": "T",
+      "pegi": "16",
+      "descriptors": [
+        "Violence",
+        "Blood",
+        "Language",
+        "Drug Reference"
+      ],
+      "notes": null
+    },
     "ratings": {
       "critic": 89,
       "user": {
@@ -4094,7 +5294,8 @@
       ],
       "cons": [],
       "asOf": "2026-09-06"
-    }
+    },
+    "description": "Walk through a house of sealed bedrooms, playing out each relative's last day in a different, perfectly judged mechanic."
   },
   {
     "id": "life-is-strange-remastered",
@@ -4106,7 +5307,22 @@
     "platform": "PS4",
     "tags": [],
     "steamAppId": 1265920,
-    "description": "Max rewinds time in a Pacific Northwest town, with the original season and Before the Storm rebuilt with new lighting and animation.",
+    "ageRating": {
+      "tier": "mature",
+      "source": "ESRB",
+      "rating": "M",
+      "official": true,
+      "esrb": "M",
+      "pegi": "16",
+      "descriptors": [
+        "Intense Violence",
+        "Blood",
+        "Sexual Themes",
+        "Strong Language",
+        "Use of Drugs and Alcohol"
+      ],
+      "notes": "The protagonist of Life is Strange Remastered, Max Caulfield, can rewind time at will. But her ability to prevent the futures she sees does not stop her from experiencing them, nor does it shield her from the emotional fallout of those events. This Game deals honestly with complex emotions, difficult themes, and rare but shocking acts of violence. As such, it may contain content not appropriate for all ages, and may not be appropriate for viewing at work, with cautions suggested for Intense Violence, Blood, Sexual Themes, Strong Language, and Use of Drugs and Alcohol."
+    },
     "ratings": {
       "critic": null,
       "user": {
@@ -4134,7 +5350,8 @@
       ],
       "cons": [],
       "asOf": "2026-09-06"
-    }
+    },
+    "description": "Max rewinds time in a Pacific Northwest town, with the original season and Before the Storm rebuilt with new lighting and animation."
   },
   {
     "id": "life-is-strange-2",
@@ -4146,7 +5363,23 @@
     "platform": "PS4",
     "tags": [],
     "steamAppId": 532210,
-    "description": "Two brothers run for the Mexican border, and everything you teach the younger one along the way changes who he becomes.",
+    "ageRating": {
+      "tier": "mature",
+      "source": "ESRB",
+      "rating": "M",
+      "official": true,
+      "esrb": "M",
+      "pegi": "18",
+      "descriptors": [
+        "Blood",
+        "Partial Nudity",
+        "Violence",
+        "Sexual Content",
+        "Use of Drugs &amp; Alcohol",
+        "Strong Language"
+      ],
+      "notes": null
+    },
     "ratings": {
       "critic": null,
       "user": {
@@ -4174,7 +5407,8 @@
       ],
       "cons": [],
       "asOf": "2026-09-06"
-    }
+    },
+    "description": "Two brothers run for the Mexican border, and everything you teach the younger one along the way changes who he becomes."
   },
   {
     "id": "the-quarry",
@@ -4188,7 +5422,21 @@
       "graphics"
     ],
     "steamAppId": 1577120,
-    "description": "A summer camp horror movie you steer, where nine counselors can all live or all die based on split-second choices.",
+    "ageRating": {
+      "tier": "mature",
+      "source": "ESRB",
+      "rating": "M",
+      "official": true,
+      "esrb": "M",
+      "pegi": "18",
+      "descriptors": [
+        "Intense Violence",
+        "Blood and Gore",
+        "Mild Sexual Themes",
+        "Strong Language"
+      ],
+      "notes": "The game contains scenes with intense violence, blood and gore, mild sexual themes, and strong language."
+    },
     "ratings": {
       "critic": null,
       "user": {
@@ -4229,7 +5477,8 @@
         }
       ],
       "asOf": "2026-09-06"
-    }
+    },
+    "description": "A summer camp horror movie you steer, where nine counselors can all live or all die based on split-second choices."
   },
   {
     "id": "until-dawn",
@@ -4243,7 +5492,21 @@
       "graphics"
     ],
     "steamAppId": 2172010,
-    "description": "Eight teenagers on a snowbound mountain, a branching butterfly-effect script, and a horror twist worth going in blind for.",
+    "ageRating": {
+      "tier": "mature",
+      "source": "ESRB",
+      "rating": "M",
+      "official": true,
+      "esrb": "M",
+      "pegi": "18",
+      "descriptors": [
+        "Intense Violence",
+        "Blood and Gore",
+        "Sexual Themes",
+        "Strong Language"
+      ],
+      "notes": "Until Dawn is a branching narrative survival horror game in which any choice of action by the player may cause other consequences later in the story. Throughout the game the player makes difficult decisions during ethical and moral dilemmas. Choices can lead to scenes of intense violence and gore of which might include characters falling to their death, character dismemberment where blood and viscera are shown, character decapitation and other violent deaths including scenes with gun shots. The game contains frequent strong language, sexually suggestive dialogue and occasional depictions of alcohol and tobacco."
+    },
     "ratings": {
       "critic": null,
       "user": {
@@ -4271,7 +5534,8 @@
       ],
       "cons": [],
       "asOf": "2026-09-06"
-    }
+    },
+    "description": "Eight teenagers on a snowbound mountain, a branching butterfly-effect script, and a horror twist worth going in blind for."
   },
   {
     "id": "detroit-become-human",
@@ -4285,7 +5549,18 @@
       "graphics"
     ],
     "steamAppId": 1222140,
-    "description": "Three androids in near-future Detroit, each with a flowchart of consequences that can kill them off long before the finale.",
+    "ageRating": {
+      "tier": "mature",
+      "source": "ESRB",
+      "rating": "M",
+      "official": true,
+      "esrb": "M",
+      "pegi": "18",
+      "descriptors": [
+        "Blood, Intense Violence, Partial Nudity, Sexual Themes, Strong Language, Use of Drugs"
+      ],
+      "notes": null
+    },
     "ratings": {
       "critic": 80,
       "user": {
@@ -4318,7 +5593,8 @@
         }
       ],
       "asOf": "2026-09-06"
-    }
+    },
+    "description": "Three androids in near-future Detroit, each with a flowchart of consequences that can kill them off long before the finale."
   },
   {
     "id": "road-96",
@@ -4330,7 +5606,16 @@
     "platform": "PS4",
     "tags": [],
     "steamAppId": 1466640,
-    "description": "A procedural road trip north out of a collapsing country, stitched together from random encounters with a recurring cast.",
+    "ageRating": {
+      "tier": "teen",
+      "source": "DJCTQ",
+      "rating": "14",
+      "official": true,
+      "esrb": null,
+      "pegi": null,
+      "descriptors": [],
+      "notes": null
+    },
     "ratings": {
       "critic": 79,
       "user": {
@@ -4363,7 +5648,8 @@
         }
       ],
       "asOf": "2026-09-06"
-    }
+    },
+    "description": "A procedural road trip north out of a collapsing country, stitched together from random encounters with a recurring cast."
   },
   {
     "id": "open-roads",
@@ -4377,7 +5663,18 @@
       "cozy"
     ],
     "steamAppId": 1497360,
-    "description": "A mother and daughter drive between abandoned family properties, uncovering a secret through the objects left behind.",
+    "ageRating": {
+      "tier": "teen",
+      "source": "PEGI",
+      "rating": "12",
+      "official": true,
+      "esrb": null,
+      "pegi": "12",
+      "descriptors": [
+        "Bad Language"
+      ],
+      "notes": null
+    },
     "ratings": {
       "critic": null,
       "user": {
@@ -4388,7 +5685,8 @@
       "pros": [],
       "cons": [],
       "asOf": "2026-09-06"
-    }
+    },
+    "description": "A mother and daughter drive between abandoned family properties, uncovering a secret through the objects left behind."
   },
   {
     "id": "lost-words",
@@ -4402,7 +5700,19 @@
       "cozy"
     ],
     "steamAppId": 599610,
-    "description": "A girl's diary and the fantasy story she is writing in it, where you platform across the words on the page itself.",
+    "ageRating": {
+      "tier": "everyone",
+      "source": "ESRB",
+      "rating": "E",
+      "official": true,
+      "esrb": "E",
+      "pegi": "7",
+      "descriptors": [
+        "Mild Fantasy Violence",
+        "Mild Language"
+      ],
+      "notes": null
+    },
     "ratings": {
       "critic": null,
       "user": {
@@ -4431,7 +5741,8 @@
         }
       ],
       "asOf": "2026-09-06"
-    }
+    },
+    "description": "A girl's diary and the fantasy story she is writing in it, where you platform across the words on the page itself."
   },
   {
     "id": "behind-the-frame",
@@ -4445,7 +5756,16 @@
       "cozy"
     ],
     "steamAppId": 1634150,
-    "description": "A painter finishes her portfolio in a sunlit apartment, mixing colors by hand in a short, hand-animated story.",
+    "ageRating": {
+      "tier": "everyone",
+      "source": "DJCTQ",
+      "rating": "L",
+      "official": true,
+      "esrb": null,
+      "pegi": null,
+      "descriptors": [],
+      "notes": null
+    },
     "ratings": {
       "critic": 73,
       "user": {
@@ -4473,7 +5793,8 @@
       ],
       "cons": [],
       "asOf": "2026-09-06"
-    }
+    },
+    "description": "A painter finishes her portfolio in a sunlit apartment, mixing colors by hand in a short, hand-animated story."
   },
   {
     "id": "old-mans-journey",
@@ -4487,7 +5808,18 @@
       "cozy"
     ],
     "steamAppId": 581270,
-    "description": "Reshape rolling watercolor hills to clear a path, telling a wordless story of regret through the landscape itself.",
+    "ageRating": {
+      "tier": "everyone",
+      "source": "ESRB",
+      "rating": "E",
+      "official": true,
+      "esrb": "E",
+      "pegi": null,
+      "descriptors": [
+        "Alcohol and Tobacco Reference"
+      ],
+      "notes": null
+    },
     "ratings": {
       "critic": 76,
       "user": {
@@ -4507,7 +5839,8 @@
       ],
       "cons": [],
       "asOf": "2026-09-06"
-    }
+    },
+    "description": "Reshape rolling watercolor hills to clear a path, telling a wordless story of regret through the landscape itself."
   },
   {
     "id": "a-memoir-blue",
@@ -4521,7 +5854,16 @@
       "cozy"
     ],
     "steamAppId": 1497450,
-    "description": "A champion swimmer sinks into memories of her mother in a wordless, hour-long piece of interactive watercolor animation.",
+    "ageRating": {
+      "tier": "everyone",
+      "source": "DJCTQ",
+      "rating": "L",
+      "official": true,
+      "esrb": null,
+      "pegi": null,
+      "descriptors": [],
+      "notes": null
+    },
     "ratings": {
       "critic": null,
       "user": {
@@ -4532,7 +5874,8 @@
       "pros": [],
       "cons": [],
       "asOf": "2026-09-06"
-    }
+    },
+    "description": "A champion swimmer sinks into memories of her mother in a wordless, hour-long piece of interactive watercolor animation."
   },
   {
     "id": "dordogne",
@@ -4547,7 +5890,16 @@
       "graphics"
     ],
     "steamAppId": 1272840,
-    "description": "Mimi returns to her grandmother's house in southern France, collecting words and scents into a hand-painted scrapbook.",
+    "ageRating": {
+      "tier": "everyone",
+      "source": "DJCTQ",
+      "rating": "L",
+      "official": true,
+      "esrb": null,
+      "pegi": null,
+      "descriptors": [],
+      "notes": null
+    },
     "ratings": {
       "critic": null,
       "user": {
@@ -4563,7 +5915,8 @@
       ],
       "cons": [],
       "asOf": "2026-09-06"
-    }
+    },
+    "description": "Mimi returns to her grandmother's house in southern France, collecting words and scents into a hand-painted scrapbook."
   },
   {
     "id": "mutazione",
@@ -4577,7 +5930,16 @@
       "cozy"
     ],
     "steamAppId": 1080750,
-    "description": "A teenager tends musical gardens in a mutant community, in a soap opera that unfolds through neighbors dropping by.",
+    "ageRating": {
+      "tier": "everyone10",
+      "source": "USK",
+      "rating": "6",
+      "official": true,
+      "esrb": null,
+      "pegi": null,
+      "descriptors": [],
+      "notes": null
+    },
     "ratings": {
       "critic": 80,
       "user": {
@@ -4588,7 +5950,8 @@
       "pros": [],
       "cons": [],
       "asOf": "2026-09-06"
-    }
+    },
+    "description": "A teenager tends musical gardens in a mutant community, in a soap opera that unfolds through neighbors dropping by."
   },
   {
     "id": "norco",
@@ -4600,7 +5963,16 @@
     "platform": "PS4",
     "tags": [],
     "steamAppId": 1221250,
-    "description": "A southern gothic point-and-click through the refineries of Louisiana, searching for a missing brother.",
+    "ageRating": {
+      "tier": "mature",
+      "source": "DJCTQ",
+      "rating": "16",
+      "official": true,
+      "esrb": null,
+      "pegi": null,
+      "descriptors": [],
+      "notes": "The game contains instances of violence, suicide, substance use and mature language."
+    },
     "ratings": {
       "critic": 89,
       "user": {
@@ -4620,7 +5992,8 @@
       ],
       "cons": [],
       "asOf": "2026-09-06"
-    }
+    },
+    "description": "A southern gothic point-and-click through the refineries of Louisiana, searching for a missing brother."
   },
   {
     "id": "unpacking",
@@ -4634,7 +6007,16 @@
       "cozy"
     ],
     "steamAppId": 1135690,
-    "description": "Pull a life out of cardboard boxes across eight moves, telling an entire biography through where things fit and where they don't.",
+    "ageRating": {
+      "tier": "everyone",
+      "source": "DJCTQ",
+      "rating": "L",
+      "official": true,
+      "esrb": null,
+      "pegi": null,
+      "descriptors": [],
+      "notes": null
+    },
     "ratings": {
       "critic": 83,
       "user": {
@@ -4662,7 +6044,8 @@
       ],
       "cons": [],
       "asOf": "2026-09-06"
-    }
+    },
+    "description": "Pull a life out of cardboard boxes across eight moves, telling an entire biography through where things fit and where they don't."
   },
   {
     "id": "coffee-talk",
@@ -4676,7 +6059,16 @@
       "cozy"
     ],
     "steamAppId": 914800,
-    "description": "Serve drinks to elves, orcs and succubi on rainy Seattle nights, where latte art is your only way to steer a conversation.",
+    "ageRating": {
+      "tier": "teen",
+      "source": "DJCTQ",
+      "rating": "12",
+      "official": true,
+      "esrb": null,
+      "pegi": null,
+      "descriptors": [],
+      "notes": null
+    },
     "ratings": {
       "critic": 76,
       "user": {
@@ -4704,7 +6096,8 @@
       ],
       "cons": [],
       "asOf": "2026-09-06"
-    }
+    },
+    "description": "Serve drinks to elves, orcs and succubi on rainy Seattle nights, where latte art is your only way to steer a conversation."
   },
   {
     "id": "coffee-talk-2",
@@ -4718,7 +6111,16 @@
       "cozy"
     ],
     "steamAppId": 1663220,
-    "description": "The night shift returns with new regulars, new recipes and the same warm, rain-soaked lo-fi atmosphere.",
+    "ageRating": {
+      "tier": "teen",
+      "source": "DJCTQ",
+      "rating": "12",
+      "official": true,
+      "esrb": null,
+      "pegi": null,
+      "descriptors": [],
+      "notes": null
+    },
     "ratings": {
       "critic": null,
       "user": {
@@ -4729,7 +6131,8 @@
       "pros": [],
       "cons": [],
       "asOf": "2026-09-06"
-    }
+    },
+    "description": "The night shift returns with new regulars, new recipes and the same warm, rain-soaked lo-fi atmosphere."
   },
   {
     "id": "va-11-hall-a",
@@ -4741,7 +6144,16 @@
     "platform": "PS4",
     "tags": [],
     "steamAppId": 447530,
-    "description": "Jill mixes drinks in a dystopian city, and how strong you pour decides what her customers are willing to tell you.",
+    "ageRating": {
+      "tier": "mature",
+      "source": "DJCTQ",
+      "rating": "18",
+      "official": false,
+      "esrb": null,
+      "pegi": null,
+      "descriptors": [],
+      "notes": "The player character is a bartender serving alcohol to a number of patrons. Characters routinely use coarse language and speak in detail about their sex lives, though this is expressed entirely through written dialogue."
+    },
     "ratings": {
       "critic": 77,
       "user": {
@@ -4769,7 +6181,8 @@
       ],
       "cons": [],
       "asOf": "2026-09-06"
-    }
+    },
+    "description": "Jill mixes drinks in a dystopian city, and how strong you pour decides what her customers are willing to tell you."
   },
   {
     "id": "goodbye-volcano-high",
@@ -4783,7 +6196,18 @@
       "graphics"
     ],
     "steamAppId": 1310330,
-    "description": "A fully animated last year of high school for a band of dinosaur teenagers who know exactly how little time is left.",
+    "ageRating": {
+      "tier": "mature",
+      "source": "PEGI",
+      "rating": "16",
+      "official": true,
+      "esrb": null,
+      "pegi": "16",
+      "descriptors": [
+        "Strong Language"
+      ],
+      "notes": "This game contains mature representations of queer teen life, strong language, mentions of drug and alcohol use, death, and sexuality."
+    },
     "ratings": {
       "critic": null,
       "user": {
@@ -4794,7 +6218,8 @@
       "pros": [],
       "cons": [],
       "asOf": "2026-09-06"
-    }
+    },
+    "description": "A fully animated last year of high school for a band of dinosaur teenagers who know exactly how little time is left."
   },
   {
     "id": "beacon-pines",
@@ -4808,7 +6233,16 @@
       "cozy"
     ],
     "steamAppId": 1269640,
-    "description": "A storybook about a young deer where you collect words and slot them into the text to rewrite how each chapter goes.",
+    "ageRating": {
+      "tier": "teen",
+      "source": "DJCTQ",
+      "rating": "14",
+      "official": true,
+      "esrb": null,
+      "pegi": null,
+      "descriptors": [],
+      "notes": null
+    },
     "ratings": {
       "critic": 83,
       "user": {
@@ -4836,7 +6270,8 @@
       ],
       "cons": [],
       "asOf": "2026-09-06"
-    }
+    },
+    "description": "A storybook about a young deer where you collect words and slot them into the text to rewrite how each chapter goes."
   },
   {
     "id": "a-space-for-the-unbound",
@@ -4850,7 +6285,16 @@
       "cozy"
     ],
     "steamAppId": 1201270,
-    "description": "Two high schoolers in 1990s rural Indonesia, one of whom can dive into other people's minds, face the end of the world.",
+    "ageRating": {
+      "tier": "everyone10",
+      "source": "DJCTQ",
+      "rating": "10",
+      "official": true,
+      "esrb": null,
+      "pegi": null,
+      "descriptors": [],
+      "notes": null
+    },
     "ratings": {
       "critic": null,
       "user": {
@@ -4878,7 +6322,8 @@
       ],
       "cons": [],
       "asOf": "2026-09-06"
-    }
+    },
+    "description": "Two high schoolers in 1990s rural Indonesia, one of whom can dive into other people's minds, face the end of the world."
   },
   {
     "id": "thirsty-suitors",
@@ -4890,7 +6335,19 @@
     "platform": "PS4",
     "tags": [],
     "steamAppId": 1617220,
-    "description": "Jala returns home and battles her exes in turn-based combat, skates through town, and cooks with her mother between fights.",
+    "ageRating": {
+      "tier": "teen",
+      "source": "PEGI",
+      "rating": "12",
+      "official": true,
+      "esrb": null,
+      "pegi": "12",
+      "descriptors": [
+        "Bad Language",
+        "Sex"
+      ],
+      "notes": null
+    },
     "ratings": {
       "critic": 80,
       "user": {
@@ -4914,7 +6371,8 @@
       ],
       "cons": [],
       "asOf": "2026-09-06"
-    }
+    },
+    "description": "Jala returns home and battles her exes in turn-based combat, skates through town, and cooks with her mother between fights."
   },
   {
     "id": "wytchwood",
@@ -4928,7 +6386,16 @@
       "cozy"
     ],
     "steamAppId": 729000,
-    "description": "A hedge witch gathers ingredients from a storybook forest to brew curses for the fairy tale characters who deserve them.",
+    "ageRating": {
+      "tier": "everyone10",
+      "source": "DJCTQ",
+      "rating": "10",
+      "official": true,
+      "esrb": null,
+      "pegi": null,
+      "descriptors": [],
+      "notes": null
+    },
     "ratings": {
       "critic": 78,
       "user": {
@@ -4956,7 +6423,8 @@
       ],
       "cons": [],
       "asOf": "2026-09-06"
-    }
+    },
+    "description": "A hedge witch gathers ingredients from a storybook forest to brew curses for the fairy tale characters who deserve them."
   },
   {
     "id": "gone-home",
@@ -4968,7 +6436,16 @@
     "platform": "PS4",
     "tags": [],
     "steamAppId": 232430,
-    "description": "Come home to an empty house in 1995 Oregon and reconstruct what happened to your sister from notes and cassette tapes.",
+    "ageRating": {
+      "tier": "everyone10",
+      "source": "USK",
+      "rating": "6",
+      "official": true,
+      "esrb": null,
+      "pegi": null,
+      "descriptors": [],
+      "notes": null
+    },
     "ratings": {
       "critic": 86,
       "user": {
@@ -4988,7 +6465,8 @@
       ],
       "cons": [],
       "asOf": "2026-09-06"
-    }
+    },
+    "description": "Come home to an empty house in 1995 Oregon and reconstruct what happened to your sister from notes and cassette tapes."
   },
   {
     "id": "twelve-minutes",
@@ -5000,7 +6478,19 @@
     "platform": "PS4",
     "tags": [],
     "steamAppId": 1097200,
-    "description": "A twelve-minute time loop in a small apartment, solved by carrying knowledge, not items, across each reset.",
+    "ageRating": {
+      "tier": "mature",
+      "source": "PEGI",
+      "rating": "18",
+      "official": true,
+      "esrb": null,
+      "pegi": "18",
+      "descriptors": [
+        "Extreme Violence",
+        "Strong Language"
+      ],
+      "notes": "Violence, gore, blood, sexual themes."
+    },
     "ratings": {
       "critic": 76,
       "user": {
@@ -5016,7 +6506,8 @@
       ],
       "cons": [],
       "asOf": "2026-09-06"
-    }
+    },
+    "description": "A twelve-minute time loop in a small apartment, solved by carrying knowledge, not items, across each reset."
   },
   {
     "id": "sea-of-solitude",
@@ -5030,7 +6521,19 @@
       "graphics"
     ],
     "steamAppId": 1225590,
-    "description": "Kay rows a flooded city where loneliness has turned people into monsters, including herself.",
+    "ageRating": {
+      "tier": "teen",
+      "source": "ESRB",
+      "rating": "T",
+      "official": true,
+      "esrb": "T",
+      "pegi": "12",
+      "descriptors": [
+        "Fantasy Violence",
+        "Language"
+      ],
+      "notes": null
+    },
     "ratings": {
       "critic": 64,
       "user": {
@@ -5046,7 +6549,8 @@
       ],
       "cons": [],
       "asOf": "2026-09-06"
-    }
+    },
+    "description": "Kay rows a flooded city where loneliness has turned people into monsters, including herself."
   },
   {
     "id": "concrete-genie",
@@ -5058,8 +6562,9 @@
     "platform": "PS4",
     "tags": [],
     "steamAppId": null,
-    "description": "Paint living murals across a dead harbor town with the DualSense motion controls, bringing creatures to life as you go.",
-    "ratings": null
+    "ageRating": null,
+    "ratings": null,
+    "description": "Paint living murals across a dead harbor town with the DualSense motion controls, bringing creatures to life as you go."
   },
   {
     "id": "the-last-campfire",
@@ -5073,7 +6578,16 @@
       "cozy"
     ],
     "steamAppId": 990630,
-    "description": "A lost ember wanders a storybook world solving small self-contained puzzles to relight others who have given up.",
+    "ageRating": {
+      "tier": "everyone10",
+      "source": "DJCTQ",
+      "rating": "10",
+      "official": true,
+      "esrb": null,
+      "pegi": null,
+      "descriptors": [],
+      "notes": null
+    },
     "ratings": {
       "critic": 80,
       "user": {
@@ -5101,7 +6615,8 @@
       ],
       "cons": [],
       "asOf": "2026-09-06"
-    }
+    },
+    "description": "A lost ember wanders a storybook world solving small self-contained puzzles to relight others who have given up."
   },
   {
     "id": "omno",
@@ -5115,7 +6630,16 @@
       "cozy"
     ],
     "steamAppId": 969760,
-    "description": "Surf, dash and glide across serene ruins with a staff that grants a new traversal power in every biome.",
+    "ageRating": {
+      "tier": "everyone",
+      "source": "DJCTQ",
+      "rating": "L",
+      "official": true,
+      "esrb": null,
+      "pegi": null,
+      "descriptors": [],
+      "notes": null
+    },
     "ratings": {
       "critic": 76,
       "user": {
@@ -5126,7 +6650,8 @@
       "pros": [],
       "cons": [],
       "asOf": "2026-09-06"
-    }
+    },
+    "description": "Surf, dash and glide across serene ruins with a staff that grants a new traversal power in every biome."
   },
   {
     "id": "abzu",
@@ -5141,7 +6666,18 @@
       "graphics"
     ],
     "steamAppId": 384190,
-    "description": "A wordless dive through vividly colored oceans, swimming inside enormous schools of fish to a soaring score.",
+    "ageRating": {
+      "tier": "everyone",
+      "source": "ESRB",
+      "rating": "E",
+      "official": true,
+      "esrb": "E",
+      "pegi": "7",
+      "descriptors": [
+        "Mild Fantasy Violence"
+      ],
+      "notes": null
+    },
     "ratings": {
       "critic": 83,
       "user": {
@@ -5169,7 +6705,8 @@
       ],
       "cons": [],
       "asOf": "2026-09-06"
-    }
+    },
+    "description": "A wordless dive through vividly colored oceans, swimming inside enormous schools of fish to a soaring score."
   },
   {
     "id": "cyberpunk-2077",
@@ -5183,7 +6720,23 @@
       "graphics"
     ],
     "steamAppId": 1091500,
-    "description": "Build V from the ground up and take on Night City, an open world dense enough to get lost in for a hundred hours.",
+    "ageRating": {
+      "tier": "mature",
+      "source": "ESRB",
+      "rating": "M",
+      "official": true,
+      "esrb": "M",
+      "pegi": "18",
+      "descriptors": [
+        "Blood and Gore",
+        "Intense Violence",
+        "Nudity",
+        "Strong Language",
+        "Strong Sexual Content",
+        "Use of Drugs"
+      ],
+      "notes": "Cyberpunk 2077 contains strong language, intense violence, blood and gore, as well as nudity and sexual material."
+    },
     "ratings": {
       "critic": 86,
       "user": {
@@ -5228,7 +6781,8 @@
         }
       ],
       "asOf": "2026-09-06"
-    }
+    },
+    "description": "Build V from the ground up and take on Night City, an open world dense enough to get lost in for a hundred hours."
   },
   {
     "id": "the-witcher-3",
@@ -5242,7 +6796,23 @@
       "graphics"
     ],
     "steamAppId": 292030,
-    "description": "Geralt hunts monsters across an enormous open world where even the side contracts carry real moral weight.",
+    "ageRating": {
+      "tier": "mature",
+      "source": "ESRB",
+      "rating": "M",
+      "official": true,
+      "esrb": "M",
+      "pegi": "18",
+      "descriptors": [
+        "Blood and Gore",
+        "Intense Violence",
+        "Nudity",
+        "Strong Language",
+        "Strong Sexual Content",
+        "Use of Alcohol"
+      ],
+      "notes": "The Witcher 3: Wild Hunt contains strong language, intense violence, blood and gore, as well as nudity and sexual material."
+    },
     "ratings": {
       "critic": 93,
       "user": {
@@ -5283,7 +6853,8 @@
         }
       ],
       "asOf": "2026-09-06"
-    }
+    },
+    "description": "Geralt hunts monsters across an enormous open world where even the side contracts carry real moral weight."
   },
   {
     "id": "final-fantasy-vii-remake",
@@ -5297,7 +6868,23 @@
       "graphics"
     ],
     "steamAppId": 1462040,
-    "description": "Midgar rebuilt in extraordinary detail, with a hybrid action and command battle system that rewards constant switching.",
+    "ageRating": {
+      "tier": "teen",
+      "source": "ESRB",
+      "rating": "T",
+      "official": true,
+      "esrb": "T",
+      "pegi": "16",
+      "descriptors": [
+        "Violence",
+        "Blood",
+        "Suggestive Themes",
+        "Language",
+        "Use of Alcohol",
+        "Use of Tobacco"
+      ],
+      "notes": null
+    },
     "ratings": {
       "critic": null,
       "user": {
@@ -5342,7 +6929,8 @@
         }
       ],
       "asOf": "2026-09-06"
-    }
+    },
+    "description": "Midgar rebuilt in extraordinary detail, with a hybrid action and command battle system that rewards constant switching."
   },
   {
     "id": "nier-automata",
@@ -5356,7 +6944,21 @@
       "graphics"
     ],
     "steamAppId": 524220,
-    "description": "2B and 9S fight through a ruined earth in an action RPG whose real story only assembles across multiple playthroughs.",
+    "ageRating": {
+      "tier": "mature",
+      "source": "ESRB",
+      "rating": "M",
+      "official": true,
+      "esrb": "M",
+      "pegi": "18",
+      "descriptors": [
+        "Blood",
+        "Partial Nudity",
+        "Strong Language",
+        "Violence"
+      ],
+      "notes": null
+    },
     "ratings": {
       "critic": 84,
       "user": {
@@ -5401,7 +7003,8 @@
         }
       ],
       "asOf": "2026-09-06"
-    }
+    },
+    "description": "2B and 9S fight through a ruined earth in an action RPG whose real story only assembles across multiple playthroughs."
   },
   {
     "id": "ghost-of-tsushima",
@@ -5415,7 +7018,21 @@
       "graphics"
     ],
     "steamAppId": 2215430,
-    "description": "A samurai open world guided by wind instead of waypoints, with duels that turn on timing and stance.",
+    "ageRating": {
+      "tier": "mature",
+      "source": "ESRB",
+      "rating": "M",
+      "official": true,
+      "esrb": "M",
+      "pegi": "18",
+      "descriptors": [
+        "Blood and Gore",
+        "Intense Violence",
+        "Partial Nudity",
+        "Language"
+      ],
+      "notes": "Ghost of Tsushima is an action game set in feudal Japan. Players take the role of Jin Sakai, a samurai risking everything to defend Tsushima from the Mongol invaders pillaging the land. Players travel the Japanese countryside helping civilians and defending them from the Mongol invaders. Frequent sword battles take place in 3rd person melee and ranged combat. Successful attacks can result in dismemberment and decapitation, often accompanied by large blood-splatter effects. Players can also use stealth to take out enemies unseen, with assassination kills. Cinematics and other scenes show other examples of intense violence and gore, including a scene where a civilian is burned alive, a scene showing a person beheaded and the decapitated man’s head held up towards the camera. Red blood can be seen in environments, on clothing, and spraying from successful attacks."
+    },
     "ratings": {
       "critic": null,
       "user": {
@@ -5460,7 +7077,8 @@
         }
       ],
       "asOf": "2026-09-06"
-    }
+    },
+    "description": "A samurai open world guided by wind instead of waypoints, with duels that turn on timing and stance."
   },
   {
     "id": "spider-man-miles-morales",
@@ -5474,7 +7092,18 @@
       "graphics"
     ],
     "steamAppId": 1817190,
-    "description": "Miles takes over a snowbound Manhattan with bio-electric venom powers and the best web-swinging in games.",
+    "ageRating": {
+      "tier": "teen",
+      "source": "ESRB",
+      "rating": "T",
+      "official": true,
+      "esrb": "T",
+      "pegi": "16",
+      "descriptors": [
+        "Violence, Blood, Language, Drug Reference"
+      ],
+      "notes": null
+    },
     "ratings": {
       "critic": null,
       "user": {
@@ -5515,7 +7144,8 @@
         }
       ],
       "asOf": "2026-09-06"
-    }
+    },
+    "description": "Miles takes over a snowbound Manhattan with bio-electric venom powers and the best web-swinging in games."
   },
   {
     "id": "death-stranding",
@@ -5529,7 +7159,21 @@
       "graphics"
     ],
     "steamAppId": 1850570,
-    "description": "Carry cargo across a broken America on foot, where terrain, balance and other players' abandoned ladders are the whole game.",
+    "ageRating": {
+      "tier": "mature",
+      "source": "ESRB",
+      "rating": "M",
+      "official": true,
+      "esrb": "M",
+      "pegi": null,
+      "descriptors": [
+        "Blood",
+        "Intense Violence",
+        "Partial Nudity",
+        "Strong Language"
+      ],
+      "notes": "This Game may contain content not appropriate for all ages. General Mature Content"
+    },
     "ratings": {
       "critic": 85,
       "user": {
@@ -5570,7 +7214,8 @@
         }
       ],
       "asOf": "2026-09-06"
-    }
+    },
+    "description": "Carry cargo across a broken America on foot, where terrain, balance and other players' abandoned ladders are the whole game."
   },
   {
     "id": "the-last-of-us-part-ii",
@@ -5584,7 +7229,23 @@
       "graphics"
     ],
     "steamAppId": 2531310,
-    "description": "Ellie's revenge through a rain-soaked Seattle, remastered with a roguelike survival mode and restored cut levels.",
+    "ageRating": {
+      "tier": "mature",
+      "source": "ESRB",
+      "rating": "M",
+      "official": true,
+      "esrb": "M",
+      "pegi": "18",
+      "descriptors": [
+        "Blood and Gore",
+        "Intense Violence",
+        "Nudity",
+        "Sexual Content",
+        "Strong Language",
+        "Use of Drugs"
+      ],
+      "notes": "This Game may contain content not appropriate for all ages. It contains General Mature Content and may include intense violence, suggestive/sexual themes, and controlled substances."
+    },
     "ratings": {
       "critic": null,
       "user": {
@@ -5629,7 +7290,8 @@
         }
       ],
       "asOf": "2026-09-06"
-    }
+    },
+    "description": "Ellie's revenge through a rain-soaked Seattle, remastered with a roguelike survival mode and restored cut levels."
   },
   {
     "id": "assassins-creed-valhalla",
@@ -5643,7 +7305,23 @@
       "graphics"
     ],
     "steamAppId": 2208920,
-    "description": "Raid and settle across ninth-century England as Eivor, with a settlement that grows through everything you bring home.",
+    "ageRating": {
+      "tier": "mature",
+      "source": "ESRB",
+      "rating": "M",
+      "official": true,
+      "esrb": "M",
+      "pegi": "18",
+      "descriptors": [
+        "Blood and Gore",
+        "Intense Violence",
+        "Partial Nudity",
+        "Sexual Themes",
+        "Strong Language",
+        "Use of Alcohol"
+      ],
+      "notes": null
+    },
     "ratings": {
       "critic": null,
       "user": {
@@ -5688,7 +7366,8 @@
         }
       ],
       "asOf": "2026-09-06"
-    }
+    },
+    "description": "Raid and settle across ninth-century England as Eivor, with a settlement that grows through everything you bring home."
   },
   {
     "id": "immortals-fenyx-rising",
@@ -5702,7 +7381,20 @@
       "graphics"
     ],
     "steamAppId": 2221920,
-    "description": "A bright Greek myth playground of gliding, climbing and vault puzzles, starring a hero you build yourself.",
+    "ageRating": {
+      "tier": "teen",
+      "source": "ESRB",
+      "rating": "T",
+      "official": true,
+      "esrb": "T",
+      "pegi": "12",
+      "descriptors": [
+        "Suggestive Themes",
+        "Violence",
+        "Language"
+      ],
+      "notes": null
+    },
     "ratings": {
       "critic": null,
       "user": {
@@ -5730,7 +7422,8 @@
       ],
       "cons": [],
       "asOf": "2026-09-06"
-    }
+    },
+    "description": "A bright Greek myth playground of gliding, climbing and vault puzzles, starring a hero you build yourself."
   },
   {
     "id": "hogwarts-legacy",
@@ -5744,7 +7437,21 @@
       "graphics"
     ],
     "steamAppId": 990080,
-    "description": "Create a fifth-year student and explore a castle and highlands packed with spells, beasts and hidden rooms.",
+    "ageRating": {
+      "tier": "teen",
+      "source": "ESRB",
+      "rating": "T",
+      "official": true,
+      "esrb": "T",
+      "pegi": "12",
+      "descriptors": [
+        "Fantasy Violence",
+        "Blood",
+        "Mild Language",
+        "Use of Alcohol"
+      ],
+      "notes": null
+    },
     "ratings": {
       "critic": 83,
       "user": {
@@ -5789,7 +7496,8 @@
         }
       ],
       "asOf": "2026-09-06"
-    }
+    },
+    "description": "Create a fifth-year student and explore a castle and highlands packed with spells, beasts and hidden rooms."
   },
   {
     "id": "tales-of-arise",
@@ -5803,7 +7511,22 @@
       "graphics"
     ],
     "steamAppId": 740130,
-    "description": "A gorgeous anime-styled action RPG about two worlds and a party whose bonds drive the combat system itself.",
+    "ageRating": {
+      "tier": "teen",
+      "source": "ESRB",
+      "rating": "T",
+      "official": true,
+      "esrb": "T",
+      "pegi": "12",
+      "descriptors": [
+        "Alcohol Reference",
+        "Blood",
+        "Language",
+        "Suggestive Themes",
+        "Violence"
+      ],
+      "notes": null
+    },
     "ratings": {
       "critic": 84,
       "user": {
@@ -5832,7 +7555,8 @@
         }
       ],
       "asOf": "2026-09-06"
-    }
+    },
+    "description": "A gorgeous anime-styled action RPG about two worlds and a party whose bonds drive the combat system itself."
   },
   {
     "id": "sifu",
@@ -5846,7 +7570,21 @@
       "graphics"
     ],
     "steamAppId": 2138710,
-    "description": "A kung fu revenge story where every death ages you a year, trading health for damage until you learn the routes cold.",
+    "ageRating": {
+      "tier": "mature",
+      "source": "ESRB",
+      "rating": "M",
+      "official": true,
+      "esrb": "M",
+      "pegi": "16",
+      "descriptors": [
+        "Strong Language",
+        "Violence",
+        "Blood",
+        "Drug Reference"
+      ],
+      "notes": "Sifu is an action-fighting game that features violent combat gameplay."
+    },
     "ratings": {
       "critic": 81,
       "user": {
@@ -5874,7 +7612,8 @@
       ],
       "cons": [],
       "asOf": "2026-09-06"
-    }
+    },
+    "description": "A kung fu revenge story where every death ages you a year, trading health for damage until you learn the routes cold."
   },
   {
     "id": "it-takes-two",
@@ -5888,7 +7627,21 @@
       "social"
     ],
     "steamAppId": 1426210,
-    "description": "A co-op only adventure that invents an entire new mechanic every twenty minutes and never reuses one.",
+    "ageRating": {
+      "tier": "teen",
+      "source": "ESRB",
+      "rating": "T",
+      "official": true,
+      "esrb": "T",
+      "pegi": "12",
+      "descriptors": [
+        "Animated Blood",
+        "Comic Mischief",
+        "Fantasy Violence",
+        "Language"
+      ],
+      "notes": null
+    },
     "ratings": {
       "critic": 89,
       "user": {
@@ -5921,7 +7674,8 @@
         }
       ],
       "asOf": "2026-09-06"
-    }
+    },
+    "description": "A co-op only adventure that invents an entire new mechanic every twenty minutes and never reuses one."
   },
   {
     "id": "hades",
@@ -5935,7 +7689,22 @@
       "graphics"
     ],
     "steamAppId": 1145360,
-    "description": "Escape the underworld over and over, with god-granted boons that rebuild your run and a story that advances with every death.",
+    "ageRating": {
+      "tier": "teen",
+      "source": "ESRB",
+      "rating": "T",
+      "official": true,
+      "esrb": "T",
+      "pegi": null,
+      "descriptors": [
+        "Alcohol Reference",
+        "Blood",
+        "Mild Language",
+        "Suggestive Themes",
+        "Violence"
+      ],
+      "notes": null
+    },
     "ratings": {
       "critic": 93,
       "user": {
@@ -5968,7 +7737,8 @@
         }
       ],
       "asOf": "2026-09-06"
-    }
+    },
+    "description": "Escape the underworld over and over, with god-granted boons that rebuild your run and a story that advances with every death."
   },
   {
     "id": "endling",
@@ -5980,7 +7750,19 @@
     "platform": "PS4",
     "tags": [],
     "steamAppId": 898890,
-    "description": "The last fox on earth leads her cubs through a poisoned landscape, and any cub you lose stays lost.",
+    "ageRating": {
+      "tier": "teen",
+      "source": "ESRB",
+      "rating": "T",
+      "official": true,
+      "esrb": "T",
+      "pegi": "16",
+      "descriptors": [
+        "Fantasy Violence",
+        "Blood"
+      ],
+      "notes": "Some scenes might be disturbing to a young audience due to the described violence."
+    },
     "ratings": {
       "critic": 75,
       "user": {
@@ -6004,7 +7786,8 @@
       ],
       "cons": [],
       "asOf": "2026-09-06"
-    }
+    },
+    "description": "The last fox on earth leads her cubs through a poisoned landscape, and any cub you lose stays lost."
   },
   {
     "id": "astro-bot",
@@ -6019,8 +7802,9 @@
       "graphics"
     ],
     "steamAppId": null,
-    "description": "A joyful 3D platformer built around the DualSense, packed with inventive one-off mechanics and a galaxy of PlayStation history.",
-    "ratings": null
+    "ageRating": null,
+    "ratings": null,
+    "description": "A joyful 3D platformer built around the DualSense, packed with inventive one-off mechanics and a galaxy of PlayStation history."
   },
   {
     "id": "astros-playroom",
@@ -6034,8 +7818,9 @@
       "cozy"
     ],
     "steamAppId": null,
-    "description": "The free pack-in platformer that turns the DualSense itself into the toy, with a museum of PlayStation nostalgia.",
-    "ratings": null
+    "ageRating": null,
+    "ratings": null,
+    "description": "The free pack-in platformer that turns the DualSense itself into the toy, with a museum of PlayStation nostalgia."
   },
   {
     "id": "returnal",
@@ -6049,7 +7834,20 @@
       "graphics"
     ],
     "steamAppId": 1649240,
-    "description": "A roguelike bullet hell where Selene crashes on a shifting alien planet and dies her way toward the truth.",
+    "ageRating": {
+      "tier": "teen",
+      "source": "ESRB",
+      "rating": "T",
+      "official": true,
+      "esrb": "T",
+      "pegi": "16",
+      "descriptors": [
+        "Violence",
+        "Blood",
+        "Mild Language"
+      ],
+      "notes": null
+    },
     "ratings": {
       "critic": null,
       "user": {
@@ -6090,7 +7888,8 @@
         }
       ],
       "asOf": "2026-09-06"
-    }
+    },
+    "description": "A roguelike bullet hell where Selene crashes on a shifting alien planet and dies her way toward the truth."
   },
   {
     "id": "demons-souls",
@@ -6104,8 +7903,9 @@
       "graphics"
     ],
     "steamAppId": null,
-    "description": "The soulslike that started it all, rebuilt from the ground up as a showcase of what the hardware could do.",
-    "ratings": null
+    "ageRating": null,
+    "ratings": null,
+    "description": "The soulslike that started it all, rebuilt from the ground up as a showcase of what the hardware could do."
   },
   {
     "id": "ratchet-rift-apart",
@@ -6119,7 +7919,20 @@
       "graphics"
     ],
     "steamAppId": 1895880,
-    "description": "Dimension-hopping platforming that swaps entire worlds mid-jump, with an arsenal of absurd weapons.",
+    "ageRating": {
+      "tier": "everyone10",
+      "source": "ESRB",
+      "rating": "E10",
+      "official": true,
+      "esrb": "E10",
+      "pegi": "7",
+      "descriptors": [
+        "Animated Blood",
+        "Fantasy Violence",
+        "Alcohol Reference"
+      ],
+      "notes": null
+    },
     "ratings": {
       "critic": null,
       "user": {
@@ -6152,7 +7965,8 @@
         }
       ],
       "asOf": "2026-09-06"
-    }
+    },
+    "description": "Dimension-hopping platforming that swaps entire worlds mid-jump, with an arsenal of absurd weapons."
   },
   {
     "id": "spider-man-2",
@@ -6166,7 +7980,21 @@
       "graphics"
     ],
     "steamAppId": 2651280,
-    "description": "Two Spider-Men share an expanded New York, with wingsuit traversal across the full five boroughs.",
+    "ageRating": {
+      "tier": "teen",
+      "source": "ESRB",
+      "rating": "T",
+      "official": true,
+      "esrb": "T",
+      "pegi": "16",
+      "descriptors": [
+        "Blood",
+        "Violence",
+        "Drug Reference",
+        "Mild Language"
+      ],
+      "notes": null
+    },
     "ratings": {
       "critic": null,
       "user": {
@@ -6211,7 +8039,8 @@
         }
       ],
       "asOf": "2026-09-06"
-    }
+    },
+    "description": "Two Spider-Men share an expanded New York, with wingsuit traversal across the full five boroughs."
   },
   {
     "id": "final-fantasy-xvi",
@@ -6225,7 +8054,22 @@
       "graphics"
     ],
     "steamAppId": 2515020,
-    "description": "A darker, action-driven Final Fantasy built around enormous summon battles that reshape the landscape.",
+    "ageRating": {
+      "tier": "mature",
+      "source": "ESRB",
+      "rating": "M",
+      "official": true,
+      "esrb": "M",
+      "pegi": "18",
+      "descriptors": [
+        "Violence",
+        "Blood and Gore",
+        "Sexual Themes",
+        "Partial Nudity",
+        "Strong Language"
+      ],
+      "notes": "FINAL FANTASY XVI contains mild blood, fantasy violence, criminal acts and depiction of criminal acts in certain areas of the game."
+    },
     "ratings": {
       "critic": null,
       "user": {
@@ -6270,7 +8114,8 @@
         }
       ],
       "asOf": "2026-09-06"
-    }
+    },
+    "description": "A darker, action-driven Final Fantasy built around enormous summon battles that reshape the landscape."
   },
   {
     "id": "stellar-blade",
@@ -6284,7 +8129,21 @@
       "graphics"
     ],
     "steamAppId": 3489700,
-    "description": "A stylish combo-driven action game across a ruined earth, built on parries and spectacle.",
+    "ageRating": {
+      "tier": "mature",
+      "source": "ESRB",
+      "rating": "M",
+      "official": true,
+      "esrb": "M",
+      "pegi": "18",
+      "descriptors": [
+        "Violence",
+        "Blood and Gore",
+        "Suggestive Themes",
+        "Language"
+      ],
+      "notes": "Stellar Blade™ is an action-adventure game set in a post-apocalyptic world. Players engage in fast paced melee-style combat with weapons such as blades, machine guns and laser blasters. Attacks result in black splatter effects, and can also impale, dismember, or decapitate the enemies. There are female characters in revealing costumes. There are some references to suicide and torture. There are scenes which include depictions of alcohol and tobacco. Low-mid level language is used in the dialogue."
+    },
     "ratings": {
       "critic": null,
       "user": {
@@ -6329,7 +8188,8 @@
         }
       ],
       "asOf": "2026-09-06"
-    }
+    },
+    "description": "A stylish combo-driven action game across a ruined earth, built on parries and spectacle."
   },
   {
     "id": "rise-of-the-ronin",
@@ -6343,7 +8203,20 @@
       "graphics"
     ],
     "steamAppId": 1340990,
-    "description": "An open-world samurai RPG set during the fall of the shogunate, with shifting allegiances and a custom protagonist.",
+    "ageRating": {
+      "tier": "mature",
+      "source": "ESRB",
+      "rating": "M",
+      "official": true,
+      "esrb": "M",
+      "pegi": "18",
+      "descriptors": [
+        "Violence",
+        "Blood and Gore",
+        "Language"
+      ],
+      "notes": "This Game may contain content not appropriate for all ages, or may not be appropriate for viewing at work: Frequent Violence or Gore, Partial Nudity, Sexual Content"
+    },
     "ratings": {
       "critic": 73,
       "user": {
@@ -6384,7 +8257,8 @@
         }
       ],
       "asOf": "2026-09-06"
-    }
+    },
+    "description": "An open-world samurai RPG set during the fall of the shogunate, with shifting allegiances and a custom protagonist."
   },
   {
     "id": "baldurs-gate-3",
@@ -6399,7 +8273,22 @@
       "graphics"
     ],
     "steamAppId": 1086940,
-    "description": "A vast turn-based RPG where nearly every plan works, playable in co-op with friends who ruin all of them.",
+    "ageRating": {
+      "tier": "mature",
+      "source": "ESRB",
+      "rating": "M",
+      "official": true,
+      "esrb": "M",
+      "pegi": "18",
+      "descriptors": [
+        "Intense Violence",
+        "Blood and Gore",
+        "Strong Sexual Content",
+        "Nudity",
+        "Strong Language"
+      ],
+      "notes": "This Game may contain content not appropriate for all ages. It contains General Mature Content, and may include Nudity or Sexual Content."
+    },
     "ratings": {
       "critic": 96,
       "user": {
@@ -6444,7 +8333,8 @@
         }
       ],
       "asOf": "2026-09-06"
-    }
+    },
+    "description": "A vast turn-based RPG where nearly every plan works, playable in co-op with friends who ruin all of them."
   },
   {
     "id": "helldivers-2",
@@ -6458,7 +8348,19 @@
       "social"
     ],
     "steamAppId": 553850,
-    "description": "Four-player squads drop onto hostile planets to spread managed democracy, mostly via friendly fire.",
+    "ageRating": {
+      "tier": "mature",
+      "source": "ESRB",
+      "rating": "M",
+      "official": true,
+      "esrb": "M",
+      "pegi": "18",
+      "descriptors": [
+        "Blood and Gore",
+        "Intense Violence"
+      ],
+      "notes": "HELLDIVERS™ 2 is a 3rd person squad-based shooter that sees the elite forces of the Helldivers battling to win an intergalactic struggle to rid the galaxy of the rising alien threats. From a 3rd person perspective, players use a variety of weapons (pistols, machine guns, flamethrowers) and stratagems (turrets, airstrikes, etc.) to shoot and kill the alien threats. Players can also aim down the sights for a more accurate 1st person camera view. Combat is accompanied by frequent sprays of blood and dismemberment as players exterminate the alien forces or players and squad mates are hit by environmental explosions or friendly fire. Enemy encampments and battlefield environments depict bloodstains and dismembered corpses."
+    },
     "ratings": {
       "critic": null,
       "user": {
@@ -6503,7 +8405,8 @@
         }
       ],
       "asOf": "2026-09-06"
-    }
+    },
+    "description": "Four-player squads drop onto hostile planets to spread managed democracy, mostly via friendly fire."
   },
   {
     "id": "gran-turismo-7",
@@ -6518,8 +8421,9 @@
       "social"
     ],
     "steamAppId": null,
-    "description": "A meticulous driving simulator whose car models and lighting are the real showcase.",
-    "ratings": null
+    "ageRating": null,
+    "ratings": null,
+    "description": "A meticulous driving simulator whose car models and lighting are the real showcase."
   },
   {
     "id": "alan-wake-2",
@@ -6533,8 +8437,9 @@
       "graphics"
     ],
     "steamAppId": null,
-    "description": "A survival horror sequel switching between an FBI agent and a trapped writer, and one of the best-looking games on the console.",
-    "ratings": null
+    "ageRating": null,
+    "ratings": null,
+    "description": "A survival horror sequel switching between an FBI agent and a trapped writer, and one of the best-looking games on the console."
   },
   {
     "id": "black-myth-wukong",
@@ -6548,7 +8453,21 @@
       "graphics"
     ],
     "steamAppId": 2358720,
-    "description": "An action RPG drawn from Journey to the West, with shapeshifting and enormous mythic bosses.",
+    "ageRating": {
+      "tier": "teen",
+      "source": "ESRB",
+      "rating": "T",
+      "official": true,
+      "esrb": "T",
+      "pegi": "16",
+      "descriptors": [
+        "Violence",
+        "Blood and Gore",
+        "Partial Nudity",
+        "Language"
+      ],
+      "notes": null
+    },
     "ratings": {
       "critic": null,
       "user": {
@@ -6593,7 +8512,8 @@
         }
       ],
       "asOf": "2026-09-06"
-    }
+    },
+    "description": "An action RPG drawn from Journey to the West, with shapeshifting and enormous mythic bosses."
   },
   {
     "id": "silent-hill-2",
@@ -6607,7 +8527,21 @@
       "graphics"
     ],
     "steamAppId": 2124490,
-    "description": "The remake of the psychological horror landmark, rebuilt over the shoulder in fog thick enough to taste.",
+    "ageRating": {
+      "tier": "mature",
+      "source": "ESRB",
+      "rating": "M",
+      "official": true,
+      "esrb": "M",
+      "pegi": "18",
+      "descriptors": [
+        "Violence",
+        "Blood and Gore",
+        "Sexual Themes",
+        "Language"
+      ],
+      "notes": "This Game may contain content not appropriate for all ages, or may not be appropriate for viewing at work: Frequent Violence or Gore, General Mature Content"
+    },
     "ratings": {
       "critic": null,
       "user": {
@@ -6652,7 +8586,8 @@
         }
       ],
       "asOf": "2026-09-06"
-    }
+    },
+    "description": "The remake of the psychological horror landmark, rebuilt over the shoulder in fog thick enough to taste."
   },
   {
     "id": "dead-space-remake",
@@ -6666,7 +8601,20 @@
       "graphics"
     ],
     "steamAppId": 1693980,
-    "description": "The rebuild of the sci-fi horror classic, seamless from menu to credits with no visible loads.",
+    "ageRating": {
+      "tier": "mature",
+      "source": "ESRB",
+      "rating": "M",
+      "official": true,
+      "esrb": "M",
+      "pegi": "18",
+      "descriptors": [
+        "Intense Violence",
+        "Blood and Gore",
+        "Strong Language"
+      ],
+      "notes": "This Game may contain content not appropriate for all ages, or may not be appropriate for viewing at work: Frequent Violence or Gore, General Mature Content"
+    },
     "ratings": {
       "critic": 87,
       "user": {
@@ -6707,7 +8655,8 @@
         }
       ],
       "asOf": "2026-09-06"
-    }
+    },
+    "description": "The rebuild of the sci-fi horror classic, seamless from menu to credits with no visible loads."
   },
   {
     "id": "the-last-of-us-part-i",
@@ -6721,7 +8670,22 @@
       "graphics"
     ],
     "steamAppId": 1888930,
-    "description": "The original rebuilt on the Part II engine, with rebuilt performances and deep accessibility support.",
+    "ageRating": {
+      "tier": "mature",
+      "source": "ESRB",
+      "rating": "M",
+      "official": true,
+      "esrb": "M",
+      "pegi": "18",
+      "descriptors": [
+        "Blood and Gore",
+        "Intense Violence",
+        "Sexual Themes",
+        "Strong Language",
+        "Use of Alcohol"
+      ],
+      "notes": "Players use weapons such as pistols, rifles, and crafted explosives as well as melee attacks with chokeholds, bats, and metal pipes to defend themselves from the infected and other human survivors. Players can also engage in stealth combat sequences involving a close-up camera view. Weapon and explosive attacks can result in decapitation and/or dismemberment. Scenes depict intense acts of violence, including themes of suicide and torture. During the game, a character makes sexual remarks about an adult magazine and a young character is shown drinking alcohol. Strong language is used frequently in dialogue."
+    },
     "ratings": {
       "critic": null,
       "user": {
@@ -6762,7 +8726,8 @@
         }
       ],
       "asOf": "2026-09-06"
-    }
+    },
+    "description": "The original rebuilt on the Part II engine, with rebuilt performances and deep accessibility support."
   },
   {
     "id": "a-plague-tale-requiem",
@@ -6776,7 +8741,20 @@
       "graphics"
     ],
     "steamAppId": 1182900,
-    "description": "Amicia and Hugo flee south through France, pursued by rat swarms tens of thousands strong.",
+    "ageRating": {
+      "tier": "mature",
+      "source": "ESRB",
+      "rating": "M",
+      "official": true,
+      "esrb": "M",
+      "pegi": "18",
+      "descriptors": [
+        "Violence",
+        "Blood and Gore",
+        "Strong Language"
+      ],
+      "notes": "A Plague Tale: Requiem will contain intense violence, blood and gore content."
+    },
     "ratings": {
       "critic": 82,
       "user": {
@@ -6821,7 +8799,8 @@
         }
       ],
       "asOf": "2026-09-06"
-    }
+    },
+    "description": "Amicia and Hugo flee south through France, pursued by rat swarms tens of thousands strong."
   },
   {
     "id": "star-wars-outlaws",
@@ -6835,7 +8814,20 @@
       "graphics"
     ],
     "steamAppId": 2842040,
-    "description": "A scoundrel and her companion creature run jobs across an open-world Outer Rim between the films.",
+    "ageRating": {
+      "tier": "teen",
+      "source": "ESRB",
+      "rating": "T",
+      "official": true,
+      "esrb": "T",
+      "pegi": "12",
+      "descriptors": [
+        "Violence",
+        "Mild Language",
+        "Simulated Gambling"
+      ],
+      "notes": null
+    },
     "ratings": {
       "critic": null,
       "user": {
@@ -6880,7 +8872,8 @@
         }
       ],
       "asOf": "2026-09-06"
-    }
+    },
+    "description": "A scoundrel and her companion creature run jobs across an open-world Outer Rim between the films."
   },
   {
     "id": "avatar-frontiers-of-pandora",
@@ -6894,7 +8887,20 @@
       "graphics"
     ],
     "steamAppId": 2840770,
-    "description": "A first-person open world on Pandora, dense with bioluminescent forest and vertical traversal.",
+    "ageRating": {
+      "tier": "teen",
+      "source": "ESRB",
+      "rating": "T",
+      "official": true,
+      "esrb": "T",
+      "pegi": "16",
+      "descriptors": [
+        "Violence",
+        "Mild Blood",
+        "Language"
+      ],
+      "notes": null
+    },
     "ratings": {
       "critic": null,
       "user": {
@@ -6931,7 +8937,8 @@
         }
       ],
       "asOf": "2026-09-06"
-    }
+    },
+    "description": "A first-person open world on Pandora, dense with bioluminescent forest and vertical traversal."
   },
   {
     "id": "ghost-of-yotei",
@@ -6945,8 +8952,9 @@
       "graphics"
     ],
     "steamAppId": null,
-    "description": "Atsu hunts across the plains and peaks around Mount Yotei in the follow-up to Ghost of Tsushima.",
-    "ratings": null
+    "ageRating": null,
+    "ratings": null,
+    "description": "Atsu hunts across the plains and peaks around Mount Yotei in the follow-up to Ghost of Tsushima."
   },
   {
     "id": "death-stranding-2",
@@ -6960,7 +8968,21 @@
       "graphics"
     ],
     "steamAppId": 3280350,
-    "description": "Sam's deliveries continue across a new continent, with the same strange, beautiful traversal.",
+    "ageRating": {
+      "tier": "mature",
+      "source": "ESRB",
+      "rating": "M",
+      "official": true,
+      "esrb": "M",
+      "pegi": "18",
+      "descriptors": [
+        "Violence",
+        "Blood and Gore",
+        "Partial Nudity",
+        "Strong Language"
+      ],
+      "notes": "This game contains content not appropriate for all ages, or may not be appropriate for viewing at work: General Mature Content, Violence and Strong Language."
+    },
     "ratings": {
       "critic": null,
       "user": {
@@ -6993,7 +9015,8 @@
         }
       ],
       "asOf": "2026-09-06"
-    }
+    },
+    "description": "Sam's deliveries continue across a new continent, with the same strange, beautiful traversal."
   },
   {
     "id": "sable",
@@ -7008,7 +9031,16 @@
       "graphics"
     ],
     "steamAppId": 757310,
-    "description": "A gliding, hoverbike coming-of-age journey across a desert drawn like a Moebius comic.",
+    "ageRating": {
+      "tier": "everyone",
+      "source": "DJCTQ",
+      "rating": "L",
+      "official": true,
+      "esrb": null,
+      "pegi": null,
+      "descriptors": [],
+      "notes": null
+    },
     "ratings": {
       "critic": 76,
       "user": {
@@ -7045,7 +9077,8 @@
         }
       ],
       "asOf": "2026-09-06"
-    }
+    },
+    "description": "A gliding, hoverbike coming-of-age journey across a desert drawn like a Moebius comic."
   },
   {
     "id": "venba",
@@ -7059,7 +9092,16 @@
       "cozy"
     ],
     "steamAppId": 1491670,
-    "description": "A short, warm cooking game about an Indian family in Canada and the recipes that survive the move.",
+    "ageRating": {
+      "tier": "teen",
+      "source": "DJCTQ",
+      "rating": "12",
+      "official": true,
+      "esrb": null,
+      "pegi": null,
+      "descriptors": [],
+      "notes": null
+    },
     "ratings": {
       "critic": null,
       "user": {
@@ -7087,7 +9129,8 @@
       ],
       "cons": [],
       "asOf": "2026-09-06"
-    }
+    },
+    "description": "A short, warm cooking game about an Indian family in Canada and the recipes that survive the move."
   },
   {
     "id": "little-kitty-big-city",
@@ -7101,7 +9144,16 @@
       "cozy"
     ],
     "steamAppId": 1177980,
-    "description": "A cat knocks things off ledges on the way home, and the whole city is a playground.",
+    "ageRating": {
+      "tier": "everyone",
+      "source": "DJCTQ",
+      "rating": "L",
+      "official": true,
+      "esrb": null,
+      "pegi": null,
+      "descriptors": [],
+      "notes": null
+    },
     "ratings": {
       "critic": null,
       "user": {
@@ -7138,7 +9190,8 @@
         }
       ],
       "asOf": "2026-09-06"
-    }
+    },
+    "description": "A cat knocks things off ledges on the way home, and the whole city is a playground."
   },
   {
     "id": "jusant",
@@ -7153,7 +9206,16 @@
       "graphics"
     ],
     "steamAppId": 1977170,
-    "description": "A methodical climb up an enormous dried-out tower, one handhold and one stamina bar at a time.",
+    "ageRating": {
+      "tier": "everyone",
+      "source": "DJCTQ",
+      "rating": "L",
+      "official": false,
+      "esrb": null,
+      "pegi": null,
+      "descriptors": [],
+      "notes": null
+    },
     "ratings": {
       "critic": 83,
       "user": {
@@ -7181,7 +9243,8 @@
       ],
       "cons": [],
       "asOf": "2026-09-06"
-    }
+    },
+    "description": "A methodical climb up an enormous dried-out tower, one handhold and one stamina bar at a time."
   },
   {
     "id": "the-plucky-squire",
@@ -7195,7 +9258,16 @@
       "cozy"
     ],
     "steamAppId": 1627570,
-    "description": "A storybook hero leaps off the page into the three-dimensional desk the book is sitting on.",
+    "ageRating": {
+      "tier": "everyone10",
+      "source": "USK",
+      "rating": "6",
+      "official": true,
+      "esrb": null,
+      "pegi": null,
+      "descriptors": [],
+      "notes": null
+    },
     "ratings": {
       "critic": 83,
       "user": {
@@ -7223,7 +9295,8 @@
       ],
       "cons": [],
       "asOf": "2026-09-06"
-    }
+    },
+    "description": "A storybook hero leaps off the page into the three-dimensional desk the book is sitting on."
   },
   {
     "id": "neva",
@@ -7237,7 +9310,16 @@
       "graphics"
     ],
     "steamAppId": 2420660,
-    "description": "From the makers of Gris: a woman and a growing wolf cub cross a dying, hand-painted world.",
+    "ageRating": {
+      "tier": "everyone10",
+      "source": "Steam Germany",
+      "rating": "6",
+      "official": false,
+      "esrb": null,
+      "pegi": null,
+      "descriptors": [],
+      "notes": null
+    },
     "ratings": {
       "critic": 87,
       "user": {
@@ -7265,7 +9347,8 @@
       ],
       "cons": [],
       "asOf": "2026-09-06"
-    }
+    },
+    "description": "From the makers of Gris: a woman and a growing wolf cub cross a dying, hand-painted world."
   },
   {
     "id": "animal-well",
@@ -7279,7 +9362,18 @@
       "graphics"
     ],
     "steamAppId": 813230,
-    "description": "A tiny luminous blob explores a dense, secret-packed labyrinth where almost nothing is explained.",
+    "ageRating": {
+      "tier": "everyone10",
+      "source": "PEGI",
+      "rating": "7",
+      "official": true,
+      "esrb": null,
+      "pegi": "7",
+      "descriptors": [
+        "Fear, Mild Violence"
+      ],
+      "notes": null
+    },
     "ratings": {
       "critic": 90,
       "user": {
@@ -7312,7 +9406,8 @@
         }
       ],
       "asOf": "2026-09-06"
-    }
+    },
+    "description": "A tiny luminous blob explores a dense, secret-packed labyrinth where almost nothing is explained."
   },
   {
     "id": "lorelei-and-the-laser-eyes",
@@ -7324,7 +9419,21 @@
     "platform": "PS5",
     "tags": [],
     "steamAppId": 2008920,
-    "description": "A monochrome puzzle box of a hotel where every door is a riddle and the whole game is one long deduction.",
+    "ageRating": {
+      "tier": "teen",
+      "source": "ESRB",
+      "rating": "T",
+      "official": true,
+      "esrb": "T",
+      "pegi": "12",
+      "descriptors": [
+        "Mild Violence",
+        "Blood",
+        "Language",
+        "Alcohol Reference"
+      ],
+      "notes": null
+    },
     "ratings": {
       "critic": 88,
       "user": {
@@ -7352,7 +9461,8 @@
       ],
       "cons": [],
       "asOf": "2026-09-06"
-    }
+    },
+    "description": "A monochrome puzzle box of a hotel where every door is a riddle and the whole game is one long deduction."
   },
   {
     "id": "temtem",
@@ -7366,7 +9476,16 @@
       "social"
     ],
     "steamAppId": 745920,
-    "description": "A massively multiplayer creature collector where other tamers roam the same islands you do.",
+    "ageRating": {
+      "tier": "everyone10",
+      "source": "DJCTQ",
+      "rating": "10",
+      "official": true,
+      "esrb": null,
+      "pegi": null,
+      "descriptors": [],
+      "notes": null
+    },
     "ratings": {
       "critic": 79,
       "user": {
@@ -7377,7 +9496,8 @@
       "pros": [],
       "cons": [],
       "asOf": "2026-09-06"
-    }
+    },
+    "description": "A massively multiplayer creature collector where other tamers roam the same islands you do."
   },
   {
     "id": "palworld",
@@ -7391,7 +9511,16 @@
       "social"
     ],
     "steamAppId": 1623730,
-    "description": "Catch creatures, then put them to work in your base, in a co-op survival crafting game with a very straight face.",
+    "ageRating": {
+      "tier": "everyone",
+      "source": "DJCTQ",
+      "rating": "L",
+      "official": true,
+      "esrb": null,
+      "pegi": null,
+      "descriptors": [],
+      "notes": null
+    },
     "ratings": {
       "critic": null,
       "user": {
@@ -7436,7 +9565,8 @@
         }
       ],
       "asOf": "2026-09-06"
-    }
+    },
+    "description": "Catch creatures, then put them to work in your base, in a co-op survival crafting game with a very straight face."
   },
   {
     "id": "coral-island",
@@ -7450,7 +9580,16 @@
       "cozy"
     ],
     "steamAppId": 1158160,
-    "description": "Restore a tropical farm and the dying reef below it, with a whole town of characters to befriend.",
+    "ageRating": {
+      "tier": "everyone10",
+      "source": "DJCTQ",
+      "rating": "10",
+      "official": true,
+      "esrb": null,
+      "pegi": null,
+      "descriptors": [],
+      "notes": null
+    },
     "ratings": {
       "critic": null,
       "user": {
@@ -7487,7 +9626,8 @@
         }
       ],
       "asOf": "2026-09-06"
-    }
+    },
+    "description": "Restore a tropical farm and the dying reef below it, with a whole town of characters to befriend."
   },
   {
     "id": "fae-farm",
@@ -7502,7 +9642,18 @@
       "social"
     ],
     "steamAppId": 2230110,
-    "description": "A cozy magical farming sim built for four-player co-op from the ground up.",
+    "ageRating": {
+      "tier": "everyone10",
+      "source": "ESRB",
+      "rating": "E10",
+      "official": true,
+      "esrb": "E10",
+      "pegi": "7",
+      "descriptors": [
+        "Fantasy Violence"
+      ],
+      "notes": null
+    },
     "ratings": {
       "critic": 75,
       "user": {
@@ -7518,7 +9669,8 @@
       ],
       "cons": [],
       "asOf": "2026-09-06"
-    }
+    },
+    "description": "A cozy magical farming sim built for four-player co-op from the ground up."
   },
   {
     "id": "moonstone-island",
@@ -7532,7 +9684,16 @@
       "cozy"
     ],
     "steamAppId": 1658150,
-    "description": "Farm, tame spirits and build decks across a hundred floating islands during your alchemist's apprenticeship.",
+    "ageRating": {
+      "tier": "everyone10",
+      "source": "DJCTQ",
+      "rating": "10",
+      "official": true,
+      "esrb": null,
+      "pegi": null,
+      "descriptors": [],
+      "notes": null
+    },
     "ratings": {
       "critic": 80,
       "user": {
@@ -7560,7 +9721,8 @@
       ],
       "cons": [],
       "asOf": "2026-09-06"
-    }
+    },
+    "description": "Farm, tame spirits and build decks across a hundred floating islands during your alchemist's apprenticeship."
   },
   {
     "id": "party-animals",
@@ -7574,7 +9736,20 @@
       "social"
     ],
     "steamAppId": 1260320,
-    "description": "Physics-driven puppy brawling that is mostly about failing to stand up.",
+    "ageRating": {
+      "tier": "everyone10",
+      "source": "ESRB",
+      "rating": "E10",
+      "official": true,
+      "esrb": "E10",
+      "pegi": "7",
+      "descriptors": [
+        "Fantasy Violence",
+        "Alcohol Reference",
+        "Comic Mischief"
+      ],
+      "notes": null
+    },
     "ratings": {
       "critic": null,
       "user": {
@@ -7590,7 +9765,8 @@
       ],
       "cons": [],
       "asOf": "2026-09-06"
-    }
+    },
+    "description": "Physics-driven puppy brawling that is mostly about failing to stand up."
   },
   {
     "id": "sea-of-thieves",
@@ -7605,7 +9781,20 @@
       "graphics"
     ],
     "steamAppId": 1172620,
-    "description": "Crew a pirate ship with friends, where every sail on the horizon is another table of real players.",
+    "ageRating": {
+      "tier": "teen",
+      "source": "ESRB",
+      "rating": "T",
+      "official": true,
+      "esrb": "T",
+      "pegi": "12",
+      "descriptors": [
+        "Violence",
+        "Use of Alcohol",
+        "Crude Humor"
+      ],
+      "notes": null
+    },
     "ratings": {
       "critic": null,
       "user": {
@@ -7650,7 +9839,8 @@
         }
       ],
       "asOf": "2026-09-06"
-    }
+    },
+    "description": "Crew a pirate ship with friends, where every sail on the horizon is another table of real players."
   },
   {
     "id": "phasmophobia",
@@ -7664,7 +9854,16 @@
       "social"
     ],
     "steamAppId": 739630,
-    "description": "Four investigators, one haunted house, and voice chat the ghost can hear.",
+    "ageRating": {
+      "tier": "teen",
+      "source": "DJCTQ",
+      "rating": "12",
+      "official": true,
+      "esrb": null,
+      "pegi": null,
+      "descriptors": [],
+      "notes": null
+    },
     "ratings": {
       "critic": null,
       "user": {
@@ -7709,7 +9908,8 @@
         }
       ],
       "asOf": "2026-09-06"
-    }
+    },
+    "description": "Four investigators, one haunted house, and voice chat the ghost can hear."
   },
   {
     "id": "the-medium",
@@ -7723,7 +9923,19 @@
       "graphics"
     ],
     "steamAppId": 1293160,
-    "description": "A medium walks two worlds at once, both rendered side by side on screen simultaneously.",
+    "ageRating": {
+      "tier": "mature",
+      "source": "PEGI",
+      "rating": "18",
+      "official": true,
+      "esrb": null,
+      "pegi": "18",
+      "descriptors": [
+        "Violence",
+        "Bad Language"
+      ],
+      "notes": "This game may contain content not appropriate for all ages, or may not be appropriate for viewing at work. Frequent violence and gore and general mature content is present."
+    },
     "ratings": {
       "critic": null,
       "user": {
@@ -7751,7 +9963,8 @@
       ],
       "cons": [],
       "asOf": "2026-09-06"
-    }
+    },
+    "description": "A medium walks two worlds at once, both rendered side by side on screen simultaneously."
   },
   {
     "id": "overcooked-all-you-can-eat",
@@ -7765,7 +9978,16 @@
       "social"
     ],
     "steamAppId": 1243830,
-    "description": "Both Overcooked games remastered, still the fastest way to test a friendship inside a burning kitchen.",
+    "ageRating": {
+      "tier": "everyone",
+      "source": "DJCTQ",
+      "rating": "L",
+      "official": true,
+      "esrb": null,
+      "pegi": null,
+      "descriptors": [],
+      "notes": null
+    },
     "ratings": {
       "critic": null,
       "user": {
@@ -7781,7 +10003,8 @@
       ],
       "cons": [],
       "asOf": "2026-09-06"
-    }
+    },
+    "description": "Both Overcooked games remastered, still the fastest way to test a friendship inside a burning kitchen."
   },
   {
     "id": "fall-guys",
@@ -7795,8 +10018,9 @@
       "social"
     ],
     "steamAppId": null,
-    "description": "Sixty jellybeans stumble through obstacle courses until one is left standing. Free to play.",
-    "ratings": null
+    "ageRating": null,
+    "ratings": null,
+    "description": "Sixty jellybeans stumble through obstacle courses until one is left standing. Free to play."
   },
   {
     "id": "rocket-league",
@@ -7810,8 +10034,9 @@
       "social"
     ],
     "steamAppId": null,
-    "description": "Car football, still perfectly balanced a decade later, and free to play.",
-    "ratings": null
+    "ageRating": null,
+    "ratings": null,
+    "description": "Car football, still perfectly balanced a decade later, and free to play."
   },
   {
     "id": "minecraft",
@@ -7826,8 +10051,9 @@
       "cozy"
     ],
     "steamAppId": null,
-    "description": "Build anything with anyone, in the block world that ate a generation.",
-    "ratings": null
+    "ageRating": null,
+    "ratings": null,
+    "description": "Build anything with anyone, in the block world that ate a generation."
   },
   {
     "id": "terraria",
@@ -7842,7 +10068,16 @@
       "cozy"
     ],
     "steamAppId": 105600,
-    "description": "A side-on sandbox of digging, building and boss fights, enormous and endlessly co-operative.",
+    "ageRating": {
+      "tier": "teen",
+      "source": "Steam Germany",
+      "rating": "12",
+      "official": false,
+      "esrb": null,
+      "pegi": null,
+      "descriptors": [],
+      "notes": null
+    },
     "ratings": {
       "critic": 83,
       "user": {
@@ -7887,7 +10122,8 @@
         }
       ],
       "asOf": "2026-09-06"
-    }
+    },
+    "description": "A side-on sandbox of digging, building and boss fights, enormous and endlessly co-operative."
   },
   {
     "id": "deep-rock-galactic",
@@ -7901,7 +10137,16 @@
       "social"
     ],
     "steamAppId": 548430,
-    "description": "Four dwarves mine procedurally carved caves where every wall can be dug through. Rock and stone.",
+    "ageRating": {
+      "tier": "teen",
+      "source": "DJCTQ",
+      "rating": "14",
+      "official": true,
+      "esrb": null,
+      "pegi": null,
+      "descriptors": [],
+      "notes": "Violence, Use of Alcohol, Strong Language"
+    },
     "ratings": {
       "critic": 85,
       "user": {
@@ -7929,7 +10174,8 @@
       ],
       "cons": [],
       "asOf": "2026-09-06"
-    }
+    },
+    "description": "Four dwarves mine procedurally carved caves where every wall can be dug through. Rock and stone."
   },
   {
     "id": "monster-hunter-world",
@@ -7944,7 +10190,21 @@
       "graphics"
     ],
     "steamAppId": 582010,
-    "description": "Track and fight enormous creatures in living ecosystems, alone or with three others.",
+    "ageRating": {
+      "tier": "teen",
+      "source": "ESRB",
+      "rating": "T",
+      "official": true,
+      "esrb": "T",
+      "pegi": "16",
+      "descriptors": [
+        "Blood",
+        "Mild Language",
+        "Use of Alcohol",
+        "Violence"
+      ],
+      "notes": null
+    },
     "ratings": {
       "critic": 88,
       "user": {
@@ -7989,7 +10249,8 @@
         }
       ],
       "asOf": "2026-09-06"
-    }
+    },
+    "description": "Track and fight enormous creatures in living ecosystems, alone or with three others."
   },
   {
     "id": "monster-hunter-rise",
@@ -8003,7 +10264,18 @@
       "social"
     ],
     "steamAppId": 1446780,
-    "description": "A faster, more mobile hunt built around the wirebug grapple and a very good dog.",
+    "ageRating": {
+      "tier": "teen",
+      "source": "PEGI",
+      "rating": "12",
+      "official": true,
+      "esrb": null,
+      "pegi": "12",
+      "descriptors": [
+        "Violence, In-Game Purchases"
+      ],
+      "notes": null
+    },
     "ratings": {
       "critic": 86,
       "user": {
@@ -8044,7 +10316,8 @@
         }
       ],
       "asOf": "2026-09-06"
-    }
+    },
+    "description": "A faster, more mobile hunt built around the wirebug grapple and a very good dog."
   },
   {
     "id": "human-fall-flat",
@@ -8058,7 +10331,16 @@
       "social"
     ],
     "steamAppId": 477160,
-    "description": "Wobbly humans solve physics puzzles badly, which is entirely the point.",
+    "ageRating": {
+      "tier": "teen",
+      "source": "Steam Germany",
+      "rating": "12",
+      "official": false,
+      "esrb": null,
+      "pegi": null,
+      "descriptors": [],
+      "notes": null
+    },
     "ratings": {
       "critic": 70,
       "user": {
@@ -8082,7 +10364,8 @@
       ],
       "cons": [],
       "asOf": "2026-09-06"
-    }
+    },
+    "description": "Wobbly humans solve physics puzzles badly, which is entirely the point."
   },
   {
     "id": "gang-beasts",
@@ -8096,7 +10379,18 @@
       "social"
     ],
     "steamAppId": 285900,
-    "description": "Gelatinous brawlers shove each other off industrial scenery in slow, hilarious motion.",
+    "ageRating": {
+      "tier": "everyone10",
+      "source": "ESRB",
+      "rating": "E10",
+      "official": true,
+      "esrb": "E10",
+      "pegi": "7",
+      "descriptors": [
+        "Cartoon Violence."
+      ],
+      "notes": null
+    },
     "ratings": {
       "critic": null,
       "user": {
@@ -8125,7 +10419,8 @@
         }
       ],
       "asOf": "2026-09-06"
-    }
+    },
+    "description": "Gelatinous brawlers shove each other off industrial scenery in slow, hilarious motion."
   },
   {
     "id": "moving-out",
@@ -8139,7 +10434,16 @@
       "social"
     ],
     "steamAppId": 996770,
-    "description": "A slapstick removals company where physics, doorways and your friends all conspire against you.",
+    "ageRating": {
+      "tier": "everyone",
+      "source": "PEGI",
+      "rating": "3",
+      "official": true,
+      "esrb": null,
+      "pegi": "3",
+      "descriptors": [],
+      "notes": null
+    },
     "ratings": {
       "critic": 79,
       "user": {
@@ -8150,7 +10454,8 @@
       "pros": [],
       "cons": [],
       "asOf": "2026-09-06"
-    }
+    },
+    "description": "A slapstick removals company where physics, doorways and your friends all conspire against you."
   },
   {
     "id": "among-us",
@@ -8164,7 +10469,16 @@
       "social"
     ],
     "steamAppId": 945360,
-    "description": "Finish tasks on a spaceship while somebody quietly kills everyone, then argue about who.",
+    "ageRating": {
+      "tier": "everyone",
+      "source": "DJCTQ",
+      "rating": "L",
+      "official": true,
+      "esrb": null,
+      "pegi": null,
+      "descriptors": [],
+      "notes": null
+    },
     "ratings": {
       "critic": 85,
       "user": {
@@ -8201,7 +10515,8 @@
         }
       ],
       "asOf": "2026-09-06"
-    }
+    },
+    "description": "Finish tasks on a spaceship while somebody quietly kills everyone, then argue about who."
   },
   {
     "id": "grounded",
@@ -8215,7 +10530,20 @@
       "social"
     ],
     "steamAppId": 962130,
-    "description": "Shrunk to ant size in a suburban backyard, building bases out of blades of grass.",
+    "ageRating": {
+      "tier": "teen",
+      "source": "ESRB",
+      "rating": "T",
+      "official": true,
+      "esrb": "T",
+      "pegi": "12",
+      "descriptors": [
+        "Blood",
+        "Violence",
+        "Mild Language"
+      ],
+      "notes": null
+    },
     "ratings": {
       "critic": 83,
       "user": {
@@ -8243,7 +10571,8 @@
       ],
       "cons": [],
       "asOf": "2026-09-06"
-    }
+    },
+    "description": "Shrunk to ant size in a suburban backyard, building bases out of blades of grass."
   },
   {
     "id": "diablo-iv",
@@ -8258,7 +10587,7 @@
       "graphics"
     ],
     "steamAppId": 2344520,
-    "description": "A shared open-world Sanctuary where loot, builds and seasons keep pulling you back in.",
+    "ageRating": null,
     "ratings": {
       "critic": null,
       "user": {
@@ -8303,7 +10632,8 @@
         }
       ],
       "asOf": "2026-09-06"
-    }
+    },
+    "description": "A shared open-world Sanctuary where loot, builds and seasons keep pulling you back in."
   },
   {
     "id": "genshin-impact",
@@ -8318,8 +10648,9 @@
       "graphics"
     ],
     "steamAppId": null,
-    "description": "A free, enormous anime-styled open world with drop-in co-op and a steady drip of new regions.",
-    "ratings": null
+    "ageRating": null,
+    "ratings": null,
+    "description": "A free, enormous anime-styled open world with drop-in co-op and a steady drip of new regions."
   },
   {
     "id": "warframe",
@@ -8333,7 +10664,7 @@
       "social"
     ],
     "steamAppId": 230410,
-    "description": "A free-to-play space ninja shooter with a decade of movement systems layered on top of each other.",
+    "ageRating": null,
     "ratings": {
       "critic": 69,
       "user": {
@@ -8378,7 +10709,8 @@
         }
       ],
       "asOf": "2026-09-06"
-    }
+    },
+    "description": "A free-to-play space ninja shooter with a decade of movement systems layered on top of each other."
   },
   {
     "id": "destiny-2",
@@ -8393,7 +10725,20 @@
       "graphics"
     ],
     "steamAppId": 1085660,
-    "description": "Best-in-class gunplay wrapped in raids designed to be argued through with five friends.",
+    "ageRating": {
+      "tier": "teen",
+      "source": "ESRB",
+      "rating": "T",
+      "official": true,
+      "esrb": "T",
+      "pegi": "16",
+      "descriptors": [
+        "Blood",
+        "Language",
+        "Violence"
+      ],
+      "notes": null
+    },
     "ratings": {
       "critic": 83,
       "user": {
@@ -8438,7 +10783,8 @@
         }
       ],
       "asOf": "2026-09-06"
-    }
+    },
+    "description": "Best-in-class gunplay wrapped in raids designed to be argued through with five friends."
   },
   {
     "id": "borderlands-3",
@@ -8452,7 +10798,21 @@
       "social"
     ],
     "steamAppId": 397540,
-    "description": "Four-player looter shooting with a billion guns and a comic-book coat of paint.",
+    "ageRating": {
+      "tier": "mature",
+      "source": "ESRB",
+      "rating": "M",
+      "official": true,
+      "esrb": "M",
+      "pegi": "18",
+      "descriptors": [
+        "Blood and Gore",
+        "Intense Violence",
+        "Sexual Themes",
+        "Strong Language"
+      ],
+      "notes": "This Game may contain content not appropriate for all ages, or may not be appropriate for viewing at work. \r\n\r\nThis may include:\r\nFrequent Violence or Gore\r\nGeneral Mature Content\r\nSexual Themes"
+    },
     "ratings": {
       "critic": 81,
       "user": {
@@ -8493,7 +10853,8 @@
         }
       ],
       "asOf": "2026-09-06"
-    }
+    },
+    "description": "Four-player looter shooting with a billion guns and a comic-book coat of paint."
   },
   {
     "id": "risk-of-rain-2",
@@ -8507,7 +10868,20 @@
       "social"
     ],
     "steamAppId": 632360,
-    "description": "A co-op roguelike where difficulty climbs with the clock and builds spiral completely out of control.",
+    "ageRating": {
+      "tier": "teen",
+      "source": "ESRB",
+      "rating": "T",
+      "official": true,
+      "esrb": "T",
+      "pegi": "12",
+      "descriptors": [
+        "Blood",
+        "Drug Reference",
+        "Fantasy Violence"
+      ],
+      "notes": null
+    },
     "ratings": {
       "critic": 85,
       "user": {
@@ -8544,7 +10918,8 @@
         }
       ],
       "asOf": "2026-09-06"
-    }
+    },
+    "description": "A co-op roguelike where difficulty climbs with the clock and builds spiral completely out of control."
   },
   {
     "id": "dont-starve-together",
@@ -8558,7 +10933,7 @@
       "social"
     ],
     "steamAppId": 322330,
-    "description": "Survive a gothic-cartoon wilderness with friends, mostly by starving slightly more slowly.",
+    "ageRating": null,
     "ratings": {
       "critic": 83,
       "user": {
@@ -8595,7 +10970,8 @@
         }
       ],
       "asOf": "2026-09-06"
-    }
+    },
+    "description": "Survive a gothic-cartoon wilderness with friends, mostly by starving slightly more slowly."
   },
   {
     "id": "ultimate-chicken-horse",
@@ -8609,7 +10985,16 @@
       "social"
     ],
     "steamAppId": 386940,
-    "description": "Build the level, then race through it, sabotaging everyone including yourself.",
+    "ageRating": {
+      "tier": "everyone10",
+      "source": "ESRB",
+      "rating": "E10",
+      "official": true,
+      "esrb": "E10",
+      "pegi": null,
+      "descriptors": [],
+      "notes": null
+    },
     "ratings": {
       "critic": null,
       "user": {
@@ -8637,7 +11022,8 @@
       ],
       "cons": [],
       "asOf": "2026-09-06"
-    }
+    },
+    "description": "Build the level, then race through it, sabotaging everyone including yourself."
   },
   {
     "id": "escape-academy",
@@ -8651,7 +11037,16 @@
       "social"
     ],
     "steamAppId": 1812090,
-    "description": "Escape rooms designed for two, with a running timer and a great deal of shouting.",
+    "ageRating": {
+      "tier": "teen",
+      "source": "DJCTQ",
+      "rating": "12",
+      "official": true,
+      "esrb": null,
+      "pegi": null,
+      "descriptors": [],
+      "notes": null
+    },
     "ratings": {
       "critic": 79,
       "user": {
@@ -8679,7 +11074,8 @@
       ],
       "cons": [],
       "asOf": "2026-09-06"
-    }
+    },
+    "description": "Escape rooms designed for two, with a running timer and a great deal of shouting."
   },
   {
     "id": "golf-with-your-friends",
@@ -8693,7 +11089,7 @@
       "social"
     ],
     "steamAppId": 431240,
-    "description": "Twelve-player mini golf with no waiting for turns and no dignity.",
+    "ageRating": null,
     "ratings": {
       "critic": null,
       "user": {
@@ -8734,7 +11130,8 @@
         }
       ],
       "asOf": "2026-09-06"
-    }
+    },
+    "description": "Twelve-player mini golf with no waiting for turns and no dignity."
   },
   {
     "id": "control-ultimate",
@@ -8748,7 +11145,20 @@
       "graphics"
     ],
     "steamAppId": 870780,
-    "description": "Jesse Faden takes over a shifting government building, with the best physics destruction on the platform.",
+    "ageRating": {
+      "tier": "mature",
+      "source": "ESRB",
+      "rating": "M",
+      "official": true,
+      "esrb": "M",
+      "pegi": "16",
+      "descriptors": [
+        "Blood",
+        "Strong Language",
+        "Violence"
+      ],
+      "notes": "Blood\r\nViolence\r\nStrong Language"
+    },
     "ratings": {
       "critic": 85,
       "user": {
@@ -8793,7 +11203,8 @@
         }
       ],
       "asOf": "2026-09-06"
-    }
+    },
+    "description": "Jesse Faden takes over a shifting government building, with the best physics destruction on the platform."
   },
   {
     "id": "resident-evil-village",
@@ -8807,7 +11218,7 @@
       "graphics"
     ],
     "steamAppId": 1196590,
-    "description": "First-person survival horror through a gothic village and one very tall vampire's castle.",
+    "ageRating": null,
     "ratings": {
       "critic": 83,
       "user": {
@@ -8844,7 +11255,8 @@
         }
       ],
       "asOf": "2026-09-06"
-    }
+    },
+    "description": "First-person survival horror through a gothic village and one very tall vampire's castle."
   },
   {
     "id": "resident-evil-4-remake",
@@ -8858,7 +11270,18 @@
       "graphics"
     ],
     "steamAppId": 2050650,
-    "description": "The remake of the action-horror benchmark, tighter and considerably darker than the original.",
+    "ageRating": {
+      "tier": "mature",
+      "source": "PEGI",
+      "rating": "18",
+      "official": true,
+      "esrb": null,
+      "pegi": "18",
+      "descriptors": [
+        "Violence, Bad Language, In-Game Purchase"
+      ],
+      "notes": "This Game may contain content not appropriate for all ages, or may not be appropriate for viewing at work: Frequent Violence or Gore, General Mature Content"
+    },
     "ratings": {
       "critic": 91,
       "user": {
@@ -8891,7 +11314,8 @@
         }
       ],
       "asOf": "2026-09-06"
-    }
+    },
+    "description": "The remake of the action-horror benchmark, tighter and considerably darker than the original."
   },
   {
     "id": "metro-exodus",
@@ -8905,7 +11329,18 @@
       "graphics"
     ],
     "steamAppId": 412020,
-    "description": "A year-long train journey across post-apocalyptic Russia, with fully ray-traced lighting in the enhanced edition.",
+    "ageRating": {
+      "tier": "mature",
+      "source": "ESRB",
+      "rating": "M",
+      "official": true,
+      "esrb": "M",
+      "pegi": "18",
+      "descriptors": [
+        "Blood and Gore, Intense Violence, Partial Nudity, Sexual Themes, Strong Language, Use of Drugs"
+      ],
+      "notes": "This Game may contain content not appropriate for all ages, or may not be appropriate for viewing at work: Frequent Violence or Gore, General Mature Content"
+    },
     "ratings": {
       "critic": 85,
       "user": {
@@ -8950,7 +11385,8 @@
         }
       ],
       "asOf": "2026-09-06"
-    }
+    },
+    "description": "A year-long train journey across post-apocalyptic Russia, with fully ray-traced lighting in the enhanced edition."
   },
   {
     "id": "star-wars-jedi-fallen-order",
@@ -8964,7 +11400,7 @@
       "graphics"
     ],
     "steamAppId": 1172380,
-    "description": "A soulslike-lite Jedi adventure across handcrafted planets, with a very good droid.",
+    "ageRating": null,
     "ratings": {
       "critic": 81,
       "user": {
@@ -9009,7 +11445,8 @@
         }
       ],
       "asOf": "2026-09-06"
-    }
+    },
+    "description": "A soulslike-lite Jedi adventure across handcrafted planets, with a very good droid."
   },
   {
     "id": "god-of-war",
@@ -9023,7 +11460,7 @@
       "graphics"
     ],
     "steamAppId": 1593500,
-    "description": "Kratos and his son cross Norse myth in a single unbroken camera shot from start to finish.",
+    "ageRating": null,
     "ratings": {
       "critic": 93,
       "user": {
@@ -9056,7 +11493,8 @@
         }
       ],
       "asOf": "2026-09-06"
-    }
+    },
+    "description": "Kratos and his son cross Norse myth in a single unbroken camera shot from start to finish."
   },
   {
     "id": "red-dead-redemption-2",
@@ -9070,7 +11508,23 @@
       "graphics"
     ],
     "steamAppId": 1174180,
-    "description": "An outlaw open world of extraordinary density, where the weather alone is worth the ride.",
+    "ageRating": {
+      "tier": "mature",
+      "source": "ESRB",
+      "rating": "M",
+      "official": true,
+      "esrb": "M",
+      "pegi": "18",
+      "descriptors": [
+        "Blood and Gore",
+        "Intense Violence",
+        "Nudity",
+        "Sexual Content",
+        "Strong Language",
+        "Use of Drugs and Alcohol"
+      ],
+      "notes": null
+    },
     "ratings": {
       "critic": 93,
       "user": {
@@ -9115,7 +11569,8 @@
         }
       ],
       "asOf": "2026-09-06"
-    }
+    },
+    "description": "An outlaw open world of extraordinary density, where the weather alone is worth the ride."
   },
   {
     "id": "days-gone",
@@ -9129,7 +11584,7 @@
       "graphics"
     ],
     "steamAppId": 1259420,
-    "description": "A biker crosses an overgrown Oregon where the infected swarm in their hundreds.",
+    "ageRating": null,
     "ratings": {
       "critic": null,
       "user": {
@@ -9162,7 +11617,8 @@
         }
       ],
       "asOf": "2026-09-06"
-    }
+    },
+    "description": "A biker crosses an overgrown Oregon where the infected swarm in their hundreds."
   },
   {
     "id": "a-plague-tale-innocence",
@@ -9176,7 +11632,20 @@
       "graphics"
     ],
     "steamAppId": 752590,
-    "description": "Amicia guides her younger brother through a plague-struck France thick with rats and worse.",
+    "ageRating": {
+      "tier": "mature",
+      "source": "ESRB",
+      "rating": "M",
+      "official": true,
+      "esrb": "M",
+      "pegi": "18",
+      "descriptors": [
+        "Blood and Gore",
+        "Strong Language",
+        "Violence"
+      ],
+      "notes": null
+    },
     "ratings": {
       "critic": 81,
       "user": {
@@ -9213,7 +11682,8 @@
         }
       ],
       "asOf": "2026-09-06"
-    }
+    },
+    "description": "Amicia guides her younger brother through a plague-struck France thick with rats and worse."
   },
   {
     "id": "carto",
@@ -9227,7 +11697,16 @@
       "cozy"
     ],
     "steamAppId": 1172450,
-    "description": "Rearrange the map itself like jigsaw tiles to reshape the world you are walking through.",
+    "ageRating": {
+      "tier": "everyone",
+      "source": "DJCTQ",
+      "rating": "L",
+      "official": true,
+      "esrb": null,
+      "pegi": null,
+      "descriptors": [],
+      "notes": null
+    },
     "ratings": {
       "critic": null,
       "user": {
@@ -9243,7 +11722,8 @@
       ],
       "cons": [],
       "asOf": "2026-09-06"
-    }
+    },
+    "description": "Rearrange the map itself like jigsaw tiles to reshape the world you are walking through."
   },
   {
     "id": "strange-horticulture",
@@ -9257,7 +11737,16 @@
       "cozy"
     ],
     "steamAppId": 1574580,
-    "description": "Run an occult plant shop, identifying specimens by hand from a battered field guide.",
+    "ageRating": {
+      "tier": "everyone",
+      "source": "DJCTQ",
+      "rating": "L",
+      "official": true,
+      "esrb": null,
+      "pegi": null,
+      "descriptors": [],
+      "notes": null
+    },
     "ratings": {
       "critic": 83,
       "user": {
@@ -9290,7 +11779,8 @@
         }
       ],
       "asOf": "2026-09-06"
-    }
+    },
+    "description": "Run an occult plant shop, identifying specimens by hand from a battered field guide."
   },
   {
     "id": "the-gardens-between",
@@ -9304,7 +11794,7 @@
       "cozy"
     ],
     "steamAppId": 600990,
-    "description": "Two friends move time forward and back across dreamlike islands built from their shared memories.",
+    "ageRating": null,
     "ratings": {
       "critic": 80,
       "user": {
@@ -9315,7 +11805,8 @@
       "pros": [],
       "cons": [],
       "asOf": "2026-09-06"
-    }
+    },
+    "description": "Two friends move time forward and back across dreamlike islands built from their shared memories."
   },
   {
     "id": "summer-in-mara",
@@ -9329,7 +11820,7 @@
       "cozy"
     ],
     "steamAppId": 962580,
-    "description": "Farm your own small island and sail between others in a gentle, brightly colored adventure.",
+    "ageRating": null,
     "ratings": {
       "critic": null,
       "user": {
@@ -9340,7 +11831,8 @@
       "pros": [],
       "cons": [],
       "asOf": "2026-09-06"
-    }
+    },
+    "description": "Farm your own small island and sail between others in a gentle, brightly colored adventure."
   },
   {
     "id": "the-first-tree",
@@ -9354,7 +11846,20 @@
       "cozy"
     ],
     "steamAppId": 555150,
-    "description": "A fox digs toward home across quiet landscapes while a parallel human story is told over the top.",
+    "ageRating": {
+      "tier": "everyone",
+      "source": "ESRB",
+      "rating": "E",
+      "official": true,
+      "esrb": "E",
+      "pegi": null,
+      "descriptors": [
+        "Violent References",
+        "Mild Language",
+        "Alcohol and Tobacco Reference"
+      ],
+      "notes": null
+    },
     "ratings": {
       "critic": null,
       "user": {
@@ -9365,7 +11870,8 @@
       "pros": [],
       "cons": [],
       "asOf": "2026-09-06"
-    }
+    },
+    "description": "A fox digs toward home across quiet landscapes while a parallel human story is told over the top."
   },
   {
     "id": "arise-a-simple-story",
@@ -9380,7 +11886,18 @@
       "graphics"
     ],
     "steamAppId": 866140,
-    "description": "An old man walks back through his own memories, bending time to cross each one.",
+    "ageRating": {
+      "tier": "everyone",
+      "source": "ESRB",
+      "rating": "E",
+      "official": true,
+      "esrb": "E",
+      "pegi": "7",
+      "descriptors": [
+        "Fear"
+      ],
+      "notes": null
+    },
     "ratings": {
       "critic": 79,
       "user": {
@@ -9408,7 +11925,8 @@
       ],
       "cons": [],
       "asOf": "2026-09-06"
-    }
+    },
+    "description": "An old man walks back through his own memories, bending time to cross each one."
   },
   {
     "id": "haven",
@@ -9423,7 +11941,7 @@
       "social"
     ],
     "steamAppId": 983970,
-    "description": "Two lovers glide across a fractured planet together, cooking and resting between fights.",
+    "ageRating": null,
     "ratings": {
       "critic": 73,
       "user": {
@@ -9447,7 +11965,8 @@
       ],
       "cons": [],
       "asOf": "2026-09-06"
-    }
+    },
+    "description": "Two lovers glide across a fractured planet together, cooking and resting between fights."
   },
   {
     "id": "the-jackbox-party-pack-8",
@@ -9461,7 +11980,21 @@
       "social"
     ],
     "steamAppId": 1552350,
-    "description": "Five party games played on everyone's phones, so no extra controllers required.",
+    "ageRating": {
+      "tier": "teen",
+      "source": "ESRB",
+      "rating": "T",
+      "official": true,
+      "esrb": "T",
+      "pegi": "12",
+      "descriptors": [
+        "Crude Humor",
+        "Fantasy Violence",
+        "Language",
+        "Sexual Themes"
+      ],
+      "notes": null
+    },
     "ratings": {
       "critic": null,
       "user": {
@@ -9472,7 +12005,8 @@
       "pros": [],
       "cons": [],
       "asOf": "2026-09-06"
-    }
+    },
+    "description": "Five party games played on everyone's phones, so no extra controllers required."
   },
   {
     "id": "nine-sols",
@@ -9486,7 +12020,7 @@
       "graphics"
     ],
     "steamAppId": 1809540,
-    "description": "A hand-drawn taopunk metroidvania built on a deflect-heavy parry system, where every duel is a rhythm you learn.",
+    "ageRating": null,
     "ratings": {
       "critic": null,
       "user": {
@@ -9519,7 +12053,8 @@
         }
       ],
       "asOf": "2026-09-06"
-    }
+    },
+    "description": "A hand-drawn taopunk metroidvania built on a deflect-heavy parry system, where every duel is a rhythm you learn."
   },
   {
     "id": "hollow-knight-silksong",
@@ -9533,7 +12068,16 @@
       "graphics"
     ],
     "steamAppId": 1030300,
-    "description": "Hornet climbs a hostile new kingdom in the long-awaited sequel, faster and sharper than the original.",
+    "ageRating": {
+      "tier": "everyone10",
+      "source": "Steam Germany",
+      "rating": "6",
+      "official": false,
+      "esrb": null,
+      "pegi": null,
+      "descriptors": [],
+      "notes": null
+    },
     "ratings": {
       "critic": 90,
       "user": {
@@ -9574,7 +12118,8 @@
         }
       ],
       "asOf": "2026-09-06"
-    }
+    },
+    "description": "Hornet climbs a hostile new kingdom in the long-awaited sequel, faster and sharper than the original."
   },
   {
     "id": "metaphor-refantazio",
@@ -9588,7 +12133,7 @@
       "graphics"
     ],
     "steamAppId": 2679460,
-    "description": "The Persona team's fantasy RPG, built on a calendar, a party of outcasts and a genuinely strange political race.",
+    "ageRating": null,
     "ratings": {
       "critic": 92,
       "user": {
@@ -9633,7 +12178,8 @@
         }
       ],
       "asOf": "2026-09-06"
-    }
+    },
+    "description": "The Persona team's fantasy RPG, built on a calendar, a party of outcasts and a genuinely strange political race."
   },
   {
     "id": "persona-5-royal",
@@ -9647,7 +12193,23 @@
       "graphics"
     ],
     "steamAppId": 1687950,
-    "description": "A stylish year of double life: high school by day, heists inside people's minds by night.",
+    "ageRating": {
+      "tier": "mature",
+      "source": "ESRB",
+      "rating": "M",
+      "official": true,
+      "esrb": "M",
+      "pegi": "16",
+      "descriptors": [
+        "Violence",
+        "Blood",
+        "Sexual Themes",
+        "Partial Nudity",
+        "Strong Language",
+        "Drug Reference"
+      ],
+      "notes": "This game includes content such as blood, drug reference, partial nudity, sexual themes, strong language, and violence."
+    },
     "ratings": {
       "critic": 95,
       "user": {
@@ -9688,7 +12250,8 @@
         }
       ],
       "asOf": "2026-09-06"
-    }
+    },
+    "description": "A stylish year of double life: high school by day, heists inside people's minds by night."
   },
   {
     "id": "core-keeper",
@@ -9703,7 +12266,16 @@
       "cozy"
     ],
     "steamAppId": 1621690,
-    "description": "Mine, farm and build in a vast underground cavern, alone or with up to seven other people.",
+    "ageRating": {
+      "tier": "everyone",
+      "source": "DJCTQ",
+      "rating": "L",
+      "official": true,
+      "esrb": null,
+      "pegi": null,
+      "descriptors": [],
+      "notes": null
+    },
     "ratings": {
       "critic": 86,
       "user": {
@@ -9736,7 +12308,8 @@
         }
       ],
       "asOf": "2026-09-06"
-    }
+    },
+    "description": "Mine, farm and build in a vast underground cavern, alone or with up to seven other people."
   },
   {
     "id": "spirittea",
@@ -9750,7 +12323,7 @@
       "cozy"
     ],
     "steamAppId": 1931010,
-    "description": "Run a bathhouse for spirits in a rural town, in a Ghibli-flavoured life sim of small daily favours.",
+    "ageRating": null,
     "ratings": {
       "critic": null,
       "user": {
@@ -9774,7 +12347,8 @@
       ],
       "cons": [],
       "asOf": "2026-09-06"
-    }
+    },
+    "description": "Run a bathhouse for spirits in a rural town, in a Ghibli-flavoured life sim of small daily favours."
   },
   {
     "id": "bear-and-breakfast",
@@ -9788,7 +12362,16 @@
       "cozy"
     ],
     "steamAppId": 1136370,
-    "description": "A well-meaning bear accidentally opens a hotel in the woods and has to keep the guests happy.",
+    "ageRating": {
+      "tier": "teen",
+      "source": "DJCTQ",
+      "rating": "14",
+      "official": false,
+      "esrb": null,
+      "pegi": null,
+      "descriptors": [],
+      "notes": null
+    },
     "ratings": {
       "critic": null,
       "user": {
@@ -9808,7 +12391,8 @@
       ],
       "cons": [],
       "asOf": "2026-09-06"
-    }
+    },
+    "description": "A well-meaning bear accidentally opens a hotel in the woods and has to keep the guests happy."
   },
   {
     "id": "spirit-of-the-north",
@@ -9823,7 +12407,7 @@
       "graphics"
     ],
     "steamAppId": 1213700,
-    "description": "A red fox crosses a wordless Nordic landscape of snowfields and ruins, guided by a spirit companion.",
+    "ageRating": null,
     "ratings": {
       "critic": null,
       "user": {
@@ -9856,7 +12440,8 @@
         }
       ],
       "asOf": "2026-09-06"
-    }
+    },
+    "description": "A red fox crosses a wordless Nordic landscape of snowfields and ruins, guided by a spirit companion."
   },
   {
     "id": "dragon-quest-builders-2",
@@ -9871,7 +12456,7 @@
       "social"
     ],
     "steamAppId": 1072420,
-    "description": "Rebuild islands block by block in a building game with an actual story and a very good dog.",
+    "ageRating": null,
     "ratings": {
       "critic": 85,
       "user": {
@@ -9882,7 +12467,8 @@
       "pros": [],
       "cons": [],
       "asOf": "2026-09-06"
-    }
+    },
+    "description": "Rebuild islands block by block in a building game with an actual story and a very good dog."
   },
   {
     "id": "clair-obscur-expedition-33",
@@ -9896,7 +12482,21 @@
       "graphics"
     ],
     "steamAppId": 1903340,
-    "description": "A turn-based RPG with real-time dodges and parries, set in a painted Belle Epoque world erasing itself a year at a time.",
+    "ageRating": {
+      "tier": "mature",
+      "source": "ESRB",
+      "rating": "M",
+      "official": true,
+      "esrb": "M",
+      "pegi": "18",
+      "descriptors": [
+        "Blood and Gore",
+        "Strong Language",
+        "Suggestive Themes",
+        "Violence"
+      ],
+      "notes": "The game features depictions of violence, blood and suicide, and imagery that some players may find disturbing. The game contains revealing outfits and light/stylistic partial nudity."
+    },
     "ratings": {
       "critic": 91,
       "user": {
@@ -9941,7 +12541,8 @@
         }
       ],
       "asOf": "2026-09-06"
-    }
+    },
+    "description": "A turn-based RPG with real-time dodges and parries, set in a painted Belle Epoque world erasing itself a year at a time."
   },
   {
     "id": "blue-prince",
@@ -9953,7 +12554,16 @@
     "platform": "PS5",
     "tags": [],
     "steamAppId": 1569580,
-    "description": "Draft a new floorplan every day inside a mansion that rearranges itself, hunting a room that should not exist.",
+    "ageRating": {
+      "tier": "everyone",
+      "source": "DJCTQ",
+      "rating": "L",
+      "official": true,
+      "esrb": null,
+      "pegi": null,
+      "descriptors": [],
+      "notes": null
+    },
     "ratings": {
       "critic": 92,
       "user": {
@@ -9998,7 +12608,8 @@
         }
       ],
       "asOf": "2026-09-06"
-    }
+    },
+    "description": "Draft a new floorplan every day inside a mansion that rearranges itself, hunting a room that should not exist."
   },
   {
     "id": "split-fiction",
@@ -10013,7 +12624,7 @@
       "graphics"
     ],
     "steamAppId": 2001120,
-    "description": "Co-op only, from the It Takes Two team: two writers trapped between sci-fi and fantasy worlds that keep changing the rules.",
+    "ageRating": null,
     "ratings": {
       "critic": null,
       "user": {
@@ -10050,7 +12661,8 @@
         }
       ],
       "asOf": "2026-09-06"
-    }
+    },
+    "description": "Co-op only, from the It Takes Two team: two writers trapped between sci-fi and fantasy worlds that keep changing the rules."
   },
   {
     "id": "wanderstop",
@@ -10064,7 +12676,16 @@
       "cozy"
     ],
     "steamAppId": 1299460,
-    "description": "A burnt-out fighter has to stop and run a tea shop, in a cozy game openly about being unable to rest.",
+    "ageRating": {
+      "tier": "everyone10",
+      "source": "Steam Germany",
+      "rating": "6",
+      "official": false,
+      "esrb": null,
+      "pegi": null,
+      "descriptors": [],
+      "notes": null
+    },
     "ratings": {
       "critic": 80,
       "user": {
@@ -10092,7 +12713,8 @@
       ],
       "cons": [],
       "asOf": "2026-09-06"
-    }
+    },
+    "description": "A burnt-out fighter has to stop and run a tea shop, in a cozy game openly about being unable to rest."
   },
   {
     "id": "bo-path-of-the-teal-lotus",
@@ -10106,7 +12728,7 @@
       "graphics"
     ],
     "steamAppId": 1614440,
-    "description": "A brush-painted Japanese folklore metroidvania built around bouncing off enemies to stay airborne.",
+    "ageRating": null,
     "ratings": {
       "critic": null,
       "user": {
@@ -10134,7 +12756,8 @@
       ],
       "cons": [],
       "asOf": "2026-09-06"
-    }
+    },
+    "description": "A brush-painted Japanese folklore metroidvania built around bouncing off enemies to stay airborne."
   },
   {
     "id": "monster-hunter-wilds",
@@ -10149,7 +12772,20 @@
       "graphics"
     ],
     "steamAppId": 2246340,
-    "description": "Hunt enormous creatures across shifting weather systems and herd migrations, alone or with three others.",
+    "ageRating": {
+      "tier": "teen",
+      "source": "ESRB",
+      "rating": "T",
+      "official": true,
+      "esrb": "T",
+      "pegi": "16",
+      "descriptors": [
+        "Violence",
+        "Blood",
+        "Crude Humor"
+      ],
+      "notes": null
+    },
     "ratings": {
       "critic": null,
       "user": {
@@ -10194,7 +12830,8 @@
         }
       ],
       "asOf": "2026-09-06"
-    }
+    },
+    "description": "Hunt enormous creatures across shifting weather systems and herd migrations, alone or with three others."
   },
   {
     "id": "wylde-flowers",
@@ -10208,7 +12845,7 @@
       "cozy"
     ],
     "steamAppId": 1896700,
-    "description": "Farm by day and join the local coven by night, with a fully voice-acted island cast.",
+    "ageRating": null,
     "ratings": {
       "critic": null,
       "user": {
@@ -10232,6 +12869,7 @@
       ],
       "cons": [],
       "asOf": "2026-09-06"
-    }
+    },
+    "description": "Farm by day and join the local coven by night, with a fully voice-acted island cast."
   }
 ]

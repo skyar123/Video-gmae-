@@ -123,6 +123,73 @@ function toPrice(overview, isFree) {
   };
 }
 
+/**
+ * Age rating, reduced to a single "is this ok for a kid" verdict.
+ *
+ * ESRB is preferred because it is the US board. Most smaller titles were never
+ * submitted to it, so the chain falls back through the other boards the
+ * storefront carries; those agree with the ESRB rating where both exist.
+ * Nothing is inferred from the game itself: with no board at all the answer is
+ * "unknown", not "probably fine". Some entries are auto-generated rather than
+ * issued by a board, and the detail view says so.
+ */
+const BOARDS = [
+  { key: 'esrb', label: 'ESRB', tiers: { ec: 'everyone', e: 'everyone', e10: 'everyone10', t: 'teen', m: 'mature', ao: 'mature' } },
+  { key: 'pegi', label: 'PEGI', tiers: { 3: 'everyone', 7: 'everyone10', 12: 'teen', 16: 'mature', 18: 'mature' } },
+  { key: 'usk', label: 'USK', tiers: { 0: 'everyone', 6: 'everyone10', 12: 'teen', 16: 'mature', 18: 'mature' } },
+  { key: 'oflc', label: 'OFLC', tiers: { g: 'everyone', pg: 'everyone10', m: 'teen', ma15: 'mature', r18: 'mature', x18: 'mature' } },
+  { key: 'dejus', label: 'DJCTQ', tiers: { l: 'everyone', 10: 'everyone10', 12: 'teen', 14: 'teen', 16: 'mature', 18: 'mature' } },
+  { key: 'igrs', label: 'IGRS', tiers: { 3: 'everyone', 7: 'everyone10', 12: 'teen', 16: 'mature', 18: 'mature' } },
+  { key: 'steam_germany', label: 'Steam Germany', tiers: { 0: 'everyone', 6: 'everyone10', 12: 'teen', 16: 'mature', 18: 'mature' } },
+];
+
+const splitDescriptors = (value) =>
+  (value ?? '')
+    .split(/[\r\n]+/)
+    .map((entry) => entry.trim())
+    .filter(Boolean);
+
+function toAgeRating(data) {
+  const boards = data.ratings ?? {};
+
+  let verdict = null;
+  for (const board of BOARDS) {
+    const entry = boards[board.key];
+    const raw = entry?.rating;
+    if (raw == null) continue;
+    const tier = board.tiers[String(raw).toLowerCase()];
+    if (!tier) continue;
+    verdict = {
+      tier,
+      source: board.label,
+      rating: String(raw).toUpperCase(),
+      // Steam generates some of these rather than quoting an issued rating.
+      official: entry.rating_generated !== '1',
+    };
+    break;
+  }
+
+  // Descriptors are most useful in English, so prefer the English-language
+  // boards for them regardless of which one set the tier.
+  const descriptors = splitDescriptors(
+    boards.esrb?.descriptors ?? boards.pegi?.descriptors ?? boards.oflc?.descriptors,
+  );
+  const notes = data.content_descriptors?.notes?.trim() || null;
+
+  if (!verdict && !descriptors.length && !notes) return null;
+
+  return {
+    tier: verdict?.tier ?? 'unknown',
+    source: verdict?.source ?? null,
+    rating: verdict?.rating ?? null,
+    official: verdict?.official ?? false,
+    esrb: boards.esrb?.rating ? String(boards.esrb.rating).toUpperCase() : null,
+    pegi: boards.pegi?.rating ? String(boards.pegi.rating) : null,
+    descriptors: descriptors.slice(0, 6),
+    notes,
+  };
+}
+
 function toMedia(data) {
   const screenshots = (data.screenshots || []).slice(0, 6).map((shot) => ({
     thumb: shot.path_thumbnail,
@@ -203,6 +270,7 @@ async function detailsFor(title, appId, countryCode, searchItem) {
     price: toPrice(data.price_overview, data.is_free),
     releaseDate: data.release_date?.date || null,
     metacritic: data.metacritic?.score ?? null,
+    ageRating: toAgeRating(data),
     storeUrl: `https://store.steampowered.com/app/${appId}/`,
     fetchedAt: new Date().toISOString(),
   };

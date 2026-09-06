@@ -8,6 +8,7 @@ import {
 } from 'react';
 import {
   ArrowUpRight,
+  Baby,
   BadgePercent,
   CirclePlay,
   ExternalLink,
@@ -116,6 +117,7 @@ const DEFAULT_FILTERS = {
   sort: 'catalog',
   region: 'US',
   collection: 'all',
+  kidFriendly: false,
   // PS5-only titles are out of the default view: this is a PS4 upgrade
   // catalog first, and they need different hardware.
   includePs5: false,
@@ -136,6 +138,7 @@ function readFiltersFromUrl() {
     sort: value('sort', 'catalog'),
     region: (value('cc', localStorage.getItem('region') || 'US') || 'US').toUpperCase(),
     collection: value('view', 'all'),
+    kidFriendly: params.get('kids') === '1',
     includePs5: params.get('ps5') === '1',
   };
 }
@@ -153,6 +156,7 @@ function writeFiltersToUrl(filters) {
   if (filters.sort !== 'catalog') params.set('sort', filters.sort);
   if (filters.region !== 'US') params.set('cc', filters.region);
   if (filters.collection !== 'all') params.set('view', filters.collection);
+  if (filters.kidFriendly) params.set('kids', '1');
   if (filters.includePs5) params.set('ps5', '1');
   const query = params.toString();
   window.history.replaceState(null, '', query ? `?${query}` : window.location.pathname);
@@ -279,6 +283,87 @@ function VerdictBadge({ prediction, className = '' }) {
       <TrendingDown className="h-3.5 w-3.5" aria-hidden="true" />
       {prediction.headline}
     </span>
+  );
+}
+
+/**
+ * Age suitability at a glance. Board ratings only — a game with no rating
+ * reads as "Not rated" rather than being guessed at.
+ */
+const AGE_TIERS = {
+  everyone: { label: 'All ages', tone: 'bg-emerald-50 text-emerald-700 ring-emerald-600/20' },
+  everyone10: { label: 'Ages 10+', tone: 'bg-sky-50 text-sky-700 ring-sky-600/20' },
+  teen: { label: 'Teen 13+', tone: 'bg-amber-50 text-amber-700 ring-amber-600/20' },
+  mature: { label: 'Mature 17+', tone: 'bg-rose-50 text-rose-700 ring-rose-600/20' },
+  unknown: { label: 'Not rated', tone: 'bg-slate-100 text-slate-500 ring-slate-500/20' },
+};
+
+const KID_FRIENDLY_TIERS = ['everyone', 'everyone10'];
+
+function AgeBadge({ ageRating, size = 'sm' }) {
+  const tier = AGE_TIERS[ageRating?.tier ?? 'unknown'] ?? AGE_TIERS.unknown;
+  const pad = size === 'lg' ? 'px-2.5 py-1 text-sm' : 'px-2 py-0.5 text-xs';
+  const title = ageRating?.source
+    ? `${ageRating.source} ${ageRating.rating}${ageRating.official ? '' : ' (auto-generated)'}`
+    : 'No board rating found';
+  return (
+    <span
+      title={title}
+      className={`inline-flex items-center gap-1 rounded-md font-semibold ring-1 ring-inset ${pad} ${tier.tone}`}
+    >
+      <Baby className="h-3.5 w-3.5" aria-hidden="true" />
+      {tier.label}
+    </span>
+  );
+}
+
+/** The full content picture, for the detail view. */
+function AgeDetail({ ageRating }) {
+  if (!ageRating) {
+    return (
+      <p className="mt-4 text-sm text-slate-500">
+        No age rating found for this title. Check the PS Store listing before handing it to a
+        kid.
+      </p>
+    );
+  }
+
+  return (
+    <div className="mt-4 rounded-xl border border-slate-200 p-4">
+      <div className="flex flex-wrap items-center gap-2">
+        <h3 className="text-sm font-semibold uppercase tracking-wider text-slate-400">
+          Kid friendly?
+        </h3>
+        <AgeBadge ageRating={ageRating} />
+        {ageRating.source && (
+          <span className="text-sm text-slate-500">
+            {ageRating.source} {ageRating.rating}
+            {!ageRating.official && ' (auto-generated, not an issued rating)'}
+          </span>
+        )}
+      </div>
+
+      {ageRating.descriptors.length > 0 && (
+        <div className="mt-3 flex flex-wrap gap-1.5">
+          {ageRating.descriptors.map((descriptor) => (
+            <span
+              key={descriptor}
+              className="rounded-md bg-slate-100 px-2 py-0.5 text-xs text-slate-600"
+            >
+              {descriptor}
+            </span>
+          ))}
+        </div>
+      )}
+
+      {ageRating.notes && <p className="mt-3 text-sm text-slate-600">{ageRating.notes}</p>}
+
+      {!ageRating.esrb && ageRating.source && ageRating.source !== 'ESRB' && (
+        <p className="mt-3 text-xs text-slate-400">
+          Never submitted to the ESRB, so this comes from another ratings board.
+        </p>
+      )}
+    </div>
   );
 }
 
@@ -638,6 +723,7 @@ function GameModal({ game, live, wishlisted, onToggleWishlist, onClose }) {
             <p className="leading-relaxed text-slate-700">{game.description}</p>
           </div>
 
+          <AgeDetail ageRating={game.ageRating} />
           <ProsAndCons ratings={ratings} />
           <PricePanel live={live} />
           <PredictionPanel live={live} />
@@ -852,11 +938,10 @@ function GameCard({ game, live, wishlisted, onToggleWishlist, onOpen }) {
             <UpgradeBadge value={game.ps5Upgrade} />
             {showVerdict && <VerdictBadge prediction={prediction} />}
           </div>
-          {ratings && (
-            <div className="mb-3">
-              <RatingChips ratings={ratings} />
-            </div>
-          )}
+          <div className="mb-3 flex flex-wrap items-center gap-1.5">
+            <AgeBadge ageRating={game.ageRating} />
+            <RatingChips ratings={ratings} />
+          </div>
           <p className="line-clamp-3 text-sm text-slate-600">{game.description}</p>
           {live?.price && (
             <p className="mt-4 flex items-baseline gap-2 border-t border-slate-100 pt-3 text-sm">
@@ -966,6 +1051,7 @@ export default function App() {
       if (filters.protagonist !== 'All' && game.protagonist !== filters.protagonist) return false;
       if (filters.artStyle !== 'All' && game.artStyle !== filters.artStyle) return false;
       if (filters.upgrade !== 'All' && game.ps5Upgrade !== filters.upgrade) return false;
+      if (filters.kidFriendly && !KID_FRIENDLY_TIERS.includes(game.ageRating?.tier)) return false;
       if (filters.wishlist && !wishlist.has(game.id)) return false;
       if (filters.sale && !(byTitle.get(game.title)?.price?.discountPercent > 0)) return false;
       return true;
@@ -1014,6 +1100,11 @@ export default function App() {
     [visiblePool, byTitle],
   );
 
+  const kidFriendlyCount = useMemo(
+    () => visiblePool.filter((game) => KID_FRIENDLY_TIERS.includes(game.ageRating?.tier)).length,
+    [visiblePool],
+  );
+
   const collectionCounts = useMemo(() => {
     const counts = {};
     for (const entry of COLLECTIONS) {
@@ -1046,7 +1137,11 @@ export default function App() {
   ].filter((value) => value !== 'All').length;
 
   const filtersActive =
-    Boolean(filters.q) || filters.sale || filters.wishlist || activeFilterCount > 0;
+    Boolean(filters.q) ||
+    filters.sale ||
+    filters.wishlist ||
+    filters.kidFriendly ||
+    activeFilterCount > 0;
 
   return (
     <div className="min-h-screen bg-slate-50 font-sans text-slate-900">
@@ -1219,6 +1314,27 @@ export default function App() {
                   {wishlist.size}
                 </span>
               )}
+            </button>
+
+            <button
+              type="button"
+              onClick={() => set('kidFriendly', !filters.kidFriendly)}
+              aria-pressed={filters.kidFriendly}
+              className={`inline-flex items-center gap-2 rounded-full px-3 py-1.5 text-sm font-medium transition-colors ${
+                filters.kidFriendly
+                  ? 'bg-emerald-600 text-white'
+                  : 'bg-slate-100 text-slate-600 hover:bg-slate-200'
+              }`}
+            >
+              <Baby className="h-4 w-4" />
+              Kid friendly
+              <span
+                className={`rounded-full px-1.5 text-xs ${
+                  filters.kidFriendly ? 'bg-white/25' : 'bg-white'
+                }`}
+              >
+                {kidFriendlyCount}
+              </span>
             </button>
 
             <button

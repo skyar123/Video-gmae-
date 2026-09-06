@@ -14,6 +14,8 @@ in at runtime.
   rating it positively, on every card and in the detail view.
 - **Pros and cons pulled from reviews** rather than written by hand, with a count
   of how many reviews raised each point.
+- **Kid-friendly verdict** on every card from board age ratings, with the content
+  descriptors in the detail view and a filter for the family-safe ones.
 - **Curated collections**: Best deals (computed live from current discounts,
   deepest cut first), Best graphics, Online & social, and Cozy. The last three come
   from tags in the data; every collection composes with the filters below.
@@ -119,6 +121,21 @@ Confidence starts at `low` and rises as history accumulates. Claims that depend 
 history are suppressed until there is enough of it — on day one every price is
 trivially the lowest ever seen, so the "lowest we have tracked" verdict needs at
 least two weeks of observation behind it.
+
+## Is it kid friendly?
+
+Every card carries an age verdict — All ages, Ages 10+, Teen 13+, Mature 17+, or
+Not rated — and the detail view adds the board, the rating and the content
+descriptors ("Blood and Gore", "Strong Language"). A toggle filters to the
+family-safe tiers; 99 of the 245 games qualify.
+
+The verdict comes from board ratings only. ESRB is preferred as the US board, but
+most smaller titles were never submitted to it, so the chain falls back through
+PEGI, USK, OFLC, DJCTQ and IGRS — which agree with the ESRB tier wherever both
+exist. That takes coverage from 138 games to 215. Nothing is inferred from the
+game itself: with no board rating at all it reads "Not rated", not "probably
+fine". Where a rating was auto-generated rather than issued by a board, the
+detail view says so.
 
 ## Ratings, pros and cons
 
