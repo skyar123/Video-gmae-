@@ -6,7 +6,8 @@
     "artStyle": "3D",
     "protagonist": "Custom",
     "ps5Upgrade": "Free PS5 Upgrade",
-    "description": "Explore a miniature, handcrafted solar system caught in a 22-minute time loop, translating ancient texts and piecing together a massive mystery."
+    "description": "Explore a miniature, handcrafted solar system caught in a 22-minute time loop, translating ancient texts and piecing together a massive mystery.",
+    "steamAppId": 753640
   },
   {
     "id": "disco-elysium",
@@ -15,7 +16,8 @@
     "artStyle": "Hand-drawn",
     "protagonist": "Male",
     "ps5Upgrade": "Free PS5 Upgrade",
-    "description": "A wildly unique isometric RPG where you play an amnesiac detective solving a murder through deep dialogue trees and internal psychological skill checks."
+    "description": "A wildly unique isometric RPG where you play an amnesiac detective solving a murder through deep dialogue trees and internal psychological skill checks.",
+    "steamAppId": 632470
   },
   {
     "id": "no-mans-sky",
@@ -24,7 +26,8 @@
     "artStyle": "3D",
     "protagonist": "Custom",
     "ps5Upgrade": "Free PS5 Upgrade",
-    "description": "The ultimate limitless exploration game where you seamlessly travel between procedurally generated planets, build bases, and upgrade your ship."
+    "description": "The ultimate limitless exploration game where you seamlessly travel between procedurally generated planets, build bases, and upgrade your ship.",
+    "steamAppId": 275850
   },
   {
     "id": "subnautica",
@@ -33,7 +36,8 @@
     "artStyle": "3D",
     "protagonist": "Custom",
     "ps5Upgrade": "Free PS5 Upgrade",
-    "description": "Crash-land on an alien ocean planet and explore its depths, scan wildlife, and build underwater habitats to survive."
+    "description": "Crash-land on an alien ocean planet and explore its depths, scan wildlife, and build underwater habitats to survive.",
+    "steamAppId": 264710
   },
   {
     "id": "deaths-door",
@@ -42,7 +46,8 @@
     "artStyle": "Isometric",
     "protagonist": "Creature/Animal",
     "ps5Upgrade": "PS4 & PS5 Cross-Buy",
-    "description": "Play as a soul-reaping crow in a bleak but beautiful world filled with secrets, environmental puzzles, and challenging boss fights."
+    "description": "Play as a soul-reaping crow in a bleak but beautiful world filled with secrets, environmental puzzles, and challenging boss fights.",
+    "steamAppId": 894020
   },
   {
     "id": "tunic",
@@ -51,7 +56,8 @@
     "artStyle": "Isometric",
     "protagonist": "Creature/Animal",
     "ps5Upgrade": "PS4 & PS5 Cross-Buy",
-    "description": "Guide a small fox across an island filled with forgotten ruins, deciphering mechanics using lost pages of an authentic retro instruction manual."
+    "description": "Guide a small fox across an island filled with forgotten ruins, deciphering mechanics using lost pages of an authentic retro instruction manual.",
+    "steamAppId": 553420
   },
   {
     "id": "stray",
@@ -60,7 +66,8 @@
     "artStyle": "3D",
     "protagonist": "Creature/Animal",
     "ps5Upgrade": "Free PS5 Upgrade",
-    "description": "Play as an agile stray cat separated from its pack, roaming the vertical alleys and rooftops of a decaying, neon-lit cyberpunk city."
+    "description": "Play as an agile stray cat separated from its pack, roaming the vertical alleys and rooftops of a decaying, neon-lit cyberpunk city.",
+    "steamAppId": 1332010
   },
   {
     "id": "sea-of-stars",
@@ -69,7 +76,8 @@
     "artStyle": "Pixel Art",
     "protagonist": "Ensemble",
     "ps5Upgrade": "PS4 & PS5 Cross-Buy",
-    "description": "A turn-based RPG inspired by 1990s classics that blends turn-based combat with seamless traversal, swimming, and climbing."
+    "description": "A turn-based RPG inspired by 1990s classics that blends turn-based combat with seamless traversal, swimming, and climbing.",
+    "steamAppId": 1244090
   },
   {
     "id": "the-pathless",
@@ -78,7 +86,8 @@
     "artStyle": "3D",
     "protagonist": "Female",
     "ps5Upgrade": "Free PS5 Upgrade",
-    "description": "Explore a vast, misty wilderness with an eagle companion, relying on high-speed kinetic archery movement rather than mini-maps."
+    "description": "Explore a vast, misty wilderness with an eagle companion, relying on high-speed kinetic archery movement rather than mini-maps.",
+    "steamAppId": 1492680
   },
   {
     "id": "solar-ash",
@@ -87,7 +96,8 @@
     "artStyle": "3D",
     "protagonist": "Female",
     "ps5Upgrade": "Free PS5 Upgrade",
-    "description": "Glide across surreal, gravity-defying terrain inside a massive black hole and climb massive, multi-tiered leviathans."
+    "description": "Glide across surreal, gravity-defying terrain inside a massive black hole and climb massive, multi-tiered leviathans.",
+    "steamAppId": 1867530
   },
   {
     "id": "horizon-forbidden-west",
@@ -96,7 +106,8 @@
     "artStyle": "Photorealistic",
     "protagonist": "Female",
     "ps5Upgrade": "Free PS5 Upgrade",
-    "description": "Explore photorealistic biomes ranging from dense jungles to submerged ruins, uncovering lost human history and fighting robotic wildlife."
+    "description": "Explore photorealistic biomes ranging from dense jungles to submerged ruins, uncovering lost human history and fighting robotic wildlife.",
+    "steamAppId": 2420110
   },
   {
     "id": "elden-ring",
@@ -105,7 +116,8 @@
     "artStyle": "Photorealistic",
     "protagonist": "Custom",
     "ps5Upgrade": "Free PS5 Upgrade",
-    "description": "An open-ended, non-linear fantasy world design driven entirely by curiosity without map markers or clutter."
+    "description": "An open-ended, non-linear fantasy world design driven entirely by curiosity without map markers or clutter.",
+    "steamAppId": 1245620
   },
   {
     "id": "deliver-us-mars",
@@ -114,7 +126,8 @@
     "artStyle": "3D",
     "protagonist": "Female",
     "ps5Upgrade": "PS4 & PS5 Cross-Buy",
-    "description": "Explore derelict space stations, scale steep Martian canyons with climbing picks, and solve environmental puzzles to recover colony ships."
+    "description": "Explore derelict space stations, scale steep Martian canyons with climbing picks, and solve environmental puzzles to recover colony ships.",
+    "steamAppId": 1345890
   },
   {
     "id": "season-letter",
@@ -123,7 +136,8 @@
     "artStyle": "Cel-shaded",
     "protagonist": "Female",
     "ps5Upgrade": "PS4 & PS5 Cross-Buy",
-    "description": "Ride a bicycle through a tranquil valley, recording ambient audio, snapping photographs, and journaling before a cataclysm reshapes the world."
+    "description": "Ride a bicycle through a tranquil valley, recording ambient audio, snapping photographs, and journaling before a cataclysm reshapes the world.",
+    "steamAppId": 695330
   },
   {
     "id": "eastshade",
@@ -132,7 +146,8 @@
     "artStyle": "3D",
     "protagonist": "Custom",
     "ps5Upgrade": "Backwards Compatible",
-    "description": "Capture the artistic spirit as a traveling painter exploring a peaceful island, setting up an easel to paint specific landscapes for the locals."
+    "description": "Capture the artistic spirit as a traveling painter exploring a peaceful island, setting up an easel to paint specific landscapes for the locals.",
+    "steamAppId": 715560
   },
   {
     "id": "firewatch",
@@ -141,7 +156,8 @@
     "artStyle": "Stylized",
     "protagonist": "Male",
     "ps5Upgrade": "Backwards Compatible",
-    "description": "Work as a fire lookout in 1989 Wyoming, navigating the wilderness entirely via handheld map, compass, and radio conversations."
+    "description": "Work as a fire lookout in 1989 Wyoming, navigating the wilderness entirely via handheld map, compass, and radio conversations.",
+    "steamAppId": 383870
   },
   {
     "id": "alba-wildlife",
@@ -150,7 +166,8 @@
     "artStyle": "Cel-shaded",
     "protagonist": "Female",
     "ps5Upgrade": "Free PS5 Upgrade",
-    "description": "Visit a Mediterranean island to stop a hotel development by using a smartphone to identify and photograph native bird and animal species."
+    "description": "Visit a Mediterranean island to stop a hotel development by using a smartphone to identify and photograph native bird and animal species.",
+    "steamAppId": 1337010
   },
   {
     "id": "life-is-strange-true-colors",
@@ -159,7 +176,8 @@
     "artStyle": "3D",
     "protagonist": "Female",
     "ps5Upgrade": "Free PS5 Upgrade",
-    "description": "Explore a scenic Colorado mountain valley utilizing psychic empathy powers to solve a mystery through deliberate, character-driven conversations."
+    "description": "Explore a scenic Colorado mountain valley utilizing psychic empathy powers to solve a mystery through deliberate, character-driven conversations.",
+    "steamAppId": 936790
   },
   {
     "id": "a-short-hike",
@@ -168,7 +186,8 @@
     "artStyle": "Pixel Art",
     "protagonist": "Creature/Animal",
     "ps5Upgrade": "Backwards Compatible",
-    "description": "Guide Claire, a young bird visiting a provincial park, hiking toward the mountain summit, fishing, and gliding from high cliffs."
+    "description": "Guide Claire, a young bird visiting a provincial park, hiking toward the mountain summit, fishing, and gliding from high cliffs.",
+    "steamAppId": 1055540
   },
   {
     "id": "lake",
@@ -177,7 +196,8 @@
     "artStyle": "3D",
     "protagonist": "Female",
     "ps5Upgrade": "Free PS5 Upgrade",
-    "description": "Fill in for your father as the local mail carrier in 1986 Oregon, driving a mail truck around a tranquil lake and catching up with old friends."
+    "description": "Fill in for your father as the local mail carrier in 1986 Oregon, driving a mail truck around a tranquil lake and catching up with old friends.",
+    "steamAppId": 1118240
   },
   {
     "id": "sandrock",
@@ -186,7 +206,8 @@
     "artStyle": "3D",
     "protagonist": "Custom",
     "ps5Upgrade": "Free PS5 Upgrade",
-    "description": "Rebuild a rugged desert town, craft massive machines, and socialize with locals in a deep farming and builder simulation."
+    "description": "Rebuild a rugged desert town, craft massive machines, and socialize with locals in a deep farming and builder simulation.",
+    "steamAppId": 1084600
   },
   {
     "id": "paleo-pines",
@@ -195,7 +216,8 @@
     "artStyle": "Stylized",
     "protagonist": "Custom",
     "ps5Upgrade": "PS4 & PS5 Cross-Buy",
-    "description": "Build a vast ranch, farm crops, and tame a sanctuary of brightly colored, rideable dinosaurs."
+    "description": "Build a vast ranch, farm crops, and tame a sanctuary of brightly colored, rideable dinosaurs.",
+    "steamAppId": 1202200
   },
   {
     "id": "bugsnax",
@@ -204,7 +226,8 @@
     "artStyle": "3D",
     "protagonist": "Custom",
     "ps5Upgrade": "Free PS5 Upgrade",
-    "description": "Explore an island to catch bizarre half-bug, half-snack creatures and rebuild a quirky settlement of fuzzy inhabitants."
+    "description": "Explore an island to catch bizarre half-bug, half-snack creatures and rebuild a quirky settlement of fuzzy inhabitants.",
+    "steamAppId": 674140
   },
   {
     "id": "dreamlight-valley",
@@ -213,7 +236,8 @@
     "artStyle": "3D",
     "protagonist": "Custom",
     "ps5Upgrade": "Free PS5 Upgrade",
-    "description": "A massive life-simulation where you design a town, decorate your home, and complete quests alongside classic animated characters."
+    "description": "A massive life-simulation where you design a town, decorate your home, and complete quests alongside classic animated characters.",
+    "steamAppId": 1401590
   },
   {
     "id": "cult-of-the-lamb",
@@ -222,7 +246,8 @@
     "artStyle": "Hand-drawn",
     "protagonist": "Creature/Animal",
     "ps5Upgrade": "Free PS5 Upgrade",
-    "description": "Play as a cute possessed lamb managing a woodland cult, balancing base-building with fast-paced dungeon crawling."
+    "description": "Play as a cute possessed lamb managing a woodland cult, balancing base-building with fast-paced dungeon crawling.",
+    "steamAppId": 1313140
   },
   {
     "id": "roots-of-pacha",
@@ -231,7 +256,8 @@
     "artStyle": "Pixel Art",
     "protagonist": "Custom",
     "ps5Upgrade": "PS4 & PS5 Cross-Buy",
-    "description": "A cooperative farming and life simulation game set in the Stone Age. Discover crops, invent early technology, and tame animals."
+    "description": "A cooperative farming and life simulation game set in the Stone Age. Discover crops, invent early technology, and tame animals.",
+    "steamAppId": 1245560
   },
   {
     "id": "spiritfarer",
@@ -240,7 +266,8 @@
     "artStyle": "Hand-drawn",
     "protagonist": "Female",
     "ps5Upgrade": "Backwards Compatible",
-    "description": "A gentle journey where you navigate an uncharted ocean, dock at hidden islands, and cook for eccentric animal spirits before helping them move on."
+    "description": "A gentle journey where you navigate an uncharted ocean, dock at hidden islands, and cook for eccentric animal spirits before helping them move on.",
+    "steamAppId": 972660
   },
   {
     "id": "gris",
@@ -249,7 +276,8 @@
     "artStyle": "Watercolor",
     "protagonist": "Female",
     "ps5Upgrade": "Free PS5 Upgrade",
-    "description": "Devoid of danger, the world begins as a stark, monochromatic canvas and gradually blooms with watercolor tones as you solve light spatial puzzles."
+    "description": "Devoid of danger, the world begins as a stark, monochromatic canvas and gradually blooms with watercolor tones as you solve light spatial puzzles.",
+    "steamAppId": 683320
   },
   {
     "id": "toem",
@@ -258,7 +286,8 @@
     "artStyle": "Hand-drawn",
     "protagonist": "Custom",
     "ps5Upgrade": "Free PS5 Upgrade",
-    "description": "A delightful, hand-drawn black-and-white adventure focused entirely on solving puzzles by taking photographs for quirky locals."
+    "description": "A delightful, hand-drawn black-and-white adventure focused entirely on solving puzzles by taking photographs for quirky locals.",
+    "steamAppId": 1307580
   },
   {
     "id": "dredge",
@@ -267,7 +296,8 @@
     "artStyle": "Stylized",
     "protagonist": "Custom",
     "ps5Upgrade": "Free PS5 Upgrade",
-    "description": "A fishing exploration game where you upgrade your trawler and catalog ocean life, mixed with light, eerie cosmic horror."
+    "description": "A fishing exploration game where you upgrade your trawler and catalog ocean life, mixed with light, eerie cosmic horror.",
+    "steamAppId": 1562430
   },
   {
     "id": "oxenfree-2",
@@ -276,7 +306,8 @@
     "artStyle": "2D",
     "protagonist": "Female",
     "ps5Upgrade": "PS4 & PS5 Cross-Buy",
-    "description": "Play as Riley, an environmental researcher investigating strange radio frequencies and time anomalies in a coastal town."
+    "description": "Play as Riley, an environmental researcher investigating strange radio frequencies and time anomalies in a coastal town.",
+    "steamAppId": 1574310
   },
   {
     "id": "night-in-the-woods",
@@ -285,7 +316,8 @@
     "artStyle": "2D",
     "protagonist": "Creature/Animal",
     "ps5Upgrade": "Backwards Compatible",
-    "description": "Play as Mae, a college dropout cat who returns to her struggling rust-belt hometown to reconnect with friends."
+    "description": "Play as Mae, a college dropout cat who returns to her struggling rust-belt hometown to reconnect with friends.",
+    "steamAppId": 481510
   },
   {
     "id": "roki",
@@ -294,7 +326,8 @@
     "artStyle": "Cel-shaded",
     "protagonist": "Female",
     "ps5Upgrade": "Free PS5 Upgrade",
-    "description": "Play as Tove, a young girl exploring a snow-covered Scandinavian wilderness filled with ancient folklore creatures."
+    "description": "Play as Tove, a young girl exploring a snow-covered Scandinavian wilderness filled with ancient folklore creatures.",
+    "steamAppId": 1067540
   },
   {
     "id": "kena",
@@ -303,7 +336,8 @@
     "artStyle": "3D",
     "protagonist": "Female",
     "ps5Upgrade": "Free PS5 Upgrade",
-    "description": "Play as a young female spirit guide who fights with a staff and collects adorable fuzzy companions called the Rot."
+    "description": "Play as a young female spirit guide who fights with a staff and collects adorable fuzzy companions called the Rot.",
+    "steamAppId": 1954200
   },
   {
     "id": "chicory",
@@ -312,7 +346,8 @@
     "artStyle": "Hand-drawn",
     "protagonist": "Creature/Animal",
     "ps5Upgrade": "Free PS5 Upgrade",
-    "description": "Play as a dog with a magical paintbrush, restoring color to a black-and-white world while solving environmental puzzles."
+    "description": "Play as a dog with a magical paintbrush, restoring color to a black-and-white world while solving environmental puzzles.",
+    "steamAppId": 1123450
   },
   {
     "id": "cassette-beasts",
@@ -321,7 +356,8 @@
     "artStyle": "Pixel Art",
     "protagonist": "Custom",
     "ps5Upgrade": "PS4 & PS5 Cross-Buy",
-    "description": "A monster-taming RPG where you record beasts on cassette tapes and fuse them together to fight in a nostalgic 2000s town."
+    "description": "A monster-taming RPG where you record beasts on cassette tapes and fuse them together to fight in a nostalgic 2000s town.",
+    "steamAppId": 1321440
   },
   {
     "id": "dave-the-diver",
@@ -330,7 +366,8 @@
     "artStyle": "Pixel Art",
     "protagonist": "Male",
     "ps5Upgrade": "Free PS5 Upgrade",
-    "description": "Scuba dive to spearfish by day, and manage the finances and menu of a bustling sushi restaurant by night."
+    "description": "Scuba dive to spearfish by day, and manage the finances and menu of a bustling sushi restaurant by night.",
+    "steamAppId": 1868140
   },
   {
     "id": "tinykin",
@@ -339,7 +376,8 @@
     "artStyle": "3D/2D Mix",
     "protagonist": "Male",
     "ps5Upgrade": "Free PS5 Upgrade",
-    "description": "Play as a tiny astronaut exploring a massive 1990s house, using hundreds of small alien creatures to carry objects and build ladders."
+    "description": "Play as a tiny astronaut exploring a massive 1990s house, using hundreds of small alien creatures to carry objects and build ladders.",
+    "steamAppId": 1599020
   },
   {
     "id": "balatro",
@@ -348,7 +386,8 @@
     "artStyle": "Pixel Art",
     "protagonist": "Custom",
     "ps5Upgrade": "PS4 & PS5 Cross-Buy",
-    "description": "An endlessly addictive poker roguelike where you buy illegal Joker cards to break the rules of standard poker and score massive multipliers."
+    "description": "An endlessly addictive poker roguelike where you buy illegal Joker cards to break the rules of standard poker and score massive multipliers.",
+    "steamAppId": 2379780
   },
   {
     "id": "teenage-exocolonist",
@@ -357,7 +396,8 @@
     "artStyle": "Watercolor",
     "protagonist": "Custom",
     "ps5Upgrade": "PS4 & PS5 Cross-Buy",
-    "description": "Grow up on an alien planet, making choices over ten years that shape your skills, friendships, and the colony's survival."
+    "description": "Grow up on an alien planet, making choices over ten years that shape your skills, friendships, and the colony's survival.",
+    "steamAppId": 1148760
   },
   {
     "id": "tchia",
@@ -366,7 +406,8 @@
     "artStyle": "3D",
     "protagonist": "Female",
     "ps5Upgrade": "PS4 & PS5 Cross-Buy",
-    "description": "Sail a custom boat, play a fully functional ukulele, and soul-jump into any animal or object in a physics-driven tropical sandbox."
+    "description": "Sail a custom boat, play a fully functional ukulele, and soul-jump into any animal or object in a physics-driven tropical sandbox.",
+    "steamAppId": 1496590
   },
   {
     "id": "hollow-knight",
@@ -375,7 +416,8 @@
     "artStyle": "Hand-drawn",
     "protagonist": "Creature/Animal",
     "ps5Upgrade": "Backwards Compatible",
-    "description": "Descend as a tiny nail-wielding bug into Hallownest, a vast hand-drawn ruin of insect kingdoms, secret arenas and hidden charms."
+    "description": "Descend as a tiny nail-wielding bug into Hallownest, a vast hand-drawn ruin of insect kingdoms, secret arenas and hidden charms.",
+    "steamAppId": 367520
   },
   {
     "id": "ender-lilies",
@@ -384,7 +426,8 @@
     "artStyle": "Watercolor",
     "protagonist": "Female",
     "ps5Upgrade": "PS4 & PS5 Cross-Buy",
-    "description": "A white priestess purifies fallen knights in a rain-soaked watercolor kingdom, binding their spirits to fight for her."
+    "description": "A white priestess purifies fallen knights in a rain-soaked watercolor kingdom, binding their spirits to fight for her.",
+    "steamAppId": 1369630
   },
   {
     "id": "blasphemous",
@@ -393,7 +436,8 @@
     "artStyle": "Pixel Art",
     "protagonist": "Male",
     "ps5Upgrade": "Backwards Compatible",
-    "description": "A brutal pixel-art pilgrimage through a land of baroque religious guilt, packed with grotesque bosses and hidden penances."
+    "description": "A brutal pixel-art pilgrimage through a land of baroque religious guilt, packed with grotesque bosses and hidden penances.",
+    "steamAppId": 774361
   },
   {
     "id": "dead-cells",
@@ -402,7 +446,8 @@
     "artStyle": "Pixel Art",
     "protagonist": "Custom",
     "ps5Upgrade": "Backwards Compatible",
-    "description": "A roguelike metroidvania built on razor-sharp movement, where every death reshuffles the castle and every run unlocks new permanent routes."
+    "description": "A roguelike metroidvania built on razor-sharp movement, where every death reshuffles the castle and every run unlocks new permanent routes.",
+    "steamAppId": 588650
   },
   {
     "id": "guacamelee-2",
@@ -411,7 +456,8 @@
     "artStyle": "Hand-drawn",
     "protagonist": "Male",
     "ps5Upgrade": "Backwards Compatible",
-    "description": "A luchador brawls through a bright Mexican folklore world, swapping between the living and dead realms to solve platforming puzzles."
+    "description": "A luchador brawls through a bright Mexican folklore world, swapping between the living and dead realms to solve platforming puzzles.",
+    "steamAppId": 534550
   },
   {
     "id": "momodora",
@@ -420,7 +466,8 @@
     "artStyle": "Pixel Art",
     "protagonist": "Female",
     "ps5Upgrade": "Backwards Compatible",
-    "description": "A priestess armed with a maple leaf explores a cursed kingdom in a compact, elegant pixel-art metroidvania."
+    "description": "A priestess armed with a maple leaf explores a cursed kingdom in a compact, elegant pixel-art metroidvania.",
+    "steamAppId": 428550
   },
   {
     "id": "salt-and-sanctuary",
@@ -429,7 +476,8 @@
     "artStyle": "Hand-drawn",
     "protagonist": "Custom",
     "ps5Upgrade": "Backwards Compatible",
-    "description": "A side-on soulslike with deep class building, punishing bosses and a sprawling interconnected island to unlock."
+    "description": "A side-on soulslike with deep class building, punishing bosses and a sprawling interconnected island to unlock.",
+    "steamAppId": 283640
   },
   {
     "id": "deedlit-wonder-labyrinth",
@@ -438,7 +486,8 @@
     "artStyle": "Pixel Art",
     "protagonist": "Female",
     "ps5Upgrade": "PS4 & PS5 Cross-Buy",
-    "description": "Deedlit the elf swaps between wind and fire spirits to absorb attacks in a loving tribute to classic Igavania design."
+    "description": "Deedlit the elf swaps between wind and fire spirits to absorb attacks in a loving tribute to classic Igavania design.",
+    "steamAppId": 1203630
   },
   {
     "id": "afterimage",
@@ -447,7 +496,8 @@
     "artStyle": "Hand-drawn",
     "protagonist": "Female",
     "ps5Upgrade": "PS4 & PS5 Cross-Buy",
-    "description": "Renee explores a huge hand-painted world of floating ruins with dozens of weapon types and a sprawling skill tree."
+    "description": "Renee explores a huge hand-painted world of floating ruins with dozens of weapon types and a sprawling skill tree.",
+    "steamAppId": 1701520
   },
   {
     "id": "grime",
@@ -456,7 +506,8 @@
     "artStyle": "3D",
     "protagonist": "Custom",
     "ps5Upgrade": "PS4 & PS5 Cross-Buy",
-    "description": "A living black hole absorbs enemy attacks in a surreal world of sculpted stone and flesh, rewarding perfectly timed parries."
+    "description": "A living black hole absorbs enemy attacks in a surreal world of sculpted stone and flesh, rewarding perfectly timed parries.",
+    "steamAppId": 1123050
   },
   {
     "id": "ghost-song",
@@ -465,7 +516,8 @@
     "artStyle": "Hand-drawn",
     "protagonist": "Custom",
     "ps5Upgrade": "PS4 & PS5 Cross-Buy",
-    "description": "A deadsuit wakes on a moon of bioluminescent caves and derelict ships, uncovering what happened to the crew that left it behind."
+    "description": "A deadsuit wakes on a moon of bioluminescent caves and derelict ships, uncovering what happened to the crew that left it behind.",
+    "steamAppId": 347800
   },
   {
     "id": "haiku-the-robot",
@@ -474,7 +526,8 @@
     "artStyle": "Hand-drawn",
     "protagonist": "Custom",
     "ps5Upgrade": "PS4 & PS5 Cross-Buy",
-    "description": "A small repair robot rolls through the rusted mechanical body of a dead world, restoring the machines still clinging to life."
+    "description": "A small repair robot rolls through the rusted mechanical body of a dead world, restoring the machines still clinging to life.",
+    "steamAppId": 1231880
   },
   {
     "id": "infernax",
@@ -483,7 +536,8 @@
     "artStyle": "Pixel Art",
     "protagonist": "Male",
     "ps5Upgrade": "PS4 & PS5 Cross-Buy",
-    "description": "An 8-bit style crusade with branching good and evil paths, chunky combat and a map that opens up through blunt force."
+    "description": "An 8-bit style crusade with branching good and evil paths, chunky combat and a map that opens up through blunt force.",
+    "steamAppId": 374190
   },
   {
     "id": "astalon",
@@ -492,7 +546,8 @@
     "artStyle": "Pixel Art",
     "protagonist": "Ensemble",
     "ps5Upgrade": "Backwards Compatible",
-    "description": "Three adventurers trade places mid-run inside a tower that resets on death but keeps every upgrade you bought with your life."
+    "description": "Three adventurers trade places mid-run inside a tower that resets on death but keeps every upgrade you bought with your life.",
+    "steamAppId": 1046400
   },
   {
     "id": "rain-world",
@@ -501,7 +556,8 @@
     "artStyle": "Pixel Art",
     "protagonist": "Creature/Animal",
     "ps5Upgrade": "Free PS5 Upgrade",
-    "description": "Survive as a slugcat in a crumbling ecosystem where every other creature is hunting, hiding and learning alongside you."
+    "description": "Survive as a slugcat in a crumbling ecosystem where every other creature is hunting, hiding and learning alongside you.",
+    "steamAppId": 312520
   },
   {
     "id": "carrion",
@@ -510,7 +566,8 @@
     "artStyle": "Pixel Art",
     "protagonist": "Creature/Animal",
     "ps5Upgrade": "Backwards Compatible",
-    "description": "A reverse-horror metroidvania where you are the amorphous red monster tearing through a research facility."
+    "description": "A reverse-horror metroidvania where you are the amorphous red monster tearing through a research facility.",
+    "steamAppId": 953490
   },
   {
     "id": "prince-of-persia-lost-crown",
@@ -519,7 +576,8 @@
     "artStyle": "Hand-drawn",
     "protagonist": "Male",
     "ps5Upgrade": "PS4 & PS5 Cross-Buy",
-    "description": "Sargon dashes and rewinds through Mount Qaf in a fast, combo-heavy metroidvania with a brilliant screenshot-pinning map."
+    "description": "Sargon dashes and rewinds through Mount Qaf in a fast, combo-heavy metroidvania with a brilliant screenshot-pinning map.",
+    "steamAppId": 2751000
   },
   {
     "id": "bloodstained",
@@ -528,7 +586,8 @@
     "artStyle": "3D",
     "protagonist": "Female",
     "ps5Upgrade": "Backwards Compatible",
-    "description": "Miriam explores a demon castle packed with craftable gear and shard abilities harvested from every enemy she defeats."
+    "description": "Miriam explores a demon castle packed with craftable gear and shard abilities harvested from every enemy she defeats.",
+    "steamAppId": 692850
   },
   {
     "id": "unsighted",
@@ -537,7 +596,8 @@
     "artStyle": "Pixel Art",
     "protagonist": "Female",
     "ps5Upgrade": "PS4 & PS5 Cross-Buy",
-    "description": "An automaton races a countdown that permanently kills off the friends she cannot reach in time, making every hour spent a real choice."
+    "description": "An automaton races a countdown that permanently kills off the friends she cannot reach in time, making every hour spent a real choice.",
+    "steamAppId": 1062110
   },
   {
     "id": "vernal-edge",
@@ -546,7 +606,8 @@
     "artStyle": "Pixel Art",
     "protagonist": "Female",
     "ps5Upgrade": "PS4 & PS5 Cross-Buy",
-    "description": "Vernal hunts her father across a shattered sky-island world with an aggressive juggling combat system built for style."
+    "description": "Vernal hunts her father across a shattered sky-island world with an aggressive juggling combat system built for style.",
+    "steamAppId": 1546710
   },
   {
     "id": "ultros",
@@ -555,7 +616,8 @@
     "artStyle": "Hand-drawn",
     "protagonist": "Female",
     "ps5Upgrade": "PS4 & PS5 Cross-Buy",
-    "description": "A psychedelic riot of color inside a cosmic womb, where you plant and tend gardens across loops of the same map."
+    "description": "A psychedelic riot of color inside a cosmic womb, where you plant and tend gardens across loops of the same map.",
+    "steamAppId": 2386310
   },
   {
     "id": "slay-the-spire",
@@ -564,7 +626,8 @@
     "artStyle": "Hand-drawn",
     "protagonist": "Custom",
     "ps5Upgrade": "Backwards Compatible",
-    "description": "The genre-defining roguelike deckbuilder: climb a shifting spire, refine a deck of attacks and relics, and try not to get greedy."
+    "description": "The genre-defining roguelike deckbuilder: climb a shifting spire, refine a deck of attacks and relics, and try not to get greedy.",
+    "steamAppId": 646570
   },
   {
     "id": "inscryption",
@@ -573,7 +636,8 @@
     "artStyle": "3D/2D Mix",
     "protagonist": "Male",
     "ps5Upgrade": "PS4 & PS5 Cross-Buy",
-    "description": "A card battler played across a candlelit table that keeps breaking its own rules in ways best left unspoiled."
+    "description": "A card battler played across a candlelit table that keeps breaking its own rules in ways best left unspoiled.",
+    "steamAppId": 1092790
   },
   {
     "id": "roguebook",
@@ -582,7 +646,8 @@
     "artStyle": "Watercolor",
     "protagonist": "Ensemble",
     "ps5Upgrade": "PS4 & PS5 Cross-Buy",
-    "description": "Paint your way across a blank watercolor map with a two-hero party, merging both characters' cards into a single deck."
+    "description": "Paint your way across a blank watercolor map with a two-hero party, merging both characters' cards into a single deck.",
+    "steamAppId": 1076200
   },
   {
     "id": "griftlands",
@@ -591,7 +656,8 @@
     "artStyle": "Hand-drawn",
     "protagonist": "Custom",
     "ps5Upgrade": "Backwards Compatible",
-    "description": "Every character remembers how you treated them, and you carry two decks at once: one for fighting, one for arguing."
+    "description": "Every character remembers how you treated them, and you carry two decks at once: one for fighting, one for arguing.",
+    "steamAppId": 601840
   },
   {
     "id": "fights-in-tight-spaces",
@@ -600,7 +666,8 @@
     "artStyle": "Stylized",
     "protagonist": "Male",
     "ps5Upgrade": "PS4 & PS5 Cross-Buy",
-    "description": "Play cards to choreograph spy-movie fistfights in elevators and corridors, where positioning matters more than damage."
+    "description": "Play cards to choreograph spy-movie fistfights in elevators and corridors, where positioning matters more than damage.",
+    "steamAppId": 1265820
   },
   {
     "id": "astrea-six-sided-oracles",
@@ -609,7 +676,8 @@
     "artStyle": "Hand-drawn",
     "protagonist": "Female",
     "ps5Upgrade": "PS4 & PS5 Cross-Buy",
-    "description": "A dice-building roguelike where corruption is also a resource, forcing you to poison yourself to purify everything else."
+    "description": "A dice-building roguelike where corruption is also a resource, forcing you to poison yourself to purify everything else.",
+    "steamAppId": 1755830
   },
   {
     "id": "monster-sanctuary",
@@ -618,7 +686,8 @@
     "artStyle": "Pixel Art",
     "protagonist": "Custom",
     "ps5Upgrade": "Backwards Compatible",
-    "description": "A monster-taming metroidvania where your collected creatures also grant the traversal abilities that open the map."
+    "description": "A monster-taming metroidvania where your collected creatures also grant the traversal abilities that open the map.",
+    "steamAppId": 814370
   },
   {
     "id": "nexomon-extinction",
@@ -627,7 +696,8 @@
     "artStyle": "Pixel Art",
     "protagonist": "Custom",
     "ps5Upgrade": "Backwards Compatible",
-    "description": "Catch and evolve over 380 nexomon across a world where the monsters are winning, told with a self-aware sense of humor."
+    "description": "Catch and evolve over 380 nexomon across a world where the monsters are winning, told with a self-aware sense of humor.",
+    "steamAppId": 1196630
   },
   {
     "id": "coromon",
@@ -636,7 +706,8 @@
     "artStyle": "Pixel Art",
     "protagonist": "Custom",
     "ps5Upgrade": "PS4 & PS5 Cross-Buy",
-    "description": "A polished retro monster-taming RPG with adjustable difficulty, stat potentials and puzzle-filled research facilities."
+    "description": "A polished retro monster-taming RPG with adjustable difficulty, stat potentials and puzzle-filled research facilities.",
+    "steamAppId": 1218210
   },
   {
     "id": "slime-rancher",
@@ -645,7 +716,8 @@
     "artStyle": "3D",
     "protagonist": "Female",
     "ps5Upgrade": "Backwards Compatible",
-    "description": "Beatrix vacuums up wobbling slimes on a far-off frontier planet and farms their plorts for profit."
+    "description": "Beatrix vacuums up wobbling slimes on a far-off frontier planet and farms their plorts for profit.",
+    "steamAppId": 433340
   },
   {
     "id": "siralim-ultimate",
@@ -654,7 +726,8 @@
     "artStyle": "Pixel Art",
     "protagonist": "Custom",
     "ps5Upgrade": "PS4 & PS5 Cross-Buy",
-    "description": "An absurdly deep monster-fusing roguelike with over 1,200 creatures and build combinations that never stop unfolding."
+    "description": "An absurdly deep monster-fusing roguelike with over 1,200 creatures and build combinations that never stop unfolding.",
+    "steamAppId": 1289810
   },
   {
     "id": "stardew-valley",
@@ -663,7 +736,8 @@
     "artStyle": "Pixel Art",
     "protagonist": "Custom",
     "ps5Upgrade": "Backwards Compatible",
-    "description": "Inherit a overgrown farm and rebuild it season by season, mining, fishing and befriending an entire valley of neighbors."
+    "description": "Inherit a overgrown farm and rebuild it season by season, mining, fishing and befriending an entire valley of neighbors.",
+    "steamAppId": 413150
   },
   {
     "id": "my-time-at-portia",
@@ -672,7 +746,8 @@
     "artStyle": "3D",
     "protagonist": "Custom",
     "ps5Upgrade": "Backwards Compatible",
-    "description": "Restore your father's workshop in a post-apocalyptic town rebuilt on farming, crafting commissions and small-town friendships."
+    "description": "Restore your father's workshop in a post-apocalyptic town rebuilt on farming, crafting commissions and small-town friendships.",
+    "steamAppId": 666140
   },
   {
     "id": "potion-permit",
@@ -681,7 +756,8 @@
     "artStyle": "Pixel Art",
     "protagonist": "Custom",
     "ps5Upgrade": "PS4 & PS5 Cross-Buy",
-    "description": "Move to a suspicious town as its new chemist, diagnosing residents and brewing the cures that slowly win them over."
+    "description": "Move to a suspicious town as its new chemist, diagnosing residents and brewing the cures that slowly win them over.",
+    "steamAppId": 1337760
   },
   {
     "id": "cozy-grove",
@@ -690,7 +766,8 @@
     "artStyle": "Hand-drawn",
     "protagonist": "Custom",
     "ps5Upgrade": "Backwards Compatible",
-    "description": "Camp on a haunted island that gives you a handful of gentle tasks each real day, coloring the world in as ghosts find peace."
+    "description": "Camp on a haunted island that gives you a handful of gentle tasks each real day, coloring the world in as ghosts find peace.",
+    "steamAppId": 1458100
   },
   {
     "id": "garden-story",
@@ -699,7 +776,8 @@
     "artStyle": "Pixel Art",
     "protagonist": "Creature/Animal",
     "ps5Upgrade": "Backwards Compatible",
-    "description": "Concord the grape becomes guardian of a village of fruit, splitting days between repairs, harvests and clearing rot."
+    "description": "Concord the grape becomes guardian of a village of fruit, splitting days between repairs, harvests and clearing rot.",
+    "steamAppId": 1062140
   },
   {
     "id": "the-sims-4",
@@ -708,7 +786,8 @@
     "artStyle": "3D",
     "protagonist": "Custom",
     "ps5Upgrade": "Backwards Compatible",
-    "description": "Build people and houses from the ground up, then watch the lives you designed go exactly as wrong as you hoped."
+    "description": "Build people and houses from the ground up, then watch the lives you designed go exactly as wrong as you hoped.",
+    "steamAppId": 1222670
   },
   {
     "id": "everdream-valley",
@@ -717,7 +796,8 @@
     "artStyle": "3D",
     "protagonist": "Custom",
     "ps5Upgrade": "PS4 & PS5 Cross-Buy",
-    "description": "Spend a summer restoring your grandparents' farm by day and dreaming yourself into the bodies of its animals by night."
+    "description": "Spend a summer restoring your grandparents' farm by day and dreaming yourself into the bodies of its animals by night.",
+    "steamAppId": 1403650
   },
   {
     "id": "kitaria-fables",
@@ -726,7 +806,8 @@
     "artStyle": "3D",
     "protagonist": "Creature/Animal",
     "ps5Upgrade": "PS4 & PS5 Cross-Buy",
-    "description": "A cat knight defends a valley of animal villagers, alternating between sword-and-spell combat and running the family farm."
+    "description": "A cat knight defends a valley of animal villagers, alternating between sword-and-spell combat and running the family farm.",
+    "steamAppId": 1356280
   },
   {
     "id": "calico",
@@ -735,7 +816,8 @@
     "artStyle": "3D",
     "protagonist": "Female",
     "ps5Upgrade": "PS4 & PS5 Cross-Buy",
-    "description": "Rebuild the town's cat cafe, stuff every seat with animals, bake pastries and ride a very large capybara around town."
+    "description": "Rebuild the town's cat cafe, stuff every seat with animals, bake pastries and ride a very large capybara around town.",
+    "steamAppId": 1112890
   },
   {
     "id": "graveyard-keeper",
@@ -744,7 +826,8 @@
     "artStyle": "Pixel Art",
     "protagonist": "Male",
     "ps5Upgrade": "Backwards Compatible",
-    "description": "Run a medieval cemetery as a business, with a pitch-dark sense of humor about where the resources come from."
+    "description": "Run a medieval cemetery as a business, with a pitch-dark sense of humor about where the resources come from.",
+    "steamAppId": 599140
   },
   {
     "id": "moonlighter",
@@ -753,7 +836,8 @@
     "artStyle": "Pixel Art",
     "protagonist": "Male",
     "ps5Upgrade": "Backwards Compatible",
-    "description": "Raid dungeons at night and sell the loot in your own shop by day, setting prices by reading what customers will tolerate."
+    "description": "Raid dungeons at night and sell the loot in your own shop by day, setting prices by reading what customers will tolerate.",
+    "steamAppId": 606150
   },
   {
     "id": "powerwash-simulator",
@@ -762,7 +846,8 @@
     "artStyle": "3D",
     "protagonist": "Custom",
     "ps5Upgrade": "PS4 & PS5 Cross-Buy",
-    "description": "Blast years of grime off vans, playgrounds and mars rovers in the most quietly satisfying job simulator on the platform."
+    "description": "Blast years of grime off vans, playgrounds and mars rovers in the most quietly satisfying job simulator on the platform.",
+    "steamAppId": 1290000
   },
   {
     "id": "two-point-campus",
@@ -771,7 +856,8 @@
     "artStyle": "3D",
     "protagonist": "Custom",
     "ps5Upgrade": "Free PS5 Upgrade",
-    "description": "Build an absurd university around courses like knight school and gastronomy, then keep the students fed, taught and happy."
+    "description": "Build an absurd university around courses like knight school and gastronomy, then keep the students fed, taught and happy.",
+    "steamAppId": 1649080
   },
   {
     "id": "islanders",
@@ -780,7 +866,8 @@
     "artStyle": "3D",
     "protagonist": "Custom",
     "ps5Upgrade": "PS4 & PS5 Cross-Buy",
-    "description": "A minimalist city builder with no fail state beyond running out of buildings: place well, score points, unlock the next island."
+    "description": "A minimalist city builder with no fail state beyond running out of buildings: place well, score points, unlock the next island.",
+    "steamAppId": 1046030
   },
   {
     "id": "townscaper",
@@ -789,7 +876,8 @@
     "artStyle": "3D",
     "protagonist": "Custom",
     "ps5Upgrade": "PS4 & PS5 Cross-Buy",
-    "description": "Click on water to grow impossible pastel coastal towns, with no goals, no timers and a very clever building algorithm."
+    "description": "Click on water to grow impossible pastel coastal towns, with no goals, no timers and a very clever building algorithm.",
+    "steamAppId": 1291340
   },
   {
     "id": "celeste",
@@ -798,7 +886,8 @@
     "artStyle": "Pixel Art",
     "protagonist": "Female",
     "ps5Upgrade": "Backwards Compatible",
-    "description": "Madeline climbs a mountain and her own anxiety in a precision platformer with some of the kindest accessibility options ever shipped."
+    "description": "Madeline climbs a mountain and her own anxiety in a precision platformer with some of the kindest accessibility options ever shipped.",
+    "steamAppId": 504230
   },
   {
     "id": "sackboy",
@@ -807,7 +896,8 @@
     "artStyle": "3D",
     "protagonist": "Creature/Animal",
     "ps5Upgrade": "Free PS5 Upgrade",
-    "description": "A knitted, tactile 3D platformer built around musical set pieces and four-player chaos."
+    "description": "A knitted, tactile 3D platformer built around musical set pieces and four-player chaos.",
+    "steamAppId": 1599660
   },
   {
     "id": "little-nightmares-2",
@@ -816,7 +906,8 @@
     "artStyle": "Stylized",
     "protagonist": "Male",
     "ps5Upgrade": "Free PS5 Upgrade",
-    "description": "Mono and Six creep through a broadcast-poisoned city of hunters and mannequins in a beautifully grim puzzle platformer."
+    "description": "Mono and Six creep through a broadcast-poisoned city of hunters and mannequins in a beautifully grim puzzle platformer.",
+    "steamAppId": 860510
   },
   {
     "id": "little-nightmares",
@@ -825,7 +916,8 @@
     "artStyle": "Stylized",
     "protagonist": "Female",
     "ps5Upgrade": "Backwards Compatible",
-    "description": "Six, in her yellow raincoat, escapes a drowning vessel of grotesque appetites that are all much larger than she is."
+    "description": "Six, in her yellow raincoat, escapes a drowning vessel of grotesque appetites that are all much larger than she is.",
+    "steamAppId": 424840
   },
   {
     "id": "planet-of-lana",
@@ -834,7 +926,8 @@
     "artStyle": "Hand-drawn",
     "protagonist": "Female",
     "ps5Upgrade": "PS4 & PS5 Cross-Buy",
-    "description": "A girl and a small catlike companion cross painted alien vistas, solving puzzles that depend on directing each other."
+    "description": "A girl and a small catlike companion cross painted alien vistas, solving puzzles that depend on directing each other.",
+    "steamAppId": 1608230
   },
   {
     "id": "unravel-two",
@@ -843,7 +936,8 @@
     "artStyle": "Stylized",
     "protagonist": "Creature/Animal",
     "ps5Upgrade": "Backwards Compatible",
-    "description": "Two yarn creatures tied together swing and knot their way through a warm, tactile Scandinavian landscape."
+    "description": "Two yarn creatures tied together swing and knot their way through a warm, tactile Scandinavian landscape.",
+    "steamAppId": 1225570
   },
   {
     "id": "cuphead",
@@ -852,7 +946,8 @@
     "artStyle": "Hand-drawn",
     "protagonist": "Male",
     "ps5Upgrade": "Backwards Compatible",
-    "description": "A punishing run-and-gun boss rush drawn and inked in the style of 1930s rubber-hose cartoons."
+    "description": "A punishing run-and-gun boss rush drawn and inked in the style of 1930s rubber-hose cartoons.",
+    "steamAppId": 268910
   },
   {
     "id": "yooka-laylee-impossible-lair",
@@ -861,7 +956,8 @@
     "artStyle": "2D",
     "protagonist": "Creature/Animal",
     "ps5Upgrade": "Backwards Compatible",
-    "description": "A chameleon and a bat run a sharp 2D platformer whose final level is open from minute one, if you think you are ready."
+    "description": "A chameleon and a bat run a sharp 2D platformer whose final level is open from minute one, if you think you are ready.",
+    "steamAppId": 846870
   },
   {
     "id": "new-supers-luckys-tale",
@@ -870,7 +966,8 @@
     "artStyle": "3D",
     "protagonist": "Creature/Animal",
     "ps5Upgrade": "PS4 & PS5 Cross-Buy",
-    "description": "A cheerful fox platformer that mixes 3D worlds, 2D side-scrolling stages and rolling puzzle levels."
+    "description": "A cheerful fox platformer that mixes 3D worlds, 2D side-scrolling stages and rolling puzzle levels.",
+    "steamAppId": 1038300
   },
   {
     "id": "pumpkin-jack",
@@ -879,7 +976,8 @@
     "artStyle": "3D",
     "protagonist": "Male",
     "ps5Upgrade": "PS4 & PS5 Cross-Buy",
-    "description": "A pumpkin-headed devil's champion romps through Halloween-flavored levels in an unabashed love letter to sixth-gen platformers."
+    "description": "A pumpkin-headed devil's champion romps through Halloween-flavored levels in an unabashed love letter to sixth-gen platformers.",
+    "steamAppId": 1186640
   },
   {
     "id": "kaze-and-the-wild-masks",
@@ -888,7 +986,8 @@
     "artStyle": "Pixel Art",
     "protagonist": "Creature/Animal",
     "ps5Upgrade": "PS4 & PS5 Cross-Buy",
-    "description": "A rabbit wearing animal masks tears through 16-bit style stages built with obvious affection for Donkey Kong Country."
+    "description": "A rabbit wearing animal masks tears through 16-bit style stages built with obvious affection for Donkey Kong Country.",
+    "steamAppId": 829280
   },
   {
     "id": "rayman-legends",
@@ -897,7 +996,8 @@
     "artStyle": "Hand-drawn",
     "protagonist": "Male",
     "ps5Upgrade": "Backwards Compatible",
-    "description": "Still the gold standard for 2D platforming feel, with hand-painted worlds and levels choreographed to music."
+    "description": "Still the gold standard for 2D platforming feel, with hand-painted worlds and levels choreographed to music.",
+    "steamAppId": 242550
   },
   {
     "id": "crash-bandicoot-4",
@@ -906,7 +1006,8 @@
     "artStyle": "3D",
     "protagonist": "Creature/Animal",
     "ps5Upgrade": "Free PS5 Upgrade",
-    "description": "A genuinely demanding return for the marsupial, with quantum masks that rewrite the rules of each obstacle course."
+    "description": "A genuinely demanding return for the marsupial, with quantum masks that rewrite the rules of each obstacle course.",
+    "steamAppId": 1378990
   },
   {
     "id": "neon-white",
@@ -915,7 +1016,8 @@
     "artStyle": "Cel-shaded",
     "protagonist": "Male",
     "ps5Upgrade": "PS4 & PS5 Cross-Buy",
-    "description": "A first-person speedrunning platformer where every gun is also a movement card you discard to jump, dash or blink."
+    "description": "A first-person speedrunning platformer where every gun is also a movement card you discard to jump, dash or blink.",
+    "steamAppId": 1533420
   },
   {
     "id": "the-artful-escape",
@@ -924,7 +1026,8 @@
     "artStyle": "Hand-drawn",
     "protagonist": "Male",
     "ps5Upgrade": "PS4 & PS5 Cross-Buy",
-    "description": "A teenage guitarist invents a cosmic stage persona across neon alien worlds built entirely around a shredding solo."
+    "description": "A teenage guitarist invents a cosmic stage persona across neon alien worlds built entirely around a shredding solo.",
+    "steamAppId": 1122680
   },
   {
     "id": "what-remains-of-edith-finch",
@@ -933,7 +1036,8 @@
     "artStyle": "3D",
     "protagonist": "Female",
     "ps5Upgrade": "Free PS5 Upgrade",
-    "description": "Walk through a house of sealed bedrooms, playing out each relative's last day in a different, perfectly judged mechanic."
+    "description": "Walk through a house of sealed bedrooms, playing out each relative's last day in a different, perfectly judged mechanic.",
+    "steamAppId": 501300
   },
   {
     "id": "life-is-strange-remastered",
@@ -942,7 +1046,8 @@
     "artStyle": "Stylized",
     "protagonist": "Female",
     "ps5Upgrade": "PS4 & PS5 Cross-Buy",
-    "description": "Max rewinds time in a Pacific Northwest town, with the original season and Before the Storm rebuilt with new lighting and animation."
+    "description": "Max rewinds time in a Pacific Northwest town, with the original season and Before the Storm rebuilt with new lighting and animation.",
+    "steamAppId": 1265920
   },
   {
     "id": "life-is-strange-2",
@@ -951,7 +1056,8 @@
     "artStyle": "Stylized",
     "protagonist": "Male",
     "ps5Upgrade": "Backwards Compatible",
-    "description": "Two brothers run for the Mexican border, and everything you teach the younger one along the way changes who he becomes."
+    "description": "Two brothers run for the Mexican border, and everything you teach the younger one along the way changes who he becomes.",
+    "steamAppId": 532210
   },
   {
     "id": "the-quarry",
@@ -960,7 +1066,8 @@
     "artStyle": "Photorealistic",
     "protagonist": "Ensemble",
     "ps5Upgrade": "Paid PS5 Upgrade",
-    "description": "A summer camp horror movie you steer, where nine counselors can all live or all die based on split-second choices."
+    "description": "A summer camp horror movie you steer, where nine counselors can all live or all die based on split-second choices.",
+    "steamAppId": 1577120
   },
   {
     "id": "until-dawn",
@@ -969,7 +1076,8 @@
     "artStyle": "Photorealistic",
     "protagonist": "Ensemble",
     "ps5Upgrade": "Backwards Compatible",
-    "description": "Eight teenagers on a snowbound mountain, a branching butterfly-effect script, and a horror twist worth going in blind for."
+    "description": "Eight teenagers on a snowbound mountain, a branching butterfly-effect script, and a horror twist worth going in blind for.",
+    "steamAppId": 2172010
   },
   {
     "id": "detroit-become-human",
@@ -978,7 +1086,8 @@
     "artStyle": "Photorealistic",
     "protagonist": "Ensemble",
     "ps5Upgrade": "Backwards Compatible",
-    "description": "Three androids in near-future Detroit, each with a flowchart of consequences that can kill them off long before the finale."
+    "description": "Three androids in near-future Detroit, each with a flowchart of consequences that can kill them off long before the finale.",
+    "steamAppId": 1222140
   },
   {
     "id": "road-96",
@@ -987,7 +1096,8 @@
     "artStyle": "Cel-shaded",
     "protagonist": "Custom",
     "ps5Upgrade": "PS4 & PS5 Cross-Buy",
-    "description": "A procedural road trip north out of a collapsing country, stitched together from random encounters with a recurring cast."
+    "description": "A procedural road trip north out of a collapsing country, stitched together from random encounters with a recurring cast.",
+    "steamAppId": 1466640
   },
   {
     "id": "open-roads",
@@ -996,7 +1106,8 @@
     "artStyle": "Cel-shaded",
     "protagonist": "Female",
     "ps5Upgrade": "PS4 & PS5 Cross-Buy",
-    "description": "A mother and daughter drive between abandoned family properties, uncovering a secret through the objects left behind."
+    "description": "A mother and daughter drive between abandoned family properties, uncovering a secret through the objects left behind.",
+    "steamAppId": 1497360
   },
   {
     "id": "lost-words",
@@ -1005,7 +1116,8 @@
     "artStyle": "Watercolor",
     "protagonist": "Female",
     "ps5Upgrade": "Backwards Compatible",
-    "description": "A girl's diary and the fantasy story she is writing in it, where you platform across the words on the page itself."
+    "description": "A girl's diary and the fantasy story she is writing in it, where you platform across the words on the page itself.",
+    "steamAppId": 599610
   },
   {
     "id": "behind-the-frame",
@@ -1014,7 +1126,8 @@
     "artStyle": "Hand-drawn",
     "protagonist": "Female",
     "ps5Upgrade": "PS4 & PS5 Cross-Buy",
-    "description": "A painter finishes her portfolio in a sunlit apartment, mixing colors by hand in a short, hand-animated story."
+    "description": "A painter finishes her portfolio in a sunlit apartment, mixing colors by hand in a short, hand-animated story.",
+    "steamAppId": 1634150
   },
   {
     "id": "old-mans-journey",
@@ -1023,7 +1136,8 @@
     "artStyle": "Watercolor",
     "protagonist": "Male",
     "ps5Upgrade": "Backwards Compatible",
-    "description": "Reshape rolling watercolor hills to clear a path, telling a wordless story of regret through the landscape itself."
+    "description": "Reshape rolling watercolor hills to clear a path, telling a wordless story of regret through the landscape itself.",
+    "steamAppId": 581270
   },
   {
     "id": "a-memoir-blue",
@@ -1032,7 +1146,8 @@
     "artStyle": "Watercolor",
     "protagonist": "Female",
     "ps5Upgrade": "PS4 & PS5 Cross-Buy",
-    "description": "A champion swimmer sinks into memories of her mother in a wordless, hour-long piece of interactive watercolor animation."
+    "description": "A champion swimmer sinks into memories of her mother in a wordless, hour-long piece of interactive watercolor animation.",
+    "steamAppId": 1497450
   },
   {
     "id": "dordogne",
@@ -1041,7 +1156,8 @@
     "artStyle": "Watercolor",
     "protagonist": "Female",
     "ps5Upgrade": "PS4 & PS5 Cross-Buy",
-    "description": "Mimi returns to her grandmother's house in southern France, collecting words and scents into a hand-painted scrapbook."
+    "description": "Mimi returns to her grandmother's house in southern France, collecting words and scents into a hand-painted scrapbook.",
+    "steamAppId": 1272840
   },
   {
     "id": "mutazione",
@@ -1050,7 +1166,8 @@
     "artStyle": "Hand-drawn",
     "protagonist": "Female",
     "ps5Upgrade": "Backwards Compatible",
-    "description": "A teenager tends musical gardens in a mutant community, in a soap opera that unfolds through neighbors dropping by."
+    "description": "A teenager tends musical gardens in a mutant community, in a soap opera that unfolds through neighbors dropping by.",
+    "steamAppId": 1080750
   },
   {
     "id": "norco",
@@ -1059,7 +1176,8 @@
     "artStyle": "Pixel Art",
     "protagonist": "Female",
     "ps5Upgrade": "PS4 & PS5 Cross-Buy",
-    "description": "A southern gothic point-and-click through the refineries of Louisiana, searching for a missing brother."
+    "description": "A southern gothic point-and-click through the refineries of Louisiana, searching for a missing brother.",
+    "steamAppId": 1221250
   },
   {
     "id": "unpacking",
@@ -1068,7 +1186,8 @@
     "artStyle": "Pixel Art",
     "protagonist": "Female",
     "ps5Upgrade": "PS4 & PS5 Cross-Buy",
-    "description": "Pull a life out of cardboard boxes across eight moves, telling an entire biography through where things fit and where they don't."
+    "description": "Pull a life out of cardboard boxes across eight moves, telling an entire biography through where things fit and where they don't.",
+    "steamAppId": 1135690
   },
   {
     "id": "coffee-talk",
@@ -1077,7 +1196,8 @@
     "artStyle": "Pixel Art",
     "protagonist": "Custom",
     "ps5Upgrade": "Backwards Compatible",
-    "description": "Serve drinks to elves, orcs and succubi on rainy Seattle nights, where latte art is your only way to steer a conversation."
+    "description": "Serve drinks to elves, orcs and succubi on rainy Seattle nights, where latte art is your only way to steer a conversation.",
+    "steamAppId": 914800
   },
   {
     "id": "coffee-talk-2",
@@ -1086,7 +1206,8 @@
     "artStyle": "Pixel Art",
     "protagonist": "Custom",
     "ps5Upgrade": "PS4 & PS5 Cross-Buy",
-    "description": "The night shift returns with new regulars, new recipes and the same warm, rain-soaked lo-fi atmosphere."
+    "description": "The night shift returns with new regulars, new recipes and the same warm, rain-soaked lo-fi atmosphere.",
+    "steamAppId": 1663220
   },
   {
     "id": "va-11-hall-a",
@@ -1095,7 +1216,8 @@
     "artStyle": "Pixel Art",
     "protagonist": "Female",
     "ps5Upgrade": "Backwards Compatible",
-    "description": "Jill mixes drinks in a dystopian city, and how strong you pour decides what her customers are willing to tell you."
+    "description": "Jill mixes drinks in a dystopian city, and how strong you pour decides what her customers are willing to tell you.",
+    "steamAppId": 447530
   },
   {
     "id": "goodbye-volcano-high",
@@ -1104,7 +1226,8 @@
     "artStyle": "Hand-drawn",
     "protagonist": "Creature/Animal",
     "ps5Upgrade": "PS4 & PS5 Cross-Buy",
-    "description": "A fully animated last year of high school for a band of dinosaur teenagers who know exactly how little time is left."
+    "description": "A fully animated last year of high school for a band of dinosaur teenagers who know exactly how little time is left.",
+    "steamAppId": 1310330
   },
   {
     "id": "beacon-pines",
@@ -1113,7 +1236,8 @@
     "artStyle": "Hand-drawn",
     "protagonist": "Creature/Animal",
     "ps5Upgrade": "PS4 & PS5 Cross-Buy",
-    "description": "A storybook about a young deer where you collect words and slot them into the text to rewrite how each chapter goes."
+    "description": "A storybook about a young deer where you collect words and slot them into the text to rewrite how each chapter goes.",
+    "steamAppId": 1269640
   },
   {
     "id": "a-space-for-the-unbound",
@@ -1122,7 +1246,8 @@
     "artStyle": "Pixel Art",
     "protagonist": "Male",
     "ps5Upgrade": "PS4 & PS5 Cross-Buy",
-    "description": "Two high schoolers in 1990s rural Indonesia, one of whom can dive into other people's minds, face the end of the world."
+    "description": "Two high schoolers in 1990s rural Indonesia, one of whom can dive into other people's minds, face the end of the world.",
+    "steamAppId": 1201270
   },
   {
     "id": "thirsty-suitors",
@@ -1131,7 +1256,8 @@
     "artStyle": "Cel-shaded",
     "protagonist": "Female",
     "ps5Upgrade": "PS4 & PS5 Cross-Buy",
-    "description": "Jala returns home and battles her exes in turn-based combat, skates through town, and cooks with her mother between fights."
+    "description": "Jala returns home and battles her exes in turn-based combat, skates through town, and cooks with her mother between fights.",
+    "steamAppId": 1617220
   },
   {
     "id": "wytchwood",
@@ -1140,7 +1266,8 @@
     "artStyle": "Hand-drawn",
     "protagonist": "Female",
     "ps5Upgrade": "PS4 & PS5 Cross-Buy",
-    "description": "A hedge witch gathers ingredients from a storybook forest to brew curses for the fairy tale characters who deserve them."
+    "description": "A hedge witch gathers ingredients from a storybook forest to brew curses for the fairy tale characters who deserve them.",
+    "steamAppId": 729000
   },
   {
     "id": "gone-home",
@@ -1149,7 +1276,8 @@
     "artStyle": "3D",
     "protagonist": "Female",
     "ps5Upgrade": "Backwards Compatible",
-    "description": "Come home to an empty house in 1995 Oregon and reconstruct what happened to your sister from notes and cassette tapes."
+    "description": "Come home to an empty house in 1995 Oregon and reconstruct what happened to your sister from notes and cassette tapes.",
+    "steamAppId": 232430
   },
   {
     "id": "twelve-minutes",
@@ -1158,7 +1286,8 @@
     "artStyle": "3D",
     "protagonist": "Male",
     "ps5Upgrade": "PS4 & PS5 Cross-Buy",
-    "description": "A twelve-minute time loop in a small apartment, solved by carrying knowledge, not items, across each reset."
+    "description": "A twelve-minute time loop in a small apartment, solved by carrying knowledge, not items, across each reset.",
+    "steamAppId": 1097200
   },
   {
     "id": "sea-of-solitude",
@@ -1167,7 +1296,8 @@
     "artStyle": "Stylized",
     "protagonist": "Female",
     "ps5Upgrade": "Backwards Compatible",
-    "description": "Kay rows a flooded city where loneliness has turned people into monsters, including herself."
+    "description": "Kay rows a flooded city where loneliness has turned people into monsters, including herself.",
+    "steamAppId": 1225590
   },
   {
     "id": "concrete-genie",
@@ -1176,7 +1306,8 @@
     "artStyle": "Stylized",
     "protagonist": "Male",
     "ps5Upgrade": "Backwards Compatible",
-    "description": "Paint living murals across a dead harbor town with the DualSense motion controls, bringing creatures to life as you go."
+    "description": "Paint living murals across a dead harbor town with the DualSense motion controls, bringing creatures to life as you go.",
+    "steamAppId": null
   },
   {
     "id": "the-last-campfire",
@@ -1185,7 +1316,8 @@
     "artStyle": "Stylized",
     "protagonist": "Custom",
     "ps5Upgrade": "Backwards Compatible",
-    "description": "A lost ember wanders a storybook world solving small self-contained puzzles to relight others who have given up."
+    "description": "A lost ember wanders a storybook world solving small self-contained puzzles to relight others who have given up.",
+    "steamAppId": 990630
   },
   {
     "id": "omno",
@@ -1194,7 +1326,8 @@
     "artStyle": "Stylized",
     "protagonist": "Custom",
     "ps5Upgrade": "PS4 & PS5 Cross-Buy",
-    "description": "Surf, dash and glide across serene ruins with a staff that grants a new traversal power in every biome."
+    "description": "Surf, dash and glide across serene ruins with a staff that grants a new traversal power in every biome.",
+    "steamAppId": 969760
   },
   {
     "id": "abzu",
@@ -1203,7 +1336,8 @@
     "artStyle": "Stylized",
     "protagonist": "Female",
     "ps5Upgrade": "Backwards Compatible",
-    "description": "A wordless dive through vividly colored oceans, swimming inside enormous schools of fish to a soaring score."
+    "description": "A wordless dive through vividly colored oceans, swimming inside enormous schools of fish to a soaring score.",
+    "steamAppId": 384190
   },
   {
     "id": "cyberpunk-2077",
@@ -1212,7 +1346,8 @@
     "artStyle": "Photorealistic",
     "protagonist": "Custom",
     "ps5Upgrade": "Free PS5 Upgrade",
-    "description": "Build V from the ground up and take on Night City, an open world dense enough to get lost in for a hundred hours."
+    "description": "Build V from the ground up and take on Night City, an open world dense enough to get lost in for a hundred hours.",
+    "steamAppId": 1091500
   },
   {
     "id": "the-witcher-3",
@@ -1221,7 +1356,8 @@
     "artStyle": "Photorealistic",
     "protagonist": "Male",
     "ps5Upgrade": "Free PS5 Upgrade",
-    "description": "Geralt hunts monsters across an enormous open world where even the side contracts carry real moral weight."
+    "description": "Geralt hunts monsters across an enormous open world where even the side contracts carry real moral weight.",
+    "steamAppId": 292030
   },
   {
     "id": "final-fantasy-vii-remake",
@@ -1230,7 +1366,8 @@
     "artStyle": "Photorealistic",
     "protagonist": "Male",
     "ps5Upgrade": "Free PS5 Upgrade",
-    "description": "Midgar rebuilt in extraordinary detail, with a hybrid action and command battle system that rewards constant switching."
+    "description": "Midgar rebuilt in extraordinary detail, with a hybrid action and command battle system that rewards constant switching.",
+    "steamAppId": 1462040
   },
   {
     "id": "nier-automata",
@@ -1239,7 +1376,8 @@
     "artStyle": "3D",
     "protagonist": "Female",
     "ps5Upgrade": "Backwards Compatible",
-    "description": "2B and 9S fight through a ruined earth in an action RPG whose real story only assembles across multiple playthroughs."
+    "description": "2B and 9S fight through a ruined earth in an action RPG whose real story only assembles across multiple playthroughs.",
+    "steamAppId": 524220
   },
   {
     "id": "ghost-of-tsushima",
@@ -1248,7 +1386,8 @@
     "artStyle": "Photorealistic",
     "protagonist": "Male",
     "ps5Upgrade": "Paid PS5 Upgrade",
-    "description": "A samurai open world guided by wind instead of waypoints, with duels that turn on timing and stance."
+    "description": "A samurai open world guided by wind instead of waypoints, with duels that turn on timing and stance.",
+    "steamAppId": 2215430
   },
   {
     "id": "spider-man-miles-morales",
@@ -1257,7 +1396,8 @@
     "artStyle": "Photorealistic",
     "protagonist": "Male",
     "ps5Upgrade": "Paid PS5 Upgrade",
-    "description": "Miles takes over a snowbound Manhattan with bio-electric venom powers and the best web-swinging in games."
+    "description": "Miles takes over a snowbound Manhattan with bio-electric venom powers and the best web-swinging in games.",
+    "steamAppId": 1817190
   },
   {
     "id": "death-stranding",
@@ -1266,7 +1406,8 @@
     "artStyle": "Photorealistic",
     "protagonist": "Male",
     "ps5Upgrade": "Paid PS5 Upgrade",
-    "description": "Carry cargo across a broken America on foot, where terrain, balance and other players' abandoned ladders are the whole game."
+    "description": "Carry cargo across a broken America on foot, where terrain, balance and other players' abandoned ladders are the whole game.",
+    "steamAppId": 1850570
   },
   {
     "id": "the-last-of-us-part-ii",
@@ -1275,7 +1416,8 @@
     "artStyle": "Photorealistic",
     "protagonist": "Female",
     "ps5Upgrade": "Paid PS5 Upgrade",
-    "description": "Ellie's revenge through a rain-soaked Seattle, remastered with a roguelike survival mode and restored cut levels."
+    "description": "Ellie's revenge through a rain-soaked Seattle, remastered with a roguelike survival mode and restored cut levels.",
+    "steamAppId": 2531310
   },
   {
     "id": "assassins-creed-valhalla",
@@ -1284,7 +1426,8 @@
     "artStyle": "Photorealistic",
     "protagonist": "Custom",
     "ps5Upgrade": "Free PS5 Upgrade",
-    "description": "Raid and settle across ninth-century England as Eivor, with a settlement that grows through everything you bring home."
+    "description": "Raid and settle across ninth-century England as Eivor, with a settlement that grows through everything you bring home.",
+    "steamAppId": 2208920
   },
   {
     "id": "immortals-fenyx-rising",
@@ -1293,7 +1436,8 @@
     "artStyle": "Cel-shaded",
     "protagonist": "Custom",
     "ps5Upgrade": "Free PS5 Upgrade",
-    "description": "A bright Greek myth playground of gliding, climbing and vault puzzles, starring a hero you build yourself."
+    "description": "A bright Greek myth playground of gliding, climbing and vault puzzles, starring a hero you build yourself.",
+    "steamAppId": 2221920
   },
   {
     "id": "hogwarts-legacy",
@@ -1302,7 +1446,8 @@
     "artStyle": "Photorealistic",
     "protagonist": "Custom",
     "ps5Upgrade": "Paid PS5 Upgrade",
-    "description": "Create a fifth-year student and explore a castle and highlands packed with spells, beasts and hidden rooms."
+    "description": "Create a fifth-year student and explore a castle and highlands packed with spells, beasts and hidden rooms.",
+    "steamAppId": 990080
   },
   {
     "id": "tales-of-arise",
@@ -1311,7 +1456,8 @@
     "artStyle": "Cel-shaded",
     "protagonist": "Male",
     "ps5Upgrade": "Free PS5 Upgrade",
-    "description": "A gorgeous anime-styled action RPG about two worlds and a party whose bonds drive the combat system itself."
+    "description": "A gorgeous anime-styled action RPG about two worlds and a party whose bonds drive the combat system itself.",
+    "steamAppId": 740130
   },
   {
     "id": "sifu",
@@ -1320,7 +1466,8 @@
     "artStyle": "Cel-shaded",
     "protagonist": "Custom",
     "ps5Upgrade": "PS4 & PS5 Cross-Buy",
-    "description": "A kung fu revenge story where every death ages you a year, trading health for damage until you learn the routes cold."
+    "description": "A kung fu revenge story where every death ages you a year, trading health for damage until you learn the routes cold.",
+    "steamAppId": 2138710
   },
   {
     "id": "it-takes-two",
@@ -1329,7 +1476,8 @@
     "artStyle": "3D",
     "protagonist": "Ensemble",
     "ps5Upgrade": "Free PS5 Upgrade",
-    "description": "A co-op only adventure that invents an entire new mechanic every twenty minutes and never reuses one."
+    "description": "A co-op only adventure that invents an entire new mechanic every twenty minutes and never reuses one.",
+    "steamAppId": 1426210
   },
   {
     "id": "hades",
@@ -1338,7 +1486,8 @@
     "artStyle": "Hand-drawn",
     "protagonist": "Male",
     "ps5Upgrade": "PS4 & PS5 Cross-Buy",
-    "description": "Escape the underworld over and over, with god-granted boons that rebuild your run and a story that advances with every death."
+    "description": "Escape the underworld over and over, with god-granted boons that rebuild your run and a story that advances with every death.",
+    "steamAppId": 1145360
   },
   {
     "id": "endling",
@@ -1347,6 +1496,7 @@
     "artStyle": "3D",
     "protagonist": "Creature/Animal",
     "ps5Upgrade": "PS4 & PS5 Cross-Buy",
-    "description": "The last fox on earth leads her cubs through a poisoned landscape, and any cub you lose stays lost."
+    "description": "The last fox on earth leads her cubs through a poisoned landscape, and any cub you lose stays lost.",
+    "steamAppId": 898890
   }
 ]

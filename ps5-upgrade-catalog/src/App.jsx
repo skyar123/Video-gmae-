@@ -11,12 +11,14 @@ import {
   BadgePercent,
   CirclePlay,
   ExternalLink,
+  Heart,
   Image as ImageIcon,
   Loader2,
   RefreshCw,
   Search,
   SlidersHorizontal,
   Sparkles,
+  TrendingDown,
   X,
 } from 'lucide-react';
 import gamesData from './games.json';
@@ -40,9 +42,23 @@ const UPGRADES = uniqueValues('ps5Upgrade');
 
 const SORTS = [
   { value: 'catalog', label: 'Catalog order' },
+  { value: 'buy', label: 'Best time to buy' },
   { value: 'discount', label: 'Biggest discount' },
   { value: 'price', label: 'Lowest price' },
   { value: 'title', label: 'Title A-Z' },
+];
+
+/** Storefront regions. Default is the US, which covers Asheville. */
+const REGIONS = [
+  { value: 'US', label: 'United States' },
+  { value: 'CA', label: 'Canada' },
+  { value: 'GB', label: 'United Kingdom' },
+  { value: 'DE', label: 'Germany' },
+  { value: 'FR', label: 'France' },
+  { value: 'AU', label: 'Australia' },
+  { value: 'JP', label: 'Japan' },
+  { value: 'BR', label: 'Brazil' },
+  { value: 'MX', label: 'Mexico' },
 ];
 
 const UPGRADE_STYLES = {
@@ -52,6 +68,74 @@ const UPGRADE_STYLES = {
   'Backwards Compatible': 'bg-slate-100 text-slate-600 ring-slate-500/20',
 };
 
+const VERDICT_STYLES = {
+  'buy-now': 'bg-emerald-50 text-emerald-700 ring-emerald-600/20',
+  wait: 'bg-amber-50 text-amber-700 ring-amber-600/20',
+  hold: 'bg-slate-100 text-slate-600 ring-slate-500/20',
+  'too-new': 'bg-sky-50 text-sky-700 ring-sky-600/20',
+  unknown: 'bg-slate-100 text-slate-500 ring-slate-500/20',
+};
+
+/* ------------------------------------------------------------------ *
+ * URL and local state
+ * ------------------------------------------------------------------ */
+
+const DEFAULT_FILTERS = {
+  q: '',
+  genre: 'All',
+  protagonist: 'All',
+  artStyle: 'All',
+  upgrade: 'All',
+  sale: false,
+  wishlist: false,
+  sort: 'catalog',
+  region: 'US',
+};
+
+function readFiltersFromUrl() {
+  if (typeof window === 'undefined') return DEFAULT_FILTERS;
+  const params = new URLSearchParams(window.location.search);
+  const value = (key, fallback) => params.get(key) ?? fallback;
+  return {
+    q: value('q', ''),
+    genre: value('genre', 'All'),
+    protagonist: value('protagonist', 'All'),
+    artStyle: value('art', 'All'),
+    upgrade: value('upgrade', 'All'),
+    sale: params.get('sale') === '1',
+    wishlist: params.get('wishlist') === '1',
+    sort: value('sort', 'catalog'),
+    region: (value('cc', localStorage.getItem('region') || 'US') || 'US').toUpperCase(),
+  };
+}
+
+/** Only non-default values reach the URL, so a plain link stays plain. */
+function writeFiltersToUrl(filters) {
+  const params = new URLSearchParams();
+  if (filters.q) params.set('q', filters.q);
+  if (filters.genre !== 'All') params.set('genre', filters.genre);
+  if (filters.protagonist !== 'All') params.set('protagonist', filters.protagonist);
+  if (filters.artStyle !== 'All') params.set('art', filters.artStyle);
+  if (filters.upgrade !== 'All') params.set('upgrade', filters.upgrade);
+  if (filters.sale) params.set('sale', '1');
+  if (filters.wishlist) params.set('wishlist', '1');
+  if (filters.sort !== 'catalog') params.set('sort', filters.sort);
+  if (filters.region !== 'US') params.set('cc', filters.region);
+  const query = params.toString();
+  window.history.replaceState(null, '', query ? `?${query}` : window.location.pathname);
+}
+
+const WISHLIST_KEY = 'wishlist';
+
+function readWishlist() {
+  try {
+    const raw = localStorage.getItem(WISHLIST_KEY);
+    return new Set(raw ? JSON.parse(raw) : []);
+  } catch {
+    return new Set();
+  }
+}
+
 /* ------------------------------------------------------------------ *
  * Live storefront data
  * ------------------------------------------------------------------ */
@@ -60,56 +144,59 @@ const CHUNK_SIZE = 15;
 const CHUNK_COUNT = Math.ceil(gamesData.length / CHUNK_SIZE);
 
 /**
- * Pulls artwork, screenshots, trailers and current sale prices from
+ * Pulls artwork, screenshots, trailers, sale prices and drop predictions from
  * /api/games, one fixed chunk at a time. Chunk URLs are identical for every
  * visitor, so the CDN can serve most of these without touching the upstream
  * storefront. Cards render immediately and fill in as chunks land.
  */
-function useLiveData() {
+function useLiveData(region) {
   const [byTitle, setByTitle] = useState(() => new Map());
   const [chunksLoaded, setChunksLoaded] = useState(0);
   const [status, setStatus] = useState('loading');
   const [updatedAt, setUpdatedAt] = useState(null);
   const runId = useRef(0);
 
-  const load = useCallback(async (force = false) => {
-    const run = ++runId.current;
-    // On mount the state already reads as loading; only a refresh has to reset.
-    if (force) {
-      setStatus('loading');
-      setChunksLoaded(0);
-    }
-    let failed = 0;
-
-    for (let chunk = 0; chunk < CHUNK_COUNT; chunk += 1) {
-      if (runId.current !== run) return;
-      try {
-        const response = await fetch(`/api/games?chunk=${chunk}`, {
-          cache: force ? 'reload' : 'default',
-        });
-        if (!response.ok) throw new Error(`request failed: ${response.status}`);
-        const payload = await response.json();
-        if (runId.current !== run) return;
-
-        setByTitle((previous) => {
-          const next = new Map(previous);
-          for (const game of payload.games ?? []) next.set(game.title, game);
-          return next;
-        });
-      } catch {
-        failed += 1;
+  const load = useCallback(
+    async (force = false) => {
+      const run = ++runId.current;
+      if (force || runId.current > 1) {
+        setStatus('loading');
+        setChunksLoaded(0);
+        setByTitle(new Map());
       }
-      setChunksLoaded(chunk + 1);
-    }
+      let failed = 0;
 
-    if (runId.current !== run) return;
-    setStatus(failed === CHUNK_COUNT ? 'error' : 'ready');
-    setUpdatedAt(new Date());
-  }, []);
+      for (let chunk = 0; chunk < CHUNK_COUNT; chunk += 1) {
+        if (runId.current !== run) return;
+        try {
+          const response = await fetch(`/api/games?chunk=${chunk}&cc=${region}`, {
+            cache: force ? 'reload' : 'default',
+          });
+          if (!response.ok) throw new Error(`request failed: ${response.status}`);
+          const payload = await response.json();
+          if (runId.current !== run) return;
+
+          setByTitle((previous) => {
+            const next = new Map(previous);
+            for (const game of payload.games ?? []) next.set(game.title, game);
+            return next;
+          });
+        } catch {
+          failed += 1;
+        }
+        setChunksLoaded(chunk + 1);
+      }
+
+      if (runId.current !== run) return;
+      setStatus(failed === CHUNK_COUNT ? 'error' : 'ready');
+      setUpdatedAt(new Date());
+    },
+    [region],
+  );
 
   useEffect(() => {
-    // Fetching on mount is the point of this effect; the state it writes lands
-    // asynchronously, once each chunk comes back.
+    // Fetching on mount and on region change is the point of this effect; the
+    // state it writes lands asynchronously, once each chunk comes back.
     // eslint-disable-next-line react/set-state-in-effect
     load();
   }, [load]);
@@ -148,10 +235,30 @@ function DiscountBadge({ price }) {
   );
 }
 
+function VerdictBadge({ prediction, className = '' }) {
+  if (!prediction || prediction.verdict === 'unknown') return null;
+  return (
+    <span
+      className={`inline-flex items-center gap-1 rounded-md px-2 py-1 text-xs font-semibold ring-1 ring-inset ${
+        VERDICT_STYLES[prediction.verdict]
+      } ${className}`}
+    >
+      <TrendingDown className="h-3.5 w-3.5" aria-hidden="true" />
+      {prediction.headline}
+    </span>
+  );
+}
+
 /** Cover art, or a lettered gradient when the game has no storefront match. */
 function CoverArt({ game, live, className = '' }) {
   const [failed, setFailed] = useState(false);
-  const image = live?.heroImage;
+  // The catalog carries the storefront id, so art can render before the live
+  // request lands.
+  const image =
+    live?.heroImage ??
+    (game.steamAppId
+      ? `https://shared.akamai.steamstatic.com/store_item_assets/steam/apps/${game.steamAppId}/header.jpg`
+      : null);
 
   if (!image || failed) {
     return (
@@ -174,6 +281,37 @@ function CoverArt({ game, live, className = '' }) {
       onError={() => setFailed(true)}
       className={`object-cover ${className}`}
     />
+  );
+}
+
+/** Recorded price points, oldest to newest. Nothing to draw below two points. */
+function PriceSparkline({ points }) {
+  if (!points || points.length < 2) return null;
+  const values = points.map((point) => point.final);
+  const min = Math.min(...values);
+  const max = Math.max(...values);
+  const span = max - min || 1;
+  const width = 240;
+  const height = 40;
+
+  const path = points
+    .map((point, index) => {
+      const x = (index / (points.length - 1)) * width;
+      const y = height - ((point.final - min) / span) * (height - 6) - 3;
+      return `${index === 0 ? 'M' : 'L'}${x.toFixed(1)},${y.toFixed(1)}`;
+    })
+    .join(' ');
+
+  return (
+    <svg
+      viewBox={`0 0 ${width} ${height}`}
+      className="mt-3 h-10 w-full"
+      role="img"
+      aria-label={`Recorded price history across ${points.length} changes`}
+      preserveAspectRatio="none"
+    >
+      <path d={path} fill="none" stroke="currentColor" strokeWidth="2" className="text-indigo-500" />
+    </svg>
   );
 }
 
@@ -234,7 +372,7 @@ const trailerSearchLink = (title) =>
     `${title} gameplay PS5`,
   )}`;
 
-function GameModal({ game, live, onClose }) {
+function GameModal({ game, live, wishlisted, onToggleWishlist, onClose }) {
   const [selected, setSelected] = useState(null);
   const closeRef = useRef(null);
 
@@ -243,10 +381,7 @@ function GameModal({ game, live, onClose }) {
 
   // Default view: the trailer's poster frame, falling back to key art.
   const view =
-    selected ??
-    (videos[0]
-      ? { kind: 'video-poster', video: videos[0] }
-      : { kind: 'cover' });
+    selected ?? (videos[0] ? { kind: 'video-poster', video: videos[0] } : { kind: 'cover' });
 
   useEffect(() => {
     closeRef.current?.focus();
@@ -351,9 +486,12 @@ function GameModal({ game, live, onClose }) {
         )}
 
         <div className="p-6 sm:p-8">
-          <h2 id="game-modal-title" className="pr-10 text-2xl font-bold text-slate-900">
-            {game.title}
-          </h2>
+          <div className="flex items-start justify-between gap-4">
+            <h2 id="game-modal-title" className="pr-6 text-2xl font-bold text-slate-900">
+              {game.title}
+            </h2>
+            <WishlistButton wishlisted={wishlisted} onToggle={onToggleWishlist} withLabel />
+          </div>
 
           <div className="mt-5 grid grid-cols-2 gap-4 sm:grid-cols-4">
             {[
@@ -381,6 +519,7 @@ function GameModal({ game, live, onClose }) {
           </div>
 
           <PricePanel live={live} />
+          <PredictionPanel live={live} />
 
           <div className="mt-6 flex flex-col gap-3 sm:flex-row">
             <a
@@ -458,50 +597,155 @@ function PricePanel({ live }) {
   );
 }
 
+/**
+ * The drop predictor's reasoning, shown in full. The score is a heuristic, so
+ * the panel always says what produced it rather than asking for trust.
+ */
+function PredictionPanel({ live }) {
+  const prediction = live?.prediction;
+  if (!prediction || prediction.verdict === 'unknown') return null;
+
+  const history = live.history;
+  return (
+    <div className="mt-4 rounded-xl border border-slate-200 p-4">
+      <div className="flex flex-wrap items-center justify-between gap-2">
+        <h3 className="text-sm font-semibold uppercase tracking-wider text-slate-400">
+          Price outlook
+        </h3>
+        <VerdictBadge prediction={prediction} />
+      </div>
+
+      <div className="mt-3 flex items-center gap-3">
+        <div
+          className="h-2 flex-1 overflow-hidden rounded-full bg-slate-100"
+          role="meter"
+          aria-valuenow={prediction.score}
+          aria-valuemin={0}
+          aria-valuemax={100}
+          aria-label="Estimated chance of a lower price within 30 days"
+        >
+          <div
+            className={`h-full rounded-full ${
+              prediction.score >= 60
+                ? 'bg-amber-500'
+                : prediction.score >= 35
+                  ? 'bg-slate-400'
+                  : 'bg-emerald-500'
+            }`}
+            style={{ width: `${prediction.score}%` }}
+          />
+        </div>
+        <span className="text-sm font-semibold text-slate-700">{prediction.score}%</span>
+      </div>
+      <p className="mt-1 text-xs text-slate-500">
+        Estimated chance of a lower price in the next {prediction.horizonDays} days.
+      </p>
+
+      <ul className="mt-3 space-y-1.5 text-sm text-slate-600">
+        {prediction.reasons.map((reason) => (
+          <li key={reason} className="flex gap-2">
+            <span className="mt-2 h-1 w-1 shrink-0 rounded-full bg-slate-300" />
+            {reason}
+          </li>
+        ))}
+      </ul>
+
+      {history?.points?.length > 1 && (
+        <div className="mt-4 border-t border-slate-100 pt-3">
+          <p className="text-xs font-medium text-slate-500">
+            Recorded since {history.since} · lowest {history.lowest.formatted} on{' '}
+            {history.lowest.date}
+          </p>
+          <PriceSparkline points={history.points} />
+        </div>
+      )}
+
+      <p className="mt-3 text-xs text-slate-400">
+        A heuristic from release age, current discount, typical sale windows and the price
+        history this site has recorded — not an announced sale. Confidence:{' '}
+        {prediction.confidence}
+        {prediction.confidence === 'low' && ', history is still being collected'}.
+      </p>
+    </div>
+  );
+}
+
+function WishlistButton({ wishlisted, onToggle, withLabel = false }) {
+  return (
+    <button
+      type="button"
+      onClick={(event) => {
+        event.stopPropagation();
+        onToggle();
+      }}
+      aria-pressed={wishlisted}
+      aria-label={wishlisted ? 'Remove from wishlist' : 'Add to wishlist'}
+      className={`inline-flex shrink-0 items-center gap-1.5 rounded-lg px-2 py-1.5 text-sm transition-colors ${
+        wishlisted
+          ? 'bg-rose-50 text-rose-600 hover:bg-rose-100'
+          : 'text-slate-400 hover:bg-slate-100 hover:text-slate-600'
+      }`}
+    >
+      <Heart className={`h-4 w-4 ${wishlisted ? 'fill-current' : ''}`} />
+      {withLabel && (wishlisted ? 'Wishlisted' : 'Wishlist')}
+    </button>
+  );
+}
+
 /* ------------------------------------------------------------------ *
  * Card
  * ------------------------------------------------------------------ */
 
-function GameCard({ game, live, onOpen }) {
-  return (
-    <button
-      type="button"
-      onClick={onOpen}
-      className="group flex h-full flex-col overflow-hidden rounded-xl border border-slate-200 bg-white text-left shadow-sm transition-all hover:-translate-y-1 hover:shadow-md focus:outline-none focus-visible:ring-2 focus-visible:ring-indigo-500"
-    >
-      <div className="relative aspect-[460/215] w-full overflow-hidden bg-slate-100">
-        <CoverArt game={game} live={live} className="h-full w-full" />
-        {live?.videos?.length > 0 && (
-          <span className="absolute bottom-2 right-2 rounded-full bg-slate-900/70 p-1.5 text-white opacity-0 transition-opacity group-hover:opacity-100">
-            <CirclePlay className="h-4 w-4" />
-          </span>
-        )}
-        {live?.price?.discountPercent > 0 && (
-          <span className="absolute left-2 top-2">
-            <DiscountBadge price={live.price} />
-          </span>
-        )}
-      </div>
+function GameCard({ game, live, wishlisted, onToggleWishlist, onOpen }) {
+  const prediction = live?.prediction;
+  const showVerdict = prediction && (prediction.verdict === 'buy-now' || prediction.verdict === 'wait');
 
-      <div className="flex flex-1 flex-col p-5">
-        <h2 className="mb-2 text-lg font-bold leading-tight text-slate-800">{game.title}</h2>
-        <div className="mb-4 flex flex-wrap gap-2">
-          <span className="rounded-md bg-indigo-50 px-2 py-1 text-xs font-semibold text-indigo-700">
-            {game.genre}
-          </span>
-          <UpgradeBadge value={game.ps5Upgrade} />
+  return (
+    <div className="group relative flex h-full flex-col overflow-hidden rounded-xl border border-slate-200 bg-white shadow-sm transition-all hover:-translate-y-1 hover:shadow-md focus-within:ring-2 focus-within:ring-indigo-500">
+      <button
+        type="button"
+        onClick={onOpen}
+        className="flex flex-1 flex-col text-left focus:outline-none"
+      >
+        <div className="relative aspect-[460/215] w-full overflow-hidden bg-slate-100">
+          <CoverArt game={game} live={live} className="h-full w-full" />
+          {live?.videos?.length > 0 && (
+            <span className="absolute bottom-2 right-2 rounded-full bg-slate-900/70 p-1.5 text-white opacity-0 transition-opacity group-hover:opacity-100">
+              <CirclePlay className="h-4 w-4" />
+            </span>
+          )}
+          {live?.price?.discountPercent > 0 && (
+            <span className="absolute left-2 top-2">
+              <DiscountBadge price={live.price} />
+            </span>
+          )}
         </div>
-        <p className="line-clamp-3 text-sm text-slate-600">{game.description}</p>
-        {live?.price && (
-          <p className="mt-4 flex items-baseline gap-2 border-t border-slate-100 pt-3 text-sm">
-            <span className="font-semibold text-slate-900">{live.price.finalFormatted}</span>
-            {live.price.discountPercent > 0 && (
-              <span className="text-slate-400 line-through">{live.price.initialFormatted}</span>
-            )}
-          </p>
-        )}
+
+        <div className="flex flex-1 flex-col p-5">
+          <h2 className="mb-2 pr-8 text-lg font-bold leading-tight text-slate-800">{game.title}</h2>
+          <div className="mb-4 flex flex-wrap gap-2">
+            <span className="rounded-md bg-indigo-50 px-2 py-1 text-xs font-semibold text-indigo-700">
+              {game.genre}
+            </span>
+            <UpgradeBadge value={game.ps5Upgrade} />
+            {showVerdict && <VerdictBadge prediction={prediction} />}
+          </div>
+          <p className="line-clamp-3 text-sm text-slate-600">{game.description}</p>
+          {live?.price && (
+            <p className="mt-4 flex items-baseline gap-2 border-t border-slate-100 pt-3 text-sm">
+              <span className="font-semibold text-slate-900">{live.price.finalFormatted}</span>
+              {live.price.discountPercent > 0 && (
+                <span className="text-slate-400 line-through">{live.price.initialFormatted}</span>
+              )}
+            </p>
+          )}
+        </div>
+      </button>
+
+      <div className="absolute right-2 top-2">
+        <WishlistButton wishlisted={wishlisted} onToggle={onToggleWishlist} />
       </div>
-    </button>
+    </div>
   );
 }
 
@@ -535,81 +779,101 @@ function Select({ label, value, options, onChange }) {
 }
 
 export default function App() {
-  const [searchQuery, setSearchQuery] = useState('');
-  const [selectedGenre, setSelectedGenre] = useState('All');
-  const [selectedProtagonist, setSelectedProtagonist] = useState('All');
-  const [selectedArtStyle, setSelectedArtStyle] = useState('All');
-  const [selectedUpgrade, setSelectedUpgrade] = useState('All');
-  const [onSaleOnly, setOnSaleOnly] = useState(false);
-  const [sort, setSort] = useState('catalog');
+  const [filters, setFilters] = useState(readFiltersFromUrl);
+  const [wishlist, setWishlist] = useState(readWishlist);
   const [activeGameId, setActiveGameId] = useState(null);
   const [filtersOpen, setFiltersOpen] = useState(false);
 
-  const { byTitle, status, updatedAt, progress, refresh } = useLiveData();
+  const { byTitle, status, updatedAt, progress, refresh } = useLiveData(filters.region);
+
+  const set = useCallback(
+    (key, value) => setFilters((previous) => ({ ...previous, [key]: value })),
+    [],
+  );
+
+  // Filters live in the URL so a filtered view can be linked or bookmarked.
+  useEffect(() => {
+    writeFiltersToUrl(filters);
+    try {
+      localStorage.setItem('region', filters.region);
+    } catch {
+      // A browser refusing storage just means the region resets next visit.
+    }
+  }, [filters]);
+
+  useEffect(() => {
+    const onPopState = () => setFilters(readFiltersFromUrl());
+    window.addEventListener('popstate', onPopState);
+    return () => window.removeEventListener('popstate', onPopState);
+  }, []);
+
+  const toggleWishlist = useCallback((id) => {
+    setWishlist((previous) => {
+      const next = new Set(previous);
+      if (next.has(id)) next.delete(id);
+      else next.add(id);
+      try {
+        localStorage.setItem(WISHLIST_KEY, JSON.stringify([...next]));
+      } catch {
+        // Storage is a convenience here; the in-memory set still works.
+      }
+      return next;
+    });
+  }, []);
 
   // Keeps typing responsive while React re-filters in the background.
-  const deferredQuery = useDeferredValue(searchQuery);
+  const deferredQuery = useDeferredValue(filters.q);
 
   const filteredGames = useMemo(() => {
     const needle = deferredQuery.trim().toLowerCase();
 
     const matches = gamesData.filter((game) => {
       if (needle && !game.title.toLowerCase().includes(needle)) return false;
-      if (selectedGenre !== 'All' && game.genre !== selectedGenre) return false;
-      if (selectedProtagonist !== 'All' && game.protagonist !== selectedProtagonist) return false;
-      if (selectedArtStyle !== 'All' && game.artStyle !== selectedArtStyle) return false;
-      if (selectedUpgrade !== 'All' && game.ps5Upgrade !== selectedUpgrade) return false;
-      if (onSaleOnly && !(byTitle.get(game.title)?.price?.discountPercent > 0)) return false;
+      if (filters.genre !== 'All' && game.genre !== filters.genre) return false;
+      if (filters.protagonist !== 'All' && game.protagonist !== filters.protagonist) return false;
+      if (filters.artStyle !== 'All' && game.artStyle !== filters.artStyle) return false;
+      if (filters.upgrade !== 'All' && game.ps5Upgrade !== filters.upgrade) return false;
+      if (filters.wishlist && !wishlist.has(game.id)) return false;
+      if (filters.sale && !(byTitle.get(game.title)?.price?.discountPercent > 0)) return false;
       return true;
     });
 
-    if (sort === 'catalog') return matches;
+    if (filters.sort === 'catalog') return matches;
 
-    const priceOf = (game) => byTitle.get(game.title)?.price?.final ?? Number.POSITIVE_INFINITY;
-    const discountOf = (game) => byTitle.get(game.title)?.price?.discountPercent ?? -1;
+    const liveOf = (game) => byTitle.get(game.title);
+    const priceOf = (game) => liveOf(game)?.price?.final ?? Number.POSITIVE_INFINITY;
+    const discountOf = (game) => liveOf(game)?.price?.discountPercent ?? -1;
+    // "Best time to buy" ranks the lowest drop-likelihood first: the games
+    // least likely to get cheaper are the ones worth buying today.
+    const buyScoreOf = (game) => liveOf(game)?.prediction?.score ?? Number.POSITIVE_INFINITY;
 
     return [...matches].sort((a, b) => {
-      if (sort === 'title') return a.title.localeCompare(b.title);
-      if (sort === 'price') return priceOf(a) - priceOf(b);
+      if (filters.sort === 'title') return a.title.localeCompare(b.title);
+      if (filters.sort === 'price') return priceOf(a) - priceOf(b);
+      if (filters.sort === 'buy') return buyScoreOf(a) - buyScoreOf(b);
       return discountOf(b) - discountOf(a);
     });
-  }, [
-    deferredQuery,
-    selectedGenre,
-    selectedProtagonist,
-    selectedArtStyle,
-    selectedUpgrade,
-    onSaleOnly,
-    sort,
-    byTitle,
-  ]);
+  }, [deferredQuery, filters, wishlist, byTitle]);
 
   const saleCount = useMemo(
     () => gamesData.filter((game) => byTitle.get(game.title)?.price?.discountPercent > 0).length,
     [byTitle],
   );
 
-  const activeGame = activeGameId
-    ? gamesData.find((game) => game.id === activeGameId)
-    : null;
+  const activeGame = activeGameId ? gamesData.find((game) => game.id === activeGameId) : null;
 
-  const clearFilters = () => {
-    setSearchQuery('');
-    setSelectedGenre('All');
-    setSelectedProtagonist('All');
-    setSelectedArtStyle('All');
-    setSelectedUpgrade('All');
-    setOnSaleOnly(false);
-  };
+  const clearFilters = () =>
+    setFilters((previous) => ({ ...DEFAULT_FILTERS, region: previous.region, sort: previous.sort }));
 
   const activeFilterCount = [
-    selectedGenre,
-    selectedProtagonist,
-    selectedArtStyle,
-    selectedUpgrade,
+    filters.genre,
+    filters.protagonist,
+    filters.artStyle,
+    filters.upgrade,
   ].filter((value) => value !== 'All').length;
 
-  const filtersActive = Boolean(searchQuery) || onSaleOnly || activeFilterCount > 0;
+  const filtersActive =
+    Boolean(filters.q) || filters.sale || filters.wishlist || activeFilterCount > 0;
 
   return (
     <div className="min-h-screen bg-slate-50 font-sans text-slate-900">
@@ -638,8 +902,8 @@ export default function App() {
                 aria-label="Search titles"
                 placeholder="Search titles..."
                 className="w-full rounded-lg border border-slate-300 py-2 pl-10 pr-4 outline-none transition-all focus:border-indigo-500 focus:ring-2 focus:ring-indigo-500"
-                value={searchQuery}
-                onChange={(event) => setSearchQuery(event.target.value)}
+                value={filters.q}
+                onChange={(event) => set('q', event.target.value)}
               />
             </div>
 
@@ -665,33 +929,39 @@ export default function App() {
             >
               <Select
                 label="All Genres"
-                value={selectedGenre}
+                value={filters.genre}
                 options={GENRES}
-                onChange={setSelectedGenre}
+                onChange={(value) => set('genre', value)}
               />
               <Select
                 label="All Protagonists"
-                value={selectedProtagonist}
+                value={filters.protagonist}
                 options={PROTAGONISTS}
-                onChange={setSelectedProtagonist}
+                onChange={(value) => set('protagonist', value)}
               />
               <Select
                 label="All Art Styles"
-                value={selectedArtStyle}
+                value={filters.artStyle}
                 options={ART_STYLES}
-                onChange={setSelectedArtStyle}
+                onChange={(value) => set('artStyle', value)}
               />
               <Select
                 label="All Upgrade Types"
-                value={selectedUpgrade}
+                value={filters.upgrade}
                 options={UPGRADES}
-                onChange={setSelectedUpgrade}
+                onChange={(value) => set('upgrade', value)}
               />
               <Select
                 label="Sort"
-                value={sort}
+                value={filters.sort}
                 options={SORTS}
-                onChange={setSort}
+                onChange={(value) => set('sort', value)}
+              />
+              <Select
+                label="Region"
+                value={filters.region}
+                options={REGIONS}
+                onChange={(value) => set('region', value)}
               />
             </div>
           </div>
@@ -699,10 +969,10 @@ export default function App() {
           <div className="mt-3 flex flex-wrap items-center gap-3">
             <button
               type="button"
-              onClick={() => setOnSaleOnly((value) => !value)}
-              aria-pressed={onSaleOnly}
+              onClick={() => set('sale', !filters.sale)}
+              aria-pressed={filters.sale}
               className={`inline-flex items-center gap-2 rounded-full px-3 py-1.5 text-sm font-medium transition-colors ${
-                onSaleOnly
+                filters.sale
                   ? 'bg-rose-600 text-white'
                   : 'bg-slate-100 text-slate-600 hover:bg-slate-200'
               }`}
@@ -712,10 +982,33 @@ export default function App() {
               {saleCount > 0 && (
                 <span
                   className={`rounded-full px-1.5 text-xs ${
-                    onSaleOnly ? 'bg-white/25' : 'bg-white'
+                    filters.sale ? 'bg-white/25' : 'bg-white'
                   }`}
                 >
                   {saleCount}
+                </span>
+              )}
+            </button>
+
+            <button
+              type="button"
+              onClick={() => set('wishlist', !filters.wishlist)}
+              aria-pressed={filters.wishlist}
+              className={`inline-flex items-center gap-2 rounded-full px-3 py-1.5 text-sm font-medium transition-colors ${
+                filters.wishlist
+                  ? 'bg-rose-600 text-white'
+                  : 'bg-slate-100 text-slate-600 hover:bg-slate-200'
+              }`}
+            >
+              <Heart className={`h-4 w-4 ${filters.wishlist ? 'fill-current' : ''}`} />
+              Wishlist
+              {wishlist.size > 0 && (
+                <span
+                  className={`rounded-full px-1.5 text-xs ${
+                    filters.wishlist ? 'bg-white/25' : 'bg-white'
+                  }`}
+                >
+                  {wishlist.size}
                 </span>
               )}
             </button>
@@ -745,6 +1038,8 @@ export default function App() {
               key={game.id}
               game={game}
               live={byTitle.get(game.title)}
+              wishlisted={wishlist.has(game.id)}
+              onToggleWishlist={() => toggleWishlist(game.id)}
               onOpen={() => setActiveGameId(game.id)}
             />
           ))}
@@ -754,7 +1049,10 @@ export default function App() {
           <div className="py-20 text-center text-slate-500">
             <Sparkles className="mx-auto mb-3 h-8 w-8 text-slate-300" />
             <p className="text-lg">No games found matching those filters.</p>
-            {onSaleOnly && status === 'loading' && (
+            {filters.wishlist && wishlist.size === 0 && (
+              <p className="mt-1 text-sm">Your wishlist is empty. Tap the heart on any card.</p>
+            )}
+            {filters.sale && status === 'loading' && (
               <p className="mt-1 text-sm">Still checking prices — more may appear.</p>
             )}
             <button
@@ -773,6 +1071,8 @@ export default function App() {
           key={activeGame.id}
           game={activeGame}
           live={byTitle.get(activeGame.title)}
+          wishlisted={wishlist.has(activeGame.id)}
+          onToggleWishlist={() => toggleWishlist(activeGame.id)}
           onClose={() => setActiveGameId(null)}
         />
       )}

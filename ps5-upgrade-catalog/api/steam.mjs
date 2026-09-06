@@ -11,6 +11,9 @@
  * environments serve byte-identical responses.
  */
 
+import { recordAndSummarize } from './history.mjs';
+import { predictPriceDrop } from './predict.mjs';
+
 const SEARCH_URL = 'https://store.steampowered.com/api/storesearch/';
 const DETAILS_URL = 'https://store.steampowered.com/api/appdetails';
 
@@ -94,7 +97,7 @@ async function fetchJson(url, timeoutMs = 8000) {
   }
 }
 
-function formatMoney(cents, currency) {
+export function formatMoney(cents, currency) {
   if (typeof cents !== 'number') return null;
   try {
     return new Intl.NumberFormat('en-US', { style: 'currency', currency }).format(cents / 100);
@@ -134,7 +137,11 @@ function toMedia(data) {
   return { screenshots, videos };
 }
 
-async function resolveUncached(title, countryCode) {
+async function resolveUncached(title, countryCode, knownAppId) {
+  // A catalog entry that already carries its storefront id skips the search
+  // step entirely: one upstream call instead of two, and no chance of drift.
+  if (knownAppId) return detailsFor(title, knownAppId, countryCode, null);
+
   const search = await fetchJson(
     `${SEARCH_URL}?term=${encodeURIComponent(title)}&cc=${countryCode}&l=en`,
   );
@@ -203,13 +210,13 @@ async function detailsFor(title, appId, countryCode, searchItem) {
  * Resolve one title, collapsing concurrent duplicate lookups and serving a
  * stale entry rather than nothing when the storefront is unreachable.
  */
-export async function resolveGame(title, countryCode = 'US') {
+export async function resolveGame(title, countryCode = 'US', knownAppId = null) {
   const key = `${countryCode}:${normalize(title)}`;
   const hit = cache.get(key);
   if (hit && Date.now() - hit.storedAt < CACHE_TTL_MS) return hit.value;
   if (inFlight.has(key)) return inFlight.get(key);
 
-  const pending = resolveUncached(title, countryCode)
+  const pending = resolveUncached(title, countryCode, knownAppId)
     .then((value) => {
       cache.set(key, { value, storedAt: Date.now() });
       return value;
@@ -224,14 +231,20 @@ export async function resolveGame(title, countryCode = 'US') {
   return pending;
 }
 
-/** Resolve a list with bounded concurrency so we stay polite to the upstream. */
-export async function resolveMany(titles, countryCode = 'US', concurrency = 4) {
-  const results = new Array(titles.length);
+/**
+ * Resolve a list with bounded concurrency so we stay polite to the upstream.
+ * Entries may be plain titles or catalog games carrying a `steamAppId`.
+ */
+export async function resolveMany(entries, countryCode = 'US', concurrency = 4) {
+  const results = new Array(entries.length);
   let cursor = 0;
-  const workers = Array.from({ length: Math.min(concurrency, titles.length) }, async () => {
-    while (cursor < titles.length) {
+  const workers = Array.from({ length: Math.min(concurrency, entries.length) }, async () => {
+    while (cursor < entries.length) {
       const index = cursor++;
-      results[index] = await resolveGame(titles[index], countryCode);
+      const entry = entries[index];
+      const title = typeof entry === 'string' ? entry : entry.title;
+      const appId = typeof entry === 'string' ? null : (entry.steamAppId ?? null);
+      results[index] = await resolveGame(title, countryCode, appId);
     }
   });
   await Promise.all(workers);
@@ -251,8 +264,13 @@ export async function handleGamesRequest(url, catalog) {
 
   const titleParam = url.searchParams.get('title');
   if (titleParam) {
-    const game = await resolveGame(titleParam.slice(0, 120), countryCode);
-    return { status: 200, body: { countryCode, games: [game] } };
+    const wanted = titleParam.slice(0, 120);
+    const known = catalog.find((game) => game.title === wanted);
+    const game = await resolveGame(wanted, countryCode, known?.steamAppId ?? null);
+    return {
+      status: 200,
+      body: { countryCode, games: [{ ...game, prediction: predictPriceDrop(game) }] },
+    };
   }
 
   const chunkParam = Number.parseInt(url.searchParams.get('chunk') ?? '', 10);
@@ -265,10 +283,17 @@ export async function handleGamesRequest(url, catalog) {
   }
 
   const slice = catalog.slice(chunkParam * CHUNK_SIZE, (chunkParam + 1) * CHUNK_SIZE);
-  const games = await resolveMany(
-    slice.map((game) => game.title),
-    countryCode,
-  );
+  const resolved = await resolveMany(slice, countryCode);
+  const games = resolved.map((game, index) => ({ ...game, id: slice[index].id }));
+
+  // Recording on read means history starts accruing from the first visit
+  // rather than waiting for the first nightly snapshot.
+  let histories = {};
+  try {
+    histories = await recordAndSummarize(chunkParam, countryCode, games);
+  } catch {
+    // History is an enhancement; never fail the response over it.
+  }
 
   return {
     status: 200,
@@ -276,7 +301,10 @@ export async function handleGamesRequest(url, catalog) {
       countryCode,
       chunk: chunkParam,
       chunkCount,
-      games: games.map((game, index) => ({ ...game, id: slice[index].id })),
+      games: games.map((game) => {
+        const history = histories[game.id] ?? null;
+        return { ...game, history, prediction: predictPriceDrop(game, history) };
+      }),
     },
   };
 }
