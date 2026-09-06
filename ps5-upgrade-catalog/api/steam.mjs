@@ -49,7 +49,7 @@ function core(value) {
  * soundtracks, season passes. Steam reports all of them as type "app".
  */
 const ACCESSORY =
-  /\b(dlc|soundtrack|ost|outfit|costume|skin|pack|bundle|demo|artbook|season pass|expansion|upgrade|wallpaper|avatar|beta|server|editor|sdk)\b/;
+  /\b(dlc|soundtrack|ost|outfit|costume|skin|pack|bundle|demo|artbook|audiobook|season pass|expansion|upgrade|wallpaper|avatar|beta|server|editor|sdk)\b/;
 
 function isAccessoryFor(wanted, candidate) {
   return ACCESSORY.test(normalize(candidate)) && !ACCESSORY.test(normalize(wanted));
@@ -243,7 +243,14 @@ export async function resolveMany(entries, countryCode = 'US', concurrency = 4) 
       const index = cursor++;
       const entry = entries[index];
       const title = typeof entry === 'string' ? entry : entry.title;
-      const appId = typeof entry === 'string' ? null : (entry.steamAppId ?? null);
+      if (typeof entry === 'object' && entry.steamAppId == null) {
+        // A catalog entry with no store id has no listing to fetch — a console
+        // exclusive, or a game sold elsewhere. Never fall back to searching:
+        // the ids are resolved offline where a bad match can be caught.
+        results[index] = { title, matched: false, reason: 'no-store-listing' };
+        continue;
+      }
+      const appId = typeof entry === 'string' ? null : entry.steamAppId;
       results[index] = await resolveGame(title, countryCode, appId);
     }
   });

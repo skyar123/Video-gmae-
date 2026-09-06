@@ -11,6 +11,7 @@ import {
   BadgePercent,
   CirclePlay,
   ExternalLink,
+  Gamepad2,
   Heart,
   Image as ImageIcon,
   Loader2,
@@ -40,6 +41,25 @@ const PROTAGONISTS = uniqueValues('protagonist');
 const ART_STYLES = uniqueValues('artStyle');
 const UPGRADES = uniqueValues('ps5Upgrade');
 
+/**
+ * Curated views over the catalog. "Best deals" is computed live from current
+ * discounts; the rest come from tags in games.json.
+ */
+const COLLECTIONS = [
+  { value: 'all', label: 'All games', tag: null },
+  { value: 'deals', label: 'Best deals', tag: null },
+  { value: 'graphics', label: 'Best graphics', tag: 'graphics' },
+  { value: 'social', label: 'Online & social', tag: 'social' },
+  { value: 'cozy', label: 'Cozy', tag: 'cozy' },
+];
+
+const COLLECTION_BLURBS = {
+  deals: 'Everything discounted right now, deepest cut first. Updates with the storefront.',
+  graphics: 'Technical showcases and standout art direction.',
+  social: 'Online play, co-op and couch multiplayer.',
+  cozy: 'Low-stress games with gentle pacing and no fail state to speak of.',
+};
+
 const SORTS = [
   { value: 'catalog', label: 'Catalog order' },
   { value: 'buy', label: 'Best time to buy' },
@@ -66,6 +86,7 @@ const UPGRADE_STYLES = {
   'PS4 & PS5 Cross-Buy': 'bg-sky-50 text-sky-700 ring-sky-600/20',
   'Paid PS5 Upgrade': 'bg-amber-50 text-amber-700 ring-amber-600/20',
   'Backwards Compatible': 'bg-slate-100 text-slate-600 ring-slate-500/20',
+  'PS5 Only': 'bg-violet-50 text-violet-700 ring-violet-600/20',
 };
 
 const VERDICT_STYLES = {
@@ -90,6 +111,10 @@ const DEFAULT_FILTERS = {
   wishlist: false,
   sort: 'catalog',
   region: 'US',
+  collection: 'all',
+  // PS5-only titles are out of the default view: this is a PS4 upgrade
+  // catalog first, and they need different hardware.
+  includePs5: false,
 };
 
 function readFiltersFromUrl() {
@@ -106,6 +131,8 @@ function readFiltersFromUrl() {
     wishlist: params.get('wishlist') === '1',
     sort: value('sort', 'catalog'),
     region: (value('cc', localStorage.getItem('region') || 'US') || 'US').toUpperCase(),
+    collection: value('view', 'all'),
+    includePs5: params.get('ps5') === '1',
   };
 }
 
@@ -121,6 +148,8 @@ function writeFiltersToUrl(filters) {
   if (filters.wishlist) params.set('wishlist', '1');
   if (filters.sort !== 'catalog') params.set('sort', filters.sort);
   if (filters.region !== 'US') params.set('cc', filters.region);
+  if (filters.collection !== 'all') params.set('view', filters.collection);
+  if (filters.includePs5) params.set('ps5', '1');
   const query = params.toString();
   window.history.replaceState(null, '', query ? `?${query}` : window.location.pathname);
 }
@@ -827,7 +856,13 @@ export default function App() {
   const filteredGames = useMemo(() => {
     const needle = deferredQuery.trim().toLowerCase();
 
+    const collection = COLLECTIONS.find((entry) => entry.value === filters.collection);
+
     const matches = gamesData.filter((game) => {
+      if (!filters.includePs5 && game.platform === 'PS5') return false;
+      if (collection?.tag && !game.tags.includes(collection.tag)) return false;
+      if (filters.collection === 'deals' && !(byTitle.get(game.title)?.price?.discountPercent > 0))
+        return false;
       if (needle && !game.title.toLowerCase().includes(needle)) return false;
       if (filters.genre !== 'All' && game.genre !== filters.genre) return false;
       if (filters.protagonist !== 'All' && game.protagonist !== filters.protagonist) return false;
@@ -838,9 +873,25 @@ export default function App() {
       return true;
     });
 
+    const liveFor = (game) => byTitle.get(game.title);
+
+    // The deals view ranks itself: deepest discount first, then biggest saving
+    // in absolute terms, unless the reader picked an explicit sort.
+    if (filters.collection === 'deals' && filters.sort === 'catalog') {
+      return [...matches].sort((a, b) => {
+        const priceA = liveFor(a)?.price;
+        const priceB = liveFor(b)?.price;
+        const cut = (priceB?.discountPercent ?? 0) - (priceA?.discountPercent ?? 0);
+        if (cut !== 0) return cut;
+        const savedA = (priceA?.initial ?? 0) - (priceA?.final ?? 0);
+        const savedB = (priceB?.initial ?? 0) - (priceB?.final ?? 0);
+        return savedB - savedA;
+      });
+    }
+
     if (filters.sort === 'catalog') return matches;
 
-    const liveOf = (game) => byTitle.get(game.title);
+    const liveOf = liveFor;
     const priceOf = (game) => liveOf(game)?.price?.final ?? Number.POSITIVE_INFINITY;
     const discountOf = (game) => liveOf(game)?.price?.discountPercent ?? -1;
     // "Best time to buy" ranks the lowest drop-likelihood first: the games
@@ -855,15 +906,39 @@ export default function App() {
     });
   }, [deferredQuery, filters, wishlist, byTitle]);
 
-  const saleCount = useMemo(
-    () => gamesData.filter((game) => byTitle.get(game.title)?.price?.discountPercent > 0).length,
-    [byTitle],
+  const visiblePool = useMemo(
+    () => gamesData.filter((game) => filters.includePs5 || game.platform !== 'PS5'),
+    [filters.includePs5],
   );
+
+  const saleCount = useMemo(
+    () => visiblePool.filter((game) => byTitle.get(game.title)?.price?.discountPercent > 0).length,
+    [visiblePool, byTitle],
+  );
+
+  const collectionCounts = useMemo(() => {
+    const counts = {};
+    for (const entry of COLLECTIONS) {
+      counts[entry.value] =
+        entry.value === 'deals'
+          ? saleCount
+          : entry.tag
+            ? visiblePool.filter((game) => game.tags.includes(entry.tag)).length
+            : visiblePool.length;
+    }
+    return counts;
+  }, [visiblePool, saleCount]);
 
   const activeGame = activeGameId ? gamesData.find((game) => game.id === activeGameId) : null;
 
   const clearFilters = () =>
-    setFilters((previous) => ({ ...DEFAULT_FILTERS, region: previous.region, sort: previous.sort }));
+    setFilters((previous) => ({
+      ...DEFAULT_FILTERS,
+      region: previous.region,
+      sort: previous.sort,
+      collection: previous.collection,
+      includePs5: previous.includePs5,
+    }));
 
   const activeFilterCount = [
     filters.genre,
@@ -890,6 +965,35 @@ export default function App() {
               onRefresh={refresh}
             />
           </div>
+
+          <nav aria-label="Collections" className="mb-4 flex flex-wrap gap-2">
+            {COLLECTIONS.map((entry) => {
+              const active = filters.collection === entry.value;
+              return (
+                <button
+                  key={entry.value}
+                  type="button"
+                  onClick={() => set('collection', entry.value)}
+                  aria-current={active ? 'true' : undefined}
+                  className={`inline-flex items-center gap-2 rounded-full px-3.5 py-1.5 text-sm font-medium transition-colors ${
+                    active
+                      ? 'bg-slate-900 text-white'
+                      : 'bg-slate-100 text-slate-600 hover:bg-slate-200'
+                  }`}
+                >
+                  {entry.value === 'deals' && <BadgePercent className="h-4 w-4" />}
+                  {entry.label}
+                  <span
+                    className={`rounded-full px-1.5 text-xs ${
+                      active ? 'bg-white/20' : 'bg-white'
+                    }`}
+                  >
+                    {collectionCounts[entry.value]}
+                  </span>
+                </button>
+              );
+            })}
+          </nav>
 
           <div className="flex flex-col gap-3 lg:flex-row">
             <div className="relative flex-1">
@@ -949,7 +1053,13 @@ export default function App() {
                 label="All Upgrade Types"
                 value={filters.upgrade}
                 options={UPGRADES}
-                onChange={(value) => set('upgrade', value)}
+                onChange={(value) =>
+                  setFilters((previous) => ({
+                    ...previous,
+                    upgrade: value,
+                    includePs5: value === 'PS5 Only' ? true : previous.includePs5,
+                  }))
+                }
               />
               <Select
                 label="Sort"
@@ -1013,6 +1123,27 @@ export default function App() {
               )}
             </button>
 
+            <button
+              type="button"
+              onClick={() => set('includePs5', !filters.includePs5)}
+              aria-pressed={filters.includePs5}
+              className={`inline-flex items-center gap-2 rounded-full px-3 py-1.5 text-sm font-medium transition-colors ${
+                filters.includePs5
+                  ? 'bg-violet-600 text-white'
+                  : 'bg-slate-100 text-slate-600 hover:bg-slate-200'
+              }`}
+            >
+              <Gamepad2 className="h-4 w-4" />
+              PS5-only titles
+              <span
+                className={`rounded-full px-1.5 text-xs ${
+                  filters.includePs5 ? 'bg-white/25' : 'bg-white'
+                }`}
+              >
+                {filters.includePs5 ? 'shown' : 'hidden'}
+              </span>
+            </button>
+
             {filtersActive && (
               <button
                 type="button"
@@ -1028,9 +1159,16 @@ export default function App() {
       </header>
 
       <main className="mx-auto max-w-7xl p-4 sm:p-6">
-        <p className="mb-6 font-medium text-slate-500">
-          Showing {filteredGames.length} of {gamesData.length} games
-        </p>
+        <div className="mb-6">
+          <p className="font-medium text-slate-500">
+            Showing {filteredGames.length} of {visiblePool.length} games
+          </p>
+          {COLLECTION_BLURBS[filters.collection] && (
+            <p className="mt-1 text-sm text-slate-400">
+              {COLLECTION_BLURBS[filters.collection]}
+            </p>
+          )}
+        </div>
 
         <div className="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
           {filteredGames.map((game) => (
@@ -1051,6 +1189,9 @@ export default function App() {
             <p className="text-lg">No games found matching those filters.</p>
             {filters.wishlist && wishlist.size === 0 && (
               <p className="mt-1 text-sm">Your wishlist is empty. Tap the heart on any card.</p>
+            )}
+            {!filters.includePs5 && (
+              <p className="mt-1 text-sm">PS5-only titles are hidden. Turn them on to see more.</p>
             )}
             {filters.sale && status === 'loading' && (
               <p className="mt-1 text-sm">Still checking prices — more may appear.</p>

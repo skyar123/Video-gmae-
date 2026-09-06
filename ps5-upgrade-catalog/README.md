@@ -1,13 +1,21 @@
 # PS4 to PS5 Upgrade Catalog
 
-A filterable catalog of 150 PlayStation 4 games that run better on PS5, with live
-artwork, trailers and sale prices pulled in at runtime.
+A filterable catalog of 229 PlayStation games — 190 PS4 titles with a PS5 upgrade
+path, plus 39 PS5-only titles — with live artwork, trailers and sale prices pulled
+in at runtime.
 
 ## What it does
 
-- **150 games** in `src/games.json`, each with `id`, `title`, `genre`, `artStyle`,
-  `protagonist`, `ps5Upgrade` and `description`, plus a `steamAppId` used to load
-  artwork before the live request lands.
+- **229 games** in `src/games.json`, each with `id`, `title`, `genre`, `artStyle`,
+  `protagonist`, `ps5Upgrade` and `description`, plus `platform` (`PS4` or `PS5`),
+  `tags` for the curated collections, and a `steamAppId` used to load artwork
+  before the live request lands.
+- **Curated collections**: Best deals (computed live from current discounts,
+  deepest cut first), Best graphics, Online & social, and Cozy. The last three come
+  from tags in the data; every collection composes with the filters below.
+- **PS5-only titles are hidden by default** and revealed with one toggle. This is a
+  PS4 upgrade catalog first, and those games need different hardware. Choosing the
+  `PS5 Only` upgrade type reveals them automatically.
 - **Combinable filters**: title search, genre, protagonist, art style, upgrade type,
   an "on sale now" toggle, and sorting by discount, price or title. Every filter
   narrows the same list, and the grid updates as you type.
@@ -136,5 +144,21 @@ netlify/functions/games.mjs            /api/games in production
 netlify/functions/snapshot-prices.mjs  nightly price snapshot
 vite.config.js             the same route during development
 src/App.jsx                the entire UI
-src/games.json             the 150-game catalog, each entry carrying its store id
+src/games.json             the 229-game catalog, each entry carrying its store id
 ```
+
+## Adding games
+
+Append to `src/games.json` with `platform` set to `PS4` or `PS5` and `tags` drawn
+from `cozy`, `graphics` and `social`. Then resolve the store id once, offline:
+
+```js
+import { resolveMany } from './api/steam.mjs';
+```
+
+Runtime never searches the storefront — it only fetches by a baked id — so a bad
+match is caught while baking rather than shipped to readers. An entry with
+`steamAppId: null` renders a lettered gradient and no price, which is correct for
+console exclusives and for games sold outside Steam. Eleven of the 229 are in that
+state: PlayStation exclusives such as Astro Bot, Demon's Souls and Gran Turismo 7,
+and Epic-store titles such as Rocket League, Fall Guys and Genshin Impact.
