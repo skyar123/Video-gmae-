@@ -1,0 +1,36 @@
+# Netlify configuration — PS4 to PS5 Upgrade Catalog
+#
+# A Vite/React static build plus one function that fetches live artwork,
+# trailers and sale prices. Set "Base directory" to ps5-upgrade-catalog in the
+# Netlify UI if this repository is deployed from its root.
+
+[build]
+  publish   = "dist"
+  functions = "netlify/functions"
+  command   = "npm run build"
+
+[build.environment]
+  NODE_VERSION = "22"
+
+[functions]
+  node_bundler = "esbuild"
+  # The function imports the catalog and the shared storefront client.
+  included_files = ["src/games.json", "api/**"]
+
+# /api/games is routed by the function's exported `config.path`.
+
+[[redirects]]
+  from   = "/*"
+  to     = "/index.html"
+  status = 200
+
+[[headers]]
+  for = "/*"
+  [headers.values]
+    X-Content-Type-Options = "nosniff"
+    Referrer-Policy        = "strict-origin-when-cross-origin"
+
+[[headers]]
+  for = "/assets/*"
+  [headers.values]
+    Cache-Control = "public, max-age=31536000, immutable"
