@@ -1,0 +1,62 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  :root {
+    /* Measured from the control bar so the feed can size a slide to exactly
+       one screen minus the bar, whatever height the bar currently is. */
+    --bar-height: 52px;
+  }
+
+  html {
+    -webkit-tap-highlight-color: transparent;
+    scroll-behavior: smooth;
+  }
+
+  /* Keep the sticky header from covering a snapped card. */
+  body {
+    overscroll-behavior-y: none;
+  }
+}
+
+@layer utilities {
+  /* The feed's scrollbar is noise; the snap points are the affordance. */
+  .no-scrollbar {
+    scrollbar-width: none;
+    -ms-overflow-style: none;
+  }
+  .no-scrollbar::-webkit-scrollbar {
+    display: none;
+  }
+
+  /* Momentum scrolling on iOS, and a hard stop at the ends of the feed. */
+  .feed-scroll {
+    -webkit-overflow-scrolling: touch;
+    overscroll-behavior-y: contain;
+    scroll-snap-type: y mandatory;
+  }
+
+  .feed-slide {
+    scroll-snap-align: center;
+    scroll-snap-stop: always;
+  }
+}
+
+/* Respect the visitor's motion preference for every transition here. */
+@media (prefers-reduced-motion: reduce) {
+  html {
+    scroll-behavior: auto;
+  }
+
+  .feed-scroll {
+    scroll-snap-type: none;
+  }
+
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    transition-duration: 0.01ms !important;
+  }
+}
