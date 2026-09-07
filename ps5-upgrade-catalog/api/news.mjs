@@ -125,22 +125,43 @@ function parseFeed(xml, feed) {
   });
 }
 
+// Several publishers return 403 or 406 to an obviously automated agent even
+// though the feed is public, so requests look like a browser's.
+const FEED_HEADERS = {
+  'user-agent':
+    'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/124.0 Safari/537.36',
+  accept: 'application/rss+xml, application/atom+xml, application/xml;q=0.9, text/xml;q=0.8, */*;q=0.5',
+  'accept-language': 'en-US,en;q=0.9',
+};
+
+/** Records why a feed came back empty, which is otherwise invisible. */
+const feedStatus = new Map();
+
 async function fetchFeed(feed) {
   const controller = new AbortController();
   const timer = setTimeout(() => controller.abort(), 8000);
   try {
     const res = await fetch(feed.url, {
       signal: controller.signal,
-      headers: { 'user-agent': 'Mozilla/5.0 (compatible; ps5-upgrade-catalog/1.0)', accept: 'application/rss+xml, application/xml, text/xml' },
+      headers: FEED_HEADERS,
+      redirect: 'follow',
     });
-    if (!res.ok) return [];
-    return parseFeed(await res.text(), feed);
-  } catch {
+    if (!res.ok) {
+      feedStatus.set(feed.source, `http ${res.status}`);
+      return [];
+    }
+    const items = parseFeed(await res.text(), feed);
+    feedStatus.set(feed.source, `${items.length} items`);
+    return items;
+  } catch (error) {
+    feedStatus.set(feed.source, error?.name === 'AbortError' ? 'timeout' : 'failed');
     return [];
   } finally {
     clearTimeout(timer);
   }
 }
+
+export const feedDiagnostics = () => Object.fromEntries(feedStatus);
 
 /** Newest first, with one publisher never allowed to crowd out the rest. */
 export async function loadNews() {
@@ -163,21 +184,27 @@ export async function loadNews() {
   const balanced = [];
   for (const item of items) {
     const count = perSource.get(item.source) ?? 0;
-    if (count >= 4) continue;
+    if (count >= 3) continue;
     perSource.set(item.source, count + 1);
     balanced.push(item);
   }
 
-  // Queer outlets publish on a slower clock than the wire services, so their
-  // stories are kept even when they fall outside the newest few dozen.
-  const queer = items.filter(
-    (item) => item.tone === 'queer' && !balanced.some((kept) => kept.link === item.link),
-  );
+  const kept = balanced.slice(0, 30);
+  const links = new Set(kept.map((item) => item.link));
+
+  // Sorting by recency alone buries anyone who does not publish hourly, which
+  // is most of the queer press, so every feed that returned something is
+  // guaranteed its newest story.
+  const represented = new Set(kept.map((item) => item.source));
+  for (const item of items) {
+    if (represented.has(item.source) || links.has(item.link)) continue;
+    represented.add(item.source);
+    links.add(item.link);
+    kept.push(item);
+  }
 
   const value = {
-    items: [...balanced.slice(0, 28), ...queer.slice(0, 4)].sort(
-      (a, b) => new Date(b.publishedAt ?? 0) - new Date(a.publishedAt ?? 0),
-    ),
+    items: kept.sort((a, b) => new Date(b.publishedAt ?? 0) - new Date(a.publishedAt ?? 0)),
     fetchedAt: new Date().toISOString(),
   };
   cache = { value, storedAt: Date.now() };

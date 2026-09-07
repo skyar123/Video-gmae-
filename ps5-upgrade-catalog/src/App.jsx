@@ -2228,7 +2228,10 @@ function NewsPanel({ items, status, onReload }) {
                 <span className={`rounded px-1.5 py-0.5 ${TONE_STYLES[item.tone] ?? TONE_STYLES.general}`}>
                   {item.source}
                 </span>
-                <span className="text-slate-400">{relativeTime(item.publishedAt)}</span>
+                {tone === 'queer' && item.note && (
+                  <span className="truncate font-normal text-violet-500">{item.note}</span>
+                )}
+                <span className="shrink-0 text-slate-400">{relativeTime(item.publishedAt)}</span>
               </div>
               <p className="line-clamp-2 text-sm font-semibold leading-snug text-slate-800">
                 {item.title}
