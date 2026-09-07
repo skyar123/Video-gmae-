@@ -1,0 +1,2356 @@
+{
+  "games": [
+    {
+      "id": 10008396,
+      "title": "Bus Simulator 27",
+      "releaseDate": "2026-09-08T15:00:00Z",
+      "publisher": "astragon Entertainment GmbH",
+      "platforms": [
+        "PS5"
+      ],
+      "genres": [
+        "Simulation"
+      ],
+      "price": "$34.99",
+      "basePrice": "$34.99",
+      "art": "https://image.api.playstation.com/vulcan/ap/rnd/202602/2610/d5b8d56997359b0addf687e4105eb32c14ac7e53a1f48cd6.jpg",
+      "portrait": "https://image.api.playstation.com/vulcan/ap/rnd/202602/2019/447ef9a64c0c45429b962f0e191a9946120301d5056c8ff2.png",
+      "storeUrl": "https://store.playstation.com/en-us/concept/10008396"
+    },
+    {
+      "id": 10014718,
+      "title": "Halloween: The Game",
+      "releaseDate": "2026-09-08T16:00:00Z",
+      "publisher": "IllFonic Inc.",
+      "platforms": [
+        "PS5"
+      ],
+      "genres": [
+        "Horror"
+      ],
+      "price": "$39.99",
+      "basePrice": "$39.99",
+      "art": "https://image.api.playstation.com/vulcan/ap/rnd/202606/0218/3ef51b368b55ff03aa64adc964154bf6c0bf11ac6eeb9272.png",
+      "portrait": "https://image.api.playstation.com/vulcan/ap/rnd/202606/0218/285b1da98e326bdff9a1656d8294a221c1254c4b7b758def.png",
+      "storeUrl": "https://store.playstation.com/en-us/concept/10014718"
+    },
+    {
+      "id": 10010731,
+      "title": "HOT WHEELS™ Infinite Rush",
+      "releaseDate": "2026-09-10T04:00:00Z",
+      "publisher": "Milestone",
+      "platforms": [
+        "PS5"
+      ],
+      "genres": [
+        "Driving/Racing",
+        "Arcade"
+      ],
+      "price": "$49.99",
+      "basePrice": "$49.99",
+      "art": "https://image.api.playstation.com/vulcan/ap/rnd/202605/2614/05edf7d96709c759792e39b8dc4b11217bdc141517f6aac4.jpg",
+      "portrait": "https://image.api.playstation.com/vulcan/ap/rnd/202605/2614/539a6ad3f44a56dbbccef9755be4dc2b99ec6aa5fbe904f3.jpg",
+      "storeUrl": "https://store.playstation.com/en-us/concept/10010731"
+    },
+    {
+      "id": 10018739,
+      "title": "TCG Card Shop Simulator",
+      "releaseDate": "2026-09-15T00:00:00Z",
+      "publisher": "OPNEON GAMES SDN BHD",
+      "platforms": [
+        "PS4",
+        "PS5"
+      ],
+      "genres": [
+        "Casual",
+        "Simulator",
+        "Simulation"
+      ],
+      "price": "$16.99",
+      "basePrice": "$19.99",
+      "art": "https://image.api.playstation.com/vulcan/ap/rnd/202605/1923/a6e851e3ce4b9704a4c6f589940603d9ac1167e3d327289a.jpg",
+      "portrait": "https://image.api.playstation.com/vulcan/ap/rnd/202605/1923/86dc3c8f50a2697d2b6cfaa6f7e3ddb68cac7e54b1419892.png",
+      "storeUrl": "https://store.playstation.com/en-us/concept/10018739"
+    },
+    {
+      "id": 10019606,
+      "title": "Train Sim World® 7",
+      "releaseDate": "2026-09-15T15:00:00Z",
+      "publisher": "Dovetail Games",
+      "platforms": [
+        "PS5"
+      ],
+      "genres": [
+        "Simulation"
+      ],
+      "price": "$44.99",
+      "basePrice": "$49.99",
+      "art": "https://image.api.playstation.com/vulcan/ap/rnd/202608/0310/38dc345907df93dfb16a1eb117e395ba15cdab38fef3c0ba.jpg",
+      "portrait": "https://image.api.playstation.com/vulcan/ap/rnd/202608/0310/8d04ec22d81a8a220e2e3fc34c3b61744c408e9b4a1b1e91.jpg",
+      "storeUrl": "https://store.playstation.com/en-us/concept/10019606"
+    },
+    {
+      "id": 10017679,
+      "title": "AKIBA LOST",
+      "releaseDate": "2026-09-16T15:00:00Z",
+      "publisher": "IZANAGIGAMES, Inc.",
+      "platforms": [
+        "PS5"
+      ],
+      "genres": [
+        "Adventure"
+      ],
+      "price": "$22.49",
+      "basePrice": "$24.99",
+      "art": "https://image.api.playstation.com/vulcan/ap/rnd/202604/2101/8196ccb381080b9f57266960e3494b69f38433e621d6429a.jpg",
+      "portrait": "https://image.api.playstation.com/vulcan/ap/rnd/202607/2912/fc2561019d4ba4079e28816325d8382eefff4193cf160186.jpg",
+      "storeUrl": "https://store.playstation.com/en-us/concept/10017679"
+    },
+    {
+      "id": 10012337,
+      "title": "Woodo",
+      "releaseDate": "2026-09-16T15:00:00Z",
+      "publisher": "Daedalic Entertainment GmbH",
+      "platforms": [
+        "PS5"
+      ],
+      "genres": [
+        "Puzzle"
+      ],
+      "price": "$15.99",
+      "basePrice": "$19.99",
+      "art": "https://image.api.playstation.com/vulcan/ap/rnd/202503/2512/5b162729490dc827b8f01660b9b28c07d33dbca257f993fb.png",
+      "portrait": "https://image.api.playstation.com/vulcan/ap/rnd/202503/2512/2e2ba80419cad54244fa870d6de1210157e22d3315bb7014.png",
+      "storeUrl": "https://store.playstation.com/en-us/concept/10012337"
+    },
+    {
+      "id": 10016373,
+      "title": "PATLABOR the Case Files",
+      "releaseDate": "2026-09-17T04:00:00Z",
+      "publisher": "Good Smile Company, Inc.",
+      "platforms": [
+        "PS5"
+      ],
+      "genres": [
+        "Action"
+      ],
+      "price": "$31.49",
+      "basePrice": "$34.99",
+      "art": "https://image.api.playstation.com/vulcan/ap/rnd/202607/0108/c242e87d06ec5a93995b9c7ba8cc2585104288e75053df38.png",
+      "portrait": "https://image.api.playstation.com/vulcan/ap/rnd/202607/0108/abb997f1f7b8ede4c1e6fc874f1d578754defb57c9f48882.png",
+      "storeUrl": "https://store.playstation.com/en-us/concept/10016373"
+    },
+    {
+      "id": 10018326,
+      "title": "Sniper Dan",
+      "releaseDate": "2026-09-17T04:00:00Z",
+      "publisher": "PQUBE LTD",
+      "platforms": [
+        "PS5"
+      ],
+      "genres": [
+        "Puzzle"
+      ],
+      "price": "$10.39",
+      "basePrice": "$12.99",
+      "art": "https://image.api.playstation.com/vulcan/ap/rnd/202601/2017/7e75e5f2bf1ec11716a4c4b7de63600c9a0f92aee7acac13.jpg",
+      "portrait": "https://image.api.playstation.com/vulcan/ap/rnd/202607/0708/5c24ca62ba36589a358e7cc20265ffc41bd7b45c4287ce73.jpg",
+      "storeUrl": "https://store.playstation.com/en-us/concept/10018326"
+    },
+    {
+      "id": 10017332,
+      "title": "EA SPORTS FC™ 27",
+      "releaseDate": "2026-09-18T04:00:00Z",
+      "publisher": "Electronic Arts Inc",
+      "platforms": [
+        "PS5"
+      ],
+      "genres": [
+        "Sport"
+      ],
+      "price": "$99.99",
+      "basePrice": "$99.99",
+      "art": "https://image.api.playstation.com/vulcan/ap/rnd/202607/2322/233d438e1438fee7ba78db7860a8cdf097bb666b15878f07.png",
+      "portrait": "https://image.api.playstation.com/vulcan/ap/rnd/202607/2322/1afbfc7ac6475a94d0e6aa302302b7e4fdefbf0a28ee1fa6.png",
+      "storeUrl": "https://store.playstation.com/en-us/concept/10017332"
+    },
+    {
+      "id": 10018405,
+      "title": "NASCAR 26",
+      "releaseDate": "2026-09-18T04:00:00Z",
+      "publisher": "iRacing.com Motorsport Simulations LLC",
+      "platforms": [
+        "PS5"
+      ],
+      "genres": [
+        "Sport",
+        "Simulation",
+        "Driving/Racing"
+      ],
+      "price": "$59.99",
+      "basePrice": "$59.99",
+      "art": "https://image.api.playstation.com/vulcan/ap/rnd/202606/2613/609cc249ee849605571a327b9c1f586fcb0b430df364a2fa.jpg",
+      "portrait": "https://image.api.playstation.com/vulcan/ap/rnd/202606/2613/28abad865db070a8e6658045107f88abc3bf78ae75283985.jpg",
+      "storeUrl": "https://store.playstation.com/en-us/concept/10018405"
+    },
+    {
+      "id": 10019963,
+      "title": "The Walking Dead: Streets of Survival",
+      "releaseDate": "2026-09-18T04:00:00Z",
+      "publisher": "Trailmark Games, LLC",
+      "platforms": [
+        "PS5"
+      ],
+      "genres": [
+        "Arcade"
+      ],
+      "price": "$19.99",
+      "basePrice": "$19.99",
+      "art": "https://image.api.playstation.com/vulcan/ap/rnd/202607/1313/56d1d8e3024afa4c6a9cfcf29518aeff00861b21cccb1f09.png",
+      "portrait": "https://image.api.playstation.com/vulcan/ap/rnd/202607/1313/e20a5c4b1202cbb08f39b2893e9c9888ef598f306f7b023f.png",
+      "storeUrl": "https://store.playstation.com/en-us/concept/10019963"
+    },
+    {
+      "id": 10018528,
+      "title": "Graveyard Keeper 2",
+      "releaseDate": "2026-09-22T17:00:00Z",
+      "publisher": "tinyBuild GAMES",
+      "platforms": [
+        "PS5"
+      ],
+      "genres": [
+        "Strategy",
+        "Simulation",
+        "Role Playing Games"
+      ],
+      "price": "$15.99",
+      "basePrice": "$19.99",
+      "art": "https://image.api.playstation.com/vulcan/ap/rnd/202603/2415/9de1b545c9b268cde23114efc6790afeccc66610847af7c2.png",
+      "portrait": "https://image.api.playstation.com/vulcan/ap/rnd/202603/2415/849ecff89e69af828071e758a5e5790179cb61e008e86513.png",
+      "storeUrl": "https://store.playstation.com/en-us/concept/10018528"
+    },
+    {
+      "id": 10016861,
+      "title": "Qliphah in Providence's Shadow",
+      "releaseDate": "2026-09-24T01:00:00Z",
+      "publisher": "Arc System Works Co., Ltd.",
+      "platforms": [
+        "PS5"
+      ],
+      "genres": [
+        "Role Playing Games",
+        "Action"
+      ],
+      "price": "$24.99",
+      "basePrice": "$24.99",
+      "art": "https://image.api.playstation.com/vulcan/ap/rnd/202606/1007/7a371897a026389beda339e91c9d5a867114677a8904bd93.png",
+      "portrait": "https://image.api.playstation.com/vulcan/ap/rnd/202606/1007/11c47eaefa8667dd8f446981d64106d4229d46f3b9e46999.png",
+      "storeUrl": "https://store.playstation.com/en-us/concept/10016861"
+    },
+    {
+      "id": 10016947,
+      "title": "SILENT HILL: Townfall",
+      "releaseDate": "2026-09-24T04:00:00Z",
+      "publisher": "KONAMI",
+      "platforms": [
+        "PS5"
+      ],
+      "genres": [
+        "Horror"
+      ],
+      "price": "$49.99",
+      "basePrice": "$49.99",
+      "art": "https://image.api.playstation.com/vulcan/ap/rnd/202605/1407/67d844162a51e604411157ac6eb3faf771212462b7b79577.png",
+      "portrait": "https://image.api.playstation.com/vulcan/ap/rnd/202605/1407/879aa64e43d91a8931fd278671494ec993f0c5f93f50f2ad.jpg",
+      "storeUrl": "https://store.playstation.com/en-us/concept/10016947"
+    },
+    {
+      "id": 10017682,
+      "title": "CONTROL Resonant",
+      "releaseDate": "2026-09-24T14:00:00Z",
+      "publisher": "REMEDY ENTERTAINMENT LTD.",
+      "platforms": [
+        "PS5"
+      ],
+      "genres": [
+        "Action"
+      ],
+      "price": "$59.99",
+      "basePrice": "$59.99",
+      "art": "https://image.api.playstation.com/vulcan/ap/rnd/202606/0407/335391c49b1265ac5f64b811896294f109444bef3fd3f6bd.png",
+      "portrait": "https://image.api.playstation.com/vulcan/ap/rnd/202605/2212/a30316cd25cb98a4942e75b4c612cdfead3cb10c008c55b9.jpg",
+      "storeUrl": "https://store.playstation.com/en-us/concept/10017682"
+    },
+    {
+      "id": 10011569,
+      "title": "Seafarer: The Ship Sim",
+      "releaseDate": "2026-09-24T15:00:00Z",
+      "publisher": "astragon Entertainment GmbH",
+      "platforms": [
+        "PS5"
+      ],
+      "genres": [
+        "Simulation"
+      ],
+      "price": "$34.99",
+      "basePrice": "$34.99",
+      "art": "https://image.api.playstation.com/vulcan/ap/rnd/202607/1316/529a098bff954273d7ee632374a66290009ffee32325452d.png",
+      "portrait": "https://image.api.playstation.com/vulcan/ap/rnd/202607/1316/1ca0fe38bc4c10eaa7475ae25df79168563cb6d6e0fd3a41.png",
+      "storeUrl": "https://store.playstation.com/en-us/concept/10011569"
+    },
+    {
+      "id": 10008220,
+      "title": "Minecraft Dungeons II",
+      "releaseDate": "2026-09-29T08:00:00Z",
+      "publisher": "Mojang",
+      "platforms": [
+        "PS5"
+      ],
+      "genres": [
+        "Adventure"
+      ],
+      "price": "$29.99",
+      "basePrice": "$29.99",
+      "art": "https://image.api.playstation.com/vulcan/ap/rnd/202606/0718/e32e82761a5b9ac214518f2b73f9c341b1835806d037a724.png",
+      "portrait": null,
+      "storeUrl": "https://store.playstation.com/en-us/concept/10008220"
+    },
+    {
+      "id": 10008946,
+      "title": "Way of the Hunter 2",
+      "releaseDate": "2026-09-29T13:00:00Z",
+      "publisher": "THQ NORDIC GMBH",
+      "platforms": [
+        "PS5"
+      ],
+      "genres": [
+        "Action"
+      ],
+      "price": "$39.99",
+      "basePrice": "$39.99",
+      "art": "https://image.api.playstation.com/vulcan/ap/rnd/202602/2617/62055a3631fc323fd760bc28840e3451f77523d1fb2d83d8.jpg",
+      "portrait": "https://image.api.playstation.com/vulcan/ap/rnd/202602/2617/71f5efcf07e721f0a0f9deed7d1bfe427e753c34ae32dd41.jpg",
+      "storeUrl": "https://store.playstation.com/en-us/concept/10008946"
+    },
+    {
+      "id": 10015054,
+      "title": "Transport Fever 3",
+      "releaseDate": "2026-09-29T16:00:00Z",
+      "publisher": "Paradox Interactive",
+      "platforms": [
+        "PS5"
+      ],
+      "genres": [
+        "Simulation"
+      ],
+      "price": "$59.99",
+      "basePrice": "$59.99",
+      "art": "https://image.api.playstation.com/vulcan/ap/rnd/202505/0807/9bd848e0e87606d7f109a83941ad903d9fd62d084cd9af01.png",
+      "portrait": "https://image.api.playstation.com/vulcan/ap/rnd/202602/2015/5d68dd3a0b7e1b6043457560b5f9472bc08323407befc25e.png",
+      "storeUrl": "https://store.playstation.com/en-us/concept/10015054"
+    },
+    {
+      "id": 10016743,
+      "title": "DYNASTY WARRIORS 3: Complete Edition Remastered",
+      "releaseDate": "2026-10-01T04:00:00Z",
+      "publisher": "KOEI TECMO GAMES CO., LTD.",
+      "platforms": [
+        "PS5"
+      ],
+      "genres": [
+        "Action"
+      ],
+      "price": "$39.99",
+      "basePrice": "$39.99",
+      "art": "https://image.api.playstation.com/vulcan/ap/rnd/202509/1706/d9f24c29d53ffd2aed41b8537eb421256f6543073f64229e.png",
+      "portrait": null,
+      "storeUrl": "https://store.playstation.com/en-us/concept/10016743"
+    },
+    {
+      "id": 10017364,
+      "title": "Rayman Legends Retold",
+      "releaseDate": "2026-10-01T04:00:00Z",
+      "publisher": "Ubisoft",
+      "platforms": [
+        "PS5"
+      ],
+      "genres": [
+        "Adventure"
+      ],
+      "price": "$39.99",
+      "basePrice": "$39.99",
+      "art": "https://image.api.playstation.com/vulcan/ap/rnd/202605/0508/1f01833843313a19cac763d4fe2f98d105dc2b26c6028442.jpg",
+      "portrait": "https://image.api.playstation.com/vulcan/ap/rnd/202605/0508/a1848584c4116a3c173d2f03bf7abfc8bb34bfc47cbda507.jpg",
+      "storeUrl": "https://store.playstation.com/en-us/concept/10017364"
+    },
+    {
+      "id": 10018146,
+      "title": "Anvil Saga",
+      "releaseDate": "2026-10-01T04:00:00Z",
+      "publisher": "HeroCraft, Ltd",
+      "platforms": [
+        "PS4",
+        "PS5"
+      ],
+      "genres": [
+        "Simulation",
+        "Role Playing Games"
+      ],
+      "price": "$16.99",
+      "basePrice": "$19.99",
+      "art": "https://image.api.playstation.com/vulcan/ap/rnd/202605/1412/cfaf086f31522ab90982f9b0d7f55a32e386f03e183881dd.jpg",
+      "portrait": "https://image.api.playstation.com/vulcan/ap/rnd/202608/2614/f1bd8f2e2c041590082c4a004f3fd3aa3eb8ce68d865736c.jpg",
+      "storeUrl": "https://store.playstation.com/en-us/concept/10018146"
+    },
+    {
+      "id": 10015195,
+      "title": "MXGP 26 - The Official Game",
+      "releaseDate": "2026-10-01T08:00:00Z",
+      "publisher": "NACON SA",
+      "platforms": [
+        "PS5"
+      ],
+      "genres": [
+        "Driving/Racing"
+      ],
+      "price": "$59.99",
+      "basePrice": "$59.99",
+      "art": "https://image.api.playstation.com/vulcan/ap/rnd/202607/1014/abc3886d85c71ea3f8fb590fdda68e8ac5b34a50c182343e.jpg",
+      "portrait": "https://image.api.playstation.com/vulcan/ap/rnd/202607/1014/da537db8096636c2525a28e8864c2a5c0575c7914a2a3a9a.jpg",
+      "storeUrl": "https://store.playstation.com/en-us/concept/10015195"
+    },
+    {
+      "id": 10012377,
+      "title": "End of Abyss",
+      "releaseDate": "2026-10-01T12:00:00Z",
+      "publisher": "Epic Games Inc.",
+      "platforms": [
+        "PS5"
+      ],
+      "genres": [
+        "Action"
+      ],
+      "price": "$26.99",
+      "basePrice": "$29.99",
+      "art": "https://image.api.playstation.com/vulcan/ap/rnd/202506/0619/a6f666be2918286733383cf4c7a06d5fa6aebe7302329598.jpg",
+      "portrait": "https://image.api.playstation.com/vulcan/ap/rnd/202606/1019/d3ddabf72e33c008f15051439de67eb4d99032c0aedf8bb1.jpg",
+      "storeUrl": "https://store.playstation.com/en-us/concept/10012377"
+    },
+    {
+      "id": 10011942,
+      "title": "ACE COMBAT 8: WINGS OF THEVE",
+      "releaseDate": "2026-10-01T22:00:00Z",
+      "publisher": "Bandai Namco Entertainment Inc.",
+      "platforms": [
+        "PS5"
+      ],
+      "genres": [
+        "Shooter",
+        "Action"
+      ],
+      "price": "$69.99",
+      "basePrice": "$69.99",
+      "art": "https://image.api.playstation.com/vulcan/ap/rnd/202605/1502/95905fbb3bb2ac0fc797ad14a809efa859769828bbbe6463.png",
+      "portrait": "https://image.api.playstation.com/vulcan/ap/rnd/202605/1502/d4ff99f2a72eb21672077428b6cc873041ede5fd864ff6fb.png",
+      "storeUrl": "https://store.playstation.com/en-us/concept/10011942"
+    },
+    {
+      "id": 10018494,
+      "title": "KINGDOM HEARTS Collection [I～III]",
+      "releaseDate": "2026-10-06T04:00:00Z",
+      "publisher": "SQUARE ENIX CO. LTD.",
+      "platforms": [
+        "PS5"
+      ],
+      "genres": [
+        "Role Playing Games",
+        "Action"
+      ],
+      "price": "$74.99",
+      "basePrice": "$74.99",
+      "art": "https://image.api.playstation.com/vulcan/ap/rnd/202605/1308/75ff48aaa1d77b50074085ea80060d84d1efdfdfc3565640.png",
+      "portrait": "https://image.api.playstation.com/vulcan/ap/rnd/202604/3008/49c64a75a1b3d3cbb0e91555a35c7c4211bb7f5e3e6d41b9.png",
+      "storeUrl": "https://store.playstation.com/en-us/concept/10018494"
+    },
+    {
+      "id": 10014146,
+      "title": "STAR WARS: Galactic Racer™",
+      "releaseDate": "2026-10-06T09:00:00Z",
+      "publisher": "Secret Mode Limited",
+      "platforms": [
+        "PS5"
+      ],
+      "genres": [],
+      "price": "$59.99",
+      "basePrice": "$59.99",
+      "art": "https://image.api.playstation.com/vulcan/ap/rnd/202602/1713/c90c6f76ce6fe76a7e824236faa207446130507c198075f5.png",
+      "portrait": "https://image.api.playstation.com/vulcan/ap/rnd/202602/1713/680412378bc32623d397c6ec51f7b48548879a86adca7fa7.png",
+      "storeUrl": "https://store.playstation.com/en-us/concept/10014146"
+    },
+    {
+      "id": 10017084,
+      "title": "Gear.Club Unlimited 3",
+      "releaseDate": "2026-10-08T08:00:00Z",
+      "publisher": "NACON SA",
+      "platforms": [
+        "PS5"
+      ],
+      "genres": [
+        "Driving/Racing"
+      ],
+      "price": "$49.99",
+      "basePrice": "$49.99",
+      "art": "https://image.api.playstation.com/vulcan/ap/rnd/202510/2810/211aad8a2339fe70d5965ad274ff85c8c0cbb59990565390.jpg",
+      "portrait": "https://image.api.playstation.com/vulcan/ap/rnd/202510/2810/7524c6d80df04c39f2ca0938a606e1ee636dc6cd62bc561e.jpg",
+      "storeUrl": "https://store.playstation.com/en-us/concept/10017084"
+    },
+    {
+      "id": 10012313,
+      "title": "Clive Barker's Hellraiser: Revival",
+      "releaseDate": "2026-10-08T12:00:00Z",
+      "publisher": "Saber Interactive, Inc",
+      "platforms": [
+        "PS5"
+      ],
+      "genres": [
+        "Horror"
+      ],
+      "price": "$39.99",
+      "basePrice": "$39.99",
+      "art": "https://image.api.playstation.com/vulcan/ap/rnd/202507/1809/0e674208eb71f10df39ad1f9deab22425521ed6ff72bab9a.png",
+      "portrait": "https://image.api.playstation.com/vulcan/ap/rnd/202608/1314/4a1535daf1c9111c238b441fba677f03af28574306122a2f.png",
+      "storeUrl": "https://store.playstation.com/en-us/concept/10012313"
+    },
+    {
+      "id": 10015056,
+      "title": "Planet Zoo 2",
+      "releaseDate": "2026-10-13T14:00:00Z",
+      "publisher": "Frontier Developments PLC",
+      "platforms": [
+        "PS5"
+      ],
+      "genres": [
+        "Simulation",
+        "Family",
+        "Educational"
+      ],
+      "price": "$49.99",
+      "basePrice": "$49.99",
+      "art": "https://image.api.playstation.com/vulcan/ap/rnd/202605/0110/20fb6045ba434345bf4fc7a61ca09fb5fe726c55ba6fd754.jpg",
+      "portrait": "https://image.api.playstation.com/vulcan/ap/rnd/202605/0110/a5fc9d923b340dfc152bb45c2fdf2e8730ba9c6a7729588a.jpg",
+      "storeUrl": "https://store.playstation.com/en-us/concept/10015056"
+    },
+    {
+      "id": 10018186,
+      "title": "Castlevania: Belmont's Curse",
+      "releaseDate": "2026-10-15T04:00:00Z",
+      "publisher": "KONAMI",
+      "platforms": [
+        "PS5"
+      ],
+      "genres": [
+        "Role Playing Games",
+        "Action"
+      ],
+      "price": "$29.99",
+      "basePrice": "$29.99",
+      "art": "https://image.api.playstation.com/vulcan/ap/rnd/202606/0906/724071a2c329fa38b317c67a57d33a9c69e2fe8a7e4296c3.png",
+      "portrait": "https://image.api.playstation.com/vulcan/ap/rnd/202605/2108/98ee5fe75d227f36fe22574f2fab9404d4b69e4318378f39.png",
+      "storeUrl": "https://store.playstation.com/en-us/concept/10018186"
+    },
+    {
+      "id": 10013888,
+      "title": "Stupid Never Dies",
+      "releaseDate": "2026-10-21T22:00:00Z",
+      "publisher": "GPTRACK50 Inc.",
+      "platforms": [
+        "PS5"
+      ],
+      "genres": [
+        "Action"
+      ],
+      "price": "$49.99",
+      "basePrice": "$49.99",
+      "art": "https://image.api.playstation.com/vulcan/ap/rnd/202607/2307/fbfabcf0c67d21e7b0cd406049c7c27627d07b2fb2449736.png",
+      "portrait": "https://image.api.playstation.com/vulcan/ap/rnd/202607/2307/2bd31278abf5c2876bd3a72de34ffb27619c72cfb5718dc8.png",
+      "storeUrl": "https://store.playstation.com/en-us/concept/10013888"
+    },
+    {
+      "id": 10015961,
+      "title": "FINAL FANTASY RESONANCE",
+      "releaseDate": "2026-10-22T04:00:00Z",
+      "publisher": "SQUARE ENIX CO., LTD.",
+      "platforms": [
+        "PS5"
+      ],
+      "genres": [
+        "Role Playing Games"
+      ],
+      "price": "$49.99",
+      "basePrice": "$49.99",
+      "art": "https://image.api.playstation.com/vulcan/ap/rnd/202604/2403/e13825714849a55ce1b1cd190d96b710d1bc96d78ca71597.png",
+      "portrait": "https://image.api.playstation.com/vulcan/ap/rnd/202604/2403/3a5b644daaf4b0885cacc7a56fc91765ee7635dc55c8962e.png",
+      "storeUrl": "https://store.playstation.com/en-us/concept/10015961"
+    },
+    {
+      "id": 10016994,
+      "title": "Back to the Dawn",
+      "releaseDate": "2026-10-22T04:00:00Z",
+      "publisher": "CLOUDED LEOPARD ENTERTAINMENT INC.",
+      "platforms": [
+        "PS5"
+      ],
+      "genres": [
+        "Role Playing Games"
+      ],
+      "price": "$34.99",
+      "basePrice": "$34.99",
+      "art": "https://image.api.playstation.com/vulcan/ap/rnd/202509/1111/c0f71d63b39b642d374631d0227cac65dcb96b11aa20eee1.jpg",
+      "portrait": "https://image.api.playstation.com/vulcan/ap/rnd/202509/1111/658f0d85ce6967fcdb11c7ab5bc075043d759664ec97fc6a.jpg",
+      "storeUrl": "https://store.playstation.com/en-us/concept/10016994"
+    },
+    {
+      "id": 10019998,
+      "title": "Warrior Cats: Clans of the Forest",
+      "releaseDate": "2026-10-23T04:00:00Z",
+      "publisher": "Trailmark Games, LLC",
+      "platforms": [
+        "PS5"
+      ],
+      "genres": [
+        "Adventure",
+        "Action"
+      ],
+      "price": "$29.99",
+      "basePrice": "$29.99",
+      "art": "https://image.api.playstation.com/vulcan/ap/rnd/202608/0412/98ad0941090b5711771276a9199fcfe4d1fdfd4d3bf203b0.jpg",
+      "portrait": "https://image.api.playstation.com/vulcan/ap/rnd/202608/0412/ab97b06945635cdfa32a5dc8afbe627dde8c7db8f8d4bbff.png",
+      "storeUrl": "https://store.playstation.com/en-us/concept/10019998"
+    },
+    {
+      "id": 10012984,
+      "title": "ANOMALITH",
+      "releaseDate": "2026-10-28T15:00:00Z",
+      "publisher": "FURYU CORP.",
+      "platforms": [
+        "PS5"
+      ],
+      "genres": [
+        "Action",
+        "Adventure"
+      ],
+      "price": "$44.99",
+      "basePrice": "$49.99",
+      "art": "https://image.api.playstation.com/vulcan/ap/rnd/202604/2706/471d694c53d4acf22d30802717f31550ef76587a81072f61.png",
+      "portrait": null,
+      "storeUrl": "https://store.playstation.com/en-us/concept/10012984"
+    },
+    {
+      "id": 10017620,
+      "title": "Phantom Blade Zero",
+      "releaseDate": "2026-10-29T02:00:00Z",
+      "publisher": "S-GAME Publishing",
+      "platforms": [
+        "PS5"
+      ],
+      "genres": [
+        "Action"
+      ],
+      "price": "$59.99",
+      "basePrice": "$59.99",
+      "art": "https://image.api.playstation.com/vulcan/ap/rnd/202607/2810/2153ee57f7955802d94a6722418315637e8fba8f69eaf064.png",
+      "portrait": "https://image.api.playstation.com/vulcan/ap/rnd/202607/2810/403f5d09dbeced62daea7907184de098522d9a5ce1aa4647.jpg",
+      "storeUrl": "https://store.playstation.com/en-us/concept/10017620"
+    },
+    {
+      "id": 10019084,
+      "title": "CRYMELIGHT",
+      "releaseDate": "2026-11-04T15:00:00Z",
+      "publisher": "FURYU CORP.",
+      "platforms": [
+        "PS5"
+      ],
+      "genres": [
+        "Action"
+      ],
+      "price": "$19.99",
+      "basePrice": "$19.99",
+      "art": "https://image.api.playstation.com/vulcan/ap/rnd/202604/0205/baf360b1f72f1d88b1da64a7f89b20efacfb8be7806f243a.png",
+      "portrait": null,
+      "storeUrl": "https://store.playstation.com/en-us/concept/10019084"
+    },
+    {
+      "id": 10016414,
+      "title": "DRAGON QUEST MONSTERS: The Withered World",
+      "releaseDate": "2026-12-03T05:00:00Z",
+      "publisher": "SQUARE ENIX CO., LTD.",
+      "platforms": [
+        "PS5"
+      ],
+      "genres": [
+        "Role Playing Games"
+      ],
+      "price": "$59.99",
+      "basePrice": "$59.99",
+      "art": "https://image.api.playstation.com/vulcan/ap/rnd/202608/0704/64db280cd2b182043d5e4183ba753645c6a5c08867cfb530.png",
+      "portrait": "https://image.api.playstation.com/vulcan/ap/rnd/202607/2207/bf5ce9e244c723a88d8671c0ee05195f9ddfe0723e9f5944.jpg",
+      "storeUrl": "https://store.playstation.com/en-us/concept/10016414"
+    },
+    {
+      "id": 10012189,
+      "title": "Attack on Titan 3",
+      "releaseDate": "2026-12-10T05:00:00Z",
+      "publisher": "KOEI TECMO GAMES CO., LTD.",
+      "platforms": [
+        "PS5"
+      ],
+      "genres": [
+        "Action"
+      ],
+      "price": "$69.99",
+      "basePrice": "$69.99",
+      "art": "https://image.api.playstation.com/vulcan/ap/rnd/202607/2108/985131c0d1a0a04bca901fd3c98b2d9b13f0e61ea309ce62.jpg",
+      "portrait": "https://image.api.playstation.com/vulcan/ap/rnd/202607/2108/1cb4dda7c955f35e08edb4e1e46f469c86877119c482dd51.jpg",
+      "storeUrl": "https://store.playstation.com/en-us/concept/10012189"
+    },
+    {
+      "id": 10017939,
+      "title": "STRANGER THAN HEAVEN",
+      "releaseDate": "2027-01-15T05:00:00Z",
+      "publisher": "SEGA of America, Inc.",
+      "platforms": [
+        "PS5"
+      ],
+      "genres": [
+        "Adventure",
+        "Action"
+      ],
+      "price": "$69.99",
+      "basePrice": "$69.99",
+      "art": "https://image.api.playstation.com/vulcan/ap/rnd/202604/2303/bd11fd157a51a1e2bfa15ff04791b13ff19f7f3e8c42859b.png",
+      "portrait": "https://image.api.playstation.com/vulcan/ap/rnd/202604/2303/08d7048ed50363e5032d7f78a04da3c702692cba8a1940d9.png",
+      "storeUrl": "https://store.playstation.com/en-us/concept/10017939"
+    },
+    {
+      "id": 10017362,
+      "title": "Wandering Sword",
+      "releaseDate": "2027-01-21T05:00:00Z",
+      "publisher": "CLOUDED LEOPARD ENTERTAINMENT INC.",
+      "platforms": [
+        "PS5"
+      ],
+      "genres": [
+        "Role Playing Games"
+      ],
+      "price": "$34.99",
+      "basePrice": "$34.99",
+      "art": "https://image.api.playstation.com/vulcan/ap/rnd/202510/1009/1896a877099ef707c4876591fc16ffaabe8814630d587fe2.jpg",
+      "portrait": "https://image.api.playstation.com/vulcan/ap/rnd/202510/1009/103bc5118f4ca8bb6d93d83e06367628a77e94c692e039bb.png",
+      "storeUrl": "https://store.playstation.com/en-us/concept/10017362"
+    },
+    {
+      "id": 10014491,
+      "title": "Tomb Raider: Legacy of Atlantis",
+      "releaseDate": "2027-02-12T18:00:00Z",
+      "publisher": "Amazon Game Studios",
+      "platforms": [
+        "PS5"
+      ],
+      "genres": [
+        "Adventure",
+        "Action"
+      ],
+      "price": "$59.99",
+      "basePrice": "$59.99",
+      "art": "https://image.api.playstation.com/vulcan/ap/rnd/202605/1817/771217e22a1d0697bc99d28ece0715e4cedb40a2b3561f78.png",
+      "portrait": "https://image.api.playstation.com/vulcan/ap/rnd/202605/1817/22b27bfbc1d05e94e9011d9e0983dacdaaf9670307bf9eb4.png",
+      "storeUrl": "https://store.playstation.com/en-us/concept/10014491"
+    },
+    {
+      "id": 10011107,
+      "title": "Persona 4 Revival",
+      "releaseDate": "2027-02-18T05:00:00Z",
+      "publisher": "SEGA of America, Inc.",
+      "platforms": [
+        "PS5"
+      ],
+      "genres": [
+        "Role Playing Games"
+      ],
+      "price": "$69.99",
+      "basePrice": "$69.99",
+      "art": "https://image.api.playstation.com/vulcan/ap/rnd/202605/2501/733a2c71170e619c72d576b57e37506975886515d6370159.png",
+      "portrait": "https://image.api.playstation.com/vulcan/ap/rnd/202605/2501/3b2c02663760ac51c865cdcb93a5d012cd36f59f1c7dd811.png",
+      "storeUrl": "https://store.playstation.com/en-us/concept/10011107"
+    },
+    {
+      "id": 10015869,
+      "title": "Fable",
+      "releaseDate": "2027-02-23T16:00:00Z",
+      "publisher": "Microsoft Corporation",
+      "platforms": [
+        "PS5"
+      ],
+      "genres": [
+        "Adventure"
+      ],
+      "price": "$69.99",
+      "basePrice": "$69.99",
+      "art": "https://image.api.playstation.com/vulcan/ap/rnd/202605/2823/015f968089869ea9a0c6589190eedf3dabab77e715dc8cec.png",
+      "portrait": "https://image.api.playstation.com/vulcan/ap/rnd/202605/2823/d383cb81797335a6740541cd25ed71a1ae81e4b611237575.png",
+      "storeUrl": "https://store.playstation.com/en-us/concept/10015869"
+    },
+    {
+      "id": 10006022,
+      "title": "GUNDAM ROGUE ORBIT",
+      "releaseDate": "2027-03-05T05:00:00Z",
+      "publisher": "Bandai Namco Entertainment Inc.",
+      "platforms": [
+        "PS5"
+      ],
+      "genres": [
+        "Role Playing Games",
+        "Action"
+      ],
+      "price": "$59.99",
+      "basePrice": "$59.99",
+      "art": "https://image.api.playstation.com/vulcan/ap/rnd/202605/2502/84dce1a62f92c2df911d171b79a819defd8ec5e1d0b69f81.png",
+      "portrait": "https://image.api.playstation.com/vulcan/ap/rnd/202605/2502/982e3d2cf55c48abd48fd50a4b197c84c70f174d51c99358.png",
+      "storeUrl": "https://store.playstation.com/en-us/concept/10006022"
+    },
+    {
+      "id": 10018084,
+      "title": "FINAL FANTASY VII REVELATION",
+      "releaseDate": "2027-04-08T04:00:00Z",
+      "publisher": "SQUARE ENIX CO. LTD.",
+      "platforms": [
+        "PS5"
+      ],
+      "genres": [
+        "Role Playing Games"
+      ],
+      "price": "$69.99",
+      "basePrice": "$69.99",
+      "art": "https://image.api.playstation.com/vulcan/ap/rnd/202606/0806/d6722a147cefc055bac2846bb7061e7853ebb955a9d851dd.png",
+      "portrait": "https://image.api.playstation.com/vulcan/ap/rnd/202608/0409/6fe9aa41c39a5cdb2515bf70d136a96577835351ac572e02.jpg",
+      "storeUrl": "https://store.playstation.com/en-us/concept/10018084"
+    }
+  ],
+  "recent": [
+    {
+      "id": 10020176,
+      "title": "Kijutsu Rider",
+      "releaseDate": "2026-09-07T04:00:00Z",
+      "publisher": "Omegamechanimations, L.L.C.",
+      "platforms": [
+        "PS5"
+      ],
+      "genres": [
+        "Action"
+      ],
+      "price": "$9.99",
+      "basePrice": "$9.99",
+      "art": "https://image.api.playstation.com/vulcan/ap/rnd/202607/0703/2d00c6b6bb1df7ec17f97f406322eea19402ebf7a453996b.png",
+      "portrait": null,
+      "storeUrl": "https://store.playstation.com/en-us/concept/10020176"
+    },
+    {
+      "id": 10019737,
+      "title": "Railbreak DX",
+      "releaseDate": "2026-09-04T22:00:00Z",
+      "publisher": "Dead Drop Studios LLC",
+      "platforms": [
+        "PS5"
+      ],
+      "genres": [],
+      "price": "$24.99",
+      "basePrice": "$24.99",
+      "art": "https://image.api.playstation.com/vulcan/ap/rnd/202608/2603/8de9b2d1a8b0c468dfff4a5f3dceb48d0d511b813633cac9.png",
+      "portrait": "https://image.api.playstation.com/vulcan/ap/rnd/202606/2421/0e32aafe20343008725daaf4377c7346174aaccbabaf0450.jpg",
+      "storeUrl": "https://store.playstation.com/en-us/concept/10019737"
+    },
+    {
+      "id": 10019437,
+      "title": "Fear The Timeloop",
+      "releaseDate": "2026-09-04T19:00:00Z",
+      "publisher": "PlayWay plc",
+      "platforms": [
+        "PS5"
+      ],
+      "genres": [
+        "Adventure"
+      ],
+      "price": "$13.49",
+      "basePrice": "$14.99",
+      "art": "https://image.api.playstation.com/vulcan/ap/rnd/202606/0810/2d205b8ae1b1f73ef021f8b73c4aa5a2a00bfd352775e9cb.jpg",
+      "portrait": "https://image.api.playstation.com/vulcan/ap/rnd/202606/0810/9ebb4fa1b47b5bba7b27fd8998e20c10b4f78daad39ce99e.jpg",
+      "storeUrl": "https://store.playstation.com/en-us/concept/10019437"
+    },
+    {
+      "id": 10017367,
+      "title": "NHL® 27",
+      "releaseDate": "2026-09-04T16:00:00Z",
+      "publisher": "Electronic Arts Inc",
+      "platforms": [
+        "PS5"
+      ],
+      "genres": [
+        "Sport"
+      ],
+      "price": "$99.99",
+      "basePrice": "$99.99",
+      "art": "https://image.api.playstation.com/vulcan/ap/rnd/202608/1018/564d0d67f46b0e623bbc44ac407e7be8d60ac2e5fb1bdbc7.png",
+      "portrait": "https://image.api.playstation.com/vulcan/ap/rnd/202608/1018/687241ac2c83087b61240cffde233fbd1e8ca004aa5f4a79.png",
+      "storeUrl": "https://store.playstation.com/en-us/concept/10017367"
+    },
+    {
+      "id": 10018962,
+      "title": "Jaleco Sports: Faceoffs",
+      "releaseDate": "2026-09-04T15:00:00Z",
+      "publisher": "Rock It Games, LLC",
+      "platforms": [
+        "PS5"
+      ],
+      "genres": [
+        "Sport"
+      ],
+      "price": "$9.99",
+      "basePrice": "$9.99",
+      "art": "https://image.api.playstation.com/vulcan/ap/rnd/202608/2418/7e7b644c77e91cc8f341e7cc79c4a9bc7e30257058646960.jpg",
+      "portrait": "https://image.api.playstation.com/vulcan/ap/rnd/202608/2418/1fbe1b17371527ad01ab58bfba482e7ad19e3013d48d5ab2.jpg",
+      "storeUrl": "https://store.playstation.com/en-us/concept/10018962"
+    },
+    {
+      "id": 10019166,
+      "title": "Order Automatica",
+      "releaseDate": "2026-09-04T12:00:00Z",
+      "publisher": "Better Gaming Agency sp. z o.o.",
+      "platforms": [
+        "PS5"
+      ],
+      "genres": [
+        "Strategy"
+      ],
+      "price": "$5.99",
+      "basePrice": "$5.99",
+      "art": "https://image.api.playstation.com/vulcan/ap/rnd/202607/2916/3b2b2d980aee751ad30e70c58de39747e05b0622dd9d6ce7.png",
+      "portrait": "https://image.api.playstation.com/vulcan/ap/rnd/202607/2916/ccb023b2083c1f6c171c0638e46f2259b24b41dd8f87a8bf.png",
+      "storeUrl": "https://store.playstation.com/en-us/concept/10019166"
+    },
+    {
+      "id": 10020559,
+      "title": "Isle of Reveries",
+      "releaseDate": "2026-09-04T04:00:00Z",
+      "publisher": "Electric Airship",
+      "platforms": [
+        "PS4",
+        "PS5"
+      ],
+      "genres": [
+        "Adventure"
+      ],
+      "price": "$17.99",
+      "basePrice": "$17.99",
+      "art": "https://image.api.playstation.com/vulcan/ap/rnd/202608/0610/779167555f053ef7a106f26b61cde4ea4ac02d60b97a412a.png",
+      "portrait": "https://image.api.playstation.com/vulcan/ap/rnd/202608/0302/6acf3e7f69d5b38539c72b585f857394930813be6949d1b7.jpg",
+      "storeUrl": "https://store.playstation.com/en-us/concept/10020559"
+    },
+    {
+      "id": 10019473,
+      "title": "Asdivine Knot",
+      "releaseDate": "2026-09-04T04:00:00Z",
+      "publisher": "KEMCO",
+      "platforms": [
+        "PS4",
+        "PS5"
+      ],
+      "genres": [
+        "Role Playing Games"
+      ],
+      "price": "$19.99",
+      "basePrice": "$19.99",
+      "art": "https://image.api.playstation.com/vulcan/ap/rnd/202606/2500/ebaf9f42ae5834aaa0549c4428b2d9c91102b1d732464453.png",
+      "portrait": "https://image.api.playstation.com/vulcan/ap/rnd/202606/2500/5c0d5a9b9f4d834466614583492014fc02cb02347caee921.png",
+      "storeUrl": "https://store.playstation.com/en-us/concept/10019473"
+    },
+    {
+      "id": 10018725,
+      "title": "Fortress Merge",
+      "releaseDate": "2026-09-04T04:00:00Z",
+      "publisher": "QubicGames S.A.",
+      "platforms": [
+        "PS5"
+      ],
+      "genres": [
+        "Strategy",
+        "Casual",
+        "Action"
+      ],
+      "price": "Free",
+      "basePrice": "Free",
+      "art": "https://image.api.playstation.com/vulcan/ap/rnd/202608/0409/59ee243e9863d1a42d4f060f45da5c9a10d393cdbca287d8.jpg",
+      "portrait": "https://image.api.playstation.com/vulcan/ap/rnd/202608/0409/a903d946386456086db0ca7418fc5b7f359bc0555f99b0c0.jpg",
+      "storeUrl": "https://store.playstation.com/en-us/concept/10018725"
+    },
+    {
+      "id": 10018502,
+      "title": "NBA 2K27",
+      "releaseDate": "2026-09-04T04:00:00Z",
+      "publisher": "2K",
+      "platforms": [
+        "PS5"
+      ],
+      "genres": [
+        "Sport"
+      ],
+      "price": "$69.99",
+      "basePrice": "$69.99",
+      "art": "https://image.api.playstation.com/vulcan/ap/rnd/202606/2913/329872fb560dfd00e2dcd42b1b4fd651990d857be2308956.png",
+      "portrait": "https://image.api.playstation.com/vulcan/ap/rnd/202606/2913/c2a2e94cbdc954b737366fc01751f3ba7e6625fda288ebb0.png",
+      "storeUrl": "https://store.playstation.com/en-us/concept/10018502"
+    },
+    {
+      "id": 10018404,
+      "title": "Tales of Formentera",
+      "releaseDate": "2026-09-04T04:00:00Z",
+      "publisher": "Ratalaika Games SL",
+      "platforms": [
+        "PS4",
+        "PS5"
+      ],
+      "genres": [
+        "Adventure"
+      ],
+      "price": "$5.99",
+      "basePrice": "$5.99",
+      "art": "https://image.api.playstation.com/vulcan/ap/rnd/202607/2818/39686277ea543b43b95bab257d0e4f43f16d3cd9dc5a9503.png",
+      "portrait": "https://image.api.playstation.com/vulcan/ap/rnd/202607/2818/195cfaef2c0759c6b7dae115038eb0f468840ed505b8e4fe.png",
+      "storeUrl": "https://store.playstation.com/en-us/concept/10018404"
+    },
+    {
+      "id": 10013248,
+      "title": "Onimusha: Way of the Sword",
+      "releaseDate": "2026-09-04T04:00:00Z",
+      "publisher": "Capcom U.S.A., Inc.",
+      "platforms": [
+        "PS5"
+      ],
+      "genres": [
+        "Action"
+      ],
+      "price": "$69.99",
+      "basePrice": "$69.99",
+      "art": "https://image.api.playstation.com/vulcan/ap/rnd/202605/1308/6f451f9fcef025e8913d863041514efb8cf24dc0b6d7ab01.png",
+      "portrait": "https://image.api.playstation.com/vulcan/ap/rnd/202605/1308/3b7ab4532870cb4a7bccdfd80df7d0bebcdd842750a049d9.png",
+      "storeUrl": "https://store.playstation.com/en-us/concept/10013248"
+    },
+    {
+      "id": 10020438,
+      "title": "Dice A Million",
+      "releaseDate": "2026-09-04T00:00:00Z",
+      "publisher": "COUNTLESSNIGHTS S.L.",
+      "platforms": [
+        "PS5"
+      ],
+      "genres": [
+        "Puzzle",
+        "Strategy"
+      ],
+      "price": "$12.99",
+      "basePrice": "$12.99",
+      "art": "https://image.api.playstation.com/vulcan/ap/rnd/202608/0418/8691ed2bec60efa3430afe1b39f8e6a55ab79cc337291943.jpg",
+      "portrait": "https://image.api.playstation.com/vulcan/ap/rnd/202608/0418/17b45e0ba2af12bc30382a432861071a8499ffd9e03ef298.jpg",
+      "storeUrl": "https://store.playstation.com/en-us/concept/10020438"
+    },
+    {
+      "id": 10019989,
+      "title": "Dream Cage",
+      "releaseDate": "2026-09-04T00:00:00Z",
+      "publisher": "JanduSoft S.L.",
+      "platforms": [
+        "PS5"
+      ],
+      "genres": [
+        "Horror"
+      ],
+      "price": "$8.39",
+      "basePrice": "$10.49",
+      "art": "https://image.api.playstation.com/vulcan/ap/rnd/202609/0714/b8b617b0802c8200a1381d6e962e06c9bd7f56e7c551b8e2.jpg",
+      "portrait": "https://image.api.playstation.com/vulcan/ap/rnd/202608/0510/92849cc763703bb7a159cadbbe32d365898ea53485039ee6.jpg",
+      "storeUrl": "https://store.playstation.com/en-us/concept/10019989"
+    },
+    {
+      "id": 10014858,
+      "title": "SpeedRunners 2: King of Speed",
+      "releaseDate": "2026-09-03T17:00:00Z",
+      "publisher": "tinyBuild GAMES",
+      "platforms": [
+        "PS5"
+      ],
+      "genres": [],
+      "price": "Game Trial",
+      "basePrice": "Game Trial",
+      "art": "https://image.api.playstation.com/vulcan/ap/rnd/202503/2813/f53e377624c8a8559f5774b5ec6d8d22a5cfaad1eb15de09.png",
+      "portrait": "https://image.api.playstation.com/vulcan/ap/rnd/202503/2813/51769540194bbdb70d01b50b763e51eda495fce988c7759d.png",
+      "storeUrl": "https://store.playstation.com/en-us/concept/10014858"
+    },
+    {
+      "id": 10020245,
+      "title": "Komorebi",
+      "releaseDate": "2026-09-03T16:00:00Z",
+      "publisher": "TOP HAT STUDIOS, INC.",
+      "platforms": [
+        "PS5"
+      ],
+      "genres": [
+        "Role Playing Games",
+        "Simulation"
+      ],
+      "price": "$15.99",
+      "basePrice": "$19.99",
+      "art": "https://image.api.playstation.com/vulcan/ap/rnd/202607/1906/8cdd76c5ea52b0366f53a9106b27bfde57628af9582df9e9.png",
+      "portrait": "https://image.api.playstation.com/vulcan/ap/rnd/202607/1906/aeb6ad686155eb8778c970eacc59a30fbc6efbda638cf578.png",
+      "storeUrl": "https://store.playstation.com/en-us/concept/10020245"
+    },
+    {
+      "id": 10019366,
+      "title": "BioEden",
+      "releaseDate": "2026-09-03T16:00:00Z",
+      "publisher": "Focus Entertainment",
+      "platforms": [
+        "PS5"
+      ],
+      "genres": [
+        "Unique",
+        "Simulation",
+        "Adventure"
+      ],
+      "price": "$21.99",
+      "basePrice": "$21.99",
+      "art": "https://image.api.playstation.com/vulcan/ap/rnd/202605/2813/2662d8dcc23504833893aaf4f644f9aae4361e6200c9ce5b.jpg",
+      "portrait": "https://image.api.playstation.com/vulcan/ap/rnd/202605/2813/2e2abe1fcb5d26872d7a3e05e26b97336fbe655095d0174c.jpg",
+      "storeUrl": "https://store.playstation.com/en-us/concept/10019366"
+    },
+    {
+      "id": 10020501,
+      "title": "Keeper",
+      "releaseDate": "2026-09-03T15:00:00Z",
+      "publisher": "Double Fine Productions",
+      "platforms": [
+        "PS5"
+      ],
+      "genres": [],
+      "price": "$15.99",
+      "basePrice": "$19.99",
+      "art": "https://image.api.playstation.com/vulcan/ap/rnd/202608/0501/1e58525f2a763b45e87aee66764d8fa53eaa425ac8b42b00.png",
+      "portrait": "https://image.api.playstation.com/vulcan/ap/rnd/202608/0501/d0294aef59a192eb262b0e17c5d0b5b341d41dc74b9092a4.png",
+      "storeUrl": "https://store.playstation.com/en-us/concept/10020501"
+    },
+    {
+      "id": 10017398,
+      "title": "Fight School Simulator",
+      "releaseDate": "2026-09-03T15:00:00Z",
+      "publisher": "ULTIMATE GAMES",
+      "platforms": [
+        "PS5"
+      ],
+      "genres": [],
+      "price": "$11.99",
+      "basePrice": "$11.99",
+      "art": "https://image.api.playstation.com/vulcan/ap/rnd/202605/1110/124a2ddbc6e8b76530b6170cc9059852ccab5522cc703d3d.jpg",
+      "portrait": "https://image.api.playstation.com/vulcan/ap/rnd/202605/1110/3475d43fb2745e7f0cd063ce59ccec6861a75e9722b58425.jpg",
+      "storeUrl": "https://store.playstation.com/en-us/concept/10017398"
+    },
+    {
+      "id": 10018868,
+      "title": "Shoe it All!",
+      "releaseDate": "2026-09-03T13:00:00Z",
+      "publisher": "Bright Gambit AB",
+      "platforms": [
+        "PS5"
+      ],
+      "genres": [
+        "Adventure",
+        "Puzzle",
+        "Action"
+      ],
+      "price": "$7.99",
+      "basePrice": "$7.99",
+      "art": "https://image.api.playstation.com/vulcan/ap/rnd/202607/2819/516510ca1ef92ae772ac01ef8117911c791aae37a23596fd.png",
+      "portrait": "https://image.api.playstation.com/vulcan/ap/rnd/202607/2819/eeff4df643eeb29400d5160669752324d0baf6c5bf18fa0e.jpg",
+      "storeUrl": "https://store.playstation.com/en-us/concept/10018868"
+    },
+    {
+      "id": 10020007,
+      "title": "Arcade Archives 2 Wiz",
+      "releaseDate": "2026-09-03T04:00:00Z",
+      "publisher": "HAMSTER Corporation",
+      "platforms": [
+        "PS5"
+      ],
+      "genres": [
+        "Action"
+      ],
+      "price": "$9.99",
+      "basePrice": "$9.99",
+      "art": "https://image.api.playstation.com/vulcan/ap/rnd/202608/1802/d49b7e066451698521b776b7c85ac9450474dc025e24a563.png",
+      "portrait": "https://image.api.playstation.com/vulcan/ap/rnd/202608/1802/b7c1cb036cdb28f3ad1c9e8015c15696ed42c5af8d4660cf.jpg",
+      "storeUrl": "https://store.playstation.com/en-us/concept/10020007"
+    },
+    {
+      "id": 10019925,
+      "title": "Arcade Archives 2 ARKANOID REVENGE OF DOH",
+      "releaseDate": "2026-09-03T04:00:00Z",
+      "publisher": "HAMSTER Corporation",
+      "platforms": [
+        "PS5"
+      ],
+      "genres": [
+        "Action"
+      ],
+      "price": "$9.99",
+      "basePrice": "$9.99",
+      "art": "https://image.api.playstation.com/vulcan/ap/rnd/202608/1902/c415097a2316444a9a872f42d5851cd32a184e8d7e079b9d.jpg",
+      "portrait": "https://image.api.playstation.com/vulcan/ap/rnd/202608/1902/06adfd5573c55351eb427cb95c79ec3d1dc9f2957de6cbeb.jpg",
+      "storeUrl": "https://store.playstation.com/en-us/concept/10019925"
+    },
+    {
+      "id": 10019665,
+      "title": "Galactic Vault",
+      "releaseDate": "2026-09-03T04:00:00Z",
+      "publisher": "Take IT Studio! Sp. z o.o.",
+      "platforms": [
+        "PS5"
+      ],
+      "genres": [
+        "Action",
+        "Shooter"
+      ],
+      "price": "$17.99",
+      "basePrice": "$19.99",
+      "art": "https://image.api.playstation.com/vulcan/ap/rnd/202606/2307/afd44851e23a2051f838dabf75772933f64e5ea08cdd3094.png",
+      "portrait": "https://image.api.playstation.com/vulcan/ap/rnd/202606/2307/baa5f240df62f036d26206aa25f9bbf5b3d49bb01a3c8371.png",
+      "storeUrl": "https://store.playstation.com/en-us/concept/10019665"
+    },
+    {
+      "id": 10017553,
+      "title": "Marsupilami 2 - Salsa Palombia",
+      "releaseDate": "2026-09-03T04:00:00Z",
+      "publisher": "Microids",
+      "platforms": [
+        "PS5"
+      ],
+      "genres": [
+        "Adventure"
+      ],
+      "price": "$29.99",
+      "basePrice": "$29.99",
+      "art": "https://image.api.playstation.com/vulcan/ap/rnd/202602/2609/320914c086b7b8292333091cca6ce57efd6ff62d251fbdff.png",
+      "portrait": null,
+      "storeUrl": "https://store.playstation.com/en-us/concept/10017553"
+    },
+    {
+      "id": 10017452,
+      "title": "Console Archives THE CONVENI 2",
+      "releaseDate": "2026-09-03T04:00:00Z",
+      "publisher": "HAMSTER Corporation",
+      "platforms": [
+        "PS5"
+      ],
+      "genres": [
+        "Simulation"
+      ],
+      "price": "$11.99",
+      "basePrice": "$11.99",
+      "art": "https://image.api.playstation.com/vulcan/ap/rnd/202608/1902/449f12431c309befc9aa5651c462475c8531dee552bd97bc.jpg",
+      "portrait": "https://image.api.playstation.com/vulcan/ap/rnd/202608/1902/498588f4318cc626aac556183a389280c6bb6c90a54806ee.jpg",
+      "storeUrl": "https://store.playstation.com/en-us/concept/10017452"
+    },
+    {
+      "id": 10013855,
+      "title": "The Blood of Dawnwalker",
+      "releaseDate": "2026-09-03T04:00:00Z",
+      "publisher": "BANDAI NAMCO ENTERTAINMENT EUROPE",
+      "platforms": [
+        "PS5"
+      ],
+      "genres": [
+        "Adventure"
+      ],
+      "price": "$69.99",
+      "basePrice": "$69.99",
+      "art": "https://image.api.playstation.com/vulcan/ap/rnd/202603/2518/9809db989baf4a50dfa7f3d4f0ff9086554cc55954014367.png",
+      "portrait": "https://image.api.playstation.com/vulcan/ap/rnd/202512/1814/ddbb64a482de46164e8749051b74419cbd25da80dc2b3cc4.jpg",
+      "storeUrl": "https://store.playstation.com/en-us/concept/10013855"
+    },
+    {
+      "id": 10019301,
+      "title": "EXSTETRA",
+      "releaseDate": "2026-09-02T15:00:00Z",
+      "publisher": "FURYU CORP.",
+      "platforms": [
+        "PS5"
+      ],
+      "genres": [
+        "Role Playing Games"
+      ],
+      "price": "$19.99",
+      "basePrice": "$24.99",
+      "art": "https://image.api.playstation.com/vulcan/ap/rnd/202608/1811/151238d8123c17fe9a2b63269fde011c7855d87fc77e1f3f.png",
+      "portrait": "https://image.api.playstation.com/vulcan/ap/rnd/202608/2102/fa5d8454b38d16616a549b0f5051a4f59b70f117462196ab.png",
+      "storeUrl": "https://store.playstation.com/en-us/concept/10019301"
+    },
+    {
+      "id": 10018187,
+      "title": "Angeline Era",
+      "releaseDate": "2026-09-02T13:00:00Z",
+      "publisher": "Analgesic Productions LLC",
+      "platforms": [
+        "PS5"
+      ],
+      "genres": [
+        "Adventure",
+        "Action"
+      ],
+      "price": "$19.99",
+      "basePrice": "$24.99",
+      "art": "https://image.api.playstation.com/vulcan/ap/rnd/202607/2223/b7a211595c438476519d5c92a57a06f6edab7e5a8e38f3d0.png",
+      "portrait": "https://image.api.playstation.com/vulcan/ap/rnd/202607/2223/712a52749059396b82bf14a4c0fd697a02e89d3dd09342d2.jpg",
+      "storeUrl": "https://store.playstation.com/en-us/concept/10018187"
+    },
+    {
+      "id": 10019004,
+      "title": "Catch Flex",
+      "releaseDate": "2026-09-02T04:00:00Z",
+      "publisher": "Vilegacy LLC",
+      "platforms": [
+        "PS5"
+      ],
+      "genres": [
+        "Unique",
+        "Music/Rhythm"
+      ],
+      "price": "$9.99",
+      "basePrice": "$9.99",
+      "art": "https://image.api.playstation.com/vulcan/ap/rnd/202608/1521/f14907b85269e261e334548659f81eebc6d6242d013eb426.png",
+      "portrait": "https://image.api.playstation.com/vulcan/ap/rnd/202608/1521/7d9833a9a8645a81f2a601890f1591eb3553c1318ad931fa.png",
+      "storeUrl": "https://store.playstation.com/en-us/concept/10019004"
+    },
+    {
+      "id": 10018518,
+      "title": "Super Woden Rally Edge",
+      "releaseDate": "2026-09-02T04:00:00Z",
+      "publisher": "EastAsiaSoft",
+      "platforms": [
+        "PS4",
+        "PS5"
+      ],
+      "genres": [],
+      "price": "$13.49",
+      "basePrice": "$14.99",
+      "art": "https://image.api.playstation.com/vulcan/ap/rnd/202607/2709/67414a472b61be05b2ad334da6c1e0fbac5bea1a8399ad31.png",
+      "portrait": "https://image.api.playstation.com/vulcan/ap/rnd/202607/2709/a6b9cf26bb9aca6c51e52f9116b02876eca0a05befd3f8c7.png",
+      "storeUrl": "https://store.playstation.com/en-us/concept/10018518"
+    },
+    {
+      "id": 10018393,
+      "title": "Monuments Renovator",
+      "releaseDate": "2026-09-01T15:00:00Z",
+      "publisher": "ULTIMATE GAMES",
+      "platforms": [
+        "PS5"
+      ],
+      "genres": [],
+      "price": "$14.99",
+      "basePrice": "$14.99",
+      "art": "https://image.api.playstation.com/vulcan/ap/rnd/202601/1519/0e89fad8fed6cce451761eb62d08576ee724c6c9d51c5de7.jpg",
+      "portrait": "https://image.api.playstation.com/vulcan/ap/rnd/202601/1519/e0231f72ae946fbf593205e9cd45ceec41ad1b945c8a3fea.jpg",
+      "storeUrl": "https://store.playstation.com/en-us/concept/10018393"
+    },
+    {
+      "id": 10013260,
+      "title": "Crimson Moon",
+      "releaseDate": "2026-09-01T15:00:00Z",
+      "publisher": "ProbablyMonsters",
+      "platforms": [
+        "PS5"
+      ],
+      "genres": [
+        "Action"
+      ],
+      "price": "$19.99",
+      "basePrice": "$19.99",
+      "art": "https://image.api.playstation.com/vulcan/ap/rnd/202608/0621/817833c6abf8b373ea92fd149d6d4807ea1c54b9de9aa74d.png",
+      "portrait": "https://image.api.playstation.com/vulcan/ap/rnd/202608/0621/e717ac320b49542b62c4c1b5e1bbb42bcd4feb806573ffba.jpg",
+      "storeUrl": "https://store.playstation.com/en-us/concept/10013260"
+    },
+    {
+      "id": 10019478,
+      "title": "Lady Death Demonicron",
+      "releaseDate": "2026-08-31T07:00:00Z",
+      "publisher": "Art Of Play Interactive Pty Ltd",
+      "platforms": [
+        "PS5"
+      ],
+      "genres": [
+        "Arcade"
+      ],
+      "price": "$39.99",
+      "basePrice": "$39.99",
+      "art": "https://image.api.playstation.com/vulcan/ap/rnd/202607/1612/fdfc7023b7572f815d415b392f959185ce4dc3f5e33c8ea3.png",
+      "portrait": "https://image.api.playstation.com/vulcan/ap/rnd/202607/1612/17ae2dca4ea38a4fb1faf11cd0db78b9a625d10e4dda1342.png",
+      "storeUrl": "https://store.playstation.com/en-us/concept/10019478"
+    },
+    {
+      "id": 10020648,
+      "title": "Wishing Well Simulator",
+      "releaseDate": "2026-08-30T04:00:00Z",
+      "publisher": "Kanuni games oyun YAZILIM VE Pazarlama Ticaret limited Sirketi",
+      "platforms": [
+        "PS5"
+      ],
+      "genres": [
+        "Simulation"
+      ],
+      "price": "$5.49",
+      "basePrice": "$5.49",
+      "art": "https://image.api.playstation.com/vulcan/ap/rnd/202608/1213/7d79cc94ff427471f4991c9756e2e640a360cfd18e2463d0.png",
+      "portrait": "https://image.api.playstation.com/vulcan/ap/rnd/202608/1213/a3e5d7e87a06f616321daf938e00eb2d12c7159e3adf56a7.png",
+      "storeUrl": "https://store.playstation.com/en-us/concept/10020648"
+    },
+    {
+      "id": 10020441,
+      "title": "Tank Odyssey",
+      "releaseDate": "2026-08-30T04:00:00Z",
+      "publisher": "Orca Games Pty Ltd",
+      "platforms": [
+        "PS5"
+      ],
+      "genres": [
+        "Arcade"
+      ],
+      "price": "$5.99",
+      "basePrice": "$5.99",
+      "art": "https://image.api.playstation.com/vulcan/ap/rnd/202607/3103/1dc21a41ca7782c25f9f4d814f00ab62c83dc8b8ff900504.png",
+      "portrait": null,
+      "storeUrl": "https://store.playstation.com/en-us/concept/10020441"
+    },
+    {
+      "id": 10013515,
+      "title": "Quiz & Learn: Food & Drink",
+      "releaseDate": "2026-08-28T21:00:00Z",
+      "publisher": "Kuims Games Ltd",
+      "platforms": [
+        "PS5"
+      ],
+      "genres": [
+        "Quiz"
+      ],
+      "price": "$3.99",
+      "basePrice": "$3.99",
+      "art": "https://image.api.playstation.com/vulcan/ap/rnd/202502/1121/8354afdd9be6676453f760405b401d0f289803c165d70db1.jpg",
+      "portrait": "https://image.api.playstation.com/vulcan/ap/rnd/202502/1121/324cdd76979c8105186430e3d3a8e305a16c322906b03e64.jpg",
+      "storeUrl": "https://store.playstation.com/en-us/concept/10013515"
+    },
+    {
+      "id": 10020562,
+      "title": "Radon Blast 2",
+      "releaseDate": "2026-08-28T20:00:00Z",
+      "publisher": "THOMAS CLAUS UND FRANK MENZEL",
+      "platforms": [
+        "PS4"
+      ],
+      "genres": [
+        "Casual",
+        "Arcade"
+      ],
+      "price": "$3.99",
+      "basePrice": "$3.99",
+      "art": "https://image.api.playstation.com/vulcan/ap/rnd/202608/1014/f6f279029e8a0e8dc3199d83336960c1d89f09ea2be36e0a.png",
+      "portrait": "https://image.api.playstation.com/vulcan/ap/rnd/202608/1014/1b53b2db944732a2037ef113ddddac1b9aba8bc6a31a18fe.png",
+      "storeUrl": "https://store.playstation.com/en-us/concept/10020562"
+    },
+    {
+      "id": 10016237,
+      "title": "Once Alive",
+      "releaseDate": "2026-08-28T17:00:00Z",
+      "publisher": "NAİSU OYUN YAZILIM SANAYİ TİCARET LİMİTED ŞİRKETİ",
+      "platforms": [
+        "PS5"
+      ],
+      "genres": [],
+      "price": "$6.99",
+      "basePrice": "$9.99",
+      "art": "https://image.api.playstation.com/vulcan/ap/rnd/202507/2307/b27e25f76f1008381981616b534c101ce9fdec4f92477e68.jpg",
+      "portrait": "https://image.api.playstation.com/vulcan/ap/rnd/202507/2307/8c963195b1fea0b3ce08c7f6ae5bff4d40ee95e09a98d00a.jpg",
+      "storeUrl": "https://store.playstation.com/en-us/concept/10016237"
+    },
+    {
+      "id": 10019647,
+      "title": "1964 Operation Velvet Twins",
+      "releaseDate": "2026-08-28T04:00:00Z",
+      "publisher": "Ratalaika Games SL",
+      "platforms": [
+        "PS4",
+        "PS5"
+      ],
+      "genres": [
+        "Adventure",
+        "Arcade",
+        "Action"
+      ],
+      "price": "$5.99",
+      "basePrice": "$5.99",
+      "art": "https://image.api.playstation.com/vulcan/ap/rnd/202607/2816/fe0b4c95159858fedc992925183cd554010efdfd6ea74add.png",
+      "portrait": "https://image.api.playstation.com/vulcan/ap/rnd/202607/2816/d3dfdd83081719a47b3b302a73658c9a1d8f619f3babbff7.png",
+      "storeUrl": "https://store.playstation.com/en-us/concept/10019647"
+    },
+    {
+      "id": 10018993,
+      "title": "Jonah Lomu Rugby Challenge 4 Remastered",
+      "releaseDate": "2026-08-28T04:00:00Z",
+      "publisher": "Home Entertainment Suppliers",
+      "platforms": [
+        "PS4",
+        "PS5"
+      ],
+      "genres": [],
+      "price": "$39.99",
+      "basePrice": "$39.99",
+      "art": "https://image.api.playstation.com/vulcan/ap/rnd/202607/2301/0fa3a91589912f73cce88220f23e13f5bc74cc435de27962.png",
+      "portrait": "https://image.api.playstation.com/vulcan/ap/rnd/202607/2301/5a450254092bb358efb804a1876f150805ff05c39a23d9cf.jpg",
+      "storeUrl": "https://store.playstation.com/en-us/concept/10018993"
+    },
+    {
+      "id": 10020455,
+      "title": "Cozy Farm Life Simulator",
+      "releaseDate": "2026-08-27T16:00:00Z",
+      "publisher": "OWN IT SOLUTIONS SA",
+      "platforms": [
+        "PS5"
+      ],
+      "genres": [],
+      "price": "$9.99",
+      "basePrice": "$9.99",
+      "art": "https://image.api.playstation.com/vulcan/ap/rnd/202608/0717/917c724ffeafc3d271dc379f9b76601a0ce6018d2da6a9f4.jpg",
+      "portrait": "https://image.api.playstation.com/vulcan/ap/rnd/202608/0717/62fb7f03beb8ae39823acfd1ee661a4fc3fab7d588afe1f6.jpg",
+      "storeUrl": "https://store.playstation.com/en-us/concept/10020455"
+    },
+    {
+      "id": 10018440,
+      "title": "The Immortal John Triptych",
+      "releaseDate": "2026-08-27T16:00:00Z",
+      "publisher": "Akupara Games, LLC",
+      "platforms": [
+        "PS5"
+      ],
+      "genres": [],
+      "price": "$24.99",
+      "basePrice": "$24.99",
+      "art": "https://image.api.playstation.com/vulcan/ap/rnd/202603/2422/bcce2fe8a2fe1de1598f10153b777fefff920db0aab33eb6.jpg",
+      "portrait": "https://image.api.playstation.com/vulcan/ap/rnd/202603/2422/7255bcd9383e054884b84177daaa26a42eea438e78ad21d8.png",
+      "storeUrl": "https://store.playstation.com/en-us/concept/10018440"
+    },
+    {
+      "id": 10015413,
+      "title": "Resonance: A Plague Tale Legacy",
+      "releaseDate": "2026-08-27T16:00:00Z",
+      "publisher": "Focus Entertainment",
+      "platforms": [
+        "PS5"
+      ],
+      "genres": [
+        "Adventure",
+        "Action"
+      ],
+      "price": "$59.99",
+      "basePrice": "$59.99",
+      "art": "https://image.api.playstation.com/vulcan/ap/rnd/202605/1510/fe316f221c3326450f8bd6c68ec8a589198462d33ee3030c.jpg",
+      "portrait": "https://image.api.playstation.com/vulcan/ap/rnd/202605/1510/edbe267fc70626ec1f21fd9c7540ac1645e218ff9e4c3019.jpg",
+      "storeUrl": "https://store.playstation.com/en-us/concept/10015413"
+    },
+    {
+      "id": 10017582,
+      "title": "Animal Shelter 2",
+      "releaseDate": "2026-08-27T15:00:00Z",
+      "publisher": "GAMES INCUBATOR S.A.",
+      "platforms": [
+        "PS5"
+      ],
+      "genres": [
+        "Simulator",
+        "Unique",
+        "Casual"
+      ],
+      "price": "$24.99",
+      "basePrice": "$24.99",
+      "art": "https://image.api.playstation.com/vulcan/ap/rnd/202603/0310/cb08afde3fd6f0f474b5cb11ce0312b80fca3f8e9609b6e6.png",
+      "portrait": "https://image.api.playstation.com/vulcan/ap/rnd/202603/0310/b6eeb650c93be0282e31d4fc4afa231a34d236cb2998d507.jpg",
+      "storeUrl": "https://store.playstation.com/en-us/concept/10017582"
+    },
+    {
+      "id": 10017024,
+      "title": "Ghetto Zombies: Graffiti Squad",
+      "releaseDate": "2026-08-27T15:00:00Z",
+      "publisher": "Nuntius Games, LLC",
+      "platforms": [
+        "PS4",
+        "PS5"
+      ],
+      "genres": [
+        "Action",
+        "Shooter"
+      ],
+      "price": "$9.99",
+      "basePrice": "$9.99",
+      "art": "https://image.api.playstation.com/vulcan/ap/rnd/202607/2819/59ab3c5656c32454a0c4bf0f85edc5ca46b7ff0aa1a7b9c8.png",
+      "portrait": "https://image.api.playstation.com/vulcan/ap/rnd/202607/2819/74609c42e1bc27c9faed3f12debbd1ad9b210e4ccd4a475a.jpg",
+      "storeUrl": "https://store.playstation.com/en-us/concept/10017024"
+    },
+    {
+      "id": 10019147,
+      "title": "Horripilant",
+      "releaseDate": "2026-08-27T13:00:00Z",
+      "publisher": "Indie Games Starter Sp. z o.o.",
+      "platforms": [
+        "PS5"
+      ],
+      "genres": [
+        "Horror",
+        "Adventure"
+      ],
+      "price": "$9.99",
+      "basePrice": "$9.99",
+      "art": "https://image.api.playstation.com/vulcan/ap/rnd/202608/2621/487dc6b7b8b2fa6a2da45c74dc7ae31bf89957164964e80a.png",
+      "portrait": "https://image.api.playstation.com/vulcan/ap/rnd/202607/2313/3423267882ef9694c553a6ca25a1c054aa944a132ac69e8f.png",
+      "storeUrl": "https://store.playstation.com/en-us/concept/10019147"
+    },
+    {
+      "id": 10018176,
+      "title": "1x1 Street Football: mini soccer PvP",
+      "releaseDate": "2026-08-27T09:00:00Z",
+      "publisher": "Witenovastudio OÜ",
+      "platforms": [
+        "PS4",
+        "PS5"
+      ],
+      "genres": [
+        "Action",
+        "Sport"
+      ],
+      "price": "$14.99",
+      "basePrice": "$14.99",
+      "art": "https://image.api.playstation.com/vulcan/ap/rnd/202608/1315/b0b088b532b4bcdf104c983c758b5985cd5a5eaba226fc99.png",
+      "portrait": "https://image.api.playstation.com/vulcan/ap/rnd/202512/1815/36cc03bfc680aa46411fa998aa283acb5f3a03ecabcc73f4.jpg",
+      "storeUrl": "https://store.playstation.com/en-us/concept/10018176"
+    },
+    {
+      "id": 10020487,
+      "title": "Frutz",
+      "releaseDate": "2026-08-27T04:00:00Z",
+      "publisher": "Broken Walls Studios LLC.",
+      "platforms": [
+        "PS5"
+      ],
+      "genres": [],
+      "price": "$13.99",
+      "basePrice": "$13.99",
+      "art": "https://image.api.playstation.com/vulcan/ap/rnd/202608/0318/bc885dd4d234dd127693ad35e1fd81481a20c966ba388a10.png",
+      "portrait": "https://image.api.playstation.com/vulcan/ap/rnd/202608/0320/aa349fd06388e4485e0388f62b97fb4df4f101d702272efa.jpg",
+      "storeUrl": "https://store.playstation.com/en-us/concept/10020487"
+    },
+    {
+      "id": 10020290,
+      "title": "New York Mysteries 4: The Outbreak",
+      "releaseDate": "2026-08-27T04:00:00Z",
+      "publisher": "FIVE-BN STUDIO LLC",
+      "platforms": [
+        "PS5"
+      ],
+      "genres": [
+        "Adventure"
+      ],
+      "price": "Free",
+      "basePrice": "Free",
+      "art": "https://image.api.playstation.com/vulcan/ap/rnd/202607/0611/976c76ae423380b9952d11db6f2c4d8d309163eea6f3eec2.png",
+      "portrait": "https://image.api.playstation.com/vulcan/ap/rnd/202607/0807/547a7305176f5ed4bd7159394c7d82a83992b8fae594ca36.png",
+      "storeUrl": "https://store.playstation.com/en-us/concept/10020290"
+    },
+    {
+      "id": 10020205,
+      "title": "Obby Sprunki Towers",
+      "releaseDate": "2026-08-27T04:00:00Z",
+      "publisher": "BIG WAY LLC",
+      "platforms": [
+        "PS4",
+        "PS5"
+      ],
+      "genres": [
+        "Action",
+        "Horror"
+      ],
+      "price": "$4.99",
+      "basePrice": "$4.99",
+      "art": "https://image.api.playstation.com/vulcan/ap/rnd/202606/2503/6083392d5795cd86dce7e1e7ada3450616a810f9b2686a9a.jpg",
+      "portrait": "https://image.api.playstation.com/vulcan/ap/rnd/202606/2503/0f9e47d12b81b0ee40d06cc4cde492e2e0c2d1fc25461166.jpg",
+      "storeUrl": "https://store.playstation.com/en-us/concept/10020205"
+    },
+    {
+      "id": 10019543,
+      "title": "Mind Diver",
+      "releaseDate": "2026-08-27T04:00:00Z",
+      "publisher": "PLAYISM",
+      "platforms": [
+        "PS5"
+      ],
+      "genres": [],
+      "price": "$16.19",
+      "basePrice": "$17.99",
+      "art": "https://image.api.playstation.com/vulcan/ap/rnd/202607/1710/efec763853108866d13003b2021964f4e1aaa6e8eb01aa05.jpg",
+      "portrait": "https://image.api.playstation.com/vulcan/ap/rnd/202607/1710/e07f9d345a0f5b1223c1ac365941c5365de15b8d30b75092.png",
+      "storeUrl": "https://store.playstation.com/en-us/concept/10019543"
+    },
+    {
+      "id": 10019264,
+      "title": "Arcade Archives 2 SATAN OF SATURN",
+      "releaseDate": "2026-08-27T04:00:00Z",
+      "publisher": "HAMSTER Corporation",
+      "platforms": [
+        "PS5"
+      ],
+      "genres": [
+        "Shooter"
+      ],
+      "price": "$9.99",
+      "basePrice": "$9.99",
+      "art": "https://image.api.playstation.com/vulcan/ap/rnd/202608/0503/e98f8bbe132bd785e771cf3737f04b04977db82026c50864.jpg",
+      "portrait": "https://image.api.playstation.com/vulcan/ap/rnd/202608/0707/fedbc75dc6eb69b2e00b7fb4be8b8355048f1372e131a24f.jpg",
+      "storeUrl": "https://store.playstation.com/en-us/concept/10019264"
+    },
+    {
+      "id": 10019232,
+      "title": "Tearscape",
+      "releaseDate": "2026-08-27T04:00:00Z",
+      "publisher": "NERDS TAKE OVER S.R.L.",
+      "platforms": [
+        "PS5"
+      ],
+      "genres": [],
+      "price": "$14.99",
+      "basePrice": "$14.99",
+      "art": "https://image.api.playstation.com/vulcan/ap/rnd/202603/2715/50b37d52f26ccf55a37b7ccc4270c1d652ee537918bfd338.png",
+      "portrait": "https://image.api.playstation.com/vulcan/ap/rnd/202603/2715/2cfe4b45b54c633b5f70373666181ff0ff849d8a377d01cf.png",
+      "storeUrl": "https://store.playstation.com/en-us/concept/10019232"
+    },
+    {
+      "id": 10019254,
+      "title": "Golftacular!",
+      "releaseDate": "2026-08-27T04:00:00Z",
+      "publisher": "Both Good LLC",
+      "platforms": [
+        "PS5"
+      ],
+      "genres": [
+        "Party"
+      ],
+      "price": "$9.99",
+      "basePrice": "$9.99",
+      "art": "https://image.api.playstation.com/vulcan/ap/rnd/202606/2412/9616aadff515d0d618fe59eebdfb3ea4d92f6363e6239ea0.png",
+      "portrait": "https://image.api.playstation.com/vulcan/ap/rnd/202606/2412/bd8f5d0f74320786e0d11d49a9a642f8b3c4138d4e514ca3.png",
+      "storeUrl": "https://store.playstation.com/en-us/concept/10019254"
+    },
+    {
+      "id": 10018215,
+      "title": "Whisper of the House",
+      "releaseDate": "2026-08-27T04:00:00Z",
+      "publisher": "E-Home Entertainment Development Company LTD",
+      "platforms": [
+        "PS5"
+      ],
+      "genres": [],
+      "price": "$11.99",
+      "basePrice": "$14.99",
+      "art": "https://image.api.playstation.com/vulcan/ap/rnd/202606/2903/d1d4e39fa2a024e8d3b9af8acaae68bf4c5ec4ea485aafca.jpg",
+      "portrait": null,
+      "storeUrl": "https://store.playstation.com/en-us/concept/10018215"
+    },
+    {
+      "id": 10013637,
+      "title": "Brigandine Abyss",
+      "releaseDate": "2026-08-27T04:00:00Z",
+      "publisher": "Happinet Corporation",
+      "platforms": [
+        "PS5"
+      ],
+      "genres": [
+        "Strategy"
+      ],
+      "price": "$49.99",
+      "basePrice": "$49.99",
+      "art": "https://image.api.playstation.com/vulcan/ap/rnd/202602/0500/282245b78d7701d9c44fce3ce05d053c033a22ae389a2a54.png",
+      "portrait": "https://image.api.playstation.com/vulcan/ap/rnd/202602/0500/fec32977d055a076022ac101496d414d5157e4bce5690753.jpg",
+      "storeUrl": "https://store.playstation.com/en-us/concept/10013637"
+    },
+    {
+      "id": 10018294,
+      "title": "Murders on the Yangtze River",
+      "releaseDate": "2026-08-27T02:00:00Z",
+      "publisher": "NiuGamer Co., Ltd.",
+      "platforms": [
+        "PS5"
+      ],
+      "genres": [
+        "Adventure"
+      ],
+      "price": "$17.99",
+      "basePrice": "$19.99",
+      "art": "https://image.api.playstation.com/vulcan/ap/rnd/202607/2406/b7cb0c9a93c99bd34fa2492474d134dd50715444b9f5f30d.png",
+      "portrait": "https://image.api.playstation.com/vulcan/ap/rnd/202607/2406/5b372bdf42bd24e6a0685b3daedffc259047196fac4b6c18.png",
+      "storeUrl": "https://store.playstation.com/en-us/concept/10018294"
+    },
+    {
+      "id": 10018277,
+      "title": "LIZARDS MUST DIE 2",
+      "releaseDate": "2026-08-27T00:00:00Z",
+      "publisher": "Sobaka Studio LLP",
+      "platforms": [
+        "PS4",
+        "PS5"
+      ],
+      "genres": [
+        "Action"
+      ],
+      "price": "$9.99",
+      "basePrice": "$9.99",
+      "art": "https://image.api.playstation.com/vulcan/ap/rnd/202605/2710/c3fcac3002776548dc31ce94215e43135dcad95bb68a42a0.png",
+      "portrait": "https://image.api.playstation.com/vulcan/ap/rnd/202608/1713/49c7e3abf8abcf06d8c313f58f272f4faa17b4cbca1671df.png",
+      "storeUrl": "https://store.playstation.com/en-us/concept/10018277"
+    },
+    {
+      "id": 10019835,
+      "title": "I am an Air Traffic Controller AIRPORT HERO Centrair EX",
+      "releaseDate": "2026-08-26T15:00:00Z",
+      "publisher": "Sonic Powered Co. LTD",
+      "platforms": [
+        "PS5"
+      ],
+      "genres": [
+        "Simulation",
+        "Puzzle"
+      ],
+      "price": "$54.99",
+      "basePrice": "$54.99",
+      "art": "https://image.api.playstation.com/vulcan/ap/rnd/202607/2302/cf8cf93113614cb8e00caafc114d7f4f37f57a8e2d24c2d8.jpg",
+      "portrait": "https://image.api.playstation.com/vulcan/ap/rnd/202607/2302/02ef7f25e5ee13062a97e2f3db64c9f7eca9d79196178bce.png",
+      "storeUrl": "https://store.playstation.com/en-us/concept/10019835"
+    },
+    {
+      "id": 10017408,
+      "title": "Fractured Worlds",
+      "releaseDate": "2026-08-26T10:00:00Z",
+      "publisher": "LASER GUIDED GAMES LLC",
+      "platforms": [
+        "PS5"
+      ],
+      "genres": [],
+      "price": "$22.99",
+      "basePrice": "$22.99",
+      "art": "https://image.api.playstation.com/vulcan/ap/rnd/202607/2011/f7114b744419a7e989d2098d2bf4070b7d35a55af5d7e5dc.png",
+      "portrait": "https://image.api.playstation.com/vulcan/ap/rnd/202607/2011/b9afb626ae192871b05141dc7b3f74e08876145e65d8fe5f.jpg",
+      "storeUrl": "https://store.playstation.com/en-us/concept/10017408"
+    },
+    {
+      "id": 10020636,
+      "title": "The Legend of Dark Witch",
+      "releaseDate": "2026-08-26T05:25:33Z",
+      "publisher": "INSIDE SYSTEM",
+      "platforms": [
+        "PS5"
+      ],
+      "genres": [
+        "Action"
+      ],
+      "price": "$6.99",
+      "basePrice": "$6.99",
+      "art": "https://image.api.playstation.com/vulcan/ap/rnd/202608/1102/a6dac70b0acc270a25b471061f6c4cb09ad2a98c78d4f770.png",
+      "portrait": "https://image.api.playstation.com/vulcan/ap/rnd/202608/1102/64dcf8878a2cfa9e41aa489ee3364ae08abf959a8a86ac2f.jpg",
+      "storeUrl": "https://store.playstation.com/en-us/concept/10020636"
+    },
+    {
+      "id": 10019068,
+      "title": "Console Archives BUBBLE BOBBLE",
+      "releaseDate": "2026-08-26T04:00:00Z",
+      "publisher": "HAMSTER Corporation",
+      "platforms": [
+        "PS5"
+      ],
+      "genres": [
+        "Action"
+      ],
+      "price": "$7.99",
+      "basePrice": "$7.99",
+      "art": "https://image.api.playstation.com/vulcan/ap/rnd/202608/0601/921dbed5542f2cf8362c14cad622347debea181ed3887aa5.jpg",
+      "portrait": "https://image.api.playstation.com/vulcan/ap/rnd/202608/0708/ad638e47b3c490cc1f4bdcf51dd9a99f3f18d7fb573b29dc.jpg",
+      "storeUrl": "https://store.playstation.com/en-us/concept/10019068"
+    },
+    {
+      "id": 10016334,
+      "title": "A Tower Full of Cats",
+      "releaseDate": "2026-08-26T04:00:00Z",
+      "publisher": "Alchemy Games",
+      "platforms": [
+        "PS5"
+      ],
+      "genres": [
+        "Unique",
+        "Casual"
+      ],
+      "price": "$5.99",
+      "basePrice": "$5.99",
+      "art": "https://image.api.playstation.com/vulcan/ap/rnd/202510/0818/866536b1fe5ab746778d8a75cbd1ac7949c134cc18156ff8.jpg",
+      "portrait": "https://image.api.playstation.com/vulcan/ap/rnd/202608/0420/1e208bc92f483cfba1995e7317924418df1b0c94e1bb42b9.jpg",
+      "storeUrl": "https://store.playstation.com/en-us/concept/10016334"
+    },
+    {
+      "id": 10015762,
+      "title": "Once Human (F2P)",
+      "releaseDate": "2026-08-25T18:00:00Z",
+      "publisher": "NETEASE INTERACTIVE ENTERTAINMENT PTE.LTD",
+      "platforms": [
+        "PS5"
+      ],
+      "genres": [
+        "Shooter",
+        "Role Playing Games"
+      ],
+      "price": "Free",
+      "basePrice": "Free",
+      "art": "https://image.api.playstation.com/vulcan/ap/rnd/202608/2407/f6975c000b5c570c9acd60ccb04e053de9e740b0dbca13a2.png",
+      "portrait": "https://image.api.playstation.com/vulcan/ap/rnd/202608/1812/ad5c3b1d266236e988e0a8bc9ed6aa5346fd0bb74e69ef6b.png",
+      "storeUrl": "https://store.playstation.com/en-us/concept/10015762"
+    },
+    {
+      "id": 10019522,
+      "title": "Blood Dungeon",
+      "releaseDate": "2026-08-25T16:00:00Z",
+      "publisher": "MESSHOF",
+      "platforms": [
+        "PS5"
+      ],
+      "genres": [
+        "Action"
+      ],
+      "price": "$9.99",
+      "basePrice": "$9.99",
+      "art": "https://image.api.playstation.com/vulcan/ap/rnd/202605/1117/20c7287f58d01c4366444c53a79f204b72db1d5950ae6db1.jpg",
+      "portrait": "https://image.api.playstation.com/vulcan/ap/rnd/202605/2619/4cb551d7545f67c798ca29c8d720bbf6ed93004a3ab87dc8.jpg",
+      "storeUrl": "https://store.playstation.com/en-us/concept/10019522"
+    },
+    {
+      "id": 10016847,
+      "title": "Funguys Swarm",
+      "releaseDate": "2026-08-25T16:00:00Z",
+      "publisher": "Stairway Games",
+      "platforms": [
+        "PS5"
+      ],
+      "genres": [
+        "Action"
+      ],
+      "price": "$9.99",
+      "basePrice": "$9.99",
+      "art": "https://image.api.playstation.com/vulcan/ap/rnd/202607/0910/4a12a18a5f3930b056877056c743dfc036e837b65b96cc11.png",
+      "portrait": "https://image.api.playstation.com/vulcan/ap/rnd/202607/0910/9d804684f26f53f6c9d0c6ec94c1d2da93f6c661daf3954e.png",
+      "storeUrl": "https://store.playstation.com/en-us/concept/10016847"
+    },
+    {
+      "id": 10014695,
+      "title": "Aliens: Fireteam Elite 2",
+      "releaseDate": "2026-08-25T15:00:00Z",
+      "publisher": "Daybreak Games",
+      "platforms": [
+        "PS5"
+      ],
+      "genres": [
+        "Shooter"
+      ],
+      "price": "$49.99",
+      "basePrice": "$49.99",
+      "art": "https://image.api.playstation.com/vulcan/ap/rnd/202605/0519/0dc77b6566fdfe38c21f584be8bcdcd4cebb9e4ec1fa0bb6.png",
+      "portrait": "https://image.api.playstation.com/vulcan/ap/rnd/202608/0521/a969d5b2ae3fbbbd6e62a0f1849e47cd1295e69622ad6e37.jpg",
+      "storeUrl": "https://store.playstation.com/en-us/concept/10014695"
+    },
+    {
+      "id": 10018698,
+      "title": "Apidya' Special",
+      "releaseDate": "2026-08-25T10:00:00Z",
+      "publisher": "ININ",
+      "platforms": [
+        "PS5"
+      ],
+      "genres": [
+        "Action"
+      ],
+      "price": "$19.99",
+      "basePrice": "$19.99",
+      "art": "https://image.api.playstation.com/vulcan/ap/rnd/202607/2413/7af318b02bebda15a97655dd28fee506f67c5618665cb0db.jpg",
+      "portrait": "https://image.api.playstation.com/vulcan/ap/rnd/202607/2413/a11c9bbbc658aae7e91fa90a6595faddc5f2244d33ce1c0a.jpg",
+      "storeUrl": "https://store.playstation.com/en-us/concept/10018698"
+    },
+    {
+      "id": 10020598,
+      "title": "1-2-Splendid Word Search!",
+      "releaseDate": "2026-08-24T04:00:00Z",
+      "publisher": "TreeFall Studios L.L.C.",
+      "platforms": [
+        "PS5"
+      ],
+      "genres": [],
+      "price": "$2.99",
+      "basePrice": "$2.99",
+      "art": "https://image.api.playstation.com/vulcan/ap/rnd/202608/1503/3ce8d7b8e841db816fd03846e8113dae80684e3de0583c6d.png",
+      "portrait": "https://image.api.playstation.com/vulcan/ap/rnd/202608/1503/a166267b29cb8c183bdba56f33de82f1c33907d5a45a5208.png",
+      "storeUrl": "https://store.playstation.com/en-us/concept/10020598"
+    },
+    {
+      "id": 10019692,
+      "title": "Psalm 5:9-13",
+      "releaseDate": "2026-08-21T20:00:00Z",
+      "publisher": "Axyos Games Entertainment LLC",
+      "platforms": [
+        "PS5"
+      ],
+      "genres": [
+        "Horror",
+        "Adventure",
+        "Unique"
+      ],
+      "price": "$9.99",
+      "basePrice": "$9.99",
+      "art": "https://image.api.playstation.com/vulcan/ap/rnd/202608/0213/8379abe4a00afcdd4d1020f1a4b260ee1e3550cec05cee57.jpg",
+      "portrait": "https://image.api.playstation.com/vulcan/ap/rnd/202605/1117/cb2ae8fa5a4435868a16b2048464bd9be28b404dac5b909f.jpg",
+      "storeUrl": "https://store.playstation.com/en-us/concept/10019692"
+    },
+    {
+      "id": 10020616,
+      "title": "4096 Space Traders Era",
+      "releaseDate": "2026-08-21T19:00:00Z",
+      "publisher": "Benoit Varasse trading as Pix Arts",
+      "platforms": [
+        "PS5"
+      ],
+      "genres": [
+        "Strategy"
+      ],
+      "price": "$9.99",
+      "basePrice": "$9.99",
+      "art": "https://image.api.playstation.com/vulcan/ap/rnd/202608/1216/ea0ec70088d9ddcedfd2483cefd79134847962bd335f3289.jpg",
+      "portrait": null,
+      "storeUrl": "https://store.playstation.com/en-us/concept/10020616"
+    },
+    {
+      "id": 10016135,
+      "title": "Creepy Shift: Uncle Joe’s Motel",
+      "releaseDate": "2026-08-21T17:00:00Z",
+      "publisher": "Red Limb Studio",
+      "platforms": [
+        "PS5"
+      ],
+      "genres": [
+        "Horror",
+        "Simulator"
+      ],
+      "price": "$9.99",
+      "basePrice": "$9.99",
+      "art": "https://image.api.playstation.com/vulcan/ap/rnd/202607/0109/83dac7f1f1bdfdaff3b256f5f575aa16f96f0fa5a092b19b.png",
+      "portrait": "https://image.api.playstation.com/vulcan/ap/rnd/202607/0109/0cecfaf880039142053f06d19f85b1c640e8cb080f913907.png",
+      "storeUrl": "https://store.playstation.com/en-us/concept/10016135"
+    },
+    {
+      "id": 10013947,
+      "title": "Mega City Force",
+      "releaseDate": "2026-08-21T16:00:00Z",
+      "publisher": "Ravenage Games LLC",
+      "platforms": [
+        "PS5"
+      ],
+      "genres": [
+        "Action"
+      ],
+      "price": "$14.99",
+      "basePrice": "$14.99",
+      "art": "https://image.api.playstation.com/vulcan/ap/rnd/202508/1914/570765593076077b402d66e731ccbf2f8c918afc2ac1dbe0.png",
+      "portrait": "https://image.api.playstation.com/vulcan/ap/rnd/202508/1914/411c84bd716cb4bebdeecda25929499feba4fa916dc5756d.png",
+      "storeUrl": "https://store.playstation.com/en-us/concept/10013947"
+    },
+    {
+      "id": 10017112,
+      "title": "Refate: Echoes of Desire",
+      "releaseDate": "2026-08-21T14:00:00Z",
+      "publisher": "Hangzhou Shanhai Xingchen Culture and Technology Co. , Ltd.",
+      "platforms": [
+        "PS5"
+      ],
+      "genres": [],
+      "price": "$25.99",
+      "basePrice": "$25.99",
+      "art": "https://image.api.playstation.com/vulcan/ap/rnd/202509/2411/e55fa93519fc0cef911c19abae3a94ac8aa1dc0aa57ef2b7.jpg",
+      "portrait": "https://image.api.playstation.com/vulcan/ap/rnd/202509/2411/1df69e75286cffc44d59b3007e2652e45e922b8d4d104415.jpg",
+      "storeUrl": "https://store.playstation.com/en-us/concept/10017112"
+    },
+    {
+      "id": 10019049,
+      "title": "iRacing Arcade",
+      "releaseDate": "2026-08-21T11:00:00Z",
+      "publisher": "iRacing ARG Holding, LLC",
+      "platforms": [
+        "PS5"
+      ],
+      "genres": [],
+      "price": "$24.99",
+      "basePrice": "$24.99",
+      "art": "https://image.api.playstation.com/vulcan/ap/rnd/202606/1522/464fac2065b081dc60ed45a67cbcb7430acb58ce7ccb5802.png",
+      "portrait": "https://image.api.playstation.com/vulcan/ap/rnd/202606/1522/f33ff7c71bd495e291bcc3d35c5b454c1658b897280ad7cf.png",
+      "storeUrl": "https://store.playstation.com/en-us/concept/10019049"
+    },
+    {
+      "id": 10020457,
+      "title": "River Strike",
+      "releaseDate": "2026-08-21T04:00:00Z",
+      "publisher": "Alexander Tóth trading as Hoglet Interactive",
+      "platforms": [
+        "PS5"
+      ],
+      "genres": [],
+      "price": "$1.99",
+      "basePrice": "$1.99",
+      "art": "https://image.api.playstation.com/vulcan/ap/rnd/202608/1900/86aaea165245078cb1ed03fb8ac6eb5e8d22fa5efc0964e7.jpg",
+      "portrait": "https://image.api.playstation.com/vulcan/ap/rnd/202607/2118/c0b4db03e54b032b0e9690d418c751a1251a6d4030f942c8.jpg",
+      "storeUrl": "https://store.playstation.com/en-us/concept/10020457"
+    },
+    {
+      "id": 10019939,
+      "title": "A Dark Room",
+      "releaseDate": "2026-08-21T04:00:00Z",
+      "publisher": "Scratchwork Development LLC",
+      "platforms": [
+        "PS5"
+      ],
+      "genres": [
+        "Role Playing Games"
+      ],
+      "price": "$9.99",
+      "basePrice": "$9.99",
+      "art": "https://image.api.playstation.com/vulcan/ap/rnd/202607/0318/d7037570581a6519f850ba534d32635b72a854f7517d9d99.png",
+      "portrait": "https://image.api.playstation.com/vulcan/ap/rnd/202607/0318/24124b53609faf505dbfcec6809160a013d5e7b950fcf573.png",
+      "storeUrl": "https://store.playstation.com/en-us/concept/10019939"
+    },
+    {
+      "id": 10018546,
+      "title": "With Eyes of Ice",
+      "releaseDate": "2026-08-21T04:00:00Z",
+      "publisher": "Ratalaika Games SL",
+      "platforms": [
+        "PS4",
+        "PS5"
+      ],
+      "genres": [
+        "Adventure"
+      ],
+      "price": "$14.99",
+      "basePrice": "$14.99",
+      "art": "https://image.api.playstation.com/vulcan/ap/rnd/202607/2818/f80af5b9432eed22f1144583dbed38e2f1eabda19233dd90.png",
+      "portrait": "https://image.api.playstation.com/vulcan/ap/rnd/202607/2818/9dbcdfd19522a1d7d1f34b09f3e81e9b740784a0855c16e3.png",
+      "storeUrl": "https://store.playstation.com/en-us/concept/10018546"
+    },
+    {
+      "id": 10018714,
+      "title": "Mexican Ninja",
+      "releaseDate": "2026-08-20T14:00:00Z",
+      "publisher": "Amber Studio SRL",
+      "platforms": [
+        "PS5"
+      ],
+      "genres": [
+        "Action"
+      ],
+      "price": "$16.99",
+      "basePrice": "$16.99",
+      "art": "https://image.api.playstation.com/vulcan/ap/rnd/202608/1011/243421fa170a32ef2494c042efd046e6e6786d5a2d27b55f.jpg",
+      "portrait": "https://image.api.playstation.com/vulcan/ap/rnd/202608/1011/35e07a8c942b7c9bcf4fa06a8cb33d3f485ce9a5c440d14e.jpg",
+      "storeUrl": "https://store.playstation.com/en-us/concept/10018714"
+    },
+    {
+      "id": 10019613,
+      "title": "Ground Zero Hero",
+      "releaseDate": "2026-08-20T13:00:00Z",
+      "publisher": "Acclaim, Inc.",
+      "platforms": [
+        "PS5"
+      ],
+      "genres": [
+        "Action"
+      ],
+      "price": "Game Trial",
+      "basePrice": "Game Trial",
+      "art": "https://image.api.playstation.com/vulcan/ap/rnd/202605/0821/15619d2f849398391e637e6a1050ac05f0090b353b9d6013.png",
+      "portrait": "https://image.api.playstation.com/vulcan/ap/rnd/202605/0821/ca4dc432cb016dc8bb5aeb8e7ad5cb35bbb15a2cbd20c62b.png",
+      "storeUrl": "https://store.playstation.com/en-us/concept/10019613"
+    },
+    {
+      "id": 10019099,
+      "title": "Berry Bury Berry",
+      "releaseDate": "2026-08-20T13:00:00Z",
+      "publisher": "Indie Games Starter Sp. z o.o.",
+      "platforms": [
+        "PS5"
+      ],
+      "genres": [
+        "Adventure"
+      ],
+      "price": "$9.99",
+      "basePrice": "$9.99",
+      "art": "https://image.api.playstation.com/vulcan/ap/rnd/202608/0419/e3da746ae6a08583d190190628670efd4db3a7425462751d.png",
+      "portrait": "https://image.api.playstation.com/vulcan/ap/rnd/202607/2417/10f3a56abb826d284e42317f6138e7f3efda3ed264e72f2f.png",
+      "storeUrl": "https://store.playstation.com/en-us/concept/10019099"
+    },
+    {
+      "id": 10014396,
+      "title": "Gallipoli",
+      "releaseDate": "2026-08-20T13:00:00Z",
+      "publisher": "BlackMill Games B.V.",
+      "platforms": [
+        "PS5"
+      ],
+      "genres": [
+        "Action",
+        "Shooter"
+      ],
+      "price": "$29.99",
+      "basePrice": "$29.99",
+      "art": "https://image.api.playstation.com/vulcan/ap/rnd/202606/1115/a694d343da8a6d114f917c31cb5473983df2b3dc5f844ac2.png",
+      "portrait": "https://image.api.playstation.com/vulcan/ap/rnd/202606/2215/02b55708e2bb364b505cc2ed96e0af6cbcf4e422656a9d2c.jpg",
+      "storeUrl": "https://store.playstation.com/en-us/concept/10014396"
+    },
+    {
+      "id": 10019278,
+      "title": "Birds Watching",
+      "releaseDate": "2026-08-20T10:00:00Z",
+      "publisher": "Dark Product",
+      "platforms": [
+        "PS5"
+      ],
+      "genres": [],
+      "price": "$5.99",
+      "basePrice": "$5.99",
+      "art": "https://image.api.playstation.com/vulcan/ap/rnd/202607/2908/a3cb84c3e3eca1fe5eac1ec8a5edae0698121ef92f8dc990.png",
+      "portrait": "https://image.api.playstation.com/vulcan/ap/rnd/202607/2908/9e0921eb73234309976a6ca7883a5e4d4ea8965c7914b84f.jpg",
+      "storeUrl": "https://store.playstation.com/en-us/concept/10019278"
+    },
+    {
+      "id": 10020252,
+      "title": "Threshold Warden",
+      "releaseDate": "2026-08-20T04:00:00Z",
+      "publisher": "Brainium Games LLC",
+      "platforms": [
+        "PS5"
+      ],
+      "genres": [
+        "Action"
+      ],
+      "price": "$7.99",
+      "basePrice": "$7.99",
+      "art": "https://image.api.playstation.com/vulcan/ap/rnd/202607/1413/f0aba3317d752f0a58964615e568bbe4ba54007d61474e41.jpg",
+      "portrait": "https://image.api.playstation.com/vulcan/ap/rnd/202607/1413/edbbb2591470cd70a0b5172fc905971db9a5c8154b720c0e.jpg",
+      "storeUrl": "https://store.playstation.com/en-us/concept/10020252"
+    },
+    {
+      "id": 10020187,
+      "title": "Dark Reflection",
+      "releaseDate": "2026-08-20T04:00:00Z",
+      "publisher": "Stamina Zero LLC",
+      "platforms": [
+        "PS4",
+        "PS5"
+      ],
+      "genres": [
+        "Adventure"
+      ],
+      "price": "$4.99",
+      "basePrice": "$4.99",
+      "art": "https://image.api.playstation.com/vulcan/ap/rnd/202607/2707/0776529a269700b25efe56bc1e17c7b982d9c5d3d66daa99.png",
+      "portrait": "https://image.api.playstation.com/vulcan/ap/rnd/202607/2708/d2722e3908c7058beeeffd99d1bb77e4294f440e830a0ba0.jpg",
+      "storeUrl": "https://store.playstation.com/en-us/concept/10020187"
+    },
+    {
+      "id": 10019872,
+      "title": "Arcade Archives 2 NINJA EMAKI",
+      "releaseDate": "2026-08-20T04:00:00Z",
+      "publisher": "HAMSTER Corporation",
+      "platforms": [
+        "PS5"
+      ],
+      "genres": [
+        "Action"
+      ],
+      "price": "$9.99",
+      "basePrice": "$9.99",
+      "art": "https://image.api.playstation.com/vulcan/ap/rnd/202608/0603/f7281b5a2675eeced834038b4033130c9520e04afa2b0e95.png",
+      "portrait": "https://image.api.playstation.com/vulcan/ap/rnd/202608/0603/70d8c349b42ed3a1e45acd3fde144e6c81e9ee4b02ac76e7.jpg",
+      "storeUrl": "https://store.playstation.com/en-us/concept/10019872"
+    },
+    {
+      "id": 10019317,
+      "title": "Arcade Archives 2 CYBER CYCLES",
+      "releaseDate": "2026-08-20T04:00:00Z",
+      "publisher": "HAMSTER Corporation",
+      "platforms": [
+        "PS5"
+      ],
+      "genres": [
+        "Driving/Racing"
+      ],
+      "price": "$16.99",
+      "basePrice": "$16.99",
+      "art": "https://image.api.playstation.com/vulcan/ap/rnd/202608/0601/b718af2b0f722614d108a479baf40f9bd40f2e0a5b4a7c98.jpg",
+      "portrait": "https://image.api.playstation.com/vulcan/ap/rnd/202608/0601/309d28d15f0b4d76bec1e0f5e55688b89cf20a011887e395.jpg",
+      "storeUrl": "https://store.playstation.com/en-us/concept/10019317"
+    },
+    {
+      "id": 10019067,
+      "title": "Console Archives Rhapsody II: Ballad of the Little Princess",
+      "releaseDate": "2026-08-20T04:00:00Z",
+      "publisher": "HAMSTER Corporation",
+      "platforms": [
+        "PS5"
+      ],
+      "genres": [
+        "Role Playing Games"
+      ],
+      "price": "$14.99",
+      "basePrice": "$14.99",
+      "art": "https://image.api.playstation.com/vulcan/ap/rnd/202608/0308/a01d6ed36e53b85918634e30205a6641503bdd26ef45ccc6.jpg",
+      "portrait": "https://image.api.playstation.com/vulcan/ap/rnd/202608/0308/35c7e4e84620ff0cb330c3450a41b30a2533a5d307160a1e.jpg",
+      "storeUrl": "https://store.playstation.com/en-us/concept/10019067"
+    },
+    {
+      "id": 10017863,
+      "title": "Driving is Hard",
+      "releaseDate": "2026-08-20T04:00:00Z",
+      "publisher": "MB Elegant horse studios",
+      "platforms": [
+        "PS5"
+      ],
+      "genres": [
+        "Adventure",
+        "Driving/Racing"
+      ],
+      "price": "$9.99",
+      "basePrice": "$9.99",
+      "art": "https://image.api.playstation.com/vulcan/ap/rnd/202605/3114/be4264b3cd5d9d067b872ad15d9379c256848958b634dba2.png",
+      "portrait": "https://image.api.playstation.com/vulcan/ap/rnd/202605/3114/ad359ae0a7a34057b6d9cb755c6554369d782514640673f7.png",
+      "storeUrl": "https://store.playstation.com/en-us/concept/10017863"
+    }
+  ],
+  "fetchedAt": "2026-09-07T16:13:01.115Z"
+}

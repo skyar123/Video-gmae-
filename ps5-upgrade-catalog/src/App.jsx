@@ -1760,21 +1760,24 @@ const daysUntil = (iso) =>
  * Grouped by month so a long scroll still reads as a calendar rather than a
  * list. The day block on the left is the anchor your eye follows down.
  */
-function UpcomingPanel({ games, status, onReload, catalogTitles }) {
+function UpcomingPanel({ games, recent, status, onReload, catalogTitles }) {
+  const [when, setWhen] = useState('ahead');
+  const list = when === 'ahead' ? games : recent;
+
   const months = useMemo(() => {
     const groups = new Map();
-    for (const game of games) {
+    for (const game of list) {
       const key = MONTH_LABEL(game.releaseDate);
       if (!groups.has(key)) groups.set(key, []);
       groups.get(key).push(game);
     }
     return [...groups.entries()];
-  }, [games]);
+  }, [list]);
 
-  if (status === 'loading' && games.length === 0) {
+  if (status === 'loading' && games.length === 0 && recent.length === 0) {
     return <PanelMessage icon={Loader2} spin label="Checking the store calendar..." />;
   }
-  if (games.length === 0) {
+  if (games.length === 0 && recent.length === 0) {
     return (
       <PanelMessage
         icon={CalendarDays}
@@ -1786,6 +1789,39 @@ function UpcomingPanel({ games, status, onReload, catalogTitles }) {
 
   return (
     <div className="space-y-5">
+      <div className="no-scrollbar -mb-2 flex gap-1.5 overflow-x-auto">
+        {[
+          ['ahead', 'Coming soon', games.length],
+          ['out', 'Just released', recent.length],
+        ].map(([value, label, count]) => (
+          <button
+            key={value}
+            type="button"
+            onClick={() => setWhen(value)}
+            aria-pressed={when === value}
+            className={`inline-flex shrink-0 items-center gap-1.5 rounded-full px-2.5 py-1 text-xs font-medium transition-all duration-200 ease-spring active:scale-95 ${
+              when === value
+                ? 'bg-slate-900 text-white'
+                : 'bg-white text-slate-600 ring-1 ring-inset ring-slate-200 hover:bg-slate-100'
+            }`}
+          >
+            {label}
+            <span className={when === value ? 'text-white/60' : 'text-slate-400'}>{count}</span>
+          </button>
+        ))}
+      </div>
+
+      {list.length === 0 && (
+        <PanelMessage
+          icon={CalendarDays}
+          label={
+            when === 'ahead'
+              ? 'Nothing dated ahead right now.'
+              : 'Nothing has landed in the last two months.'
+          }
+        />
+      )}
+
       {months.map(([month, entries]) => (
         <section key={month}>
           <h3 className="sticky top-0 z-10 -mx-1 mb-2 bg-slate-50/95 px-1 py-1 text-xs font-bold uppercase tracking-wider text-slate-400 backdrop-blur">
@@ -1837,7 +1873,7 @@ function UpcomingPanel({ games, status, onReload, catalogTitles }) {
                         <span className="rounded bg-slate-100 px-1.5 py-0.5 text-[11px] font-semibold text-slate-600">
                           {game.platforms?.join(' / ') || 'PS5'}
                         </span>
-                        {away <= 30 && (
+                        {away > 0 && away <= 30 && (
                           <span className="rounded bg-amber-100 px-1.5 py-0.5 text-[11px] font-semibold text-amber-700">
                             {away <= 1 ? 'Tomorrow' : `in ${away} days`}
                           </span>
@@ -1964,6 +2000,7 @@ function BriefingDrawer({ open, tab, onTab, onClose, catalogTitles }) {
           ) : (
             <UpcomingPanel
               games={upcoming.data?.games ?? []}
+              recent={upcoming.data?.recent ?? []}
               status={upcoming.status}
               onReload={upcoming.reload}
               catalogTitles={catalogTitles}
@@ -1974,7 +2011,7 @@ function BriefingDrawer({ open, tab, onTab, onClose, catalogTitles }) {
         <footer className="border-t border-slate-200 bg-white px-3 py-2 text-[11px] text-slate-400">
           {tab === 'news'
             ? 'Headlines link straight to the publisher. Feeds refresh every 15 minutes.'
-            : 'Dates and prices are read from the PS Store; delayed games move themselves.'}
+            : 'Read from the PS Store nightly, so delayed games move themselves and new ones turn up on their own.'}
         </footer>
       </aside>
     </div>

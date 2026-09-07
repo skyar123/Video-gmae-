@@ -7,7 +7,8 @@
  * the calendar without anyone editing a file.
  */
 
-import { readFile } from 'node:fs/promises';
+import bakedSeeds from './upcoming-seeds.json' with { type: 'json' };
+import snapshot from './upcoming-snapshot.json' with { type: 'json' };
 import { loadBlob, saveBlob } from './history.mjs';
 
 const UA = 'Mozilla/5.0 (compatible; ps5-upgrade-catalog/1.0)';
@@ -23,10 +24,16 @@ const SCAN_FROM = 10_006_000;
 const SCAN_TO = 10_030_000;
 const SCAN_WINDOW = 1_500;
 
+// A game stays in "just released" for this long after its date, which is how
+// something new reaches the app without the catalog itself being rebuilt.
+const RECENT_DAYS = 60;
+
+// Every seed costs a store fetch on the nightly rebuild, so the discovered
+// list is bounded; the baked seeds are always kept on top of this.
+const MAX_DISCOVERED_SEEDS = 120;
+
 let memory = null;
 let inFlight = null;
-
-const seedsUrl = new URL('./upcoming-seeds.json', import.meta.url);
 
 const decodeEntities = (value) =>
   value
@@ -40,7 +47,7 @@ const decodeEntities = (value) =>
 /** Reads the head of a concept page — enough for the Apollo payload we need. */
 async function fetchConcept(id) {
   const controller = new AbortController();
-  const timer = setTimeout(() => controller.abort(), 12_000);
+  const timer = setTimeout(() => controller.abort(), 5_000);
   try {
     const response = await fetch(`https://store.playstation.com/en-us/concept/${id}`, {
       signal: controller.signal,
@@ -77,6 +84,9 @@ const artFor = (html, role) => {
 const NOT_A_GAME = /\b(pre-?order|bundle|pack|season pass|dlc|expansion|upgrade|currency|coins?|credits?|avatar|theme|soundtrack)\b/i;
 
 /** "Standard Edition" and friends are the same release under a longer name. */
+/** Store listings often tack the platforms onto the end of the name. */
+const PLATFORM_SUFFIX = /\s*(PS4|PS5|PlayStation\s*[45])\s*(®|™)?\s*(&|and|\+|\/)\s*(PS4|PS5|PlayStation\s*[45])\s*(®|™)?\s*$/i;
+
 const EDITION_SUFFIX =
   /\s*[:\u2013-]?\s*(standard|digital|deluxe|ultimate|gold|premium|special|launch|day one)\s+edition\b(\s*(PS4|PS5|&|and|\/|\s)+)*$/i;
 
@@ -102,6 +112,7 @@ function parseConcept(id, html) {
   return {
     id,
     title: decodeEntities(name.replace(/\s*[|·-]\s*(PS[45]|PlayStation).*$/i, ''))
+      .replace(PLATFORM_SUFFIX, '')
       .replace(EDITION_SUFFIX, '')
       .trim(),
     releaseDate: release,
@@ -136,53 +147,72 @@ async function mapWithConcurrency(items, limit, worker) {
 
 /** Baked seeds plus whatever the nightly sweep has since turned up. */
 async function currentSeeds() {
-  const baked = JSON.parse(await readFile(seedsUrl, 'utf8'));
   const discovered = (await loadBlob(SEEDS_KEY))?.seeds ?? [];
   const byId = new Map();
-  for (const seed of [...baked, ...discovered]) byId.set(seed.id, seed);
+  for (const seed of [...bakedSeeds, ...discovered]) byId.set(seed.id, seed);
   return [...byId.values()];
 }
 
-async function build() {
+/** Exported so the snapshot shipped with a deploy can be baked from it. */
+export async function build() {
   const seeds = await currentSeeds();
-  const pages = await mapWithConcurrency(seeds, 8, async (seed) => {
+  const pages = await mapWithConcurrency(seeds, 16, async (seed) => {
     const html = await fetchConcept(seed.id);
     return html ? parseConcept(seed.id, html) : null;
   });
 
   const now = Date.now();
-  const games = pages
-    .filter(Boolean)
+  const dated = pages.filter(Boolean);
+  const games = dated
     .filter((game) => new Date(game.releaseDate).getTime() > now)
     .sort((a, b) => new Date(a.releaseDate) - new Date(b.releaseDate));
 
-  return { games, fetchedAt: new Date().toISOString() };
+  // Yesterday's calendar is today's new releases, so seeds are followed past
+  // their date rather than dropped the moment a game comes out.
+  const recent = dated
+    .filter((game) => {
+      const age = now - new Date(game.releaseDate).getTime();
+      return age > 0 && age < RECENT_DAYS * 86_400_000;
+    })
+    .sort((a, b) => new Date(b.releaseDate) - new Date(a.releaseDate));
+
+  return { games, recent, fetchedAt: new Date().toISOString() };
 }
 
-/** Cached six hours; a stale copy is served rather than an empty calendar. */
+/** Dates drift while a stored copy sits, so the split is redone on read. */
+function reslice(value) {
+  const now = Date.now();
+  const all = [...(value.games ?? []), ...(value.recent ?? [])];
+  return {
+    games: all
+      .filter((game) => new Date(game.releaseDate).getTime() > now)
+      .sort((a, b) => new Date(a.releaseDate) - new Date(b.releaseDate)),
+    recent: all
+      .filter((game) => {
+        const age = now - new Date(game.releaseDate).getTime();
+        return age > 0 && age < RECENT_DAYS * 86_400_000;
+      })
+      .sort((a, b) => new Date(b.releaseDate) - new Date(a.releaseDate)),
+    fetchedAt: value.fetchedAt ?? null,
+  };
+}
+
+/**
+ * Reads only. Rebuilding means a store fetch per game, which is the nightly
+ * job's work, not a visitor's — so a request serves the last build, or the
+ * snapshot baked at deploy time until the first nightly run replaces it.
+ */
 export async function loadUpcoming() {
   if (memory && Date.now() - memory.storedAt < CACHE_TTL_MS) return memory.value;
   if (inFlight) return inFlight;
 
   inFlight = (async () => {
+    // A missing blob reads back as {}, so presence is judged on the data.
     const stored = await loadBlob(BLOB_KEY);
-    if (stored?.fetchedAt && Date.now() - new Date(stored.fetchedAt).getTime() < CACHE_TTL_MS) {
-      memory = { value: stored, storedAt: Date.now() };
-      return stored;
-    }
-    try {
-      const value = await build();
-      if (value.games.length > 0) {
-        memory = { value, storedAt: Date.now() };
-        await saveBlob(BLOB_KEY, value);
-        return value;
-      }
-    } catch {
-      // Fall through to whatever we last managed to store.
-    }
-    const fallback = stored ?? { games: [], fetchedAt: null };
-    memory = { value: fallback, storedAt: Date.now() };
-    return fallback;
+    const source = Array.isArray(stored?.games) && stored.games.length > 0 ? stored : snapshot;
+    const value = reslice(source);
+    memory = { value, storedAt: Date.now() };
+    return value;
   })().finally(() => {
     inFlight = null;
   });
@@ -209,7 +239,10 @@ export async function sweepForReleases() {
   const now = Date.now();
   const fresh = found
     .filter(Boolean)
-    .filter((game) => new Date(game.releaseDate).getTime() > now)
+    .filter(
+      (game) =>
+        new Date(game.releaseDate).getTime() > now - RECENT_DAYS * 86_400_000,
+    )
     .map((game) => ({ id: game.id, title: game.title }));
 
   // Seeds whose release has passed are dropped so the refresh stays cheap.
@@ -217,22 +250,31 @@ export async function sweepForReleases() {
   for (const seed of (await loadBlob(SEEDS_KEY))?.seeds ?? []) kept.set(seed.id, seed);
   for (const seed of fresh) kept.set(seed.id, seed);
 
-  const released = new Set(
-    ((await loadBlob(BLOB_KEY))?.games ?? [])
-      .filter((game) => new Date(game.releaseDate).getTime() <= now)
+  // Only seeds whose release is well behind us are dropped; the rest keep
+  // feeding the "just released" list.
+  const calendar = await loadBlob(BLOB_KEY);
+  const stale = new Set(
+    [...(calendar?.games ?? []), ...(calendar?.recent ?? [])]
+      .filter(
+        (game) => now - new Date(game.releaseDate).getTime() > RECENT_DAYS * 86_400_000,
+      )
       .map((game) => game.id),
   );
-  for (const id of released) kept.delete(id);
+  for (const id of stale) kept.delete(id);
 
-  await saveBlob(SEEDS_KEY, { seeds: [...kept.values()], sweptAt: new Date().toISOString() });
+  await saveBlob(SEEDS_KEY, {
+    seeds: [...kept.values()].slice(-MAX_DISCOVERED_SEEDS),
+    sweptAt: new Date().toISOString(),
+  });
   await saveBlob(CURSOR_KEY, { next: to >= SCAN_TO ? SCAN_FROM : to });
 
-  // Rebuild now, against the new seed list, so no reader pays for the refresh.
-  // The old games stay in place as a fallback until the rebuild succeeds.
+  // Rebuild now, against the new seed list, so no reader ever pays for it.
+  // The stored copy is only replaced once the new one comes back non-empty.
+  const rebuilt = await build();
+  if (rebuilt.games.length > 0 || rebuilt.recent.length > 0) {
+    await saveBlob(BLOB_KEY, rebuilt);
+  }
   memory = null;
-  const previous = (await loadBlob(BLOB_KEY))?.games ?? [];
-  await saveBlob(BLOB_KEY, { games: previous, fetchedAt: null });
-  const rebuilt = await loadUpcoming();
 
   return {
     scanned: ids.length,
@@ -241,5 +283,6 @@ export async function sweepForReleases() {
     discovered: fresh.length,
     seeds: kept.size,
     calendar: rebuilt.games.length,
+    recent: rebuilt.recent.length,
   };
 }
