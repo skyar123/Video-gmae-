@@ -2,13 +2,36 @@
 <html lang="en">
   <head>
     <meta charset="UTF-8" />
-    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+    <!-- viewport-fit=cover lets the page paint under the notch and the home
+         indicator; the safe-area insets in index.css put the content back. User
+         scaling is deliberately left on. -->
+    <meta
+      name="viewport"
+      content="width=device-width, initial-scale=1, viewport-fit=cover"
+    />
+
+    <title>PS4 to PS5 Catalog</title>
     <meta
       name="description"
-      content="A filterable catalog of 150 PlayStation 4 games that run better on PS5, with genre, protagonist and art style filters."
+      content="PlayStation games worth playing, with live store prices, a price-drop predictor, a release calendar and picks based on what you own."
     />
-    <title>PS4 to PS5 Upgrade Catalog</title>
+
+    <!-- Home-screen install. iOS reads the apple-* tags; everything else reads
+         the manifest. -->
+    <link rel="manifest" href="/manifest.webmanifest" />
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <link rel="apple-touch-icon" href="/icon-180.png" />
+    <meta name="apple-mobile-web-app-capable" content="yes" />
+    <meta name="mobile-web-app-capable" content="yes" />
+    <meta name="apple-mobile-web-app-title" content="PS4→5" />
+    <meta name="apple-mobile-web-app-status-bar-style" content="default" />
+    <meta name="theme-color" content="#ffffff" />
+
+    <!-- The store's art and the trailers come from these two hosts, so the
+         handshake starts while the bundle is still parsing. -->
+    <link rel="preconnect" href="https://image.api.playstation.com" crossorigin />
+    <link rel="preconnect" href="https://shared.akamai.steamstatic.com" crossorigin />
   </head>
   <body>
     <div id="root"></div>

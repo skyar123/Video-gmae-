@@ -417,11 +417,28 @@ function VerdictBadge({ prediction, className = '' }) {
  * earned the rating was language or a drug reference; what disqualifies it is
  * gore, brutal violence or sexual content.
  */
+// `short` is what fits on a card two-up on a phone; `label` is the real one.
 const FAMILY_TIERS = {
-  safe: { label: 'Great for kids', tone: 'bg-emerald-50 text-emerald-700 ring-emerald-600/20' },
-  mild: { label: 'Fine for most kids', tone: 'bg-sky-50 text-sky-700 ring-sky-600/20' },
-  mature: { label: 'Mature content', tone: 'bg-rose-50 text-rose-700 ring-rose-600/20' },
-  unknown: { label: 'Not rated', tone: 'bg-slate-100 text-slate-500 ring-slate-500/20' },
+  safe: {
+    label: 'Great for kids',
+    short: 'Kids',
+    tone: 'bg-emerald-50 text-emerald-700 ring-emerald-600/20',
+  },
+  mild: {
+    label: 'Fine for most kids',
+    short: 'Most kids',
+    tone: 'bg-sky-50 text-sky-700 ring-sky-600/20',
+  },
+  mature: {
+    label: 'Mature content',
+    short: 'Mature',
+    tone: 'bg-rose-50 text-rose-700 ring-rose-600/20',
+  },
+  unknown: {
+    label: 'Not rated',
+    short: 'Not rated',
+    tone: 'bg-slate-100 text-slate-500 ring-slate-500/20',
+  },
 };
 
 /** The board's own verdict, kept separate and shown alongside. */
@@ -447,7 +464,14 @@ function AgeBadge({ ageRating, size = 'sm' }) {
       className={`inline-flex items-center gap-1 rounded font-semibold ring-1 ring-inset ${pad} ${family.tone}`}
     >
       <Baby className="h-3.5 w-3.5" aria-hidden="true" />
-      {family.label}
+      {size === 'lg' ? (
+        family.label
+      ) : (
+        <>
+          <span className="sm:hidden">{family.short}</span>
+          <span className="hidden sm:inline">{family.label}</span>
+        </>
+      )}
     </span>
   );
 }
@@ -552,7 +576,9 @@ function RatingChips({ ratings, size = 'sm' }) {
         >
           <Star className="h-3.5 w-3.5" aria-hidden="true" />
           {critic}
-          <span className="font-normal opacity-70">critics</span>
+          <span className={`font-normal opacity-70 ${size === 'lg' ? '' : 'hidden sm:inline'}`}>
+            critics
+          </span>
         </span>
       )}
       {user != null && (
@@ -562,7 +588,9 @@ function RatingChips({ ratings, size = 'sm' }) {
         >
           <Users className="h-3.5 w-3.5" aria-hidden="true" />
           {user.percentPositive}%
-          <span className="font-normal opacity-70">players</span>
+          <span className={`font-normal opacity-70 ${size === 'lg' ? '' : 'hidden sm:inline'}`}>
+            players
+          </span>
         </span>
       )}
     </div>
@@ -780,7 +808,39 @@ function GameModal({
   onClose,
 }) {
   const [selected, setSelected] = useState(null);
+  const [drag, setDrag] = useState(0);
   const closeRef = useRef(null);
+  const sheetRef = useRef(null);
+
+  /**
+   * Drag-to-dismiss, from the handle only. Dragging the whole sheet would
+   * fight the scrolling inside it; the handle has nothing else to do.
+   */
+  const onDragStart = useCallback(
+    (event) => {
+      const startY = event.clientY;
+      const target = event.currentTarget;
+      target.setPointerCapture?.(event.pointerId);
+      let travelled = 0;
+
+      const onMove = (move) => {
+        travelled = Math.max(0, move.clientY - startY);
+        setDrag(travelled);
+      };
+      const onEnd = () => {
+        target.removeEventListener('pointermove', onMove);
+        target.removeEventListener('pointerup', onEnd);
+        target.removeEventListener('pointercancel', onEnd);
+        if (travelled > 110) onClose();
+        else setDrag(0);
+      };
+
+      target.addEventListener('pointermove', onMove);
+      target.addEventListener('pointerup', onEnd);
+      target.addEventListener('pointercancel', onEnd);
+    },
+    [onClose],
+  );
 
   // Ratings ship with the catalog; the nightly refresh overrides them.
   const ratings = live?.ratings ?? game.ratings;
@@ -811,7 +871,7 @@ function GameModal({
 
   return (
     <div
-      className="fixed inset-0 z-50 flex items-start justify-center overflow-y-auto bg-slate-900/50 p-4 backdrop-blur-sm animate-fade-in sm:items-center"
+      className="fixed inset-0 z-50 flex items-end justify-center bg-slate-900/50 backdrop-blur-sm animate-fade-in sm:items-center sm:p-4"
       onMouseDown={(event) => {
         if (event.target === event.currentTarget) onClose();
       }}
@@ -820,14 +880,27 @@ function GameModal({
         role="dialog"
         aria-modal="true"
         aria-labelledby="game-modal-title"
-        className="relative my-auto w-full max-w-3xl overflow-hidden rounded-2xl bg-white shadow-2xl animate-pop-in"
+        ref={sheetRef}
+        style={drag > 0 ? { transform: `translateY(${drag}px)`, transition: 'none' } : undefined}
+        // A sheet on a phone, a dialog on a desktop. The content scrolls inside
+        // it rather than the backdrop scrolling behind it, which is what stops
+        // iOS rubber-banding the page under an open modal.
+        className="panel-scroll relative max-h-[92dvh] w-full overflow-y-auto rounded-t-2xl bg-white pb-[var(--inset-bottom)] shadow-2xl animate-sheet-up sm:my-auto sm:max-h-[90dvh] sm:max-w-3xl sm:rounded-2xl sm:pb-0 sm:animate-pop-in"
       >
+        {/* Grab handle: the standard way out of a sheet on a phone. */}
+        <div
+          onPointerDown={onDragStart}
+          className="touch-only sticky top-0 z-20 flex h-6 cursor-grab touch-none items-center justify-center bg-gradient-to-b from-white to-transparent"
+        >
+          <span className="h-1 w-10 rounded-full bg-slate-300" />
+        </div>
+
         <button
           ref={closeRef}
           type="button"
           onClick={onClose}
           aria-label="Close"
-          className="absolute right-3 top-3 z-10 rounded-full bg-slate-900/60 p-2 text-white transition-colors hover:bg-slate-900 focus:outline-none focus-visible:ring-2 focus-visible:ring-white"
+          className="tap absolute right-3 top-8 z-10 inline-flex items-center justify-center rounded-full bg-slate-900/60 text-white transition-colors hover:bg-slate-900 focus:outline-none focus-visible:ring-2 focus-visible:ring-white sm:top-3 sm:h-9 sm:min-h-0 sm:w-9 sm:min-w-0"
         >
           <X className="h-5 w-5" />
         </button>
@@ -895,11 +968,13 @@ function GameModal({
         )}
 
         <div className="p-6 sm:p-8">
-          <div className="flex items-start justify-between gap-4">
-            <h2 id="game-modal-title" className="pr-6 text-2xl font-bold text-slate-900">
+          {/* Stacked on a phone: side by side, the title wraps to two lines to
+              make room for two buttons that fit fine on their own row. */}
+          <div className="flex flex-col gap-3 sm:flex-row sm:items-start sm:justify-between sm:gap-4">
+            <h2 id="game-modal-title" className="text-2xl font-bold text-slate-900 sm:pr-6">
               {game.title}
             </h2>
-            <div className="flex shrink-0 items-center gap-1">
+            <div className="flex shrink-0 items-center gap-2 sm:gap-1">
               <WishlistButton wishlisted={wishlisted} onToggle={onToggleWishlist} withLabel />
               <OwnedButton owned={owned} onToggle={onToggleOwned} withLabel />
             </div>
@@ -912,7 +987,7 @@ function GameModal({
             </p>
           )}
 
-          <div className="mt-5 grid grid-cols-3 gap-4">
+          <div className="mt-5 grid grid-cols-3 gap-3 sm:gap-4">
             {[
               ['Genre', game.genre],
               ['Protagonist', game.protagonist],
@@ -1105,7 +1180,7 @@ function WishlistButton({ wishlisted, onToggle, withLabel = false }) {
       }}
       aria-pressed={wishlisted}
       aria-label={wishlisted ? 'Remove from wishlist' : 'Add to wishlist'}
-      className={`inline-flex shrink-0 items-center gap-1.5 rounded-lg px-2 py-1.5 text-sm transition-colors ${
+      className={`inline-flex h-10 shrink-0 items-center justify-center gap-1.5 rounded-lg px-2.5 text-sm transition-colors sm:h-8 ${
         wishlisted
           ? 'bg-rose-50 text-rose-600 hover:bg-rose-100'
           : 'text-slate-400 hover:bg-slate-100 hover:text-slate-600'
@@ -1133,7 +1208,7 @@ function OwnedButton({ owned, onToggle, withLabel = false }) {
       aria-pressed={owned}
       aria-label={owned ? 'Remove from library' : 'Add to library'}
       title={owned ? 'In your library' : 'Mark as owned'}
-      className={`inline-flex shrink-0 items-center gap-1.5 rounded-lg px-2 py-1.5 text-sm transition-colors ${
+      className={`inline-flex h-10 shrink-0 items-center justify-center gap-1.5 rounded-lg px-2.5 text-sm transition-colors sm:h-8 ${
         owned
           ? 'bg-emerald-50 text-emerald-600 hover:bg-emerald-100'
           : 'text-slate-400 hover:bg-slate-100 hover:text-slate-600'
@@ -1191,18 +1266,18 @@ function GameCard({
           )}
         </div>
 
-        <div className="flex flex-1 flex-col p-3 sm:p-4">
-          <h2 className="mb-1.5 pr-7 text-sm font-bold leading-tight text-slate-800 sm:text-base">
+        <div className="flex flex-1 flex-col p-2.5 sm:p-4">
+          <h2 className="mb-1.5 text-sm font-bold leading-tight text-slate-800 sm:pr-7 sm:text-base">
             {game.title}
           </h2>
-          <div className="mb-2 flex flex-wrap gap-1">
-            <span className="rounded bg-indigo-50 px-1.5 py-0.5 text-[11px] font-semibold text-indigo-700">
+          <div className="mb-1.5 flex flex-wrap gap-1">
+            <span className="rounded bg-indigo-50 px-1.5 py-0.5 text-[10px] font-semibold text-indigo-700 sm:text-[11px]">
               {game.genre}
             </span>
             <UpgradeBadge value={game.ps5Upgrade} />
             {showVerdict && <VerdictBadge prediction={prediction} />}
           </div>
-          <div className="mb-2 flex flex-wrap items-center gap-1">
+          <div className="mb-1.5 flex flex-wrap items-center gap-1">
             {game.representation?.length > 0 && (
               <span
                 title={game.representation.map((entry) => entry.note).join(' ')}
@@ -1216,12 +1291,14 @@ function GameCard({
             <RatingChips ratings={ratings} />
           </div>
           {reason ? (
-            <p className="line-clamp-3 text-xs font-medium leading-relaxed text-indigo-600">
+            <p className="line-clamp-3 text-[11px] font-medium leading-relaxed text-indigo-600 sm:text-xs">
               <Sparkles className="mr-1 inline h-3 w-3 align-[-1px]" />
               {reason}
             </p>
           ) : (
-            <p className="line-clamp-2 text-xs leading-relaxed text-slate-500">{game.description}</p>
+            <p className="line-clamp-2 text-[11px] leading-relaxed text-slate-500 sm:text-xs">
+              {game.description}
+            </p>
           )}
           {live?.price && (
             <p className="mt-auto flex items-baseline gap-2 pt-3 text-sm">
@@ -1234,7 +1311,10 @@ function GameCard({
         </div>
       </button>
 
-      <div className="absolute right-1.5 top-1.5 flex flex-col items-end gap-0.5 rounded-xl bg-white/75 p-0.5 backdrop-blur-sm">
+      {/* Pointer: a hover rail tucked into the corner, out of the way until
+          wanted. Touch: three full-height targets in a row, because a stack of
+          36px buttons over the art is a mis-tap waiting to happen. */}
+      <div className="pointer-only absolute right-1.5 top-1.5 flex flex-col items-end gap-0.5 rounded-xl bg-white/75 p-0.5 backdrop-blur-sm">
         <WishlistButton wishlisted={wishlisted} onToggle={onToggleWishlist} />
         <OwnedButton owned={owned} onToggle={onToggleOwned} />
         <button
@@ -1245,9 +1325,42 @@ function GameCard({
           }}
           aria-label={`Stop showing ${game.title}`}
           title="Not for me"
-          className="rounded-lg px-2 py-1.5 text-slate-300 opacity-0 transition-all duration-200 hover:bg-slate-100 hover:text-slate-600 focus:opacity-100 group-hover:opacity-100 max-sm:opacity-60"
+          className="inline-flex h-8 items-center justify-center rounded-lg px-2.5 text-slate-300 opacity-0 transition-all duration-200 hover:bg-slate-100 hover:text-slate-600 focus:opacity-100 group-hover:opacity-100"
         >
           <X className="h-4 w-4" />
+        </button>
+      </div>
+
+      <div className="touch-only grid grid-cols-3 divide-x divide-slate-100 border-t border-slate-100">
+        <button
+          type="button"
+          onClick={onToggleWishlist}
+          aria-pressed={wishlisted}
+          aria-label={wishlisted ? `Remove ${game.title} from wishlist` : `Add ${game.title} to wishlist`}
+          className={`flex h-11 items-center justify-center transition-colors active:bg-slate-100 ${
+            wishlisted ? 'bg-rose-50 text-rose-600' : 'text-slate-400'
+          }`}
+        >
+          <Heart className={`h-[18px] w-[18px] ${wishlisted ? 'fill-current' : ''}`} />
+        </button>
+        <button
+          type="button"
+          onClick={onToggleOwned}
+          aria-pressed={owned}
+          aria-label={owned ? `Remove ${game.title} from library` : `Mark ${game.title} as owned`}
+          className={`flex h-11 items-center justify-center transition-colors active:bg-slate-100 ${
+            owned ? 'bg-emerald-50 text-emerald-600' : 'text-slate-400'
+          }`}
+        >
+          <CircleCheck className="h-[18px] w-[18px]" />
+        </button>
+        <button
+          type="button"
+          onClick={onHide}
+          aria-label={`Stop showing ${game.title}`}
+          className="flex h-11 items-center justify-center text-slate-300 transition-colors active:bg-slate-100"
+        >
+          <X className="h-[18px] w-[18px]" />
         </button>
       </div>
     </div>
@@ -1669,7 +1782,7 @@ function FeedSlide({
       )}
       <div className="absolute inset-0 bg-gradient-to-t from-slate-950 via-slate-950/70 to-slate-950/10" />
 
-      <div className="relative w-full p-5 pb-24 sm:p-8 sm:pb-28">
+      <div className="relative w-full p-5 pb-[calc(6rem+var(--inset-bottom))] sm:p-8 sm:pb-[calc(6.5rem+var(--inset-bottom))]">
         <div className="mx-auto flex max-w-3xl items-end justify-between gap-4">
           <div className="min-w-0">
             <div className="mb-3 flex flex-wrap items-center gap-1.5">
@@ -1825,6 +1938,57 @@ const UPDATE_TEXT = {
     `Moved up to ${new Date(update.to).toLocaleDateString([], { day: 'numeric', month: 'short', year: 'numeric' })}`,
   out: () => 'Out now',
 };
+
+/**
+ * Phone navigation.
+ *
+ * A 390pt screen cannot hold a wordmark, a search field and four icon buttons
+ * on one row without squeezing the search down to two characters, and a bar
+ * across the bottom is where a hand actually rests. Pointer layouts keep the
+ * single header row and never see this.
+ */
+function BottomBar({ view, onView, onBriefing, onSurprise, canSurprise, updates }) {
+  const items = [
+    { key: 'grid', label: 'Browse', icon: LayoutGrid, active: view === 'grid' },
+    { key: 'feed', label: 'Feed', icon: Rows3, active: view === 'feed' },
+    { key: 'news', label: 'News', icon: Newspaper, badge: updates },
+    { key: 'surprise', label: 'Surprise', icon: Dices, disabled: !canSurprise },
+  ];
+
+  return (
+    <nav
+      aria-label="Sections"
+      className="touch-only fixed inset-x-0 bottom-0 z-30 border-t border-slate-200 bg-white/90 pb-[var(--inset-bottom)] backdrop-blur"
+    >
+      <div className="flex">
+        {items.map((item) => (
+          <button
+            key={item.key}
+            type="button"
+            disabled={item.disabled}
+            aria-current={item.active ? 'page' : undefined}
+            onClick={() => {
+              if (item.key === 'news') onBriefing();
+              else if (item.key === 'surprise') onSurprise();
+              else onView(item.key);
+            }}
+            className={`relative flex h-14 flex-1 flex-col items-center justify-center gap-0.5 transition-colors active:bg-slate-100 disabled:opacity-40 ${
+              item.active ? 'text-indigo-600' : 'text-slate-500'
+            }`}
+          >
+            <item.icon className={`h-[22px] w-[22px] ${item.active ? 'stroke-[2.4]' : ''}`} />
+            <span className="text-[10px] font-semibold tracking-tight">{item.label}</span>
+            {item.badge > 0 && (
+              <span className="absolute right-[26%] top-1.5 flex h-4 min-w-4 items-center justify-center rounded-full bg-amber-500 px-1 text-[10px] font-bold text-white">
+                {item.badge}
+              </span>
+            )}
+          </button>
+        ))}
+      </div>
+    </nav>
+  );
+}
 
 /* ------------------------------------------------------------------ *
  * Store mirror
@@ -2075,7 +2239,7 @@ function StorePanel({ query, curatedByName, onOpenCurated }) {
         />
       ) : (
         <>
-          <div className="grid grid-cols-2 gap-3 sm:gap-4 lg:grid-cols-3 xl:grid-cols-4 2xl:grid-cols-5">
+          <div className="grid grid-cols-2 gap-3 sm:grid-cols-3 sm:gap-4 lg:grid-cols-4 xl:grid-cols-5">
             {results.games.map((game) => (
               <StoreCard
                 key={game.id}
@@ -2458,7 +2622,7 @@ function UpcomingPanel({
                           : `Follow ${game.title} for date changes`
                       }
                       title={saved.has(game.id) ? 'Following' : 'Tell me if this changes'}
-                      className={`shrink-0 self-center rounded-lg p-2 transition-colors ${
+                      className={`tap inline-flex shrink-0 items-center justify-center self-center rounded-lg transition-colors ${
                         saved.has(game.id)
                           ? 'bg-amber-50 text-amber-600'
                           : 'text-slate-300 hover:bg-slate-100 hover:text-slate-600'
@@ -2546,7 +2710,7 @@ function BriefingDrawer({
         onClick={onClose}
         className="absolute inset-0 animate-fade-in bg-slate-900/40 backdrop-blur-sm"
       />
-      <aside className="relative flex h-full w-full max-w-md animate-slide-in flex-col border-l border-slate-200 bg-slate-50 shadow-2xl">
+      <aside className="relative flex h-full w-full max-w-md animate-slide-in flex-col border-l border-slate-200 bg-slate-50 pt-[var(--inset-top)] shadow-2xl">
         <header className="flex items-center gap-2 border-b border-slate-200 bg-white px-3 py-2.5">
           <div className="flex flex-1 gap-1">
             {[
@@ -2558,7 +2722,7 @@ function BriefingDrawer({
                 type="button"
                 onClick={() => onTab(value)}
                 aria-pressed={tab === value}
-                className={`inline-flex items-center gap-1.5 rounded-full px-3 py-1.5 text-sm font-medium transition-all duration-200 ease-spring active:scale-95 ${
+                className={`inline-flex h-10 items-center gap-1.5 rounded-full px-3.5 text-sm font-medium transition-all duration-200 ease-spring active:scale-95 sm:h-9 ${
                   tab === value
                     ? 'bg-slate-900 text-white'
                     : 'bg-slate-100 text-slate-600 hover:bg-slate-200'
@@ -2573,7 +2737,7 @@ function BriefingDrawer({
             type="button"
             onClick={active.reload}
             aria-label="Refresh"
-            className="rounded-full p-2 text-slate-400 transition-colors hover:bg-slate-100 hover:text-slate-700"
+            className="tap inline-flex items-center justify-center rounded-full text-slate-400 transition-colors hover:bg-slate-100 hover:text-slate-700 sm:h-9 sm:min-h-0 sm:w-9 sm:min-w-0"
           >
             <RefreshCw className={`h-4 w-4 ${active.status === 'loading' ? 'animate-spin' : ''}`} />
           </button>
@@ -2581,13 +2745,13 @@ function BriefingDrawer({
             type="button"
             onClick={onClose}
             aria-label="Close panel"
-            className="rounded-full p-2 text-slate-400 transition-colors hover:bg-slate-100 hover:text-slate-700"
+            className="tap inline-flex items-center justify-center rounded-full text-slate-400 transition-colors hover:bg-slate-100 hover:text-slate-700 sm:h-9 sm:min-h-0 sm:w-9 sm:min-w-0"
           >
             <X className="h-5 w-5" />
           </button>
         </header>
 
-        <div className="no-scrollbar flex-1 overflow-y-auto overscroll-contain p-3">
+        <div className="no-scrollbar panel-scroll flex-1 overflow-y-auto p-3">
           {tab === 'news' ? (
             <NewsPanel
               items={news.data?.items ?? []}
@@ -2608,7 +2772,7 @@ function BriefingDrawer({
           )}
         </div>
 
-        <footer className="border-t border-slate-200 bg-white px-3 py-2 text-[11px] text-slate-400">
+        <footer className="border-t border-slate-200 bg-white px-3 pb-[calc(0.5rem+var(--inset-bottom))] pt-2 text-[11px] text-slate-400">
           {tab === 'news'
             ? 'Headlines link straight to the publisher. Feeds refresh every 15 minutes.'
             : 'Read from the PS Store nightly, so delayed games move themselves and new ones turn up on their own.'}
@@ -2944,11 +3108,15 @@ export default function App() {
     const counts = {};
     for (const entry of COLLECTIONS) {
       counts[entry.value] =
-        entry.value === 'deals'
-          ? saleCount
-          : entry.value === 'genius'
-            ? geniusPicks.length
-            : entry.tag
+        // The mirror's size is only known once its facets load, so the chip
+        // carries no number rather than a wrong one.
+        entry.value === 'store'
+          ? null
+          : entry.value === 'deals'
+            ? saleCount
+            : entry.value === 'genius'
+              ? geniusPicks.length
+              : entry.tag
             ? visiblePool.filter((game) => game.tags.includes(entry.tag)).length
             : visiblePool.length;
     }
@@ -3006,17 +3174,18 @@ export default function App() {
           down, and springs back the moment you scroll up. */}
       <header
         ref={barRef}
-        className={`sticky top-0 z-20 border-b border-slate-200 bg-white/90 backdrop-blur transition-[padding] duration-300 ease-swift ${
-          compact ? 'px-3 py-2 sm:px-4' : 'px-3 py-3 sm:px-6 sm:py-4'
+        style={{ paddingTop: 'calc(var(--inset-top) + var(--bar-pad))' }}
+        className={`gutter sticky top-0 z-20 border-b border-slate-200 bg-white/90 backdrop-blur transition-[padding] duration-300 ease-swift ${
+          compact ? '[--bar-pad:0.5rem] pb-2' : '[--bar-pad:0.75rem] pb-3 sm:pb-4 sm:[--bar-pad:1rem]'
         }`}
       >
         <div className="mx-auto max-w-7xl">
           {/* Always-visible row: identity, search, filters, view switch. */}
           <div className="flex items-center gap-2">
             <h1
-              className={`shrink-0 font-bold tracking-tight text-slate-800 transition-all duration-300 ease-swift ${
-                compact ? 'w-0 overflow-hidden opacity-0 sm:w-auto sm:opacity-100' : ''
-              } ${compact ? 'text-base' : 'text-lg sm:text-2xl'}`}
+              className={`hidden shrink-0 font-bold tracking-tight text-slate-800 transition-all duration-300 ease-swift sm:block ${
+                compact ? 'text-base' : 'text-lg sm:text-2xl'
+              }`}
             >
               PS<span className="text-indigo-600">4→5</span>
               <span className="hidden sm:inline"> Catalog</span>
@@ -3030,8 +3199,9 @@ export default function App() {
               <input
                 type="search"
                 aria-label="Search titles"
-                placeholder={`Search ${gamesData.length} games...`}
-                className="w-full rounded-full border border-slate-300 bg-white py-1.5 pl-8 pr-3 text-sm outline-none transition-all duration-200 focus:border-indigo-500 focus:ring-2 focus:ring-indigo-500"
+                placeholder="Search games"
+                enterKeyHint="search"
+                className="w-full rounded-full border border-slate-300 bg-white py-2 pl-8 pr-3 text-base outline-none transition-all duration-200 focus:border-indigo-500 focus:ring-2 focus:ring-indigo-500 sm:py-1.5 sm:text-sm"
                 value={filters.q}
                 onChange={(event) => set('q', event.target.value)}
               />
@@ -3042,7 +3212,7 @@ export default function App() {
               onClick={() => setSheetOpen((open) => !open)}
               aria-expanded={sheetOpen}
               aria-label="Filters"
-              className={`inline-flex shrink-0 items-center gap-1.5 rounded-full px-3 py-1.5 text-sm font-medium transition-all duration-200 ease-spring active:scale-95 ${
+              className={`inline-flex h-11 shrink-0 items-center gap-1.5 rounded-full px-3 text-sm font-medium transition-all duration-200 ease-spring active:scale-95 sm:h-9 ${
                 sheetOpen || activeFilterCount > 0
                   ? 'bg-slate-900 text-white'
                   : 'bg-slate-100 text-slate-600 hover:bg-slate-200'
@@ -3069,7 +3239,7 @@ export default function App() {
               disabled={filteredGames.length === 0}
               aria-label="Surprise me with a random game"
               title="Surprise me"
-              className="shrink-0 rounded-full bg-amber-100 p-2 text-amber-700 transition-all duration-200 ease-spring hover:bg-amber-200 hover:rotate-12 active:scale-90 disabled:opacity-40"
+              className="pointer-only inline-flex h-9 w-9 shrink-0 items-center justify-center rounded-full bg-amber-100 text-amber-700 transition-all duration-200 ease-spring hover:rotate-12 hover:bg-amber-200 active:scale-90 disabled:opacity-40"
             >
               <Dices className="h-4 w-4" />
             </button>
@@ -3088,7 +3258,7 @@ export default function App() {
                   : 'News and upcoming releases'
               }
               title="News & upcoming"
-              className="relative shrink-0 rounded-full bg-sky-100 p-2 text-sky-700 transition-all duration-200 ease-spring hover:bg-sky-200 active:scale-90"
+              className="relative pointer-only inline-flex h-9 w-9 shrink-0 items-center justify-center rounded-full bg-sky-100 text-sky-700 transition-all duration-200 ease-spring hover:bg-sky-200 active:scale-90"
             >
               <Newspaper className="h-4 w-4" />
               {releaseChanges.length > 0 && (
@@ -3103,7 +3273,7 @@ export default function App() {
               onClick={() => set('view', filters.view === 'feed' ? 'grid' : 'feed')}
               aria-label={filters.view === 'feed' ? 'Switch to grid' : 'Switch to feed'}
               title={filters.view === 'feed' ? 'Grid view' : 'Feed view'}
-              className="shrink-0 rounded-full bg-slate-100 p-2 text-slate-600 transition-all duration-200 ease-spring hover:bg-slate-200 active:scale-90"
+              className="pointer-only inline-flex h-9 w-9 shrink-0 items-center justify-center rounded-full bg-slate-100 text-slate-600 transition-all duration-200 ease-spring hover:bg-slate-200 active:scale-90"
             >
               {filters.view === 'feed' ? (
                 <LayoutGrid className="h-4 w-4" />
@@ -3131,7 +3301,7 @@ export default function App() {
                     type="button"
                     onClick={() => set('collection', entry.value)}
                     aria-current={active ? 'true' : undefined}
-                    className={`inline-flex shrink-0 items-center gap-1.5 rounded-full px-3 py-1 text-xs font-medium transition-all duration-200 ease-spring active:scale-95 ${
+                    className={`inline-flex h-9 shrink-0 items-center gap-1.5 rounded-full px-3 text-xs font-medium transition-all duration-200 ease-spring active:scale-95 sm:h-7 ${
                       active
                         ? 'bg-slate-900 text-white'
                         : 'bg-slate-100 text-slate-600 hover:bg-slate-200'
@@ -3140,9 +3310,13 @@ export default function App() {
                     {entry.value === 'deals' && <BadgePercent className="h-3.5 w-3.5" />}
                     {entry.value === 'genius' && <Sparkles className="h-3.5 w-3.5" />}
                     {entry.label}
-                    <span className={`tabular-nums ${active ? 'text-white/60' : 'text-slate-400'}`}>
-                      {collectionCounts[entry.value]}
-                    </span>
+                    {collectionCounts[entry.value] != null && (
+                      <span
+                        className={`tabular-nums ${active ? 'text-white/60' : 'text-slate-400'}`}
+                      >
+                        {collectionCounts[entry.value]}
+                      </span>
+                    )}
                   </button>
                 );
               })}
@@ -3316,7 +3490,7 @@ export default function App() {
           )}
         </main>
       ) : (
-        <main className="mx-auto max-w-7xl px-3 pb-10 pt-3 sm:px-6">
+        <main className="gutter pb-nav mx-auto max-w-7xl pt-3">
           {filters.collection === 'store' ? (
             <StorePanel
               query={deferredQuery.trim()}
@@ -3331,7 +3505,7 @@ export default function App() {
               ` · ${COLLECTION_BLURBS[filters.collection]}`}
           </p>
 
-          <div className="grid grid-cols-2 gap-3 sm:gap-4 lg:grid-cols-3 xl:grid-cols-4 2xl:grid-cols-5">
+          <div className="grid grid-cols-2 gap-3 sm:grid-cols-3 sm:gap-4 lg:grid-cols-4 xl:grid-cols-5">
             {filteredGames.map((game) => (
               <GameCard
                 key={game.id}
@@ -3408,6 +3582,23 @@ export default function App() {
           onClose={() => setActiveGameId(null)}
         />
       )}
+
+      <BottomBar
+        view={filters.view}
+        onView={(view) => set('view', view)}
+        onBriefing={() =>
+          setBriefing({
+            open: true,
+            tab: releaseChanges.length > 0 ? 'upcoming' : briefing.tab,
+          })
+        }
+        onSurprise={() => {
+          if (filteredGames.length === 0) return;
+          setActiveGameId(filteredGames[Math.floor(Math.random() * filteredGames.length)].id);
+        }}
+        canSurprise={filteredGames.length > 0}
+        updates={releaseChanges.length}
+      />
 
       <BriefingDrawer
         open={briefing.open}

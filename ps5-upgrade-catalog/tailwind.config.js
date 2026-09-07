@@ -21,6 +21,10 @@ export default {
           from: { opacity: '0', transform: 'translateY(14px) scale(0.985)' },
           to: { opacity: '1', transform: 'translateY(0) scale(1)' },
         },
+        sheetUp: {
+          from: { opacity: '0', transform: 'translateY(24px)' },
+          to: { opacity: '1', transform: 'translateY(0)' },
+        },
         slideIn: {
           from: { opacity: '0', transform: 'translateX(24px)' },
           to: { opacity: '1', transform: 'translateX(0)' },
@@ -34,6 +38,7 @@ export default {
         'fade-in': 'fadeIn 160ms ease-out',
         'pop-in': 'popIn 220ms cubic-bezier(0.34, 1.56, 0.64, 1)',
         'rise-in': 'riseIn 340ms cubic-bezier(0.34, 1.56, 0.64, 1) both',
+        'sheet-up': 'sheetUp 260ms cubic-bezier(0.22, 1, 0.36, 1) both',
         'slide-in': 'slideIn 260ms cubic-bezier(0.22, 1, 0.36, 1) both',
         'sheet-down': 'sheetDown 200ms cubic-bezier(0.34, 1.56, 0.64, 1)',
       },

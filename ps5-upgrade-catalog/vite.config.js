@@ -99,4 +99,20 @@ function gamesApiPlugin() {
 
 export default defineConfig({
   plugins: [react(), gamesApiPlugin()],
+  build: {
+    rolldownOptions: {
+      output: {
+        // The catalog is half the bundle and changes far less often than the
+        // code around it, so it gets its own long-lived chunk: editing a
+        // component no longer costs a phone another 90KB of catalog.
+        manualChunks: (id) => {
+          if (id.includes('games.json')) return 'catalog';
+          if (id.includes('node_modules/react') || id.includes('node_modules/scheduler')) {
+            return 'react';
+          }
+          return undefined;
+        },
+      },
+    },
+  },
 });
