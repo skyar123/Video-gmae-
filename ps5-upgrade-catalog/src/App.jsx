@@ -2538,7 +2538,7 @@ function UpcomingPanel({
               return (
                 <li key={game.id} className="rounded-xl border border-slate-200 bg-white">
                   <div className="flex items-stretch gap-3 p-2.5">
-                    <div className="flex w-12 shrink-0 flex-col items-center justify-center rounded-lg bg-slate-900 py-1.5 text-white">
+                    <div className="flex w-12 shrink-0 flex-col items-center justify-center self-center rounded-lg bg-slate-900 py-1.5 text-white">
                       <span className="text-[10px] font-semibold uppercase tracking-wide text-white/60">
                         {date.toLocaleDateString([], { month: 'short' })}
                       </span>
@@ -2844,6 +2844,7 @@ export default function App() {
 
   const { byTitle, status, updatedAt, progress, refresh } = useLiveData(filters.region);
   const barRef = useRef(null);
+  const collectionsRef = useRef(null);
   const [briefing, setBriefing] = useState({ open: false, tab: 'news' });
 
   // The calendar is fetched when the panel opens, and also when something is
@@ -2913,6 +2914,13 @@ export default function App() {
       // A browser refusing storage just means the region resets next visit.
     }
   }, [filters]);
+
+  // The strip is wider than a phone, so a collection reached by any route
+  // other than tapping its own chip would otherwise leave that chip off screen.
+  useEffect(() => {
+    const active = collectionsRef.current?.querySelector('[data-active]');
+    active?.scrollIntoView({ inline: 'center', block: 'nearest', behavior: 'smooth' });
+  }, [filters.collection]);
 
   useEffect(() => {
     const element = barRef.current;
@@ -3290,6 +3298,7 @@ export default function App() {
             }`}
           >
             <nav
+              ref={collectionsRef}
               aria-label="Collections"
               className="no-scrollbar flex gap-1.5 overflow-x-auto pb-0.5"
             >
@@ -3299,6 +3308,7 @@ export default function App() {
                   <button
                     key={entry.value}
                     type="button"
+                    data-active={active ? 'true' : undefined}
                     onClick={() => set('collection', entry.value)}
                     aria-current={active ? 'true' : undefined}
                     className={`inline-flex h-9 shrink-0 items-center gap-1.5 rounded-full px-3 text-xs font-medium transition-all duration-200 ease-spring active:scale-95 sm:h-7 ${
