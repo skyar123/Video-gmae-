@@ -65,6 +65,14 @@
       ],
       "asOf": "2026-09-06"
     },
+    "coverage": [
+      {
+        "handle": "Skurry",
+        "videoId": "ppsY9X_Mox8",
+        "videoTitle": "So Outer Wilds Has A Randomizer Now",
+        "videos": 2
+      }
+    ],
     "description": "Explore a miniature, handcrafted solar system caught in a 22-minute time loop, translating ancient texts and piecing together a massive mystery."
   },
   {
@@ -126,6 +134,14 @@
       ],
       "asOf": "2026-09-06"
     },
+    "coverage": [
+      {
+        "handle": "JimSterling",
+        "videoId": "VMiY2f0DRSg",
+        "videoTitle": "Disco Elysium - Sex, Drugs, And Dice Rolls (Jimpressions)",
+        "videos": 1
+      }
+    ],
     "description": "A wildly unique isometric RPG where you play an amnesiac detective solving a murder through deep dialogue trees and internal psychological skill checks."
   },
   {
@@ -203,6 +219,14 @@
       ],
       "asOf": "2026-09-06"
     },
+    "coverage": [
+      {
+        "handle": "JimSterling",
+        "videoId": "nP-2t2XXU7o",
+        "videoTitle": "No Man's Sky Next And The Concept Of The Mega Patch (The Jimquisition)",
+        "videos": 2
+      }
+    ],
     "description": "The ultimate limitless exploration game where you seamlessly travel between procedurally generated planets, build bases, and upgrade your ship."
   },
   {
@@ -267,6 +291,14 @@
       ],
       "asOf": "2026-09-06"
     },
+    "coverage": [
+      {
+        "handle": "GabSmolders",
+        "videoId": "Z1invXvbT2A",
+        "videoTitle": "We sick! - Subnautica w/ Sean [2]",
+        "videos": 5
+      }
+    ],
     "description": "Crash-land on an alien ocean planet and explore its depths, scan wildlife, and build underwater habitats to survive."
   },
   {
@@ -326,6 +358,7 @@
       "cons": [],
       "asOf": "2026-09-06"
     },
+    "coverage": null,
     "description": "Play as a soul-reaping crow in a bleak but beautiful world filled with secrets, environmental puzzles, and challenging boss fights."
   },
   {
@@ -397,6 +430,14 @@
       ],
       "asOf": "2026-09-06"
     },
+    "coverage": [
+      {
+        "handle": "Skurry",
+        "videoId": "-x4mAGdbPdU",
+        "videoTitle": "The Randomizer Of TUNIC",
+        "videos": 1
+      }
+    ],
     "description": "Guide a small fox across an island filled with forgotten ruins, deciphering mechanics using lost pages of an authentic retro instruction manual."
   },
   {
@@ -461,6 +502,7 @@
       ],
       "asOf": "2026-09-06"
     },
+    "coverage": null,
     "description": "Play as an agile stray cat separated from its pack, roaming the vertical alleys and rooftops of a decaying, neon-lit cyberpunk city."
   },
   {
@@ -530,6 +572,7 @@
       ],
       "asOf": "2026-09-06"
     },
+    "coverage": null,
     "description": "A turn-based RPG inspired by 1990s classics that blends turn-based combat with seamless traversal, swimming, and climbing."
   },
   {
@@ -589,6 +632,7 @@
       "cons": [],
       "asOf": "2026-09-06"
     },
+    "coverage": null,
     "description": "Explore a vast, misty wilderness with an eagle companion, relying on high-speed kinetic archery movement rather than mini-maps."
   },
   {
@@ -632,6 +676,7 @@
       "cons": [],
       "asOf": "2026-09-06"
     },
+    "coverage": null,
     "description": "Glide across surreal, gravity-defying terrain inside a massive black hole and climb massive, multi-tiered leviathans."
   },
   {
@@ -710,6 +755,14 @@
       ],
       "asOf": "2026-09-06"
     },
+    "coverage": [
+      {
+        "handle": "LauraKBuzz",
+        "videoId": "vvL1FhVa81E",
+        "videoTitle": "Horizon Forbidden West Accessibility Review - Access-Ability",
+        "videos": 1
+      }
+    ],
     "description": "Explore photorealistic biomes ranging from dense jungles to submerged ruins, uncovering lost human history and fighting robotic wildlife."
   },
   {
@@ -783,6 +836,44 @@
       ],
       "asOf": "2026-09-06"
     },
+    "coverage": [
+      {
+        "handle": "GabSmolders",
+        "videoId": "_5c9lSvUP4s",
+        "videoTitle": "THE FINAL BOSS - Elden Ring DLC [ENDING]",
+        "videos": 34
+      },
+      {
+        "handle": "NemesisLacroix",
+        "videoId": "p46dKZA6aVk",
+        "videoTitle": "Playing Elden Ring With God Mode - SHADOW OF THE ERDTREE DLC EXPANSION!! (Part 7, Ending)",
+        "videos": 7
+      },
+      {
+        "handle": "TheSphereHunter",
+        "videoId": "X5Uybg4wSwo",
+        "videoTitle": "Elden Ring Spoiler Free Review",
+        "videos": 2
+      },
+      {
+        "handle": "LauraKBuzz",
+        "videoId": "XAKloyKqqGI",
+        "videoTitle": "Elden Ring: Nightreign Cognitive Accessibility Impressions - Access-Ability",
+        "videos": 2
+      },
+      {
+        "handle": "JimSterling",
+        "videoId": "on7m4SYdgiU",
+        "videoTitle": "Elden Ring - The Dark Souls Of Games That Aren't Dark Souls (Jimpressions)",
+        "videos": 2
+      },
+      {
+        "handle": "Skurry",
+        "videoId": "1lt6sO94x28",
+        "videoTitle": "Elden Ring Has An Enemy Randomizer...",
+        "videos": 1
+      }
+    ],
     "description": "An open-ended, non-linear fantasy world design driven entirely by curiosity without map markers or clutter."
   },
   {
@@ -830,6 +921,7 @@
       "cons": [],
       "asOf": "2026-09-06"
     },
+    "coverage": null,
     "description": "Explore derelict space stations, scale steep Martian canyons with climbing picks, and solve environmental puzzles to recover colony ships."
   },
   {
@@ -879,6 +971,7 @@
       "cons": [],
       "asOf": "2026-09-06"
     },
+    "coverage": null,
     "description": "Ride a bicycle through a tranquil valley, recording ambient audio, snapping photographs, and journaling before a cataclysm reshapes the world."
   },
   {
@@ -935,6 +1028,7 @@
       "cons": [],
       "asOf": "2026-09-06"
     },
+    "coverage": null,
     "description": "Capture the artistic spirit as a traveling painter exploring a peaceful island, setting up an easel to paint specific landscapes for the locals."
   },
   {
@@ -1001,6 +1095,20 @@
       ],
       "asOf": "2026-09-06"
     },
+    "coverage": [
+      {
+        "handle": "SuperButterBuns",
+        "videoId": "wJeLWuxFsIQ",
+        "videoTitle": "Is FireWatch Disappointing? (Thoughts on FireWatch)",
+        "videos": 1
+      },
+      {
+        "handle": "zombiecleo",
+        "videoId": "m7NeVSEs-LA",
+        "videoTitle": "Firewatch - Watching it Burn (Edited and reuploaded)",
+        "videos": 1
+      }
+    ],
     "description": "Work as a fire lookout in 1989 Wyoming, navigating the wilderness entirely via handheld map, compass, and radio conversations."
   },
   {
@@ -1057,6 +1165,7 @@
       "cons": [],
       "asOf": "2026-09-06"
     },
+    "coverage": null,
     "description": "Visit a Mediterranean island to stop a hotel development by using a smartphone to identify and photograph native bird and animal species."
   },
   {
@@ -1130,6 +1239,14 @@
       ],
       "asOf": "2026-09-06"
     },
+    "coverage": [
+      {
+        "handle": "LauraKBuzz",
+        "videoId": "xs95NUrlUtg",
+        "videoTitle": "Life is Strange: True Colors - Part 5 (With Spoiler Warnings)",
+        "videos": 5
+      }
+    ],
     "description": "Explore a scenic Colorado mountain valley utilizing psychic empathy powers to solve a mystery through deliberate, character-driven conversations."
   },
   {
@@ -1186,6 +1303,14 @@
       "cons": [],
       "asOf": "2026-09-06"
     },
+    "coverage": [
+      {
+        "handle": "GabSmolders",
+        "videoId": "IW0wlGKy56U",
+        "videoTitle": "Let's go for a short hike",
+        "videos": 1
+      }
+    ],
     "description": "Guide Claire, a young bird visiting a provincial park, hiking toward the mountain summit, fishing, and gliding from high cliffs."
   },
   {
@@ -1247,6 +1372,7 @@
       ],
       "asOf": "2026-09-06"
     },
+    "coverage": null,
     "description": "Fill in for your father as the local mail carrier in 1986 Oregon, driving a mail truck around a tranquil lake and catching up with old friends."
   },
   {
@@ -1310,6 +1436,14 @@
       ],
       "asOf": "2026-09-06"
     },
+    "coverage": [
+      {
+        "handle": "GabSmolders",
+        "videoId": "5ds-qpQeiS0",
+        "videoTitle": "Howdy partner!! - My Time at Sandrock Multiplayer",
+        "videos": 1
+      }
+    ],
     "description": "Rebuild a rugged desert town, craft massive machines, and socialize with locals in a deep farming and builder simulation."
   },
   {
@@ -1362,6 +1496,7 @@
       "cons": [],
       "asOf": "2026-09-06"
     },
+    "coverage": null,
     "description": "Build a vast ranch, farm crops, and tame a sanctuary of brightly colored, rideable dinosaurs."
   },
   {
@@ -1412,6 +1547,7 @@
       "cons": [],
       "asOf": "2026-09-06"
     },
+    "coverage": null,
     "description": "Explore an island to catch bizarre half-bug, half-snack creatures and rebuild a quirky settlement of fuzzy inhabitants."
   },
   {
@@ -1476,6 +1612,14 @@
       ],
       "asOf": "2026-09-06"
     },
+    "coverage": [
+      {
+        "handle": "GabSmolders",
+        "videoId": "WV5yIT-DywI",
+        "videoTitle": "FISHING WITH GOOFY - Disney Dreamlight Valley [1]",
+        "videos": 9
+      }
+    ],
     "description": "A massive life-simulation where you design a town, decorate your home, and complete quests alongside classic animated characters."
   },
   {
@@ -1545,6 +1689,20 @@
       ],
       "asOf": "2026-09-06"
     },
+    "coverage": [
+      {
+        "handle": "GabSmolders",
+        "videoId": "kT6o08G3YpE",
+        "videoTitle": "WE DID IT - Cult of the Lamb [ENDING]",
+        "videos": 4
+      },
+      {
+        "handle": "JimSterling",
+        "videoId": "7yCWn9mZh4Q",
+        "videoTitle": "Cult Of The Lamb - A World Of Sh*t (Jimpressions)",
+        "videos": 1
+      }
+    ],
     "description": "Play as a cute possessed lamb managing a woodland cult, balancing base-building with fast-paced dungeon crawling."
   },
   {
@@ -1590,6 +1748,7 @@
       "cons": [],
       "asOf": "2026-09-06"
     },
+    "coverage": null,
     "description": "A cooperative farming and life simulation game set in the Stone Age. Discover crops, invent early technology, and tame animals."
   },
   {
@@ -1665,6 +1824,7 @@
       ],
       "asOf": "2026-09-06"
     },
+    "coverage": null,
     "description": "A gentle journey where you navigate an uncharted ocean, dock at hidden islands, and cook for eccentric animal spirits before helping them move on."
   },
   {
@@ -1722,6 +1882,7 @@
       "cons": [],
       "asOf": "2026-09-06"
     },
+    "coverage": null,
     "description": "Devoid of danger, the world begins as a stark, monochromatic canvas and gradually blooms with watercolor tones as you solve light spatial puzzles."
   },
   {
@@ -1778,6 +1939,7 @@
       "cons": [],
       "asOf": "2026-09-06"
     },
+    "coverage": null,
     "description": "A delightful, hand-drawn black-and-white adventure focused entirely on solving puzzles by taking photographs for quirky locals."
   },
   {
@@ -1837,6 +1999,14 @@
       ],
       "asOf": "2026-09-06"
     },
+    "coverage": [
+      {
+        "handle": "GabSmolders",
+        "videoId": "GKqx1SJO5do",
+        "videoTitle": "The Iron Rig - Dredge DLC!!",
+        "videos": 6
+      }
+    ],
     "description": "A fishing exploration game where you upgrade your trawler and catalog ocean life, mixed with light, eerie cosmic horror."
   },
   {
@@ -1883,6 +2053,7 @@
       "cons": [],
       "asOf": "2026-09-06"
     },
+    "coverage": null,
     "description": "Play as Riley, an environmental researcher investigating strange radio frequencies and time anomalies in a coastal town."
   },
   {
@@ -1955,6 +2126,14 @@
       ],
       "asOf": "2026-09-06"
     },
+    "coverage": [
+      {
+        "handle": "snapcube",
+        "videoId": "JtVgdltWDIA",
+        "videoTitle": "Cronch Time | Night In The Woods | PART 3",
+        "videos": 3
+      }
+    ],
     "description": "Play as Mae, a college dropout cat who returns to her struggling rust-belt hometown to reconnect with friends."
   },
   {
@@ -2006,6 +2185,7 @@
       "cons": [],
       "asOf": "2026-09-06"
     },
+    "coverage": null,
     "description": "Play as Tove, a young girl exploring a snow-covered Scandinavian wilderness filled with ancient folklore creatures."
   },
   {
@@ -2073,6 +2253,7 @@
       ],
       "asOf": "2026-09-06"
     },
+    "coverage": null,
     "description": "Play as a young female spirit guide who fights with a staff and collects adorable fuzzy companions called the Rot."
   },
   {
@@ -2115,6 +2296,7 @@
       "cons": [],
       "asOf": "2026-09-06"
     },
+    "coverage": null,
     "description": "Play as a dog with a magical paintbrush, restoring color to a black-and-white world while solving environmental puzzles."
   },
   {
@@ -2178,6 +2360,7 @@
       "cons": [],
       "asOf": "2026-09-06"
     },
+    "coverage": null,
     "description": "A monster-taming RPG where you record beasts on cassette tapes and fuse them together to fight in a nostalgic 2000s town."
   },
   {
@@ -2243,6 +2426,14 @@
       ],
       "asOf": "2026-09-06"
     },
+    "coverage": [
+      {
+        "handle": "GabSmolders",
+        "videoId": "iyk6vnyZ7Vw",
+        "videoTitle": "Playing Dredge IN Dave the Diver!?",
+        "videos": 11
+      }
+    ],
     "description": "Scuba dive to spearfish by day, and manage the finances and menu of a bustling sushi restaurant by night."
   },
   {
@@ -2299,6 +2490,7 @@
       "cons": [],
       "asOf": "2026-09-06"
     },
+    "coverage": null,
     "description": "Play as a tiny astronaut exploring a massive 1990s house, using hundreds of small alien creatures to carry objects and build ladders."
   },
   {
@@ -2355,6 +2547,14 @@
       "cons": [],
       "asOf": "2026-09-06"
     },
+    "coverage": [
+      {
+        "handle": "JimSterling",
+        "videoId": "9JO3xKbzcuA",
+        "videoTitle": "The Next Balatro: Monkey See, Monkey Publish",
+        "videos": 1
+      }
+    ],
     "description": "An endlessly addictive poker roguelike where you buy illegal Joker cards to break the rules of standard poker and score massive multipliers."
   },
   {
@@ -2419,6 +2619,7 @@
       "cons": [],
       "asOf": "2026-09-06"
     },
+    "coverage": null,
     "description": "Grow up on an alien planet, making choices over ten years that shape your skills, friendships, and the colony's survival."
   },
   {
@@ -2459,6 +2660,7 @@
       "cons": [],
       "asOf": "2026-09-06"
     },
+    "coverage": null,
     "description": "Sail a custom boat, play a fully functional ukulele, and soul-jump into any animal or object in a physics-driven tropical sandbox."
   },
   {
@@ -2523,6 +2725,14 @@
       ],
       "asOf": "2026-09-06"
     },
+    "coverage": [
+      {
+        "handle": "Skurry",
+        "videoId": "XDj_PHPeZHI",
+        "videoTitle": "Hollow Knight Randomizer With Your Favorite Settings",
+        "videos": 80
+      }
+    ],
     "description": "Descend as a tiny nail-wielding bug into Hallownest, a vast hand-drawn ruin of insect kingdoms, secret arenas and hidden charms."
   },
   {
@@ -2582,6 +2792,7 @@
       "cons": [],
       "asOf": "2026-09-06"
     },
+    "coverage": null,
     "description": "A white priestess purifies fallen knights in a rain-soaked watercolor kingdom, binding their spirits to fight for her."
   },
   {
@@ -2656,6 +2867,14 @@
       ],
       "asOf": "2026-09-06"
     },
+    "coverage": [
+      {
+        "handle": "JimSterling",
+        "videoId": "qGrU_Vb7Nys",
+        "videoTitle": "Blasphemous - Deliciously Macabre Misery (Jimpressions)",
+        "videos": 2
+      }
+    ],
     "description": "A brutal pixel-art pilgrimage through a land of baroque religious guilt, packed with grotesque bosses and hidden penances."
   },
   {
@@ -2721,6 +2940,26 @@
       ],
       "asOf": "2026-09-06"
     },
+    "coverage": [
+      {
+        "handle": "JimSterling",
+        "videoId": "daeaav9WeGM",
+        "videoTitle": "Dead Cells - Dead Cellabration (Jimpressions)",
+        "videos": 2
+      },
+      {
+        "handle": "LauraKBuzz",
+        "videoId": "poC1OL_YJIw",
+        "videoTitle": "Dead Cells, Breaking Barriers, and Encouraging Accessibility - Access-Ability",
+        "videos": 1
+      },
+      {
+        "handle": "snapcube",
+        "videoId": "T84NBOevVBQ",
+        "videoTitle": "A Girl and Her Sword | Dead Cells",
+        "videos": 1
+      }
+    ],
     "description": "A roguelike metroidvania built on razor-sharp movement, where every death reshuffles the castle and every run unlocks new permanent routes."
   },
   {
@@ -2762,6 +3001,7 @@
       "cons": [],
       "asOf": "2026-09-06"
     },
+    "coverage": null,
     "description": "A luchador brawls through a bright Mexican folklore world, swapping between the living and dead realms to solve platforming puzzles."
   },
   {
@@ -2799,6 +3039,7 @@
       "cons": [],
       "asOf": "2026-09-06"
     },
+    "coverage": null,
     "description": "A priestess armed with a maple leaf explores a cursed kingdom in a compact, elegant pixel-art metroidvania."
   },
   {
@@ -2856,6 +3097,7 @@
       "cons": [],
       "asOf": "2026-09-06"
     },
+    "coverage": null,
     "description": "A side-on soulslike with deep class building, punishing bosses and a sprawling interconnected island to unlock."
   },
   {
@@ -2893,6 +3135,7 @@
       "cons": [],
       "asOf": "2026-09-06"
     },
+    "coverage": null,
     "description": "Deedlit the elf swaps between wind and fire spirits to absorb attacks in a loving tribute to classic Igavania design."
   },
   {
@@ -2949,6 +3192,7 @@
       "cons": [],
       "asOf": "2026-09-06"
     },
+    "coverage": null,
     "description": "Renee explores a huge hand-painted world of floating ruins with dozens of weapon types and a sprawling skill tree."
   },
   {
@@ -2998,6 +3242,7 @@
       "cons": [],
       "asOf": "2026-09-06"
     },
+    "coverage": null,
     "description": "A living black hole absorbs enemy attacks in a surreal world of sculpted stone and flesh, rewarding perfectly timed parries."
   },
   {
@@ -3037,6 +3282,7 @@
       "cons": [],
       "asOf": "2026-09-06"
     },
+    "coverage": null,
     "description": "A deadsuit wakes on a moon of bioluminescent caves and derelict ships, uncovering what happened to the crew that left it behind."
   },
   {
@@ -3093,6 +3339,14 @@
       "cons": [],
       "asOf": "2026-09-06"
     },
+    "coverage": [
+      {
+        "handle": "Skurry",
+        "videoId": "1DzmDMB9Eo4",
+        "videoTitle": "Haiku The Robot... Randomized",
+        "videos": 1
+      }
+    ],
     "description": "A small repair robot rolls through the rusted mechanical body of a dead world, restoring the machines still clinging to life."
   },
   {
@@ -3132,6 +3386,7 @@
       "cons": [],
       "asOf": "2026-09-06"
     },
+    "coverage": null,
     "description": "An 8-bit style crusade with branching good and evil paths, chunky combat and a map that opens up through blunt force."
   },
   {
@@ -3185,6 +3440,7 @@
       "cons": [],
       "asOf": "2026-09-06"
     },
+    "coverage": null,
     "description": "Three adventurers trade places mid-run inside a tower that resets on death but keeps every upgrade you bought with your life."
   },
   {
@@ -3252,6 +3508,14 @@
       ],
       "asOf": "2026-09-06"
     },
+    "coverage": [
+      {
+        "handle": "Skurry",
+        "videoId": "mhHuxd-PCuk",
+        "videoTitle": "I Played Some Wacky Rain World Mods",
+        "videos": 19
+      }
+    ],
     "description": "Survive as a slugcat in a crumbling ecosystem where every other creature is hunting, hiding and learning alongside you."
   },
   {
@@ -3313,6 +3577,7 @@
       ],
       "asOf": "2026-09-06"
     },
+    "coverage": null,
     "description": "A reverse-horror metroidvania where you are the amorphous red monster tearing through a research facility."
   },
   {
@@ -3371,6 +3636,14 @@
       "cons": [],
       "asOf": "2026-09-06"
     },
+    "coverage": [
+      {
+        "handle": "LauraKBuzz",
+        "videoId": "CDP1YKAo55c",
+        "videoTitle": "Prince of Persia: The Lost Crown Accessibility Review - Access-Ability",
+        "videos": 2
+      }
+    ],
     "description": "Sargon dashes and rewinds through Mount Qaf in a fast, combo-heavy metroidvania with a brilliant screenshot-pinning map."
   },
   {
@@ -3433,6 +3706,14 @@
       "cons": [],
       "asOf": "2026-09-06"
     },
+    "coverage": [
+      {
+        "handle": "JimSterling",
+        "videoId": "LI2eVrwa_YE",
+        "videoTitle": "Bloodstained: Ritual Of The Night - CastleMania (Jimpressions)",
+        "videos": 1
+      }
+    ],
     "description": "Miriam explores a demon castle packed with craftable gear and shard abilities harvested from every enemy she defeats."
   },
   {
@@ -3487,6 +3768,7 @@
       "cons": [],
       "asOf": "2026-09-06"
     },
+    "coverage": null,
     "description": "An automaton races a countdown that permanently kills off the friends she cannot reach in time, making every hour spent a real choice."
   },
   {
@@ -3537,6 +3819,7 @@
       "cons": [],
       "asOf": "2026-09-06"
     },
+    "coverage": null,
     "description": "Vernal hunts her father across a shattered sky-island world with an aggressive juggling combat system built for style."
   },
   {
@@ -3587,6 +3870,7 @@
       "cons": [],
       "asOf": "2026-09-06"
     },
+    "coverage": null,
     "description": "A psychedelic riot of color inside a cosmic womb, where you plant and tend gardens across loops of the same map."
   },
   {
@@ -3645,6 +3929,20 @@
       "cons": [],
       "asOf": "2026-09-06"
     },
+    "coverage": [
+      {
+        "handle": "GabSmolders",
+        "videoId": "PwrKqxQ8L4k",
+        "videoTitle": "Ascension 10 baby! - Slay the Spire 2 Multiplayer [5]",
+        "videos": 5
+      },
+      {
+        "handle": "Skurry",
+        "videoId": "mfDvfTLCgl0",
+        "videoTitle": "I Broke This Slay The Spire Slugcat Mod",
+        "videos": 1
+      }
+    ],
     "description": "The genre-defining roguelike deckbuilder: climb a shifting spire, refine a deck of attacks and relics, and try not to get greedy."
   },
   {
@@ -3704,6 +4002,7 @@
       ],
       "asOf": "2026-09-06"
     },
+    "coverage": null,
     "description": "A card battler played across a candlelit table that keeps breaking its own rules in ways best left unspoiled."
   },
   {
@@ -3750,6 +4049,7 @@
       "cons": [],
       "asOf": "2026-09-06"
     },
+    "coverage": null,
     "description": "Paint your way across a blank watercolor map with a two-hero party, merging both characters' cards into a single deck."
   },
   {
@@ -3800,6 +4100,7 @@
       "cons": [],
       "asOf": "2026-09-06"
     },
+    "coverage": null,
     "description": "Every character remembers how you treated them, and you carry two decks at once: one for fighting, one for arguing."
   },
   {
@@ -3837,6 +4138,7 @@
       "cons": [],
       "asOf": "2026-09-06"
     },
+    "coverage": null,
     "description": "Play cards to choreograph spy-movie fistfights in elevators and corridors, where positioning matters more than damage."
   },
   {
@@ -3874,6 +4176,7 @@
       "cons": [],
       "asOf": "2026-09-06"
     },
+    "coverage": null,
     "description": "A dice-building roguelike where corruption is also a resource, forcing you to poison yourself to purify everything else."
   },
   {
@@ -3935,6 +4238,7 @@
       ],
       "asOf": "2026-09-06"
     },
+    "coverage": null,
     "description": "A monster-taming metroidvania where your collected creatures also grant the traversal abilities that open the map."
   },
   {
@@ -3974,6 +4278,7 @@
       "cons": [],
       "asOf": "2026-09-06"
     },
+    "coverage": null,
     "description": "Catch and evolve over 380 nexomon across a world where the monsters are winning, told with a self-aware sense of humor."
   },
   {
@@ -4031,6 +4336,7 @@
       ],
       "asOf": "2026-09-06"
     },
+    "coverage": null,
     "description": "A polished retro monster-taming RPG with adjustable difficulty, stat potentials and puzzle-filled research facilities."
   },
   {
@@ -4087,6 +4393,20 @@
       "cons": [],
       "asOf": "2026-09-06"
     },
+    "coverage": [
+      {
+        "handle": "GabSmolders",
+        "videoId": "BVCRjw2utmc",
+        "videoTitle": "Checking out Slime Rancher 2!! [1]",
+        "videos": 1
+      },
+      {
+        "handle": "JimSterling",
+        "videoId": "Yto7lyLlqrc",
+        "videoTitle": "SLIME RANCHER - Every Night's A Genocide",
+        "videos": 1
+      }
+    ],
     "description": "Beatrix vacuums up wobbling slimes on a far-off frontier planet and farms their plorts for profit."
   },
   {
@@ -4124,6 +4444,7 @@
       "cons": [],
       "asOf": "2026-09-06"
     },
+    "coverage": null,
     "description": "An absurdly deep monster-fusing roguelike with over 1,200 creatures and build combinations that never stop unfolding."
   },
   {
@@ -4198,6 +4519,26 @@
       ],
       "asOf": "2026-09-06"
     },
+    "coverage": [
+      {
+        "handle": "zombiecleo",
+        "videoId": "1zMG1loqeAo",
+        "videoTitle": "Stardew Valley - 40",
+        "videos": 44
+      },
+      {
+        "handle": "GabSmolders",
+        "videoId": "sKlL5UCgvIE",
+        "videoTitle": "BACK IN BUSINESS - Stardew Valley EXPANDED [22]",
+        "videos": 34
+      },
+      {
+        "handle": "Skurry",
+        "videoId": "2tKv-OZ3J5I",
+        "videoTitle": "Turning Everyone In Stardew Valley Into Furries",
+        "videos": 4
+      }
+    ],
     "description": "Inherit a overgrown farm and rebuild it season by season, mining, fishing and befriending an entire valley of neighbors."
   },
   {
@@ -4239,6 +4580,7 @@
       "cons": [],
       "asOf": "2026-09-06"
     },
+    "coverage": null,
     "description": "Restore your father's workshop in a post-apocalyptic town rebuilt on farming, crafting commissions and small-town friendships."
   },
   {
@@ -4303,6 +4645,7 @@
       ],
       "asOf": "2026-09-06"
     },
+    "coverage": null,
     "description": "Move to a suspicious town as its new chemist, diagnosing residents and brewing the cures that slowly win them over."
   },
   {
@@ -4352,6 +4695,7 @@
       ],
       "asOf": "2026-09-06"
     },
+    "coverage": null,
     "description": "Camp on a haunted island that gives you a handful of gentle tasks each real day, coloring the world in as ghosts find peace."
   },
   {
@@ -4393,6 +4737,7 @@
       "cons": [],
       "asOf": "2026-09-06"
     },
+    "coverage": null,
     "description": "Concord the grape becomes guardian of a village of fruit, splitting days between repairs, harvests and clearing rot."
   },
   {
@@ -4476,6 +4821,14 @@
       ],
       "asOf": "2026-09-06"
     },
+    "coverage": [
+      {
+        "handle": "snapcube",
+        "videoId": "mxhKUkclsuQ",
+        "videoTitle": "Penny and Incomplete Todd | The Sims 4 (Test Run)",
+        "videos": 1
+      }
+    ],
     "description": "Build people and houses from the ground up, then watch the lives you designed go exactly as wrong as you hoped."
   },
   {
@@ -4520,6 +4873,7 @@
       ],
       "asOf": "2026-09-06"
     },
+    "coverage": null,
     "description": "Spend a summer restoring your grandparents' farm by day and dreaming yourself into the bodies of its animals by night."
   },
   {
@@ -4559,6 +4913,7 @@
       "cons": [],
       "asOf": "2026-09-06"
     },
+    "coverage": null,
     "description": "A cat knight defends a valley of animal villagers, alternating between sword-and-spell combat and running the family farm."
   },
   {
@@ -4603,6 +4958,7 @@
       "cons": [],
       "asOf": "2026-09-06"
     },
+    "coverage": null,
     "description": "Rebuild the town's cat cafe, stuff every seat with animals, bake pastries and ride a very large capybara around town."
   },
   {
@@ -4670,6 +5026,7 @@
       ],
       "asOf": "2026-09-06"
     },
+    "coverage": null,
     "description": "Run a medieval cemetery as a business, with a pitch-dark sense of humor about where the resources come from."
   },
   {
@@ -4743,6 +5100,14 @@
       ],
       "asOf": "2026-09-06"
     },
+    "coverage": [
+      {
+        "handle": "GabSmolders",
+        "videoId": "03mq7c6LdYc",
+        "videoTitle": "A new shop to run!! - Moonlighter 2",
+        "videos": 1
+      }
+    ],
     "description": "Raid dungeons at night and sell the loot in your own shop by day, setting prices by reading what customers will tolerate."
   },
   {
@@ -4800,6 +5165,14 @@
       "cons": [],
       "asOf": "2026-09-06"
     },
+    "coverage": [
+      {
+        "handle": "GabSmolders",
+        "videoId": "_I6dH45O11o",
+        "videoTitle": "Ho Ho Ho Merry Powerwash Simulator!",
+        "videos": 1
+      }
+    ],
     "description": "Blast years of grime off vans, playgrounds and mars rovers in the most quietly satisfying job simulator on the platform."
   },
   {
@@ -4850,6 +5223,7 @@
       "cons": [],
       "asOf": "2026-09-06"
     },
+    "coverage": null,
     "description": "Build an absurd university around courses like knight school and gastronomy, then keep the students fed, taught and happy."
   },
   {
@@ -4894,6 +5268,7 @@
       "cons": [],
       "asOf": "2026-09-06"
     },
+    "coverage": null,
     "description": "A minimalist city builder with no fail state beyond running out of buildings: place well, score points, unlock the next island."
   },
   {
@@ -4938,6 +5313,7 @@
       "cons": [],
       "asOf": "2026-09-06"
     },
+    "coverage": null,
     "description": "Click on water to grow impossible pastel coastal towns, with no goals, no timers and a very clever building algorithm."
   },
   {
@@ -5004,6 +5380,14 @@
       "cons": [],
       "asOf": "2026-09-06"
     },
+    "coverage": [
+      {
+        "handle": "Skurry",
+        "videoId": "OERSAnSuV7U",
+        "videoTitle": "Finishing My First Lobby In Celeste Strawberry Jam",
+        "videos": 2
+      }
+    ],
     "description": "Madeline climbs a mountain and her own anxiety in a precision platformer with some of the kindest accessibility options ever shipped."
   },
   {
@@ -5052,6 +5436,14 @@
       "cons": [],
       "asOf": "2026-09-06"
     },
+    "coverage": [
+      {
+        "handle": "NemesisLacroix",
+        "videoId": "Z9FuququBIM",
+        "videoTitle": "Sackboy: A Big Adventure #1 (Stream Replay)",
+        "videos": 4
+      }
+    ],
     "description": "A knitted, tactile 3D platformer built around musical set pieces and four-player chaos."
   },
   {
@@ -5115,6 +5507,7 @@
       ],
       "asOf": "2026-09-06"
     },
+    "coverage": null,
     "description": "Mono and Six creep through a broadcast-poisoned city of hunters and mannequins in a beautifully grim puzzle platformer."
   },
   {
@@ -5172,6 +5565,26 @@
       "cons": [],
       "asOf": "2026-09-06"
     },
+    "coverage": [
+      {
+        "handle": "NemesisLacroix",
+        "videoId": "cX-NXEnsvbI",
+        "videoTitle": "Revisiting Little Nightmares (Part 2 of 2)",
+        "videos": 9
+      },
+      {
+        "handle": "Skurry",
+        "videoId": "BzIbApkAimM",
+        "videoTitle": "I'm Not Scared of Little Nightmares",
+        "videos": 2
+      },
+      {
+        "handle": "GabSmolders",
+        "videoId": "Rhku9x8a9N0",
+        "videoTitle": "LITTLE NIGHTMARES 3",
+        "videos": 1
+      }
+    ],
     "description": "Six, in her yellow raincoat, escapes a drowning vessel of grotesque appetites that are all much larger than she is."
   },
   {
@@ -5228,6 +5641,20 @@
       "cons": [],
       "asOf": "2026-09-06"
     },
+    "coverage": [
+      {
+        "handle": "GabSmolders",
+        "videoId": "Qd3eMramovA",
+        "videoTitle": "This is gonna be GREAT! - Planet of Lana II Demo",
+        "videos": 2
+      },
+      {
+        "handle": "Skurry",
+        "videoId": "X7MNwT0JaF4",
+        "videoTitle": "Saving The Planet Of Lana",
+        "videos": 1
+      }
+    ],
     "description": "A girl and a small catlike companion cross painted alien vistas, solving puzzles that depend on directing each other."
   },
   {
@@ -5276,6 +5703,7 @@
       "cons": [],
       "asOf": "2026-09-06"
     },
+    "coverage": null,
     "description": "Two yarn creatures tied together swing and knot their way through a warm, tactile Scandinavian landscape."
   },
   {
@@ -5341,6 +5769,26 @@
       ],
       "asOf": "2026-09-06"
     },
+    "coverage": [
+      {
+        "handle": "GabSmolders",
+        "videoId": "cjeoAQ7w9ek",
+        "videoTitle": "We're baking a tart! - Cuphead DLC",
+        "videos": 2
+      },
+      {
+        "handle": "JimSterling",
+        "videoId": "yy6vCxKvpa0",
+        "videoTitle": "Enchanted Portals - A Shockingly Brazen Cuphead Ripoff? (OMGH)",
+        "videos": 2
+      },
+      {
+        "handle": "Gooseworx",
+        "videoId": "xaXEAVELDUs",
+        "videoTitle": "Floral Fury - Cuphead - Gooseworx Cover",
+        "videos": 1
+      }
+    ],
     "description": "A punishing run-and-gun boss rush drawn and inked in the style of 1930s rubber-hose cartoons."
   },
   {
@@ -5382,6 +5830,7 @@
       "cons": [],
       "asOf": "2026-09-06"
     },
+    "coverage": null,
     "description": "A chameleon and a bat run a sharp 2D platformer whose final level is open from minute one, if you think you are ready."
   },
   {
@@ -5426,6 +5875,7 @@
       "cons": [],
       "asOf": "2026-09-06"
     },
+    "coverage": null,
     "description": "A cheerful fox platformer that mixes 3D worlds, 2D side-scrolling stages and rolling puzzle levels."
   },
   {
@@ -5476,6 +5926,7 @@
       "cons": [],
       "asOf": "2026-09-06"
     },
+    "coverage": null,
     "description": "A pumpkin-headed devil's champion romps through Halloween-flavored levels in an unabashed love letter to sixth-gen platformers."
   },
   {
@@ -5513,6 +5964,7 @@
       "cons": [],
       "asOf": "2026-09-06"
     },
+    "coverage": null,
     "description": "A rabbit wearing animal masks tears through 16-bit style stages built with obvious affection for Donkey Kong Country."
   },
   {
@@ -5564,6 +6016,7 @@
       "cons": [],
       "asOf": "2026-09-06"
     },
+    "coverage": null,
     "description": "Still the gold standard for 2D platforming feel, with hand-painted worlds and levels choreographed to music."
   },
   {
@@ -5622,6 +6075,7 @@
       ],
       "asOf": "2026-09-06"
     },
+    "coverage": null,
     "description": "A genuinely demanding return for the marsupial, with quantum masks that rewrite the rules of each obstacle course."
   },
   {
@@ -5686,6 +6140,7 @@
       "cons": [],
       "asOf": "2026-09-06"
     },
+    "coverage": null,
     "description": "A first-person speedrunning platformer where every gun is also a movement card you discard to jump, dash or blink."
   },
   {
@@ -5743,6 +6198,14 @@
       "cons": [],
       "asOf": "2026-09-06"
     },
+    "coverage": [
+      {
+        "handle": "NemesisLacroix",
+        "videoId": "IYhJH1QLvXQ",
+        "videoTitle": "The Artful Escape - A Very Emotional Playthrough",
+        "videos": 1
+      }
+    ],
     "description": "A teenage guitarist invents a cosmic stage persona across neon alien worlds built entirely around a shredding solo."
   },
   {
@@ -5802,6 +6265,20 @@
       "cons": [],
       "asOf": "2026-09-06"
     },
+    "coverage": [
+      {
+        "handle": "GabSmolders",
+        "videoId": "QpYSNzGw48o",
+        "videoTitle": "What Remains of Edith Finch",
+        "videos": 1
+      },
+      {
+        "handle": "JimSterling",
+        "videoId": "D6Cv15ifQPs",
+        "videoTitle": "WHAT REMAINS OF EDITH FINCH - The Hits Keep Coming",
+        "videos": 1
+      }
+    ],
     "description": "Walk through a house of sealed bedrooms, playing out each relative's last day in a different, perfectly judged mechanic."
   },
   {
@@ -5872,6 +6349,26 @@
       "cons": [],
       "asOf": "2026-09-06"
     },
+    "coverage": [
+      {
+        "handle": "LauraKBuzz",
+        "videoId": "3E0gk_Sc2Ow",
+        "videoTitle": "Touring Accessibility in Life is Strange: Double Exposure - Access-Ability",
+        "videos": 5
+      },
+      {
+        "handle": "SuperButterBuns",
+        "videoId": "pgXQNdFq11k",
+        "videoTitle": "LIFE IS STRANGE FOR BEGINNERS (ft. Anima GAMING)",
+        "videos": 3
+      },
+      {
+        "handle": "JimSterling",
+        "videoId": "6T1dDrV7ITY",
+        "videoTitle": "Life Is Strange And The REAL Virtue Signalling (The Jimquisition)",
+        "videos": 1
+      }
+    ],
     "description": "Max rewinds time in a Pacific Northwest town, with the original season and Before the Storm rebuilt with new lighting and animation."
   },
   {
@@ -5944,6 +6441,7 @@
       "cons": [],
       "asOf": "2026-09-06"
     },
+    "coverage": null,
     "description": "Two brothers run for the Mexican border, and everything you teach the younger one along the way changes who he becomes."
   },
   {
@@ -6024,6 +6522,26 @@
       ],
       "asOf": "2026-09-06"
     },
+    "coverage": [
+      {
+        "handle": "GabSmolders",
+        "videoId": "1ndkdB62L8w",
+        "videoTitle": "Literally NO ONE SURVIVES the Quarry",
+        "videos": 8
+      },
+      {
+        "handle": "LauraKBuzz",
+        "videoId": "Ng2lW-9F66s",
+        "videoTitle": "The Quarry - Accessibility Review - Access-Ability",
+        "videos": 1
+      },
+      {
+        "handle": "NemesisLacroix",
+        "videoId": "_3xGD1BSgt0",
+        "videoTitle": "LET'S PLAY! The Quarry: Full Game With Chapters IN DESCRIPTION (Sponsored & Provided by 2K Games!)",
+        "videos": 1
+      }
+    ],
     "description": "A summer camp horror movie you steer, where nine counselors can all live or all die based on split-second choices."
   },
   {
@@ -6090,6 +6608,26 @@
       "cons": [],
       "asOf": "2026-09-06"
     },
+    "coverage": [
+      {
+        "handle": "snapcube",
+        "videoId": "Vp3mNqwRros",
+        "videoTitle": "Until Dawn - Part 2 | SnapCube's Real-Time Fandub",
+        "videos": 10
+      },
+      {
+        "handle": "GabSmolders",
+        "videoId": "2Wd4pk-39Hc",
+        "videoTitle": "New content?? - Until Dawn Remake [ENDING]",
+        "videos": 4
+      },
+      {
+        "handle": "LauraKBuzz",
+        "videoId": "jmLIE1sVhIo",
+        "videoTitle": "Until Dawn PS5 Accessibility Review - Access-Ability",
+        "videos": 1
+      }
+    ],
     "description": "Eight teenagers on a snowbound mountain, a branching butterfly-effect script, and a horror twist worth going in blind for."
   },
   {
@@ -6156,6 +6694,14 @@
       ],
       "asOf": "2026-09-06"
     },
+    "coverage": [
+      {
+        "handle": "JimSterling",
+        "videoId": "Ror-A4_7zSk",
+        "videoTitle": "Detroit: Become Human - Crazy Fat Ethel II (Jimpressions)",
+        "videos": 1
+      }
+    ],
     "description": "Three androids in near-future Detroit, each with a flowchart of consequences that can kill them off long before the finale."
   },
   {
@@ -6215,6 +6761,14 @@
       ],
       "asOf": "2026-09-06"
     },
+    "coverage": [
+      {
+        "handle": "JimSterling",
+        "videoId": "rEljYhm7OxE",
+        "videoTitle": "Road 96 - Country Roads (Jimpressions)",
+        "videos": 1
+      }
+    ],
     "description": "A procedural road trip north out of a collapsing country, stitched together from random encounters with a recurring cast."
   },
   {
@@ -6258,6 +6812,7 @@
       "cons": [],
       "asOf": "2026-09-06"
     },
+    "coverage": null,
     "description": "A mother and daughter drive between abandoned family properties, uncovering a secret through the objects left behind."
   },
   {
@@ -6318,6 +6873,7 @@
       ],
       "asOf": "2026-09-06"
     },
+    "coverage": null,
     "description": "A girl's diary and the fantasy story she is writing in it, where you platform across the words on the page itself."
   },
   {
@@ -6374,6 +6930,7 @@
       "cons": [],
       "asOf": "2026-09-06"
     },
+    "coverage": null,
     "description": "A painter finishes her portfolio in a sunlit apartment, mixing colors by hand in a short, hand-animated story."
   },
   {
@@ -6424,6 +6981,7 @@
       "cons": [],
       "asOf": "2026-09-06"
     },
+    "coverage": null,
     "description": "Reshape rolling watercolor hills to clear a path, telling a wordless story of regret through the landscape itself."
   },
   {
@@ -6463,6 +7021,7 @@
       "cons": [],
       "asOf": "2026-09-06"
     },
+    "coverage": null,
     "description": "A champion swimmer sinks into memories of her mother in a wordless, hour-long piece of interactive watercolor animation."
   },
   {
@@ -6508,6 +7067,7 @@
       "cons": [],
       "asOf": "2026-09-06"
     },
+    "coverage": null,
     "description": "Mimi returns to her grandmother's house in southern France, collecting words and scents into a hand-painted scrapbook."
   },
   {
@@ -6549,6 +7109,7 @@
       "cons": [],
       "asOf": "2026-09-06"
     },
+    "coverage": null,
     "description": "A teenager tends musical gardens in a mutant community, in a soap opera that unfolds through neighbors dropping by."
   },
   {
@@ -6595,6 +7156,7 @@
       "cons": [],
       "asOf": "2026-09-06"
     },
+    "coverage": null,
     "description": "A southern gothic point-and-click through the refineries of Louisiana, searching for a missing brother."
   },
   {
@@ -6657,6 +7219,20 @@
       "cons": [],
       "asOf": "2026-09-06"
     },
+    "coverage": [
+      {
+        "handle": "GabSmolders",
+        "videoId": "QjzLM3RuIKo",
+        "videoTitle": "Unpacking Simulator ♥",
+        "videos": 1
+      },
+      {
+        "handle": "JimSterling",
+        "videoId": "PV-JVAZ5E6g",
+        "videoTitle": "BOGLINWATCH: Unpacking The New 2021 Boglins! (Heaving Toy Chest)",
+        "videos": 1
+      }
+    ],
     "description": "Pull a life out of cardboard boxes across eight moves, telling an entire biography through where things fit and where they don't."
   },
   {
@@ -6715,6 +7291,7 @@
       "cons": [],
       "asOf": "2026-09-06"
     },
+    "coverage": null,
     "description": "Serve drinks to elves, orcs and succubi on rainy Seattle nights, where latte art is your only way to steer a conversation."
   },
   {
@@ -6754,6 +7331,7 @@
       "cons": [],
       "asOf": "2026-09-06"
     },
+    "coverage": null,
     "description": "The night shift returns with new regulars, new recipes and the same warm, rain-soaked lo-fi atmosphere."
   },
   {
@@ -6817,6 +7395,7 @@
       "cons": [],
       "asOf": "2026-09-06"
     },
+    "coverage": null,
     "description": "Jill mixes drinks in a dystopian city, and how strong you pour decides what her customers are willing to tell you."
   },
   {
@@ -6864,6 +7443,7 @@
       "cons": [],
       "asOf": "2026-09-06"
     },
+    "coverage": null,
     "description": "A fully animated last year of high school for a band of dinosaur teenagers who know exactly how little time is left."
   },
   {
@@ -6920,6 +7500,14 @@
       "cons": [],
       "asOf": "2026-09-06"
     },
+    "coverage": [
+      {
+        "handle": "GabSmolders",
+        "videoId": "5m-vIx8fzIE",
+        "videoTitle": "The perfect ending! - Beacon Pines",
+        "videos": 2
+      }
+    ],
     "description": "A storybook about a young deer where you collect words and slot them into the text to rewrite how each chapter goes."
   },
   {
@@ -6976,6 +7564,7 @@
       "cons": [],
       "asOf": "2026-09-06"
     },
+    "coverage": null,
     "description": "Two high schoolers in 1990s rural Indonesia, one of whom can dive into other people's minds, face the end of the world."
   },
   {
@@ -7038,6 +7627,7 @@
       "cons": [],
       "asOf": "2026-09-06"
     },
+    "coverage": null,
     "description": "Jala returns home and battles her exes in turn-based combat, skates through town, and cooks with her mother between fights."
   },
   {
@@ -7094,6 +7684,7 @@
       "cons": [],
       "asOf": "2026-09-06"
     },
+    "coverage": null,
     "description": "A hedge witch gathers ingredients from a storybook forest to brew curses for the fairy tale characters who deserve them."
   },
   {
@@ -7147,6 +7738,14 @@
       "cons": [],
       "asOf": "2026-09-06"
     },
+    "coverage": [
+      {
+        "handle": "GabSmolders",
+        "videoId": "jct80mVX0DI",
+        "videoTitle": "Gone Home",
+        "videos": 1
+      }
+    ],
     "description": "Come home to an empty house in 1995 Oregon and reconstruct what happened to your sister from notes and cassette tapes."
   },
   {
@@ -7196,6 +7795,7 @@
       "cons": [],
       "asOf": "2026-09-06"
     },
+    "coverage": null,
     "description": "A twelve-minute time loop in a small apartment, solved by carrying knowledge, not items, across each reset."
   },
   {
@@ -7249,6 +7849,14 @@
       "cons": [],
       "asOf": "2026-09-06"
     },
+    "coverage": [
+      {
+        "handle": "JimSterling",
+        "videoId": "b_spl8ldX4Q",
+        "videoTitle": "Sea Of Solitude - Cry Me A River (Jimpressions)",
+        "videos": 1
+      }
+    ],
     "description": "Kay rows a flooded city where loneliness has turned people into monsters, including herself."
   },
   {
@@ -7265,6 +7873,7 @@
     "psnStorePath": "product/UP9000-CUSA11834_00-CONCRETEGENIE000",
     "ageRating": null,
     "ratings": null,
+    "coverage": null,
     "description": "Paint living murals across a dead harbor town with the DualSense motion controls, bringing creatures to life as you go."
   },
   {
@@ -7321,6 +7930,7 @@
       "cons": [],
       "asOf": "2026-09-06"
     },
+    "coverage": null,
     "description": "A lost ember wanders a storybook world solving small self-contained puzzles to relight others who have given up."
   },
   {
@@ -7360,6 +7970,7 @@
       "cons": [],
       "asOf": "2026-09-06"
     },
+    "coverage": null,
     "description": "Surf, dash and glide across serene ruins with a staff that grants a new traversal power in every biome."
   },
   {
@@ -7419,6 +8030,7 @@
       "cons": [],
       "asOf": "2026-09-06"
     },
+    "coverage": null,
     "description": "A wordless dive through vividly colored oceans, swimming inside enormous schools of fish to a soaring score."
   },
   {
@@ -7512,6 +8124,32 @@
       ],
       "asOf": "2026-09-06"
     },
+    "coverage": [
+      {
+        "handle": "JimSterling",
+        "videoId": "vKtrrlD8aTc",
+        "videoTitle": "Cyberpunk 2077 Should Be Delayed For Three Years (The Jimquisition)",
+        "videos": 4
+      },
+      {
+        "handle": "TheSphereHunter",
+        "videoId": "xmJefd5Tyic",
+        "videoTitle": "How Phantom Liberty Reboots Cyberpunk 2077",
+        "videos": 2
+      },
+      {
+        "handle": "NemesisLacroix",
+        "videoId": "hz2mKh7Qr-A",
+        "videoTitle": "Harley Quinn 2077 - Trying Cyberpunk 2077 One Last Time",
+        "videos": 2
+      },
+      {
+        "handle": "LauraKBuzz",
+        "videoId": "TWp7vYOVyFc",
+        "videoTitle": "Cyberpunk 2077 Isn't Very Accessible - Access-Ability",
+        "videos": 1
+      }
+    ],
     "description": "Build V from the ground up and take on Night City, an open world dense enough to get lost in for a hundred hours."
   },
   {
@@ -7595,6 +8233,7 @@
       ],
       "asOf": "2026-09-06"
     },
+    "coverage": null,
     "description": "Geralt hunts monsters across an enormous open world where even the side contracts carry real moral weight."
   },
   {
@@ -7678,6 +8317,20 @@
       ],
       "asOf": "2026-09-06"
     },
+    "coverage": [
+      {
+        "handle": "NemesisLacroix",
+        "videoId": "ziMYnHX8NBY",
+        "videoTitle": "Let's Play!! Final Fantasy VII Remake INTERGRADE For The First Time!!",
+        "videos": 6
+      },
+      {
+        "handle": "JimSterling",
+        "videoId": "5gMhAMFAWvE",
+        "videoTitle": "Final Fantasy VII Remake - A Work Of Subversive Genius (Jimpressions)",
+        "videos": 5
+      }
+    ],
     "description": "Midgar rebuilt in extraordinary detail, with a hybrid action and command battle system that rewards constant switching."
   },
   {
@@ -7758,6 +8411,14 @@
       ],
       "asOf": "2026-09-06"
     },
+    "coverage": [
+      {
+        "handle": "SuperButterBuns",
+        "videoId": "2oxc-v3_VfI",
+        "videoTitle": "NIER AUTOMATA FOR BEGINNERS",
+        "videos": 2
+      }
+    ],
     "description": "2B and 9S fight through a ruined earth in an action RPG whose real story only assembles across multiple playthroughs."
   },
   {
@@ -7842,6 +8503,14 @@
       ],
       "asOf": "2026-09-06"
     },
+    "coverage": [
+      {
+        "handle": "JimSterling",
+        "videoId": "iJ1WNn3SEa8",
+        "videoTitle": "Ghost of Tsushima - Serious Samurai (Jimpressions)",
+        "videos": 2
+      }
+    ],
     "description": "A samurai open world guided by wind instead of waypoints, with duels that turn on timing and stance."
   },
   {
@@ -7913,6 +8582,7 @@
       ],
       "asOf": "2026-09-06"
     },
+    "coverage": null,
     "description": "Miles takes over a snowbound Manhattan with bio-electric venom powers and the best web-swinging in games."
   },
   {
@@ -7990,6 +8660,14 @@
       ],
       "asOf": "2026-09-06"
     },
+    "coverage": [
+      {
+        "handle": "JimSterling",
+        "videoId": "2Hy87yKfXn0",
+        "videoTitle": "Death Stranding - Made For Walking (Jimpressions)",
+        "videos": 2
+      }
+    ],
     "description": "Carry cargo across a broken America on foot, where terrain, balance and other players' abandoned ladders are the whole game."
   },
   {
@@ -8088,6 +8766,14 @@
       ],
       "asOf": "2026-09-06"
     },
+    "coverage": [
+      {
+        "handle": "JimSterling",
+        "videoId": "NJwYO0TZpdY",
+        "videoTitle": "The Last Of Us Part II - Through The Slime & The Mud (Jimpressions)",
+        "videos": 1
+      }
+    ],
     "description": "Ellie's revenge through a rain-soaked Seattle, remastered with a roguelike survival mode and restored cut levels."
   },
   {
@@ -8181,6 +8867,7 @@
       ],
       "asOf": "2026-09-06"
     },
+    "coverage": null,
     "description": "Raid and settle across ninth-century England as Eivor, with a settlement that grows through everything you bring home."
   },
   {
@@ -8243,6 +8930,7 @@
       "cons": [],
       "asOf": "2026-09-06"
     },
+    "coverage": null,
     "description": "A bright Greek myth playground of gliding, climbing and vault puzzles, starring a hero you build yourself."
   },
   {
@@ -8321,6 +9009,7 @@
       ],
       "asOf": "2026-09-06"
     },
+    "coverage": null,
     "description": "Create a fifth-year student and explore a castle and highlands packed with spells, beasts and hidden rooms."
   },
   {
@@ -8386,6 +9075,7 @@
       ],
       "asOf": "2026-09-06"
     },
+    "coverage": null,
     "description": "A gorgeous anime-styled action RPG about two worlds and a party whose bonds drive the combat system itself."
   },
   {
@@ -8447,6 +9137,7 @@
       "cons": [],
       "asOf": "2026-09-06"
     },
+    "coverage": null,
     "description": "A kung fu revenge story where every death ages you a year, trading health for damage until you learn the routes cold."
   },
   {
@@ -8513,6 +9204,7 @@
       ],
       "asOf": "2026-09-06"
     },
+    "coverage": null,
     "description": "A co-op only adventure that invents an entire new mechanic every twenty minutes and never reuses one."
   },
   {
@@ -8586,6 +9278,20 @@
       ],
       "asOf": "2026-09-06"
     },
+    "coverage": [
+      {
+        "handle": "LauraKBuzz",
+        "videoId": "Vi_8qB19pOw",
+        "videoTitle": "Hades' God Mode is a Great Approach to Difficulty - Access-Ability",
+        "videos": 4
+      },
+      {
+        "handle": "JimSterling",
+        "videoId": "xxsPPN6j6ps",
+        "videoTitle": "Hades - Basically My Game Of The Year (Jimpressions)",
+        "videos": 1
+      }
+    ],
     "description": "Escape the underworld over and over, with god-granted boons that rebuild your run and a story that advances with every death."
   },
   {
@@ -8639,6 +9345,7 @@
       "cons": [],
       "asOf": "2026-09-06"
     },
+    "coverage": null,
     "description": "The last fox on earth leads her cubs through a poisoned landscape, and any cub you lose stays lost."
   },
   {
@@ -8658,6 +9365,26 @@
     "psnStorePath": "concept/10002684",
     "ageRating": null,
     "ratings": null,
+    "coverage": [
+      {
+        "handle": "NemesisLacroix",
+        "videoId": "cHmTk2V92FE",
+        "videoTitle": "Playing ASTRO BOT, 100% Completion!! ...finishing the game... TWO YEARS LATER??",
+        "videos": 5
+      },
+      {
+        "handle": "LauraKBuzz",
+        "videoId": "3euzbkP9T0M",
+        "videoTitle": "Astro Bot Accessibility Review - Access-Ability",
+        "videos": 1
+      },
+      {
+        "handle": "JimSterling",
+        "videoId": "lotwsbglpUk",
+        "videoTitle": "The Frustrating Contrast Between Concord's Failure & Astro Bot's Success (The Jimquisition)",
+        "videos": 1
+      }
+    ],
     "description": "A joyful 3D platformer built around the DualSense, packed with inventive one-off mechanics and a galaxy of PlayStation history."
   },
   {
@@ -8676,6 +9403,7 @@
     "psnStorePath": "concept/10000229",
     "ageRating": null,
     "ratings": null,
+    "coverage": null,
     "description": "The free pack-in platformer that turns the DualSense itself into the toy, with a museum of PlayStation nostalgia."
   },
   {
@@ -8749,6 +9477,14 @@
       ],
       "asOf": "2026-09-06"
     },
+    "coverage": [
+      {
+        "handle": "JimSterling",
+        "videoId": "uiD4R7Yorl8",
+        "videoTitle": "Returnal - Die, Die Again! (Jimpressions)",
+        "videos": 1
+      }
+    ],
     "description": "A roguelike bullet hell where Selene crashes on a shifting alien planet and dies her way toward the truth."
   },
   {
@@ -8767,6 +9503,14 @@
     "psnStorePath": "concept/10000368",
     "ageRating": null,
     "ratings": null,
+    "coverage": [
+      {
+        "handle": "JimSterling",
+        "videoId": "4Yn-vUdV-Rc",
+        "videoTitle": "Demon's Souls - The PS5's Best PS3 Game (Jimpressions)",
+        "videos": 1
+      }
+    ],
     "description": "The soulslike that started it all, rebuilt from the ground up as a showcase of what the hardware could do."
   },
   {
@@ -8832,6 +9576,20 @@
       ],
       "asOf": "2026-09-06"
     },
+    "coverage": [
+      {
+        "handle": "LauraKBuzz",
+        "videoId": "_uOYT0vzlvo",
+        "videoTitle": "Ratchet and Clank: Rift Apart Accessibility Review - Access-Ability",
+        "videos": 2
+      },
+      {
+        "handle": "JimSterling",
+        "videoId": "0a1x5GT88jw",
+        "videoTitle": "Ratchet & Clank: Rift Apart - An Actual PS5 Game (Jimpressions)",
+        "videos": 1
+      }
+    ],
     "description": "Dimension-hopping platforming that swaps entire worlds mid-jump, with an arsenal of absurd weapons."
   },
   {
@@ -8910,6 +9668,26 @@
       ],
       "asOf": "2026-09-06"
     },
+    "coverage": [
+      {
+        "handle": "NemesisLacroix",
+        "videoId": "c1KVgQ3eJYs",
+        "videoTitle": "Marvel's Spider-Man 2 - PS5  (PART 3, FINALE)",
+        "videos": 3
+      },
+      {
+        "handle": "LauraKBuzz",
+        "videoId": "iQFws3UC1dk",
+        "videoTitle": "Marvel's Spider-Man 2: Accessibility Review - Access-Ability",
+        "videos": 1
+      },
+      {
+        "handle": "snapcube",
+        "videoId": "BOn5tCqmefk",
+        "videoTitle": "Screaming About Marvel's Spider-Man 2",
+        "videos": 1
+      }
+    ],
     "description": "Two Spider-Men share an expanded New York, with wingsuit traversal across the full five boroughs."
   },
   {
@@ -8995,6 +9773,32 @@
       ],
       "asOf": "2026-09-06"
     },
+    "coverage": [
+      {
+        "handle": "NemesisLacroix",
+        "videoId": "2lOoBCCnkq8",
+        "videoTitle": "Nemesis Plays Final Fantasy XVI For The First Time!! (Part 6, Ending)",
+        "videos": 6
+      },
+      {
+        "handle": "TheSphereHunter",
+        "videoId": "Ixj5jECUylU",
+        "videoTitle": "What I Want From Final Fantasy XVI",
+        "videos": 1
+      },
+      {
+        "handle": "LauraKBuzz",
+        "videoId": "kbIftCDdX30",
+        "videoTitle": "Let's Talk About Final Fantasy XVI - Access-Ability",
+        "videos": 1
+      },
+      {
+        "handle": "JimSterling",
+        "videoId": "sgjqXTvHaLk",
+        "videoTitle": "Final Fantasy XVI's Magical Misery Tour (The Jimquisition)",
+        "videos": 1
+      }
+    ],
     "description": "A darker, action-driven Final Fantasy built around enormous summon battles that reshape the landscape."
   },
   {
@@ -9078,6 +9882,32 @@
       ],
       "asOf": "2026-09-06"
     },
+    "coverage": [
+      {
+        "handle": "NemesisLacroix",
+        "videoId": "KD_xf33Y1zw",
+        "videoTitle": "Let's Play!! Stellar Blade, BOSS CHALLENGE!! (Part 8)",
+        "videos": 8
+      },
+      {
+        "handle": "TheSphereHunter",
+        "videoId": "UvDieSfvrn4",
+        "videoTitle": "Stellar Blade is Awesome Butt Messy",
+        "videos": 1
+      },
+      {
+        "handle": "LauraKBuzz",
+        "videoId": "hHRjhPtpQC8",
+        "videoTitle": "Stellar Blade: Accessibility Review In Progress - Access-Ability",
+        "videos": 1
+      },
+      {
+        "handle": "DeadDomain",
+        "videoId": "jHJczgHCwTY",
+        "videoTitle": "The Fake Controversy of Stellar Blade's Culture War",
+        "videos": 1
+      }
+    ],
     "description": "A stylish combo-driven action game across a ruined earth, built on parries and spectacle."
   },
   {
@@ -9155,6 +9985,14 @@
       ],
       "asOf": "2026-09-06"
     },
+    "coverage": [
+      {
+        "handle": "LauraKBuzz",
+        "videoId": "E8sN9mk6lDA",
+        "videoTitle": "Rise of the Ronin Hands On Preview (Plus Settings Info)",
+        "videos": 1
+      }
+    ],
     "description": "An open-world samurai RPG set during the fall of the shogunate, with shifting allegiances and a custom protagonist."
   },
   {
@@ -9248,6 +10086,26 @@
       ],
       "asOf": "2026-09-06"
     },
+    "coverage": [
+      {
+        "handle": "AlanahPearce",
+        "videoId": "RGb3GOW2fN0",
+        "videoTitle": "Is Baldur's Gate 3... Too Good?",
+        "videos": 1
+      },
+      {
+        "handle": "JimSterling",
+        "videoId": "7vo9z7MTE2E",
+        "videoTitle": "We Need To Talk About Baldur's Gate 3 Being The New Industry Standard (The Jimquisition)",
+        "videos": 1
+      },
+      {
+        "handle": "snapcube",
+        "videoId": "yHHbYkc3_Yk",
+        "videoTitle": "I Played Baldur's Gate 3 as Twilight Sparkle",
+        "videos": 1
+      }
+    ],
     "description": "A vast turn-based RPG where nearly every plan works, playable in co-op with friends who ruin all of them."
   },
   {
@@ -9328,6 +10186,7 @@
       ],
       "asOf": "2026-09-06"
     },
+    "coverage": null,
     "description": "Four-player squads drop onto hostile planets to spread managed democracy, mostly via friendly fire."
   },
   {
@@ -9347,6 +10206,14 @@
     "psnStorePath": "concept/10000956",
     "ageRating": null,
     "ratings": null,
+    "coverage": [
+      {
+        "handle": "LauraKBuzz",
+        "videoId": "-Bn1XTLhafE",
+        "videoTitle": "Gran Turismo 7 Accessibility Review - \"Unforgiving\" - Access-Ability",
+        "videos": 1
+      }
+    ],
     "description": "A meticulous driving simulator whose car models and lighting are the real showcase."
   },
   {
@@ -9365,6 +10232,14 @@
     "psnStorePath": "concept/10002065",
     "ageRating": null,
     "ratings": null,
+    "coverage": [
+      {
+        "handle": "GabSmolders",
+        "videoId": "jBJmCZ61w7E",
+        "videoTitle": "Alan Wake 2: The Lake House",
+        "videos": 10
+      }
+    ],
     "description": "A survival horror sequel switching between an FBI agent and a trapped writer, and one of the best-looking games on the console."
   },
   {
@@ -9446,6 +10321,7 @@
       ],
       "asOf": "2026-09-06"
     },
+    "coverage": null,
     "description": "An action RPG drawn from Journey to the West, with shapeshifting and enormous mythic bosses."
   },
   {
@@ -9529,6 +10405,44 @@
       ],
       "asOf": "2026-09-06"
     },
+    "coverage": [
+      {
+        "handle": "NemesisLacroix",
+        "videoId": "WZUWslu-itk",
+        "videoTitle": "🎃 Playing The Silent Hill 2 Remake (Part 5 of 5) After The Stream Crashed",
+        "videos": 7
+      },
+      {
+        "handle": "GabSmolders",
+        "videoId": "zxkxaezvO6A",
+        "videoTitle": "The hotel - Silent Hill 2 Remake [ENDING]",
+        "videos": 6
+      },
+      {
+        "handle": "TheSphereHunter",
+        "videoId": "b_QU2yTMDoE",
+        "videoTitle": "Silent Hill 2 Remake Is a Sequel",
+        "videos": 2
+      },
+      {
+        "handle": "JimSterling",
+        "videoId": "I5Re87u0VPg",
+        "videoTitle": "Monsters, Memes, and Money: Silent Hill 2 Remake's Worrying Nonsense (The Jimquisition)",
+        "videos": 2
+      },
+      {
+        "handle": "LauraKBuzz",
+        "videoId": "VH2dV1I3Dig",
+        "videoTitle": "Silent Hill 2 Remake Accessibility Review - Access-Ability",
+        "videos": 1
+      },
+      {
+        "handle": "DeadDomain",
+        "videoId": "JMS0voMOj7w",
+        "videoTitle": "Dissecting the Grift: Silent Hill 2's WOKE DEI Outrage",
+        "videos": 1
+      }
+    ],
     "description": "The remake of the psychological horror landmark, rebuilt over the shoulder in fog thick enough to taste."
   },
   {
@@ -9607,6 +10521,44 @@
       ],
       "asOf": "2026-09-06"
     },
+    "coverage": [
+      {
+        "handle": "GabSmolders",
+        "videoId": "EQtUCTpiOC4",
+        "videoTitle": "Down to the planet - Dead Space [ENDING]",
+        "videos": 6
+      },
+      {
+        "handle": "DeadDomain",
+        "videoId": "pDP0Nd4hYg4",
+        "videoTitle": "Going Through ALL The Dead Space Expanded Media - Dead Domains",
+        "videos": 4
+      },
+      {
+        "handle": "TheSphereHunter",
+        "videoId": "I3VQ-fuRugQ",
+        "videoTitle": "Dead Space Remake Is Perfect",
+        "videos": 3
+      },
+      {
+        "handle": "JimSterling",
+        "videoId": "rG6_qTb4VwU",
+        "videoTitle": "Why EA's Dead Space Can F*** Off (The Jimquisition)",
+        "videos": 2
+      },
+      {
+        "handle": "LauraKBuzz",
+        "videoId": "E1_QRNor2hY",
+        "videoTitle": "Dead Space Brings Content Warnings to Big Budget Horror - Access-Ability",
+        "videos": 1
+      },
+      {
+        "handle": "SuperButterBuns",
+        "videoId": "CBqPM589Pfo",
+        "videoTitle": "SPOOKS IN SPACE ( Dead Space 1 Stream Highlights)",
+        "videos": 1
+      }
+    ],
     "description": "The rebuild of the sci-fi horror classic, seamless from menu to credits with no visible loads."
   },
   {
@@ -9695,6 +10647,14 @@
       ],
       "asOf": "2026-09-06"
     },
+    "coverage": [
+      {
+        "handle": "JimSterling",
+        "videoId": "49nZmOAP12M",
+        "videoTitle": "The Last Of Us Part I Has The Worst Graphics Of All Time (The Jimquisition)",
+        "videos": 2
+      }
+    ],
     "description": "The original rebuilt on the Part II engine, with rebuilt performances and deep accessibility support."
   },
   {
@@ -9775,6 +10735,14 @@
       ],
       "asOf": "2026-09-06"
     },
+    "coverage": [
+      {
+        "handle": "GabSmolders",
+        "videoId": "ui1QxT0mD90",
+        "videoTitle": "It's finally out!! - A Plague Tale: Requiem [1]",
+        "videos": 3
+      }
+    ],
     "description": "Amicia and Hugo flee south through France, pursued by rat swarms tens of thousands strong."
   },
   {
@@ -9852,6 +10820,7 @@
       ],
       "asOf": "2026-09-06"
     },
+    "coverage": null,
     "description": "A scoundrel and her companion creature run jobs across an open-world Outer Rim between the films."
   },
   {
@@ -9921,6 +10890,7 @@
       ],
       "asOf": "2026-09-06"
     },
+    "coverage": null,
     "description": "A first-person open world on Pandora, dense with bioluminescent forest and vertical traversal."
   },
   {
@@ -9939,6 +10909,14 @@
     "psnStorePath": "concept/10003923",
     "ageRating": null,
     "ratings": null,
+    "coverage": [
+      {
+        "handle": "LauraKBuzz",
+        "videoId": "8i0PML9mqqc",
+        "videoTitle": "Ghost of Yotei Accessibility Review - Access-Ability",
+        "videos": 1
+      }
+    ],
     "description": "Atsu hunts across the plains and peaks around Mount Yotei in the follow-up to Ghost of Tsushima."
   },
   {
@@ -10009,6 +10987,7 @@
       ],
       "asOf": "2026-09-06"
     },
+    "coverage": null,
     "description": "Sam's deliveries continue across a new continent, with the same strange, beautiful traversal."
   },
   {
@@ -10075,6 +11054,14 @@
       ],
       "asOf": "2026-09-06"
     },
+    "coverage": [
+      {
+        "handle": "GabSmolders",
+        "videoId": "QwiKOgZUwaM",
+        "videoTitle": "These visuals are NUTS - Sable [1]",
+        "videos": 2
+      }
+    ],
     "description": "A gliding, hoverbike coming-of-age journey across a desert drawn like a Moebius comic."
   },
   {
@@ -10131,6 +11118,20 @@
       "cons": [],
       "asOf": "2026-09-06"
     },
+    "coverage": [
+      {
+        "handle": "GabSmolders",
+        "videoId": "GYe0V5bojxc",
+        "videoTitle": "Cooking with the family ♥ - Venba",
+        "videos": 1
+      },
+      {
+        "handle": "LauraKBuzz",
+        "videoId": "AT9gMLQuZiI",
+        "videoTitle": "Venba Review - Podquisition 449",
+        "videos": 1
+      }
+    ],
     "description": "A short, warm cooking game about an Indian family in Canada and the recipes that survive the move."
   },
   {
@@ -10196,6 +11197,14 @@
       ],
       "asOf": "2026-09-06"
     },
+    "coverage": [
+      {
+        "handle": "GabSmolders",
+        "videoId": "dCXeUwUh6r8",
+        "videoTitle": "Little Kitty Big City!",
+        "videos": 2
+      }
+    ],
     "description": "A cat knocks things off ledges on the way home, and the whole city is a playground."
   },
   {
@@ -10253,6 +11262,7 @@
       "cons": [],
       "asOf": "2026-09-06"
     },
+    "coverage": null,
     "description": "A methodical climb up an enormous dried-out tower, one handhold and one stamina bar at a time."
   },
   {
@@ -10309,6 +11319,7 @@
       "cons": [],
       "asOf": "2026-09-06"
     },
+    "coverage": null,
     "description": "A storybook hero leaps off the page into the three-dimensional desk the book is sitting on."
   },
   {
@@ -10365,6 +11376,7 @@
       "cons": [],
       "asOf": "2026-09-06"
     },
+    "coverage": null,
     "description": "From the makers of Gris: a woman and a growing wolf cub cross a dying, hand-painted world."
   },
   {
@@ -10428,6 +11440,14 @@
       ],
       "asOf": "2026-09-06"
     },
+    "coverage": [
+      {
+        "handle": "Skurry",
+        "videoId": "3EAvpL1II-E",
+        "videoTitle": "Animal Well... Randomized",
+        "videos": 3
+      }
+    ],
     "description": "A tiny luminous blob explores a dense, secret-packed labyrinth where almost nothing is explained."
   },
   {
@@ -10487,6 +11507,7 @@
       "cons": [],
       "asOf": "2026-09-06"
     },
+    "coverage": null,
     "description": "A monochrome puzzle box of a hotel where every door is a riddle and the whole game is one long deduction."
   },
   {
@@ -10526,6 +11547,7 @@
       "cons": [],
       "asOf": "2026-09-06"
     },
+    "coverage": null,
     "description": "A massively multiplayer creature collector where other tamers roam the same islands you do."
   },
   {
@@ -10599,6 +11621,7 @@
       ],
       "asOf": "2026-09-06"
     },
+    "coverage": null,
     "description": "Catch creatures, then put them to work in your base, in a co-op survival crafting game with a very straight face."
   },
   {
@@ -10670,6 +11693,7 @@
       ],
       "asOf": "2026-09-06"
     },
+    "coverage": null,
     "description": "Restore a tropical farm and the dying reef below it, with a whole town of characters to befriend."
   },
   {
@@ -10723,6 +11747,14 @@
       "cons": [],
       "asOf": "2026-09-06"
     },
+    "coverage": [
+      {
+        "handle": "GabSmolders",
+        "videoId": "I8sVF6eNlI4",
+        "videoTitle": "THIS IS AMAZING!? - Fae Farm [1]",
+        "videos": 5
+      }
+    ],
     "description": "A cozy magical farming sim built for four-player co-op from the ground up."
   },
   {
@@ -10779,6 +11811,7 @@
       "cons": [],
       "asOf": "2026-09-06"
     },
+    "coverage": null,
     "description": "Farm, tame spirits and build decks across a hundred floating islands during your alchemist's apprenticeship."
   },
   {
@@ -10827,6 +11860,7 @@
       "cons": [],
       "asOf": "2026-09-06"
     },
+    "coverage": null,
     "description": "Physics-driven puppy brawling that is mostly about failing to stand up."
   },
   {
@@ -10905,6 +11939,14 @@
       ],
       "asOf": "2026-09-06"
     },
+    "coverage": [
+      {
+        "handle": "JimSterling",
+        "videoId": "jgAjO3It2fI",
+        "videoTitle": "I'm Not Applauding Sea Of Thieves For 'Just' Having Microtransactions",
+        "videos": 1
+      }
+    ],
     "description": "Crew a pirate ship with friends, where every sail on the horizon is another table of real players."
   },
   {
@@ -10978,6 +12020,20 @@
       ],
       "asOf": "2026-09-06"
     },
+    "coverage": [
+      {
+        "handle": "GabSmolders",
+        "videoId": "YqkFsTAwD7k",
+        "videoTitle": "It's been a while... - Phasmophobia",
+        "videos": 3
+      },
+      {
+        "handle": "zombiecleo",
+        "videoId": "5FdJIMUEY1s",
+        "videoTitle": "KAIJURALIS, BEDTOPIA and PHASMOPHOBIA - 49 - Hermitcraft - Season 7",
+        "videos": 1
+      }
+    ],
     "description": "Four investigators, one haunted house, and voice chat the ghost can hear."
   },
   {
@@ -11037,6 +12093,7 @@
       "cons": [],
       "asOf": "2026-09-06"
     },
+    "coverage": null,
     "description": "A medium walks two worlds at once, both rendered side by side on screen simultaneously."
   },
   {
@@ -11081,6 +12138,7 @@
       "cons": [],
       "asOf": "2026-09-06"
     },
+    "coverage": null,
     "description": "Both Overcooked games remastered, still the fastest way to test a friendship inside a burning kitchen."
   },
   {
@@ -11099,6 +12157,32 @@
     "psnStorePath": "concept/10003354",
     "ageRating": null,
     "ratings": null,
+    "coverage": [
+      {
+        "handle": "GabSmolders",
+        "videoId": "4-MkRcYh7ww",
+        "videoTitle": "FALL GUYS w/ Jack, Rae & Sykkuno!",
+        "videos": 2
+      },
+      {
+        "handle": "JimSterling",
+        "videoId": "gysMwnHVOJo",
+        "videoTitle": "The Marketable Genius Of Fall Guys (The Jimquisition)",
+        "videos": 2
+      },
+      {
+        "handle": "LauraKBuzz",
+        "videoId": "vBf2V82no64",
+        "videoTitle": "Stream VOD: Podquisition Plays - Fall Guys",
+        "videos": 1
+      },
+      {
+        "handle": "Skurry",
+        "videoId": "bJQZ6czKo3E",
+        "videoTitle": "I Created The Most Evil Fall Guys Map",
+        "videos": 1
+      }
+    ],
     "description": "Sixty jellybeans stumble through obstacle courses until one is left standing. Free to play."
   },
   {
@@ -11117,6 +12201,14 @@
     "psnStorePath": null,
     "ageRating": null,
     "ratings": null,
+    "coverage": [
+      {
+        "handle": "SuperButterBuns",
+        "videoId": "PmOtR9eZgSg",
+        "videoTitle": "ROCKET LEAGUE FOR BEGINNERS",
+        "videos": 1
+      }
+    ],
     "description": "Car football, still perfectly balanced a decade later, and free to play."
   },
   {
@@ -11136,6 +12228,7 @@
     "psnStorePath": "product/UP4433-PPSA17221_00-MINECRAFTPS50000",
     "ageRating": null,
     "ratings": null,
+    "coverage": null,
     "description": "Build anything with anyone, in the block world that ate a generation."
   },
   {
@@ -11210,6 +12303,7 @@
       ],
       "asOf": "2026-09-06"
     },
+    "coverage": null,
     "description": "A side-on sandbox of digging, building and boss fights, enormous and endlessly co-operative."
   },
   {
@@ -11266,6 +12360,7 @@
       "cons": [],
       "asOf": "2026-09-06"
     },
+    "coverage": null,
     "description": "Four dwarves mine procedurally carved caves where every wall can be dug through. Rock and stone."
   },
   {
@@ -11345,6 +12440,14 @@
       ],
       "asOf": "2026-09-06"
     },
+    "coverage": [
+      {
+        "handle": "JimSterling",
+        "videoId": "P7fJTSZ1vog",
+        "videoTitle": "Monster Hunter World Won't Devalue Its Gameplay With Loot Boxes",
+        "videos": 1
+      }
+    ],
     "description": "Track and fight enormous creatures in living ecosystems, alone or with three others."
   },
   {
@@ -11416,6 +12519,7 @@
       ],
       "asOf": "2026-09-06"
     },
+    "coverage": null,
     "description": "A faster, more mobile hunt built around the wirebug grapple and a very good dog."
   },
   {
@@ -11468,6 +12572,7 @@
       "cons": [],
       "asOf": "2026-09-06"
     },
+    "coverage": null,
     "description": "Wobbly humans solve physics puzzles badly, which is entirely the point."
   },
   {
@@ -11527,6 +12632,7 @@
       ],
       "asOf": "2026-09-06"
     },
+    "coverage": null,
     "description": "Gelatinous brawlers shove each other off industrial scenery in slow, hilarious motion."
   },
   {
@@ -11566,6 +12672,7 @@
       "cons": [],
       "asOf": "2026-09-06"
     },
+    "coverage": null,
     "description": "A slapstick removals company where physics, doorways and your friends all conspire against you."
   },
   {
@@ -11631,6 +12738,7 @@
       ],
       "asOf": "2026-09-06"
     },
+    "coverage": null,
     "description": "Finish tasks on a spaceship while somebody quietly kills everyone, then argue about who."
   },
   {
@@ -11691,6 +12799,7 @@
       "cons": [],
       "asOf": "2026-09-06"
     },
+    "coverage": null,
     "description": "Shrunk to ant size in a suburban backyard, building bases out of blades of grass."
   },
   {
@@ -11773,6 +12882,7 @@
       ],
       "asOf": "2026-09-06"
     },
+    "coverage": null,
     "description": "A shared open-world Sanctuary where loot, builds and seasons keep pulling you back in."
   },
   {
@@ -11792,6 +12902,14 @@
     "psnStorePath": "concept/10000896",
     "ageRating": null,
     "ratings": null,
+    "coverage": [
+      {
+        "handle": "NemesisLacroix",
+        "videoId": "xGaugojqKCY",
+        "videoTitle": "Genshin Impact 7.0 Update | Being A Tourist In Snezhnaya",
+        "videos": 9
+      }
+    ],
     "description": "A free, enormous anime-styled open world with drop-in co-op and a steady drip of new regions."
   },
   {
@@ -11871,6 +12989,14 @@
       ],
       "asOf": "2026-09-06"
     },
+    "coverage": [
+      {
+        "handle": "JimSterling",
+        "videoId": "RVYXTbqxHWM",
+        "videoTitle": "Warframe Devs Shame 'AAA' Industry, Actually Ask Players What They Want",
+        "videos": 3
+      }
+    ],
     "description": "A free-to-play space ninja shooter with a decade of movement systems layered on top of each other."
   },
   {
@@ -11949,6 +13075,14 @@
       ],
       "asOf": "2026-09-06"
     },
+    "coverage": [
+      {
+        "handle": "JimSterling",
+        "videoId": "mhLQsegK9AA",
+        "videoTitle": "Destiny 2 Fails To Meet Sales Expectations, Activision Promises More Monetization",
+        "videos": 9
+      }
+    ],
     "description": "Best-in-class gunplay wrapped in raids designed to be argued through with five friends."
   },
   {
@@ -12027,6 +13161,14 @@
       ],
       "asOf": "2026-09-06"
     },
+    "coverage": [
+      {
+        "handle": "JimSterling",
+        "videoId": "cyUutk1xDew",
+        "videoTitle": "Borderlands 3 - The Totally Unbiased Critique (Jimpressions)",
+        "videos": 5
+      }
+    ],
     "description": "Four-player looter shooting with a billion guns and a comic-book coat of paint."
   },
   {
@@ -12096,6 +13238,7 @@
       ],
       "asOf": "2026-09-06"
     },
+    "coverage": null,
     "description": "A co-op roguelike where difficulty climbs with the clock and builds spiral completely out of control."
   },
   {
@@ -12161,6 +13304,7 @@
       ],
       "asOf": "2026-09-06"
     },
+    "coverage": null,
     "description": "Survive a gothic-cartoon wilderness with friends, mostly by starving slightly more slowly."
   },
   {
@@ -12217,6 +13361,7 @@
       "cons": [],
       "asOf": "2026-09-06"
     },
+    "coverage": null,
     "description": "Build the level, then race through it, sabotaging everyone including yourself."
   },
   {
@@ -12273,6 +13418,14 @@
       "cons": [],
       "asOf": "2026-09-06"
     },
+    "coverage": [
+      {
+        "handle": "GabSmolders",
+        "videoId": "2vlCM3U0HsY",
+        "videoTitle": "Super fun escape room game! - Escape Academy",
+        "videos": 1
+      }
+    ],
     "description": "Escape rooms designed for two, with a running timer and a great deal of shouting."
   },
   {
@@ -12342,6 +13495,7 @@
       ],
       "asOf": "2026-09-06"
     },
+    "coverage": null,
     "description": "Twelve-player mini golf with no waiting for turns and no dignity."
   },
   {
@@ -12421,6 +13575,7 @@
       ],
       "asOf": "2026-09-06"
     },
+    "coverage": null,
     "description": "Jesse Faden takes over a shifting government building, with the best physics destruction on the platform."
   },
   {
@@ -12490,6 +13645,32 @@
       ],
       "asOf": "2026-09-06"
     },
+    "coverage": [
+      {
+        "handle": "TheSphereHunter",
+        "videoId": "TOMqxGzEowU",
+        "videoTitle": "Resident Evil VIllage Three Years Later",
+        "videos": 2
+      },
+      {
+        "handle": "GabSmolders",
+        "videoId": "GvBb6Re0Sug",
+        "videoTitle": "SO GOOD - Resident Evil Village: Shadows Of Rose DLC",
+        "videos": 1
+      },
+      {
+        "handle": "LauraKBuzz",
+        "videoId": "5vQMnFONoFA",
+        "videoTitle": "Resident Evil Village's Accessibility Update is Great, With One Caveat - Access-Ability",
+        "videos": 1
+      },
+      {
+        "handle": "JimSterling",
+        "videoId": "ZOO3d8Fh-Rw",
+        "videoTitle": "Resident Evil Village - Village Creeple (Jimpressions)",
+        "videos": 1
+      }
+    ],
     "description": "First-person survival horror through a gothic village and one very tall vampire's castle."
   },
   {
@@ -12556,6 +13737,44 @@
       ],
       "asOf": "2026-09-06"
     },
+    "coverage": [
+      {
+        "handle": "GabSmolders",
+        "videoId": "J0s6-litank",
+        "videoTitle": "Resident Evil 4 - Separate Ways",
+        "videos": 10
+      },
+      {
+        "handle": "NemesisLacroix",
+        "videoId": "vNcZj8k7br0",
+        "videoTitle": "Playing Resident Evil 4 For The First Time!! (Part 4) #CapcomCreator",
+        "videos": 7
+      },
+      {
+        "handle": "TheSphereHunter",
+        "videoId": "hfU_iF1VXlg",
+        "videoTitle": "Resident Evil 4 Remake Separate Ways Is Fantastic! (1st Playthrough Impressions)",
+        "videos": 6
+      },
+      {
+        "handle": "LauraKBuzz",
+        "videoId": "9i0LExQHUO8",
+        "videoTitle": "Resident Evil 4 Remake Accessibility Review - Access-Ability",
+        "videos": 1
+      },
+      {
+        "handle": "JimSterling",
+        "videoId": "Yiye7LMly3A",
+        "videoTitle": "Yes Resident Evil 4 Remake's Microtransactions Are Bad (The Jimquisition)",
+        "videos": 1
+      },
+      {
+        "handle": "SuperButterBuns",
+        "videoId": "S3gKXQ90LJI",
+        "videoTitle": "RESIDENT EVIL 4 FOR BEGINNERS",
+        "videos": 1
+      }
+    ],
     "description": "The remake of the action-horror benchmark, tighter and considerably darker than the original."
   },
   {
@@ -12634,6 +13853,14 @@
       ],
       "asOf": "2026-09-06"
     },
+    "coverage": [
+      {
+        "handle": "JimSterling",
+        "videoId": "yaSDvSLErw0",
+        "videoTitle": "Metro Exodus - I'm Not Saying Far Cry Is Better... (Jimpressions)",
+        "videos": 2
+      }
+    ],
     "description": "A year-long train journey across post-apocalyptic Russia, with fully ray-traced lighting in the enhanced edition."
   },
   {
@@ -12709,6 +13936,14 @@
       ],
       "asOf": "2026-09-06"
     },
+    "coverage": [
+      {
+        "handle": "JimSterling",
+        "videoId": "ZDy5j_9X_EQ",
+        "videoTitle": "Star Wars Jedi: Fallen Order, A Story-Driven EA Game, Is Selling Pretty Dang Well!",
+        "videos": 4
+      }
+    ],
     "description": "A soulslike-lite Jedi adventure across handcrafted planets, with a very good droid."
   },
   {
@@ -12778,6 +14013,32 @@
       ],
       "asOf": "2026-09-06"
     },
+    "coverage": [
+      {
+        "handle": "NemesisLacroix",
+        "videoId": "PPAqd-KA5G8",
+        "videoTitle": "THE END!! God of War: Ragnarok,  Part 4 (Full Playthrough)",
+        "videos": 6
+      },
+      {
+        "handle": "LauraKBuzz",
+        "videoId": "AEFl6HDIDjg",
+        "videoTitle": "Review: God of War: Ragnarok - Valhalla",
+        "videos": 4
+      },
+      {
+        "handle": "JimSterling",
+        "videoId": "gJBGJleZEpM",
+        "videoTitle": "God Of War And The Importance Of Console Exclusives (The Jimquisition)",
+        "videos": 3
+      },
+      {
+        "handle": "AlanahPearce",
+        "videoId": "yUZyIL86FYY",
+        "videoTitle": "How Do You Actually Write a Video Game? (ft. God of War Laufey!)",
+        "videos": 1
+      }
+    ],
     "description": "Kratos and his son cross Norse myth in a single unbroken camera shot from start to finish."
   },
   {
@@ -12863,6 +14124,14 @@
       ],
       "asOf": "2026-09-06"
     },
+    "coverage": [
+      {
+        "handle": "JimSterling",
+        "videoId": "6REhEuVBAec",
+        "videoTitle": "Red Dead Redemption 2 - Red Dead Realism (Jimpressions)",
+        "videos": 2
+      }
+    ],
     "description": "An outlaw open world of extraordinary density, where the weather alone is worth the ride."
   },
   {
@@ -12936,6 +14205,20 @@
       ],
       "asOf": "2026-09-06"
     },
+    "coverage": [
+      {
+        "handle": "JimSterling",
+        "videoId": "gu8pRZA634Q",
+        "videoTitle": "Days Gone - The Art Of Motorcycle Maintenance (Jimpressions)",
+        "videos": 2
+      },
+      {
+        "handle": "LauraKBuzz",
+        "videoId": "Rc5zVJ8Ekiw",
+        "videoTitle": "Days Gone: Remastered - Accessibility Impressions - Access-Ability",
+        "videos": 1
+      }
+    ],
     "description": "A biker crosses an overgrown Oregon where the infected swarm in their hundreds."
   },
   {
@@ -13008,6 +14291,14 @@
       ],
       "asOf": "2026-09-06"
     },
+    "coverage": [
+      {
+        "handle": "JimSterling",
+        "videoId": "A_Ycx1qsJiA",
+        "videoTitle": "A Plague Tale: Innocence - Heartwarming And Horrifying (Jimpressions)",
+        "videos": 1
+      }
+    ],
     "description": "Amicia guides her younger brother through a plague-struck France thick with rats and worse."
   },
   {
@@ -13052,6 +14343,7 @@
       "cons": [],
       "asOf": "2026-09-06"
     },
+    "coverage": null,
     "description": "Rearrange the map itself like jigsaw tiles to reshape the world you are walking through."
   },
   {
@@ -13113,6 +14405,14 @@
       ],
       "asOf": "2026-09-06"
     },
+    "coverage": [
+      {
+        "handle": "GabSmolders",
+        "videoId": "Yw6K08QCh9Y",
+        "videoTitle": "Strange horticulture at Botany Manor",
+        "videos": 3
+      }
+    ],
     "description": "Run an occult plant shop, identifying specimens by hand from a battered field guide."
   },
   {
@@ -13152,6 +14452,7 @@
       "cons": [],
       "asOf": "2026-09-06"
     },
+    "coverage": null,
     "description": "Two friends move time forward and back across dreamlike islands built from their shared memories."
   },
   {
@@ -13191,6 +14492,7 @@
       "cons": [],
       "asOf": "2026-09-06"
     },
+    "coverage": null,
     "description": "Farm your own small island and sail between others in a gentle, brightly colored adventure."
   },
   {
@@ -13234,6 +14536,7 @@
       "cons": [],
       "asOf": "2026-09-06"
     },
+    "coverage": null,
     "description": "A fox digs toward home across quiet landscapes while a parallel human story is told over the top."
   },
   {
@@ -13293,6 +14596,7 @@
       "cons": [],
       "asOf": "2026-09-06"
     },
+    "coverage": null,
     "description": "An old man walks back through his own memories, bending time to cross each one."
   },
   {
@@ -13355,6 +14659,7 @@
       "cons": [],
       "asOf": "2026-09-06"
     },
+    "coverage": null,
     "description": "Two lovers glide across a fractured planet together, cooking and resting between fights."
   },
   {
@@ -13402,6 +14707,7 @@
       "cons": [],
       "asOf": "2026-09-06"
     },
+    "coverage": null,
     "description": "Five party games played on everyone's phones, so no extra controllers required."
   },
   {
@@ -13463,6 +14769,7 @@
       ],
       "asOf": "2026-09-06"
     },
+    "coverage": null,
     "description": "A hand-drawn taopunk metroidvania built on a deflect-heavy parry system, where every duel is a rhythm you learn."
   },
   {
@@ -13532,6 +14839,20 @@
       ],
       "asOf": "2026-09-06"
     },
+    "coverage": [
+      {
+        "handle": "Skurry",
+        "videoId": "cCzrrHe9vrE",
+        "videoTitle": "Discovering The True Depths Of Hollow Knight: Silksong",
+        "videos": 5
+      },
+      {
+        "handle": "LauraKBuzz",
+        "videoId": "8PsJhwjErwg",
+        "videoTitle": "Hollow Knight Silksong Accessibility Settings Preview - Access-Ability",
+        "videos": 1
+      }
+    ],
     "description": "Hornet climbs a hostile new kingdom in the long-awaited sequel, faster and sharper than the original."
   },
   {
@@ -13609,6 +14930,14 @@
       ],
       "asOf": "2026-09-06"
     },
+    "coverage": [
+      {
+        "handle": "SuperButterBuns",
+        "videoId": "RPMhULLv0ZA",
+        "videoTitle": "Melting Over Metaphor: ReFantazio | Spoiler Free Review",
+        "videos": 1
+      }
+    ],
     "description": "The Persona team's fantasy RPG, built on a calendar, a party of outcasts and a genuinely strange political race."
   },
   {
@@ -13692,6 +15021,7 @@
       ],
       "asOf": "2026-09-06"
     },
+    "coverage": null,
     "description": "A stylish year of double life: high school by day, heists inside people's minds by night."
   },
   {
@@ -13754,6 +15084,14 @@
       ],
       "asOf": "2026-09-06"
     },
+    "coverage": [
+      {
+        "handle": "GabSmolders",
+        "videoId": "7e1X5jh0Ddw",
+        "videoTitle": "I LOVE THIS GAME - Core Keeper",
+        "videos": 1
+      }
+    ],
     "description": "Mine, farm and build in a vast underground cavern, alone or with up to seven other people."
   },
   {
@@ -13806,6 +15144,7 @@
       "cons": [],
       "asOf": "2026-09-06"
     },
+    "coverage": null,
     "description": "Run a bathhouse for spirits in a rural town, in a Ghibli-flavoured life sim of small daily favours."
   },
   {
@@ -13854,6 +15193,14 @@
       "cons": [],
       "asOf": "2026-09-06"
     },
+    "coverage": [
+      {
+        "handle": "GabSmolders",
+        "videoId": "u4gz0dlPItE",
+        "videoTitle": "Deeper into the caves... - Bear & Breakfast [ENDING]",
+        "videos": 7
+      }
+    ],
     "description": "A well-meaning bear accidentally opens a hotel in the woods and has to keep the guests happy."
   },
   {
@@ -13916,6 +15263,7 @@
       ],
       "asOf": "2026-09-06"
     },
+    "coverage": null,
     "description": "A red fox crosses a wordless Nordic landscape of snowfields and ruins, guided by a spirit companion."
   },
   {
@@ -13963,6 +15311,7 @@
       "cons": [],
       "asOf": "2026-09-06"
     },
+    "coverage": null,
     "description": "Rebuild islands block by block in a building game with an actual story and a very good dog."
   },
   {
@@ -14045,6 +15394,7 @@
       ],
       "asOf": "2026-09-06"
     },
+    "coverage": null,
     "description": "A turn-based RPG with real-time dodges and parries, set in a painted Belle Epoque world erasing itself a year at a time."
   },
   {
@@ -14116,6 +15466,14 @@
       ],
       "asOf": "2026-09-06"
     },
+    "coverage": [
+      {
+        "handle": "GabSmolders",
+        "videoId": "ylutl-6ft9g",
+        "videoTitle": "The search for Room 46 - Blue Prince (Demo)",
+        "videos": 1
+      }
+    ],
     "description": "Draft a new floorplan every day inside a mansion that rearranges itself, hunting a room that should not exist."
   },
   {
@@ -14189,6 +15547,20 @@
       ],
       "asOf": "2026-09-06"
     },
+    "coverage": [
+      {
+        "handle": "GabSmolders",
+        "videoId": "vRi7LXrYTqQ",
+        "videoTitle": "THIS IS NUTS - Split Fiction with Sean! [ENDING]",
+        "videos": 4
+      },
+      {
+        "handle": "NemesisLacroix",
+        "videoId": "-tSB6kOLR_M",
+        "videoTitle": "Let's Play!! Split Fiction (Part 1 of ?) #Provided",
+        "videos": 1
+      }
+    ],
     "description": "Co-op only, from the It Takes Two team: two writers trapped between sci-fi and fantasy worlds that keep changing the rules."
   },
   {
@@ -14245,6 +15617,7 @@
       "cons": [],
       "asOf": "2026-09-06"
     },
+    "coverage": null,
     "description": "A burnt-out fighter has to stop and run a tea shop, in a cozy game openly about being unable to rest."
   },
   {
@@ -14301,6 +15674,7 @@
       "cons": [],
       "asOf": "2026-09-06"
     },
+    "coverage": null,
     "description": "A brush-painted Japanese folklore metroidvania built around bouncing off enemies to stay airborne."
   },
   {
@@ -14379,6 +15753,7 @@
       ],
       "asOf": "2026-09-06"
     },
+    "coverage": null,
     "description": "Hunt enormous creatures across shifting weather systems and herd migrations, alone or with three others."
   },
   {
@@ -14437,6 +15812,7 @@
       "cons": [],
       "asOf": "2026-09-06"
     },
+    "coverage": null,
     "description": "Farm by day and join the local coven by night, with a fully voice-acted island cast."
   },
   {
@@ -14516,6 +15892,7 @@
       ],
       "asOf": "2026-09-07"
     },
+    "coverage": null,
     "description": "Low and Alone cross the Nowhere together, with online co-op bringing a second player into the series for the first time."
   },
   {
@@ -14566,6 +15943,7 @@
       ],
       "asOf": "2026-09-07"
     },
+    "coverage": null,
     "description": "Switch freely between twelve lives — farmer, cook, paladin, angler — while rebuilding a town across two time periods."
   },
   {
@@ -14633,6 +16011,7 @@
       ],
       "asOf": "2026-09-07"
     },
+    "coverage": null,
     "description": "Melinoe fights up from the underworld and down from the surface, with a broader arsenal and a far larger cast than the first."
   },
   {
@@ -14692,6 +16071,14 @@
       "cons": [],
       "asOf": "2026-09-07"
     },
+    "coverage": [
+      {
+        "handle": "JimSterling",
+        "videoId": "KZyv6glChiI",
+        "videoTitle": "Exhibiting Value: How Two Point Museum Is What Games Should Be",
+        "videos": 1
+      }
+    ],
     "description": "Curate exhibits, send experts on expeditions and keep the school groups moving, in the third Two Point sim."
   },
   {
@@ -14745,6 +16132,14 @@
       ],
       "asOf": "2026-09-07"
     },
+    "coverage": [
+      {
+        "handle": "GabSmolders",
+        "videoId": "uRwbeei-c6w",
+        "videoTitle": "I'm a HOBBIT - Tales of the Shire",
+        "videos": 1
+      }
+    ],
     "description": "Live as a hobbit in Bywater: cook, garden, fish and feed your neighbours, with no quest to save anything."
   },
   {
@@ -14806,6 +16201,14 @@
       ],
       "asOf": "2026-09-07"
     },
+    "coverage": [
+      {
+        "handle": "GabSmolders",
+        "videoId": "R46dwbLTS5Y",
+        "videoTitle": "I am here to stay - Tiny Bookshop [ENDING]",
+        "videos": 7
+      }
+    ],
     "description": "Park a book cart somewhere scenic each day, stock it by hand, and learn the town through what people ask for."
   },
   {
@@ -14859,6 +16262,7 @@
       "cons": [],
       "asOf": "2026-09-07"
     },
+    "coverage": null,
     "description": "Guide a herd of shaggy antlered calicorns up a mountain, protecting them through weather and light environmental puzzles."
   },
   {
@@ -14903,6 +16307,7 @@
       "cons": [],
       "asOf": "2026-09-07"
     },
+    "coverage": null,
     "description": "Farm all week and sell at Saturday's bazaar, where what the town buys shapes what is worth growing next."
   },
   {
@@ -14965,6 +16370,7 @@
       "cons": [],
       "asOf": "2026-09-07"
     },
+    "coverage": null,
     "description": "Farm and fight across four seasonal villages in a Japanese-styled Rune Factory built around restoring blighted land."
   },
   {
@@ -15046,6 +16452,14 @@
       ],
       "asOf": "2026-09-07"
     },
+    "coverage": [
+      {
+        "handle": "JimSterling",
+        "videoId": "n4v7BQoMTGU",
+        "videoTitle": "Hellblade: Senua's Sacrifice Review - For The Damaged (Coda)",
+        "videos": 1
+      }
+    ],
     "description": "A Pict warrior crosses a Norse underworld while living with psychosis, built with neuroscientists and people who experience it."
   },
   {
@@ -15070,6 +16484,7 @@
     "psnStorePath": null,
     "ageRating": null,
     "ratings": null,
+    "coverage": null,
     "description": "Rae, a blind ten-year-old, feels her way through a watercolour world that paints itself in only as far as her other senses reach."
   },
   {
@@ -15121,6 +16536,7 @@
       "cons": [],
       "asOf": "2026-09-07"
     },
+    "coverage": null,
     "description": "Cassie, who is blind, explores a haunted New England mansion by echolocation, each sound briefly drawing the room around her."
   },
   {
@@ -15139,6 +16555,14 @@
     "psnStorePath": "concept/10010296",
     "ageRating": null,
     "ratings": null,
+    "coverage": [
+      {
+        "handle": "snapcube",
+        "videoId": "qcL8QjBj08U",
+        "videoTitle": "My Name is Bent | Sly Cooper and the Thievius Raccoonus | FINALE",
+        "videos": 20
+      }
+    ],
     "description": "A raccoon master thief sneaks through cel-shaded levels to steal back his family's book of tricks."
   },
   {
@@ -15157,6 +16581,14 @@
     "psnStorePath": "concept/10010137",
     "ageRating": null,
     "ratings": null,
+    "coverage": [
+      {
+        "handle": "NemesisLacroix",
+        "videoId": "v__7W0IB5Zk",
+        "videoTitle": "Beating Jak and Daxter: The Precursor Legacy In ONE SITTING!!",
+        "videos": 4
+      }
+    ],
     "description": "A seamless open world with no loading screens, and a best friend who spends the whole game as an otter-weasel."
   },
   {
@@ -15175,6 +16607,14 @@
     "psnStorePath": "concept/10008138",
     "ageRating": null,
     "ratings": null,
+    "coverage": [
+      {
+        "handle": "JimSterling",
+        "videoId": "qwWGQ4Q6KFA",
+        "videoTitle": "MediEvil - It's The Nineties! (Jimpressions)",
+        "videos": 2
+      }
+    ],
     "description": "Sir Daniel Fortesque, a skeleton knight who died badly the first time, gets a rebuilt second shot at heroism."
   },
   {
@@ -15225,6 +16665,7 @@
       "cons": [],
       "asOf": "2026-09-07"
     },
+    "coverage": null,
     "description": "Two remastered 2.5D platformers about a big-eared dream traveller, gentle to play and quietly devastating to finish."
   },
   {
@@ -15273,6 +16714,7 @@
       "cons": [],
       "asOf": "2026-09-07"
     },
+    "coverage": null,
     "description": "Roll a sticky ball over everything on earth until it becomes a star, to one of the great video game soundtracks."
   },
   {
@@ -15291,6 +16733,14 @@
     "psnStorePath": "concept/10004394",
     "ageRating": null,
     "ratings": null,
+    "coverage": [
+      {
+        "handle": "NemesisLacroix",
+        "videoId": "gCJCT_9dRgk",
+        "videoTitle": "FINALLY Playing Ape Escape 3!! (Part 3 of 3)",
+        "videos": 3
+      }
+    ],
     "description": "The game that justified the dual analogue sticks, spent entirely on catching monkeys with a net."
   },
   {
@@ -15334,6 +16784,7 @@
       "cons": [],
       "asOf": "2026-09-07"
     },
+    "coverage": null,
     "description": "Command an army of one-eyed tribespeople entirely by drumming, in silhouettes and flat bright colour."
   },
   {
@@ -15373,6 +16824,7 @@
       "cons": [],
       "asOf": "2026-09-07"
     },
+    "coverage": null,
     "description": "A bounty hunter loads live animals into his crossbow in a western that keeps a real secret until late."
   },
   {
@@ -15442,6 +16894,14 @@
       ],
       "asOf": "2026-09-07"
     },
+    "coverage": [
+      {
+        "handle": "NemesisLacroix",
+        "videoId": "o5qF9fqFZM0",
+        "videoTitle": "Let's Play!! Tomb Raider I–III Remastered (Part 2)",
+        "videos": 2
+      }
+    ],
     "description": "The original three Lara Croft adventures with the tank controls intact and a graphics toggle for nostalgia."
   },
   {
@@ -15507,6 +16967,7 @@
       "cons": [],
       "asOf": "2026-09-07"
     },
+    "coverage": null,
     "description": "Dawn of Sorrow, Portrait of Ruin and Order of Ecclesia — three of the best metroidvanias ever made, in one place."
   },
   {
@@ -15562,6 +17023,7 @@
       "cons": [],
       "asOf": "2026-09-07"
     },
+    "coverage": null,
     "description": "Circle of the Moon, Harmony of Dissonance and Aria of Sorrow, the last of which is a genre high-water mark."
   },
   {
@@ -15612,6 +17074,7 @@
       "cons": [],
       "asOf": "2026-09-07"
     },
+    "coverage": null,
     "description": "Two beloved political RPGs about recruiting 108 characters and slowly building a castle full of them."
   },
   {
@@ -15657,6 +17120,14 @@
       "cons": [],
       "asOf": "2026-09-07"
     },
+    "coverage": [
+      {
+        "handle": "JimSterling",
+        "videoId": "i0UsqccjOZA",
+        "videoTitle": "Grandia HD Collection - Still A Bloody Good Game (Jimpressions)",
+        "videos": 1
+      }
+    ],
     "description": "A pair of adventure-first JRPGs whose positioning-based battle system still has no real successor."
   },
   {
@@ -15715,6 +17186,7 @@
       "cons": [],
       "asOf": "2026-09-07"
     },
+    "coverage": null,
     "description": "Four Sega-era platformers including the one that quietly invented the metroidvania before the word existed."
   },
   {
@@ -15733,6 +17205,7 @@
     "psnStorePath": "concept/10004605",
     "ageRating": null,
     "ratings": null,
+    "coverage": null,
     "description": "A cult PS1 RPG built on timed button presses mid-combo, with pre-rendered backdrops that still look painted."
   },
   {
@@ -15779,6 +17252,7 @@
       "cons": [],
       "asOf": "2026-09-07"
     },
+    "coverage": null,
     "description": "Jade, a photojournalist with a camera and a staff, exposes a planetary conspiracy alongside a talking pig."
   },
   {
@@ -15838,6 +17312,14 @@
       ],
       "asOf": "2026-09-07"
     },
+    "coverage": [
+      {
+        "handle": "JimSterling",
+        "videoId": "6On5zpld7Rk",
+        "videoTitle": "Sonic Origins Is On Some Real Silly Bullsh*t (The Jimquisition)",
+        "videos": 1
+      }
+    ],
     "description": "The four Genesis Sonic games rebuilt widescreen, including the one where you can play as Knuckles."
   },
   {
@@ -15884,6 +17366,7 @@
       "cons": [],
       "asOf": "2026-09-07"
     },
+    "coverage": null,
     "description": "Thirteen Turtles games with online co-op, rewind and a genuinely excellent museum of scans and art."
   },
   {
@@ -15941,6 +17424,7 @@
       "cons": [],
       "asOf": "2026-09-07"
     },
+    "coverage": null,
     "description": "The 1988 template for the whole genre, rebuilt in HD-2D so the sprites sit in real depth of field."
   },
   {
@@ -15998,6 +17482,7 @@
       "cons": [],
       "asOf": "2026-09-07"
     },
+    "coverage": null,
     "description": "A PS1 RPG remade with 2D sprites on 3D dioramas, and a branching cast whose endings depend on who you befriend."
   },
   {
@@ -16057,6 +17542,7 @@
       "cons": [],
       "asOf": "2026-09-07"
     },
+    "coverage": null,
     "description": "The follow-up to Ender Lilies: a girl who tunes broken machines walks a rain-washed, watercolour ruin."
   },
   {
@@ -16111,6 +17597,7 @@
       "cons": [],
       "asOf": "2026-09-07"
     },
+    "coverage": null,
     "description": "A cat dies, is assigned janitorial duty in the afterlife, and sweeps its way through a very large map instead."
   },
   {
@@ -16161,6 +17648,7 @@
       "cons": [],
       "asOf": "2026-09-07"
     },
+    "coverage": null,
     "description": "Fly an airship between floating islands and physically drag them back together, which reshapes the map as you go."
   },
   {
@@ -16216,6 +17704,7 @@
       "cons": [],
       "asOf": "2026-09-07"
     },
+    "coverage": null,
     "description": "A hand-painted, deliberately punishing metroidvania with a teleporting arrow that turns platforming into geometry."
   },
   {
@@ -16258,6 +17747,7 @@
       "cons": [],
       "asOf": "2026-09-07"
     },
+    "coverage": null,
     "description": "Absorb the shape of the enemies you defeat and use their bodies to reach the places yours cannot."
   },
   {
@@ -16297,6 +17787,7 @@
       "cons": [],
       "asOf": "2026-09-07"
     },
+    "coverage": null,
     "description": "A small construct kills gods and builds a pantheon out of them, drawn in ink-black cosmic horror."
   },
   {
@@ -16369,6 +17860,7 @@
       ],
       "asOf": "2026-09-07"
     },
+    "coverage": null,
     "description": "The Penitent One returns with three weapons that each open the map differently, and even denser pixel art."
   },
   {
@@ -16430,6 +17922,7 @@
       ],
       "asOf": "2026-09-07"
     },
+    "coverage": null,
     "description": "Climb a Babel tower deducing five invented languages from context, filling in a glossary you write yourself."
   },
   {
@@ -16489,6 +17982,7 @@
       ],
       "asOf": "2026-09-07"
     },
+    "coverage": null,
     "description": "A sci-fi story of clone sisters, diaspora and inherited memory that keeps reframing everything you thought it was."
   },
   {
@@ -16554,6 +18048,7 @@
       ],
       "asOf": "2026-09-07"
     },
+    "coverage": null,
     "description": "You're told to slay a princess. Every choice rewrites who she is, in scratchy charcoal and full voice acting."
   },
   {
@@ -16618,6 +18113,7 @@
       ],
       "asOf": "2026-09-07"
     },
+    "coverage": null,
     "description": "A young nun crosses an alternate-history Russia with the devil narrating, in a game that argues with itself."
   },
   {
@@ -16662,6 +18158,7 @@
       "cons": [],
       "asOf": "2026-09-07"
     },
+    "coverage": null,
     "description": "A Cold War romance told across Antarctic ice and Cambridge lecture halls, steered by choosing an emotion."
   },
   {
@@ -16716,6 +18213,7 @@
       "cons": [],
       "asOf": "2026-09-07"
     },
+    "coverage": null,
     "description": "A feral child sprints through an overgrown, abandoned earth in a Jungle Book riff drawn like a Saturday cartoon."
   },
   {
@@ -16772,6 +18270,14 @@
       "cons": [],
       "asOf": "2026-09-07"
     },
+    "coverage": [
+      {
+        "handle": "LauraKBuzz",
+        "videoId": "zxr0nM-pIyU",
+        "videoTitle": "Botany Manor Accessibility Review (Switch) - Access-Ability",
+        "videos": 2
+      }
+    ],
     "description": "A retired botanist coaxes forgotten plants into bloom by reading her own notes carefully. No fail state anywhere."
   },
   {
@@ -16833,6 +18339,14 @@
       ],
       "asOf": "2026-09-07"
     },
+    "coverage": [
+      {
+        "handle": "GabSmolders",
+        "videoId": "VbyiCByUWrk",
+        "videoTitle": "We found more to organize! - A little to the Left (DLC)",
+        "videos": 5
+      }
+    ],
     "description": "Tidy household objects into satisfying order while a cat does its best to undo your work."
   },
   {
@@ -16889,6 +18403,7 @@
       "cons": [],
       "asOf": "2026-09-07"
     },
+    "coverage": null,
     "description": "Place hex tiles to grow a soft pastel countryside, with quiet objectives and no way to actually lose."
   },
   {
@@ -16945,6 +18460,7 @@
       "cons": [],
       "asOf": "2026-09-07"
     },
+    "coverage": null,
     "description": "A small alligator makes up a cardboard adventure to get their sister to play again. Nothing can hurt you."
   },
   {
@@ -16984,6 +18500,14 @@
       "cons": [],
       "asOf": "2026-09-07"
     },
+    "coverage": [
+      {
+        "handle": "GabSmolders",
+        "videoId": "LT5QZbWPj00",
+        "videoTitle": "Time on Frog Island ♥",
+        "videos": 1
+      }
+    ],
     "description": "Shipwrecked among frogs who speak no language you know, bartering objects until your boat is whole again."
   },
   {
@@ -17029,6 +18553,7 @@
       "cons": [],
       "asOf": "2026-09-07"
     },
+    "coverage": null,
     "description": "A pirate cat sails a tiny open world of appalling puns, playable in couch co-op with a second cat."
   },
   {
@@ -17073,6 +18598,20 @@
       "cons": [],
       "asOf": "2026-09-07"
     },
+    "coverage": [
+      {
+        "handle": "GabSmolders",
+        "videoId": "6-3MG_O97E4",
+        "videoTitle": "A Lo-Fi rhythm game!! - Melatonin",
+        "videos": 1
+      },
+      {
+        "handle": "LauraKBuzz",
+        "videoId": "EEPIo-aMZLQ",
+        "videoTitle": "Melatonin Nails Music Rhythm Accessibility - Access-Ability",
+        "videos": 1
+      }
+    ],
     "description": "A pastel rhythm game about dreams and everyday anxieties, played entirely by ear before the visuals catch up."
   },
   {
@@ -17129,6 +18668,7 @@
       "cons": [],
       "asOf": "2026-09-07"
     },
+    "coverage": null,
     "description": "Build a town on the back of a vast walking creature, and decide how much you take from it to survive."
   }
 ]

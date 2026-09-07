@@ -180,6 +180,26 @@ Ratings ship baked into `src/games.json`, so a card is never blank on first
 paint and costs no request. The nightly function refreshes them into blob
 storage, and anything it has overrides the baked values.
 
+## Who has played it
+
+Every game lists the creators who have actually covered it, linking to the
+video itself rather than to a channel. That list is verified, not guessed: all
+7,641 uploads across the tracked channels were indexed and matched against
+game titles, giving 188 creator-game links across 114 games.
+
+Matching is deliberately fussy, because a wrong claim here is worse than a
+missing one. Titles that are ordinary English words are excluded outright
+("Lake", "Haven", "Journey", "Control"), single-word titles need at least five
+characters, and each video is credited to the longest game title it matches so
+Silksong videos do not land under Hollow Knight. Where a creator has only
+covered a sequel, the video title on screen says so.
+
+Channels with no match stay one click away behind a search link, since the
+index is a snapshot and they may have posted since.
+
+`src/creators.json` holds the directory. Every handle was checked against
+YouTube before inclusion; each resolves to a live channel whose name matches.
+
 ## Price history
 
 Nobody publishes a usable price-history feed, so the app keeps its own. Two things

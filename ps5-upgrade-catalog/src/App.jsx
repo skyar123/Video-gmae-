@@ -1165,29 +1165,35 @@ const creatorSearchLink = (handle, title) =>
 const reviewSearchLink = (title) =>
   `https://www.youtube.com/results?search_query=${encodeURIComponent(`${title} review`)}`;
 
-/**
- * Rank creators for one game: the ones you starred first, then whoever
- * covers this genre or this kind of game, then everyone else. Nobody is
- * hidden — the order just saves you reading all nineteen every time.
- */
-function rankCreators(game, favourites) {
-  return [...creatorsData]
-    .map((creator) => {
-      let score = 0;
-      if (favourites.has(creator.handle)) score += 100;
-      if (creator.focus.includes(game.genre)) score += 10;
-      for (const tag of creator.tags) if (game.tags?.includes(tag)) score += 4;
-      if (game.representation?.some((entry) => creator.tags.includes(entry.kind))) score += 6;
-      return { creator, score };
-    })
-    .sort((a, b) => b.score - a.score || a.creator.name.localeCompare(b.creator.name))
-    .map((entry) => ({ ...entry.creator, matched: entry.score > 0 }));
-}
+const creatorsByHandle = Object.fromEntries(creatorsData.map((creator) => [creator.handle, creator]));
 
+/** A real video, so the link lands on the video rather than a profile page. */
+const videoLink = (videoId) => `https://www.youtube.com/watch?v=${videoId}`;
+
+/**
+ * Who has actually covered this game.
+ *
+ * The catalog carries verified coverage: every creator's uploads were indexed
+ * and matched against game titles, so this is a list of videos that exist
+ * rather than a guess from genre. Starred creators come first.
+ */
 function WatchPanel({ game, favourites, onToggleFavourite }) {
-  // Everyone stays one click away: a genre guess is not good enough to decide
-  // who has actually played something. Ranking only sets the order.
-  const ranked = useMemo(() => rankCreators(game, favourites), [game, favourites]);
+  const [showAll, setShowAll] = useState(false);
+
+  const covered = useMemo(() => {
+    const entries = (game.coverage ?? [])
+      .map((entry) => ({ ...entry, creator: creatorsByHandle[entry.handle] }))
+      .filter((entry) => entry.creator);
+    return entries.sort(
+      (a, b) =>
+        Number(favourites.has(b.handle)) - Number(favourites.has(a.handle)) || b.videos - a.videos,
+    );
+  }, [game, favourites]);
+
+  const uncovered = useMemo(
+    () => creatorsData.filter((creator) => !covered.some((entry) => entry.handle === creator.handle)),
+    [covered],
+  );
 
   return (
     <div className="mt-6 border-t border-slate-100 pt-5">
@@ -1216,53 +1222,91 @@ function WatchPanel({ game, favourites, onToggleFavourite }) {
         </a>
       </div>
 
-      <p className="mb-2 text-xs text-slate-500">
-        Jump straight to this game on a creator's channel. Star the ones you follow to pin them.
-      </p>
-
-      <ul className="max-h-72 space-y-1.5 overflow-y-auto pr-1">
-        {ranked.map((creator) => (
-          <li key={creator.handle} className="flex items-center gap-2">
-            <button
-              type="button"
-              onClick={() => onToggleFavourite(creator.handle)}
-              aria-pressed={favourites.has(creator.handle)}
-              aria-label={`${favourites.has(creator.handle) ? 'Unstar' : 'Star'} ${creator.name}`}
-              className={`shrink-0 rounded p-1 transition-transform duration-200 ease-spring active:scale-90 ${
-                favourites.has(creator.handle)
-                  ? 'text-amber-500'
-                  : 'text-slate-300 hover:text-slate-500'
-              }`}
-            >
-              <Star className={`h-4 w-4 ${favourites.has(creator.handle) ? 'fill-current' : ''}`} />
-            </button>
-            <a
-              href={creatorSearchLink(creator.handle, game.title)}
-              target="_blank"
-              rel="noopener noreferrer"
-              className="group flex min-w-0 flex-1 items-center gap-2 rounded-lg px-2 py-1.5 transition-colors hover:bg-slate-50"
-            >
-              <span className="min-w-0">
-                <span className="flex flex-wrap items-baseline gap-x-2">
-                  <span className="text-sm font-medium text-slate-800 group-hover:text-indigo-600">
-                    {creator.name}
+      {covered.length > 0 ? (
+        <>
+          <p className="mb-2 text-xs text-slate-500">
+            {covered.length === 1 ? 'One creator has' : `${covered.length} creators have`} played
+            this. Each link opens their actual video.
+          </p>
+          <ul className="space-y-1.5">
+            {covered.map((entry) => (
+              <li key={entry.handle} className="flex items-center gap-2">
+                <button
+                  type="button"
+                  onClick={() => onToggleFavourite(entry.handle)}
+                  aria-pressed={favourites.has(entry.handle)}
+                  aria-label={`${favourites.has(entry.handle) ? 'Unstar' : 'Star'} ${entry.creator.name}`}
+                  className={`shrink-0 rounded p-1 transition-transform duration-200 ease-spring active:scale-90 ${
+                    favourites.has(entry.handle)
+                      ? 'text-amber-500'
+                      : 'text-slate-300 hover:text-slate-500'
+                  }`}
+                >
+                  <Star className={`h-4 w-4 ${favourites.has(entry.handle) ? 'fill-current' : ''}`} />
+                </button>
+                <a
+                  href={videoLink(entry.videoId)}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="group flex min-w-0 flex-1 items-center gap-2 rounded-lg px-2 py-1.5 transition-colors hover:bg-slate-50"
+                >
+                  <span className="min-w-0 flex-1">
+                    <span className="flex flex-wrap items-baseline gap-x-2">
+                      <span className="text-sm font-medium text-slate-800 group-hover:text-indigo-600">
+                        {entry.creator.name}
+                      </span>
+                      <span className="text-[11px] text-violet-600">{entry.creator.identity}</span>
+                      <span className="text-[11px] text-slate-400">
+                        {entry.videos === 1 ? '1 video' : `${entry.videos} videos`}
+                      </span>
+                    </span>
+                    <span className="block truncate text-xs text-slate-500">
+                      {entry.videoTitle}
+                    </span>
                   </span>
-                  <span className="text-[11px] text-violet-600">{creator.identity}</span>
-                  {creator.matched && (
-                    <span className="text-[11px] text-slate-400">likely covered this</span>
-                  )}
-                </span>
-                <span className="block truncate text-xs text-slate-500">{creator.note}</span>
-              </span>
-              <ArrowUpRight className="ml-auto h-4 w-4 shrink-0 text-slate-300 group-hover:text-indigo-600" />
-            </a>
-          </li>
-        ))}
-      </ul>
+                  <CirclePlay className="h-4 w-4 shrink-0 text-slate-300 group-hover:text-rose-600" />
+                </a>
+              </li>
+            ))}
+          </ul>
+        </>
+      ) : (
+        <p className="mb-2 text-xs text-slate-500">
+          None of the tracked creators has a video for this one.
+        </p>
+      )}
 
-      <p className="mt-2 text-xs text-slate-400">
-        {ranked.length} creators, ordered by who most likely covered this. Every one opens their
-        channel searched for this game.
+      <button
+        type="button"
+        onClick={() => setShowAll((open) => !open)}
+        className="mt-3 text-xs font-medium text-indigo-600 hover:underline"
+      >
+        {showAll ? 'Hide' : `Search the other ${uncovered.length} channels`}
+      </button>
+
+      {showAll && (
+        <ul className="mt-2 flex flex-wrap gap-1.5">
+          {uncovered.map((creator) => (
+            <li key={creator.handle}>
+              <a
+                href={creatorSearchLink(creator.handle, game.title)}
+                target="_blank"
+                rel="noopener noreferrer"
+                title={`${creator.identity} — ${creator.note}`}
+                className="inline-flex items-center gap-1 rounded-full bg-slate-100 px-2.5 py-1 text-xs text-slate-600 transition-colors hover:bg-slate-200"
+              >
+                {creator.name}
+                <ArrowUpRight className="h-3 w-3" />
+              </a>
+            </li>
+          ))}
+        </ul>
+      )}
+
+      <p className="mt-3 text-xs text-slate-400">
+        Coverage comes from indexing every tracked creator's uploads and matching them to this
+        title, so these are videos that exist rather than a guess. Channels with no match are
+        searchable above in case they posted since.
       </p>
     </div>
   );
