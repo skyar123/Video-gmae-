@@ -32,10 +32,12 @@ export const localeFor = (countryCode) => LOCALES[countryCode] ?? LOCALES.US;
  * Read only as much of the page as it takes to reach the price data, then
  * drop the connection.
  */
-async function fetchPricePayload(conceptId, countryCode, timeoutMs = 12000) {
+async function fetchPricePayload(storePath, countryCode, timeoutMs = 12000) {
   const controller = new AbortController();
   const timer = setTimeout(() => controller.abort(), timeoutMs);
-  const url = `${STORE_ORIGIN}/${localeFor(countryCode)}/concept/${conceptId}`;
+  // Newer games have a concept page, older ones only a product page. Both
+  // server-render the same price payload.
+  const url = `${STORE_ORIGIN}/${localeFor(countryCode)}/${storePath}`;
 
   try {
     const response = await fetch(url, {
@@ -126,15 +128,15 @@ function toPrice(entry) {
   };
 }
 
-/** Current PlayStation Store price for one concept id, cached per region. */
-export async function loadPsnPrice(conceptId, countryCode = 'US') {
-  if (!conceptId) return null;
-  const key = `${countryCode}:${conceptId}`;
+/** Current PlayStation Store price for one store path, cached per region. */
+export async function loadPsnPrice(storePath, countryCode = 'US') {
+  if (!storePath) return null;
+  const key = `${countryCode}:${storePath}`;
   const hit = cache.get(key);
   if (hit && Date.now() - hit.storedAt < CACHE_TTL_MS) return hit.value;
   if (inFlight.has(key)) return inFlight.get(key);
 
-  const pending = fetchPricePayload(conceptId, countryCode)
+  const pending = fetchPricePayload(storePath, countryCode)
     .then((html) => {
       const entry = parsePrices(html);
       const value = entry ? toPrice(entry) : null;

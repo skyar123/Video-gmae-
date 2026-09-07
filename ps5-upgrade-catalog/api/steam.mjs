@@ -409,7 +409,7 @@ export async function handleGamesRequest(url, catalog) {
     const known = catalog.find((game) => game.title === wanted);
     const [game, price] = await Promise.all([
       resolveGame(wanted, countryCode, known?.steamAppId ?? null),
-      loadPsnPrice(known?.psnConceptId ?? null, countryCode),
+      loadPsnPrice(known?.psnStorePath ?? null, countryCode),
     ]);
     const withPrice = { ...game, price: price ?? null };
     return {
@@ -435,7 +435,7 @@ export async function handleGamesRequest(url, catalog) {
   // number. A game with no store id simply has no price rather than a
   // stand-in from somewhere else.
   const psnPrices = await mapWithConcurrency(slice, 4, (game) =>
-    loadPsnPrice(game.psnConceptId, countryCode),
+    loadPsnPrice(game.psnStorePath, countryCode),
   );
 
   const games = resolved.map((game, index) => ({

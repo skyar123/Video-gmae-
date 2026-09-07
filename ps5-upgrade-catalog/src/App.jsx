@@ -60,6 +60,8 @@ const COLLECTIONS = [
   { value: 'graphics', label: 'Best graphics', tag: 'graphics' },
   { value: 'social', label: 'Online & social', tag: 'social' },
   { value: 'cozy', label: 'Cozy', tag: 'cozy' },
+  { value: 'queer', label: 'Queer stories', tag: 'queer' },
+  { value: 'disability', label: 'Disability rep', tag: 'disability' },
 ];
 
 const COLLECTION_BLURBS = {
@@ -67,6 +69,8 @@ const COLLECTION_BLURBS = {
   graphics: 'Technical showcases and standout art direction.',
   social: 'Online play, co-op and couch multiplayer.',
   cozy: 'Low-stress games with gentle pacing and no fail state to speak of.',
+  queer: 'Games with queer characters or relationships that matter to the story, not background detail.',
+  disability: 'Games with disabled or neurodivergent characters, or landmark accessibility work.',
 };
 
 const SORTS = [
@@ -541,6 +545,32 @@ function ProsAndCons({ ratings }) {
   );
 }
 
+const REPRESENTATION_LABELS = { queer: 'Queer representation', disability: 'Disability representation' };
+
+/**
+ * What the representation actually is, named per game. A tag alone says
+ * nothing and is easy to get wrong; a sentence can be checked.
+ */
+function RepresentationDetail({ representation }) {
+  if (!representation?.length) return null;
+  return (
+    <div className="mt-4 rounded-xl border border-slate-200 p-4">
+      {representation.map((entry) => (
+        <div key={entry.kind} className="not-first:mt-3">
+          <p className="text-xs font-semibold uppercase tracking-wider text-violet-700">
+            {REPRESENTATION_LABELS[entry.kind] ?? entry.kind}
+          </p>
+          <p className="mt-1 text-sm text-slate-600">{entry.note}</p>
+        </div>
+      ))}
+      <p className="mt-3 text-xs text-slate-400">
+        Noted by hand, and deliberately specific. If something here is wrong or a game is
+        missing, it is worth correcting.
+      </p>
+    </div>
+  );
+}
+
 /** Cover art, or a lettered gradient when the game has no storefront match. */
 function CoverArt({ game, live, className = '' }) {
   const [failed, setFailed] = useState(false);
@@ -658,8 +688,8 @@ function TrailerPlayer({ video, poster }) {
  * ------------------------------------------------------------------ */
 
 const storeLink = (game) =>
-  game.psnConceptId
-    ? `https://store.playstation.com/en-us/concept/${game.psnConceptId}`
+  game.psnStorePath
+    ? `https://store.playstation.com/en-us/${game.psnStorePath}`
     : `https://store.playstation.com/en-us/search/${encodeURIComponent(game.title)}`;
 const trailerSearchLink = (title) =>
   `https://www.youtube.com/results?search_query=${encodeURIComponent(
@@ -814,6 +844,7 @@ function GameModal({ game, live, wishlisted, onToggleWishlist, onClose }) {
             <p className="leading-relaxed text-slate-700">{game.description}</p>
           </div>
 
+          <RepresentationDetail representation={game.representation} />
           <AgeDetail ageRating={game.ageRating} />
           <ProsAndCons ratings={ratings} />
           <PricePanel game={game} live={live} />
@@ -1035,6 +1066,15 @@ function GameCard({ game, live, wishlisted, onToggleWishlist, onOpen }) {
             {showVerdict && <VerdictBadge prediction={prediction} />}
           </div>
           <div className="mb-2 flex flex-wrap items-center gap-1">
+            {game.representation?.length > 0 && (
+              <span
+                title={game.representation.map((entry) => entry.note).join(' ')}
+                className="inline-flex items-center gap-1 rounded bg-violet-50 px-1.5 py-0.5 text-[11px] font-semibold text-violet-700 ring-1 ring-inset ring-violet-600/20"
+              >
+                <Sparkles className="h-3 w-3" />
+                {game.representation.map((entry) => REPRESENTATION_LABELS[entry.kind]?.split(' ')[0]).join(' + ')}
+              </span>
+            )}
             <AgeBadge ageRating={game.ageRating} />
             <RatingChips ratings={ratings} />
           </div>

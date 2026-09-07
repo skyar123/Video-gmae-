@@ -10,7 +10,9 @@
     "tags": [
       "graphics"
     ],
+    "representation": null,
     "steamAppId": 753640,
+    "psnStorePath": null,
     "ageRating": {
       "family": "mild",
       "concerns": [],
@@ -76,7 +78,9 @@
     "tags": [
       "graphics"
     ],
+    "representation": null,
     "steamAppId": 632470,
+    "psnStorePath": "concept/10002292",
     "ageRating": {
       "family": "mild",
       "concerns": [],
@@ -136,7 +140,9 @@
       "graphics",
       "social"
     ],
+    "representation": null,
     "steamAppId": 275850,
+    "psnStorePath": null,
     "ageRating": {
       "family": "safe",
       "concerns": [],
@@ -210,7 +216,9 @@
     "tags": [
       "graphics"
     ],
+    "representation": null,
     "steamAppId": 264710,
+    "psnStorePath": null,
     "ageRating": {
       "family": "mild",
       "concerns": [],
@@ -270,7 +278,9 @@
     "ps5Upgrade": "PS4 & PS5 Cross-Buy",
     "platform": "PS4",
     "tags": [],
+    "representation": null,
     "steamAppId": 894020,
+    "psnStorePath": "concept/10003808",
     "ageRating": {
       "family": "mild",
       "concerns": [],
@@ -327,7 +337,9 @@
     "ps5Upgrade": "PS4 & PS5 Cross-Buy",
     "platform": "PS4",
     "tags": [],
+    "representation": null,
     "steamAppId": 553420,
+    "psnStorePath": "concept/10002475",
     "ageRating": {
       "family": "mild",
       "concerns": [],
@@ -398,7 +410,9 @@
     "tags": [
       "graphics"
     ],
+    "representation": null,
     "steamAppId": 1332010,
+    "psnStorePath": "concept/10001114",
     "ageRating": {
       "family": "mild",
       "concerns": [],
@@ -460,7 +474,9 @@
     "tags": [
       "cozy"
     ],
+    "representation": null,
     "steamAppId": 1244090,
+    "psnStorePath": null,
     "ageRating": {
       "family": "mild",
       "concerns": [],
@@ -528,7 +544,9 @@
       "cozy",
       "graphics"
     ],
+    "representation": null,
     "steamAppId": 1492680,
+    "psnStorePath": null,
     "ageRating": {
       "family": "mild",
       "concerns": [],
@@ -584,7 +602,9 @@
     "tags": [
       "graphics"
     ],
+    "representation": null,
     "steamAppId": 1867530,
+    "psnStorePath": "concept/10001115",
     "ageRating": {
       "family": "mild",
       "concerns": [],
@@ -625,7 +645,9 @@
     "tags": [
       "graphics"
     ],
+    "representation": null,
     "steamAppId": 2420110,
+    "psnStorePath": "concept/10000886",
     "ageRating": {
       "family": "mild",
       "concerns": [],
@@ -702,7 +724,9 @@
       "graphics",
       "social"
     ],
+    "representation": null,
     "steamAppId": 1245620,
+    "psnStorePath": "concept/10000333",
     "ageRating": {
       "family": "mature",
       "concerns": [
@@ -772,7 +796,9 @@
     "tags": [
       "graphics"
     ],
+    "representation": null,
     "steamAppId": 1345890,
+    "psnStorePath": "concept/10003378",
     "ageRating": {
       "family": "mild",
       "concerns": [],
@@ -818,7 +844,9 @@
       "cozy",
       "graphics"
     ],
+    "representation": null,
     "steamAppId": 695330,
+    "psnStorePath": "concept/10001697",
     "ageRating": {
       "family": "safe",
       "concerns": [],
@@ -864,7 +892,9 @@
     "tags": [
       "cozy"
     ],
+    "representation": null,
     "steamAppId": 715560,
+    "psnStorePath": null,
     "ageRating": {
       "family": "safe",
       "concerns": [],
@@ -916,7 +946,9 @@
     "ps5Upgrade": "Backwards Compatible",
     "platform": "PS4",
     "tags": [],
+    "representation": null,
     "steamAppId": 383870,
+    "psnStorePath": null,
     "ageRating": {
       "family": "mature",
       "concerns": [
@@ -982,7 +1014,9 @@
     "tags": [
       "cozy"
     ],
+    "representation": null,
     "steamAppId": 1337010,
+    "psnStorePath": "concept/10002528",
     "ageRating": {
       "family": "safe",
       "concerns": [],
@@ -1033,8 +1067,17 @@
     "protagonist": "Female",
     "ps5Upgrade": "Free PS5 Upgrade",
     "platform": "PS4",
-    "tags": [],
+    "tags": [
+      "queer"
+    ],
+    "representation": [
+      {
+        "kind": "queer",
+        "note": "Alex can romance Steph, a lesbian character who later headlines her own story."
+      }
+    ],
     "steamAppId": 936790,
+    "psnStorePath": "product/UP0082-PPSA02046_00-1336949547454056",
     "ageRating": {
       "family": "mild",
       "concerns": [],
@@ -1100,7 +1143,9 @@
     "tags": [
       "cozy"
     ],
+    "representation": null,
     "steamAppId": 1055540,
+    "psnStorePath": "concept/10003019",
     "ageRating": {
       "family": "safe",
       "concerns": [],
@@ -1154,7 +1199,9 @@
     "tags": [
       "cozy"
     ],
+    "representation": null,
     "steamAppId": 1118240,
+    "psnStorePath": "concept/10003149",
     "ageRating": {
       "family": "mild",
       "concerns": [],
@@ -1213,7 +1260,9 @@
     "tags": [
       "cozy"
     ],
+    "representation": null,
     "steamAppId": 1084600,
+    "psnStorePath": "concept/10007685",
     "ageRating": {
       "family": "mild",
       "concerns": [],
@@ -1274,7 +1323,9 @@
     "tags": [
       "cozy"
     ],
+    "representation": null,
     "steamAppId": 1202200,
+    "psnStorePath": "concept/10005927",
     "ageRating": {
       "family": "safe",
       "concerns": [],
@@ -1324,7 +1375,9 @@
     "tags": [
       "cozy"
     ],
+    "representation": null,
     "steamAppId": 674140,
+    "psnStorePath": "concept/10000854",
     "ageRating": {
       "family": "mild",
       "concerns": [],
@@ -1373,7 +1426,9 @@
       "cozy",
       "social"
     ],
+    "representation": null,
     "steamAppId": 1401590,
+    "psnStorePath": "concept/10002466",
     "ageRating": {
       "family": "safe",
       "concerns": [],
@@ -1434,7 +1489,9 @@
     "tags": [
       "graphics"
     ],
+    "representation": null,
     "steamAppId": 1313140,
+    "psnStorePath": "concept/10004484",
     "ageRating": {
       "family": "mild",
       "concerns": [],
@@ -1502,7 +1559,9 @@
       "cozy",
       "social"
     ],
+    "representation": null,
     "steamAppId": 1245560,
+    "psnStorePath": "concept/10008955",
     "ageRating": {
       "family": "mild",
       "concerns": [],
@@ -1545,7 +1604,9 @@
       "cozy",
       "graphics"
     ],
+    "representation": null,
     "steamAppId": 972660,
+    "psnStorePath": "concept/10000752",
     "ageRating": {
       "family": "mature",
       "concerns": [
@@ -1618,7 +1679,9 @@
       "cozy",
       "graphics"
     ],
+    "representation": null,
     "steamAppId": 683320,
+    "psnStorePath": null,
     "ageRating": {
       "family": "safe",
       "concerns": [],
@@ -1672,7 +1735,9 @@
     "tags": [
       "cozy"
     ],
+    "representation": null,
     "steamAppId": 1307580,
+    "psnStorePath": "concept/10003267",
     "ageRating": {
       "family": "safe",
       "concerns": [],
@@ -1724,7 +1789,9 @@
     "ps5Upgrade": "Free PS5 Upgrade",
     "platform": "PS4",
     "tags": [],
+    "representation": null,
     "steamAppId": 1562430,
+    "psnStorePath": "concept/10005693",
     "ageRating": {
       "family": "mild",
       "concerns": [],
@@ -1781,7 +1848,9 @@
     "ps5Upgrade": "PS4 & PS5 Cross-Buy",
     "platform": "PS4",
     "tags": [],
+    "representation": null,
     "steamAppId": 1574310,
+    "psnStorePath": "concept/10004538",
     "ageRating": {
       "family": "mild",
       "concerns": [],
@@ -1825,9 +1894,22 @@
     "ps5Upgrade": "Backwards Compatible",
     "platform": "PS4",
     "tags": [
-      "cozy"
+      "cozy",
+      "queer",
+      "disability"
+    ],
+    "representation": [
+      {
+        "kind": "queer",
+        "note": "Gregg and Angus are a long-term couple, and Mae is canonically pansexual."
+      },
+      {
+        "kind": "disability",
+        "note": "Mae's dissociative episodes and depression drive the plot."
+      }
     ],
     "steamAppId": 481510,
+    "psnStorePath": null,
     "ageRating": {
       "family": "mild",
       "concerns": [],
@@ -1886,7 +1968,9 @@
     "tags": [
       "cozy"
     ],
+    "representation": null,
     "steamAppId": 1067540,
+    "psnStorePath": "concept/10003640",
     "ageRating": {
       "family": "mild",
       "concerns": [],
@@ -1935,7 +2019,9 @@
     "tags": [
       "graphics"
     ],
+    "representation": null,
     "steamAppId": 1954200,
+    "psnStorePath": "concept/10001235",
     "ageRating": {
       "family": "mild",
       "concerns": [],
@@ -2001,7 +2087,9 @@
       "cozy",
       "graphics"
     ],
+    "representation": null,
     "steamAppId": 1123450,
+    "psnStorePath": "concept/10002468",
     "ageRating": {
       "family": "mild",
       "concerns": [],
@@ -2039,9 +2127,17 @@
     "platform": "PS4",
     "tags": [
       "cozy",
-      "social"
+      "social",
+      "queer"
+    ],
+    "representation": [
+      {
+        "kind": "queer",
+        "note": "Every companion romance is open regardless of gender, and the cast includes a trans character."
+      }
     ],
     "steamAppId": 1321440,
+    "psnStorePath": null,
     "ageRating": {
       "family": "safe",
       "concerns": [],
@@ -2095,7 +2191,9 @@
     "tags": [
       "cozy"
     ],
+    "representation": null,
     "steamAppId": 1868140,
+    "psnStorePath": "concept/10009413",
     "ageRating": {
       "family": "mild",
       "concerns": [],
@@ -2158,7 +2256,9 @@
     "tags": [
       "cozy"
     ],
+    "representation": null,
     "steamAppId": 1599020,
+    "psnStorePath": "concept/10003847",
     "ageRating": {
       "family": "safe",
       "concerns": [],
@@ -2212,7 +2312,9 @@
     "tags": [
       "social"
     ],
+    "representation": null,
     "steamAppId": 2379780,
+    "psnStorePath": "concept/10010334",
     "ageRating": {
       "family": "safe",
       "concerns": [],
@@ -2264,9 +2366,17 @@
     "ps5Upgrade": "PS4 & PS5 Cross-Buy",
     "platform": "PS4",
     "tags": [
-      "cozy"
+      "cozy",
+      "queer"
+    ],
+    "representation": [
+      {
+        "kind": "queer",
+        "note": "Nonbinary options for your character, and romances available regardless of gender."
+      }
     ],
     "steamAppId": 1148760,
+    "psnStorePath": "concept/10005431",
     "ageRating": {
       "family": "mature",
       "concerns": [
@@ -2323,7 +2433,9 @@
       "cozy",
       "graphics"
     ],
+    "representation": null,
     "steamAppId": 1496590,
+    "psnStorePath": "concept/10003612",
     "ageRating": {
       "family": "mild",
       "concerns": [],
@@ -2360,7 +2472,9 @@
     "tags": [
       "graphics"
     ],
+    "representation": null,
     "steamAppId": 367520,
+    "psnStorePath": null,
     "ageRating": {
       "family": "mild",
       "concerns": [],
@@ -2422,7 +2536,9 @@
     "tags": [
       "graphics"
     ],
+    "representation": null,
     "steamAppId": 1369630,
+    "psnStorePath": "concept/10001655",
     "ageRating": {
       "family": "mild",
       "concerns": [],
@@ -2477,7 +2593,9 @@
     "ps5Upgrade": "Backwards Compatible",
     "platform": "PS4",
     "tags": [],
+    "representation": null,
     "steamAppId": 774361,
+    "psnStorePath": null,
     "ageRating": {
       "family": "mature",
       "concerns": [
@@ -2549,7 +2667,9 @@
     "ps5Upgrade": "Backwards Compatible",
     "platform": "PS4",
     "tags": [],
+    "representation": null,
     "steamAppId": 588650,
+    "psnStorePath": "product/UP4016-PPSA15552_00-DEADCELLSPS5SIEA",
     "ageRating": {
       "family": "mature",
       "concerns": [
@@ -2612,7 +2732,9 @@
     "ps5Upgrade": "Backwards Compatible",
     "platform": "PS4",
     "tags": [],
+    "representation": null,
     "steamAppId": 534550,
+    "psnStorePath": null,
     "ageRating": {
       "family": "mild",
       "concerns": [],
@@ -2651,7 +2773,9 @@
     "ps5Upgrade": "Backwards Compatible",
     "platform": "PS4",
     "tags": [],
+    "representation": null,
     "steamAppId": 428550,
+    "psnStorePath": null,
     "ageRating": {
       "family": "mild",
       "concerns": [],
@@ -2686,7 +2810,9 @@
     "ps5Upgrade": "Backwards Compatible",
     "platform": "PS4",
     "tags": [],
+    "representation": null,
     "steamAppId": 283640,
+    "psnStorePath": null,
     "ageRating": {
       "family": "mature",
       "concerns": [
@@ -2741,7 +2867,9 @@
     "ps5Upgrade": "PS4 & PS5 Cross-Buy",
     "platform": "PS4",
     "tags": [],
+    "representation": null,
     "steamAppId": 1203630,
+    "psnStorePath": "concept/10003396",
     "ageRating": {
       "family": "mild",
       "concerns": [],
@@ -2778,7 +2906,9 @@
     "tags": [
       "graphics"
     ],
+    "representation": null,
     "steamAppId": 1701520,
+    "psnStorePath": "concept/10007477",
     "ageRating": {
       "family": "mild",
       "concerns": [],
@@ -2830,7 +2960,9 @@
     "ps5Upgrade": "PS4 & PS5 Cross-Buy",
     "platform": "PS4",
     "tags": [],
+    "representation": null,
     "steamAppId": 1123050,
+    "psnStorePath": "concept/10002537",
     "ageRating": {
       "family": "mild",
       "concerns": [],
@@ -2877,7 +3009,9 @@
     "ps5Upgrade": "PS4 & PS5 Cross-Buy",
     "platform": "PS4",
     "tags": [],
+    "representation": null,
     "steamAppId": 347800,
+    "psnStorePath": "concept/10005004",
     "ageRating": {
       "family": "mature",
       "concerns": [
@@ -2914,7 +3048,9 @@
     "ps5Upgrade": "PS4 & PS5 Cross-Buy",
     "platform": "PS4",
     "tags": [],
+    "representation": null,
     "steamAppId": 1231880,
+    "psnStorePath": null,
     "ageRating": {
       "family": "mild",
       "concerns": [],
@@ -2968,7 +3104,9 @@
     "ps5Upgrade": "PS4 & PS5 Cross-Buy",
     "platform": "PS4",
     "tags": [],
+    "representation": null,
     "steamAppId": 374190,
+    "psnStorePath": "concept/10003982",
     "ageRating": {
       "family": "mature",
       "concerns": [
@@ -3005,7 +3143,9 @@
     "ps5Upgrade": "Backwards Compatible",
     "platform": "PS4",
     "tags": [],
+    "representation": null,
     "steamAppId": 1046400,
+    "psnStorePath": "concept/10002058",
     "ageRating": {
       "family": "mild",
       "concerns": [],
@@ -3056,7 +3196,9 @@
     "ps5Upgrade": "Free PS5 Upgrade",
     "platform": "PS4",
     "tags": [],
+    "representation": null,
     "steamAppId": 312520,
+    "psnStorePath": null,
     "ageRating": {
       "family": "mild",
       "concerns": [],
@@ -3121,7 +3263,9 @@
     "ps5Upgrade": "Backwards Compatible",
     "platform": "PS4",
     "tags": [],
+    "representation": null,
     "steamAppId": 953490,
+    "psnStorePath": "concept/10002805",
     "ageRating": {
       "family": "mature",
       "concerns": [
@@ -3180,7 +3324,9 @@
     "ps5Upgrade": "PS4 & PS5 Cross-Buy",
     "platform": "PS4",
     "tags": [],
+    "representation": null,
     "steamAppId": 2751000,
+    "psnStorePath": "concept/10005985",
     "ageRating": {
       "family": "mild",
       "concerns": [],
@@ -3236,7 +3382,9 @@
     "ps5Upgrade": "Backwards Compatible",
     "platform": "PS4",
     "tags": [],
+    "representation": null,
     "steamAppId": 692850,
+    "psnStorePath": null,
     "ageRating": {
       "family": "mature",
       "concerns": [
@@ -3296,7 +3444,9 @@
     "ps5Upgrade": "PS4 & PS5 Cross-Buy",
     "platform": "PS4",
     "tags": [],
+    "representation": null,
     "steamAppId": 1062110,
+    "psnStorePath": "concept/10003562",
     "ageRating": {
       "family": "mild",
       "concerns": [],
@@ -3348,7 +3498,9 @@
     "ps5Upgrade": "PS4 & PS5 Cross-Buy",
     "platform": "PS4",
     "tags": [],
+    "representation": null,
     "steamAppId": 1546710,
+    "psnStorePath": "concept/10005187",
     "ageRating": {
       "family": "mild",
       "concerns": [],
@@ -3398,7 +3550,9 @@
     "tags": [
       "graphics"
     ],
+    "representation": null,
     "steamAppId": 2386310,
+    "psnStorePath": "concept/10003373",
     "ageRating": {
       "family": "mature",
       "concerns": [
@@ -3444,7 +3598,9 @@
     "ps5Upgrade": "Backwards Compatible",
     "platform": "PS4",
     "tags": [],
+    "representation": null,
     "steamAppId": 646570,
+    "psnStorePath": null,
     "ageRating": {
       "family": "mild",
       "concerns": [],
@@ -3500,7 +3656,9 @@
     "ps5Upgrade": "PS4 & PS5 Cross-Buy",
     "platform": "PS4",
     "tags": [],
+    "representation": null,
     "steamAppId": 1092790,
+    "psnStorePath": "concept/10004707",
     "ageRating": {
       "family": "mild",
       "concerns": [],
@@ -3557,7 +3715,9 @@
     "ps5Upgrade": "PS4 & PS5 Cross-Buy",
     "platform": "PS4",
     "tags": [],
+    "representation": null,
     "steamAppId": 1076200,
+    "psnStorePath": "concept/10001348",
     "ageRating": {
       "family": "mild",
       "concerns": [],
@@ -3601,7 +3761,9 @@
     "ps5Upgrade": "Backwards Compatible",
     "platform": "PS4",
     "tags": [],
+    "representation": null,
     "steamAppId": 601840,
+    "psnStorePath": "concept/10002747",
     "ageRating": {
       "family": "mild",
       "concerns": [],
@@ -3649,7 +3811,9 @@
     "ps5Upgrade": "PS4 & PS5 Cross-Buy",
     "platform": "PS4",
     "tags": [],
+    "representation": null,
     "steamAppId": 1265820,
+    "psnStorePath": "concept/10004694",
     "ageRating": {
       "family": "mild",
       "concerns": [],
@@ -3684,7 +3848,9 @@
     "ps5Upgrade": "PS4 & PS5 Cross-Buy",
     "platform": "PS4",
     "tags": [],
+    "representation": null,
     "steamAppId": 1755830,
+    "psnStorePath": "concept/10011469",
     "ageRating": {
       "family": "mild",
       "concerns": [],
@@ -3721,7 +3887,9 @@
     "tags": [
       "cozy"
     ],
+    "representation": null,
     "steamAppId": 814370,
+    "psnStorePath": "concept/10000423",
     "ageRating": {
       "family": "mild",
       "concerns": [],
@@ -3780,7 +3948,9 @@
     "tags": [
       "cozy"
     ],
+    "representation": null,
     "steamAppId": 1196630,
+    "psnStorePath": "concept/10000634",
     "ageRating": {
       "family": "mild",
       "concerns": [],
@@ -3817,7 +3987,9 @@
     "tags": [
       "cozy"
     ],
+    "representation": null,
     "steamAppId": 1218210,
+    "psnStorePath": null,
     "ageRating": {
       "family": "mild",
       "concerns": [],
@@ -3872,7 +4044,9 @@
     "tags": [
       "cozy"
     ],
+    "representation": null,
     "steamAppId": 433340,
+    "psnStorePath": null,
     "ageRating": {
       "family": "safe",
       "concerns": [],
@@ -3924,7 +4098,9 @@
     "ps5Upgrade": "PS4 & PS5 Cross-Buy",
     "platform": "PS4",
     "tags": [],
+    "representation": null,
     "steamAppId": 1289810,
+    "psnStorePath": null,
     "ageRating": {
       "family": "mild",
       "concerns": [],
@@ -3960,9 +4136,17 @@
     "platform": "PS4",
     "tags": [
       "cozy",
-      "social"
+      "social",
+      "queer"
+    ],
+    "representation": [
+      {
+        "kind": "queer",
+        "note": "Every marriage candidate is available regardless of your character's gender."
+      }
     ],
     "steamAppId": 413150,
+    "psnStorePath": null,
     "ageRating": {
       "family": "mild",
       "concerns": [],
@@ -4027,7 +4211,9 @@
     "tags": [
       "cozy"
     ],
+    "representation": null,
     "steamAppId": 666140,
+    "psnStorePath": null,
     "ageRating": {
       "family": "mild",
       "concerns": [],
@@ -4066,7 +4252,9 @@
     "tags": [
       "cozy"
     ],
+    "representation": null,
     "steamAppId": 1337760,
+    "psnStorePath": "concept/10002179",
     "ageRating": {
       "family": "mild",
       "concerns": [],
@@ -4128,7 +4316,9 @@
     "tags": [
       "cozy"
     ],
+    "representation": null,
     "steamAppId": 1458100,
+    "psnStorePath": "concept/10002088",
     "ageRating": {
       "family": "mild",
       "concerns": [],
@@ -4175,7 +4365,9 @@
     "tags": [
       "cozy"
     ],
+    "representation": null,
     "steamAppId": 1062140,
+    "psnStorePath": null,
     "ageRating": {
       "family": "mild",
       "concerns": [],
@@ -4212,9 +4404,17 @@
     "ps5Upgrade": "Backwards Compatible",
     "platform": "PS4",
     "tags": [
-      "cozy"
+      "cozy",
+      "queer"
+    ],
+    "representation": [
+      {
+        "kind": "queer",
+        "note": "Same-sex relationships throughout, with trans-inclusive body, clothing and pronoun options."
+      }
     ],
     "steamAppId": 1222670,
+    "psnStorePath": null,
     "ageRating": {
       "family": "mature",
       "concerns": [
@@ -4289,7 +4489,9 @@
     "tags": [
       "cozy"
     ],
+    "representation": null,
     "steamAppId": 1403650,
+    "psnStorePath": "concept/10007656",
     "ageRating": {
       "family": "mild",
       "concerns": [],
@@ -4331,7 +4533,9 @@
     "tags": [
       "cozy"
     ],
+    "representation": null,
     "steamAppId": 1356280,
+    "psnStorePath": "concept/10001835",
     "ageRating": {
       "family": "mild",
       "concerns": [],
@@ -4368,7 +4572,9 @@
     "tags": [
       "cozy"
     ],
+    "representation": null,
     "steamAppId": 1112890,
+    "psnStorePath": "concept/10003748",
     "ageRating": {
       "family": "safe",
       "concerns": [],
@@ -4408,7 +4614,9 @@
     "ps5Upgrade": "Backwards Compatible",
     "platform": "PS4",
     "tags": [],
+    "representation": null,
     "steamAppId": 599140,
+    "psnStorePath": null,
     "ageRating": {
       "family": "mild",
       "concerns": [],
@@ -4475,7 +4683,9 @@
     "tags": [
       "cozy"
     ],
+    "representation": null,
     "steamAppId": 606150,
+    "psnStorePath": null,
     "ageRating": {
       "family": "mild",
       "concerns": [],
@@ -4547,7 +4757,9 @@
       "cozy",
       "social"
     ],
+    "representation": null,
     "steamAppId": 1290000,
+    "psnStorePath": "concept/10003654",
     "ageRating": {
       "family": "safe",
       "concerns": [],
@@ -4601,7 +4813,9 @@
     "tags": [
       "cozy"
     ],
+    "representation": null,
     "steamAppId": 1649080,
+    "psnStorePath": "concept/10001458",
     "ageRating": {
       "family": "mild",
       "concerns": [],
@@ -4649,7 +4863,9 @@
     "tags": [
       "cozy"
     ],
+    "representation": null,
     "steamAppId": 1046030,
+    "psnStorePath": null,
     "ageRating": {
       "family": "safe",
       "concerns": [],
@@ -4691,7 +4907,9 @@
     "tags": [
       "cozy"
     ],
+    "representation": null,
     "steamAppId": 1291340,
+    "psnStorePath": null,
     "ageRating": {
       "family": "safe",
       "concerns": [],
@@ -4730,8 +4948,22 @@
     "protagonist": "Female",
     "ps5Upgrade": "Backwards Compatible",
     "platform": "PS4",
-    "tags": [],
+    "tags": [
+      "queer",
+      "disability"
+    ],
+    "representation": [
+      {
+        "kind": "queer",
+        "note": "Madeline is a trans woman, confirmed by the developer and reflected in the Farewell chapter."
+      },
+      {
+        "kind": "disability",
+        "note": "Her panic attacks are the subject, not a metaphor, and the game names anxiety plainly."
+      }
+    ],
     "steamAppId": 504230,
+    "psnStorePath": null,
     "ageRating": {
       "family": "mild",
       "concerns": [],
@@ -4783,7 +5015,9 @@
     "ps5Upgrade": "Free PS5 Upgrade",
     "platform": "PS4",
     "tags": [],
+    "representation": null,
     "steamAppId": 1599660,
+    "psnStorePath": "concept/10000177",
     "ageRating": {
       "family": "mild",
       "concerns": [],
@@ -4831,7 +5065,9 @@
     "tags": [
       "graphics"
     ],
+    "representation": null,
     "steamAppId": 860510,
+    "psnStorePath": "product/UP0700-PPSA02200_00-LITTLENIGHTS2000",
     "ageRating": {
       "family": "mild",
       "concerns": [],
@@ -4890,7 +5126,9 @@
     "ps5Upgrade": "Backwards Compatible",
     "platform": "PS4",
     "tags": [],
+    "representation": null,
     "steamAppId": 424840,
+    "psnStorePath": "product/UP0700-PPSA10738_00-LITTLENIGHTMARES",
     "ageRating": {
       "family": "mild",
       "concerns": [],
@@ -4947,7 +5185,9 @@
     "tags": [
       "graphics"
     ],
+    "representation": null,
     "steamAppId": 1608230,
+    "psnStorePath": "concept/10009541",
     "ageRating": {
       "family": "mild",
       "concerns": [],
@@ -4999,7 +5239,9 @@
     "ps5Upgrade": "Backwards Compatible",
     "platform": "PS4",
     "tags": [],
+    "representation": null,
     "steamAppId": 1225570,
+    "psnStorePath": null,
     "ageRating": {
       "family": "mild",
       "concerns": [],
@@ -5047,7 +5289,9 @@
     "tags": [
       "graphics"
     ],
+    "representation": null,
     "steamAppId": 268910,
+    "psnStorePath": "concept/10001369",
     "ageRating": {
       "family": "mild",
       "concerns": [],
@@ -5108,7 +5352,9 @@
     "ps5Upgrade": "Backwards Compatible",
     "platform": "PS4",
     "tags": [],
+    "representation": null,
     "steamAppId": 846870,
+    "psnStorePath": null,
     "ageRating": {
       "family": "mature",
       "concerns": [
@@ -5147,7 +5393,9 @@
     "ps5Upgrade": "PS4 & PS5 Cross-Buy",
     "platform": "PS4",
     "tags": [],
+    "representation": null,
     "steamAppId": 1038300,
+    "psnStorePath": "concept/10000800",
     "ageRating": {
       "family": "mild",
       "concerns": [],
@@ -5189,7 +5437,9 @@
     "ps5Upgrade": "PS4 & PS5 Cross-Buy",
     "platform": "PS4",
     "tags": [],
+    "representation": null,
     "steamAppId": 1186640,
+    "psnStorePath": "concept/10001111",
     "ageRating": {
       "family": "mild",
       "concerns": [],
@@ -5237,7 +5487,9 @@
     "ps5Upgrade": "PS4 & PS5 Cross-Buy",
     "platform": "PS4",
     "tags": [],
+    "representation": null,
     "steamAppId": 829280,
+    "psnStorePath": null,
     "ageRating": {
       "family": "mild",
       "concerns": [],
@@ -5274,7 +5526,9 @@
     "tags": [
       "graphics"
     ],
+    "representation": null,
     "steamAppId": 242550,
+    "psnStorePath": null,
     "ageRating": {
       "family": "safe",
       "concerns": [],
@@ -5323,7 +5577,9 @@
     "tags": [
       "graphics"
     ],
+    "representation": null,
     "steamAppId": 1378990,
+    "psnStorePath": "concept/10000264",
     "ageRating": {
       "family": "mild",
       "concerns": [],
@@ -5379,7 +5635,9 @@
     "tags": [
       "graphics"
     ],
+    "representation": null,
     "steamAppId": 1533420,
+    "psnStorePath": "concept/10006032",
     "ageRating": {
       "family": "mature",
       "concerns": [
@@ -5441,7 +5699,9 @@
     "tags": [
       "graphics"
     ],
+    "representation": null,
     "steamAppId": 1122680,
+    "psnStorePath": "concept/10003693",
     "ageRating": {
       "family": "mild",
       "concerns": [],
@@ -5494,7 +5754,9 @@
     "ps5Upgrade": "Free PS5 Upgrade",
     "platform": "PS4",
     "tags": [],
+    "representation": null,
     "steamAppId": 501300,
+    "psnStorePath": null,
     "ageRating": {
       "family": "mild",
       "concerns": [],
@@ -5550,8 +5812,17 @@
     "protagonist": "Female",
     "ps5Upgrade": "PS4 & PS5 Cross-Buy",
     "platform": "PS4",
-    "tags": [],
+    "tags": [
+      "queer"
+    ],
+    "representation": [
+      {
+        "kind": "queer",
+        "note": "Max and Chloe's relationship can be romantic, and Before the Storm centres Chloe and Rachel."
+      }
+    ],
     "steamAppId": 1265920,
+    "psnStorePath": "concept/10001187",
     "ageRating": {
       "family": "mature",
       "concerns": [
@@ -5611,8 +5882,17 @@
     "protagonist": "Male",
     "ps5Upgrade": "Backwards Compatible",
     "platform": "PS4",
-    "tags": [],
+    "tags": [
+      "queer"
+    ],
+    "representation": [
+      {
+        "kind": "queer",
+        "note": "Sean can enter a relationship with Finn."
+      }
+    ],
     "steamAppId": 532210,
+    "psnStorePath": null,
     "ageRating": {
       "family": "mature",
       "concerns": [
@@ -5677,7 +5957,9 @@
     "tags": [
       "graphics"
     ],
+    "representation": null,
     "steamAppId": 1577120,
+    "psnStorePath": "product/UP1001-PPSA05813_00-8185911092060169",
     "ageRating": {
       "family": "mature",
       "concerns": [
@@ -5755,7 +6037,9 @@
     "tags": [
       "graphics"
     ],
+    "representation": null,
     "steamAppId": 2172010,
+    "psnStorePath": "concept/10007897",
     "ageRating": {
       "family": "mature",
       "concerns": [
@@ -5819,7 +6103,9 @@
     "tags": [
       "graphics"
     ],
+    "representation": null,
     "steamAppId": 1222140,
+    "psnStorePath": null,
     "ageRating": {
       "family": "mature",
       "concerns": [
@@ -5881,7 +6167,9 @@
     "ps5Upgrade": "PS4 & PS5 Cross-Buy",
     "platform": "PS4",
     "tags": [],
+    "representation": null,
     "steamAppId": 1466640,
+    "psnStorePath": "concept/10003593",
     "ageRating": {
       "family": "mild",
       "concerns": [],
@@ -5940,7 +6228,9 @@
     "tags": [
       "cozy"
     ],
+    "representation": null,
     "steamAppId": 1497360,
+    "psnStorePath": "concept/10002209",
     "ageRating": {
       "family": "mature",
       "concerns": [
@@ -5981,7 +6271,9 @@
     "tags": [
       "cozy"
     ],
+    "representation": null,
     "steamAppId": 599610,
+    "psnStorePath": null,
     "ageRating": {
       "family": "mild",
       "concerns": [],
@@ -6039,7 +6331,9 @@
     "tags": [
       "cozy"
     ],
+    "representation": null,
     "steamAppId": 1634150,
+    "psnStorePath": "concept/10004835",
     "ageRating": {
       "family": "safe",
       "concerns": [],
@@ -6093,7 +6387,9 @@
     "tags": [
       "cozy"
     ],
+    "representation": null,
     "steamAppId": 581270,
+    "psnStorePath": null,
     "ageRating": {
       "family": "mild",
       "concerns": [],
@@ -6141,7 +6437,9 @@
     "tags": [
       "cozy"
     ],
+    "representation": null,
     "steamAppId": 1497450,
+    "psnStorePath": "concept/10003796",
     "ageRating": {
       "family": "safe",
       "concerns": [],
@@ -6179,7 +6477,9 @@
       "cozy",
       "graphics"
     ],
+    "representation": null,
     "steamAppId": 1272840,
+    "psnStorePath": "concept/10003948",
     "ageRating": {
       "family": "safe",
       "concerns": [],
@@ -6221,7 +6521,9 @@
     "tags": [
       "cozy"
     ],
+    "representation": null,
     "steamAppId": 1080750,
+    "psnStorePath": null,
     "ageRating": {
       "family": "mature",
       "concerns": [
@@ -6258,7 +6560,9 @@
     "ps5Upgrade": "PS4 & PS5 Cross-Buy",
     "platform": "PS4",
     "tags": [],
+    "representation": null,
     "steamAppId": 1221250,
+    "psnStorePath": "concept/10004418",
     "ageRating": {
       "family": "mild",
       "concerns": [],
@@ -6302,9 +6606,17 @@
     "ps5Upgrade": "PS4 & PS5 Cross-Buy",
     "platform": "PS4",
     "tags": [
-      "cozy"
+      "cozy",
+      "queer"
+    ],
+    "representation": [
+      {
+        "kind": "queer",
+        "note": "The boxes quietly tell the story of a relationship with another woman."
+      }
     ],
     "steamAppId": 1135690,
+    "psnStorePath": "concept/10004687",
     "ageRating": {
       "family": "safe",
       "concerns": [],
@@ -6358,7 +6670,9 @@
     "tags": [
       "cozy"
     ],
+    "representation": null,
     "steamAppId": 914800,
+    "psnStorePath": null,
     "ageRating": {
       "family": "mature",
       "concerns": [
@@ -6414,7 +6728,9 @@
     "tags": [
       "cozy"
     ],
+    "representation": null,
     "steamAppId": 1663220,
+    "psnStorePath": "concept/10004780",
     "ageRating": {
       "family": "mild",
       "concerns": [],
@@ -6448,8 +6764,17 @@
     "protagonist": "Female",
     "ps5Upgrade": "Backwards Compatible",
     "platform": "PS4",
-    "tags": [],
+    "tags": [
+      "queer"
+    ],
+    "representation": [
+      {
+        "kind": "queer",
+        "note": "Jill is bisexual, and the bar's regulars are a broadly queer cast."
+      }
+    ],
     "steamAppId": 447530,
+    "psnStorePath": null,
     "ageRating": {
       "family": "mature",
       "concerns": [
@@ -6503,9 +6828,17 @@
     "ps5Upgrade": "PS4 & PS5 Cross-Buy",
     "platform": "PS4",
     "tags": [
-      "graphics"
+      "graphics",
+      "queer"
+    ],
+    "representation": [
+      {
+        "kind": "queer",
+        "note": "Fang, the protagonist, is nonbinary and uses they/them, as do several of the band."
+      }
     ],
     "steamAppId": 1310330,
+    "psnStorePath": "concept/10007198",
     "ageRating": {
       "family": "mild",
       "concerns": [],
@@ -6544,7 +6877,9 @@
     "tags": [
       "cozy"
     ],
+    "representation": null,
     "steamAppId": 1269640,
+    "psnStorePath": null,
     "ageRating": {
       "family": "mild",
       "concerns": [],
@@ -6598,7 +6933,9 @@
     "tags": [
       "cozy"
     ],
+    "representation": null,
     "steamAppId": 1201270,
+    "psnStorePath": "concept/10005843",
     "ageRating": {
       "family": "mild",
       "concerns": [],
@@ -6649,8 +6986,17 @@
     "protagonist": "Female",
     "ps5Upgrade": "PS4 & PS5 Cross-Buy",
     "platform": "PS4",
-    "tags": [],
+    "tags": [
+      "queer"
+    ],
+    "representation": [
+      {
+        "kind": "queer",
+        "note": "Jala's exes span genders in an explicitly queer, South Asian coming-home story."
+      }
+    ],
     "steamAppId": 1617220,
+    "psnStorePath": "concept/10004698",
     "ageRating": {
       "family": "mature",
       "concerns": [
@@ -6705,7 +7051,9 @@
     "tags": [
       "cozy"
     ],
+    "representation": null,
     "steamAppId": 729000,
+    "psnStorePath": "concept/10003146",
     "ageRating": {
       "family": "mild",
       "concerns": [],
@@ -6756,8 +7104,17 @@
     "protagonist": "Female",
     "ps5Upgrade": "Backwards Compatible",
     "platform": "PS4",
-    "tags": [],
+    "tags": [
+      "queer"
+    ],
+    "representation": [
+      {
+        "kind": "queer",
+        "note": "The story you piece together is your sister's first relationship with another girl."
+      }
+    ],
     "steamAppId": 232430,
+    "psnStorePath": null,
     "ageRating": {
       "family": "safe",
       "concerns": [],
@@ -6801,7 +7158,9 @@
     "ps5Upgrade": "PS4 & PS5 Cross-Buy",
     "platform": "PS4",
     "tags": [],
+    "representation": null,
     "steamAppId": 1097200,
+    "psnStorePath": "concept/10002477",
     "ageRating": {
       "family": "mature",
       "concerns": [
@@ -6848,9 +7207,17 @@
     "ps5Upgrade": "Backwards Compatible",
     "platform": "PS4",
     "tags": [
-      "graphics"
+      "graphics",
+      "disability"
+    ],
+    "representation": [
+      {
+        "kind": "disability",
+        "note": "Kay's depression and loneliness take physical form as the monsters she meets."
+      }
     ],
     "steamAppId": 1225590,
+    "psnStorePath": null,
     "ageRating": {
       "family": "mild",
       "concerns": [],
@@ -6893,7 +7260,9 @@
     "ps5Upgrade": "Backwards Compatible",
     "platform": "PS4",
     "tags": [],
+    "representation": null,
     "steamAppId": null,
+    "psnStorePath": "product/UP9000-CUSA11834_00-CONCRETEGENIE000",
     "ageRating": null,
     "ratings": null,
     "description": "Paint living murals across a dead harbor town with the DualSense motion controls, bringing creatures to life as you go."
@@ -6909,7 +7278,9 @@
     "tags": [
       "cozy"
     ],
+    "representation": null,
     "steamAppId": 990630,
+    "psnStorePath": "concept/10000531",
     "ageRating": {
       "family": "mild",
       "concerns": [],
@@ -6963,7 +7334,9 @@
     "tags": [
       "cozy"
     ],
+    "representation": null,
     "steamAppId": 969760,
+    "psnStorePath": "concept/10002920",
     "ageRating": {
       "family": "safe",
       "concerns": [],
@@ -7001,7 +7374,9 @@
       "cozy",
       "graphics"
     ],
+    "representation": null,
     "steamAppId": 384190,
+    "psnStorePath": null,
     "ageRating": {
       "family": "mild",
       "concerns": [],
@@ -7055,9 +7430,17 @@
     "ps5Upgrade": "Free PS5 Upgrade",
     "platform": "PS4",
     "tags": [
-      "graphics"
+      "graphics",
+      "queer"
+    ],
+    "representation": [
+      {
+        "kind": "queer",
+        "note": "V's body and voice are chosen independently, romances are same-sex inclusive, and Claire is a trans woman."
+      }
     ],
     "steamAppId": 1091500,
+    "psnStorePath": "product/UP4497-PPSA03974_00-0000000000000CP1",
     "ageRating": {
       "family": "mature",
       "concerns": [
@@ -7142,7 +7525,9 @@
     "tags": [
       "graphics"
     ],
+    "representation": null,
     "steamAppId": 292030,
+    "psnStorePath": null,
     "ageRating": {
       "family": "mature",
       "concerns": [
@@ -7223,7 +7608,9 @@
     "tags": [
       "graphics"
     ],
+    "representation": null,
     "steamAppId": 1462040,
+    "psnStorePath": "product/UP0082-PPSA01903_00-5827003902180177",
     "ageRating": {
       "family": "mature",
       "concerns": [
@@ -7304,7 +7691,9 @@
     "tags": [
       "graphics"
     ],
+    "representation": null,
     "steamAppId": 524220,
+    "psnStorePath": null,
     "ageRating": {
       "family": "mature",
       "concerns": [
@@ -7382,7 +7771,9 @@
     "tags": [
       "graphics"
     ],
+    "representation": null,
     "steamAppId": 2215430,
+    "psnStorePath": null,
     "ageRating": {
       "family": "mature",
       "concerns": [
@@ -7464,7 +7855,9 @@
     "tags": [
       "graphics"
     ],
+    "representation": null,
     "steamAppId": 1817190,
+    "psnStorePath": "concept/10000649",
     "ageRating": {
       "family": "mild",
       "concerns": [],
@@ -7533,7 +7926,9 @@
     "tags": [
       "graphics"
     ],
+    "representation": null,
     "steamAppId": 1850570,
+    "psnStorePath": null,
     "ageRating": {
       "family": "mature",
       "concerns": [
@@ -7606,9 +8001,22 @@
     "ps5Upgrade": "Paid PS5 Upgrade",
     "platform": "PS4",
     "tags": [
-      "graphics"
+      "graphics",
+      "queer",
+      "disability"
+    ],
+    "representation": [
+      {
+        "kind": "queer",
+        "note": "Ellie is a lesbian protagonist, and Lev is a trans boy. Both are central, not background."
+      },
+      {
+        "kind": "disability",
+        "note": "A landmark for accessibility, with over sixty options including a set that makes it playable without sight."
+      }
     ],
     "steamAppId": 2531310,
+    "psnStorePath": null,
     "ageRating": {
       "family": "mature",
       "concerns": [
@@ -7691,9 +8099,17 @@
     "ps5Upgrade": "Free PS5 Upgrade",
     "platform": "PS4",
     "tags": [
-      "graphics"
+      "graphics",
+      "queer"
+    ],
+    "representation": [
+      {
+        "kind": "queer",
+        "note": "Eivor's romances are available regardless of gender."
+      }
     ],
     "steamAppId": 2208920,
+    "psnStorePath": "concept/10000237",
     "ageRating": {
       "family": "mature",
       "concerns": [
@@ -7778,7 +8194,9 @@
     "tags": [
       "graphics"
     ],
+    "representation": null,
     "steamAppId": 2221920,
+    "psnStorePath": "product/UP0001-PPSA01507_00-GAME000000000000",
     "ageRating": {
       "family": "mature",
       "concerns": [
@@ -7838,7 +8256,9 @@
     "tags": [
       "graphics"
     ],
+    "representation": null,
     "steamAppId": 990080,
+    "psnStorePath": "product/UP1018-PPSA01593_00-HOGWARTSLEGACY01",
     "ageRating": {
       "family": "mild",
       "concerns": [],
@@ -7914,7 +8334,9 @@
     "tags": [
       "graphics"
     ],
+    "representation": null,
     "steamAppId": 740130,
+    "psnStorePath": null,
     "ageRating": {
       "family": "mature",
       "concerns": [
@@ -7977,7 +8399,9 @@
     "tags": [
       "graphics"
     ],
+    "representation": null,
     "steamAppId": 2138710,
+    "psnStorePath": "concept/10001973",
     "ageRating": {
       "family": "mild",
       "concerns": [],
@@ -8036,7 +8460,9 @@
     "tags": [
       "social"
     ],
+    "representation": null,
     "steamAppId": 1426210,
+    "psnStorePath": null,
     "ageRating": {
       "family": "mild",
       "concerns": [],
@@ -8098,9 +8524,17 @@
     "ps5Upgrade": "PS4 & PS5 Cross-Buy",
     "platform": "PS4",
     "tags": [
-      "graphics"
+      "graphics",
+      "queer"
+    ],
+    "representation": [
+      {
+        "kind": "queer",
+        "note": "Zagreus is bisexual, with romances available with both Thanatos and Megaera."
+      }
     ],
     "steamAppId": 1145360,
+    "psnStorePath": "concept/10002648",
     "ageRating": {
       "family": "mild",
       "concerns": [],
@@ -8163,7 +8597,9 @@
     "ps5Upgrade": "PS4 & PS5 Cross-Buy",
     "platform": "PS4",
     "tags": [],
+    "representation": null,
     "steamAppId": 898890,
+    "psnStorePath": "concept/10001440",
     "ageRating": {
       "family": "mild",
       "concerns": [],
@@ -8217,7 +8653,9 @@
       "cozy",
       "graphics"
     ],
+    "representation": null,
     "steamAppId": null,
+    "psnStorePath": "concept/10002684",
     "ageRating": null,
     "ratings": null,
     "description": "A joyful 3D platformer built around the DualSense, packed with inventive one-off mechanics and a galaxy of PlayStation history."
@@ -8233,7 +8671,9 @@
     "tags": [
       "cozy"
     ],
+    "representation": null,
     "steamAppId": null,
+    "psnStorePath": "concept/10000229",
     "ageRating": null,
     "ratings": null,
     "description": "The free pack-in platformer that turns the DualSense itself into the toy, with a museum of PlayStation nostalgia."
@@ -8249,7 +8689,9 @@
     "tags": [
       "graphics"
     ],
+    "representation": null,
     "steamAppId": 1649240,
+    "psnStorePath": "concept/10000176",
     "ageRating": {
       "family": "mild",
       "concerns": [],
@@ -8320,7 +8762,9 @@
     "tags": [
       "graphics"
     ],
+    "representation": null,
     "steamAppId": null,
+    "psnStorePath": "concept/10000368",
     "ageRating": null,
     "ratings": null,
     "description": "The soulslike that started it all, rebuilt from the ground up as a showcase of what the hardware could do."
@@ -8336,7 +8780,9 @@
     "tags": [
       "graphics"
     ],
+    "representation": null,
     "steamAppId": 1895880,
+    "psnStorePath": "concept/10000669",
     "ageRating": {
       "family": "mild",
       "concerns": [],
@@ -8399,7 +8845,9 @@
     "tags": [
       "graphics"
     ],
+    "representation": null,
     "steamAppId": 2651280,
+    "psnStorePath": "concept/10002456",
     "ageRating": {
       "family": "mild",
       "concerns": [],
@@ -8475,7 +8923,9 @@
     "tags": [
       "graphics"
     ],
+    "representation": null,
     "steamAppId": 2515020,
+    "psnStorePath": "concept/10002100",
     "ageRating": {
       "family": "mature",
       "concerns": [
@@ -8558,7 +9008,9 @@
     "tags": [
       "graphics"
     ],
+    "representation": null,
     "steamAppId": 3489700,
+    "psnStorePath": "concept/10006891",
     "ageRating": {
       "family": "mature",
       "concerns": [
@@ -8639,7 +9091,9 @@
     "tags": [
       "graphics"
     ],
+    "representation": null,
     "steamAppId": 1340990,
+    "psnStorePath": "concept/10003386",
     "ageRating": {
       "family": "mature",
       "concerns": [
@@ -8713,9 +9167,17 @@
     "platform": "PS5",
     "tags": [
       "social",
-      "graphics"
+      "graphics",
+      "queer"
+    ],
+    "representation": [
+      {
+        "kind": "queer",
+        "note": "Every companion romance is open regardless of gender, and the character creator separates body, voice and pronouns."
+      }
     ],
     "steamAppId": 1086940,
+    "psnStorePath": "concept/10007460",
     "ageRating": {
       "family": "mature",
       "concerns": [
@@ -8799,7 +9261,9 @@
     "tags": [
       "social"
     ],
+    "representation": null,
     "steamAppId": 553850,
+    "psnStorePath": "concept/10000657",
     "ageRating": {
       "family": "mature",
       "concerns": [
@@ -8878,7 +9342,9 @@
       "graphics",
       "social"
     ],
+    "representation": null,
     "steamAppId": null,
+    "psnStorePath": "concept/10000956",
     "ageRating": null,
     "ratings": null,
     "description": "A meticulous driving simulator whose car models and lighting are the real showcase."
@@ -8894,7 +9360,9 @@
     "tags": [
       "graphics"
     ],
+    "representation": null,
     "steamAppId": null,
+    "psnStorePath": "concept/10002065",
     "ageRating": null,
     "ratings": null,
     "description": "A survival horror sequel switching between an FBI agent and a trapped writer, and one of the best-looking games on the console."
@@ -8910,7 +9378,9 @@
     "tags": [
       "graphics"
     ],
+    "representation": null,
     "steamAppId": 2358720,
+    "psnStorePath": "concept/10007144",
     "ageRating": {
       "family": "mature",
       "concerns": [
@@ -8989,7 +9459,9 @@
     "tags": [
       "graphics"
     ],
+    "representation": null,
     "steamAppId": 2124490,
+    "psnStorePath": "concept/10005529",
     "ageRating": {
       "family": "mature",
       "concerns": [
@@ -9070,7 +9542,9 @@
     "tags": [
       "graphics"
     ],
+    "representation": null,
     "steamAppId": 1693980,
+    "psnStorePath": "concept/10002958",
     "ageRating": {
       "family": "mature",
       "concerns": [
@@ -9144,9 +9618,17 @@
     "ps5Upgrade": "PS5 Only",
     "platform": "PS5",
     "tags": [
-      "graphics"
+      "graphics",
+      "queer"
+    ],
+    "representation": [
+      {
+        "kind": "queer",
+        "note": "The Left Behind chapter centres Ellie's first romance with another girl."
+      }
     ],
     "steamAppId": 1888930,
+    "psnStorePath": "concept/10002694",
     "ageRating": {
       "family": "mature",
       "concerns": [
@@ -9226,7 +9708,9 @@
     "tags": [
       "graphics"
     ],
+    "representation": null,
     "steamAppId": 1182900,
+    "psnStorePath": "concept/10002255",
     "ageRating": {
       "family": "mature",
       "concerns": [
@@ -9304,7 +9788,9 @@
     "tags": [
       "graphics"
     ],
+    "representation": null,
     "steamAppId": 2842040,
+    "psnStorePath": "concept/10005323",
     "ageRating": {
       "family": "mild",
       "concerns": [],
@@ -9379,7 +9865,9 @@
     "tags": [
       "graphics"
     ],
+    "representation": null,
     "steamAppId": 2840770,
+    "psnStorePath": "product/UP0001-PPSA01576_00-AVATAR2GAME00001",
     "ageRating": {
       "family": "mild",
       "concerns": [],
@@ -9446,7 +9934,9 @@
     "tags": [
       "graphics"
     ],
+    "representation": null,
     "steamAppId": null,
+    "psnStorePath": "concept/10003923",
     "ageRating": null,
     "ratings": null,
     "description": "Atsu hunts across the plains and peaks around Mount Yotei in the follow-up to Ghost of Tsushima."
@@ -9462,7 +9952,9 @@
     "tags": [
       "graphics"
     ],
+    "representation": null,
     "steamAppId": 3280350,
+    "psnStorePath": "concept/10001538",
     "ageRating": {
       "family": "mature",
       "concerns": [
@@ -9531,7 +10023,9 @@
       "cozy",
       "graphics"
     ],
+    "representation": null,
     "steamAppId": 757310,
+    "psnStorePath": "concept/10001007",
     "ageRating": {
       "family": "safe",
       "concerns": [],
@@ -9594,7 +10088,9 @@
     "tags": [
       "cozy"
     ],
+    "representation": null,
     "steamAppId": 1491670,
+    "psnStorePath": "concept/10004312",
     "ageRating": {
       "family": "mild",
       "concerns": [],
@@ -9648,7 +10144,9 @@
     "tags": [
       "cozy"
     ],
+    "representation": null,
     "steamAppId": 1177980,
+    "psnStorePath": "concept/10007112",
     "ageRating": {
       "family": "safe",
       "concerns": [],
@@ -9712,7 +10210,9 @@
       "cozy",
       "graphics"
     ],
+    "representation": null,
     "steamAppId": 1977170,
+    "psnStorePath": "concept/10006168",
     "ageRating": {
       "family": "safe",
       "concerns": [],
@@ -9766,7 +10266,9 @@
     "tags": [
       "cozy"
     ],
+    "representation": null,
     "steamAppId": 1627570,
+    "psnStorePath": "concept/10007954",
     "ageRating": {
       "family": "mild",
       "concerns": [],
@@ -9820,7 +10322,9 @@
     "tags": [
       "graphics"
     ],
+    "representation": null,
     "steamAppId": 2420660,
+    "psnStorePath": "concept/10008521",
     "ageRating": {
       "family": "mild",
       "concerns": [],
@@ -9874,7 +10378,9 @@
     "tags": [
       "graphics"
     ],
+    "representation": null,
     "steamAppId": 813230,
+    "psnStorePath": "concept/10004542",
     "ageRating": {
       "family": "mild",
       "concerns": [],
@@ -9933,7 +10439,9 @@
     "ps5Upgrade": "PS5 Only",
     "platform": "PS5",
     "tags": [],
+    "representation": null,
     "steamAppId": 2008920,
+    "psnStorePath": "concept/10011409",
     "ageRating": {
       "family": "mild",
       "concerns": [],
@@ -9992,7 +10500,9 @@
     "tags": [
       "social"
     ],
+    "representation": null,
     "steamAppId": 745920,
+    "psnStorePath": "concept/10001170",
     "ageRating": {
       "family": "mild",
       "concerns": [],
@@ -10029,7 +10539,9 @@
     "tags": [
       "social"
     ],
+    "representation": null,
     "steamAppId": 1623730,
+    "psnStorePath": "concept/10011027",
     "ageRating": {
       "family": "mild",
       "concerns": [],
@@ -10098,9 +10610,17 @@
     "ps5Upgrade": "PS5 Only",
     "platform": "PS5",
     "tags": [
-      "cozy"
+      "cozy",
+      "queer"
+    ],
+    "representation": [
+      {
+        "kind": "queer",
+        "note": "Every marriage candidate is available regardless of gender."
+      }
     ],
     "steamAppId": 1158160,
+    "psnStorePath": "concept/10008698",
     "ageRating": {
       "family": "mild",
       "concerns": [],
@@ -10162,9 +10682,17 @@
     "platform": "PS5",
     "tags": [
       "cozy",
-      "social"
+      "social",
+      "queer"
+    ],
+    "representation": [
+      {
+        "kind": "queer",
+        "note": "Romance options are open regardless of gender."
+      }
     ],
     "steamAppId": 2230110,
+    "psnStorePath": "concept/10010439",
     "ageRating": {
       "family": "mild",
       "concerns": [],
@@ -10208,7 +10736,9 @@
     "tags": [
       "cozy"
     ],
+    "representation": null,
     "steamAppId": 1658150,
+    "psnStorePath": null,
     "ageRating": {
       "family": "mild",
       "concerns": [],
@@ -10262,7 +10792,9 @@
     "tags": [
       "social"
     ],
+    "representation": null,
     "steamAppId": 1260320,
+    "psnStorePath": "concept/10010023",
     "ageRating": {
       "family": "mild",
       "concerns": [],
@@ -10309,7 +10841,9 @@
       "social",
       "graphics"
     ],
+    "representation": null,
     "steamAppId": 1172620,
+    "psnStorePath": "concept/10008884",
     "ageRating": {
       "family": "mild",
       "concerns": [],
@@ -10384,7 +10918,9 @@
     "tags": [
       "social"
     ],
+    "representation": null,
     "steamAppId": 739630,
+    "psnStorePath": "concept/10005673",
     "ageRating": {
       "family": "mild",
       "concerns": [],
@@ -10455,7 +10991,9 @@
     "tags": [
       "graphics"
     ],
+    "representation": null,
     "steamAppId": 1293160,
+    "psnStorePath": "concept/10002899",
     "ageRating": {
       "family": "mild",
       "concerns": [],
@@ -10512,7 +11050,9 @@
     "tags": [
       "social"
     ],
+    "representation": null,
     "steamAppId": 1243830,
+    "psnStorePath": "concept/10000899",
     "ageRating": {
       "family": "safe",
       "concerns": [],
@@ -10554,7 +11094,9 @@
     "tags": [
       "social"
     ],
+    "representation": null,
     "steamAppId": null,
+    "psnStorePath": "concept/10003354",
     "ageRating": null,
     "ratings": null,
     "description": "Sixty jellybeans stumble through obstacle courses until one is left standing. Free to play."
@@ -10570,7 +11112,9 @@
     "tags": [
       "social"
     ],
+    "representation": null,
     "steamAppId": null,
+    "psnStorePath": null,
     "ageRating": null,
     "ratings": null,
     "description": "Car football, still perfectly balanced a decade later, and free to play."
@@ -10587,7 +11131,9 @@
       "social",
       "cozy"
     ],
+    "representation": null,
     "steamAppId": null,
+    "psnStorePath": "product/UP4433-PPSA17221_00-MINECRAFTPS50000",
     "ageRating": null,
     "ratings": null,
     "description": "Build anything with anyone, in the block world that ate a generation."
@@ -10604,7 +11150,9 @@
       "social",
       "cozy"
     ],
+    "representation": null,
     "steamAppId": 105600,
+    "psnStorePath": null,
     "ageRating": {
       "family": "mild",
       "concerns": [],
@@ -10675,7 +11223,9 @@
     "tags": [
       "social"
     ],
+    "representation": null,
     "steamAppId": 548430,
+    "psnStorePath": "product/UP4664-PPSA02967_00-DRGFULLGAMEPS5US",
     "ageRating": {
       "family": "mild",
       "concerns": [],
@@ -10730,7 +11280,9 @@
       "social",
       "graphics"
     ],
+    "representation": null,
     "steamAppId": 582010,
+    "psnStorePath": null,
     "ageRating": {
       "family": "mild",
       "concerns": [],
@@ -10806,7 +11358,9 @@
     "tags": [
       "social"
     ],
+    "representation": null,
     "steamAppId": 1446780,
+    "psnStorePath": "concept/10005250",
     "ageRating": {
       "family": "mild",
       "concerns": [],
@@ -10875,7 +11429,9 @@
     "tags": [
       "social"
     ],
+    "representation": null,
     "steamAppId": 477160,
+    "psnStorePath": "product/UP4395-PPSA02431_00-HFFGAME000000PS5",
     "ageRating": {
       "family": "mild",
       "concerns": [],
@@ -10925,7 +11481,9 @@
     "tags": [
       "social"
     ],
+    "representation": null,
     "steamAppId": 285900,
+    "psnStorePath": null,
     "ageRating": {
       "family": "mild",
       "concerns": [],
@@ -10982,7 +11540,9 @@
     "tags": [
       "social"
     ],
+    "representation": null,
     "steamAppId": 996770,
+    "psnStorePath": null,
     "ageRating": {
       "family": "mild",
       "concerns": [],
@@ -11019,7 +11579,9 @@
     "tags": [
       "social"
     ],
+    "representation": null,
     "steamAppId": 945360,
+    "psnStorePath": "concept/10002811",
     "ageRating": {
       "family": "mild",
       "concerns": [],
@@ -11082,7 +11644,9 @@
     "tags": [
       "social"
     ],
+    "representation": null,
     "steamAppId": 962130,
+    "psnStorePath": "concept/10008048",
     "ageRating": {
       "family": "mild",
       "concerns": [],
@@ -11141,7 +11705,9 @@
       "social",
       "graphics"
     ],
+    "representation": null,
     "steamAppId": 2344520,
+    "psnStorePath": "product/UP0002-PPSA02442_00-DIVBASEGAME00000",
     "ageRating": {
       "family": "mature",
       "concerns": [
@@ -11221,7 +11787,9 @@
       "social",
       "graphics"
     ],
+    "representation": null,
     "steamAppId": null,
+    "psnStorePath": "concept/10000896",
     "ageRating": null,
     "ratings": null,
     "description": "A free, enormous anime-styled open world with drop-in co-op and a steady drip of new regions."
@@ -11237,7 +11805,9 @@
     "tags": [
       "social"
     ],
+    "representation": null,
     "steamAppId": 230410,
+    "psnStorePath": "product/UP2097-PPSA01737_00-WARFRAMEPS500000",
     "ageRating": {
       "family": "mature",
       "concerns": [
@@ -11315,7 +11885,9 @@
       "social",
       "graphics"
     ],
+    "representation": null,
     "steamAppId": 1085660,
+    "psnStorePath": null,
     "ageRating": {
       "family": "mild",
       "concerns": [],
@@ -11390,7 +11962,9 @@
     "tags": [
       "social"
     ],
+    "representation": null,
     "steamAppId": 397540,
+    "psnStorePath": null,
     "ageRating": {
       "family": "mature",
       "concerns": [
@@ -11466,7 +12040,9 @@
     "tags": [
       "social"
     ],
+    "representation": null,
     "steamAppId": 632360,
+    "psnStorePath": null,
     "ageRating": {
       "family": "mild",
       "concerns": [],
@@ -11533,7 +12109,9 @@
     "tags": [
       "social"
     ],
+    "representation": null,
     "steamAppId": 322330,
+    "psnStorePath": null,
     "ageRating": {
       "family": "mild",
       "concerns": [],
@@ -11596,7 +12174,9 @@
     "tags": [
       "social"
     ],
+    "representation": null,
     "steamAppId": 386940,
+    "psnStorePath": null,
     "ageRating": {
       "family": "safe",
       "concerns": [],
@@ -11650,7 +12230,9 @@
     "tags": [
       "social"
     ],
+    "representation": null,
     "steamAppId": 1812090,
+    "psnStorePath": "concept/10004502",
     "ageRating": {
       "family": "mild",
       "concerns": [],
@@ -11704,7 +12286,9 @@
     "tags": [
       "social"
     ],
+    "representation": null,
     "steamAppId": 431240,
+    "psnStorePath": null,
     "ageRating": {
       "family": "safe",
       "concerns": [],
@@ -11771,7 +12355,9 @@
     "tags": [
       "graphics"
     ],
+    "representation": null,
     "steamAppId": 870780,
+    "psnStorePath": null,
     "ageRating": {
       "family": "mature",
       "concerns": [
@@ -11848,7 +12434,9 @@
     "tags": [
       "graphics"
     ],
+    "representation": null,
     "steamAppId": 1196590,
+    "psnStorePath": "product/UP0102-PPSA01556_00-VILLAGEFULLGAMEX",
     "ageRating": {
       "family": "mature",
       "concerns": [
@@ -11915,7 +12503,9 @@
     "tags": [
       "graphics"
     ],
+    "representation": null,
     "steamAppId": 2050650,
+    "psnStorePath": "concept/10004473",
     "ageRating": {
       "family": "mature",
       "concerns": [
@@ -11979,7 +12569,9 @@
     "tags": [
       "graphics"
     ],
+    "representation": null,
     "steamAppId": 412020,
+    "psnStorePath": "product/UP2047-PPSA02395_00-METROEXODUS0GEN9",
     "ageRating": {
       "family": "mature",
       "concerns": [
@@ -12055,7 +12647,9 @@
     "tags": [
       "graphics"
     ],
+    "representation": null,
     "steamAppId": 1172380,
+    "psnStorePath": null,
     "ageRating": {
       "family": "mild",
       "concerns": [],
@@ -12128,7 +12722,9 @@
     "tags": [
       "graphics"
     ],
+    "representation": null,
     "steamAppId": 1593500,
+    "psnStorePath": "product/UP9000-CUSA07408_00-00000000GODOFWAR",
     "ageRating": {
       "family": "mature",
       "concerns": [
@@ -12195,7 +12791,9 @@
     "tags": [
       "graphics"
     ],
+    "representation": null,
     "steamAppId": 1174180,
+    "psnStorePath": "product/UP1004-CUSA03041_00-REDEMPTIONFULL02",
     "ageRating": {
       "family": "mature",
       "concerns": [
@@ -12278,7 +12876,9 @@
     "tags": [
       "graphics"
     ],
+    "representation": null,
     "steamAppId": 1259420,
+    "psnStorePath": "product/UP9000-PPSA28180_00-DAYSGONEREMASTER",
     "ageRating": {
       "family": "mature",
       "concerns": [
@@ -12349,7 +12949,9 @@
     "tags": [
       "graphics"
     ],
+    "representation": null,
     "steamAppId": 752590,
+    "psnStorePath": "product/UP4133-CUSA11032_00-APLAGUETALEGAME0",
     "ageRating": {
       "family": "mature",
       "concerns": [
@@ -12419,7 +13021,9 @@
     "tags": [
       "cozy"
     ],
+    "representation": null,
     "steamAppId": 1172450,
+    "psnStorePath": "concept/10000947",
     "ageRating": {
       "family": "safe",
       "concerns": [],
@@ -12461,7 +13065,9 @@
     "tags": [
       "cozy"
     ],
+    "representation": null,
     "steamAppId": 1574580,
+    "psnStorePath": "concept/10009589",
     "ageRating": {
       "family": "mild",
       "concerns": [],
@@ -12520,7 +13126,9 @@
     "tags": [
       "cozy"
     ],
+    "representation": null,
     "steamAppId": 600990,
+    "psnStorePath": null,
     "ageRating": {
       "family": "safe",
       "concerns": [],
@@ -12557,7 +13165,9 @@
     "tags": [
       "cozy"
     ],
+    "representation": null,
     "steamAppId": 962580,
+    "psnStorePath": "concept/10000222",
     "ageRating": {
       "family": "safe",
       "concerns": [],
@@ -12594,7 +13204,9 @@
     "tags": [
       "cozy"
     ],
+    "representation": null,
     "steamAppId": 555150,
+    "psnStorePath": null,
     "ageRating": {
       "family": "mild",
       "concerns": [],
@@ -12636,7 +13248,9 @@
       "cozy",
       "graphics"
     ],
+    "representation": null,
     "steamAppId": 866140,
+    "psnStorePath": null,
     "ageRating": {
       "family": "mild",
       "concerns": [],
@@ -12693,7 +13307,9 @@
       "cozy",
       "social"
     ],
+    "representation": null,
     "steamAppId": 983970,
+    "psnStorePath": "concept/10000983",
     "ageRating": {
       "family": "mature",
       "concerns": [
@@ -12752,7 +13368,9 @@
     "tags": [
       "social"
     ],
+    "representation": null,
     "steamAppId": 1552350,
+    "psnStorePath": "concept/10003120",
     "ageRating": {
       "family": "mature",
       "concerns": [
@@ -12797,7 +13415,9 @@
     "tags": [
       "graphics"
     ],
+    "representation": null,
     "steamAppId": 1809540,
+    "psnStorePath": "concept/10007919",
     "ageRating": {
       "family": "mild",
       "concerns": [],
@@ -12856,7 +13476,9 @@
     "tags": [
       "graphics"
     ],
+    "representation": null,
     "steamAppId": 1030300,
+    "psnStorePath": "concept/10005908",
     "ageRating": {
       "family": "mild",
       "concerns": [],
@@ -12923,7 +13545,9 @@
     "tags": [
       "graphics"
     ],
+    "representation": null,
     "steamAppId": 2679460,
+    "psnStorePath": "concept/10001029",
     "ageRating": {
       "family": "mature",
       "concerns": [
@@ -12998,7 +13622,9 @@
     "tags": [
       "graphics"
     ],
+    "representation": null,
     "steamAppId": 1687950,
+    "psnStorePath": "concept/10002771",
     "ageRating": {
       "family": "mature",
       "concerns": [
@@ -13080,7 +13706,9 @@
       "social",
       "cozy"
     ],
+    "representation": null,
     "steamAppId": 1621690,
+    "psnStorePath": "concept/10009534",
     "ageRating": {
       "family": "mild",
       "concerns": [],
@@ -13139,7 +13767,9 @@
     "tags": [
       "cozy"
     ],
+    "representation": null,
     "steamAppId": 1931010,
+    "psnStorePath": null,
     "ageRating": {
       "family": "safe",
       "concerns": [],
@@ -13189,7 +13819,9 @@
     "tags": [
       "cozy"
     ],
+    "representation": null,
     "steamAppId": 1136370,
+    "psnStorePath": "concept/10007449",
     "ageRating": {
       "family": "mild",
       "concerns": [],
@@ -13236,7 +13868,9 @@
       "cozy",
       "graphics"
     ],
+    "representation": null,
     "steamAppId": 1213700,
+    "psnStorePath": null,
     "ageRating": {
       "family": "mild",
       "concerns": [],
@@ -13296,7 +13930,9 @@
       "cozy",
       "social"
     ],
+    "representation": null,
     "steamAppId": 1072420,
+    "psnStorePath": null,
     "ageRating": {
       "family": "mild",
       "concerns": [],
@@ -13340,7 +13976,9 @@
     "tags": [
       "graphics"
     ],
+    "representation": null,
     "steamAppId": 1903340,
+    "psnStorePath": "concept/10008503",
     "ageRating": {
       "family": "mature",
       "concerns": [
@@ -13418,7 +14056,9 @@
     "ps5Upgrade": "PS5 Only",
     "platform": "PS5",
     "tags": [],
+    "representation": null,
     "steamAppId": 1569580,
+    "psnStorePath": "concept/10012002",
     "ageRating": {
       "family": "mild",
       "concerns": [],
@@ -13490,7 +14130,9 @@
       "social",
       "graphics"
     ],
+    "representation": null,
     "steamAppId": 2001120,
+    "psnStorePath": "concept/10005449",
     "ageRating": {
       "family": "mature",
       "concerns": [
@@ -13560,7 +14202,9 @@
     "tags": [
       "cozy"
     ],
+    "representation": null,
     "steamAppId": 1299460,
+    "psnStorePath": "concept/10011513",
     "ageRating": {
       "family": "mild",
       "concerns": [],
@@ -13614,7 +14258,9 @@
     "tags": [
       "graphics"
     ],
+    "representation": null,
     "steamAppId": 1614440,
+    "psnStorePath": "concept/10008977",
     "ageRating": {
       "family": "mild",
       "concerns": [],
@@ -13669,7 +14315,9 @@
       "social",
       "graphics"
     ],
+    "representation": null,
     "steamAppId": 2246340,
+    "psnStorePath": "concept/10005176",
     "ageRating": {
       "family": "mild",
       "concerns": [],
@@ -13742,9 +14390,17 @@
     "ps5Upgrade": "PS5 Only",
     "platform": "PS5",
     "tags": [
-      "cozy"
+      "cozy",
+      "queer"
+    ],
+    "representation": [
+      {
+        "kind": "queer",
+        "note": "Tara can romance women or men among the island cast."
+      }
     ],
     "steamAppId": 1896700,
+    "psnStorePath": "concept/10013675",
     "ageRating": {
       "family": "mild",
       "concerns": [],
@@ -13795,7 +14451,9 @@
       "graphics",
       "social"
     ],
+    "representation": null,
     "steamAppId": 1392860,
+    "psnStorePath": "concept/10003713",
     "ageRating": {
       "family": "mature",
       "concerns": [
@@ -13872,7 +14530,9 @@
       "cozy",
       "social"
     ],
+    "representation": null,
     "steamAppId": 2993780,
+    "psnStorePath": "concept/10013482",
     "ageRating": {
       "family": "mild",
       "concerns": [],
@@ -13919,7 +14579,9 @@
     "tags": [
       "graphics"
     ],
+    "representation": null,
     "steamAppId": 1145350,
+    "psnStorePath": "concept/10018449",
     "ageRating": {
       "family": "mature",
       "concerns": [
@@ -13984,7 +14646,9 @@
     "tags": [
       "cozy"
     ],
+    "representation": null,
     "steamAppId": 2185060,
+    "psnStorePath": null,
     "ageRating": {
       "family": "mild",
       "concerns": [],
@@ -14041,7 +14705,9 @@
     "tags": [
       "cozy"
     ],
+    "representation": null,
     "steamAppId": 2016460,
+    "psnStorePath": null,
     "ageRating": {
       "family": "mild",
       "concerns": [],
@@ -14092,7 +14758,9 @@
     "tags": [
       "cozy"
     ],
+    "representation": null,
     "steamAppId": 2133760,
+    "psnStorePath": "concept/10016208",
     "ageRating": {
       "family": "safe",
       "concerns": [],
@@ -14152,7 +14820,9 @@
       "cozy",
       "graphics"
     ],
+    "representation": null,
     "steamAppId": 3047750,
+    "psnStorePath": "concept/10013966",
     "ageRating": {
       "family": "safe",
       "concerns": [],
@@ -14202,7 +14872,9 @@
     "tags": [
       "cozy"
     ],
+    "representation": null,
     "steamAppId": 2508780,
+    "psnStorePath": "concept/10010859",
     "ageRating": {
       "family": "safe",
       "concerns": [],
@@ -14245,7 +14917,9 @@
       "cozy",
       "social"
     ],
+    "representation": null,
     "steamAppId": 2864560,
+    "psnStorePath": "concept/10010244",
     "ageRating": {
       "family": "mild",
       "concerns": [],
@@ -14292,5 +14966,161 @@
       "asOf": "2026-09-07"
     },
     "description": "Farm and fight across four seasonal villages in a Japanese-styled Rune Factory built around restoring blighted land."
+  },
+  {
+    "id": "hellblade-senuas-sacrifice",
+    "title": "Hellblade: Senua's Sacrifice",
+    "genre": "Action",
+    "artStyle": "Photorealistic",
+    "protagonist": "Female",
+    "ps5Upgrade": "Backwards Compatible",
+    "platform": "PS4",
+    "tags": [
+      "graphics",
+      "disability"
+    ],
+    "representation": [
+      {
+        "kind": "disability",
+        "note": "Senua lives with psychosis, developed with neuroscientists and people who experience it."
+      }
+    ],
+    "steamAppId": 414340,
+    "psnStorePath": "concept/10013503",
+    "ageRating": {
+      "family": "mature",
+      "concerns": [
+        "Blood and Gore",
+        "Intense Violence",
+        "Nudity"
+      ],
+      "tier": "mature",
+      "source": "ESRB",
+      "rating": "M",
+      "official": true,
+      "esrb": "M",
+      "pegi": "18",
+      "descriptors": [
+        "Violence",
+        "Blood and Gore",
+        "Intense Violence",
+        "Nudity",
+        "Strong Language"
+      ],
+      "notes": null
+    },
+    "ratings": {
+      "critic": 83,
+      "user": {
+        "percentPositive": 90,
+        "total": 76547,
+        "label": "Very Positive"
+      },
+      "pros": [
+        {
+          "label": "Combat and controls",
+          "mentions": 20
+        },
+        {
+          "label": "Story and writing",
+          "mentions": 18
+        },
+        {
+          "label": "Soundtrack",
+          "mentions": 13
+        },
+        {
+          "label": "Atmosphere",
+          "mentions": 8
+        }
+      ],
+      "cons": [
+        {
+          "label": "Frustrating difficulty",
+          "mentions": 3
+        },
+        {
+          "label": "Repetitive",
+          "mentions": 3
+        }
+      ],
+      "asOf": "2026-09-07"
+    },
+    "description": "A Pict warrior crosses a Norse underworld while living with psychosis, built with neuroscientists and people who experience it."
+  },
+  {
+    "id": "beyond-eyes",
+    "title": "Beyond Eyes",
+    "genre": "Exploration",
+    "artStyle": "Watercolor",
+    "protagonist": "Female",
+    "ps5Upgrade": "Backwards Compatible",
+    "platform": "PS4",
+    "tags": [
+      "cozy",
+      "disability"
+    ],
+    "representation": [
+      {
+        "kind": "disability",
+        "note": "Rae is blind, and the world only paints itself in as far as her other senses reach."
+      }
+    ],
+    "steamAppId": null,
+    "psnStorePath": null,
+    "ageRating": null,
+    "ratings": null,
+    "description": "Rae, a blind ten-year-old, feels her way through a watercolour world that paints itself in only as far as her other senses reach."
+  },
+  {
+    "id": "perception",
+    "title": "Perception",
+    "genre": "Mystery",
+    "artStyle": "3D",
+    "protagonist": "Female",
+    "ps5Upgrade": "Backwards Compatible",
+    "platform": "PS4",
+    "tags": [
+      "disability"
+    ],
+    "representation": [
+      {
+        "kind": "disability",
+        "note": "Cassie is blind and navigates entirely by echolocation."
+      }
+    ],
+    "steamAppId": 426310,
+    "psnStorePath": null,
+    "ageRating": {
+      "family": "mature",
+      "concerns": [
+        "Sexual Themes",
+        "Sexuelle Inhalte"
+      ],
+      "tier": "mature",
+      "source": "ESRB",
+      "rating": "M",
+      "official": true,
+      "esrb": "M",
+      "pegi": "16",
+      "descriptors": [
+        "Violence",
+        "Strong Language",
+        "Sexual Themes"
+      ],
+      "notes": "Violence\r\nStrong Language\r\nSexual Themes"
+    },
+    "ratings": {
+      "critic": null,
+      "user": {
+        "percentPositive": 73,
+        "total": 634,
+        "label": "Mostly Positive"
+      },
+      "pros": [],
+      "cons": [],
+      "asOf": "2026-09-07"
+    },
+    "description": "Cassie, who is blind, explores a haunted New England mansion by echolocation, each sound briefly drawing the room around her."
   }
 ]

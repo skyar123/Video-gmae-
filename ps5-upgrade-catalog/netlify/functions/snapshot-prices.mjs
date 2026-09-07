@@ -28,7 +28,7 @@ export default async () => {
     for (let chunk = 0; chunk < chunkCount; chunk += 1) {
       const slice = catalog.slice(chunk * CHUNK_SIZE, (chunk + 1) * CHUNK_SIZE);
       const prices = await mapWithConcurrency(slice, 3, (game) =>
-        loadPsnPrice(game.psnConceptId, countryCode),
+        loadPsnPrice(game.psnStorePath, countryCode),
       );
       const games = slice.map((game, index) => ({
         id: game.id,
