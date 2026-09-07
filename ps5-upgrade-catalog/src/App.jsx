@@ -1467,7 +1467,7 @@ export default function App() {
               <input
                 type="search"
                 aria-label="Search titles"
-                placeholder="Search 245 games..."
+                placeholder={`Search ${gamesData.length} games...`}
                 className="w-full rounded-full border border-slate-300 bg-white py-1.5 pl-8 pr-3 text-sm outline-none transition-all duration-200 focus:border-indigo-500 focus:ring-2 focus:ring-indigo-500"
                 value={filters.q}
                 onChange={(event) => set('q', event.target.value)}

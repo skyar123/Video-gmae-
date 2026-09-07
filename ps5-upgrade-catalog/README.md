@@ -1,12 +1,12 @@
 # PS4 to PS5 Upgrade Catalog
 
-A filterable catalog of 245 PlayStation games — 199 PS4 titles with a PS5 upgrade
-path, plus 46 PS5-only titles — with live artwork, trailers and sale prices pulled
+A filterable catalog of 254 PlayStation games — 201 PS4 titles with a PS5 upgrade
+path, plus 53 PS5-only titles — with live artwork, trailers and sale prices pulled
 in at runtime.
 
 ## What it does
 
-- **245 games** in `src/games.json`, each with `id`, `title`, `genre`, `artStyle`,
+- **254 games** in `src/games.json`, each with `id`, `title`, `genre`, `artStyle`,
   `protagonist`, `ps5Upgrade` and `description`, plus `platform` (`PS4` or `PS5`),
   `tags` for the curated collections, a `steamAppId` used to load artwork before
   the live request lands, and `ratings` (critic score, player score, pros, cons).
@@ -130,7 +130,7 @@ least two weeks of observation behind it.
 ## Is it kid friendly?
 
 Every card carries a verdict — Great for kids, Fine for most kids, Mature content,
-or Not rated — and a toggle filters to the first two, which covers 170 of the 245
+or Not rated — and a toggle filters to the first two, which covers 177 of the 254
 games.
 
 The verdict is judged on **content, not the age number**, because those are
@@ -159,7 +159,7 @@ Two numbers sit beside each other on every card: the **critic score** from
 Metacritic (as carried by the storefront) and the **player score**, the share of
 all player reviews that are positive, with the total review count in the tooltip.
 Either is omitted rather than guessed when the storefront has no figure. Of the
-245 games, 234 have a player score and 148 a critic score.
+254 games, 243 have a player score and 148 a critic score.
 
 Pros and cons are counted from the review corpus, not written by us:
 
@@ -209,7 +209,7 @@ netlify/functions/games.mjs            /api/games in production
 netlify/functions/snapshot-prices.mjs  nightly price snapshot
 vite.config.js             the same route during development
 src/App.jsx                the entire UI
-src/games.json             the 245-game catalog, each entry carrying its store id
+src/games.json             the 254-game catalog, each entry carrying its store id
 ```
 
 ## Adding games
@@ -224,7 +224,7 @@ import { resolveMany } from './api/steam.mjs';
 Runtime never searches the storefront — it only fetches by a baked id — so a bad
 match is caught while baking rather than shipped to readers. An entry with
 `steamAppId: null` renders a lettered gradient and no price, which is correct for
-console exclusives and for games sold outside Steam. Eleven of the 229 are in that
+console exclusives and for games sold outside Steam. Eleven of the 254 are in that
 state: PlayStation exclusives such as Astro Bot, Demon's Souls and Gran Turismo 7,
 and Epic-store titles such as Rocket League, Fall Guys and Genshin Impact. Those
 also have no ratings, since the ratings come from the same storefront.

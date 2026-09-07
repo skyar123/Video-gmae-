@@ -13782,5 +13782,515 @@
       "asOf": "2026-09-06"
     },
     "description": "Farm by day and join the local coven by night, with a fully voice-acted island cast."
+  },
+  {
+    "id": "little-nightmares-3",
+    "title": "Little Nightmares III",
+    "genre": "Platformer",
+    "artStyle": "Stylized",
+    "protagonist": "Ensemble",
+    "ps5Upgrade": "PS4 & PS5 Cross-Buy",
+    "platform": "PS4",
+    "tags": [
+      "graphics",
+      "social"
+    ],
+    "steamAppId": 1392860,
+    "ageRating": {
+      "family": "mature",
+      "concerns": [
+        "Blood and Gore"
+      ],
+      "tier": "teen",
+      "source": "ESRB",
+      "rating": "T",
+      "official": true,
+      "esrb": "T",
+      "pegi": "16",
+      "descriptors": [
+        "Violence",
+        "Blood and Gore"
+      ],
+      "notes": "This Game may contain content not appropriate for all ages: Unrealistic Violence, Fear, Depiction of Suicide"
+    },
+    "ratings": {
+      "critic": null,
+      "user": {
+        "percentPositive": 47,
+        "total": 21017,
+        "label": "Mixed"
+      },
+      "pros": [
+        {
+          "label": "Story and writing",
+          "mentions": 10
+        },
+        {
+          "label": "Soundtrack",
+          "mentions": 9
+        },
+        {
+          "label": "Art and visuals",
+          "mentions": 7
+        },
+        {
+          "label": "Atmosphere",
+          "mentions": 6
+        }
+      ],
+      "cons": [
+        {
+          "label": "Bugs and crashes",
+          "mentions": 20
+        },
+        {
+          "label": "Clunky controls",
+          "mentions": 8
+        },
+        {
+          "label": "Repetitive",
+          "mentions": 7
+        },
+        {
+          "label": "Overpriced",
+          "mentions": 5
+        }
+      ],
+      "asOf": "2026-09-07"
+    },
+    "description": "Low and Alone cross the Nowhere together, with online co-op bringing a second player into the series for the first time."
+  },
+  {
+    "id": "fantasy-life-i",
+    "title": "Fantasy Life i: The Girl Who Steals Time",
+    "genre": "Life Sim",
+    "artStyle": "Cel-shaded",
+    "protagonist": "Custom",
+    "ps5Upgrade": "PS4 & PS5 Cross-Buy",
+    "platform": "PS4",
+    "tags": [
+      "cozy",
+      "social"
+    ],
+    "steamAppId": 2993780,
+    "ageRating": {
+      "family": "mild",
+      "concerns": [],
+      "tier": "teen",
+      "source": "DJCTQ",
+      "rating": "14",
+      "official": false,
+      "esrb": null,
+      "pegi": null,
+      "descriptors": [],
+      "notes": null
+    },
+    "ratings": {
+      "critic": null,
+      "user": {
+        "percentPositive": 92,
+        "total": 13525,
+        "label": "Very Positive"
+      },
+      "pros": [
+        {
+          "label": "Story and writing",
+          "mentions": 4
+        }
+      ],
+      "cons": [
+        {
+          "label": "Repetitive",
+          "mentions": 3
+        }
+      ],
+      "asOf": "2026-09-07"
+    },
+    "description": "Switch freely between twelve lives — farmer, cook, paladin, angler — while rebuilding a town across two time periods."
+  },
+  {
+    "id": "hades-2",
+    "title": "Hades II",
+    "genre": "Action",
+    "artStyle": "Hand-drawn",
+    "protagonist": "Female",
+    "ps5Upgrade": "PS5 Only",
+    "platform": "PS5",
+    "tags": [
+      "graphics"
+    ],
+    "steamAppId": 1145350,
+    "ageRating": {
+      "family": "mature",
+      "concerns": [
+        "Conteúdo sexual"
+      ],
+      "tier": "teen",
+      "source": "DJCTQ",
+      "rating": "14",
+      "official": true,
+      "esrb": null,
+      "pegi": null,
+      "descriptors": [],
+      "notes": null
+    },
+    "ratings": {
+      "critic": 94,
+      "user": {
+        "percentPositive": 96,
+        "total": 123077,
+        "label": "Overwhelmingly Positive"
+      },
+      "pros": [
+        {
+          "label": "Story and writing",
+          "mentions": 43
+        },
+        {
+          "label": "Soundtrack",
+          "mentions": 26
+        },
+        {
+          "label": "Combat and controls",
+          "mentions": 26
+        },
+        {
+          "label": "Art and visuals",
+          "mentions": 16
+        }
+      ],
+      "cons": [
+        {
+          "label": "Repetitive",
+          "mentions": 4
+        },
+        {
+          "label": "Frustrating difficulty",
+          "mentions": 3
+        }
+      ],
+      "asOf": "2026-09-07"
+    },
+    "description": "Melinoe fights up from the underworld and down from the surface, with a broader arsenal and a far larger cast than the first."
+  },
+  {
+    "id": "two-point-museum",
+    "title": "Two Point Museum",
+    "genre": "Management",
+    "artStyle": "3D",
+    "protagonist": "Custom",
+    "ps5Upgrade": "PS5 Only",
+    "platform": "PS5",
+    "tags": [
+      "cozy"
+    ],
+    "steamAppId": 2185060,
+    "ageRating": {
+      "family": "mild",
+      "concerns": [],
+      "tier": "everyone",
+      "source": "ESRB",
+      "rating": "E",
+      "official": true,
+      "esrb": "E",
+      "pegi": "3",
+      "descriptors": [
+        "Mild Language",
+        "Crude Humor"
+      ],
+      "notes": null
+    },
+    "ratings": {
+      "critic": 84,
+      "user": {
+        "percentPositive": 95,
+        "total": 13369,
+        "label": "Overwhelmingly Positive"
+      },
+      "pros": [
+        {
+          "label": "Soundtrack",
+          "mentions": 14
+        },
+        {
+          "label": "Story and writing",
+          "mentions": 12
+        },
+        {
+          "label": "Combat and controls",
+          "mentions": 10
+        },
+        {
+          "label": "Relaxing to play",
+          "mentions": 9
+        }
+      ],
+      "cons": [],
+      "asOf": "2026-09-07"
+    },
+    "description": "Curate exhibits, send experts on expeditions and keep the school groups moving, in the third Two Point sim."
+  },
+  {
+    "id": "tales-of-the-shire",
+    "title": "Tales of the Shire",
+    "genre": "Life Sim",
+    "artStyle": "3D",
+    "protagonist": "Custom",
+    "ps5Upgrade": "PS5 Only",
+    "platform": "PS5",
+    "tags": [
+      "cozy"
+    ],
+    "steamAppId": 2016460,
+    "ageRating": {
+      "family": "mild",
+      "concerns": [],
+      "tier": "everyone10",
+      "source": "DJCTQ",
+      "rating": "10",
+      "official": false,
+      "esrb": null,
+      "pegi": null,
+      "descriptors": [],
+      "notes": null
+    },
+    "ratings": {
+      "critic": null,
+      "user": {
+        "percentPositive": 82,
+        "total": 3782,
+        "label": "Very Positive"
+      },
+      "pros": [
+        {
+          "label": "Relaxing to play",
+          "mentions": 6
+        },
+        {
+          "label": "Soundtrack",
+          "mentions": 3
+        }
+      ],
+      "cons": [
+        {
+          "label": "Repetitive",
+          "mentions": 3
+        }
+      ],
+      "asOf": "2026-09-07"
+    },
+    "description": "Live as a hobbit in Bywater: cook, garden, fish and feed your neighbours, with no quest to save anything."
+  },
+  {
+    "id": "tiny-bookshop",
+    "title": "Tiny Bookshop",
+    "genre": "Management",
+    "artStyle": "Hand-drawn",
+    "protagonist": "Female",
+    "ps5Upgrade": "PS5 Only",
+    "platform": "PS5",
+    "tags": [
+      "cozy"
+    ],
+    "steamAppId": 2133760,
+    "ageRating": {
+      "family": "safe",
+      "concerns": [],
+      "tier": "everyone",
+      "source": "DJCTQ",
+      "rating": "L",
+      "official": true,
+      "esrb": null,
+      "pegi": null,
+      "descriptors": [],
+      "notes": null
+    },
+    "ratings": {
+      "critic": null,
+      "user": {
+        "percentPositive": 96,
+        "total": 7726,
+        "label": "Overwhelmingly Positive"
+      },
+      "pros": [
+        {
+          "label": "Relaxing to play",
+          "mentions": 60
+        },
+        {
+          "label": "Story and writing",
+          "mentions": 36
+        },
+        {
+          "label": "Art and visuals",
+          "mentions": 14
+        },
+        {
+          "label": "Soundtrack",
+          "mentions": 13
+        }
+      ],
+      "cons": [
+        {
+          "label": "Repetitive",
+          "mentions": 4
+        }
+      ],
+      "asOf": "2026-09-07"
+    },
+    "description": "Park a book cart somewhere scenic each day, stock it by hand, and learn the town through what people ask for."
+  },
+  {
+    "id": "herdling",
+    "title": "Herdling",
+    "genre": "Exploration",
+    "artStyle": "Stylized",
+    "protagonist": "Creature/Animal",
+    "ps5Upgrade": "PS5 Only",
+    "platform": "PS5",
+    "tags": [
+      "cozy",
+      "graphics"
+    ],
+    "steamAppId": 3047750,
+    "ageRating": {
+      "family": "safe",
+      "concerns": [],
+      "tier": "everyone",
+      "source": "DJCTQ",
+      "rating": "L",
+      "official": false,
+      "esrb": null,
+      "pegi": null,
+      "descriptors": [],
+      "notes": null
+    },
+    "ratings": {
+      "critic": null,
+      "user": {
+        "percentPositive": 94,
+        "total": 1009,
+        "label": "Very Positive"
+      },
+      "pros": [
+        {
+          "label": "Art and visuals",
+          "mentions": 10
+        },
+        {
+          "label": "Soundtrack",
+          "mentions": 8
+        },
+        {
+          "label": "Combat and controls",
+          "mentions": 4
+        }
+      ],
+      "cons": [],
+      "asOf": "2026-09-07"
+    },
+    "description": "Guide a herd of shaggy antlered calicorns up a mountain, protecting them through weather and light environmental puzzles."
+  },
+  {
+    "id": "story-of-seasons-grand-bazaar",
+    "title": "Story of Seasons: Grand Bazaar",
+    "genre": "Life Sim",
+    "artStyle": "3D",
+    "protagonist": "Custom",
+    "ps5Upgrade": "PS5 Only",
+    "platform": "PS5",
+    "tags": [
+      "cozy"
+    ],
+    "steamAppId": 2508780,
+    "ageRating": {
+      "family": "safe",
+      "concerns": [],
+      "tier": "everyone",
+      "source": "ESRB",
+      "rating": "E",
+      "official": true,
+      "esrb": "E",
+      "pegi": null,
+      "descriptors": [],
+      "notes": null
+    },
+    "ratings": {
+      "critic": null,
+      "user": {
+        "percentPositive": 94,
+        "total": 4033,
+        "label": "Very Positive"
+      },
+      "pros": [
+        {
+          "label": "Story and writing",
+          "mentions": 10
+        }
+      ],
+      "cons": [],
+      "asOf": "2026-09-07"
+    },
+    "description": "Farm all week and sell at Saturday's bazaar, where what the town buys shapes what is worth growing next."
+  },
+  {
+    "id": "rune-factory-guardians-of-azuma",
+    "title": "Rune Factory: Guardians of Azuma",
+    "genre": "Life Sim",
+    "artStyle": "Cel-shaded",
+    "protagonist": "Custom",
+    "ps5Upgrade": "PS5 Only",
+    "platform": "PS5",
+    "tags": [
+      "cozy",
+      "social"
+    ],
+    "steamAppId": 2864560,
+    "ageRating": {
+      "family": "mild",
+      "concerns": [],
+      "tier": "teen",
+      "source": "ESRB",
+      "rating": "T",
+      "official": true,
+      "esrb": "T",
+      "pegi": null,
+      "descriptors": [
+        "Fantasy Violence",
+        "Language",
+        "Mild Suggestive Themes",
+        "Use of Alcohol"
+      ],
+      "notes": null
+    },
+    "ratings": {
+      "critic": 80,
+      "user": {
+        "percentPositive": 88,
+        "total": 3656,
+        "label": "Very Positive"
+      },
+      "pros": [
+        {
+          "label": "Story and writing",
+          "mentions": 8
+        },
+        {
+          "label": "Combat and controls",
+          "mentions": 5
+        },
+        {
+          "label": "Relaxing to play",
+          "mentions": 4
+        },
+        {
+          "label": "Soundtrack",
+          "mentions": 3
+        }
+      ],
+      "cons": [],
+      "asOf": "2026-09-07"
+    },
+    "description": "Farm and fight across four seasonal villages in a Japanese-styled Rune Factory built around restoring blighted land."
   }
 ]
