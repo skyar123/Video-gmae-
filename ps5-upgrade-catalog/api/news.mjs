@@ -11,9 +11,17 @@ const FEEDS = [
   { source: 'IGN', url: 'https://feeds.ign.com/ign/games-all', tone: 'general' },
   { source: 'Eurogamer', url: 'https://www.eurogamer.net/feed', tone: 'general' },
   { source: 'Rock Paper Shotgun', url: 'https://www.rockpapershotgun.com/feed', tone: 'general' },
+  { source: 'The Gamer', url: 'https://www.thegamer.com/feed/', tone: 'general' },
+  { source: 'GamesRadar', url: 'https://www.gamesradar.com/feeds/articletype/news/', tone: 'general' },
+  { source: 'VGC', url: 'https://www.videogameschronicle.com/feed/', tone: 'general' },
   { source: 'Push Square', url: 'https://www.pushsquare.com/feeds/latest', tone: 'playstation' },
   { source: 'PlayStation Blog', url: 'https://blog.playstation.com/feed/', tone: 'playstation' },
   { source: 'Gayming Magazine', url: 'https://gaymingmag.com/feed/', tone: 'queer' },
+  {
+    source: 'Autostraddle',
+    url: 'https://www.autostraddle.com/tag/video-games/feed/',
+    tone: 'queer',
+  },
 ];
 
 const CACHE_TTL_MS = 15 * 60 * 1000;
@@ -33,6 +41,14 @@ const decodeEntities = (value) =>
     .trim();
 
 const stripTags = (value) => decodeEntities(value.replace(/<[^>]*>/g, ' ')).replace(/\s+/g, ' ');
+
+/** WordPress feeds append their own footer to every excerpt. */
+const cleanSummary = (value) =>
+  stripTags(value)
+    .replace(/\s*The post .*? appeared first on .*$/i, '')
+    .replace(/\s*The post .*$/i, '')
+    .replace(/\s*(Continue reading|Read more).*$/i, '')
+    .trim();
 
 const tag = (block, name) => {
   const match = block.match(new RegExp(`<${name}[^>]*>([\\s\\S]*?)</${name}>`, 'i'));
@@ -61,7 +77,7 @@ function parseFeed(xml, feed) {
       title: stripTags(tag(block, 'title') ?? ''),
       link: link?.trim() ?? null,
       publishedAt: published ? new Date(published).toISOString() : null,
-      summary: stripTags(summaryRaw).slice(0, 220),
+      summary: cleanSummary(summaryRaw).slice(0, 220),
       image,
     };
   });
@@ -103,7 +119,18 @@ export async function loadNews() {
     balanced.push(item);
   }
 
-  const value = { items: balanced.slice(0, 24), fetchedAt: new Date().toISOString() };
+  // Queer outlets publish on a slower clock than the wire services, so their
+  // stories are kept even when they fall outside the newest few dozen.
+  const queer = items.filter(
+    (item) => item.tone === 'queer' && !balanced.some((kept) => kept.link === item.link),
+  );
+
+  const value = {
+    items: [...balanced.slice(0, 28), ...queer.slice(0, 4)].sort(
+      (a, b) => new Date(b.publishedAt ?? 0) - new Date(a.publishedAt ?? 0),
+    ),
+    fetchedAt: new Date().toISOString(),
+  };
   cache = { value, storedAt: Date.now() };
   return value;
 }

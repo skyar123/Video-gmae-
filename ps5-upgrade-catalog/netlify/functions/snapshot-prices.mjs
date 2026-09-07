@@ -3,6 +3,7 @@ import { CHUNK_SIZE, REVIEW_KEY_PREFIX, mapWithConcurrency } from '../../api/ste
 import { loadPsnPrice } from '../../api/psn.mjs';
 import { recordAndSummarize, saveBlob } from '../../api/history.mjs';
 import { loadReviewSignal } from '../../api/reviews.mjs';
+import { sweepForReleases } from '../../api/upcoming.mjs';
 
 /**
  * Nightly maintenance.
@@ -13,6 +14,9 @@ import { loadReviewSignal } from '../../api/reviews.mjs';
  *
  * Ratings: player scores and the pros and cons drawn from reviews ship baked
  * into the catalog. Refreshing them here keeps them current between deploys.
+ *
+ * Calendar: a slice of the store's concept IDs is swept each night, so newly
+ * announced games reach the release calendar without a deploy.
  *
  * Scheduled functions only run on published deploys.
  */
@@ -61,6 +65,12 @@ export default async () => {
     await saveBlob(`${REVIEW_KEY_PREFIX}${chunk}`, entries);
   }
   console.log('Refreshed review ratings');
+
+  const sweep = await sweepForReleases();
+  console.log(
+    `Swept concepts ${sweep.from}-${sweep.to}: ${sweep.discovered} upcoming found, ` +
+      `${sweep.seeds} seeds tracked, ${sweep.calendar} on the calendar`,
+  );
 };
 
 export const config = { schedule: '@daily' };

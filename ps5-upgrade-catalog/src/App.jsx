@@ -1659,7 +1659,16 @@ function relativeTime(iso) {
   return `${Math.round(minutes / 1440)}d ago`;
 }
 
+const NEWS_TONES = [
+  ['all', 'Everything'],
+  ['playstation', 'PlayStation'],
+  ['queer', 'Queer press'],
+];
+
 function NewsPanel({ items, status, onReload }) {
+  const [tone, setTone] = useState('all');
+  const shown = tone === 'all' ? items : items.filter((item) => item.tone === tone);
+
   if (status === 'loading' && items.length === 0) {
     return <PanelMessage icon={Loader2} spin label="Reading the feeds..." />;
   }
@@ -1674,8 +1683,31 @@ function NewsPanel({ items, status, onReload }) {
   }
 
   return (
-    <ul className="space-y-2">
-      {items.map((item) => (
+    <>
+      <div className="no-scrollbar mb-2 flex gap-1.5 overflow-x-auto">
+        {NEWS_TONES.map(([value, label]) => (
+          <button
+            key={value}
+            type="button"
+            onClick={() => setTone(value)}
+            aria-pressed={tone === value}
+            className={`shrink-0 rounded-full px-2.5 py-1 text-xs font-medium transition-all duration-200 ease-spring active:scale-95 ${
+              tone === value
+                ? 'bg-slate-900 text-white'
+                : 'bg-white text-slate-600 ring-1 ring-inset ring-slate-200 hover:bg-slate-100'
+            }`}
+          >
+            {label}
+          </button>
+        ))}
+      </div>
+
+      {shown.length === 0 && (
+        <PanelMessage icon={Newspaper} label="Nothing from that corner right now." />
+      )}
+
+      <ul className="space-y-2">
+        {shown.map((item) => (
         <li key={item.link}>
           <a
             href={item.link}
@@ -1712,8 +1744,9 @@ function NewsPanel({ items, status, onReload }) {
             </div>
           </a>
         </li>
-      ))}
-    </ul>
+        ))}
+      </ul>
+    </>
   );
 }
 

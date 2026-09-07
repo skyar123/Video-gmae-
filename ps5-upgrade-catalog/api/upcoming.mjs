@@ -14,6 +14,14 @@ const UA = 'Mozilla/5.0 (compatible; ps5-upgrade-catalog/1.0)';
 const READ_CAP = 190_000; // Release date, art, price and genres all land inside this.
 const CACHE_TTL_MS = 6 * 60 * 60 * 1000;
 const BLOB_KEY = 'upcoming/us.json';
+const SEEDS_KEY = 'upcoming/seeds.json';
+const CURSOR_KEY = 'upcoming/cursor.json';
+
+// The store keeps announcing things, so the ID space is swept a slice at a
+// time by the nightly job rather than frozen at whatever the last deploy knew.
+const SCAN_FROM = 10_006_000;
+const SCAN_TO = 10_030_000;
+const SCAN_WINDOW = 1_500;
 
 let memory = null;
 let inFlight = null;
@@ -126,8 +134,17 @@ async function mapWithConcurrency(items, limit, worker) {
   return results;
 }
 
+/** Baked seeds plus whatever the nightly sweep has since turned up. */
+async function currentSeeds() {
+  const baked = JSON.parse(await readFile(seedsUrl, 'utf8'));
+  const discovered = (await loadBlob(SEEDS_KEY))?.seeds ?? [];
+  const byId = new Map();
+  for (const seed of [...baked, ...discovered]) byId.set(seed.id, seed);
+  return [...byId.values()];
+}
+
 async function build() {
-  const seeds = JSON.parse(await readFile(seedsUrl, 'utf8'));
+  const seeds = await currentSeeds();
   const pages = await mapWithConcurrency(seeds, 8, async (seed) => {
     const html = await fetchConcept(seed.id);
     return html ? parseConcept(seed.id, html) : null;
@@ -171,4 +188,58 @@ export async function loadUpcoming() {
   });
 
   return inFlight;
+}
+
+/**
+ * One night's slice of the sweep. Concept IDs are dense enough to walk, and a
+ * window at a time keeps the job inside a scheduled function's budget while
+ * still covering the whole range over a handful of nights.
+ */
+export async function sweepForReleases() {
+  const cursorState = await loadBlob(CURSOR_KEY);
+  const from = cursorState?.next && cursorState.next < SCAN_TO ? cursorState.next : SCAN_FROM;
+  const to = Math.min(from + SCAN_WINDOW, SCAN_TO);
+
+  const ids = Array.from({ length: to - from }, (_, index) => from + index);
+  const found = await mapWithConcurrency(ids, 10, async (id) => {
+    const html = await fetchConcept(id);
+    return html ? parseConcept(id, html) : null;
+  });
+
+  const now = Date.now();
+  const fresh = found
+    .filter(Boolean)
+    .filter((game) => new Date(game.releaseDate).getTime() > now)
+    .map((game) => ({ id: game.id, title: game.title }));
+
+  // Seeds whose release has passed are dropped so the refresh stays cheap.
+  const kept = new Map();
+  for (const seed of (await loadBlob(SEEDS_KEY))?.seeds ?? []) kept.set(seed.id, seed);
+  for (const seed of fresh) kept.set(seed.id, seed);
+
+  const released = new Set(
+    ((await loadBlob(BLOB_KEY))?.games ?? [])
+      .filter((game) => new Date(game.releaseDate).getTime() <= now)
+      .map((game) => game.id),
+  );
+  for (const id of released) kept.delete(id);
+
+  await saveBlob(SEEDS_KEY, { seeds: [...kept.values()], sweptAt: new Date().toISOString() });
+  await saveBlob(CURSOR_KEY, { next: to >= SCAN_TO ? SCAN_FROM : to });
+
+  // Rebuild now, against the new seed list, so no reader pays for the refresh.
+  // The old games stay in place as a fallback until the rebuild succeeds.
+  memory = null;
+  const previous = (await loadBlob(BLOB_KEY))?.games ?? [];
+  await saveBlob(BLOB_KEY, { games: previous, fetchedAt: null });
+  const rebuilt = await loadUpcoming();
+
+  return {
+    scanned: ids.length,
+    from,
+    to,
+    discovered: fresh.length,
+    seeds: kept.size,
+    calendar: rebuilt.games.length,
+  };
 }
