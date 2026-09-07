@@ -14,8 +14,7 @@
 
 import baked from './store-index.json' with { type: 'json' };
 import { loadBlob } from './history.mjs';
-
-export const DISCOVERED_KEY = 'store/discovered.json';
+import { DISCOVERED_KEY } from './keys.mjs';
 
 const PAGE_SIZE = 36;
 const MERGE_TTL_MS = 30 * 60 * 1000;

@@ -10,7 +10,7 @@
 import bakedSeeds from './upcoming-seeds.json' with { type: 'json' };
 import snapshot from './upcoming-snapshot.json' with { type: 'json' };
 import { loadBlob, saveBlob } from './history.mjs';
-import { DISCOVERED_KEY } from './store.mjs';
+import { DISCOVERED_KEY } from './keys.mjs';
 
 const UA = 'Mozilla/5.0 (compatible; ps5-upgrade-catalog/1.0)';
 const READ_CAP = 190_000; // Release date, art, price and genres all land inside this.
