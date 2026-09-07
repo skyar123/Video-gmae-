@@ -34,6 +34,7 @@ import {
   X,
 } from 'lucide-react';
 import gamesData from './games.json';
+import creatorsData from './creators.json';
 
 /* ------------------------------------------------------------------ *
  * Filter options
@@ -179,6 +180,15 @@ function writeFiltersToUrl(filters) {
 }
 
 const WISHLIST_KEY = 'wishlist';
+
+function readFavouriteCreators() {
+  try {
+    const raw = localStorage.getItem(FAVOURITE_CREATORS_KEY);
+    return new Set(raw ? JSON.parse(raw) : []);
+  } catch {
+    return new Set();
+  }
+}
 
 function readWishlist() {
   try {
@@ -703,7 +713,18 @@ const trailerSearchLink = (title) =>
     `${title} gameplay PS5`,
   )}`;
 
-function GameModal({ game, live, pool, byTitle, wishlisted, onToggleWishlist, onOpen, onClose }) {
+function GameModal({
+  game,
+  live,
+  pool,
+  byTitle,
+  wishlisted,
+  favouriteCreators,
+  onToggleFavouriteCreator,
+  onToggleWishlist,
+  onOpen,
+  onClose,
+}) {
   const [selected, setSelected] = useState(null);
   const closeRef = useRef(null);
 
@@ -857,26 +878,23 @@ function GameModal({ game, live, pool, byTitle, wishlisted, onToggleWishlist, on
           <PricePanel game={game} live={live} />
           <PredictionPanel live={live} />
 
-          <div className="mt-6 flex flex-col gap-3 sm:flex-row">
+          <div className="mt-6">
             <a
               href={storeLink(game)}
               target="_blank"
               rel="noopener noreferrer"
-              className="flex flex-1 items-center justify-center gap-2 rounded-lg bg-indigo-600 px-4 py-2.5 font-medium text-white transition-colors hover:bg-indigo-700"
+              className="flex items-center justify-center gap-2 rounded-lg bg-indigo-600 px-4 py-2.5 font-medium text-white transition-transform duration-200 ease-spring hover:bg-indigo-700 active:scale-95"
             >
               <ExternalLink className="h-4 w-4" />
               PS Store
             </a>
-            <a
-              href={trailerSearchLink(game.title)}
-              target="_blank"
-              rel="noopener noreferrer"
-              className="flex flex-1 items-center justify-center gap-2 rounded-lg bg-rose-600 px-4 py-2.5 font-medium text-white transition-colors hover:bg-rose-700"
-            >
-              <CirclePlay className="h-4 w-4" />
-              More gameplay
-            </a>
           </div>
+
+          <WatchPanel
+            game={game}
+            favourites={favouriteCreators}
+            onToggleFavourite={onToggleFavouriteCreator}
+          />
 
           <SimilarGames game={game} pool={pool} byTitle={byTitle} onOpen={onOpen} />
         </div>
@@ -1127,6 +1145,125 @@ function EmptyState({ filters, wishlist, status, onClear }) {
       >
         Clear all filters
       </button>
+    </div>
+  );
+}
+
+/* ------------------------------------------------------------------ *
+ * Watch it first
+ * ------------------------------------------------------------------ */
+
+const FAVOURITE_CREATORS_KEY = 'favouriteCreators';
+
+/**
+ * YouTube lets you search inside a single channel, which turns "has this
+ * person played it" into one link rather than a search you have to sift.
+ */
+const creatorSearchLink = (handle, title) =>
+  `https://www.youtube.com/@${handle}/search?query=${encodeURIComponent(title)}`;
+
+const reviewSearchLink = (title) =>
+  `https://www.youtube.com/results?search_query=${encodeURIComponent(`${title} review`)}`;
+
+/**
+ * Rank creators for one game: the ones you starred first, then whoever
+ * covers this genre or this kind of game, then everyone else. Nobody is
+ * hidden — the order just saves you reading all nineteen every time.
+ */
+function rankCreators(game, favourites) {
+  return [...creatorsData]
+    .map((creator) => {
+      let score = 0;
+      if (favourites.has(creator.handle)) score += 100;
+      if (creator.focus.includes(game.genre)) score += 10;
+      for (const tag of creator.tags) if (game.tags?.includes(tag)) score += 4;
+      if (game.representation?.some((entry) => creator.tags.includes(entry.kind))) score += 6;
+      return { creator, score };
+    })
+    .sort((a, b) => b.score - a.score || a.creator.name.localeCompare(b.creator.name))
+    .map((entry) => ({ ...entry.creator, matched: entry.score > 0 }));
+}
+
+function WatchPanel({ game, favourites, onToggleFavourite }) {
+  // Everyone stays one click away: a genre guess is not good enough to decide
+  // who has actually played something. Ranking only sets the order.
+  const ranked = useMemo(() => rankCreators(game, favourites), [game, favourites]);
+
+  return (
+    <div className="mt-6 border-t border-slate-100 pt-5">
+      <h3 className="mb-3 text-sm font-semibold uppercase tracking-wider text-slate-400">
+        Watch it first
+      </h3>
+
+      <div className="mb-4 flex flex-col gap-2 sm:flex-row">
+        <a
+          href={reviewSearchLink(game.title)}
+          target="_blank"
+          rel="noopener noreferrer"
+          className="flex flex-1 items-center justify-center gap-2 rounded-lg bg-rose-600 px-4 py-2 text-sm font-medium text-white transition-transform duration-200 ease-spring hover:bg-rose-700 active:scale-95"
+        >
+          <CirclePlay className="h-4 w-4" />
+          Reviews
+        </a>
+        <a
+          href={trailerSearchLink(game.title)}
+          target="_blank"
+          rel="noopener noreferrer"
+          className="flex flex-1 items-center justify-center gap-2 rounded-lg bg-slate-800 px-4 py-2 text-sm font-medium text-white transition-transform duration-200 ease-spring hover:bg-slate-900 active:scale-95"
+        >
+          <CirclePlay className="h-4 w-4" />
+          Gameplay
+        </a>
+      </div>
+
+      <p className="mb-2 text-xs text-slate-500">
+        Jump straight to this game on a creator's channel. Star the ones you follow to pin them.
+      </p>
+
+      <ul className="max-h-72 space-y-1.5 overflow-y-auto pr-1">
+        {ranked.map((creator) => (
+          <li key={creator.handle} className="flex items-center gap-2">
+            <button
+              type="button"
+              onClick={() => onToggleFavourite(creator.handle)}
+              aria-pressed={favourites.has(creator.handle)}
+              aria-label={`${favourites.has(creator.handle) ? 'Unstar' : 'Star'} ${creator.name}`}
+              className={`shrink-0 rounded p-1 transition-transform duration-200 ease-spring active:scale-90 ${
+                favourites.has(creator.handle)
+                  ? 'text-amber-500'
+                  : 'text-slate-300 hover:text-slate-500'
+              }`}
+            >
+              <Star className={`h-4 w-4 ${favourites.has(creator.handle) ? 'fill-current' : ''}`} />
+            </button>
+            <a
+              href={creatorSearchLink(creator.handle, game.title)}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="group flex min-w-0 flex-1 items-center gap-2 rounded-lg px-2 py-1.5 transition-colors hover:bg-slate-50"
+            >
+              <span className="min-w-0">
+                <span className="flex flex-wrap items-baseline gap-x-2">
+                  <span className="text-sm font-medium text-slate-800 group-hover:text-indigo-600">
+                    {creator.name}
+                  </span>
+                  <span className="text-[11px] text-violet-600">{creator.identity}</span>
+                  {creator.matched && (
+                    <span className="text-[11px] text-slate-400">likely covered this</span>
+                  )}
+                </span>
+                <span className="block truncate text-xs text-slate-500">{creator.note}</span>
+              </span>
+              <ArrowUpRight className="ml-auto h-4 w-4 shrink-0 text-slate-300 group-hover:text-indigo-600" />
+            </a>
+          </li>
+        ))}
+      </ul>
+
+      <p className="mt-2 text-xs text-slate-400">
+        {ranked.length} creators, ordered by who most likely covered this. Every one opens their
+        channel searched for this game.
+      </p>
     </div>
   );
 }
@@ -1409,6 +1546,7 @@ function Select({ label, value, options, onChange }) {
 export default function App() {
   const [filters, setFilters] = useState(readFiltersFromUrl);
   const [wishlist, setWishlist] = useState(readWishlist);
+  const [favouriteCreators, setFavouriteCreators] = useState(readFavouriteCreators);
   const [activeGameId, setActiveGameId] = useState(null);
   const [sheetOpen, setSheetOpen] = useState(false);
   const scrolled = useScrollCollapse();
@@ -1450,6 +1588,20 @@ export default function App() {
     const onPopState = () => setFilters(readFiltersFromUrl());
     window.addEventListener('popstate', onPopState);
     return () => window.removeEventListener('popstate', onPopState);
+  }, []);
+
+  const toggleFavouriteCreator = useCallback((handle) => {
+    setFavouriteCreators((previous) => {
+      const next = new Set(previous);
+      if (next.has(handle)) next.delete(handle);
+      else next.add(handle);
+      try {
+        localStorage.setItem(FAVOURITE_CREATORS_KEY, JSON.stringify([...next]));
+      } catch {
+        // Storage is a convenience; the in-memory set still works.
+      }
+      return next;
+    });
   }, []);
 
   const toggleWishlist = useCallback((id) => {
@@ -1902,6 +2054,8 @@ export default function App() {
           pool={visiblePool}
           byTitle={byTitle}
           onOpen={setActiveGameId}
+          favouriteCreators={favouriteCreators}
+          onToggleFavouriteCreator={toggleFavouriteCreator}
           wishlisted={wishlist.has(activeGame.id)}
           onToggleWishlist={() => toggleWishlist(activeGame.id)}
           onClose={() => setActiveGameId(null)}
