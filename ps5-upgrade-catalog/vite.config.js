@@ -2,6 +2,8 @@ import { readFileSync } from 'node:fs';
 import { defineConfig } from 'vite';
 import react from '@vitejs/plugin-react';
 import { CACHE_HEADER, handleGamesRequest } from './api/steam.mjs';
+import { loadNews } from './api/news.mjs';
+import { loadUpcoming } from './api/upcoming.mjs';
 
 /**
  * Serves the same /api/games responses as the Netlify function during
@@ -29,10 +31,30 @@ function gamesApiPlugin() {
     });
   };
 
+  const mountJson = (server, path, load) => {
+    server.middlewares.use(path, async (request, response) => {
+      try {
+        const payload = await load();
+        response.setHeader('content-type', 'application/json; charset=utf-8');
+        response.end(JSON.stringify(payload));
+      } catch (error) {
+        response.statusCode = 502;
+        response.setHeader('content-type', 'application/json; charset=utf-8');
+        response.end(JSON.stringify({ error: String(error?.message || error) }));
+      }
+    });
+  };
+
+  const mountAll = (server) => {
+    mount(server);
+    mountJson(server, '/api/news', loadNews);
+    mountJson(server, '/api/upcoming', loadUpcoming);
+  };
+
   return {
     name: 'games-api',
-    configureServer: mount,
-    configurePreviewServer: mount,
+    configureServer: mountAll,
+    configurePreviewServer: mountAll,
   };
 }
 

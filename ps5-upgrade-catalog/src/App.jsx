@@ -10,7 +10,10 @@ import {
   ArrowUpRight,
   Baby,
   BadgePercent,
+  CalendarDays,
   ChevronDown,
+  ChevronRight,
+  CircleCheck,
   CirclePlay,
   Dices,
   ExternalLink,
@@ -20,6 +23,7 @@ import {
   Info,
   LayoutGrid,
   Loader2,
+  Newspaper,
   RefreshCw,
   Rows3,
   Search,
@@ -132,6 +136,7 @@ const DEFAULT_FILTERS = {
   region: 'US',
   collection: 'all',
   kidFriendly: false,
+  owned: 'any',
   view: 'grid',
   // PS5-only titles are out of the default view: this is a PS4 upgrade
   // catalog first, and they need different hardware.
@@ -154,6 +159,7 @@ function readFiltersFromUrl() {
     region: (value('cc', localStorage.getItem('region') || 'US') || 'US').toUpperCase(),
     collection: value('view', 'all'),
     kidFriendly: params.get('kids') === '1',
+    owned: value('owned', 'any'),
     view: params.get('mode') === 'feed' ? 'feed' : 'grid',
     includePs5: params.get('ps5') === '1',
   };
@@ -173,6 +179,7 @@ function writeFiltersToUrl(filters) {
   if (filters.region !== 'US') params.set('cc', filters.region);
   if (filters.collection !== 'all') params.set('view', filters.collection);
   if (filters.kidFriendly) params.set('kids', '1');
+  if (filters.owned !== 'any') params.set('owned', filters.owned);
   if (filters.view === 'feed') params.set('mode', 'feed');
   if (filters.includePs5) params.set('ps5', '1');
   const query = params.toString();
@@ -180,10 +187,20 @@ function writeFiltersToUrl(filters) {
 }
 
 const WISHLIST_KEY = 'wishlist';
+const LIBRARY_KEY = 'library';
 
 function readFavouriteCreators() {
   try {
     const raw = localStorage.getItem(FAVOURITE_CREATORS_KEY);
+    return new Set(raw ? JSON.parse(raw) : []);
+  } catch {
+    return new Set();
+  }
+}
+
+function readLibrary() {
+  try {
+    const raw = localStorage.getItem(LIBRARY_KEY);
     return new Set(raw ? JSON.parse(raw) : []);
   } catch {
     return new Set();
@@ -719,6 +736,8 @@ function GameModal({
   pool,
   byTitle,
   wishlisted,
+  owned,
+  onToggleOwned,
   favouriteCreators,
   onToggleFavouriteCreator,
   onToggleWishlist,
@@ -845,7 +864,10 @@ function GameModal({
             <h2 id="game-modal-title" className="pr-6 text-2xl font-bold text-slate-900">
               {game.title}
             </h2>
-            <WishlistButton wishlisted={wishlisted} onToggle={onToggleWishlist} withLabel />
+            <div className="flex shrink-0 items-center gap-1">
+              <WishlistButton wishlisted={wishlisted} onToggle={onToggleWishlist} withLabel />
+              <OwnedButton owned={owned} onToggle={onToggleOwned} withLabel />
+            </div>
           </div>
 
           <div className="mt-5 grid grid-cols-3 gap-4">
@@ -1051,11 +1073,39 @@ function WishlistButton({ wishlisted, onToggle, withLabel = false }) {
   );
 }
 
+/**
+ * Marks a game as already owned. Kept next to the wishlist heart because the
+ * two are the same decision from opposite ends: one is "someday", the other is
+ * "already done" — and either way the game should stop competing for attention.
+ */
+function OwnedButton({ owned, onToggle, withLabel = false }) {
+  return (
+    <button
+      type="button"
+      onClick={(event) => {
+        event.stopPropagation();
+        onToggle();
+      }}
+      aria-pressed={owned}
+      aria-label={owned ? 'Remove from library' : 'Add to library'}
+      title={owned ? 'In your library' : 'Mark as owned'}
+      className={`inline-flex shrink-0 items-center gap-1.5 rounded-lg px-2 py-1.5 text-sm transition-colors ${
+        owned
+          ? 'bg-emerald-50 text-emerald-600 hover:bg-emerald-100'
+          : 'text-slate-400 hover:bg-slate-100 hover:text-slate-600'
+      }`}
+    >
+      <CircleCheck className="h-4 w-4" />
+      {withLabel && (owned ? 'In library' : 'I own it')}
+    </button>
+  );
+}
+
 /* ------------------------------------------------------------------ *
  * Card
  * ------------------------------------------------------------------ */
 
-function GameCard({ game, live, wishlisted, onToggleWishlist, onOpen }) {
+function GameCard({ game, live, wishlisted, owned, onToggleWishlist, onToggleOwned, onOpen }) {
   const prediction = live?.prediction;
   const ratings = live?.ratings ?? game.ratings;
   const showVerdict = prediction && (prediction.verdict === 'buy-now' || prediction.verdict === 'wait');
@@ -1074,9 +1124,15 @@ function GameCard({ game, live, wishlisted, onToggleWishlist, onOpen }) {
               <CirclePlay className="h-4 w-4" />
             </span>
           )}
-          {live?.price?.discountPercent > 0 && (
+          {live?.price?.discountPercent > 0 && !owned && (
             <span className="absolute left-2 top-2">
               <DiscountBadge price={live.price} />
+            </span>
+          )}
+          {owned && (
+            <span className="absolute left-2 top-2 inline-flex items-center gap-1 rounded-full bg-emerald-600 px-2 py-0.5 text-[11px] font-semibold text-white shadow-sm">
+              <CircleCheck className="h-3 w-3" />
+              Owned
             </span>
           )}
         </div>
@@ -1117,8 +1173,9 @@ function GameCard({ game, live, wishlisted, onToggleWishlist, onOpen }) {
         </div>
       </button>
 
-      <div className="absolute right-2 top-2">
+      <div className="absolute right-1.5 top-1.5 flex flex-col items-end gap-0.5 rounded-xl bg-white/75 p-0.5 backdrop-blur-sm">
         <WishlistButton wishlisted={wishlisted} onToggle={onToggleWishlist} />
+        <OwnedButton owned={owned} onToggle={onToggleOwned} />
       </div>
     </div>
   );
@@ -1383,7 +1440,7 @@ function SimilarGames({ game, pool, byTitle, onOpen }) {
  * has to look right and get out of the way — the art runs edge to edge and
  * the text sits over a gradient rather than in a panel.
  */
-function FeedSlide({ game, live, wishlisted, onToggleWishlist, onOpen }) {
+function FeedSlide({ game, live, wishlisted, owned, onToggleWishlist, onToggleOwned, onOpen }) {
   // The trailer plays only while this slide is the one on screen, muted, the
   // way a feed behaves. Anything off screen is torn down so a long scroll
   // never leaves a stack of decoding videos behind.
@@ -1508,6 +1565,17 @@ function FeedSlide({ game, live, wishlisted, onToggleWishlist, onOpen }) {
             </button>
             <button
               type="button"
+              onClick={onToggleOwned}
+              aria-pressed={owned}
+              aria-label={owned ? 'Remove from library' : 'Add to library'}
+              className={`rounded-full p-3 backdrop-blur transition-transform duration-200 ease-spring active:scale-90 ${
+                owned ? 'bg-emerald-600 text-white' : 'bg-white/15 text-white hover:bg-white/25'
+              }`}
+            >
+              <CircleCheck className="h-5 w-5" />
+            </button>
+            <button
+              type="button"
               onClick={onOpen}
               aria-label={`Details for ${game.title}`}
               className="rounded-full bg-white/15 p-3 text-white backdrop-blur transition-transform duration-200 ease-spring hover:bg-white/25 active:scale-90"
@@ -1535,6 +1603,348 @@ function FeedSlide({ game, live, wishlisted, onToggleWishlist, onOpen }) {
         </div>
       </div>
     </section>
+  );
+}
+
+/* ------------------------------------------------------------------ *
+ * Briefing: news + release calendar
+ * ------------------------------------------------------------------ */
+
+/**
+ * Both panels fetch on first open rather than on mount — nobody should pay for
+ * seven RSS feeds and a store crawl just to browse the catalog.
+ */
+function useDeferredEndpoint(url, active) {
+  const [state, setState] = useState({ status: 'idle', data: null });
+  const started = useRef(false);
+
+  const load = useCallback(
+    async (force = false) => {
+      if (started.current && !force) return;
+      started.current = true;
+      setState((previous) => ({ status: 'loading', data: force ? null : previous.data }));
+      try {
+        const response = await fetch(url, force ? { cache: 'reload' } : undefined);
+        if (!response.ok) throw new Error(String(response.status));
+        setState({ status: 'ready', data: await response.json() });
+      } catch {
+        setState({ status: 'error', data: null });
+      }
+    },
+    [url],
+  );
+
+  useEffect(() => {
+    if (!active) return;
+    // Kicking off the first fetch is the point of this effect.
+    // eslint-disable-next-line react/set-state-in-effect
+    load();
+  }, [active, load]);
+
+  return { ...state, reload: () => load(true) };
+}
+
+const TONE_STYLES = {
+  queer: 'bg-violet-100 text-violet-700',
+  playstation: 'bg-indigo-100 text-indigo-700',
+  general: 'bg-slate-100 text-slate-600',
+};
+
+function relativeTime(iso) {
+  if (!iso) return '';
+  const minutes = Math.round((Date.now() - new Date(iso).getTime()) / 60000);
+  if (!Number.isFinite(minutes) || minutes < 0) return '';
+  if (minutes < 60) return `${Math.max(minutes, 1)}m ago`;
+  if (minutes < 1440) return `${Math.round(minutes / 60)}h ago`;
+  return `${Math.round(minutes / 1440)}d ago`;
+}
+
+function NewsPanel({ items, status, onReload }) {
+  if (status === 'loading' && items.length === 0) {
+    return <PanelMessage icon={Loader2} spin label="Reading the feeds..." />;
+  }
+  if (items.length === 0) {
+    return (
+      <PanelMessage
+        icon={Newspaper}
+        label="No stories came back just now."
+        action={{ label: 'Try again', onClick: onReload }}
+      />
+    );
+  }
+
+  return (
+    <ul className="space-y-2">
+      {items.map((item) => (
+        <li key={item.link}>
+          <a
+            href={item.link}
+            target="_blank"
+            rel="noopener noreferrer"
+            className="flex gap-3 rounded-xl border border-slate-200 bg-white p-2.5 transition-all duration-200 ease-spring hover:-translate-y-0.5 hover:border-slate-300 hover:shadow-sm active:scale-[0.99]"
+          >
+            {item.image && (
+              <img
+                src={item.image}
+                alt=""
+                loading="lazy"
+                onError={(event) => {
+                  event.currentTarget.hidden = true;
+                }}
+                className="h-16 w-24 shrink-0 rounded-lg bg-slate-100 object-cover"
+              />
+            )}
+            <div className="min-w-0 flex-1">
+              <div className="mb-1 flex items-center gap-1.5 text-[11px] font-semibold">
+                <span className={`rounded px-1.5 py-0.5 ${TONE_STYLES[item.tone] ?? TONE_STYLES.general}`}>
+                  {item.source}
+                </span>
+                <span className="text-slate-400">{relativeTime(item.publishedAt)}</span>
+              </div>
+              <p className="line-clamp-2 text-sm font-semibold leading-snug text-slate-800">
+                {item.title}
+              </p>
+              {item.summary && (
+                <p className="mt-0.5 line-clamp-2 text-xs leading-relaxed text-slate-500">
+                  {item.summary}
+                </p>
+              )}
+            </div>
+          </a>
+        </li>
+      ))}
+    </ul>
+  );
+}
+
+const MONTH_LABEL = (iso) =>
+  new Date(iso).toLocaleDateString([], { month: 'long', year: 'numeric' });
+
+const daysUntil = (iso) =>
+  Math.ceil((new Date(iso).getTime() - Date.now()) / 86_400_000);
+
+/**
+ * Grouped by month so a long scroll still reads as a calendar rather than a
+ * list. The day block on the left is the anchor your eye follows down.
+ */
+function UpcomingPanel({ games, status, onReload, catalogTitles }) {
+  const months = useMemo(() => {
+    const groups = new Map();
+    for (const game of games) {
+      const key = MONTH_LABEL(game.releaseDate);
+      if (!groups.has(key)) groups.set(key, []);
+      groups.get(key).push(game);
+    }
+    return [...groups.entries()];
+  }, [games]);
+
+  if (status === 'loading' && games.length === 0) {
+    return <PanelMessage icon={Loader2} spin label="Checking the store calendar..." />;
+  }
+  if (games.length === 0) {
+    return (
+      <PanelMessage
+        icon={CalendarDays}
+        label="No dated releases came back."
+        action={{ label: 'Try again', onClick: onReload }}
+      />
+    );
+  }
+
+  return (
+    <div className="space-y-5">
+      {months.map(([month, entries]) => (
+        <section key={month}>
+          <h3 className="sticky top-0 z-10 -mx-1 mb-2 bg-slate-50/95 px-1 py-1 text-xs font-bold uppercase tracking-wider text-slate-400 backdrop-blur">
+            {month}
+          </h3>
+          <ul className="space-y-2">
+            {entries.map((game) => {
+              const date = new Date(game.releaseDate);
+              const away = daysUntil(game.releaseDate);
+              const owned = catalogTitles.has(game.title.toLowerCase());
+              return (
+                <li key={game.id}>
+                  <a
+                    href={game.storeUrl}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="flex items-stretch gap-3 rounded-xl border border-slate-200 bg-white p-2.5 transition-all duration-200 ease-spring hover:-translate-y-0.5 hover:border-slate-300 hover:shadow-sm active:scale-[0.99]"
+                  >
+                    <div className="flex w-12 shrink-0 flex-col items-center justify-center rounded-lg bg-slate-900 py-1.5 text-white">
+                      <span className="text-[10px] font-semibold uppercase tracking-wide text-white/60">
+                        {date.toLocaleDateString([], { month: 'short' })}
+                      </span>
+                      <span className="text-lg font-bold leading-none tabular-nums">
+                        {date.getDate()}
+                      </span>
+                    </div>
+
+                    {game.art && (
+                      <img
+                        src={game.art}
+                        alt=""
+                        loading="lazy"
+                        onError={(event) => {
+                          event.currentTarget.hidden = true;
+                        }}
+                        className="h-14 w-14 shrink-0 self-center rounded-lg bg-slate-100 object-cover"
+                      />
+                    )}
+
+                    <div className="min-w-0 flex-1">
+                      <p className="line-clamp-2 text-sm font-semibold leading-snug text-slate-800">
+                        {game.title}
+                      </p>
+                      <p className="truncate text-xs text-slate-500">
+                        {game.publisher}
+                        {game.genres?.length > 0 && ` · ${game.genres.join(', ')}`}
+                      </p>
+                      <div className="mt-1 flex flex-wrap items-center gap-1">
+                        <span className="rounded bg-slate-100 px-1.5 py-0.5 text-[11px] font-semibold text-slate-600">
+                          {game.platforms?.join(' / ') || 'PS5'}
+                        </span>
+                        {away <= 30 && (
+                          <span className="rounded bg-amber-100 px-1.5 py-0.5 text-[11px] font-semibold text-amber-700">
+                            {away <= 1 ? 'Tomorrow' : `in ${away} days`}
+                          </span>
+                        )}
+                        {game.price && (
+                          <span className="rounded bg-emerald-50 px-1.5 py-0.5 text-[11px] font-semibold text-emerald-700">
+                            {game.price}
+                          </span>
+                        )}
+                        {owned && (
+                          <span className="rounded bg-indigo-50 px-1.5 py-0.5 text-[11px] font-semibold text-indigo-700">
+                            In catalog
+                          </span>
+                        )}
+                      </div>
+                    </div>
+                    <ChevronRight className="mt-1 h-4 w-4 shrink-0 self-center text-slate-300" />
+                  </a>
+                </li>
+              );
+            })}
+          </ul>
+        </section>
+      ))}
+    </div>
+  );
+}
+
+function PanelMessage({ icon: Icon, label, spin = false, action }) {
+  return (
+    <div className="py-16 text-center text-slate-500">
+      <Icon className={`mx-auto mb-3 h-7 w-7 text-slate-300 ${spin ? 'animate-spin' : ''}`} />
+      <p className="text-sm">{label}</p>
+      {action && (
+        <button
+          type="button"
+          onClick={action.onClick}
+          className="mt-3 rounded-full bg-slate-900 px-4 py-1.5 text-sm font-medium text-white transition-transform duration-200 ease-spring active:scale-95"
+        >
+          {action.label}
+        </button>
+      )}
+    </div>
+  );
+}
+
+/**
+ * A slide-over rather than another view mode: news and dates are things you
+ * dip into and dismiss, and the catalog stays exactly where you left it.
+ */
+function BriefingDrawer({ open, tab, onTab, onClose, catalogTitles }) {
+  const news = useDeferredEndpoint('/api/news', open);
+  const upcoming = useDeferredEndpoint('/api/upcoming', open && tab === 'upcoming');
+
+  useEffect(() => {
+    if (!open) return undefined;
+    const onKey = (event) => {
+      if (event.key === 'Escape') onClose();
+    };
+    window.addEventListener('keydown', onKey);
+    return () => window.removeEventListener('keydown', onKey);
+  }, [open, onClose]);
+
+  if (!open) return null;
+
+  const active = tab === 'upcoming' ? upcoming : news;
+
+  return (
+    <div className="fixed inset-0 z-40 flex justify-end" role="dialog" aria-modal="true" aria-label="News and releases">
+      <button
+        type="button"
+        aria-label="Close"
+        onClick={onClose}
+        className="absolute inset-0 animate-fade-in bg-slate-900/40 backdrop-blur-sm"
+      />
+      <aside className="relative flex h-full w-full max-w-md animate-slide-in flex-col border-l border-slate-200 bg-slate-50 shadow-2xl">
+        <header className="flex items-center gap-2 border-b border-slate-200 bg-white px-3 py-2.5">
+          <div className="flex flex-1 gap-1">
+            {[
+              ['news', 'News', Newspaper],
+              ['upcoming', 'Upcoming', CalendarDays],
+            ].map(([value, label, Icon]) => (
+              <button
+                key={value}
+                type="button"
+                onClick={() => onTab(value)}
+                aria-pressed={tab === value}
+                className={`inline-flex items-center gap-1.5 rounded-full px-3 py-1.5 text-sm font-medium transition-all duration-200 ease-spring active:scale-95 ${
+                  tab === value
+                    ? 'bg-slate-900 text-white'
+                    : 'bg-slate-100 text-slate-600 hover:bg-slate-200'
+                }`}
+              >
+                <Icon className="h-4 w-4" />
+                {label}
+              </button>
+            ))}
+          </div>
+          <button
+            type="button"
+            onClick={active.reload}
+            aria-label="Refresh"
+            className="rounded-full p-2 text-slate-400 transition-colors hover:bg-slate-100 hover:text-slate-700"
+          >
+            <RefreshCw className={`h-4 w-4 ${active.status === 'loading' ? 'animate-spin' : ''}`} />
+          </button>
+          <button
+            type="button"
+            onClick={onClose}
+            aria-label="Close panel"
+            className="rounded-full p-2 text-slate-400 transition-colors hover:bg-slate-100 hover:text-slate-700"
+          >
+            <X className="h-5 w-5" />
+          </button>
+        </header>
+
+        <div className="no-scrollbar flex-1 overflow-y-auto overscroll-contain p-3">
+          {tab === 'news' ? (
+            <NewsPanel
+              items={news.data?.items ?? []}
+              status={news.status}
+              onReload={news.reload}
+            />
+          ) : (
+            <UpcomingPanel
+              games={upcoming.data?.games ?? []}
+              status={upcoming.status}
+              onReload={upcoming.reload}
+              catalogTitles={catalogTitles}
+            />
+          )}
+        </div>
+
+        <footer className="border-t border-slate-200 bg-white px-3 py-2 text-[11px] text-slate-400">
+          {tab === 'news'
+            ? 'Headlines link straight to the publisher. Feeds refresh every 15 minutes.'
+            : 'Dates and prices are read from the PS Store; delayed games move themselves.'}
+        </footer>
+      </aside>
+    </div>
   );
 }
 
@@ -1591,12 +2001,20 @@ export default function App() {
   const [filters, setFilters] = useState(readFiltersFromUrl);
   const [wishlist, setWishlist] = useState(readWishlist);
   const [favouriteCreators, setFavouriteCreators] = useState(readFavouriteCreators);
+  const [library, setLibrary] = useState(readLibrary);
   const [activeGameId, setActiveGameId] = useState(null);
   const [sheetOpen, setSheetOpen] = useState(false);
   const scrolled = useScrollCollapse();
 
   const { byTitle, status, updatedAt, progress, refresh } = useLiveData(filters.region);
   const barRef = useRef(null);
+  const [briefing, setBriefing] = useState({ open: false, tab: 'news' });
+
+  // Lets the calendar mark a release we already track in the catalog.
+  const catalogTitles = useMemo(
+    () => new Set(gamesData.map((game) => game.title.toLowerCase())),
+    [],
+  );
 
   const set = useCallback(
     (key, value) => setFilters((previous) => ({ ...previous, [key]: value })),
@@ -1648,6 +2066,20 @@ export default function App() {
     });
   }, []);
 
+  const toggleOwned = useCallback((id) => {
+    setLibrary((previous) => {
+      const next = new Set(previous);
+      if (next.has(id)) next.delete(id);
+      else next.add(id);
+      try {
+        localStorage.setItem(LIBRARY_KEY, JSON.stringify([...next]));
+      } catch {
+        // Storage is a convenience; the in-memory set still works.
+      }
+      return next;
+    });
+  }, []);
+
   const toggleWishlist = useCallback((id) => {
     setWishlist((previous) => {
       const next = new Set(previous);
@@ -1681,6 +2113,8 @@ export default function App() {
       if (filters.artStyle !== 'All' && game.artStyle !== filters.artStyle) return false;
       if (filters.upgrade !== 'All' && game.ps5Upgrade !== filters.upgrade) return false;
       if (filters.kidFriendly && !FAMILY_TIER_VALUES.includes(game.ageRating?.family)) return false;
+      if (filters.owned === 'owned' && !library.has(game.id)) return false;
+      if (filters.owned === 'unowned' && library.has(game.id)) return false;
       if (filters.wishlist && !wishlist.has(game.id)) return false;
       if (filters.sale && !(byTitle.get(game.title)?.price?.discountPercent > 0)) return false;
       return true;
@@ -1717,7 +2151,7 @@ export default function App() {
       if (filters.sort === 'buy') return buyScoreOf(a) - buyScoreOf(b);
       return discountOf(b) - discountOf(a);
     });
-  }, [deferredQuery, filters, wishlist, byTitle]);
+  }, [deferredQuery, filters, wishlist, library, byTitle]);
 
   const visiblePool = useMemo(
     () => gamesData.filter((game) => filters.includePs5 || game.platform !== 'PS5'),
@@ -1771,6 +2205,10 @@ export default function App() {
     if (filters.sale) add('sale', 'On sale', () => set('sale', false));
     if (filters.kidFriendly) add('kids', 'Kid friendly', () => set('kidFriendly', false));
     if (filters.wishlist) add('wishlist', 'Wishlist', () => set('wishlist', false));
+    if (filters.owned !== 'any')
+      add('owned', filters.owned === 'owned' ? 'In my library' : 'Not owned', () =>
+        set('owned', 'any'),
+      );
     return chips;
   }, [filters, set]);
 
@@ -1785,6 +2223,7 @@ export default function App() {
     filters.sale ||
     filters.wishlist ||
     filters.kidFriendly ||
+    filters.owned !== 'any' ||
     activeFilterCount > 0;
 
   return (
@@ -1859,6 +2298,16 @@ export default function App() {
               className="shrink-0 rounded-full bg-amber-100 p-2 text-amber-700 transition-all duration-200 ease-spring hover:bg-amber-200 hover:rotate-12 active:scale-90 disabled:opacity-40"
             >
               <Dices className="h-4 w-4" />
+            </button>
+
+            <button
+              type="button"
+              onClick={() => setBriefing((previous) => ({ ...previous, open: true }))}
+              aria-label="News and upcoming releases"
+              title="News & upcoming"
+              className="shrink-0 rounded-full bg-sky-100 p-2 text-sky-700 transition-all duration-200 ease-spring hover:bg-sky-200 active:scale-90"
+            >
+              <Newspaper className="h-4 w-4" />
             </button>
 
             <button
@@ -1985,6 +2434,21 @@ export default function App() {
                   tone="bg-rose-600"
                 />
                 <TogglePill
+                  active={filters.owned === 'owned'}
+                  onClick={() => set('owned', filters.owned === 'owned' ? 'any' : 'owned')}
+                  icon={CircleCheck}
+                  label="I own it"
+                  count={library.size}
+                  tone="bg-emerald-600"
+                />
+                <TogglePill
+                  active={filters.owned === 'unowned'}
+                  onClick={() => set('owned', filters.owned === 'unowned' ? 'any' : 'unowned')}
+                  icon={Sparkles}
+                  label="Not owned"
+                  tone="bg-slate-700"
+                />
+                <TogglePill
                   active={filters.includePs5}
                   onClick={() => set('includePs5', !filters.includePs5)}
                   icon={Gamepad2}
@@ -2045,7 +2509,9 @@ export default function App() {
               game={game}
               live={byTitle.get(game.title)}
               wishlisted={wishlist.has(game.id)}
+              owned={library.has(game.id)}
               onToggleWishlist={() => toggleWishlist(game.id)}
+              onToggleOwned={() => toggleOwned(game.id)}
               onOpen={() => setActiveGameId(game.id)}
             />
           ))}
@@ -2073,7 +2539,9 @@ export default function App() {
                 game={game}
                 live={byTitle.get(game.title)}
                 wishlisted={wishlist.has(game.id)}
+                owned={library.has(game.id)}
                 onToggleWishlist={() => toggleWishlist(game.id)}
+                onToggleOwned={() => toggleOwned(game.id)}
                 onOpen={() => setActiveGameId(game.id)}
               />
             ))}
@@ -2101,10 +2569,20 @@ export default function App() {
           favouriteCreators={favouriteCreators}
           onToggleFavouriteCreator={toggleFavouriteCreator}
           wishlisted={wishlist.has(activeGame.id)}
+          owned={library.has(activeGame.id)}
           onToggleWishlist={() => toggleWishlist(activeGame.id)}
+          onToggleOwned={() => toggleOwned(activeGame.id)}
           onClose={() => setActiveGameId(null)}
         />
       )}
+
+      <BriefingDrawer
+        open={briefing.open}
+        tab={briefing.tab}
+        onTab={(tab) => setBriefing((previous) => ({ ...previous, tab }))}
+        onClose={() => setBriefing((previous) => ({ ...previous, open: false }))}
+        catalogTitles={catalogTitles}
+      />
     </div>
   );
 }
