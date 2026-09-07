@@ -10,6 +10,7 @@ import {
   ArrowUpRight,
   Baby,
   BadgePercent,
+  Bell,
   CalendarDays,
   ChevronDown,
   ChevronRight,
@@ -72,6 +73,7 @@ const COLLECTIONS = [
   { value: 'classic', label: 'Classics', tag: 'classic' },
   { value: 'queer', label: 'Queer stories', tag: 'queer' },
   { value: 'disability', label: 'Disability rep', tag: 'disability' },
+  { value: 'store', label: 'Whole store', tag: null },
 ];
 
 const COLLECTION_BLURBS = {
@@ -84,6 +86,8 @@ const COLLECTION_BLURBS = {
   classic: 'Older PlayStation games and remasters you can play on a PS4 or PS5 today.',
   queer: 'Games with queer characters or relationships that matter to the story, not background detail.',
   disability: 'Games with disabled or neurodivergent characters, or landmark accessibility work.',
+  store:
+    "Everything indexed from the PlayStation Store itself. No hand-written notes on these — store facts and PlayStation's own star rating only.",
 };
 
 const SORTS = [
@@ -192,6 +196,8 @@ function writeFiltersToUrl(filters) {
 
 const WISHLIST_KEY = 'wishlist';
 const LIBRARY_KEY = 'library';
+const HIDDEN_KEY = 'hidden';
+const SAVED_RELEASES_KEY = 'savedReleases';
 
 function readFavouriteCreators() {
   try {
@@ -205,6 +211,30 @@ function readFavouriteCreators() {
 function readLibrary() {
   try {
     const raw = localStorage.getItem(LIBRARY_KEY);
+    return new Set(raw ? JSON.parse(raw) : []);
+  } catch {
+    return new Set();
+  }
+}
+
+/**
+ * Saved upcoming games, stored with the date they had when you saved them.
+ * Keeping the old date is the whole trick: comparing it against the store's
+ * current one is what turns "saved" into "tell me when it changes".
+ */
+function readSavedReleases() {
+  try {
+    const raw = localStorage.getItem(SAVED_RELEASES_KEY);
+    const rows = raw ? JSON.parse(raw) : [];
+    return new Map(rows.map((row) => [row.id, row]));
+  } catch {
+    return new Map();
+  }
+}
+
+function readHidden() {
+  try {
+    const raw = localStorage.getItem(HIDDEN_KEY);
     return new Set(raw ? JSON.parse(raw) : []);
   } catch {
     return new Set();
@@ -930,6 +960,8 @@ function GameModal({
             onToggleFavourite={onToggleFavouriteCreator}
           />
 
+          <GameNews title={game.title} />
+
           <SimilarGames game={game} pool={pool} byTitle={byTitle} onOpen={onOpen} />
         </div>
       </div>
@@ -1125,6 +1157,7 @@ function GameCard({
   reason,
   onToggleWishlist,
   onToggleOwned,
+  onHide,
   onOpen,
 }) {
   const prediction = live?.prediction;
@@ -1204,6 +1237,18 @@ function GameCard({
       <div className="absolute right-1.5 top-1.5 flex flex-col items-end gap-0.5 rounded-xl bg-white/75 p-0.5 backdrop-blur-sm">
         <WishlistButton wishlisted={wishlisted} onToggle={onToggleWishlist} />
         <OwnedButton owned={owned} onToggle={onToggleOwned} />
+        <button
+          type="button"
+          onClick={(event) => {
+            event.stopPropagation();
+            onHide();
+          }}
+          aria-label={`Stop showing ${game.title}`}
+          title="Not for me"
+          className="rounded-lg px-2 py-1.5 text-slate-300 opacity-0 transition-all duration-200 hover:bg-slate-100 hover:text-slate-600 focus:opacity-100 group-hover:opacity-100 max-sm:opacity-60"
+        >
+          <X className="h-4 w-4" />
+        </button>
       </div>
     </div>
   );
@@ -1436,6 +1481,83 @@ function similarGames(game, pool, limit = 4) {
     .map((entry) => entry.other);
 }
 
+/**
+ * What the press has been saying about this one game.
+ *
+ * The merged publisher feeds only carry the last day or so, which is no help
+ * when you open a game whose moment was last month, so a single game's news
+ * comes from a search across the whole press instead. Nothing is fetched until
+ * the modal is open, which is the only time it is worth asking.
+ */
+function GameNews({ title }) {
+  const [state, setState] = useState({ status: 'loading', items: [] });
+
+  useEffect(() => {
+    let live = true;
+    // eslint-disable-next-line react/set-state-in-effect
+    setState({ status: 'loading', items: [] });
+    fetch(`/api/news?game=${encodeURIComponent(title)}`)
+      .then((response) => response.json())
+      .then((payload) => {
+        if (live) setState({ status: 'ready', items: payload.items ?? [] });
+      })
+      .catch(() => {
+        if (live) setState({ status: 'error', items: [] });
+      });
+    return () => {
+      live = false;
+    };
+  }, [title]);
+
+  if (state.status === 'loading') {
+    return (
+      <div className="mt-8 border-t border-slate-100 pt-6">
+        <h3 className="mb-3 flex items-center gap-2 text-sm font-bold uppercase tracking-wider text-slate-400">
+          <Newspaper className="h-4 w-4" />
+          In the news
+        </h3>
+        <p className="flex items-center gap-2 text-sm text-slate-400">
+          <Loader2 className="h-4 w-4 animate-spin" />
+          Checking the press...
+        </p>
+      </div>
+    );
+  }
+
+  if (state.items.length === 0) return null;
+
+  return (
+    <div className="mt-8 border-t border-slate-100 pt-6">
+      <h3 className="mb-3 flex items-center gap-2 text-sm font-bold uppercase tracking-wider text-slate-400">
+        <Newspaper className="h-4 w-4" />
+        In the news
+      </h3>
+      <ul className="space-y-1.5">
+        {state.items.map((item) => (
+          <li key={item.link}>
+            <a
+              href={item.link}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="group flex items-baseline gap-2 rounded-lg px-2 py-1.5 -mx-2 transition-colors hover:bg-slate-50"
+            >
+              <span className="shrink-0 rounded bg-slate-100 px-1.5 py-0.5 text-[11px] font-semibold text-slate-600">
+                {item.source}
+              </span>
+              <span className="min-w-0 flex-1 text-sm leading-snug text-slate-700 group-hover:text-slate-900">
+                {item.title}
+              </span>
+              <span className="shrink-0 text-[11px] text-slate-400">
+                {relativeTime(item.publishedAt)}
+              </span>
+            </a>
+          </li>
+        ))}
+      </ul>
+    </div>
+  );
+}
+
 function SimilarGames({ game, pool, byTitle, onOpen }) {
   const similar = useMemo(() => similarGames(game, pool), [game, pool]);
   if (similar.length === 0) return null;
@@ -1663,6 +1785,324 @@ function FeedSlide({
   );
 }
 
+/**
+ * What has changed since you saved something. A game can slip, get pulled
+ * forward, or simply come out; all three are worth a word.
+ */
+function releaseUpdates(saved, upcoming) {
+  if (!upcoming || saved.size === 0) return [];
+  const current = new Map(
+    [...(upcoming.games ?? []), ...(upcoming.recent ?? [])].map((game) => [game.id, game]),
+  );
+
+  const updates = [];
+  for (const row of saved.values()) {
+    const now = current.get(row.id);
+    if (!now) continue;
+    const wasOut = new Date(row.releaseDate).getTime() <= Date.now();
+    const isOut = new Date(now.releaseDate).getTime() <= Date.now();
+
+    if (now.releaseDate !== row.releaseDate) {
+      const later = new Date(now.releaseDate) > new Date(row.releaseDate);
+      updates.push({
+        id: row.id,
+        title: now.title,
+        kind: later ? 'delayed' : 'moved-up',
+        from: row.releaseDate,
+        to: now.releaseDate,
+      });
+    } else if (isOut && !wasOut) {
+      updates.push({ id: row.id, title: now.title, kind: 'out', to: now.releaseDate });
+    }
+  }
+  return updates;
+}
+
+const UPDATE_TEXT = {
+  delayed: (update) =>
+    `Delayed to ${new Date(update.to).toLocaleDateString([], { day: 'numeric', month: 'short', year: 'numeric' })}`,
+  'moved-up': (update) =>
+    `Moved up to ${new Date(update.to).toLocaleDateString([], { day: 'numeric', month: 'short', year: 'numeric' })}`,
+  out: () => 'Out now',
+};
+
+/* ------------------------------------------------------------------ *
+ * Store mirror
+ * ------------------------------------------------------------------ */
+
+/**
+ * The long tail behind the curated catalog: everything the store itself lists,
+ * as the store lists it. These cards deliberately look different from the
+ * hand-picked ones — no kid-friendly verdict, no representation note, no
+ * description — because nobody has read these games, only indexed them.
+ */
+function StoreCard({ game, curated, onOpenCurated }) {
+  const body = (
+    <>
+      <div className="relative aspect-[460/215] w-full overflow-hidden bg-slate-100">
+        {game.art ? (
+          <img
+            src={game.art}
+            alt=""
+            loading="lazy"
+            onError={(event) => {
+              event.currentTarget.hidden = true;
+            }}
+            className="h-full w-full object-cover"
+          />
+        ) : null}
+        {curated && (
+          <span className="absolute left-2 top-2 rounded-full bg-indigo-600 px-2 py-0.5 text-[11px] font-semibold text-white shadow-sm">
+            In your catalog
+          </span>
+        )}
+      </div>
+
+      <div className="flex flex-1 flex-col p-3">
+        <h3 className="mb-1.5 line-clamp-2 text-sm font-bold leading-tight text-slate-800">
+          {game.name}
+        </h3>
+
+        <div className="mb-2 flex flex-wrap gap-1">
+          {(game.genres ?? []).slice(0, 2).map((genre) => (
+            <span
+              key={genre}
+              className="rounded bg-slate-100 px-1.5 py-0.5 text-[11px] font-semibold text-slate-600"
+            >
+              {genre}
+            </span>
+          ))}
+          {game.platforms?.length > 0 && (
+            <span className="rounded bg-slate-100 px-1.5 py-0.5 text-[11px] font-semibold text-slate-600">
+              {game.platforms.join(' / ')}
+            </span>
+          )}
+        </div>
+
+        <div className="mb-1 flex flex-wrap items-center gap-2 text-[11px]">
+          {game.stars > 0 && (
+            <span
+              title={`${game.votes?.toLocaleString() ?? 0} PlayStation ratings`}
+              className="inline-flex items-center gap-1 rounded bg-amber-50 px-1.5 py-0.5 font-semibold text-amber-700"
+            >
+              <Star className="h-3 w-3 fill-current" />
+              {game.stars.toFixed(1)}
+              <span className="font-normal text-amber-600/70">
+                {(game.votes ?? 0) >= 1000
+                  ? `${Math.round(game.votes / 1000)}k`
+                  : (game.votes ?? 0)}
+              </span>
+            </span>
+          )}
+          {game.release && (
+            <span className="text-slate-400">{game.release.slice(0, 4)}</span>
+          )}
+        </div>
+
+        <p className="mt-auto truncate pt-2 text-xs text-slate-400">{game.publisher}</p>
+        {game.price && (
+          <p className="pt-1 text-sm font-semibold text-slate-900">{game.price}</p>
+        )}
+      </div>
+    </>
+  );
+
+  const shell =
+    'group flex h-full animate-rise-in flex-col overflow-hidden rounded-xl border border-slate-200 bg-white text-left shadow-sm transition-all duration-200 ease-spring hover:-translate-y-1 hover:shadow-lg active:scale-[0.98]';
+
+  // A game we have written about opens its own page; everything else goes to
+  // the store, because there is nothing more of ours to show.
+  return curated ? (
+    <button type="button" onClick={() => onOpenCurated(curated.id)} className={shell}>
+      {body}
+    </button>
+  ) : (
+    <a
+      href={`https://store.playstation.com/en-us/concept/${game.id}`}
+      target="_blank"
+      rel="noopener noreferrer"
+      className={shell}
+    >
+      {body}
+    </a>
+  );
+}
+
+/** Query state for the mirror, kept out of the component that renders it. */
+function useStoreSearch({ active, q, genre, sort }) {
+  const [state, setState] = useState({ status: 'idle', games: [], total: 0, page: 0 });
+  const request = useRef(0);
+
+  useEffect(() => {
+    if (!active) return undefined;
+    const run = ++request.current;
+    const params = new URLSearchParams();
+    if (q) params.set('q', q);
+    if (genre) params.set('genre', genre);
+    if (sort) params.set('sort', sort);
+
+    // eslint-disable-next-line react/set-state-in-effect
+    setState((previous) => ({ ...previous, status: 'loading' }));
+    const timer = setTimeout(async () => {
+      try {
+        const response = await fetch(`/api/store?${params}`);
+        if (!response.ok) throw new Error(String(response.status));
+        const payload = await response.json();
+        if (request.current !== run) return;
+        setState({ status: 'ready', games: payload.games, total: payload.total, page: 0 });
+      } catch {
+        if (request.current === run) setState({ status: 'error', games: [], total: 0, page: 0 });
+      }
+    }, q ? 220 : 0);
+
+    return () => clearTimeout(timer);
+  }, [active, q, genre, sort]);
+
+  const more = useCallback(async () => {
+    const params = new URLSearchParams();
+    if (q) params.set('q', q);
+    if (genre) params.set('genre', genre);
+    if (sort) params.set('sort', sort);
+    params.set('page', String(state.page + 1));
+    try {
+      const response = await fetch(`/api/store?${params}`);
+      const payload = await response.json();
+      setState((previous) => ({
+        ...previous,
+        games: [...previous.games, ...payload.games],
+        page: payload.page,
+      }));
+    } catch {
+      // A failed "load more" leaves what is already on screen alone.
+    }
+  }, [q, genre, sort, state.page]);
+
+  return { ...state, more };
+}
+
+/**
+ * The "Whole store" view. Browsing sorts by PlayStation's own star rating,
+ * weighted down until enough people have voted, so the top is genuinely
+ * well-liked rather than one five-star review.
+ */
+function StorePanel({ query, curatedByName, onOpenCurated }) {
+  const [genre, setGenre] = useState('');
+  const [sort, setSort] = useState('rating');
+  const [facets, setFacets] = useState({ genres: [], size: 0 });
+
+  useEffect(() => {
+    let live = true;
+    fetch('/api/store?facets=1')
+      .then((response) => response.json())
+      .then((payload) => {
+        if (live) setFacets(payload);
+      })
+      .catch(() => {});
+    return () => {
+      live = false;
+    };
+  }, []);
+
+  const results = useStoreSearch({ active: true, q: query, genre, sort });
+
+  return (
+    <>
+      <p className="mb-3 text-xs font-medium text-slate-400">
+        {results.total.toLocaleString()} of {facets.size.toLocaleString()} games indexed ·{' '}
+        {COLLECTION_BLURBS.store}
+      </p>
+
+      <div className="no-scrollbar mb-3 flex gap-1.5 overflow-x-auto pb-0.5">
+        {[
+          ['rating', 'Best rated'],
+          ['new', 'Newest'],
+        ].map(([value, label]) => (
+          <button
+            key={value}
+            type="button"
+            onClick={() => setSort(value)}
+            aria-pressed={sort === value}
+            className={`shrink-0 rounded-full px-2.5 py-1 text-xs font-medium transition-all duration-200 ease-spring active:scale-95 ${
+              sort === value
+                ? 'bg-slate-900 text-white'
+                : 'bg-slate-100 text-slate-600 hover:bg-slate-200'
+            }`}
+          >
+            {label}
+          </button>
+        ))}
+        <span className="w-px shrink-0 self-stretch bg-slate-200" />
+        <button
+          type="button"
+          onClick={() => setGenre('')}
+          aria-pressed={genre === ''}
+          className={`shrink-0 rounded-full px-2.5 py-1 text-xs font-medium transition-all duration-200 ease-spring active:scale-95 ${
+            genre === '' ? 'bg-slate-900 text-white' : 'bg-slate-100 text-slate-600 hover:bg-slate-200'
+          }`}
+        >
+          Any genre
+        </button>
+        {facets.genres.slice(0, 24).map((entry) => (
+          <button
+            key={entry.genre}
+            type="button"
+            onClick={() => setGenre(entry.genre === genre ? '' : entry.genre)}
+            aria-pressed={genre === entry.genre}
+            className={`inline-flex shrink-0 items-center gap-1.5 rounded-full px-2.5 py-1 text-xs font-medium transition-all duration-200 ease-spring active:scale-95 ${
+              genre === entry.genre
+                ? 'bg-slate-900 text-white'
+                : 'bg-slate-100 text-slate-600 hover:bg-slate-200'
+            }`}
+          >
+            {entry.genre}
+            <span className={genre === entry.genre ? 'text-white/60' : 'text-slate-400'}>
+              {entry.count}
+            </span>
+          </button>
+        ))}
+      </div>
+
+      {results.status === 'loading' && results.games.length === 0 ? (
+        <PanelMessage icon={Loader2} spin label="Searching the store index..." />
+      ) : results.games.length === 0 ? (
+        <PanelMessage
+          icon={Search}
+          label={
+            results.status === 'error'
+              ? 'The store index is not answering right now.'
+              : 'Nothing in the index matches that.'
+          }
+        />
+      ) : (
+        <>
+          <div className="grid grid-cols-2 gap-3 sm:gap-4 lg:grid-cols-3 xl:grid-cols-4 2xl:grid-cols-5">
+            {results.games.map((game) => (
+              <StoreCard
+                key={game.id}
+                game={game}
+                curated={curatedByName.get(game.name?.toLowerCase())}
+                onOpenCurated={onOpenCurated}
+              />
+            ))}
+          </div>
+
+          {results.games.length < results.total && (
+            <div className="mt-6 text-center">
+              <button
+                type="button"
+                onClick={results.more}
+                className="rounded-full bg-slate-900 px-5 py-2 text-sm font-medium text-white transition-transform duration-200 ease-spring active:scale-95"
+              >
+                Show more
+              </button>
+            </div>
+          )}
+        </>
+      )}
+    </>
+  );
+}
+
 /* ------------------------------------------------------------------ *
  * Briefing: news + release calendar
  * ------------------------------------------------------------------ */
@@ -1817,9 +2257,25 @@ const daysUntil = (iso) =>
  * Grouped by month so a long scroll still reads as a calendar rather than a
  * list. The day block on the left is the anchor your eye follows down.
  */
-function UpcomingPanel({ games, recent, status, onReload, catalogTitles }) {
+function UpcomingPanel({
+  games,
+  recent,
+  status,
+  onReload,
+  catalogTitles,
+  saved,
+  onToggleSaved,
+  updates,
+}) {
   const [when, setWhen] = useState('ahead');
-  const list = when === 'ahead' ? games : recent;
+  const [playing, setPlaying] = useState(null);
+
+  const savedList = useMemo(
+    () => [...games, ...recent].filter((game) => saved.has(game.id)),
+    [games, recent, saved],
+  );
+  const list = when === 'ahead' ? games : when === 'out' ? recent : savedList;
+  const updateFor = useMemo(() => new Map(updates.map((u) => [u.id, u])), [updates]);
 
   const months = useMemo(() => {
     const groups = new Map();
@@ -1850,6 +2306,7 @@ function UpcomingPanel({ games, recent, status, onReload, catalogTitles }) {
         {[
           ['ahead', 'Coming soon', games.length],
           ['out', 'Just released', recent.length],
+          ['saved', 'Saved', savedList.length],
         ].map(([value, label, count]) => (
           <button
             key={value}
@@ -1862,19 +2319,38 @@ function UpcomingPanel({ games, recent, status, onReload, catalogTitles }) {
                 : 'bg-white text-slate-600 ring-1 ring-inset ring-slate-200 hover:bg-slate-100'
             }`}
           >
+            {value === 'saved' && <Bell className="h-3.5 w-3.5" />}
             {label}
             <span className={when === value ? 'text-white/60' : 'text-slate-400'}>{count}</span>
           </button>
         ))}
       </div>
 
+      {updates.length > 0 && when !== 'saved' && (
+        <button
+          type="button"
+          onClick={() => setWhen('saved')}
+          className="flex w-full items-center gap-2 rounded-xl bg-amber-50 px-3 py-2 text-left text-sm font-medium text-amber-800 ring-1 ring-inset ring-amber-200 transition-transform duration-200 ease-spring active:scale-[0.99]"
+        >
+          <Bell className="h-4 w-4 shrink-0" />
+          <span className="flex-1">
+            {updates.length === 1
+              ? `${updates[0].title}: ${UPDATE_TEXT[updates[0].kind](updates[0]).toLowerCase()}`
+              : `${updates.length} of your saved games changed`}
+          </span>
+          <ChevronRight className="h-4 w-4 shrink-0" />
+        </button>
+      )}
+
       {list.length === 0 && (
         <PanelMessage
-          icon={CalendarDays}
+          icon={when === 'saved' ? Bell : CalendarDays}
           label={
-            when === 'ahead'
-              ? 'Nothing dated ahead right now.'
-              : 'Nothing has landed in the last two months.'
+            when === 'saved'
+              ? 'Nothing saved yet. Tap the bell on a release to follow it.'
+              : when === 'ahead'
+                ? 'Nothing dated ahead right now.'
+                : 'Nothing has landed in the last two months.'
           }
         />
       )}
@@ -1888,15 +2364,13 @@ function UpcomingPanel({ games, recent, status, onReload, catalogTitles }) {
             {entries.map((game) => {
               const date = new Date(game.releaseDate);
               const away = daysUntil(game.releaseDate);
-              const owned = catalogTitles.has(game.title.toLowerCase());
+              const inCatalog = catalogTitles.has(game.title.toLowerCase());
+              const update = updateFor.get(game.id);
+              const isPlaying = playing === game.id;
+
               return (
-                <li key={game.id}>
-                  <a
-                    href={game.storeUrl}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="flex items-stretch gap-3 rounded-xl border border-slate-200 bg-white p-2.5 transition-all duration-200 ease-spring hover:-translate-y-0.5 hover:border-slate-300 hover:shadow-sm active:scale-[0.99]"
-                  >
+                <li key={game.id} className="rounded-xl border border-slate-200 bg-white">
+                  <div className="flex items-stretch gap-3 p-2.5">
                     <div className="flex w-12 shrink-0 flex-col items-center justify-center rounded-lg bg-slate-900 py-1.5 text-white">
                       <span className="text-[10px] font-semibold uppercase tracking-wide text-white/60">
                         {date.toLocaleDateString([], { month: 'short' })}
@@ -1907,18 +2381,36 @@ function UpcomingPanel({ games, recent, status, onReload, catalogTitles }) {
                     </div>
 
                     {game.art && (
-                      <img
-                        src={game.art}
-                        alt=""
-                        loading="lazy"
-                        onError={(event) => {
-                          event.currentTarget.hidden = true;
-                        }}
-                        className="h-14 w-14 shrink-0 self-center rounded-lg bg-slate-100 object-cover"
-                      />
+                      <button
+                        type="button"
+                        onClick={() => game.trailer && setPlaying(isPlaying ? null : game.id)}
+                        disabled={!game.trailer}
+                        aria-label={game.trailer ? `Play the ${game.title} trailer` : undefined}
+                        className="relative h-14 w-14 shrink-0 self-center overflow-hidden rounded-lg bg-slate-100 disabled:cursor-default"
+                      >
+                        <img
+                          src={game.art}
+                          alt=""
+                          loading="lazy"
+                          onError={(event) => {
+                            event.currentTarget.hidden = true;
+                          }}
+                          className="h-full w-full object-cover"
+                        />
+                        {game.trailer && (
+                          <span className="absolute inset-0 flex items-center justify-center bg-slate-900/35 text-white transition-colors hover:bg-slate-900/50">
+                            <CirclePlay className="h-5 w-5 drop-shadow" />
+                          </span>
+                        )}
+                      </button>
                     )}
 
-                    <div className="min-w-0 flex-1">
+                    <a
+                      href={game.storeUrl}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="min-w-0 flex-1"
+                    >
                       <p className="line-clamp-2 text-sm font-semibold leading-snug text-slate-800">
                         {game.title}
                       </p>
@@ -1927,6 +2419,11 @@ function UpcomingPanel({ games, recent, status, onReload, catalogTitles }) {
                         {game.genres?.length > 0 && ` · ${game.genres.join(', ')}`}
                       </p>
                       <div className="mt-1 flex flex-wrap items-center gap-1">
+                        {update && (
+                          <span className="rounded bg-amber-100 px-1.5 py-0.5 text-[11px] font-semibold text-amber-800">
+                            {UPDATE_TEXT[update.kind](update)}
+                          </span>
+                        )}
                         <span className="rounded bg-slate-100 px-1.5 py-0.5 text-[11px] font-semibold text-slate-600">
                           {game.platforms?.join(' / ') || 'PS5'}
                         </span>
@@ -1940,15 +2437,46 @@ function UpcomingPanel({ games, recent, status, onReload, catalogTitles }) {
                             {game.price}
                           </span>
                         )}
-                        {owned && (
+                        {inCatalog && (
                           <span className="rounded bg-indigo-50 px-1.5 py-0.5 text-[11px] font-semibold text-indigo-700">
                             In catalog
                           </span>
                         )}
                       </div>
+                    </a>
+
+                    <button
+                      type="button"
+                      onClick={() => onToggleSaved(game)}
+                      aria-pressed={saved.has(game.id)}
+                      aria-label={
+                        saved.has(game.id)
+                          ? `Stop following ${game.title}`
+                          : `Follow ${game.title} for date changes`
+                      }
+                      title={saved.has(game.id) ? 'Following' : 'Tell me if this changes'}
+                      className={`shrink-0 self-center rounded-lg p-2 transition-colors ${
+                        saved.has(game.id)
+                          ? 'bg-amber-50 text-amber-600'
+                          : 'text-slate-300 hover:bg-slate-100 hover:text-slate-600'
+                      }`}
+                    >
+                      <Bell className={`h-4 w-4 ${saved.has(game.id) ? 'fill-current' : ''}`} />
+                    </button>
+                  </div>
+
+                  {isPlaying && game.trailer && (
+                    <div className="border-t border-slate-100 p-2.5 pt-2">
+                      <video
+                        src={game.trailer}
+                        poster={game.art ?? undefined}
+                        controls
+                        autoPlay
+                        playsInline
+                        className="w-full rounded-lg bg-black"
+                      />
                     </div>
-                    <ChevronRight className="mt-1 h-4 w-4 shrink-0 self-center text-slate-300" />
-                  </a>
+                  )}
                 </li>
               );
             })}
@@ -1981,9 +2509,18 @@ function PanelMessage({ icon: Icon, label, spin = false, action }) {
  * A slide-over rather than another view mode: news and dates are things you
  * dip into and dismiss, and the catalog stays exactly where you left it.
  */
-function BriefingDrawer({ open, tab, onTab, onClose, catalogTitles }) {
+function BriefingDrawer({
+  open,
+  tab,
+  onTab,
+  onClose,
+  catalogTitles,
+  upcoming,
+  saved,
+  onToggleSaved,
+  updates,
+}) {
   const news = useDeferredEndpoint('/api/news', open);
-  const upcoming = useDeferredEndpoint('/api/upcoming', open && tab === 'upcoming');
 
   useEffect(() => {
     if (!open) return undefined;
@@ -2061,6 +2598,9 @@ function BriefingDrawer({ open, tab, onTab, onClose, catalogTitles }) {
               status={upcoming.status}
               onReload={upcoming.reload}
               catalogTitles={catalogTitles}
+              saved={saved}
+              onToggleSaved={onToggleSaved}
+              updates={updates}
             />
           )}
         </div>
@@ -2127,6 +2667,8 @@ function Select({ label, value, options, onChange }) {
 export default function App() {
   const [filters, setFilters] = useState(readFiltersFromUrl);
   const [wishlist, setWishlist] = useState(readWishlist);
+  const [hidden, setHidden] = useState(readHidden);
+  const [savedReleases, setSavedReleases] = useState(readSavedReleases);
   const [favouriteCreators, setFavouriteCreators] = useState(readFavouriteCreators);
   const [library, setLibrary] = useState(readLibrary);
   const [activeGameId, setActiveGameId] = useState(null);
@@ -2137,11 +2679,58 @@ export default function App() {
   const barRef = useRef(null);
   const [briefing, setBriefing] = useState({ open: false, tab: 'news' });
 
-  // Lets the calendar mark a release we already track in the catalog.
-  const catalogTitles = useMemo(
-    () => new Set(gamesData.map((game) => game.title.toLowerCase())),
+  // The calendar is fetched when the panel opens, and also when something is
+  // being followed — that is the only way the header can say a date moved
+  // before you go looking.
+  const upcoming = useDeferredEndpoint(
+    '/api/upcoming',
+    (briefing.open && briefing.tab === 'upcoming') || savedReleases.size > 0,
+  );
+
+  const releaseChanges = useMemo(
+    () => releaseUpdates(savedReleases, upcoming.data),
+    [savedReleases, upcoming.data],
+  );
+
+  /** Saving stores today's date so a later one reads as a change. */
+  const toggleSavedRelease = useCallback((game) => {
+    setSavedReleases((previous) => {
+      const next = new Map(previous);
+      if (next.has(game.id)) next.delete(game.id);
+      else next.set(game.id, { id: game.id, title: game.title, releaseDate: game.releaseDate });
+      try {
+        localStorage.setItem(SAVED_RELEASES_KEY, JSON.stringify([...next.values()]));
+      } catch {
+        // Storage is a convenience; the in-memory map still works.
+      }
+      return next;
+    });
+  }, []);
+
+  // Acknowledging an update means adopting the new date as the saved one.
+  const clearReleaseChanges = useCallback(() => {
+    setSavedReleases((previous) => {
+      const next = new Map(previous);
+      for (const change of releaseChanges) {
+        const row = next.get(change.id);
+        if (row) next.set(change.id, { ...row, releaseDate: change.to });
+      }
+      try {
+        localStorage.setItem(SAVED_RELEASES_KEY, JSON.stringify([...next.values()]));
+      } catch {
+        // Same as above.
+      }
+      return next;
+    });
+  }, [releaseChanges]);
+
+  // Lets the calendar mark a release we already track in the catalog, and lets
+  // the store mirror hand a game back to its curated page when we have one.
+  const curatedByName = useMemo(
+    () => new Map(gamesData.map((game) => [game.title.toLowerCase(), game])),
     [],
   );
+  const catalogTitles = useMemo(() => new Set(curatedByName.keys()), [curatedByName]);
 
   const set = useCallback(
     (key, value) => setFilters((previous) => ({ ...previous, [key]: value })),
@@ -2207,6 +2796,29 @@ export default function App() {
     });
   }, []);
 
+  /** "Not for me": the game drops out of every list until you unhide it. */
+  const hideGame = useCallback((id) => {
+    setHidden((previous) => {
+      const next = new Set(previous);
+      next.add(id);
+      try {
+        localStorage.setItem(HIDDEN_KEY, JSON.stringify([...next]));
+      } catch {
+        // Storage is a convenience; the in-memory set still works.
+      }
+      return next;
+    });
+  }, []);
+
+  const unhideAll = useCallback(() => {
+    setHidden(new Set());
+    try {
+      localStorage.removeItem(HIDDEN_KEY);
+    } catch {
+      // Nothing to do: the in-memory set is already cleared.
+    }
+  }, []);
+
   const toggleWishlist = useCallback((id) => {
     setWishlist((previous) => {
       const next = new Set(previous);
@@ -2226,13 +2838,13 @@ export default function App() {
   const geniusPicks = useMemo(() => {
     const profile = buildProfile(gamesData, library, wishlist);
     if (!profile) return [];
-    const exclude = new Set([...library, ...wishlist]);
+    const exclude = new Set([...library, ...wishlist, ...hidden]);
     return recommend(gamesData, profile, {
       exclude,
       limit: 48,
       includePs5: filters.includePs5,
     });
-  }, [library, wishlist, filters.includePs5]);
+  }, [library, wishlist, hidden, filters.includePs5]);
 
   const geniusReasons = useMemo(
     () => new Map(geniusPicks.map((pick) => [pick.game.id, pick.reason])),
@@ -2253,6 +2865,7 @@ export default function App() {
       : null;
 
     const matches = gamesData.filter((game) => {
+      if (hidden.has(game.id)) return false;
       if (!filters.includePs5 && game.platform === 'PS5') return false;
       if (isGenius && !geniusRank.has(game.id)) return false;
       if (collection?.tag && !game.tags.includes(collection.tag)) return false;
@@ -2307,7 +2920,7 @@ export default function App() {
       if (filters.sort === 'buy') return buyScoreOf(a) - buyScoreOf(b);
       return discountOf(b) - discountOf(a);
     });
-  }, [deferredQuery, filters, wishlist, library, byTitle, geniusPicks]);
+  }, [deferredQuery, filters, wishlist, library, hidden, byTitle, geniusPicks]);
 
   const visiblePool = useMemo(
     () => gamesData.filter((game) => filters.includePs5 || game.platform !== 'PS5'),
@@ -2460,12 +3073,26 @@ export default function App() {
 
             <button
               type="button"
-              onClick={() => setBriefing((previous) => ({ ...previous, open: true }))}
-              aria-label="News and upcoming releases"
+              onClick={() =>
+                setBriefing({
+                  open: true,
+                  tab: releaseChanges.length > 0 ? 'upcoming' : briefing.tab,
+                })
+              }
+              aria-label={
+                releaseChanges.length > 0
+                  ? `News and upcoming releases, ${releaseChanges.length} update${releaseChanges.length === 1 ? '' : 's'}`
+                  : 'News and upcoming releases'
+              }
               title="News & upcoming"
-              className="shrink-0 rounded-full bg-sky-100 p-2 text-sky-700 transition-all duration-200 ease-spring hover:bg-sky-200 active:scale-90"
+              className="relative shrink-0 rounded-full bg-sky-100 p-2 text-sky-700 transition-all duration-200 ease-spring hover:bg-sky-200 active:scale-90"
             >
               <Newspaper className="h-4 w-4" />
+              {releaseChanges.length > 0 && (
+                <span className="absolute -right-0.5 -top-0.5 flex h-4 min-w-4 items-center justify-center rounded-full bg-amber-500 px-1 text-[10px] font-bold text-white ring-2 ring-white">
+                  {releaseChanges.length}
+                </span>
+              )}
             </button>
 
             <button
@@ -2687,6 +3314,14 @@ export default function App() {
         </main>
       ) : (
         <main className="mx-auto max-w-7xl px-3 pb-10 pt-3 sm:px-6">
+          {filters.collection === 'store' ? (
+            <StorePanel
+              query={deferredQuery.trim()}
+              curatedByName={curatedByName}
+              onOpenCurated={setActiveGameId}
+            />
+          ) : (
+            <>
           <p className="mb-3 text-xs font-medium text-slate-400">
             {filteredGames.length} of {visiblePool.length} games
             {COLLECTION_BLURBS[filters.collection] &&
@@ -2704,10 +3339,24 @@ export default function App() {
                 reason={filters.collection === 'genius' ? geniusReasons.get(game.id) : undefined}
                 onToggleWishlist={() => toggleWishlist(game.id)}
                 onToggleOwned={() => toggleOwned(game.id)}
+                onHide={() => hideGame(game.id)}
                 onOpen={() => setActiveGameId(game.id)}
               />
             ))}
           </div>
+
+          {hidden.size > 0 && (
+            <p className="mt-6 text-center text-xs text-slate-400">
+              {hidden.size} hidden.{' '}
+              <button
+                type="button"
+                onClick={unhideAll}
+                className="font-medium text-indigo-600 hover:underline"
+              >
+                Show them again
+              </button>
+            </p>
+          )}
 
           {filteredGames.length === 0 && (
             <EmptyState
@@ -2717,6 +3366,23 @@ export default function App() {
               status={status}
               onClear={clearFilters}
             />
+          )}
+
+          {/* The curated 298 will not have everything; the mirror will. */}
+          {deferredQuery.trim().length > 1 && (
+            <div className="mt-8 text-center">
+              <button
+                type="button"
+                onClick={() => set('collection', 'store')}
+                className="inline-flex items-center gap-1.5 text-sm font-medium text-indigo-600 hover:underline"
+              >
+                <Search className="h-4 w-4" />
+                Look for &ldquo;{deferredQuery.trim()}&rdquo; in the whole store
+                <ArrowUpRight className="h-4 w-4" />
+              </button>
+            </div>
+          )}
+            </>
           )}
         </main>
       )}
@@ -2744,8 +3410,16 @@ export default function App() {
         open={briefing.open}
         tab={briefing.tab}
         onTab={(tab) => setBriefing((previous) => ({ ...previous, tab }))}
-        onClose={() => setBriefing((previous) => ({ ...previous, open: false }))}
+        onClose={() => {
+          // Closing the panel is the acknowledgement: you have seen the change.
+          if (briefing.tab === 'upcoming') clearReleaseChanges();
+          setBriefing((previous) => ({ ...previous, open: false }));
+        }}
         catalogTitles={catalogTitles}
+        upcoming={upcoming}
+        saved={savedReleases}
+        onToggleSaved={toggleSavedRelease}
+        updates={releaseChanges}
       />
     </div>
   );

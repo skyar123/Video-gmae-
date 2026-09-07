@@ -16,11 +16,52 @@ const FEEDS = [
   { source: 'VGC', url: 'https://www.videogameschronicle.com/feed/', tone: 'general' },
   { source: 'Push Square', url: 'https://www.pushsquare.com/feeds/latest', tone: 'playstation' },
   { source: 'PlayStation Blog', url: 'https://blog.playstation.com/feed/', tone: 'playstation' },
-  { source: 'Gayming Magazine', url: 'https://gaymingmag.com/feed/', tone: 'queer' },
+
+  // The queer shelf is not one magazine. It is the LGBTQ+ gaming press, queer
+  // publications that cover games, and the worker-owned sites founded and
+  // staffed by queer writers who left the big outlets.
+  {
+    source: 'Gayming Magazine',
+    url: 'https://gaymingmag.com/feed/',
+    tone: 'queer',
+    note: 'LGBTQ+ gaming magazine',
+  },
   {
     source: 'Autostraddle',
     url: 'https://www.autostraddle.com/tag/video-games/feed/',
     tone: 'queer',
+    note: 'Queer publication, games desk',
+  },
+  {
+    source: 'Them',
+    url: 'https://www.them.us/feed/rss',
+    tone: 'queer',
+    note: 'Queer publication, culture desk',
+    filter: /\b(game|gaming|gamer|console|playstation|nintendo|xbox|steam|indie)\b/i,
+  },
+  {
+    source: 'Aftermath',
+    url: 'https://aftermath.site/feed',
+    tone: 'queer',
+    note: 'Worker-owned, queer staff',
+  },
+  {
+    source: 'Remap',
+    url: 'https://remapradio.com/rss/',
+    tone: 'queer',
+    note: 'Worker-owned, queer staff',
+  },
+  {
+    source: 'Uppercut',
+    url: 'https://uppercutcrit.com/feed/',
+    tone: 'queer',
+    note: 'Worker-owned criticism co-op',
+  },
+  {
+    source: 'Rascal',
+    url: 'https://rascal.news/rss/',
+    tone: 'queer',
+    note: 'Worker-owned, queer-led',
   },
 ];
 
@@ -74,6 +115,7 @@ function parseFeed(xml, feed) {
     return {
       source: feed.source,
       tone: feed.tone,
+      note: feed.note ?? null,
       title: stripTags(tag(block, 'title') ?? ''),
       link: link?.trim() ?? null,
       publishedAt: published ? new Date(published).toISOString() : null,
@@ -106,7 +148,14 @@ export async function loadNews() {
 
   const batches = await Promise.all(FEEDS.map(fetchFeed));
   const items = batches
-    .flatMap((batch) => batch.slice(0, 8))
+    .flatMap((batch, index) => {
+      const { filter } = FEEDS[index];
+      // A general-culture feed only belongs here for the games it covers.
+      const relevant = filter
+        ? batch.filter((item) => filter.test(`${item.title} ${item.summary}`))
+        : batch;
+      return relevant.slice(0, 8);
+    })
     .filter((item) => item.title && item.link)
     .sort((a, b) => new Date(b.publishedAt ?? 0) - new Date(a.publishedAt ?? 0));
 
@@ -132,5 +181,77 @@ export async function loadNews() {
     fetchedAt: new Date().toISOString(),
   };
   cache = { value, storedAt: Date.now() };
+  return value;
+}
+
+/* ------------------------------------------------------------------ *
+ * Per-game news
+ * ------------------------------------------------------------------ */
+
+/**
+ * News about one game.
+ *
+ * Publisher feeds only carry the last day or so, which is no use when you open
+ * a game that had its moment last month. Google News publishes a search feed
+ * that covers the whole press at once, so that is what a single game's news
+ * comes from. Its items read "Headline - Publisher", which is split back apart
+ * here so the result looks like the rest of the app.
+ */
+const GAME_NEWS_TTL_MS = 60 * 60 * 1000;
+const gameNewsCache = new Map();
+
+const looseMatch = (haystack, needle) => {
+  const words = needle
+    .toLowerCase()
+    .replace(/[^a-z0-9 ]/g, ' ')
+    .split(/\s+/)
+    .filter((word) => word.length > 2);
+  if (words.length === 0) return true;
+  const text = haystack.toLowerCase();
+  const hits = words.filter((word) => text.includes(word)).length;
+  return hits / words.length >= 0.6;
+};
+
+export async function loadGameNews(title) {
+  const key = title.trim().toLowerCase();
+  if (!key) return { items: [], fetchedAt: null };
+
+  const cached = gameNewsCache.get(key);
+  if (cached && Date.now() - cached.storedAt < GAME_NEWS_TTL_MS) return cached.value;
+
+  const query = encodeURIComponent(`"${title}" (game OR PlayStation OR PS5)`);
+  const url = `https://news.google.com/rss/search?q=${query}&hl=en-US&gl=US&ceid=US:en`;
+
+  const controller = new AbortController();
+  const timer = setTimeout(() => controller.abort(), 8000);
+  let items = [];
+  try {
+    const response = await fetch(url, {
+      signal: controller.signal,
+      headers: { 'user-agent': 'Mozilla/5.0 (compatible; ps5-upgrade-catalog/1.0)' },
+    });
+    if (response.ok) {
+      const parsed = parseFeed(await response.text(), { source: 'Google News', tone: 'general' });
+      items = parsed
+        .filter((item) => item.title && item.link)
+        .map((item) => {
+          // "Headline - Publisher" is the shape Google News uses.
+          const split = item.title.lastIndexOf(' - ');
+          const headline = split > 20 ? item.title.slice(0, split) : item.title;
+          const source = split > 20 ? item.title.slice(split + 3) : 'Google News';
+          return { ...item, title: headline, source, summary: '' };
+        })
+        .filter((item) => looseMatch(item.title, title))
+        .slice(0, 8);
+    }
+  } catch {
+    // No news is a normal outcome; the panel says so.
+  } finally {
+    clearTimeout(timer);
+  }
+
+  const value = { items, fetchedAt: new Date().toISOString() };
+  gameNewsCache.set(key, { value, storedAt: Date.now() });
+  if (gameNewsCache.size > 300) gameNewsCache.delete(gameNewsCache.keys().next().value);
   return value;
 }

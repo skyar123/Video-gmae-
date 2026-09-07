@@ -2,8 +2,9 @@ import { readFileSync } from 'node:fs';
 import { defineConfig } from 'vite';
 import react from '@vitejs/plugin-react';
 import { CACHE_HEADER, handleGamesRequest } from './api/steam.mjs';
-import { loadNews } from './api/news.mjs';
+import { loadGameNews, loadNews } from './api/news.mjs';
 import { loadUpcoming } from './api/upcoming.mjs';
+import { searchStore, storeGenres, storeSize } from './api/store.mjs';
 
 /**
  * Serves the same /api/games responses as the Netlify function during
@@ -45,10 +46,48 @@ function gamesApiPlugin() {
     });
   };
 
+  const mountStore = (server) => {
+    server.middlewares.use('/api/store', async (request, response) => {
+      try {
+        const url = new URL(request.url, 'http://localhost');
+        const payload =
+          url.searchParams.get('facets') === '1'
+            ? { genres: await storeGenres(), size: await storeSize() }
+            : await searchStore({
+                q: url.searchParams.get('q') ?? '',
+                genre: url.searchParams.get('genre') ?? '',
+                platform: url.searchParams.get('platform') ?? '',
+                sort: url.searchParams.get('sort') ?? 'relevance',
+                page: Number(url.searchParams.get('page') ?? 0) || 0,
+                exclude: (url.searchParams.get('exclude') ?? '').split('\n').filter(Boolean),
+              });
+        response.setHeader('content-type', 'application/json; charset=utf-8');
+        response.end(JSON.stringify(payload));
+      } catch (error) {
+        response.statusCode = 502;
+        response.setHeader('content-type', 'application/json; charset=utf-8');
+        response.end(JSON.stringify({ error: String(error?.message || error) }));
+      }
+    });
+  };
+
   const mountAll = (server) => {
     mount(server);
-    mountJson(server, '/api/news', loadNews);
+    server.middlewares.use('/api/news', async (request, response) => {
+      try {
+        const url = new URL(request.url, 'http://localhost');
+        const game = url.searchParams.get('game');
+        const payload = game ? await loadGameNews(game) : await loadNews();
+        response.setHeader('content-type', 'application/json; charset=utf-8');
+        response.end(JSON.stringify(payload));
+      } catch (error) {
+        response.statusCode = 502;
+        response.setHeader('content-type', 'application/json; charset=utf-8');
+        response.end(JSON.stringify({ error: String(error?.message || error) }));
+      }
+    });
     mountJson(server, '/api/upcoming', loadUpcoming);
+    mountStore(server);
   };
 
   return {

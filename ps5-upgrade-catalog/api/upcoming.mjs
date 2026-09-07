@@ -10,6 +10,7 @@
 import bakedSeeds from './upcoming-seeds.json' with { type: 'json' };
 import snapshot from './upcoming-snapshot.json' with { type: 'json' };
 import { loadBlob, saveBlob } from './history.mjs';
+import { DISCOVERED_KEY } from './store.mjs';
 
 const UA = 'Mozilla/5.0 (compatible; ps5-upgrade-catalog/1.0)';
 const READ_CAP = 190_000; // Release date, art, price and genres all land inside this.
@@ -31,6 +32,10 @@ const RECENT_DAYS = 60;
 // Every seed costs a store fetch on the nightly rebuild, so the discovered
 // list is bounded; the baked seeds are always kept on top of this.
 const MAX_DISCOVERED_SEEDS = 120;
+
+// The mirror's blob half only has to cover what the baked index missed, so it
+// is bounded too rather than growing without limit.
+const MAX_MIRROR_ROWS = 6_000;
 
 let memory = null;
 let inFlight = null;
@@ -108,6 +113,12 @@ function parseConcept(id, html) {
   const genres = [...html.matchAll(/"LocalizedGenre","value":"([^"]+)"/g)].map((m) => m[1]);
   const basePrice = (html.match(/"basePrice":"([^"]+)"/) || [])[1];
   const discounted = (html.match(/"discountedPrice":"([^"]+)"/) || [])[1];
+  const stars = html.match(/"averageRating":([\d.]+),"totalRatingsCount":(\d+)/);
+  // The store ships the official trailer on the page: role PREVIEW, type VIDEO.
+  const trailer =
+    (html.match(/"role":"PREVIEW","type":"VIDEO","url":"([^"]+)"/) || [])[1] ||
+    (html.match(/"url":"([^"]*\.mp4[^"]*)"/) || [])[1] ||
+    null;
 
   return {
     id,
@@ -121,6 +132,9 @@ function parseConcept(id, html) {
     genres: [...new Set(genres)].slice(0, 3),
     price: discounted && discounted !== basePrice ? discounted : basePrice ?? null,
     basePrice: basePrice ?? null,
+    stars: stars ? Number(stars[1]) : null,
+    votes: stars ? Number(stars[2]) : null,
+    trailer,
     art:
       artFor(html, 'GAMEHUB_COVER_ART') ||
       artFor(html, 'SIXTEEN_BY_NINE_BANNER') ||
@@ -266,6 +280,31 @@ export async function sweepForReleases() {
     seeds: [...kept.values()].slice(-MAX_DISCOVERED_SEEDS),
     sweptAt: new Date().toISOString(),
   });
+
+  // The same pages feed the store mirror, so every game the sweep sees is
+  // recorded whether or not it has a future release date. This is how the
+  // mirror keeps growing after the index baked into a deploy goes stale.
+  const mirror = new Map();
+  for (const row of (await loadBlob(DISCOVERED_KEY))?.games ?? []) mirror.set(row.id, row);
+  for (const game of found.filter(Boolean)) {
+    mirror.set(game.id, {
+      id: game.id,
+      name: game.title,
+      release: game.releaseDate,
+      platforms: game.platforms,
+      genres: game.genres,
+      publisher: game.publisher,
+      price: game.basePrice,
+      stars: game.stars,
+      votes: game.votes,
+      art: game.art,
+      portrait: game.portrait,
+    });
+  }
+  await saveBlob(DISCOVERED_KEY, {
+    games: [...mirror.values()].slice(-MAX_MIRROR_ROWS),
+    sweptAt: new Date().toISOString(),
+  });
   await saveBlob(CURSOR_KEY, { next: to >= SCAN_TO ? SCAN_FROM : to });
 
   // Rebuild now, against the new seed list, so no reader ever pays for it.
@@ -284,5 +323,6 @@ export async function sweepForReleases() {
     seeds: kept.size,
     calendar: rebuilt.games.length,
     recent: rebuilt.recent.length,
+    mirror: mirror.size,
   };
 }

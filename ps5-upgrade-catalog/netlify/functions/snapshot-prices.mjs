@@ -69,7 +69,8 @@ export default async () => {
   const sweep = await sweepForReleases();
   console.log(
     `Swept concepts ${sweep.from}-${sweep.to}: ${sweep.discovered} upcoming found, ` +
-      `${sweep.seeds} seeds tracked, ${sweep.calendar} on the calendar`,
+      `${sweep.seeds} seeds tracked, ${sweep.calendar} on the calendar, ` +
+      `${sweep.recent} just out, ${sweep.mirror} in the store mirror`,
   );
 };
 

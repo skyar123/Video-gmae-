@@ -1,8 +1,9 @@
-import { loadNews } from '../../api/news.mjs';
+import { loadGameNews, loadNews } from '../../api/news.mjs';
 
-/** GET /api/news — merged publisher feeds, newest first. */
-export default async function handler() {
-  const payload = await loadNews();
+/** GET /api/news — merged publisher feeds, or `?game=` for one title. */
+export default async function handler(request) {
+  const game = new URL(request.url).searchParams.get('game');
+  const payload = game ? await loadGameNews(game) : await loadNews();
   return new Response(JSON.stringify(payload), {
     headers: {
       'content-type': 'application/json; charset=utf-8',
