@@ -37,6 +37,7 @@ import {
   VolumeX,
   X,
 } from 'lucide-react';
+import { buildProfile, recommend } from './recommend.js';
 import gamesData from './games.json';
 import creatorsData from './creators.json';
 
@@ -63,6 +64,7 @@ const UPGRADES = uniqueValues('ps5Upgrade');
  */
 const COLLECTIONS = [
   { value: 'all', label: 'All games', tag: null },
+  { value: 'genius', label: 'Genius picks', tag: null },
   { value: 'deals', label: 'Best deals', tag: null },
   { value: 'graphics', label: 'Best graphics', tag: 'graphics' },
   { value: 'social', label: 'Online & social', tag: 'social' },
@@ -73,6 +75,8 @@ const COLLECTIONS = [
 ];
 
 const COLLECTION_BLURBS = {
+  genius:
+    'Worked out from the games you own and want, with the reason for each pick.',
   deals: 'Everything discounted right now, deepest cut first. Updates with the storefront.',
   graphics: 'Technical showcases and standout art direction.',
   social: 'Online play, co-op and couch multiplayer.',
@@ -737,6 +741,7 @@ function GameModal({
   byTitle,
   wishlisted,
   owned,
+  reason,
   onToggleOwned,
   favouriteCreators,
   onToggleFavouriteCreator,
@@ -869,6 +874,13 @@ function GameModal({
               <OwnedButton owned={owned} onToggle={onToggleOwned} withLabel />
             </div>
           </div>
+
+          {reason && (
+            <p className="mt-3 inline-flex items-start gap-2 rounded-lg bg-indigo-50 px-3 py-2 text-sm font-medium leading-relaxed text-indigo-700">
+              <Sparkles className="mt-0.5 h-4 w-4 shrink-0" />
+              <span>Picked for you: {reason.charAt(0).toLowerCase() + reason.slice(1)}.</span>
+            </p>
+          )}
 
           <div className="mt-5 grid grid-cols-3 gap-4">
             {[
@@ -1105,7 +1117,16 @@ function OwnedButton({ owned, onToggle, withLabel = false }) {
  * Card
  * ------------------------------------------------------------------ */
 
-function GameCard({ game, live, wishlisted, owned, onToggleWishlist, onToggleOwned, onOpen }) {
+function GameCard({
+  game,
+  live,
+  wishlisted,
+  owned,
+  reason,
+  onToggleWishlist,
+  onToggleOwned,
+  onOpen,
+}) {
   const prediction = live?.prediction;
   const ratings = live?.ratings ?? game.ratings;
   const showVerdict = prediction && (prediction.verdict === 'buy-now' || prediction.verdict === 'wait');
@@ -1161,7 +1182,14 @@ function GameCard({ game, live, wishlisted, owned, onToggleWishlist, onToggleOwn
             <AgeBadge ageRating={game.ageRating} />
             <RatingChips ratings={ratings} />
           </div>
-          <p className="line-clamp-2 text-xs leading-relaxed text-slate-500">{game.description}</p>
+          {reason ? (
+            <p className="line-clamp-3 text-xs font-medium leading-relaxed text-indigo-600">
+              <Sparkles className="mr-1 inline h-3 w-3 align-[-1px]" />
+              {reason}
+            </p>
+          ) : (
+            <p className="line-clamp-2 text-xs leading-relaxed text-slate-500">{game.description}</p>
+          )}
           {live?.price && (
             <p className="mt-auto flex items-baseline gap-2 pt-3 text-sm">
               <span className="font-semibold text-slate-900">{live.price.finalFormatted}</span>
@@ -1181,7 +1209,20 @@ function GameCard({ game, live, wishlisted, owned, onToggleWishlist, onToggleOwn
   );
 }
 
-function EmptyState({ filters, wishlist, status, onClear }) {
+function EmptyState({ filters, wishlist, library, status, onClear }) {
+  if (filters.collection === 'genius' && library.size === 0 && wishlist.size === 0) {
+    return (
+      <div className="py-20 text-center text-slate-500">
+        <Sparkles className="mx-auto mb-3 h-8 w-8 text-indigo-300" />
+        <p className="text-lg text-slate-700">Nothing to work from yet.</p>
+        <p className="mx-auto mt-2 max-w-sm text-sm leading-relaxed">
+          Tick the check on a few games you already own, or heart the ones you want. Picks
+          appear as soon as there is one, and get sharper with every game you add.
+        </p>
+      </div>
+    );
+  }
+
   return (
     <div className="py-20 text-center text-slate-500">
       <Sparkles className="mx-auto mb-3 h-8 w-8 text-slate-300" />
@@ -1440,7 +1481,16 @@ function SimilarGames({ game, pool, byTitle, onOpen }) {
  * has to look right and get out of the way — the art runs edge to edge and
  * the text sits over a gradient rather than in a panel.
  */
-function FeedSlide({ game, live, wishlisted, owned, onToggleWishlist, onToggleOwned, onOpen }) {
+function FeedSlide({
+  game,
+  live,
+  wishlisted,
+  owned,
+  reason,
+  onToggleWishlist,
+  onToggleOwned,
+  onOpen,
+}) {
   // The trailer plays only while this slide is the one on screen, muted, the
   // way a feed behaves. Anything off screen is torn down so a long scroll
   // never leaves a stack of decoding videos behind.
@@ -1517,6 +1567,13 @@ function FeedSlide({ game, live, wishlisted, owned, onToggleWishlist, onToggleOw
             <h2 className="text-3xl font-bold leading-tight text-white drop-shadow sm:text-5xl">
               {game.title}
             </h2>
+
+            {reason && (
+              <p className="mt-3 inline-flex items-center gap-1.5 rounded-full bg-indigo-500/25 px-3 py-1 text-sm font-medium text-white ring-1 ring-inset ring-white/25 backdrop-blur">
+                <Sparkles className="h-3.5 w-3.5" />
+                {reason}
+              </p>
+            )}
 
             <p className="mt-3 max-w-xl text-sm leading-relaxed text-white/80 sm:text-base">
               {game.description}
@@ -2164,6 +2221,24 @@ export default function App() {
     });
   }, []);
 
+  // Recomputed only when the library, wishlist or PS5 toggle changes; it never
+  // touches live data, so it stays instant while prices are still loading.
+  const geniusPicks = useMemo(() => {
+    const profile = buildProfile(gamesData, library, wishlist);
+    if (!profile) return [];
+    const exclude = new Set([...library, ...wishlist]);
+    return recommend(gamesData, profile, {
+      exclude,
+      limit: 48,
+      includePs5: filters.includePs5,
+    });
+  }, [library, wishlist, filters.includePs5]);
+
+  const geniusReasons = useMemo(
+    () => new Map(geniusPicks.map((pick) => [pick.game.id, pick.reason])),
+    [geniusPicks],
+  );
+
   // Keeps typing responsive while React re-filters in the background.
   const deferredQuery = useDeferredValue(filters.q);
 
@@ -2172,8 +2247,14 @@ export default function App() {
 
     const collection = COLLECTIONS.find((entry) => entry.value === filters.collection);
 
+    const isGenius = filters.collection === 'genius';
+    const geniusRank = isGenius
+      ? new Map(geniusPicks.map((pick, index) => [pick.game.id, index]))
+      : null;
+
     const matches = gamesData.filter((game) => {
       if (!filters.includePs5 && game.platform === 'PS5') return false;
+      if (isGenius && !geniusRank.has(game.id)) return false;
       if (collection?.tag && !game.tags.includes(collection.tag)) return false;
       if (filters.collection === 'deals' && !(byTitle.get(game.title)?.price?.discountPercent > 0))
         return false;
@@ -2206,6 +2287,11 @@ export default function App() {
       });
     }
 
+    // The picks arrive ranked, so catalog order means "keep the ranking".
+    if (isGenius && filters.sort === 'catalog') {
+      return [...matches].sort((a, b) => geniusRank.get(a.id) - geniusRank.get(b.id));
+    }
+
     if (filters.sort === 'catalog') return matches;
 
     const liveOf = liveFor;
@@ -2221,7 +2307,7 @@ export default function App() {
       if (filters.sort === 'buy') return buyScoreOf(a) - buyScoreOf(b);
       return discountOf(b) - discountOf(a);
     });
-  }, [deferredQuery, filters, wishlist, library, byTitle]);
+  }, [deferredQuery, filters, wishlist, library, byTitle, geniusPicks]);
 
   const visiblePool = useMemo(
     () => gamesData.filter((game) => filters.includePs5 || game.platform !== 'PS5'),
@@ -2244,12 +2330,14 @@ export default function App() {
       counts[entry.value] =
         entry.value === 'deals'
           ? saleCount
-          : entry.tag
+          : entry.value === 'genius'
+            ? geniusPicks.length
+            : entry.tag
             ? visiblePool.filter((game) => game.tags.includes(entry.tag)).length
             : visiblePool.length;
     }
     return counts;
-  }, [visiblePool, saleCount]);
+  }, [visiblePool, saleCount, geniusPicks]);
 
   const activeGame = activeGameId ? gamesData.find((game) => game.id === activeGameId) : null;
 
@@ -2420,6 +2508,7 @@ export default function App() {
                     }`}
                   >
                     {entry.value === 'deals' && <BadgePercent className="h-3.5 w-3.5" />}
+                    {entry.value === 'genius' && <Sparkles className="h-3.5 w-3.5" />}
                     {entry.label}
                     <span className={`tabular-nums ${active ? 'text-white/60' : 'text-slate-400'}`}>
                       {collectionCounts[entry.value]}
@@ -2580,6 +2669,7 @@ export default function App() {
               live={byTitle.get(game.title)}
               wishlisted={wishlist.has(game.id)}
               owned={library.has(game.id)}
+              reason={filters.collection === 'genius' ? geniusReasons.get(game.id) : undefined}
               onToggleWishlist={() => toggleWishlist(game.id)}
               onToggleOwned={() => toggleOwned(game.id)}
               onOpen={() => setActiveGameId(game.id)}
@@ -2589,6 +2679,7 @@ export default function App() {
             <EmptyState
               filters={filters}
               wishlist={wishlist}
+              library={library}
               status={status}
               onClear={clearFilters}
             />
@@ -2610,6 +2701,7 @@ export default function App() {
                 live={byTitle.get(game.title)}
                 wishlisted={wishlist.has(game.id)}
                 owned={library.has(game.id)}
+                reason={filters.collection === 'genius' ? geniusReasons.get(game.id) : undefined}
                 onToggleWishlist={() => toggleWishlist(game.id)}
                 onToggleOwned={() => toggleOwned(game.id)}
                 onOpen={() => setActiveGameId(game.id)}
@@ -2621,6 +2713,7 @@ export default function App() {
             <EmptyState
               filters={filters}
               wishlist={wishlist}
+              library={library}
               status={status}
               onClear={clearFilters}
             />
@@ -2640,6 +2733,7 @@ export default function App() {
           onToggleFavouriteCreator={toggleFavouriteCreator}
           wishlisted={wishlist.has(activeGame.id)}
           owned={library.has(activeGame.id)}
+          reason={geniusReasons.get(activeGame.id)}
           onToggleWishlist={() => toggleWishlist(activeGame.id)}
           onToggleOwned={() => toggleOwned(activeGame.id)}
           onClose={() => setActiveGameId(null)}
