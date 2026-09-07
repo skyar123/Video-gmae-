@@ -12,6 +12,7 @@ import {
   BadgePercent,
   ChevronDown,
   CirclePlay,
+  Dices,
   ExternalLink,
   Gamepad2,
   Heart,
@@ -29,6 +30,7 @@ import {
   ThumbsUp,
   TrendingDown,
   Users,
+  VolumeX,
   X,
 } from 'lucide-react';
 import gamesData from './games.json';
@@ -60,6 +62,7 @@ const COLLECTIONS = [
   { value: 'graphics', label: 'Best graphics', tag: 'graphics' },
   { value: 'social', label: 'Online & social', tag: 'social' },
   { value: 'cozy', label: 'Cozy', tag: 'cozy' },
+  { value: 'classic', label: 'Classics', tag: 'classic' },
   { value: 'queer', label: 'Queer stories', tag: 'queer' },
   { value: 'disability', label: 'Disability rep', tag: 'disability' },
 ];
@@ -69,6 +72,7 @@ const COLLECTION_BLURBS = {
   graphics: 'Technical showcases and standout art direction.',
   social: 'Online play, co-op and couch multiplayer.',
   cozy: 'Low-stress games with gentle pacing and no fail state to speak of.',
+  classic: 'Older PlayStation games and remasters you can play on a PS4 or PS5 today.',
   queer: 'Games with queer characters or relationships that matter to the story, not background detail.',
   disability: 'Games with disabled or neurodivergent characters, or landmark accessibility work.',
 };
@@ -100,6 +104,7 @@ const UPGRADE_STYLES = {
   'Paid PS5 Upgrade': 'bg-amber-50 text-amber-700 ring-amber-600/20',
   'Backwards Compatible': 'bg-slate-100 text-slate-600 ring-slate-500/20',
   'PS5 Only': 'bg-violet-50 text-violet-700 ring-violet-600/20',
+  'PS Plus Classic': 'bg-teal-50 text-teal-700 ring-teal-600/20',
 };
 
 const VERDICT_STYLES = {
@@ -641,7 +646,7 @@ function PriceSparkline({ points }) {
  * Plays a storefront trailer. Steam serves adaptive streams only, so hls.js is
  * loaded on demand — browsers with native HLS (Safari) skip the download.
  */
-function TrailerPlayer({ video, poster }) {
+function TrailerPlayer({ video, poster, muted = false, className }) {
   const videoRef = useRef(null);
 
   useEffect(() => {
@@ -675,10 +680,12 @@ function TrailerPlayer({ video, poster }) {
     <video
       ref={videoRef}
       poster={poster}
-      controls
+      controls={!muted}
+      muted={muted}
+      loop={muted}
       autoPlay
       playsInline
-      className="h-full w-full bg-black object-contain"
+      className={className ?? 'h-full w-full bg-black object-contain'}
     />
   );
 }
@@ -696,7 +703,7 @@ const trailerSearchLink = (title) =>
     `${title} gameplay PS5`,
   )}`;
 
-function GameModal({ game, live, wishlisted, onToggleWishlist, onClose }) {
+function GameModal({ game, live, pool, byTitle, wishlisted, onToggleWishlist, onOpen, onClose }) {
   const [selected, setSelected] = useState(null);
   const closeRef = useRef(null);
 
@@ -870,6 +877,8 @@ function GameModal({ game, live, wishlisted, onToggleWishlist, onClose }) {
               More gameplay
             </a>
           </div>
+
+          <SimilarGames game={game} pool={pool} byTitle={byTitle} onOpen={onOpen} />
         </div>
       </div>
     </div>
@@ -1122,6 +1131,68 @@ function EmptyState({ filters, wishlist, status, onClear }) {
   );
 }
 
+/**
+ * "More like this": scores every other game against one you are looking at.
+ * Weighted so that the things you actually browse by — the curated tags and
+ * the genre — matter more than incidental matches like protagonist.
+ */
+function similarGames(game, pool, limit = 4) {
+  const tags = new Set(game.tags ?? []);
+  const scored = [];
+
+  for (const other of pool) {
+    if (other.id === game.id) continue;
+    let score = 0;
+    if (other.genre === game.genre) score += 3;
+    for (const tag of other.tags ?? []) if (tags.has(tag)) score += 2;
+    if (other.artStyle === game.artStyle) score += 2;
+    if (other.protagonist === game.protagonist) score += 1;
+    if (other.ageRating?.family === game.ageRating?.family) score += 1;
+    if (score >= 4) scored.push({ other, score });
+  }
+
+  return scored
+    .sort((a, b) => b.score - a.score || a.other.title.localeCompare(b.other.title))
+    .slice(0, limit)
+    .map((entry) => entry.other);
+}
+
+function SimilarGames({ game, pool, byTitle, onOpen }) {
+  const similar = useMemo(() => similarGames(game, pool), [game, pool]);
+  if (similar.length === 0) return null;
+
+  return (
+    <div className="mt-6 border-t border-slate-100 pt-5">
+      <h3 className="mb-3 text-sm font-semibold uppercase tracking-wider text-slate-400">
+        More like this
+      </h3>
+      <div className="grid grid-cols-2 gap-2 sm:grid-cols-4">
+        {similar.map((other) => {
+          const live = byTitle.get(other.title);
+          return (
+            <button
+              key={other.id}
+              type="button"
+              onClick={() => onOpen(other.id)}
+              className="group overflow-hidden rounded-lg border border-slate-200 text-left transition-all duration-200 ease-spring hover:-translate-y-0.5 hover:shadow-md active:scale-95"
+            >
+              <div className="aspect-[460/215] w-full overflow-hidden bg-slate-100">
+                <CoverArt game={other} live={live} className="h-full w-full" />
+              </div>
+              <div className="p-2">
+                <p className="line-clamp-2 text-xs font-semibold leading-tight text-slate-700">
+                  {other.title}
+                </p>
+                <p className="mt-0.5 text-[11px] text-slate-400">{other.genre}</p>
+              </div>
+            </button>
+          );
+        })}
+      </div>
+    </div>
+  );
+}
+
 /* ------------------------------------------------------------------ *
  * Feed view
  * ------------------------------------------------------------------ */
@@ -1132,6 +1203,23 @@ function EmptyState({ filters, wishlist, status, onClear }) {
  * the text sits over a gradient rather than in a panel.
  */
 function FeedSlide({ game, live, wishlisted, onToggleWishlist, onOpen }) {
+  // The trailer plays only while this slide is the one on screen, muted, the
+  // way a feed behaves. Anything off screen is torn down so a long scroll
+  // never leaves a stack of decoding videos behind.
+  const slideRef = useRef(null);
+  const [centred, setCentred] = useState(false);
+
+  useEffect(() => {
+    const element = slideRef.current;
+    if (!element) return undefined;
+    const observer = new IntersectionObserver(
+      ([entry]) => setCentred(entry.isIntersecting),
+      { threshold: 0.6 },
+    );
+    observer.observe(element);
+    return () => observer.disconnect();
+  }, []);
+
   // A wide screenshot fills the screen far better than the 460px capsule, so
   // use one as soon as the live data arrives and fall back until then.
   const background =
@@ -1143,8 +1231,13 @@ function FeedSlide({ game, live, wishlisted, onToggleWishlist, onOpen }) {
   const ratings = live?.ratings ?? game.ratings;
   const price = live?.price;
 
+  const trailer = live?.videos?.[0] ?? null;
+
   return (
-    <section className="feed-slide relative flex h-full w-full items-end overflow-hidden bg-slate-900">
+    <section
+      ref={slideRef}
+      className="feed-slide relative flex h-full w-full items-end overflow-hidden bg-slate-900"
+    >
       {background ? (
         <img
           src={background}
@@ -1155,6 +1248,14 @@ function FeedSlide({ game, live, wishlisted, onToggleWishlist, onOpen }) {
         />
       ) : (
         <div className="absolute inset-0 bg-gradient-to-br from-indigo-600 via-violet-600 to-fuchsia-600" />
+      )}
+      {centred && trailer && (
+        <TrailerPlayer
+          video={trailer}
+          poster={background}
+          muted
+          className="absolute inset-0 h-full w-full object-cover"
+        />
       )}
       <div className="absolute inset-0 bg-gradient-to-t from-slate-950 via-slate-950/70 to-slate-950/10" />
 
@@ -1232,6 +1333,14 @@ function FeedSlide({ game, live, wishlisted, onToggleWishlist, onOpen }) {
             >
               <Info className="h-5 w-5" />
             </button>
+            {trailer && (
+              <span
+                title="Trailer plays muted"
+                className="rounded-full bg-white/15 p-3 text-white backdrop-blur"
+              >
+                <VolumeX className="h-5 w-5" />
+              </span>
+            )}
             <a
               href={storeLink(game)}
               target="_blank"
@@ -1543,6 +1652,21 @@ export default function App() {
 
             <button
               type="button"
+              onClick={() => {
+                if (filteredGames.length === 0) return;
+                const pick = filteredGames[Math.floor(Math.random() * filteredGames.length)];
+                setActiveGameId(pick.id);
+              }}
+              disabled={filteredGames.length === 0}
+              aria-label="Surprise me with a random game"
+              title="Surprise me"
+              className="shrink-0 rounded-full bg-amber-100 p-2 text-amber-700 transition-all duration-200 ease-spring hover:bg-amber-200 hover:rotate-12 active:scale-90 disabled:opacity-40"
+            >
+              <Dices className="h-4 w-4" />
+            </button>
+
+            <button
+              type="button"
               onClick={() => set('view', filters.view === 'feed' ? 'grid' : 'feed')}
               aria-label={filters.view === 'feed' ? 'Switch to grid' : 'Switch to feed'}
               title={filters.view === 'feed' ? 'Grid view' : 'Feed view'}
@@ -1775,6 +1899,9 @@ export default function App() {
           key={activeGame.id}
           game={activeGame}
           live={byTitle.get(activeGame.title)}
+          pool={visiblePool}
+          byTitle={byTitle}
+          onOpen={setActiveGameId}
           wishlisted={wishlist.has(activeGame.id)}
           onToggleWishlist={() => toggleWishlist(activeGame.id)}
           onClose={() => setActiveGameId(null)}
