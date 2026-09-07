@@ -12,6 +12,8 @@
     ],
     "steamAppId": 753640,
     "ageRating": {
+      "family": "mild",
+      "concerns": [],
       "tier": "everyone10",
       "source": "ESRB",
       "rating": "E10",
@@ -76,6 +78,8 @@
     ],
     "steamAppId": 632470,
     "ageRating": {
+      "family": "mild",
+      "concerns": [],
       "tier": "mature",
       "source": "USK",
       "rating": "16",
@@ -134,6 +138,8 @@
     ],
     "steamAppId": 275850,
     "ageRating": {
+      "family": "safe",
+      "concerns": [],
       "tier": "teen",
       "source": "ESRB",
       "rating": "T",
@@ -206,6 +212,8 @@
     ],
     "steamAppId": 264710,
     "ageRating": {
+      "family": "mild",
+      "concerns": [],
       "tier": "everyone10",
       "source": "ESRB",
       "rating": "E10",
@@ -264,6 +272,8 @@
     "tags": [],
     "steamAppId": 894020,
     "ageRating": {
+      "family": "mild",
+      "concerns": [],
       "tier": "teen",
       "source": "ESRB",
       "rating": "T",
@@ -319,6 +329,8 @@
     "tags": [],
     "steamAppId": 553420,
     "ageRating": {
+      "family": "mild",
+      "concerns": [],
       "tier": "everyone10",
       "source": "DJCTQ",
       "rating": "10",
@@ -388,6 +400,8 @@
     ],
     "steamAppId": 1332010,
     "ageRating": {
+      "family": "mild",
+      "concerns": [],
       "tier": "everyone10",
       "source": "ESRB",
       "rating": "E10",
@@ -448,6 +462,8 @@
     ],
     "steamAppId": 1244090,
     "ageRating": {
+      "family": "mild",
+      "concerns": [],
       "tier": "everyone10",
       "source": "ESRB",
       "rating": "E10",
@@ -514,6 +530,8 @@
     ],
     "steamAppId": 1492680,
     "ageRating": {
+      "family": "mild",
+      "concerns": [],
       "tier": "everyone10",
       "source": "ESRB",
       "rating": "E10",
@@ -568,6 +586,8 @@
     ],
     "steamAppId": 1867530,
     "ageRating": {
+      "family": "mild",
+      "concerns": [],
       "tier": "teen",
       "source": "ESRB",
       "rating": "T",
@@ -607,6 +627,8 @@
     ],
     "steamAppId": 2420110,
     "ageRating": {
+      "family": "mild",
+      "concerns": [],
       "tier": "teen",
       "source": "ESRB",
       "rating": "T",
@@ -682,6 +704,10 @@
     ],
     "steamAppId": 1245620,
     "ageRating": {
+      "family": "mature",
+      "concerns": [
+        "Blood and Gore"
+      ],
       "tier": "mature",
       "source": "ESRB",
       "rating": "M",
@@ -748,6 +774,8 @@
     ],
     "steamAppId": 1345890,
     "ageRating": {
+      "family": "mild",
+      "concerns": [],
       "tier": "teen",
       "source": "ESRB",
       "rating": "T",
@@ -792,6 +820,8 @@
     ],
     "steamAppId": 695330,
     "ageRating": {
+      "family": "safe",
+      "concerns": [],
       "tier": "everyone",
       "source": "PEGI",
       "rating": "3",
@@ -836,6 +866,8 @@
     ],
     "steamAppId": 715560,
     "ageRating": {
+      "family": "safe",
+      "concerns": [],
       "tier": "everyone",
       "source": "DJCTQ",
       "rating": "L",
@@ -886,6 +918,11 @@
     "tags": [],
     "steamAppId": 383870,
     "ageRating": {
+      "family": "mature",
+      "concerns": [
+        "Conteúdo sexual",
+        "Sexuelle Inhalte"
+      ],
       "tier": "mature",
       "source": "DJCTQ",
       "rating": "16",
@@ -947,6 +984,8 @@
     ],
     "steamAppId": 1337010,
     "ageRating": {
+      "family": "safe",
+      "concerns": [],
       "tier": "everyone",
       "source": "DJCTQ",
       "rating": "L",
@@ -997,6 +1036,8 @@
     "tags": [],
     "steamAppId": 936790,
     "ageRating": {
+      "family": "mild",
+      "concerns": [],
       "tier": "mature",
       "source": "ESRB",
       "rating": "M",
@@ -1061,6 +1102,8 @@
     ],
     "steamAppId": 1055540,
     "ageRating": {
+      "family": "safe",
+      "concerns": [],
       "tier": "everyone",
       "source": "ESRB",
       "rating": "E",
@@ -1113,6 +1156,8 @@
     ],
     "steamAppId": 1118240,
     "ageRating": {
+      "family": "mild",
+      "concerns": [],
       "tier": "teen",
       "source": "DJCTQ",
       "rating": "14",
@@ -1170,6 +1215,8 @@
     ],
     "steamAppId": 1084600,
     "ageRating": {
+      "family": "mild",
+      "concerns": [],
       "tier": "everyone10",
       "source": "PEGI",
       "rating": "7",
@@ -1229,6 +1276,8 @@
     ],
     "steamAppId": 1202200,
     "ageRating": {
+      "family": "safe",
+      "concerns": [],
       "tier": "everyone",
       "source": "DJCTQ",
       "rating": "L",
@@ -1277,6 +1326,8 @@
     ],
     "steamAppId": 674140,
     "ageRating": {
+      "family": "mild",
+      "concerns": [],
       "tier": "everyone10",
       "source": "ESRB",
       "rating": "E10",
@@ -1324,6 +1375,8 @@
     ],
     "steamAppId": 1401590,
     "ageRating": {
+      "family": "safe",
+      "concerns": [],
       "tier": "everyone",
       "source": "ESRB",
       "rating": "E",
@@ -1383,6 +1436,8 @@
     ],
     "steamAppId": 1313140,
     "ageRating": {
+      "family": "mild",
+      "concerns": [],
       "tier": "teen",
       "source": "USK",
       "rating": "12",
@@ -1449,6 +1504,8 @@
     ],
     "steamAppId": 1245560,
     "ageRating": {
+      "family": "mild",
+      "concerns": [],
       "tier": "everyone10",
       "source": "DJCTQ",
       "rating": "10",
@@ -1490,6 +1547,10 @@
     ],
     "steamAppId": 972660,
     "ageRating": {
+      "family": "mature",
+      "concerns": [
+        "Sexual Content"
+      ],
       "tier": "teen",
       "source": "PEGI",
       "rating": "12",
@@ -1559,6 +1620,8 @@
     ],
     "steamAppId": 683320,
     "ageRating": {
+      "family": "safe",
+      "concerns": [],
       "tier": "everyone",
       "source": "ESRB",
       "rating": "E",
@@ -1611,6 +1674,8 @@
     ],
     "steamAppId": 1307580,
     "ageRating": {
+      "family": "safe",
+      "concerns": [],
       "tier": "everyone",
       "source": "ESRB",
       "rating": "E",
@@ -1661,6 +1726,8 @@
     "tags": [],
     "steamAppId": 1562430,
     "ageRating": {
+      "family": "mild",
+      "concerns": [],
       "tier": "teen",
       "source": "USK",
       "rating": "12",
@@ -1716,6 +1783,8 @@
     "tags": [],
     "steamAppId": 1574310,
     "ageRating": {
+      "family": "mild",
+      "concerns": [],
       "tier": "mature",
       "source": "DJCTQ",
       "rating": "16",
@@ -1760,6 +1829,8 @@
     ],
     "steamAppId": 481510,
     "ageRating": {
+      "family": "mild",
+      "concerns": [],
       "tier": "teen",
       "source": "DJCTQ",
       "rating": "12",
@@ -1817,6 +1888,8 @@
     ],
     "steamAppId": 1067540,
     "ageRating": {
+      "family": "mild",
+      "concerns": [],
       "tier": "everyone10",
       "source": "ESRB",
       "rating": "E10",
@@ -1864,6 +1937,8 @@
     ],
     "steamAppId": 1954200,
     "ageRating": {
+      "family": "mild",
+      "concerns": [],
       "tier": "teen",
       "source": "ESRB",
       "rating": "T",
@@ -1928,6 +2003,8 @@
     ],
     "steamAppId": 1123450,
     "ageRating": {
+      "family": "mild",
+      "concerns": [],
       "tier": "everyone10",
       "source": "ESRB",
       "rating": "E10",
@@ -1966,6 +2043,8 @@
     ],
     "steamAppId": 1321440,
     "ageRating": {
+      "family": "safe",
+      "concerns": [],
       "tier": "everyone",
       "source": "DJCTQ",
       "rating": "L",
@@ -2018,6 +2097,8 @@
     ],
     "steamAppId": 1868140,
     "ageRating": {
+      "family": "mild",
+      "concerns": [],
       "tier": "everyone",
       "source": "DJCTQ",
       "rating": "L",
@@ -2079,6 +2160,8 @@
     ],
     "steamAppId": 1599020,
     "ageRating": {
+      "family": "safe",
+      "concerns": [],
       "tier": "everyone",
       "source": "DJCTQ",
       "rating": "L",
@@ -2131,6 +2214,8 @@
     ],
     "steamAppId": 2379780,
     "ageRating": {
+      "family": "safe",
+      "concerns": [],
       "tier": "everyone",
       "source": "DJCTQ",
       "rating": "L",
@@ -2183,6 +2268,10 @@
     ],
     "steamAppId": 1148760,
     "ageRating": {
+      "family": "mature",
+      "concerns": [
+        "Conteúdo sexual"
+      ],
       "tier": "teen",
       "source": "DJCTQ",
       "rating": "14",
@@ -2236,6 +2325,8 @@
     ],
     "steamAppId": 1496590,
     "ageRating": {
+      "family": "mild",
+      "concerns": [],
       "tier": "everyone10",
       "source": "DJCTQ",
       "rating": "10",
@@ -2271,6 +2362,8 @@
     ],
     "steamAppId": 367520,
     "ageRating": {
+      "family": "mild",
+      "concerns": [],
       "tier": "everyone10",
       "source": "ESRB",
       "rating": "E10",
@@ -2331,6 +2424,8 @@
     ],
     "steamAppId": 1369630,
     "ageRating": {
+      "family": "mild",
+      "concerns": [],
       "tier": "teen",
       "source": "ESRB",
       "rating": "T",
@@ -2384,6 +2479,11 @@
     "tags": [],
     "steamAppId": 774361,
     "ageRating": {
+      "family": "mature",
+      "concerns": [
+        "Nudez",
+        "Violência Extrema"
+      ],
       "tier": "mature",
       "source": "DJCTQ",
       "rating": "18",
@@ -2451,6 +2551,10 @@
     "tags": [],
     "steamAppId": 588650,
     "ageRating": {
+      "family": "mature",
+      "concerns": [
+        "Blood and Gore"
+      ],
       "tier": "teen",
       "source": "ESRB",
       "rating": "T",
@@ -2510,6 +2614,8 @@
     "tags": [],
     "steamAppId": 534550,
     "ageRating": {
+      "family": "mild",
+      "concerns": [],
       "tier": "everyone10",
       "source": "ESRB",
       "rating": "E10",
@@ -2547,6 +2653,8 @@
     "tags": [],
     "steamAppId": 428550,
     "ageRating": {
+      "family": "mild",
+      "concerns": [],
       "tier": "everyone",
       "source": "DJCTQ",
       "rating": "L",
@@ -2580,6 +2688,11 @@
     "tags": [],
     "steamAppId": 283640,
     "ageRating": {
+      "family": "mature",
+      "concerns": [
+        "Blood and Gore",
+        "Partial Nudity"
+      ],
       "tier": "mature",
       "source": "ESRB",
       "rating": "M",
@@ -2630,6 +2743,8 @@
     "tags": [],
     "steamAppId": 1203630,
     "ageRating": {
+      "family": "mild",
+      "concerns": [],
       "tier": "teen",
       "source": "DJCTQ",
       "rating": "14",
@@ -2665,6 +2780,8 @@
     ],
     "steamAppId": 1701520,
     "ageRating": {
+      "family": "mild",
+      "concerns": [],
       "tier": "everyone",
       "source": "DJCTQ",
       "rating": "L",
@@ -2715,6 +2832,8 @@
     "tags": [],
     "steamAppId": 1123050,
     "ageRating": {
+      "family": "mild",
+      "concerns": [],
       "tier": "teen",
       "source": "ESRB",
       "rating": "T",
@@ -2760,6 +2879,10 @@
     "tags": [],
     "steamAppId": 347800,
     "ageRating": {
+      "family": "mature",
+      "concerns": [
+        "Nudez"
+      ],
       "tier": "teen",
       "source": "DJCTQ",
       "rating": "12",
@@ -2793,6 +2916,8 @@
     "tags": [],
     "steamAppId": 1231880,
     "ageRating": {
+      "family": "mild",
+      "concerns": [],
       "tier": "everyone10",
       "source": "PEGI",
       "rating": "7",
@@ -2845,6 +2970,10 @@
     "tags": [],
     "steamAppId": 374190,
     "ageRating": {
+      "family": "mature",
+      "concerns": [
+        "Violência Extrema"
+      ],
       "tier": "mature",
       "source": "DJCTQ",
       "rating": "16",
@@ -2878,6 +3007,8 @@
     "tags": [],
     "steamAppId": 1046400,
     "ageRating": {
+      "family": "mild",
+      "concerns": [],
       "tier": "teen",
       "source": "PEGI",
       "rating": "12",
@@ -2927,6 +3058,8 @@
     "tags": [],
     "steamAppId": 312520,
     "ageRating": {
+      "family": "mild",
+      "concerns": [],
       "tier": "everyone10",
       "source": "USK",
       "rating": "6",
@@ -2990,6 +3123,10 @@
     "tags": [],
     "steamAppId": 953490,
     "ageRating": {
+      "family": "mature",
+      "concerns": [
+        "Violência Extrema"
+      ],
       "tier": "mature",
       "source": "USK",
       "rating": "16",
@@ -3045,6 +3182,8 @@
     "tags": [],
     "steamAppId": 2751000,
     "ageRating": {
+      "family": "mild",
+      "concerns": [],
       "tier": "teen",
       "source": "ESRB",
       "rating": "T",
@@ -3099,6 +3238,12 @@
     "tags": [],
     "steamAppId": 692850,
     "ageRating": {
+      "family": "mature",
+      "concerns": [
+        "Partial Nudity",
+        "Violência Extrema",
+        "Conteúdo sexual"
+      ],
       "tier": "teen",
       "source": "ESRB",
       "rating": "T",
@@ -3153,6 +3298,8 @@
     "tags": [],
     "steamAppId": 1062110,
     "ageRating": {
+      "family": "mild",
+      "concerns": [],
       "tier": "teen",
       "source": "DJCTQ",
       "rating": "14",
@@ -3203,6 +3350,8 @@
     "tags": [],
     "steamAppId": 1546710,
     "ageRating": {
+      "family": "mild",
+      "concerns": [],
       "tier": "everyone10",
       "source": "DJCTQ",
       "rating": "10",
@@ -3251,6 +3400,10 @@
     ],
     "steamAppId": 2386310,
     "ageRating": {
+      "family": "mature",
+      "concerns": [
+        "Nudez"
+      ],
       "tier": "teen",
       "source": "DJCTQ",
       "rating": "14",
@@ -3293,6 +3446,8 @@
     "tags": [],
     "steamAppId": 646570,
     "ageRating": {
+      "family": "mild",
+      "concerns": [],
       "tier": "everyone10",
       "source": "ESRB",
       "rating": "E10",
@@ -3347,6 +3502,8 @@
     "tags": [],
     "steamAppId": 1092790,
     "ageRating": {
+      "family": "mild",
+      "concerns": [],
       "tier": "teen",
       "source": "USK",
       "rating": "12",
@@ -3402,6 +3559,8 @@
     "tags": [],
     "steamAppId": 1076200,
     "ageRating": {
+      "family": "mild",
+      "concerns": [],
       "tier": "everyone10",
       "source": "DJCTQ",
       "rating": "10",
@@ -3444,6 +3603,8 @@
     "tags": [],
     "steamAppId": 601840,
     "ageRating": {
+      "family": "mild",
+      "concerns": [],
       "tier": "teen",
       "source": "DJCTQ",
       "rating": "14",
@@ -3490,6 +3651,8 @@
     "tags": [],
     "steamAppId": 1265820,
     "ageRating": {
+      "family": "mild",
+      "concerns": [],
       "tier": "teen",
       "source": "DJCTQ",
       "rating": "14",
@@ -3523,6 +3686,8 @@
     "tags": [],
     "steamAppId": 1755830,
     "ageRating": {
+      "family": "mild",
+      "concerns": [],
       "tier": "teen",
       "source": "USK",
       "rating": "12",
@@ -3558,6 +3723,8 @@
     ],
     "steamAppId": 814370,
     "ageRating": {
+      "family": "mild",
+      "concerns": [],
       "tier": "everyone10",
       "source": "DJCTQ",
       "rating": "10",
@@ -3615,6 +3782,8 @@
     ],
     "steamAppId": 1196630,
     "ageRating": {
+      "family": "mild",
+      "concerns": [],
       "tier": "everyone",
       "source": "DJCTQ",
       "rating": "L",
@@ -3650,6 +3819,8 @@
     ],
     "steamAppId": 1218210,
     "ageRating": {
+      "family": "mild",
+      "concerns": [],
       "tier": "everyone10",
       "source": "DJCTQ",
       "rating": "10",
@@ -3703,6 +3874,8 @@
     ],
     "steamAppId": 433340,
     "ageRating": {
+      "family": "safe",
+      "concerns": [],
       "tier": "everyone",
       "source": "DJCTQ",
       "rating": "L",
@@ -3753,6 +3926,8 @@
     "tags": [],
     "steamAppId": 1289810,
     "ageRating": {
+      "family": "mild",
+      "concerns": [],
       "tier": "teen",
       "source": "DJCTQ",
       "rating": "12",
@@ -3789,6 +3964,8 @@
     ],
     "steamAppId": 413150,
     "ageRating": {
+      "family": "mild",
+      "concerns": [],
       "tier": "everyone10",
       "source": "ESRB",
       "rating": "E10",
@@ -3852,6 +4029,8 @@
     ],
     "steamAppId": 666140,
     "ageRating": {
+      "family": "mild",
+      "concerns": [],
       "tier": "everyone10",
       "source": "PEGI",
       "rating": "7",
@@ -3889,6 +4068,8 @@
     ],
     "steamAppId": 1337760,
     "ageRating": {
+      "family": "mild",
+      "concerns": [],
       "tier": "everyone",
       "source": "ESRB",
       "rating": "E",
@@ -3949,6 +4130,8 @@
     ],
     "steamAppId": 1458100,
     "ageRating": {
+      "family": "mild",
+      "concerns": [],
       "tier": "everyone10",
       "source": "DJCTQ",
       "rating": "10",
@@ -3994,6 +4177,8 @@
     ],
     "steamAppId": 1062140,
     "ageRating": {
+      "family": "mild",
+      "concerns": [],
       "tier": "everyone10",
       "source": "PEGI",
       "rating": "7",
@@ -4031,6 +4216,12 @@
     ],
     "steamAppId": 1222670,
     "ageRating": {
+      "family": "mature",
+      "concerns": [
+        "Sexual Themes",
+        "Conteúdo Sexual",
+        "Sexuelle Inhalte"
+      ],
       "tier": "teen",
       "source": "ESRB",
       "rating": "T",
@@ -4100,6 +4291,8 @@
     ],
     "steamAppId": 1403650,
     "ageRating": {
+      "family": "mild",
+      "concerns": [],
       "tier": "everyone",
       "source": "DJCTQ",
       "rating": "L",
@@ -4140,6 +4333,8 @@
     ],
     "steamAppId": 1356280,
     "ageRating": {
+      "family": "mild",
+      "concerns": [],
       "tier": "everyone10",
       "source": "USK",
       "rating": "6",
@@ -4175,6 +4370,8 @@
     ],
     "steamAppId": 1112890,
     "ageRating": {
+      "family": "safe",
+      "concerns": [],
       "tier": "everyone",
       "source": "DJCTQ",
       "rating": "L",
@@ -4213,6 +4410,8 @@
     "tags": [],
     "steamAppId": 599140,
     "ageRating": {
+      "family": "mild",
+      "concerns": [],
       "tier": "teen",
       "source": "DJCTQ",
       "rating": "12",
@@ -4278,6 +4477,8 @@
     ],
     "steamAppId": 606150,
     "ageRating": {
+      "family": "mild",
+      "concerns": [],
       "tier": "everyone10",
       "source": "DJCTQ",
       "rating": "10",
@@ -4348,6 +4549,8 @@
     ],
     "steamAppId": 1290000,
     "ageRating": {
+      "family": "safe",
+      "concerns": [],
       "tier": "everyone",
       "source": "ESRB",
       "rating": "E",
@@ -4400,6 +4603,8 @@
     ],
     "steamAppId": 1649080,
     "ageRating": {
+      "family": "mild",
+      "concerns": [],
       "tier": "teen",
       "source": "ESRB",
       "rating": "T",
@@ -4446,6 +4651,8 @@
     ],
     "steamAppId": 1046030,
     "ageRating": {
+      "family": "safe",
+      "concerns": [],
       "tier": "everyone",
       "source": "DJCTQ",
       "rating": "L",
@@ -4486,6 +4693,8 @@
     ],
     "steamAppId": 1291340,
     "ageRating": {
+      "family": "safe",
+      "concerns": [],
       "tier": "everyone",
       "source": "DJCTQ",
       "rating": "L",
@@ -4524,6 +4733,8 @@
     "tags": [],
     "steamAppId": 504230,
     "ageRating": {
+      "family": "mild",
+      "concerns": [],
       "tier": "everyone10",
       "source": "Steam Germany",
       "rating": "6",
@@ -4574,6 +4785,8 @@
     "tags": [],
     "steamAppId": 1599660,
     "ageRating": {
+      "family": "mild",
+      "concerns": [],
       "tier": "everyone",
       "source": "ESRB",
       "rating": "E",
@@ -4620,6 +4833,8 @@
     ],
     "steamAppId": 860510,
     "ageRating": {
+      "family": "mild",
+      "concerns": [],
       "tier": "teen",
       "source": "ESRB",
       "rating": "T",
@@ -4677,6 +4892,8 @@
     "tags": [],
     "steamAppId": 424840,
     "ageRating": {
+      "family": "mild",
+      "concerns": [],
       "tier": "teen",
       "source": "ESRB",
       "rating": "T",
@@ -4732,6 +4949,8 @@
     ],
     "steamAppId": 1608230,
     "ageRating": {
+      "family": "mild",
+      "concerns": [],
       "tier": "everyone10",
       "source": "DJCTQ",
       "rating": "10",
@@ -4782,6 +5001,8 @@
     "tags": [],
     "steamAppId": 1225570,
     "ageRating": {
+      "family": "mild",
+      "concerns": [],
       "tier": "everyone",
       "source": "ESRB",
       "rating": "E",
@@ -4828,6 +5049,8 @@
     ],
     "steamAppId": 268910,
     "ageRating": {
+      "family": "mild",
+      "concerns": [],
       "tier": "everyone10",
       "source": "ESRB",
       "rating": "E10",
@@ -4887,6 +5110,10 @@
     "tags": [],
     "steamAppId": 846870,
     "ageRating": {
+      "family": "mature",
+      "concerns": [
+        "Conteúdo sexual"
+      ],
       "tier": "everyone",
       "source": "ESRB",
       "rating": "E",
@@ -4922,6 +5149,8 @@
     "tags": [],
     "steamAppId": 1038300,
     "ageRating": {
+      "family": "mild",
+      "concerns": [],
       "tier": "everyone",
       "source": "ESRB",
       "rating": "E",
@@ -4962,6 +5191,8 @@
     "tags": [],
     "steamAppId": 1186640,
     "ageRating": {
+      "family": "mild",
+      "concerns": [],
       "tier": "teen",
       "source": "PEGI",
       "rating": "12",
@@ -5008,6 +5239,8 @@
     "tags": [],
     "steamAppId": 829280,
     "ageRating": {
+      "family": "mild",
+      "concerns": [],
       "tier": "everyone",
       "source": "DJCTQ",
       "rating": "L",
@@ -5043,6 +5276,8 @@
     ],
     "steamAppId": 242550,
     "ageRating": {
+      "family": "safe",
+      "concerns": [],
       "tier": "everyone10",
       "source": "ESRB",
       "rating": "E10",
@@ -5090,6 +5325,8 @@
     ],
     "steamAppId": 1378990,
     "ageRating": {
+      "family": "mild",
+      "concerns": [],
       "tier": "everyone10",
       "source": "ESRB",
       "rating": "E10",
@@ -5144,6 +5381,10 @@
     ],
     "steamAppId": 1533420,
     "ageRating": {
+      "family": "mature",
+      "concerns": [
+        "Conteúdo sexual"
+      ],
       "tier": "teen",
       "source": "ESRB",
       "rating": "T",
@@ -5202,6 +5443,8 @@
     ],
     "steamAppId": 1122680,
     "ageRating": {
+      "family": "mild",
+      "concerns": [],
       "tier": "everyone10",
       "source": "ESRB",
       "rating": "E10",
@@ -5253,6 +5496,8 @@
     "tags": [],
     "steamAppId": 501300,
     "ageRating": {
+      "family": "mild",
+      "concerns": [],
       "tier": "teen",
       "source": "ESRB",
       "rating": "T",
@@ -5308,6 +5553,11 @@
     "tags": [],
     "steamAppId": 1265920,
     "ageRating": {
+      "family": "mature",
+      "concerns": [
+        "Intense Violence",
+        "Sexual Themes"
+      ],
       "tier": "mature",
       "source": "ESRB",
       "rating": "M",
@@ -5364,6 +5614,12 @@
     "tags": [],
     "steamAppId": 532210,
     "ageRating": {
+      "family": "mature",
+      "concerns": [
+        "Partial Nudity",
+        "Sexual Content",
+        "Conteúdo Sexual"
+      ],
       "tier": "mature",
       "source": "ESRB",
       "rating": "M",
@@ -5423,6 +5679,14 @@
     ],
     "steamAppId": 1577120,
     "ageRating": {
+      "family": "mature",
+      "concerns": [
+        "Violência Extrema",
+        "Intense Violence",
+        "Blood and Gore",
+        "Mild Sexual Themes",
+        "Graphic violence, horror, offensive language &amp; content that may disturb"
+      ],
       "tier": "mature",
       "source": "ESRB",
       "rating": "M",
@@ -5493,6 +5757,13 @@
     ],
     "steamAppId": 2172010,
     "ageRating": {
+      "family": "mature",
+      "concerns": [
+        "Conteudo Sexual",
+        "Intense Violence",
+        "Blood and Gore",
+        "Sexual Themes"
+      ],
       "tier": "mature",
       "source": "ESRB",
       "rating": "M",
@@ -5550,6 +5821,11 @@
     ],
     "steamAppId": 1222140,
     "ageRating": {
+      "family": "mature",
+      "concerns": [
+        "Blood, Intense Violence, Partial Nudity, Sexual Themes, Strong Language, Use of Drugs",
+        "Sexuelle Inhalte"
+      ],
       "tier": "mature",
       "source": "ESRB",
       "rating": "M",
@@ -5607,6 +5883,8 @@
     "tags": [],
     "steamAppId": 1466640,
     "ageRating": {
+      "family": "mild",
+      "concerns": [],
       "tier": "teen",
       "source": "DJCTQ",
       "rating": "14",
@@ -5664,6 +5942,10 @@
     ],
     "steamAppId": 1497360,
     "ageRating": {
+      "family": "mature",
+      "concerns": [
+        "Conteúdo sexual"
+      ],
       "tier": "teen",
       "source": "PEGI",
       "rating": "12",
@@ -5701,6 +5983,8 @@
     ],
     "steamAppId": 599610,
     "ageRating": {
+      "family": "mild",
+      "concerns": [],
       "tier": "everyone",
       "source": "ESRB",
       "rating": "E",
@@ -5757,6 +6041,8 @@
     ],
     "steamAppId": 1634150,
     "ageRating": {
+      "family": "safe",
+      "concerns": [],
       "tier": "everyone",
       "source": "DJCTQ",
       "rating": "L",
@@ -5809,6 +6095,8 @@
     ],
     "steamAppId": 581270,
     "ageRating": {
+      "family": "mild",
+      "concerns": [],
       "tier": "everyone",
       "source": "ESRB",
       "rating": "E",
@@ -5855,6 +6143,8 @@
     ],
     "steamAppId": 1497450,
     "ageRating": {
+      "family": "safe",
+      "concerns": [],
       "tier": "everyone",
       "source": "DJCTQ",
       "rating": "L",
@@ -5891,6 +6181,8 @@
     ],
     "steamAppId": 1272840,
     "ageRating": {
+      "family": "safe",
+      "concerns": [],
       "tier": "everyone",
       "source": "DJCTQ",
       "rating": "L",
@@ -5931,6 +6223,10 @@
     ],
     "steamAppId": 1080750,
     "ageRating": {
+      "family": "mature",
+      "concerns": [
+        "Nudez"
+      ],
       "tier": "everyone10",
       "source": "USK",
       "rating": "6",
@@ -5964,6 +6260,8 @@
     "tags": [],
     "steamAppId": 1221250,
     "ageRating": {
+      "family": "mild",
+      "concerns": [],
       "tier": "mature",
       "source": "DJCTQ",
       "rating": "16",
@@ -6008,6 +6306,8 @@
     ],
     "steamAppId": 1135690,
     "ageRating": {
+      "family": "safe",
+      "concerns": [],
       "tier": "everyone",
       "source": "DJCTQ",
       "rating": "L",
@@ -6060,6 +6360,10 @@
     ],
     "steamAppId": 914800,
     "ageRating": {
+      "family": "mature",
+      "concerns": [
+        "Conteúdo sexual"
+      ],
       "tier": "teen",
       "source": "DJCTQ",
       "rating": "12",
@@ -6112,6 +6416,8 @@
     ],
     "steamAppId": 1663220,
     "ageRating": {
+      "family": "mild",
+      "concerns": [],
       "tier": "teen",
       "source": "DJCTQ",
       "rating": "12",
@@ -6145,6 +6451,10 @@
     "tags": [],
     "steamAppId": 447530,
     "ageRating": {
+      "family": "mature",
+      "concerns": [
+        "Sexuelle Inhalte"
+      ],
       "tier": "mature",
       "source": "DJCTQ",
       "rating": "18",
@@ -6197,6 +6507,8 @@
     ],
     "steamAppId": 1310330,
     "ageRating": {
+      "family": "mild",
+      "concerns": [],
       "tier": "mature",
       "source": "PEGI",
       "rating": "16",
@@ -6234,6 +6546,8 @@
     ],
     "steamAppId": 1269640,
     "ageRating": {
+      "family": "mild",
+      "concerns": [],
       "tier": "teen",
       "source": "DJCTQ",
       "rating": "14",
@@ -6286,6 +6600,8 @@
     ],
     "steamAppId": 1201270,
     "ageRating": {
+      "family": "mild",
+      "concerns": [],
       "tier": "everyone10",
       "source": "DJCTQ",
       "rating": "10",
@@ -6336,6 +6652,10 @@
     "tags": [],
     "steamAppId": 1617220,
     "ageRating": {
+      "family": "mature",
+      "concerns": [
+        "Conteúdo sexual"
+      ],
       "tier": "teen",
       "source": "PEGI",
       "rating": "12",
@@ -6387,6 +6707,8 @@
     ],
     "steamAppId": 729000,
     "ageRating": {
+      "family": "mild",
+      "concerns": [],
       "tier": "everyone10",
       "source": "DJCTQ",
       "rating": "10",
@@ -6437,6 +6759,8 @@
     "tags": [],
     "steamAppId": 232430,
     "ageRating": {
+      "family": "safe",
+      "concerns": [],
       "tier": "everyone10",
       "source": "USK",
       "rating": "6",
@@ -6479,6 +6803,12 @@
     "tags": [],
     "steamAppId": 1097200,
     "ageRating": {
+      "family": "mature",
+      "concerns": [
+        "Violência Extrema",
+        "Conteúdo sexual",
+        "Sexuelle Inhalte"
+      ],
       "tier": "mature",
       "source": "PEGI",
       "rating": "18",
@@ -6522,6 +6852,8 @@
     ],
     "steamAppId": 1225590,
     "ageRating": {
+      "family": "mild",
+      "concerns": [],
       "tier": "teen",
       "source": "ESRB",
       "rating": "T",
@@ -6579,6 +6911,8 @@
     ],
     "steamAppId": 990630,
     "ageRating": {
+      "family": "mild",
+      "concerns": [],
       "tier": "everyone10",
       "source": "DJCTQ",
       "rating": "10",
@@ -6631,6 +6965,8 @@
     ],
     "steamAppId": 969760,
     "ageRating": {
+      "family": "safe",
+      "concerns": [],
       "tier": "everyone",
       "source": "DJCTQ",
       "rating": "L",
@@ -6667,6 +7003,8 @@
     ],
     "steamAppId": 384190,
     "ageRating": {
+      "family": "mild",
+      "concerns": [],
       "tier": "everyone",
       "source": "ESRB",
       "rating": "E",
@@ -6721,6 +7059,15 @@
     ],
     "steamAppId": 1091500,
     "ageRating": {
+      "family": "mature",
+      "concerns": [
+        "Blood and Gore",
+        "Intense Violence",
+        "Nudity",
+        "Strong Sexual Content",
+        "References to sexual violence",
+        "Conteúdo sexual"
+      ],
       "tier": "mature",
       "source": "ESRB",
       "rating": "M",
@@ -6797,6 +7144,15 @@
     ],
     "steamAppId": 292030,
     "ageRating": {
+      "family": "mature",
+      "concerns": [
+        "Blood and Gore",
+        "Intense Violence",
+        "Nudity",
+        "Strong Sexual Content",
+        "Sexual violence",
+        "Conteúdo Sexual"
+      ],
       "tier": "mature",
       "source": "ESRB",
       "rating": "M",
@@ -6869,6 +7225,11 @@
     ],
     "steamAppId": 1462040,
     "ageRating": {
+      "family": "mature",
+      "concerns": [
+        "Conteúdo sexual",
+        "nudity"
+      ],
       "tier": "teen",
       "source": "ESRB",
       "rating": "T",
@@ -6945,6 +7306,10 @@
     ],
     "steamAppId": 524220,
     "ageRating": {
+      "family": "mature",
+      "concerns": [
+        "Partial Nudity"
+      ],
       "tier": "mature",
       "source": "ESRB",
       "rating": "M",
@@ -7019,6 +7384,14 @@
     ],
     "steamAppId": 2215430,
     "ageRating": {
+      "family": "mature",
+      "concerns": [
+        "Blood and Gore",
+        "Intense Violence",
+        "Partial Nudity",
+        "Violência Extrema",
+        "Nudity"
+      ],
       "tier": "mature",
       "source": "ESRB",
       "rating": "M",
@@ -7093,6 +7466,8 @@
     ],
     "steamAppId": 1817190,
     "ageRating": {
+      "family": "mild",
+      "concerns": [],
       "tier": "teen",
       "source": "ESRB",
       "rating": "T",
@@ -7160,6 +7535,11 @@
     ],
     "steamAppId": 1850570,
     "ageRating": {
+      "family": "mature",
+      "concerns": [
+        "Intense Violence",
+        "Partial Nudity"
+      ],
       "tier": "mature",
       "source": "ESRB",
       "rating": "M",
@@ -7230,6 +7610,15 @@
     ],
     "steamAppId": 2531310,
     "ageRating": {
+      "family": "mature",
+      "concerns": [
+        "Blood and Gore",
+        "Intense Violence",
+        "Nudity",
+        "Sexual Content",
+        "Violência Extrema",
+        "Nudez"
+      ],
       "tier": "mature",
       "source": "ESRB",
       "rating": "M",
@@ -7306,6 +7695,15 @@
     ],
     "steamAppId": 2208920,
     "ageRating": {
+      "family": "mature",
+      "concerns": [
+        "Blood and Gore",
+        "Intense Violence",
+        "Partial Nudity",
+        "Sexual Themes",
+        "Conteúdo sexual",
+        "Violência Extrema"
+      ],
       "tier": "mature",
       "source": "ESRB",
       "rating": "M",
@@ -7382,6 +7780,10 @@
     ],
     "steamAppId": 2221920,
     "ageRating": {
+      "family": "mature",
+      "concerns": [
+        "Conteúdo sexual"
+      ],
       "tier": "teen",
       "source": "ESRB",
       "rating": "T",
@@ -7438,6 +7840,8 @@
     ],
     "steamAppId": 990080,
     "ageRating": {
+      "family": "mild",
+      "concerns": [],
       "tier": "teen",
       "source": "ESRB",
       "rating": "T",
@@ -7512,6 +7916,10 @@
     ],
     "steamAppId": 740130,
     "ageRating": {
+      "family": "mature",
+      "concerns": [
+        "Conteúdo sexual"
+      ],
       "tier": "teen",
       "source": "ESRB",
       "rating": "T",
@@ -7571,6 +7979,8 @@
     ],
     "steamAppId": 2138710,
     "ageRating": {
+      "family": "mild",
+      "concerns": [],
       "tier": "mature",
       "source": "ESRB",
       "rating": "M",
@@ -7628,6 +8038,8 @@
     ],
     "steamAppId": 1426210,
     "ageRating": {
+      "family": "mild",
+      "concerns": [],
       "tier": "teen",
       "source": "ESRB",
       "rating": "T",
@@ -7690,6 +8102,8 @@
     ],
     "steamAppId": 1145360,
     "ageRating": {
+      "family": "mild",
+      "concerns": [],
       "tier": "teen",
       "source": "ESRB",
       "rating": "T",
@@ -7751,6 +8165,8 @@
     "tags": [],
     "steamAppId": 898890,
     "ageRating": {
+      "family": "mild",
+      "concerns": [],
       "tier": "teen",
       "source": "ESRB",
       "rating": "T",
@@ -7835,6 +8251,8 @@
     ],
     "steamAppId": 1649240,
     "ageRating": {
+      "family": "mild",
+      "concerns": [],
       "tier": "teen",
       "source": "ESRB",
       "rating": "T",
@@ -7920,6 +8338,8 @@
     ],
     "steamAppId": 1895880,
     "ageRating": {
+      "family": "mild",
+      "concerns": [],
       "tier": "everyone10",
       "source": "ESRB",
       "rating": "E10",
@@ -7981,6 +8401,8 @@
     ],
     "steamAppId": 2651280,
     "ageRating": {
+      "family": "mild",
+      "concerns": [],
       "tier": "teen",
       "source": "ESRB",
       "rating": "T",
@@ -8055,6 +8477,14 @@
     ],
     "steamAppId": 2515020,
     "ageRating": {
+      "family": "mature",
+      "concerns": [
+        "Blood and Gore",
+        "Sexual Themes",
+        "Partial Nudity",
+        "Conteúdo sexual",
+        "Sexuelle Inhalte"
+      ],
       "tier": "mature",
       "source": "ESRB",
       "rating": "M",
@@ -8130,6 +8560,13 @@
     ],
     "steamAppId": 3489700,
     "ageRating": {
+      "family": "mature",
+      "concerns": [
+        "Blood and Gore",
+        "Sexual content",
+        "Violência Extrema",
+        "Conteúdo sexual"
+      ],
       "tier": "mature",
       "source": "ESRB",
       "rating": "M",
@@ -8204,6 +8641,12 @@
     ],
     "steamAppId": 1340990,
     "ageRating": {
+      "family": "mature",
+      "concerns": [
+        "Blood and Gore",
+        "Violência extrema",
+        "Conteúdo sexual"
+      ],
       "tier": "mature",
       "source": "ESRB",
       "rating": "M",
@@ -8274,6 +8717,15 @@
     ],
     "steamAppId": 1086940,
     "ageRating": {
+      "family": "mature",
+      "concerns": [
+        "Intense Violence",
+        "Blood and Gore",
+        "Strong Sexual Content",
+        "Nudity",
+        "Violência Extrema",
+        "Nudez"
+      ],
       "tier": "mature",
       "source": "ESRB",
       "rating": "M",
@@ -8349,6 +8801,12 @@
     ],
     "steamAppId": 553850,
     "ageRating": {
+      "family": "mature",
+      "concerns": [
+        "Blood and Gore",
+        "Intense Violence",
+        "Violência Extrema"
+      ],
       "tier": "mature",
       "source": "ESRB",
       "rating": "M",
@@ -8454,6 +8912,11 @@
     ],
     "steamAppId": 2358720,
     "ageRating": {
+      "family": "mature",
+      "concerns": [
+        "Blood and Gore",
+        "Partial Nudity"
+      ],
       "tier": "teen",
       "source": "ESRB",
       "rating": "T",
@@ -8528,6 +8991,13 @@
     ],
     "steamAppId": 2124490,
     "ageRating": {
+      "family": "mature",
+      "concerns": [
+        "Violência Extrema",
+        "Blood and Gore",
+        "Sexual Themes",
+        "Sexualisierte Gewalt / Sexual violence"
+      ],
       "tier": "mature",
       "source": "ESRB",
       "rating": "M",
@@ -8602,6 +9072,13 @@
     ],
     "steamAppId": 1693980,
     "ageRating": {
+      "family": "mature",
+      "concerns": [
+        "Intense Violence",
+        "Blood and Gore",
+        "Strong horror themes and violence, blood and gore",
+        "Violência extrema"
+      ],
       "tier": "mature",
       "source": "ESRB",
       "rating": "M",
@@ -8671,6 +9148,15 @@
     ],
     "steamAppId": 1888930,
     "ageRating": {
+      "family": "mature",
+      "concerns": [
+        "Blood and Gore",
+        "Intense Violence",
+        "Sexual Themes",
+        "Graphic Violence",
+        "Violência Extrema",
+        "Nudity"
+      ],
       "tier": "mature",
       "source": "ESRB",
       "rating": "M",
@@ -8742,6 +9228,11 @@
     ],
     "steamAppId": 1182900,
     "ageRating": {
+      "family": "mature",
+      "concerns": [
+        "Violência Extrema",
+        "Blood and Gore"
+      ],
       "tier": "mature",
       "source": "ESRB",
       "rating": "M",
@@ -8815,6 +9306,8 @@
     ],
     "steamAppId": 2842040,
     "ageRating": {
+      "family": "mild",
+      "concerns": [],
       "tier": "teen",
       "source": "ESRB",
       "rating": "T",
@@ -8888,6 +9381,8 @@
     ],
     "steamAppId": 2840770,
     "ageRating": {
+      "family": "mild",
+      "concerns": [],
       "tier": "teen",
       "source": "ESRB",
       "rating": "T",
@@ -8969,6 +9464,12 @@
     ],
     "steamAppId": 3280350,
     "ageRating": {
+      "family": "mature",
+      "concerns": [
+        "Blood and Gore",
+        "Partial Nudity",
+        "Conteudo sexual (Sexual Content) Drogas licitas (Legal Drugs)"
+      ],
       "tier": "mature",
       "source": "ESRB",
       "rating": "M",
@@ -9032,6 +9533,8 @@
     ],
     "steamAppId": 757310,
     "ageRating": {
+      "family": "safe",
+      "concerns": [],
       "tier": "everyone",
       "source": "DJCTQ",
       "rating": "L",
@@ -9093,6 +9596,8 @@
     ],
     "steamAppId": 1491670,
     "ageRating": {
+      "family": "mild",
+      "concerns": [],
       "tier": "teen",
       "source": "DJCTQ",
       "rating": "12",
@@ -9145,6 +9650,8 @@
     ],
     "steamAppId": 1177980,
     "ageRating": {
+      "family": "safe",
+      "concerns": [],
       "tier": "everyone",
       "source": "DJCTQ",
       "rating": "L",
@@ -9207,6 +9714,8 @@
     ],
     "steamAppId": 1977170,
     "ageRating": {
+      "family": "safe",
+      "concerns": [],
       "tier": "everyone",
       "source": "DJCTQ",
       "rating": "L",
@@ -9259,6 +9768,8 @@
     ],
     "steamAppId": 1627570,
     "ageRating": {
+      "family": "mild",
+      "concerns": [],
       "tier": "everyone10",
       "source": "USK",
       "rating": "6",
@@ -9311,6 +9822,8 @@
     ],
     "steamAppId": 2420660,
     "ageRating": {
+      "family": "mild",
+      "concerns": [],
       "tier": "everyone10",
       "source": "Steam Germany",
       "rating": "6",
@@ -9363,6 +9876,8 @@
     ],
     "steamAppId": 813230,
     "ageRating": {
+      "family": "mild",
+      "concerns": [],
       "tier": "everyone10",
       "source": "PEGI",
       "rating": "7",
@@ -9420,6 +9935,8 @@
     "tags": [],
     "steamAppId": 2008920,
     "ageRating": {
+      "family": "mild",
+      "concerns": [],
       "tier": "teen",
       "source": "ESRB",
       "rating": "T",
@@ -9477,6 +9994,8 @@
     ],
     "steamAppId": 745920,
     "ageRating": {
+      "family": "mild",
+      "concerns": [],
       "tier": "everyone10",
       "source": "DJCTQ",
       "rating": "10",
@@ -9512,6 +10031,8 @@
     ],
     "steamAppId": 1623730,
     "ageRating": {
+      "family": "mild",
+      "concerns": [],
       "tier": "everyone",
       "source": "DJCTQ",
       "rating": "L",
@@ -9581,6 +10102,8 @@
     ],
     "steamAppId": 1158160,
     "ageRating": {
+      "family": "mild",
+      "concerns": [],
       "tier": "everyone10",
       "source": "DJCTQ",
       "rating": "10",
@@ -9643,6 +10166,8 @@
     ],
     "steamAppId": 2230110,
     "ageRating": {
+      "family": "mild",
+      "concerns": [],
       "tier": "everyone10",
       "source": "ESRB",
       "rating": "E10",
@@ -9685,6 +10210,8 @@
     ],
     "steamAppId": 1658150,
     "ageRating": {
+      "family": "mild",
+      "concerns": [],
       "tier": "everyone10",
       "source": "DJCTQ",
       "rating": "10",
@@ -9737,6 +10264,8 @@
     ],
     "steamAppId": 1260320,
     "ageRating": {
+      "family": "mild",
+      "concerns": [],
       "tier": "everyone10",
       "source": "ESRB",
       "rating": "E10",
@@ -9782,6 +10311,8 @@
     ],
     "steamAppId": 1172620,
     "ageRating": {
+      "family": "mild",
+      "concerns": [],
       "tier": "teen",
       "source": "ESRB",
       "rating": "T",
@@ -9855,6 +10386,8 @@
     ],
     "steamAppId": 739630,
     "ageRating": {
+      "family": "mild",
+      "concerns": [],
       "tier": "teen",
       "source": "DJCTQ",
       "rating": "12",
@@ -9924,6 +10457,8 @@
     ],
     "steamAppId": 1293160,
     "ageRating": {
+      "family": "mild",
+      "concerns": [],
       "tier": "mature",
       "source": "PEGI",
       "rating": "18",
@@ -9979,6 +10514,8 @@
     ],
     "steamAppId": 1243830,
     "ageRating": {
+      "family": "safe",
+      "concerns": [],
       "tier": "everyone",
       "source": "DJCTQ",
       "rating": "L",
@@ -10069,6 +10606,8 @@
     ],
     "steamAppId": 105600,
     "ageRating": {
+      "family": "mild",
+      "concerns": [],
       "tier": "teen",
       "source": "Steam Germany",
       "rating": "12",
@@ -10138,6 +10677,8 @@
     ],
     "steamAppId": 548430,
     "ageRating": {
+      "family": "mild",
+      "concerns": [],
       "tier": "teen",
       "source": "DJCTQ",
       "rating": "14",
@@ -10191,6 +10732,8 @@
     ],
     "steamAppId": 582010,
     "ageRating": {
+      "family": "mild",
+      "concerns": [],
       "tier": "teen",
       "source": "ESRB",
       "rating": "T",
@@ -10265,6 +10808,8 @@
     ],
     "steamAppId": 1446780,
     "ageRating": {
+      "family": "mild",
+      "concerns": [],
       "tier": "teen",
       "source": "PEGI",
       "rating": "12",
@@ -10332,6 +10877,8 @@
     ],
     "steamAppId": 477160,
     "ageRating": {
+      "family": "mild",
+      "concerns": [],
       "tier": "teen",
       "source": "Steam Germany",
       "rating": "12",
@@ -10380,6 +10927,8 @@
     ],
     "steamAppId": 285900,
     "ageRating": {
+      "family": "mild",
+      "concerns": [],
       "tier": "everyone10",
       "source": "ESRB",
       "rating": "E10",
@@ -10435,6 +10984,8 @@
     ],
     "steamAppId": 996770,
     "ageRating": {
+      "family": "mild",
+      "concerns": [],
       "tier": "everyone",
       "source": "PEGI",
       "rating": "3",
@@ -10470,6 +11021,8 @@
     ],
     "steamAppId": 945360,
     "ageRating": {
+      "family": "mild",
+      "concerns": [],
       "tier": "everyone",
       "source": "DJCTQ",
       "rating": "L",
@@ -10531,6 +11084,8 @@
     ],
     "steamAppId": 962130,
     "ageRating": {
+      "family": "mild",
+      "concerns": [],
       "tier": "teen",
       "source": "ESRB",
       "rating": "T",
@@ -10587,7 +11142,26 @@
       "graphics"
     ],
     "steamAppId": 2344520,
-    "ageRating": null,
+    "ageRating": {
+      "family": "mature",
+      "concerns": [
+        "Intense Violence",
+        "Blood and Gore",
+        "Violência Extrema"
+      ],
+      "tier": "mature",
+      "source": "ESRB",
+      "rating": "M",
+      "official": true,
+      "esrb": "M",
+      "pegi": "18",
+      "descriptors": [
+        "Intense Violence",
+        "Blood and Gore",
+        "Language"
+      ],
+      "notes": null
+    },
     "ratings": {
       "critic": null,
       "user": {
@@ -10664,7 +11238,24 @@
       "social"
     ],
     "steamAppId": 230410,
-    "ageRating": null,
+    "ageRating": {
+      "family": "mature",
+      "concerns": [
+        "Blood and Gore"
+      ],
+      "tier": "mature",
+      "source": "ESRB",
+      "rating": "M",
+      "official": true,
+      "esrb": "M",
+      "pegi": "18",
+      "descriptors": [
+        "Violence",
+        "Blood and Gore",
+        "Language"
+      ],
+      "notes": null
+    },
     "ratings": {
       "critic": 69,
       "user": {
@@ -10726,6 +11317,8 @@
     ],
     "steamAppId": 1085660,
     "ageRating": {
+      "family": "mild",
+      "concerns": [],
       "tier": "teen",
       "source": "ESRB",
       "rating": "T",
@@ -10799,6 +11392,12 @@
     ],
     "steamAppId": 397540,
     "ageRating": {
+      "family": "mature",
+      "concerns": [
+        "Blood and Gore",
+        "Intense Violence",
+        "Sexual Themes"
+      ],
       "tier": "mature",
       "source": "ESRB",
       "rating": "M",
@@ -10869,6 +11468,8 @@
     ],
     "steamAppId": 632360,
     "ageRating": {
+      "family": "mild",
+      "concerns": [],
       "tier": "teen",
       "source": "ESRB",
       "rating": "T",
@@ -10933,7 +11534,18 @@
       "social"
     ],
     "steamAppId": 322330,
-    "ageRating": null,
+    "ageRating": {
+      "family": "mild",
+      "concerns": [],
+      "tier": "everyone",
+      "source": "DJCTQ",
+      "rating": "L",
+      "official": true,
+      "esrb": null,
+      "pegi": null,
+      "descriptors": [],
+      "notes": null
+    },
     "ratings": {
       "critic": 83,
       "user": {
@@ -10986,6 +11598,8 @@
     ],
     "steamAppId": 386940,
     "ageRating": {
+      "family": "safe",
+      "concerns": [],
       "tier": "everyone10",
       "source": "ESRB",
       "rating": "E10",
@@ -11038,6 +11652,8 @@
     ],
     "steamAppId": 1812090,
     "ageRating": {
+      "family": "mild",
+      "concerns": [],
       "tier": "teen",
       "source": "DJCTQ",
       "rating": "12",
@@ -11089,7 +11705,18 @@
       "social"
     ],
     "steamAppId": 431240,
-    "ageRating": null,
+    "ageRating": {
+      "family": "safe",
+      "concerns": [],
+      "tier": "everyone10",
+      "source": "PEGI",
+      "rating": "7",
+      "official": true,
+      "esrb": null,
+      "pegi": "7",
+      "descriptors": [],
+      "notes": null
+    },
     "ratings": {
       "critic": null,
       "user": {
@@ -11146,6 +11773,10 @@
     ],
     "steamAppId": 870780,
     "ageRating": {
+      "family": "mature",
+      "concerns": [
+        "Violência Extrema"
+      ],
       "tier": "mature",
       "source": "ESRB",
       "rating": "M",
@@ -11218,7 +11849,22 @@
       "graphics"
     ],
     "steamAppId": 1196590,
-    "ageRating": null,
+    "ageRating": {
+      "family": "mature",
+      "concerns": [
+        "Violência Extrema"
+      ],
+      "tier": "mature",
+      "source": "PEGI",
+      "rating": "18",
+      "official": true,
+      "esrb": null,
+      "pegi": "18",
+      "descriptors": [
+        "Violence, Bad Language and In-Game Purchases"
+      ],
+      "notes": "This Game may contain content not appropriate for all ages, or may not be appropriate for viewing at work: Frequent Violence or Gore, General Mature Content"
+    },
     "ratings": {
       "critic": 83,
       "user": {
@@ -11271,6 +11917,11 @@
     ],
     "steamAppId": 2050650,
     "ageRating": {
+      "family": "mature",
+      "concerns": [
+        "High impact horror violence, blood and gore, online interactivity",
+        "Graphic violence and horror"
+      ],
       "tier": "mature",
       "source": "PEGI",
       "rating": "18",
@@ -11330,6 +11981,11 @@
     ],
     "steamAppId": 412020,
     "ageRating": {
+      "family": "mature",
+      "concerns": [
+        "Blood and Gore, Intense Violence, Partial Nudity, Sexual Themes, Strong Language, Use of Drugs",
+        "Drugs, Nudity, Violence"
+      ],
       "tier": "mature",
       "source": "ESRB",
       "rating": "M",
@@ -11400,7 +12056,20 @@
       "graphics"
     ],
     "steamAppId": 1172380,
-    "ageRating": null,
+    "ageRating": {
+      "family": "mild",
+      "concerns": [],
+      "tier": "teen",
+      "source": "ESRB",
+      "rating": "T",
+      "official": true,
+      "esrb": "T",
+      "pegi": "16",
+      "descriptors": [
+        "Mild Language, Violence"
+      ],
+      "notes": null
+    },
     "ratings": {
       "critic": 81,
       "user": {
@@ -11460,7 +12129,26 @@
       "graphics"
     ],
     "steamAppId": 1593500,
-    "ageRating": null,
+    "ageRating": {
+      "family": "mature",
+      "concerns": [
+        "Violência Extrema",
+        "Blood and Gore",
+        "Intense Violence"
+      ],
+      "tier": "mature",
+      "source": "ESRB",
+      "rating": "M",
+      "official": true,
+      "esrb": "M",
+      "pegi": "18",
+      "descriptors": [
+        "Blood and Gore",
+        "Intense Violence",
+        "Strong Language"
+      ],
+      "notes": "Gameplay consists of frequent combat scenarios with characters punching and kicking or using their axe to slash/stab/impale enemies. Some larger enemies  are opened up to intense finishing moves showing enemies being ripped apart, dismembered, or decapitated.\r\n\r\nStrong Language is used in the dialogue."
+    },
     "ratings": {
       "critic": 93,
       "user": {
@@ -11509,6 +12197,13 @@
     ],
     "steamAppId": 1174180,
     "ageRating": {
+      "family": "mature",
+      "concerns": [
+        "Blood and Gore",
+        "Intense Violence",
+        "Nudity",
+        "Sexual Content"
+      ],
       "tier": "mature",
       "source": "ESRB",
       "rating": "M",
@@ -11584,7 +12279,30 @@
       "graphics"
     ],
     "steamAppId": 1259420,
-    "ageRating": null,
+    "ageRating": {
+      "family": "mature",
+      "concerns": [
+        "Blood and Gore",
+        "Intense Violence",
+        "Sexual Themes",
+        "Violência Extrema",
+        "Nudez"
+      ],
+      "tier": "mature",
+      "source": "ESRB",
+      "rating": "M",
+      "official": true,
+      "esrb": "M",
+      "pegi": "18",
+      "descriptors": [
+        "Blood and Gore",
+        "Drug Reference",
+        "Intense Violence",
+        "Sexual Themes",
+        "Strong Language"
+      ],
+      "notes": null
+    },
     "ratings": {
       "critic": null,
       "user": {
@@ -11633,6 +12351,11 @@
     ],
     "steamAppId": 752590,
     "ageRating": {
+      "family": "mature",
+      "concerns": [
+        "Blood and Gore",
+        "Violência extrema"
+      ],
       "tier": "mature",
       "source": "ESRB",
       "rating": "M",
@@ -11698,6 +12421,8 @@
     ],
     "steamAppId": 1172450,
     "ageRating": {
+      "family": "safe",
+      "concerns": [],
       "tier": "everyone",
       "source": "DJCTQ",
       "rating": "L",
@@ -11738,6 +12463,8 @@
     ],
     "steamAppId": 1574580,
     "ageRating": {
+      "family": "mild",
+      "concerns": [],
       "tier": "everyone",
       "source": "DJCTQ",
       "rating": "L",
@@ -11794,7 +12521,18 @@
       "cozy"
     ],
     "steamAppId": 600990,
-    "ageRating": null,
+    "ageRating": {
+      "family": "safe",
+      "concerns": [],
+      "tier": "everyone",
+      "source": "OFLC",
+      "rating": "G",
+      "official": true,
+      "esrb": null,
+      "pegi": null,
+      "descriptors": [],
+      "notes": null
+    },
     "ratings": {
       "critic": 80,
       "user": {
@@ -11820,7 +12558,18 @@
       "cozy"
     ],
     "steamAppId": 962580,
-    "ageRating": null,
+    "ageRating": {
+      "family": "safe",
+      "concerns": [],
+      "tier": "everyone",
+      "source": "ESRB",
+      "rating": "E",
+      "official": true,
+      "esrb": "E",
+      "pegi": "3",
+      "descriptors": [],
+      "notes": null
+    },
     "ratings": {
       "critic": null,
       "user": {
@@ -11847,6 +12596,8 @@
     ],
     "steamAppId": 555150,
     "ageRating": {
+      "family": "mild",
+      "concerns": [],
       "tier": "everyone",
       "source": "ESRB",
       "rating": "E",
@@ -11887,6 +12638,8 @@
     ],
     "steamAppId": 866140,
     "ageRating": {
+      "family": "mild",
+      "concerns": [],
       "tier": "everyone",
       "source": "ESRB",
       "rating": "E",
@@ -11941,7 +12694,27 @@
       "social"
     ],
     "steamAppId": 983970,
-    "ageRating": null,
+    "ageRating": {
+      "family": "mature",
+      "concerns": [
+        "Nudez",
+        "Sexual Themes",
+        "Partial Nudity"
+      ],
+      "tier": "mature",
+      "source": "ESRB",
+      "rating": "M",
+      "official": true,
+      "esrb": "M",
+      "pegi": null,
+      "descriptors": [
+        "Fantasy Violence",
+        "Sexual Themes",
+        "Partial Nudity",
+        "Use of Drugs"
+      ],
+      "notes": null
+    },
     "ratings": {
       "critic": 73,
       "user": {
@@ -11981,6 +12754,11 @@
     ],
     "steamAppId": 1552350,
     "ageRating": {
+      "family": "mature",
+      "concerns": [
+        "Sexual Themes",
+        "Conteúdo sexual"
+      ],
       "tier": "teen",
       "source": "ESRB",
       "rating": "T",
@@ -12020,7 +12798,18 @@
       "graphics"
     ],
     "steamAppId": 1809540,
-    "ageRating": null,
+    "ageRating": {
+      "family": "mild",
+      "concerns": [],
+      "tier": "everyone",
+      "source": "DJCTQ",
+      "rating": "L",
+      "official": true,
+      "esrb": null,
+      "pegi": null,
+      "descriptors": [],
+      "notes": "Blood, Gore"
+    },
     "ratings": {
       "critic": null,
       "user": {
@@ -12069,6 +12858,8 @@
     ],
     "steamAppId": 1030300,
     "ageRating": {
+      "family": "mild",
+      "concerns": [],
       "tier": "everyone10",
       "source": "Steam Germany",
       "rating": "6",
@@ -12133,7 +12924,22 @@
       "graphics"
     ],
     "steamAppId": 2679460,
-    "ageRating": null,
+    "ageRating": {
+      "family": "mature",
+      "concerns": [
+        "Nudity"
+      ],
+      "tier": "teen",
+      "source": "ESRB",
+      "rating": "T",
+      "official": true,
+      "esrb": "T",
+      "pegi": "16",
+      "descriptors": [
+        "Violence, Blood, Mild Suggestive Themes, Language, Use of Alcohol"
+      ],
+      "notes": "Game contains violence, blood & gore, partial nudity, and suggestive themes."
+    },
     "ratings": {
       "critic": 92,
       "user": {
@@ -12194,6 +13000,15 @@
     ],
     "steamAppId": 1687950,
     "ageRating": {
+      "family": "mature",
+      "concerns": [
+        "Sexual Themes",
+        "Partial Nudity",
+        "Strong sexualised imagery and violence",
+        "Contains violence, offensive language and sexual themes.",
+        "Sexuelle Inhalte",
+        "Strong Sexual Themes"
+      ],
       "tier": "mature",
       "source": "ESRB",
       "rating": "M",
@@ -12267,6 +13082,8 @@
     ],
     "steamAppId": 1621690,
     "ageRating": {
+      "family": "mild",
+      "concerns": [],
       "tier": "everyone",
       "source": "DJCTQ",
       "rating": "L",
@@ -12323,7 +13140,18 @@
       "cozy"
     ],
     "steamAppId": 1931010,
-    "ageRating": null,
+    "ageRating": {
+      "family": "safe",
+      "concerns": [],
+      "tier": "everyone",
+      "source": "DJCTQ",
+      "rating": "L",
+      "official": false,
+      "esrb": null,
+      "pegi": null,
+      "descriptors": [],
+      "notes": null
+    },
     "ratings": {
       "critic": null,
       "user": {
@@ -12363,6 +13191,8 @@
     ],
     "steamAppId": 1136370,
     "ageRating": {
+      "family": "mild",
+      "concerns": [],
       "tier": "teen",
       "source": "DJCTQ",
       "rating": "14",
@@ -12407,7 +13237,18 @@
       "graphics"
     ],
     "steamAppId": 1213700,
-    "ageRating": null,
+    "ageRating": {
+      "family": "mild",
+      "concerns": [],
+      "tier": "everyone10",
+      "source": "DJCTQ",
+      "rating": "10",
+      "official": true,
+      "esrb": null,
+      "pegi": null,
+      "descriptors": [],
+      "notes": null
+    },
     "ratings": {
       "critic": null,
       "user": {
@@ -12456,7 +13297,25 @@
       "social"
     ],
     "steamAppId": 1072420,
-    "ageRating": null,
+    "ageRating": {
+      "family": "mild",
+      "concerns": [],
+      "tier": "everyone10",
+      "source": "ESRB",
+      "rating": "E10",
+      "official": true,
+      "esrb": "E10",
+      "pegi": "7",
+      "descriptors": [
+        "Alcohol Reference",
+        "Comic Mischief",
+        "Fantasy Violence",
+        "Mild Blood",
+        "Mild Language",
+        "Suggestive Themes"
+      ],
+      "notes": null
+    },
     "ratings": {
       "critic": 85,
       "user": {
@@ -12483,6 +13342,12 @@
     ],
     "steamAppId": 1903340,
     "ageRating": {
+      "family": "mature",
+      "concerns": [
+        "Blood and Gore",
+        "Sexuelle Inhalte",
+        "Strong Sexual Themes"
+      ],
       "tier": "mature",
       "source": "ESRB",
       "rating": "M",
@@ -12555,6 +13420,8 @@
     "tags": [],
     "steamAppId": 1569580,
     "ageRating": {
+      "family": "mild",
+      "concerns": [],
       "tier": "everyone",
       "source": "DJCTQ",
       "rating": "L",
@@ -12624,7 +13491,25 @@
       "graphics"
     ],
     "steamAppId": 2001120,
-    "ageRating": null,
+    "ageRating": {
+      "family": "mature",
+      "concerns": [
+        "Blood and Gore"
+      ],
+      "tier": "teen",
+      "source": "ESRB",
+      "rating": "T",
+      "official": true,
+      "esrb": "T",
+      "pegi": "16",
+      "descriptors": [
+        "Language",
+        "Blood and Gore",
+        "Crude Humor",
+        "Violence"
+      ],
+      "notes": null
+    },
     "ratings": {
       "critic": null,
       "user": {
@@ -12677,6 +13562,8 @@
     ],
     "steamAppId": 1299460,
     "ageRating": {
+      "family": "mild",
+      "concerns": [],
       "tier": "everyone10",
       "source": "Steam Germany",
       "rating": "6",
@@ -12728,7 +13615,18 @@
       "graphics"
     ],
     "steamAppId": 1614440,
-    "ageRating": null,
+    "ageRating": {
+      "family": "mild",
+      "concerns": [],
+      "tier": "everyone",
+      "source": "ESRB",
+      "rating": "E",
+      "official": true,
+      "esrb": "E",
+      "pegi": null,
+      "descriptors": [],
+      "notes": null
+    },
     "ratings": {
       "critic": null,
       "user": {
@@ -12773,6 +13671,8 @@
     ],
     "steamAppId": 2246340,
     "ageRating": {
+      "family": "mild",
+      "concerns": [],
       "tier": "teen",
       "source": "ESRB",
       "rating": "T",
@@ -12845,7 +13745,18 @@
       "cozy"
     ],
     "steamAppId": 1896700,
-    "ageRating": null,
+    "ageRating": {
+      "family": "mild",
+      "concerns": [],
+      "tier": "teen",
+      "source": "DJCTQ",
+      "rating": "12",
+      "official": true,
+      "esrb": null,
+      "pegi": null,
+      "descriptors": [],
+      "notes": null
+    },
     "ratings": {
       "critic": null,
       "user": {

@@ -14,8 +14,13 @@ in at runtime.
   rating it positively, on every card and in the detail view.
 - **Pros and cons pulled from reviews** rather than written by hand, with a count
   of how many reviews raised each point.
-- **Kid-friendly verdict** on every card from board age ratings, with the content
-  descriptors in the detail view and a filter for the family-safe ones.
+- **Kid-friendly verdict** on every card, judged on content rather than the age
+  number, with a filter for the family-safe ones.
+- **Two views**: a dense grid, or a full-screen snap feed you flick through one
+  game at a time.
+- **Controls that get out of the way**: the bar collapses to a single row as you
+  scroll down and springs back when you scroll up, with active filters staying
+  visible as removable chips.
 - **Curated collections**: Best deals (computed live from current discounts,
   deepest cut first), Best graphics, Online & social, and Cozy. The last three come
   from tags in the data; every collection composes with the filters below.
@@ -124,18 +129,29 @@ least two weeks of observation behind it.
 
 ## Is it kid friendly?
 
-Every card carries an age verdict — All ages, Ages 10+, Teen 13+, Mature 17+, or
-Not rated — and the detail view adds the board, the rating and the content
-descriptors ("Blood and Gore", "Strong Language"). A toggle filters to the
-family-safe tiers; 99 of the 245 games qualify.
+Every card carries a verdict — Great for kids, Fine for most kids, Mature content,
+or Not rated — and a toggle filters to the first two, which covers 170 of the 245
+games.
 
-The verdict comes from board ratings only. ESRB is preferred as the US board, but
-most smaller titles were never submitted to it, so the chain falls back through
-PEGI, USK, OFLC, DJCTQ and IGRS — which agree with the ESRB tier wherever both
-exist. That takes coverage from 138 games to 215. Nothing is inferred from the
-game itself: with no board rating at all it reads "Not rated", not "probably
-fine". Where a rating was auto-generated rather than issued by a board, the
-detail view says so.
+The verdict is judged on **content, not the age number**, because those are
+different questions. Lake is rated for teens over a drug reference but is a game
+about delivering mail; Call of Duty carries the same rating for very different
+reasons. So gore, brutal violence and sexual content rule a game out, while mild
+violence, language and drink or drug references only soften it. A Mature-rated
+game with none of the former still reads as fine — Disco Elysium, Sifu and Life
+is Strange: True Colors all land in the family list.
+
+Severity is read from the content descriptors of whichever boards rated the game,
+so the matching covers the Portuguese and German vocabularies as well as English.
+Where a game has no descriptors at all, its age tier is the fallback. The board's
+own rating is always shown alongside, and the detail view lists exactly which
+descriptors ruled a game out.
+
+Board coverage: ESRB is preferred as the US board, but most smaller titles were
+never submitted to it, so the chain falls back through PEGI, USK, OFLC, DJCTQ and
+IGRS — which agree with the ESRB tier wherever both exist, taking coverage from
+138 games to 215. Nothing is inferred from the game itself: with no rating at all
+it reads "Not rated", not "probably fine".
 
 ## Ratings, pros and cons
 

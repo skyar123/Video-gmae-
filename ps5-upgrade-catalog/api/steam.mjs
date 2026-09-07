@@ -149,6 +149,64 @@ const splitDescriptors = (value) =>
     .map((entry) => entry.trim())
     .filter(Boolean);
 
+/**
+ * Content severity, which is a different question from the age rating.
+ *
+ * A parent asking "can my kid play this" mostly means "is there gore, brutal
+ * violence or sexual content in it" — not "what number did the board print".
+ * Lake is rated for teens over a drug reference but is a game about delivering
+ * mail; Call of Duty carries the same rating for very different reasons. So the
+ * blocking signals here are gore, intense violence and sexual content, while
+ * mild violence, language, drink and drug references only soften the verdict.
+ *
+ * Descriptors come from whichever boards rated the game, so the matching covers
+ * the Portuguese and German vocabularies too.
+ */
+const SEVERITY_PATTERNS = {
+  // Checked first: these keep a game out of the family list.
+  high: [
+    'intense violence', 'blood and gore', 'gore', 'graphic violence', 'sexual content',
+    'sexual themes', 'strong sexual', 'nudity', 'torture', 'sexual violence',
+    'conteudo sexual', 'conte\u00fado sexual', 'nudez', 'violencia extrema',
+    'viol\u00eancia extrema', 'tortura', 'sexo explicito', 'sexo expl\u00edcito',
+    'sexuelle inhalte', 'nacktheit', 'sexualitat', 'sexualit\u00e4t', 'grausam',
+  ],
+  // Checked before the general terms, so "Animated Blood" is not read as blood.
+  low: [
+    'fantasy violence', 'cartoon violence', 'animated blood', 'comic mischief',
+    'in-game purchases', 'users interact', 'mild',
+    'violencia fantasiosa', 'viol\u00eancia fantasiosa',
+  ],
+  // Present, but not disqualifying on its own.
+  medium: [
+    'violence', 'blood', 'language', 'drug', 'alcohol', 'tobacco', 'gambling',
+    'suggestive', 'crude humor', 'mature humor', 'smoking', 'horror', 'fear',
+    'violencia', 'viol\u00eancia', 'drogas', 'linguagem', 'alcool', '\u00e1lcool',
+    'tabaco', 'jogos de azar', 'atos criminosos', 'medo',
+    'gewalt', 'drogen', 'sprache', 'alkohol', 'tabak', 'glucksspiel',
+    'gl\u00fccksspiel', 'andeutungen', 'schreckmomente', 'angst',
+  ],
+};
+
+function severityOf(descriptor) {
+  const text = descriptor.toLowerCase();
+  if (SEVERITY_PATTERNS.high.some((pattern) => text.includes(pattern))) return 'high';
+  if (SEVERITY_PATTERNS.low.some((pattern) => text.includes(pattern))) return 'low';
+  if (SEVERITY_PATTERNS.medium.some((pattern) => text.includes(pattern))) return 'medium';
+  return 'low';
+}
+
+/** With no descriptors at all, the age tier is the only signal left. */
+const TIER_FALLBACK = { everyone: 'safe', everyone10: 'safe', teen: 'mild', mature: 'mature' };
+
+function toFamilyVerdict(allDescriptors, tier) {
+  if (allDescriptors.length === 0) return TIER_FALLBACK[tier] ?? 'unknown';
+  const severities = allDescriptors.map(severityOf);
+  if (severities.includes('high')) return 'mature';
+  if (severities.includes('medium')) return 'mild';
+  return 'safe';
+}
+
 function toAgeRating(data) {
   const boards = data.ratings ?? {};
 
@@ -174,11 +232,18 @@ function toAgeRating(data) {
   const descriptors = splitDescriptors(
     boards.esrb?.descriptors ?? boards.pegi?.descriptors ?? boards.oflc?.descriptors,
   );
+  // Judge severity on every board's descriptors, since plenty of games were
+  // only ever rated outside the English-speaking boards.
+  const allDescriptors = Object.values(boards).flatMap((board) =>
+    splitDescriptors(board?.descriptors),
+  );
   const notes = data.content_descriptors?.notes?.trim() || null;
 
   if (!verdict && !descriptors.length && !notes) return null;
 
   return {
+    family: toFamilyVerdict(allDescriptors, verdict?.tier ?? 'unknown'),
+    concerns: [...new Set(allDescriptors.filter((entry) => severityOf(entry) === 'high'))].slice(0, 6),
     tier: verdict?.tier ?? 'unknown',
     source: verdict?.source ?? null,
     rating: verdict?.rating ?? null,

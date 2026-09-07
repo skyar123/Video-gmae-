@@ -10,13 +10,17 @@ import {
   ArrowUpRight,
   Baby,
   BadgePercent,
+  ChevronDown,
   CirclePlay,
   ExternalLink,
   Gamepad2,
   Heart,
   Image as ImageIcon,
+  Info,
+  LayoutGrid,
   Loader2,
   RefreshCw,
+  Rows3,
   Search,
   SlidersHorizontal,
   Sparkles,
@@ -118,6 +122,7 @@ const DEFAULT_FILTERS = {
   region: 'US',
   collection: 'all',
   kidFriendly: false,
+  view: 'grid',
   // PS5-only titles are out of the default view: this is a PS4 upgrade
   // catalog first, and they need different hardware.
   includePs5: false,
@@ -139,6 +144,7 @@ function readFiltersFromUrl() {
     region: (value('cc', localStorage.getItem('region') || 'US') || 'US').toUpperCase(),
     collection: value('view', 'all'),
     kidFriendly: params.get('kids') === '1',
+    view: params.get('mode') === 'feed' ? 'feed' : 'grid',
     includePs5: params.get('ps5') === '1',
   };
 }
@@ -157,6 +163,7 @@ function writeFiltersToUrl(filters) {
   if (filters.region !== 'US') params.set('cc', filters.region);
   if (filters.collection !== 'all') params.set('view', filters.collection);
   if (filters.kidFriendly) params.set('kids', '1');
+  if (filters.view === 'feed') params.set('mode', 'feed');
   if (filters.includePs5) params.set('ps5', '1');
   const query = params.toString();
   window.history.replaceState(null, '', query ? `?${query}` : window.location.pathname);
@@ -247,6 +254,54 @@ function useLiveData(region) {
   };
 }
 
+/**
+ * Collapses the control bar once you start scrolling down and brings it back
+ * the moment you scroll up, so the games get the screen while you browse.
+ */
+function useScrollCollapse(threshold = 120) {
+  const [collapsed, setCollapsed] = useState(false);
+
+  useEffect(() => {
+    let previous = window.scrollY;
+    let ticking = false;
+    let settleUntil = 0;
+
+    const apply = (next) => {
+      setCollapsed((current) => {
+        if (current === next) return current;
+        settleUntil = performance.now() + 260;
+        return next;
+      });
+    };
+
+    const onScroll = () => {
+      if (ticking) return;
+      ticking = true;
+      requestAnimationFrame(() => {
+        ticking = false;
+        const current = window.scrollY;
+        // Collapsing shortens the sticky bar, which shifts the page and fires
+        // another scroll event; without this settle window that feedback can
+        // read as a direction change and make the bar oscillate.
+        if (performance.now() < settleUntil) {
+          previous = current;
+          return;
+        }
+        // A dead zone keeps trackpad jitter from toggling the bar.
+        if (current < threshold) apply(false);
+        else if (current > previous + 12) apply(true);
+        else if (current < previous - 12) apply(false);
+        previous = current;
+      });
+    };
+
+    window.addEventListener('scroll', onScroll, { passive: true });
+    return () => window.removeEventListener('scroll', onScroll);
+  }, [threshold]);
+
+  return collapsed;
+}
+
 /* ------------------------------------------------------------------ *
  * Small presentational pieces
  * ------------------------------------------------------------------ */
@@ -254,7 +309,7 @@ function useLiveData(region) {
 function UpgradeBadge({ value, className = '' }) {
   return (
     <span
-      className={`rounded-md px-2 py-1 text-xs font-semibold ring-1 ring-inset ${
+      className={`rounded px-1.5 py-0.5 text-[11px] font-semibold ring-1 ring-inset ${
         UPGRADE_STYLES[value] ?? UPGRADE_STYLES['Backwards Compatible']
       } ${className}`}
     >
@@ -287,32 +342,42 @@ function VerdictBadge({ prediction, className = '' }) {
 }
 
 /**
- * Age suitability at a glance. Board ratings only — a game with no rating
- * reads as "Not rated" rather than being guessed at.
+ * Suitability at a glance, judged on content rather than the board's age
+ * number. A game can be rated Mature and still be fine for a kid if what
+ * earned the rating was language or a drug reference; what disqualifies it is
+ * gore, brutal violence or sexual content.
  */
-const AGE_TIERS = {
-  everyone: { label: 'All ages', tone: 'bg-emerald-50 text-emerald-700 ring-emerald-600/20' },
-  everyone10: { label: 'Ages 10+', tone: 'bg-sky-50 text-sky-700 ring-sky-600/20' },
-  teen: { label: 'Teen 13+', tone: 'bg-amber-50 text-amber-700 ring-amber-600/20' },
-  mature: { label: 'Mature 17+', tone: 'bg-rose-50 text-rose-700 ring-rose-600/20' },
+const FAMILY_TIERS = {
+  safe: { label: 'Great for kids', tone: 'bg-emerald-50 text-emerald-700 ring-emerald-600/20' },
+  mild: { label: 'Fine for most kids', tone: 'bg-sky-50 text-sky-700 ring-sky-600/20' },
+  mature: { label: 'Mature content', tone: 'bg-rose-50 text-rose-700 ring-rose-600/20' },
   unknown: { label: 'Not rated', tone: 'bg-slate-100 text-slate-500 ring-slate-500/20' },
 };
 
-const KID_FRIENDLY_TIERS = ['everyone', 'everyone10'];
+/** The board's own verdict, kept separate and shown alongside. */
+const AGE_TIERS = {
+  everyone: { label: 'All ages' },
+  everyone10: { label: 'Ages 10+' },
+  teen: { label: 'Teen 13+' },
+  mature: { label: 'Mature 17+' },
+  unknown: { label: 'Not rated' },
+};
+
+const FAMILY_TIER_VALUES = ['safe', 'mild'];
 
 function AgeBadge({ ageRating, size = 'sm' }) {
-  const tier = AGE_TIERS[ageRating?.tier ?? 'unknown'] ?? AGE_TIERS.unknown;
-  const pad = size === 'lg' ? 'px-2.5 py-1 text-sm' : 'px-2 py-0.5 text-xs';
-  const title = ageRating?.source
+  const family = FAMILY_TIERS[ageRating?.family ?? 'unknown'] ?? FAMILY_TIERS.unknown;
+  const pad = size === 'lg' ? 'px-2.5 py-1 text-sm' : 'px-1.5 py-0.5 text-[11px]';
+  const board = ageRating?.source
     ? `${ageRating.source} ${ageRating.rating}${ageRating.official ? '' : ' (auto-generated)'}`
     : 'No board rating found';
   return (
     <span
-      title={title}
-      className={`inline-flex items-center gap-1 rounded-md font-semibold ring-1 ring-inset ${pad} ${tier.tone}`}
+      title={`${family.label} — content based. Board rating: ${board}`}
+      className={`inline-flex items-center gap-1 rounded font-semibold ring-1 ring-inset ${pad} ${family.tone}`}
     >
       <Baby className="h-3.5 w-3.5" aria-hidden="true" />
-      {tier.label}
+      {family.label}
     </span>
   );
 }
@@ -328,41 +393,65 @@ function AgeDetail({ ageRating }) {
     );
   }
 
+  const ageTier = AGE_TIERS[ageRating.tier] ?? AGE_TIERS.unknown;
+
   return (
     <div className="mt-4 rounded-xl border border-slate-200 p-4">
       <div className="flex flex-wrap items-center gap-2">
         <h3 className="text-sm font-semibold uppercase tracking-wider text-slate-400">
           Kid friendly?
         </h3>
-        <AgeBadge ageRating={ageRating} />
-        {ageRating.source && (
-          <span className="text-sm text-slate-500">
-            {ageRating.source} {ageRating.rating}
-            {!ageRating.official && ' (auto-generated, not an issued rating)'}
-          </span>
-        )}
+        <AgeBadge ageRating={ageRating} size="lg" />
+        <span className="text-sm text-slate-500">
+          Board says {ageTier.label}
+          {ageRating.source && ` (${ageRating.source} ${ageRating.rating})`}
+          {!ageRating.official && ', auto-generated'}
+        </span>
       </div>
 
+      {ageRating.concerns.length > 0 && (
+        <div className="mt-3">
+          <p className="text-xs font-semibold uppercase tracking-wider text-rose-700">
+            What rules it out
+          </p>
+          <div className="mt-1.5 flex flex-wrap gap-1.5">
+            {ageRating.concerns.map((concern) => (
+              <span
+                key={concern}
+                className="rounded-md bg-rose-50 px-2 py-0.5 text-xs text-rose-700"
+              >
+                {concern}
+              </span>
+            ))}
+          </div>
+        </div>
+      )}
+
       {ageRating.descriptors.length > 0 && (
-        <div className="mt-3 flex flex-wrap gap-1.5">
-          {ageRating.descriptors.map((descriptor) => (
-            <span
-              key={descriptor}
-              className="rounded-md bg-slate-100 px-2 py-0.5 text-xs text-slate-600"
-            >
-              {descriptor}
-            </span>
-          ))}
+        <div className="mt-3">
+          <p className="text-xs font-semibold uppercase tracking-wider text-slate-400">
+            Content descriptors
+          </p>
+          <div className="mt-1.5 flex flex-wrap gap-1.5">
+            {ageRating.descriptors.map((descriptor) => (
+              <span
+                key={descriptor}
+                className="rounded-md bg-slate-100 px-2 py-0.5 text-xs text-slate-600"
+              >
+                {descriptor}
+              </span>
+            ))}
+          </div>
         </div>
       )}
 
       {ageRating.notes && <p className="mt-3 text-sm text-slate-600">{ageRating.notes}</p>}
 
-      {!ageRating.esrb && ageRating.source && ageRating.source !== 'ESRB' && (
-        <p className="mt-3 text-xs text-slate-400">
-          Never submitted to the ESRB, so this comes from another ratings board.
-        </p>
-      )}
+      <p className="mt-3 text-xs text-slate-400">
+        The verdict is judged on content, not the age number: gore, brutal violence and sexual
+        content rule a game out, while mild violence, language and drink or drug references do
+        not. A Mature-rated game with none of the former still reads as fine.
+      </p>
     </div>
   );
 }
@@ -383,9 +472,9 @@ function RatingChips({ ratings, size = 'sm' }) {
   const user = ratings?.user ?? null;
   if (critic == null && user == null) return null;
 
-  const pad = size === 'lg' ? 'px-2.5 py-1 text-sm' : 'px-2 py-0.5 text-xs';
+  const pad = size === 'lg' ? 'px-2.5 py-1 text-sm' : 'px-1.5 py-0.5 text-[11px]';
   return (
-    <div className="flex flex-wrap items-center gap-1.5">
+    <div className="flex flex-wrap items-center gap-1">
       {critic != null && (
         <span
           title="Metacritic critic score"
@@ -909,7 +998,7 @@ function GameCard({ game, live, wishlisted, onToggleWishlist, onOpen }) {
   const showVerdict = prediction && (prediction.verdict === 'buy-now' || prediction.verdict === 'wait');
 
   return (
-    <div className="group relative flex h-full flex-col overflow-hidden rounded-xl border border-slate-200 bg-white shadow-sm transition-all hover:-translate-y-1 hover:shadow-md focus-within:ring-2 focus-within:ring-indigo-500">
+    <div className="group relative flex h-full animate-rise-in flex-col overflow-hidden rounded-xl border border-slate-200 bg-white shadow-sm transition-all duration-200 ease-spring hover:-translate-y-1 hover:shadow-lg focus-within:ring-2 focus-within:ring-indigo-500 active:scale-[0.98]">
       <button
         type="button"
         onClick={onOpen}
@@ -929,22 +1018,24 @@ function GameCard({ game, live, wishlisted, onToggleWishlist, onOpen }) {
           )}
         </div>
 
-        <div className="flex flex-1 flex-col p-5">
-          <h2 className="mb-2 pr-8 text-lg font-bold leading-tight text-slate-800">{game.title}</h2>
-          <div className="mb-4 flex flex-wrap gap-2">
-            <span className="rounded-md bg-indigo-50 px-2 py-1 text-xs font-semibold text-indigo-700">
+        <div className="flex flex-1 flex-col p-3 sm:p-4">
+          <h2 className="mb-1.5 pr-7 text-sm font-bold leading-tight text-slate-800 sm:text-base">
+            {game.title}
+          </h2>
+          <div className="mb-2 flex flex-wrap gap-1">
+            <span className="rounded bg-indigo-50 px-1.5 py-0.5 text-[11px] font-semibold text-indigo-700">
               {game.genre}
             </span>
             <UpgradeBadge value={game.ps5Upgrade} />
             {showVerdict && <VerdictBadge prediction={prediction} />}
           </div>
-          <div className="mb-3 flex flex-wrap items-center gap-1.5">
+          <div className="mb-2 flex flex-wrap items-center gap-1">
             <AgeBadge ageRating={game.ageRating} />
             <RatingChips ratings={ratings} />
           </div>
-          <p className="line-clamp-3 text-sm text-slate-600">{game.description}</p>
+          <p className="line-clamp-2 text-xs leading-relaxed text-slate-500">{game.description}</p>
           {live?.price && (
-            <p className="mt-4 flex items-baseline gap-2 border-t border-slate-100 pt-3 text-sm">
+            <p className="mt-auto flex items-baseline gap-2 pt-3 text-sm">
               <span className="font-semibold text-slate-900">{live.price.finalFormatted}</span>
               {live.price.discountPercent > 0 && (
                 <span className="text-slate-400 line-through">{live.price.initialFormatted}</span>
@@ -961,9 +1052,180 @@ function GameCard({ game, live, wishlisted, onToggleWishlist, onOpen }) {
   );
 }
 
+function EmptyState({ filters, wishlist, status, onClear }) {
+  return (
+    <div className="py-20 text-center text-slate-500">
+      <Sparkles className="mx-auto mb-3 h-8 w-8 text-slate-300" />
+      <p className="text-lg">No games found matching those filters.</p>
+      {filters.wishlist && wishlist.size === 0 && (
+        <p className="mt-1 text-sm">Your wishlist is empty. Tap the heart on any card.</p>
+      )}
+      {!filters.includePs5 && (
+        <p className="mt-1 text-sm">PS5-only titles are hidden. Turn them on to see more.</p>
+      )}
+      {filters.sale && status === 'loading' && (
+        <p className="mt-1 text-sm">Still checking prices — more may appear.</p>
+      )}
+      <button
+        type="button"
+        onClick={onClear}
+        className="mt-4 font-medium text-indigo-600 hover:underline"
+      >
+        Clear all filters
+      </button>
+    </div>
+  );
+}
+
+/* ------------------------------------------------------------------ *
+ * Feed view
+ * ------------------------------------------------------------------ */
+
+/**
+ * One full-screen card in the feed. Snap points do the paging, so this only
+ * has to look right and get out of the way — the art runs edge to edge and
+ * the text sits over a gradient rather than in a panel.
+ */
+function FeedSlide({ game, live, wishlisted, onToggleWishlist, onOpen }) {
+  // A wide screenshot fills the screen far better than the 460px capsule, so
+  // use one as soon as the live data arrives and fall back until then.
+  const background =
+    live?.screenshots?.[0]?.full ??
+    live?.heroImage ??
+    (game.steamAppId
+      ? `https://shared.akamai.steamstatic.com/store_item_assets/steam/apps/${game.steamAppId}/header.jpg`
+      : null);
+  const ratings = live?.ratings ?? game.ratings;
+  const price = live?.price;
+
+  return (
+    <section className="feed-slide relative flex h-full w-full items-end overflow-hidden bg-slate-900">
+      {background ? (
+        <img
+          src={background}
+          alt=""
+          loading="lazy"
+          decoding="async"
+          className="absolute inset-0 h-full w-full scale-105 object-cover"
+        />
+      ) : (
+        <div className="absolute inset-0 bg-gradient-to-br from-indigo-600 via-violet-600 to-fuchsia-600" />
+      )}
+      <div className="absolute inset-0 bg-gradient-to-t from-slate-950 via-slate-950/70 to-slate-950/10" />
+
+      <div className="relative w-full p-5 pb-24 sm:p-8 sm:pb-28">
+        <div className="mx-auto flex max-w-3xl items-end justify-between gap-4">
+          <div className="min-w-0">
+            <div className="mb-3 flex flex-wrap items-center gap-1.5">
+              <span className="rounded-md bg-white/15 px-2 py-1 text-xs font-semibold text-white backdrop-blur">
+                {game.genre}
+              </span>
+              <span className="rounded-md bg-white/15 px-2 py-1 text-xs font-semibold text-white backdrop-blur">
+                {game.ps5Upgrade}
+              </span>
+              {price?.discountPercent > 0 && (
+                <span className="rounded-md bg-rose-600 px-2 py-1 text-xs font-bold text-white">
+                  -{price.discountPercent}%
+                </span>
+              )}
+            </div>
+
+            <h2 className="text-3xl font-bold leading-tight text-white drop-shadow sm:text-5xl">
+              {game.title}
+            </h2>
+
+            <p className="mt-3 max-w-xl text-sm leading-relaxed text-white/80 sm:text-base">
+              {game.description}
+            </p>
+
+            <div className="mt-4 flex flex-wrap items-center gap-x-4 gap-y-2 text-sm text-white/90">
+              {ratings?.critic != null && (
+                <span className="inline-flex items-center gap-1.5">
+                  <Star className="h-4 w-4" /> {ratings.critic} critics
+                </span>
+              )}
+              {ratings?.user && (
+                <span className="inline-flex items-center gap-1.5">
+                  <Users className="h-4 w-4" /> {ratings.user.percentPositive}% players
+                </span>
+              )}
+              <span className="inline-flex items-center gap-1.5">
+                <Baby className="h-4 w-4" />
+                {(FAMILY_TIERS[game.ageRating?.family ?? 'unknown'] ?? FAMILY_TIERS.unknown).label}
+              </span>
+              {price && (
+                <span className="inline-flex items-baseline gap-2 font-semibold">
+                  {price.finalFormatted}
+                  {price.discountPercent > 0 && (
+                    <span className="text-xs font-normal text-white/50 line-through">
+                      {price.initialFormatted}
+                    </span>
+                  )}
+                </span>
+              )}
+            </div>
+          </div>
+
+          {/* Action rail, thumb-reachable on a phone. */}
+          <div className="flex shrink-0 flex-col items-center gap-3">
+            <button
+              type="button"
+              onClick={onToggleWishlist}
+              aria-pressed={wishlisted}
+              aria-label={wishlisted ? 'Remove from wishlist' : 'Add to wishlist'}
+              className={`rounded-full p-3 backdrop-blur transition-transform duration-200 ease-spring active:scale-90 ${
+                wishlisted ? 'bg-rose-600 text-white' : 'bg-white/15 text-white hover:bg-white/25'
+              }`}
+            >
+              <Heart className={`h-5 w-5 ${wishlisted ? 'fill-current' : ''}`} />
+            </button>
+            <button
+              type="button"
+              onClick={onOpen}
+              aria-label={`Details for ${game.title}`}
+              className="rounded-full bg-white/15 p-3 text-white backdrop-blur transition-transform duration-200 ease-spring hover:bg-white/25 active:scale-90"
+            >
+              <Info className="h-5 w-5" />
+            </button>
+            <a
+              href={storeLink(game.title)}
+              target="_blank"
+              rel="noopener noreferrer"
+              aria-label={`${game.title} on the PS Store`}
+              className="rounded-full bg-white/15 p-3 text-white backdrop-blur transition-transform duration-200 ease-spring hover:bg-white/25 active:scale-90"
+            >
+              <ExternalLink className="h-5 w-5" />
+            </a>
+          </div>
+        </div>
+      </div>
+    </section>
+  );
+}
+
 /* ------------------------------------------------------------------ *
  * App
  * ------------------------------------------------------------------ */
+
+/** Compact on/off control used throughout the filter sheet. */
+function TogglePill({ active, onClick, icon: Icon, label, count, tone }) {
+  return (
+    <button
+      type="button"
+      onClick={onClick}
+      aria-pressed={active}
+      className={`inline-flex items-center gap-1.5 rounded-full px-2.5 py-1 text-xs font-medium transition-all duration-200 ease-spring active:scale-95 ${
+        active ? `${tone} text-white` : 'bg-slate-100 text-slate-600 hover:bg-slate-200'
+      }`}
+    >
+      <Icon className={`h-3.5 w-3.5 ${active && label === 'Wishlist' ? 'fill-current' : ''}`} />
+      {label}
+      {count !== undefined && count !== 0 && (
+        <span className={active ? 'text-white/60' : 'text-slate-400'}>{count}</span>
+      )}
+    </button>
+  );
+}
 
 /** Options are plain strings, or {value, label} when the two differ. */
 function Select({ label, value, options, onChange }) {
@@ -994,9 +1256,11 @@ export default function App() {
   const [filters, setFilters] = useState(readFiltersFromUrl);
   const [wishlist, setWishlist] = useState(readWishlist);
   const [activeGameId, setActiveGameId] = useState(null);
-  const [filtersOpen, setFiltersOpen] = useState(false);
+  const [sheetOpen, setSheetOpen] = useState(false);
+  const scrolled = useScrollCollapse();
 
   const { byTitle, status, updatedAt, progress, refresh } = useLiveData(filters.region);
+  const barRef = useRef(null);
 
   const set = useCallback(
     (key, value) => setFilters((previous) => ({ ...previous, [key]: value })),
@@ -1012,6 +1276,21 @@ export default function App() {
       // A browser refusing storage just means the region resets next visit.
     }
   }, [filters]);
+
+  useEffect(() => {
+    const element = barRef.current;
+    if (!element) return undefined;
+    const publish = () => {
+      document.documentElement.style.setProperty(
+        '--bar-height',
+        `${Math.round(element.getBoundingClientRect().height)}px`,
+      );
+    };
+    publish();
+    const observer = new ResizeObserver(publish);
+    observer.observe(element);
+    return () => observer.disconnect();
+  }, []);
 
   useEffect(() => {
     const onPopState = () => setFilters(readFiltersFromUrl());
@@ -1051,7 +1330,7 @@ export default function App() {
       if (filters.protagonist !== 'All' && game.protagonist !== filters.protagonist) return false;
       if (filters.artStyle !== 'All' && game.artStyle !== filters.artStyle) return false;
       if (filters.upgrade !== 'All' && game.ps5Upgrade !== filters.upgrade) return false;
-      if (filters.kidFriendly && !KID_FRIENDLY_TIERS.includes(game.ageRating?.tier)) return false;
+      if (filters.kidFriendly && !FAMILY_TIER_VALUES.includes(game.ageRating?.family)) return false;
       if (filters.wishlist && !wishlist.has(game.id)) return false;
       if (filters.sale && !(byTitle.get(game.title)?.price?.discountPercent > 0)) return false;
       return true;
@@ -1101,7 +1380,7 @@ export default function App() {
   );
 
   const kidFriendlyCount = useMemo(
-    () => visiblePool.filter((game) => KID_FRIENDLY_TIERS.includes(game.ageRating?.tier)).length,
+    () => visiblePool.filter((game) => FAMILY_TIER_VALUES.includes(game.ageRating?.family)).length,
     [visiblePool],
   );
 
@@ -1129,12 +1408,27 @@ export default function App() {
       includePs5: previous.includePs5,
     }));
 
-  const activeFilterCount = [
-    filters.genre,
-    filters.protagonist,
-    filters.artStyle,
-    filters.upgrade,
-  ].filter((value) => value !== 'All').length;
+  // Removable chips so a collapsed bar still shows what is being filtered.
+  const activeChips = useMemo(() => {
+    const chips = [];
+    const add = (key, label, clear) => chips.push({ key, label, clear });
+    if (filters.q) add('q', `"${filters.q}"`, () => set('q', ''));
+    if (filters.genre !== 'All') add('genre', filters.genre, () => set('genre', 'All'));
+    if (filters.protagonist !== 'All')
+      add('protagonist', filters.protagonist, () => set('protagonist', 'All'));
+    if (filters.artStyle !== 'All') add('art', filters.artStyle, () => set('artStyle', 'All'));
+    if (filters.upgrade !== 'All') add('upgrade', filters.upgrade, () => set('upgrade', 'All'));
+    if (filters.sale) add('sale', 'On sale', () => set('sale', false));
+    if (filters.kidFriendly) add('kids', 'Kid friendly', () => set('kidFriendly', false));
+    if (filters.wishlist) add('wishlist', 'Wishlist', () => set('wishlist', false));
+    return chips;
+  }, [filters, set]);
+
+  const activeFilterCount = activeChips.length;
+
+  // The feed scrolls inside its own container, so the window listener never
+  // fires there. Keeping the bar compact also keeps the slide height stable.
+  const compact = scrolled || filters.view === 'feed';
 
   const filtersActive =
     Boolean(filters.q) ||
@@ -1145,60 +1439,36 @@ export default function App() {
 
   return (
     <div className="min-h-screen bg-slate-50 font-sans text-slate-900">
-      <header className="sticky top-0 z-10 border-b border-slate-200 bg-white/95 p-4 shadow-sm backdrop-blur sm:p-6">
+      {/* Control bar. Collapses to a single compact row as soon as you scroll
+          down, and springs back the moment you scroll up. */}
+      <header
+        ref={barRef}
+        className={`sticky top-0 z-20 border-b border-slate-200 bg-white/90 backdrop-blur transition-[padding] duration-300 ease-swift ${
+          compact ? 'px-3 py-2 sm:px-4' : 'px-3 py-3 sm:px-6 sm:py-4'
+        }`}
+      >
         <div className="mx-auto max-w-7xl">
-          <div className="mb-5 flex flex-wrap items-center justify-between gap-3">
-            <h1 className="text-2xl font-bold tracking-tight text-slate-800 sm:text-3xl">
-              PS4 to PS5 Upgrade Catalog
+          {/* Always-visible row: identity, search, filters, view switch. */}
+          <div className="flex items-center gap-2">
+            <h1
+              className={`shrink-0 font-bold tracking-tight text-slate-800 transition-all duration-300 ease-swift ${
+                compact ? 'w-0 overflow-hidden opacity-0 sm:w-auto sm:opacity-100' : ''
+              } ${compact ? 'text-base' : 'text-lg sm:text-2xl'}`}
+            >
+              PS<span className="text-indigo-600">4→5</span>
+              <span className="hidden sm:inline"> Catalog</span>
             </h1>
-            <LiveStatus
-              status={status}
-              progress={progress}
-              updatedAt={updatedAt}
-              onRefresh={refresh}
-            />
-          </div>
 
-          <nav aria-label="Collections" className="mb-4 flex flex-wrap gap-2">
-            {COLLECTIONS.map((entry) => {
-              const active = filters.collection === entry.value;
-              return (
-                <button
-                  key={entry.value}
-                  type="button"
-                  onClick={() => set('collection', entry.value)}
-                  aria-current={active ? 'true' : undefined}
-                  className={`inline-flex items-center gap-2 rounded-full px-3.5 py-1.5 text-sm font-medium transition-colors ${
-                    active
-                      ? 'bg-slate-900 text-white'
-                      : 'bg-slate-100 text-slate-600 hover:bg-slate-200'
-                  }`}
-                >
-                  {entry.value === 'deals' && <BadgePercent className="h-4 w-4" />}
-                  {entry.label}
-                  <span
-                    className={`rounded-full px-1.5 text-xs ${
-                      active ? 'bg-white/20' : 'bg-white'
-                    }`}
-                  >
-                    {collectionCounts[entry.value]}
-                  </span>
-                </button>
-              );
-            })}
-          </nav>
-
-          <div className="flex flex-col gap-3 lg:flex-row">
-            <div className="relative flex-1">
+            <div className="relative min-w-0 flex-1">
               <Search
-                className="pointer-events-none absolute left-3 top-1/2 h-5 w-5 -translate-y-1/2 text-slate-400"
+                className="pointer-events-none absolute left-2.5 top-1/2 h-4 w-4 -translate-y-1/2 text-slate-400"
                 aria-hidden="true"
               />
               <input
                 type="search"
                 aria-label="Search titles"
-                placeholder="Search titles..."
-                className="w-full rounded-lg border border-slate-300 py-2 pl-10 pr-4 outline-none transition-all focus:border-indigo-500 focus:ring-2 focus:ring-indigo-500"
+                placeholder="Search 245 games..."
+                className="w-full rounded-full border border-slate-300 bg-white py-1.5 pl-8 pr-3 text-sm outline-none transition-all duration-200 focus:border-indigo-500 focus:ring-2 focus:ring-indigo-500"
                 value={filters.q}
                 onChange={(event) => set('q', event.target.value)}
               />
@@ -1206,187 +1476,206 @@ export default function App() {
 
             <button
               type="button"
-              onClick={() => setFiltersOpen((open) => !open)}
-              aria-expanded={filtersOpen}
-              className="inline-flex items-center justify-center gap-2 rounded-lg border border-slate-300 px-4 py-2 text-sm font-medium text-slate-600 transition-colors hover:bg-slate-50 lg:hidden"
+              onClick={() => setSheetOpen((open) => !open)}
+              aria-expanded={sheetOpen}
+              aria-label="Filters"
+              className={`inline-flex shrink-0 items-center gap-1.5 rounded-full px-3 py-1.5 text-sm font-medium transition-all duration-200 ease-spring active:scale-95 ${
+                sheetOpen || activeFilterCount > 0
+                  ? 'bg-slate-900 text-white'
+                  : 'bg-slate-100 text-slate-600 hover:bg-slate-200'
+              }`}
             >
               <SlidersHorizontal className="h-4 w-4" />
-              Filters
               {activeFilterCount > 0 && (
-                <span className="rounded-full bg-indigo-600 px-1.5 text-xs text-white">
-                  {activeFilterCount}
-                </span>
+                <span className="tabular-nums">{activeFilterCount}</span>
               )}
+              <ChevronDown
+                className={`h-3.5 w-3.5 transition-transform duration-300 ease-spring ${
+                  sheetOpen ? 'rotate-180' : ''
+                }`}
+              />
             </button>
 
-            <div
-              className={`${
-                filtersOpen ? 'grid' : 'hidden'
-              } grid-cols-2 gap-3 sm:grid-cols-3 lg:flex lg:flex-wrap`}
+            <button
+              type="button"
+              onClick={() => set('view', filters.view === 'feed' ? 'grid' : 'feed')}
+              aria-label={filters.view === 'feed' ? 'Switch to grid' : 'Switch to feed'}
+              title={filters.view === 'feed' ? 'Grid view' : 'Feed view'}
+              className="shrink-0 rounded-full bg-slate-100 p-2 text-slate-600 transition-all duration-200 ease-spring hover:bg-slate-200 active:scale-90"
             >
-              <Select
-                label="All Genres"
-                value={filters.genre}
-                options={GENRES}
-                onChange={(value) => set('genre', value)}
-              />
-              <Select
-                label="All Protagonists"
-                value={filters.protagonist}
-                options={PROTAGONISTS}
-                onChange={(value) => set('protagonist', value)}
-              />
-              <Select
-                label="All Art Styles"
-                value={filters.artStyle}
-                options={ART_STYLES}
-                onChange={(value) => set('artStyle', value)}
-              />
-              <Select
-                label="All Upgrade Types"
-                value={filters.upgrade}
-                options={UPGRADES}
-                onChange={(value) =>
-                  setFilters((previous) => ({
-                    ...previous,
-                    upgrade: value,
-                    includePs5: value === 'PS5 Only' ? true : previous.includePs5,
-                  }))
-                }
-              />
-              <Select
-                label="Sort"
-                value={filters.sort}
-                options={SORTS}
-                onChange={(value) => set('sort', value)}
-              />
-              <Select
-                label="Region"
-                value={filters.region}
-                options={REGIONS}
-                onChange={(value) => set('region', value)}
-              />
+              {filters.view === 'feed' ? (
+                <LayoutGrid className="h-4 w-4" />
+              ) : (
+                <Rows3 className="h-4 w-4" />
+              )}
+            </button>
+          </div>
+
+          {/* Collection strip: one compact scrollable row, hidden once collapsed. */}
+          <div
+            className={`overflow-hidden transition-all duration-300 ease-swift ${
+              compact && !sheetOpen ? 'max-h-0 opacity-0' : 'mt-2 max-h-16 opacity-100'
+            }`}
+          >
+            <nav
+              aria-label="Collections"
+              className="no-scrollbar flex gap-1.5 overflow-x-auto pb-0.5"
+            >
+              {COLLECTIONS.map((entry) => {
+                const active = filters.collection === entry.value;
+                return (
+                  <button
+                    key={entry.value}
+                    type="button"
+                    onClick={() => set('collection', entry.value)}
+                    aria-current={active ? 'true' : undefined}
+                    className={`inline-flex shrink-0 items-center gap-1.5 rounded-full px-3 py-1 text-xs font-medium transition-all duration-200 ease-spring active:scale-95 ${
+                      active
+                        ? 'bg-slate-900 text-white'
+                        : 'bg-slate-100 text-slate-600 hover:bg-slate-200'
+                    }`}
+                  >
+                    {entry.value === 'deals' && <BadgePercent className="h-3.5 w-3.5" />}
+                    {entry.label}
+                    <span className={`tabular-nums ${active ? 'text-white/60' : 'text-slate-400'}`}>
+                      {collectionCounts[entry.value]}
+                    </span>
+                  </button>
+                );
+              })}
+            </nav>
+          </div>
+
+          {/* Filter sheet: everything else lives here instead of on screen. */}
+          {sheetOpen && (
+            <div className="mt-3 animate-sheet-down rounded-xl border border-slate-200 bg-white p-3 shadow-sm">
+              <div className="grid grid-cols-2 gap-2 sm:grid-cols-3 lg:grid-cols-6">
+                <Select
+                  label="All Genres"
+                  value={filters.genre}
+                  options={GENRES}
+                  onChange={(value) => set('genre', value)}
+                />
+                <Select
+                  label="All Protagonists"
+                  value={filters.protagonist}
+                  options={PROTAGONISTS}
+                  onChange={(value) => set('protagonist', value)}
+                />
+                <Select
+                  label="All Art Styles"
+                  value={filters.artStyle}
+                  options={ART_STYLES}
+                  onChange={(value) => set('artStyle', value)}
+                />
+                <Select
+                  label="All Upgrade Types"
+                  value={filters.upgrade}
+                  options={UPGRADES}
+                  onChange={(value) =>
+                    setFilters((previous) => ({
+                      ...previous,
+                      upgrade: value,
+                      includePs5: value === 'PS5 Only' ? true : previous.includePs5,
+                    }))
+                  }
+                />
+                <Select
+                  label="Sort"
+                  value={filters.sort}
+                  options={SORTS}
+                  onChange={(value) => set('sort', value)}
+                />
+                <Select
+                  label="Region"
+                  value={filters.region}
+                  options={REGIONS}
+                  onChange={(value) => set('region', value)}
+                />
+              </div>
+
+              <div className="mt-3 flex flex-wrap items-center gap-1.5">
+                <TogglePill
+                  active={filters.sale}
+                  onClick={() => set('sale', !filters.sale)}
+                  icon={BadgePercent}
+                  label="On sale"
+                  count={saleCount}
+                  tone="bg-rose-600"
+                />
+                <TogglePill
+                  active={filters.kidFriendly}
+                  onClick={() => set('kidFriendly', !filters.kidFriendly)}
+                  icon={Baby}
+                  label="Kid friendly"
+                  count={kidFriendlyCount}
+                  tone="bg-emerald-600"
+                />
+                <TogglePill
+                  active={filters.wishlist}
+                  onClick={() => set('wishlist', !filters.wishlist)}
+                  icon={Heart}
+                  label="Wishlist"
+                  count={wishlist.size}
+                  tone="bg-rose-600"
+                />
+                <TogglePill
+                  active={filters.includePs5}
+                  onClick={() => set('includePs5', !filters.includePs5)}
+                  icon={Gamepad2}
+                  label="PS5-only"
+                  count={filters.includePs5 ? 'on' : 'off'}
+                  tone="bg-violet-600"
+                />
+
+                <div className="ml-auto flex items-center gap-3">
+                  <LiveStatus
+                    status={status}
+                    progress={progress}
+                    updatedAt={updatedAt}
+                    onRefresh={refresh}
+                  />
+                  {filtersActive && (
+                    <button
+                      type="button"
+                      onClick={clearFilters}
+                      className="text-xs font-medium text-slate-500 hover:text-slate-800"
+                    >
+                      Clear
+                    </button>
+                  )}
+                </div>
+              </div>
             </div>
-          </div>
+          )}
 
-          <div className="mt-3 flex flex-wrap items-center gap-3">
-            <button
-              type="button"
-              onClick={() => set('sale', !filters.sale)}
-              aria-pressed={filters.sale}
-              className={`inline-flex items-center gap-2 rounded-full px-3 py-1.5 text-sm font-medium transition-colors ${
-                filters.sale
-                  ? 'bg-rose-600 text-white'
-                  : 'bg-slate-100 text-slate-600 hover:bg-slate-200'
-              }`}
-            >
-              <BadgePercent className="h-4 w-4" />
-              On sale now
-              {saleCount > 0 && (
-                <span
-                  className={`rounded-full px-1.5 text-xs ${
-                    filters.sale ? 'bg-white/25' : 'bg-white'
-                  }`}
+          {/* Active filters stay visible as removable chips once collapsed. */}
+          {compact && !sheetOpen && filtersActive && (
+            <div className="no-scrollbar mt-2 flex gap-1.5 overflow-x-auto">
+              {activeChips.map((chip) => (
+                <button
+                  key={chip.key}
+                  type="button"
+                  onClick={chip.clear}
+                  className="inline-flex shrink-0 items-center gap-1 rounded-full bg-indigo-50 px-2.5 py-1 text-xs font-medium text-indigo-700 transition-transform duration-200 ease-spring active:scale-95"
                 >
-                  {saleCount}
-                </span>
-              )}
-            </button>
-
-            <button
-              type="button"
-              onClick={() => set('wishlist', !filters.wishlist)}
-              aria-pressed={filters.wishlist}
-              className={`inline-flex items-center gap-2 rounded-full px-3 py-1.5 text-sm font-medium transition-colors ${
-                filters.wishlist
-                  ? 'bg-rose-600 text-white'
-                  : 'bg-slate-100 text-slate-600 hover:bg-slate-200'
-              }`}
-            >
-              <Heart className={`h-4 w-4 ${filters.wishlist ? 'fill-current' : ''}`} />
-              Wishlist
-              {wishlist.size > 0 && (
-                <span
-                  className={`rounded-full px-1.5 text-xs ${
-                    filters.wishlist ? 'bg-white/25' : 'bg-white'
-                  }`}
-                >
-                  {wishlist.size}
-                </span>
-              )}
-            </button>
-
-            <button
-              type="button"
-              onClick={() => set('kidFriendly', !filters.kidFriendly)}
-              aria-pressed={filters.kidFriendly}
-              className={`inline-flex items-center gap-2 rounded-full px-3 py-1.5 text-sm font-medium transition-colors ${
-                filters.kidFriendly
-                  ? 'bg-emerald-600 text-white'
-                  : 'bg-slate-100 text-slate-600 hover:bg-slate-200'
-              }`}
-            >
-              <Baby className="h-4 w-4" />
-              Kid friendly
-              <span
-                className={`rounded-full px-1.5 text-xs ${
-                  filters.kidFriendly ? 'bg-white/25' : 'bg-white'
-                }`}
-              >
-                {kidFriendlyCount}
-              </span>
-            </button>
-
-            <button
-              type="button"
-              onClick={() => set('includePs5', !filters.includePs5)}
-              aria-pressed={filters.includePs5}
-              className={`inline-flex items-center gap-2 rounded-full px-3 py-1.5 text-sm font-medium transition-colors ${
-                filters.includePs5
-                  ? 'bg-violet-600 text-white'
-                  : 'bg-slate-100 text-slate-600 hover:bg-slate-200'
-              }`}
-            >
-              <Gamepad2 className="h-4 w-4" />
-              PS5-only titles
-              <span
-                className={`rounded-full px-1.5 text-xs ${
-                  filters.includePs5 ? 'bg-white/25' : 'bg-white'
-                }`}
-              >
-                {filters.includePs5 ? 'shown' : 'hidden'}
-              </span>
-            </button>
-
-            {filtersActive && (
-              <button
-                type="button"
-                onClick={clearFilters}
-                className="inline-flex items-center gap-1.5 text-sm font-medium text-slate-500 hover:text-slate-800"
-              >
-                <SlidersHorizontal className="h-4 w-4" />
-                Clear filters
-              </button>
-            )}
-          </div>
+                  {chip.label}
+                  <X className="h-3 w-3" />
+                </button>
+              ))}
+            </div>
+          )}
         </div>
       </header>
 
-      <main className="mx-auto max-w-7xl p-4 sm:p-6">
-        <div className="mb-6">
-          <p className="font-medium text-slate-500">
-            Showing {filteredGames.length} of {visiblePool.length} games
-          </p>
-          {COLLECTION_BLURBS[filters.collection] && (
-            <p className="mt-1 text-sm text-slate-400">
-              {COLLECTION_BLURBS[filters.collection]}
-            </p>
-          )}
-        </div>
-
-        <div className="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
+      {filters.view === 'feed' ? (
+        /* Feed: one game per screen, snapped, scrolled with a flick. */
+        <main
+          className="feed-scroll no-scrollbar h-[calc(100dvh-var(--bar-height))] overflow-y-auto"
+          aria-label="Game feed"
+        >
           {filteredGames.map((game) => (
-            <GameCard
+            <FeedSlide
               key={game.id}
               game={game}
               live={byTitle.get(game.title)}
@@ -1395,31 +1684,46 @@ export default function App() {
               onOpen={() => setActiveGameId(game.id)}
             />
           ))}
-        </div>
+          {filteredGames.length === 0 && (
+            <EmptyState
+              filters={filters}
+              wishlist={wishlist}
+              status={status}
+              onClear={clearFilters}
+            />
+          )}
+        </main>
+      ) : (
+        <main className="mx-auto max-w-7xl px-3 pb-10 pt-3 sm:px-6">
+          <p className="mb-3 text-xs font-medium text-slate-400">
+            {filteredGames.length} of {visiblePool.length} games
+            {COLLECTION_BLURBS[filters.collection] &&
+              ` · ${COLLECTION_BLURBS[filters.collection]}`}
+          </p>
 
-        {filteredGames.length === 0 && (
-          <div className="py-20 text-center text-slate-500">
-            <Sparkles className="mx-auto mb-3 h-8 w-8 text-slate-300" />
-            <p className="text-lg">No games found matching those filters.</p>
-            {filters.wishlist && wishlist.size === 0 && (
-              <p className="mt-1 text-sm">Your wishlist is empty. Tap the heart on any card.</p>
-            )}
-            {!filters.includePs5 && (
-              <p className="mt-1 text-sm">PS5-only titles are hidden. Turn them on to see more.</p>
-            )}
-            {filters.sale && status === 'loading' && (
-              <p className="mt-1 text-sm">Still checking prices — more may appear.</p>
-            )}
-            <button
-              type="button"
-              onClick={clearFilters}
-              className="mt-4 font-medium text-indigo-600 hover:underline"
-            >
-              Clear all filters
-            </button>
+          <div className="grid grid-cols-2 gap-3 sm:gap-4 lg:grid-cols-3 xl:grid-cols-4 2xl:grid-cols-5">
+            {filteredGames.map((game) => (
+              <GameCard
+                key={game.id}
+                game={game}
+                live={byTitle.get(game.title)}
+                wishlisted={wishlist.has(game.id)}
+                onToggleWishlist={() => toggleWishlist(game.id)}
+                onOpen={() => setActiveGameId(game.id)}
+              />
+            ))}
           </div>
-        )}
-      </main>
+
+          {filteredGames.length === 0 && (
+            <EmptyState
+              filters={filters}
+              wishlist={wishlist}
+              status={status}
+              onClear={clearFilters}
+            />
+          )}
+        </main>
+      )}
 
       {activeGame && (
         <GameModal
