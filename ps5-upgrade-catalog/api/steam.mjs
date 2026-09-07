@@ -12,6 +12,7 @@
  */
 
 import { loadBlob, recordAndSummarize } from './history.mjs';
+import { loadPsnPrice } from './psn.mjs';
 import { predictPriceDrop } from './predict.mjs';
 
 const SEARCH_URL = 'https://store.steampowered.com/api/storesearch/';
@@ -106,21 +107,6 @@ export function formatMoney(cents, currency) {
   } catch {
     return `${(cents / 100).toFixed(2)} ${currency}`;
   }
-}
-
-function toPrice(overview, isFree) {
-  if (isFree) return { isFree: true, discountPercent: 0, final: 0, finalFormatted: 'Free' };
-  if (!overview) return null;
-  const currency = overview.currency || 'USD';
-  return {
-    isFree: false,
-    currency,
-    initial: overview.initial,
-    final: overview.final,
-    discountPercent: overview.discount_percent || 0,
-    initialFormatted: overview.initial_formatted || formatMoney(overview.initial, currency),
-    finalFormatted: overview.final_formatted || formatMoney(overview.final, currency),
-  };
 }
 
 /**
@@ -332,7 +318,6 @@ async function detailsFor(title, appId, countryCode, searchItem) {
     background: data.background_raw || null,
     screenshots,
     videos,
-    price: toPrice(data.price_overview, data.is_free),
     releaseDate: data.release_date?.date || null,
     metacritic: data.metacritic?.score ?? null,
     ageRating: toAgeRating(data),
@@ -364,6 +349,20 @@ export async function resolveGame(title, countryCode = 'US', knownAppId = null) 
 
   inFlight.set(key, pending);
   return pending;
+}
+
+/** Run a bounded number of async lookups at a time, preserving input order. */
+export async function mapWithConcurrency(items, limit, task) {
+  const results = new Array(items.length);
+  let cursor = 0;
+  const workers = Array.from({ length: Math.min(limit, items.length) }, async () => {
+    while (cursor < items.length) {
+      const index = cursor++;
+      results[index] = await task(items[index], index);
+    }
+  });
+  await Promise.all(workers);
+  return results;
 }
 
 /**
@@ -408,10 +407,14 @@ export async function handleGamesRequest(url, catalog) {
   if (titleParam) {
     const wanted = titleParam.slice(0, 120);
     const known = catalog.find((game) => game.title === wanted);
-    const game = await resolveGame(wanted, countryCode, known?.steamAppId ?? null);
+    const [game, price] = await Promise.all([
+      resolveGame(wanted, countryCode, known?.steamAppId ?? null),
+      loadPsnPrice(known?.psnConceptId ?? null, countryCode),
+    ]);
+    const withPrice = { ...game, price: price ?? null };
     return {
       status: 200,
-      body: { countryCode, games: [{ ...game, prediction: predictPriceDrop(game) }] },
+      body: { countryCode, games: [{ ...withPrice, prediction: predictPriceDrop(withPrice) }] },
     };
   }
 
@@ -426,7 +429,20 @@ export async function handleGamesRequest(url, catalog) {
 
   const slice = catalog.slice(chunkParam * CHUNK_SIZE, (chunkParam + 1) * CHUNK_SIZE);
   const resolved = await resolveMany(slice, countryCode);
-  const games = resolved.map((game, index) => ({ ...game, id: slice[index].id }));
+
+  // Prices come from the PlayStation Store, never from the PC storefront: this
+  // is a PlayStation catalog, so a price from anywhere else is the wrong
+  // number. A game with no store id simply has no price rather than a
+  // stand-in from somewhere else.
+  const psnPrices = await mapWithConcurrency(slice, 4, (game) =>
+    loadPsnPrice(game.psnConceptId, countryCode),
+  );
+
+  const games = resolved.map((game, index) => ({
+    ...game,
+    id: slice[index].id,
+    price: psnPrices[index] ?? null,
+  }));
 
   // Recording on read means history starts accruing from the first visit
   // rather than waiting for the first nightly snapshot.

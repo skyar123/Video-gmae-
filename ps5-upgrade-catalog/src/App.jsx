@@ -657,8 +657,10 @@ function TrailerPlayer({ video, poster }) {
  * Modal
  * ------------------------------------------------------------------ */
 
-const storeLink = (title) =>
-  `https://store.playstation.com/en-us/search/${encodeURIComponent(title)}`;
+const storeLink = (game) =>
+  game.psnConceptId
+    ? `https://store.playstation.com/en-us/concept/${game.psnConceptId}`
+    : `https://store.playstation.com/en-us/search/${encodeURIComponent(game.title)}`;
 const trailerSearchLink = (title) =>
   `https://www.youtube.com/results?search_query=${encodeURIComponent(
     `${title} gameplay PS5`,
@@ -814,12 +816,12 @@ function GameModal({ game, live, wishlisted, onToggleWishlist, onClose }) {
 
           <AgeDetail ageRating={game.ageRating} />
           <ProsAndCons ratings={ratings} />
-          <PricePanel live={live} />
+          <PricePanel game={game} live={live} />
           <PredictionPanel live={live} />
 
           <div className="mt-6 flex flex-col gap-3 sm:flex-row">
             <a
-              href={storeLink(game.title)}
+              href={storeLink(game)}
               target="_blank"
               rel="noopener noreferrer"
               className="flex flex-1 items-center justify-center gap-2 rounded-lg bg-indigo-600 px-4 py-2.5 font-medium text-white transition-colors hover:bg-indigo-700"
@@ -848,25 +850,27 @@ function GameModal({ game, live, wishlisted, onToggleWishlist, onClose }) {
  * that publishes prices openly, so it is labelled plainly rather than passed
  * off as the PlayStation Store price.
  */
-function PricePanel({ live }) {
+function PricePanel({ game, live }) {
   if (!live) {
     return (
       <p className="mt-6 flex items-center gap-2 text-sm text-slate-400">
         <Loader2 className="h-4 w-4 animate-spin" />
-        Checking current price...
+        Checking the PlayStation Store...
       </p>
     );
   }
 
-  if (!live.matched || !live.price) {
+  if (!live.price) {
     return (
       <p className="mt-6 text-sm text-slate-500">
-        No live price available for this title. Check the PS Store for regional pricing.
+        No PlayStation Store price found for this title. Open the store listing to check.
       </p>
     );
   }
 
   const { price } = live;
+  const saleEnds = price.saleEndsAt ? new Date(price.saleEndsAt) : null;
+
   return (
     <div className="mt-6 flex flex-wrap items-center gap-x-4 gap-y-2 rounded-xl border border-slate-200 p-4">
       <div className="flex items-baseline gap-2">
@@ -877,18 +881,19 @@ function PricePanel({ live }) {
       </div>
       <DiscountBadge price={price} />
       <a
-        href={live.storeUrl}
+        href={storeLink(game)}
         target="_blank"
         rel="noopener noreferrer"
         className="ml-auto inline-flex items-center gap-1 text-sm font-medium text-indigo-600 hover:underline"
       >
-        Current PC price via Steam
+        PlayStation Store
         <ArrowUpRight className="h-3.5 w-3.5" />
       </a>
-      <p className="w-full text-xs text-slate-400">
-        Sony publishes no open price feed, so this tracks the PC storefront as a sale signal.
-        PS Store pricing varies by region.
-      </p>
+      {saleEnds && (
+        <p className="w-full text-xs font-medium text-rose-600">
+          Sale ends {saleEnds.toLocaleDateString([], { month: 'short', day: 'numeric' })}
+        </p>
+      )}
     </div>
   );
 }
@@ -1188,7 +1193,7 @@ function FeedSlide({ game, live, wishlisted, onToggleWishlist, onOpen }) {
               <Info className="h-5 w-5" />
             </button>
             <a
-              href={storeLink(game.title)}
+              href={storeLink(game)}
               target="_blank"
               rel="noopener noreferrer"
               aria-label={`${game.title} on the PS Store`}

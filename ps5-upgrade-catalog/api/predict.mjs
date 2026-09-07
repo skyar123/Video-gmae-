@@ -2,10 +2,10 @@
  * Price-drop prediction.
  *
  * This is a transparent heuristic, not a model trained on anything. It scores
- * the chance of a better price in the next 30 days from four signals we can
- * actually observe — how old the game is, whether it is discounted right now,
- * how close the next major sale window is, and what our own recorded price
- * history says — and it reports which of those drove the answer so the number
+ * the chance of a better price in the next 30 days from what we can actually
+ * observe — how old the game is, whether it is discounted right now, when the
+ * PlayStation Store says the current sale ends, how close the next recurring
+ * sale window is, and what our own recorded price history says — and it reports which of those drove the answer so the number
  * is always auditable. Confidence rises as the history store fills in.
  */
 
@@ -105,9 +105,26 @@ export function predictPriceDrop(live, history = null, now = new Date()) {
     reasons.push('Currently at full price.');
   }
 
-  // 3. Proximity to the next major sale window.
+  // 2b. The store publishes when a sale ends, so that part is known rather
+  //     than guessed. A sale about to expire is a reason to buy now.
+  let saleEndsInDays = null;
+  if (onSale && price.saleEndsAt) {
+    const ends = new Date(price.saleEndsAt);
+    if (!Number.isNaN(ends.getTime())) {
+      saleEndsInDays = Math.max(0, daysBetween(ends, now));
+      score -= saleEndsInDays <= 3 ? 20 : 10;
+      reasons.push(
+        saleEndsInDays <= 1
+          ? 'This sale ends today on the PlayStation Store.'
+          : `This sale ends in ${saleEndsInDays} days on the PlayStation Store.`,
+      );
+    }
+  }
+
+  // 3. Proximity to the next recurring sale window. Only worth weighing when
+  //    the game is not already discounted with a known end date.
   const nextWindow = nextSaleWindow(now);
-  if (nextWindow) {
+  if (nextWindow && saleEndsInDays === null) {
     if (nextWindow.startsInDays <= 7) {
       score += 28;
       reasons.push(`${nextWindow.name} usually starts within a week.`);
@@ -165,7 +182,10 @@ export function predictPriceDrop(live, history = null, now = new Date()) {
 
   let verdict;
   let headline;
-  if (onSale && atRecordLow) {
+  if (onSale && saleEndsInDays !== null && saleEndsInDays <= 3) {
+    verdict = 'buy-now';
+    headline = saleEndsInDays <= 1 ? 'Sale ends today' : `Sale ends in ${saleEndsInDays} days`;
+  } else if (onSale && atRecordLow) {
     verdict = 'buy-now';
     headline = 'Lowest we have tracked';
   } else if (onSale && score < 45) {
@@ -182,5 +202,14 @@ export function predictPriceDrop(live, history = null, now = new Date()) {
     headline = 'No rush either way';
   }
 
-  return { score, verdict, headline, reasons, nextWindow, confidence, horizonDays: HORIZON_DAYS };
+  return {
+    score,
+    verdict,
+    headline,
+    reasons,
+    nextWindow: saleEndsInDays === null ? nextWindow : null,
+    saleEndsInDays,
+    confidence,
+    horizonDays: HORIZON_DAYS,
+  };
 }
