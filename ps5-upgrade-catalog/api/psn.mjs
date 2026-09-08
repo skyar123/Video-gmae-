@@ -97,7 +97,9 @@ function parsePrices(html) {
     const segment = html.slice(index, index + 900);
     const applicability = field(segment, 'applicability');
     const base = field(segment, 'basePriceValue');
-    if (applicability !== 'APPLICABLE' || typeof base !== 'number' || base <= 0) continue;
+    // base === 0 is a genuinely free-to-play game, which is a real answer;
+    // rejecting it left titles like Rocket League looking priceless.
+    if (applicability !== 'APPLICABLE' || typeof base !== 'number' || base < 0) continue;
 
     const discounted = field(segment, 'discountedValue');
     candidates.push({
@@ -121,7 +123,7 @@ function toPrice(entry) {
   const initial = entry.basePriceValue;
   const discountPercent = initial > 0 ? Math.round(((initial - final) / initial) * 100) : 0;
   return {
-    isFree: false,
+    isFree: initial === 0,
     currency: entry.currencyCode,
     initial,
     final,
