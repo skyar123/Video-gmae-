@@ -118,6 +118,23 @@ function parsePrices(html) {
   );
 }
 
+/**
+ * Whether the game is in the PS Plus Extra/Premium catalog.
+ *
+ * This matters more than any discount: for a subscriber the marginal price is
+ * already zero, so a sale on it is close to irrelevant. The store marks it by
+ * pricing a subscription CTA at "Included" and naming the tier in its upsell
+ * copy. A PS Plus *discount* is a different thing and does not match this.
+ */
+function parsePlus(html) {
+  if (!/"discountedPrice":"Included"/.test(html)) return null;
+  const upsell = (html.match(/"displayUpsellText":"([^"]{5,200})"/) || [])[1] ?? '';
+  const tier = (upsell.match(/PlayStation Plus (Extra|Premium|Deluxe)/) || [])[1] ?? null;
+  // Essential is online play, not a game catalog, so it is not inclusion.
+  if (!tier) return null;
+  return { included: true, tier: `PlayStation Plus ${tier}` };
+}
+
 function toPrice(entry) {
   const final = entry.discountedValue;
   const initial = entry.basePriceValue;
@@ -147,7 +164,7 @@ export async function loadPsnPrice(storePath, countryCode = 'US') {
   const pending = fetchPricePayload(storePath, countryCode)
     .then((html) => {
       const entry = parsePrices(html);
-      const value = entry ? toPrice(entry) : null;
+      const value = entry ? { ...toPrice(entry), plus: parsePlus(html) } : null;
       cache.set(key, { value, storedAt: Date.now() });
       return value;
     })

@@ -141,7 +141,7 @@ function parse(id, html) {
  * There is no recorded price history for mirror games, so the predictor works
  * from release age and the current sale alone and says so in its confidence.
  */
-export async function loadConceptDetail(id, countryCode = 'US') {
+export async function loadConceptDetail(id, countryCode = 'US', genres = []) {
   const key = `${countryCode}:${id}`;
   const hit = cache.get(key);
   if (hit && Date.now() - hit.storedAt < CACHE_TTL_MS) return hit.value;
@@ -162,8 +162,15 @@ export async function loadConceptDetail(id, countryCode = 'US') {
       return partial;
     }
 
+    // Genres sit past this module's read cap, so the caller passes the ones
+    // the mirror index already holds. That is what lets a genre-targeted
+    // event — the Halloween sale only covers horror — apply to a mirrored
+    // game exactly as it does to a curated one.
     const prediction = price
-      ? predictPriceDrop({ matched: true, price, releaseDate: detail.releaseDate })
+      ? predictPriceDrop({ matched: true, price, releaseDate: detail.releaseDate }, null, new Date(), {
+          genre: genres[0] ?? null,
+          tags: genres.map((genre) => String(genre).toLowerCase()),
+        })
       : null;
 
     const value = { ...detail, price: price ?? null, prediction };

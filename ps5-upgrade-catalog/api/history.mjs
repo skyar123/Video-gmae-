@@ -155,10 +155,15 @@ export function summarize(entry, now = new Date()) {
   }
   const positiveGaps = gaps.filter((gap) => gap > 0);
 
+  // The deepest cut ever recorded is the one piece of hard evidence we have
+  // about how far this particular game is willing to fall.
+  const deepestDiscount = points.reduce((deepest, point) => Math.max(deepest, point.p ?? 0), 0);
+
   return {
     observedDays: daysBetween(new Date(lastSeen), new Date(first.d)),
     since: first.d,
     saleCount: salePoints.length,
+    deepestDiscount,
     lowest: {
       final: lowest.f,
       formatted: formatMoney(lowest.f, currency),

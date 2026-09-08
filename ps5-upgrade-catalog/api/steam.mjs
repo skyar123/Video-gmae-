@@ -468,13 +468,15 @@ export async function handleGamesRequest(url, catalog) {
       countryCode,
       chunk: chunkParam,
       chunkCount,
-      games: games.map((game) => {
+      games: games.map((game, index) => {
         const history = histories[game.id] ?? null;
         return {
           ...game,
           history,
           ratings: ratings[game.id] ?? null,
-          prediction: predictPriceDrop(game, history),
+          // The catalog record goes in too, so genre-targeted events (the
+          // Halloween sale only covers horror) apply to the right games.
+          prediction: predictPriceDrop(game, history, new Date(), slice[index]),
         };
       }),
     },

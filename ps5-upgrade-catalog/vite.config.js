@@ -93,8 +93,9 @@ function gamesApiPlugin() {
       try {
         const url = new URL(request.url, 'http://localhost');
         const id = Number(url.searchParams.get('id'));
+        const genres = (url.searchParams.get('genres') ?? '').split(',').map((g) => g.trim()).filter(Boolean);
         const detail = Number.isFinite(id) && id > 0
-          ? await loadConceptDetail(id, (url.searchParams.get('cc') ?? 'US').toUpperCase())
+          ? await loadConceptDetail(id, (url.searchParams.get('cc') ?? 'US').toUpperCase(), genres)
           : null;
         response.statusCode = detail ? 200 : 404;
         response.setHeader('content-type', 'application/json; charset=utf-8');

@@ -16,12 +16,19 @@ const DAY_MS = 24 * 60 * 60 * 1000;
  * are historical patterns, not announced dates, and the UI says so.
  */
 const SALE_WINDOWS = [
-  { name: 'Spring sale', from: [3, 12], to: [3, 20] },
-  { name: 'Days of Play', from: [6, 1], to: [6, 12] },
-  { name: 'Summer sale', from: [6, 25], to: [7, 10] },
-  { name: 'Autumn and Black Friday sales', from: [11, 24], to: [12, 2] },
-  { name: 'Winter holiday sale', from: [12, 18], to: [1, 5] },
+  { name: 'New Year sale', from: [1, 8], to: [1, 20], depth: 'broad' },
+  { name: 'Spring sale', from: [3, 12], to: [4, 2], depth: 'broad' },
+  { name: 'Days of Play', from: [5, 29], to: [6, 12], depth: 'first-party' },
+  { name: 'Summer sale', from: [6, 25], to: [8, 5], depth: 'broad' },
+  // Sony's Halloween event is genre-targeted rather than catalog-wide, so it
+  // only raises the hazard for games it actually covers.
+  { name: 'Halloween sale', from: [10, 16], to: [10, 31], genres: ['Horror'], tags: ['horror'] },
+  { name: 'Black Friday sale', from: [11, 20], to: [12, 2], depth: 'deepest' },
+  { name: 'Winter holiday sale', from: [12, 15], to: [1, 5], depth: 'broad' },
 ];
+
+/** The store prices in fixed steps, so a predicted depth is snapped to one. */
+const DISCOUNT_TIERS = [10, 20, 25, 30, 33, 40, 50, 60, 67, 75, 80, 85, 90];
 
 const HORIZON_DAYS = 30;
 
@@ -29,21 +36,77 @@ function daysBetween(later, earlier) {
   return Math.round((later.getTime() - earlier.getTime()) / DAY_MS);
 }
 
-/** The next sale window that starts on or after `now`, wrapping into next year. */
-export function nextSaleWindow(now = new Date()) {
+/** Does a genre-targeted event, like Halloween, actually cover this game? */
+function windowCovers(window, game) {
+  if (!window.genres && !window.tags) return true;
+  if (!game) return false;
+  const genre = (game.genre ?? '').toLowerCase();
+  const tags = (game.tags ?? []).map((tag) => tag.toLowerCase());
+  return (
+    (window.genres ?? []).some((g) => genre.includes(g.toLowerCase())) ||
+    (window.tags ?? []).some((t) => tags.includes(t.toLowerCase()))
+  );
+}
+
+/**
+ * The next sale window that starts on or after `now`, wrapping into next year.
+ * `game` is optional and only used to skip events that would not include it.
+ */
+export function nextSaleWindow(now = new Date(), game = null) {
   let best = null;
   for (const window of SALE_WINDOWS) {
+    if (!windowCovers(window, game)) continue;
     for (const yearOffset of [0, 1]) {
       const [month, day] = window.from;
       const start = new Date(Date.UTC(now.getUTCFullYear() + yearOffset, month - 1, day));
       const startsInDays = daysBetween(start, now);
       if (startsInDays < 0) continue;
       if (!best || startsInDays < best.startsInDays) {
-        best = { name: window.name, startsInDays, start: start.toISOString().slice(0, 10) };
+        best = {
+          name: window.name,
+          startsInDays,
+          start: start.toISOString().slice(0, 10),
+          depth: window.depth ?? null,
+        };
       }
     }
   }
   return best;
+}
+
+const snapToTier = (value) =>
+  DISCOUNT_TIERS.reduce((best, tier) =>
+    Math.abs(tier - value) < Math.abs(best - value) ? tier : best,
+  );
+
+/**
+ * How deep the next cut is likely to be, as a percentage off base price.
+ *
+ * Recorded history wins when there is any: a discount this game has actually
+ * taken before is evidence, and a prior is not. Without history it falls back
+ * to how the store generally treats a title of this age, nudged by the event
+ * that would carry it, then snapped to one of the store's standard steps
+ * because it does not price in between them.
+ */
+function estimateDepth({ age, history, window, price }) {
+  const seen = history?.deepestDiscount ?? null;
+  if (typeof seen === 'number' && seen > 0) {
+    return { percent: snapToTier(seen), basis: 'seen-before' };
+  }
+
+  let depth;
+  if (age === null) depth = 40;
+  else if (age < 90) depth = 20;
+  else if (age < 365) depth = 30;
+  else if (age < 1095) depth = 50;
+  else depth = 67;
+
+  if (window?.depth === 'deepest') depth += 10;
+  if (window?.depth === 'first-party') depth += 5;
+  // A game already discounted rarely goes much deeper in the same cycle.
+  if (price?.discountPercent > 0) depth = Math.max(depth, price.discountPercent + 5);
+
+  return { percent: snapToTier(Math.min(90, depth)), basis: 'typical-for-age' };
 }
 
 /** Age in days, or null when the storefront gave us no usable release date. */
@@ -60,7 +123,7 @@ function ageInDays(releaseDate, now) {
  * @returns {{score:number, verdict:string, headline:string, reasons:string[],
  *            nextWindow:object|null, confidence:string}}
  */
-export function predictPriceDrop(live, history = null, now = new Date()) {
+export function predictPriceDrop(live, history = null, now = new Date(), game = null) {
   if (!live?.matched || !live.price || live.price.isFree) {
     return {
       score: null,
@@ -74,6 +137,26 @@ export function predictPriceDrop(live, history = null, now = new Date()) {
 
   const { price } = live;
   const onSale = price.discountPercent > 0;
+
+  // Competing risk. If the game is already in a subscription catalog the
+  // marginal price for a subscriber is zero, and no discount changes that.
+  // Reporting a drop probability here would be answering the wrong question.
+  if (price.plus?.included) {
+    return {
+      score: null,
+      verdict: 'included',
+      headline: `Included with ${price.plus.tier}`,
+      reasons: [
+        `This is in the ${price.plus.tier} catalog, so a subscription already covers it.`,
+        `Buying outright costs ${price.finalFormatted}${onSale ? ` (${price.discountPercent}% off)` : ''}, which only matters if you want to keep it after the subscription lapses.`,
+      ],
+      nextWindow: null,
+      saleEndsInDays: null,
+      plus: price.plus,
+      confidence: 'high',
+      horizonDays: HORIZON_DAYS,
+    };
+  }
   const age = ageInDays(live.releaseDate, now);
   const reasons = [];
   let score = 0;
@@ -123,7 +206,7 @@ export function predictPriceDrop(live, history = null, now = new Date()) {
 
   // 3. Proximity to the next recurring sale window. Only worth weighing when
   //    the game is not already discounted with a known end date.
-  const nextWindow = nextSaleWindow(now);
+  const nextWindow = nextSaleWindow(now, game);
   if (nextWindow && saleEndsInDays === null) {
     if (nextWindow.startsInDays <= 7) {
       score += 28;
@@ -202,6 +285,8 @@ export function predictPriceDrop(live, history = null, now = new Date()) {
     headline = 'No rush either way';
   }
 
+  const depth = estimateDepth({ age, history, window: nextWindow, price });
+
   return {
     score,
     verdict,
@@ -209,6 +294,8 @@ export function predictPriceDrop(live, history = null, now = new Date()) {
     reasons,
     nextWindow: saleEndsInDays === null ? nextWindow : null,
     saleEndsInDays,
+    depth,
+    plus: null,
     confidence,
     horizonDays: HORIZON_DAYS,
   };

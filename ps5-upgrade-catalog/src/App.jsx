@@ -128,6 +128,8 @@ const VERDICT_STYLES = {
   wait: 'bg-amber-50 text-amber-700 ring-amber-600/20',
   hold: 'bg-slate-100 text-slate-600 ring-slate-500/20',
   'too-new': 'bg-sky-50 text-sky-700 ring-sky-600/20',
+  // A subscription already covering the game is its own answer, not a price.
+  included: 'bg-indigo-50 text-indigo-700 ring-indigo-600/20',
   unknown: 'bg-slate-100 text-slate-500 ring-slate-500/20',
 };
 
@@ -411,7 +413,11 @@ function VerdictBadge({ prediction, className = '' }) {
         VERDICT_STYLES[prediction.verdict]
       } ${className}`}
     >
-      <TrendingDown className="h-3.5 w-3.5" aria-hidden="true" />
+      {prediction.verdict === 'included' ? (
+        <CircleCheck className="h-3.5 w-3.5" aria-hidden="true" />
+      ) : (
+        <TrendingDown className="h-3.5 w-3.5" aria-hidden="true" />
+      )}
       {prediction.headline}
     </span>
   );
@@ -1125,6 +1131,30 @@ function PredictionPanel({ live }) {
   if (!prediction || prediction.verdict === 'unknown') return null;
 
   const history = live.history;
+
+  // A game already in a subscription catalog has no drop question to answer,
+  // so the panel states that instead of showing a probability of nothing.
+  if (prediction.verdict === 'included') {
+    return (
+      <div className="mt-4 rounded-xl border border-indigo-200 bg-indigo-50/40 p-4">
+        <div className="flex flex-wrap items-center justify-between gap-2">
+          <h3 className="text-sm font-semibold uppercase tracking-wider text-slate-400">
+            Price outlook
+          </h3>
+          <VerdictBadge prediction={prediction} />
+        </div>
+        <ul className="mt-3 space-y-1.5 text-sm text-slate-600">
+          {prediction.reasons.map((reason) => (
+            <li key={reason} className="flex gap-2">
+              <span className="mt-2 h-1 w-1 shrink-0 rounded-full bg-indigo-300" />
+              {reason}
+            </li>
+          ))}
+        </ul>
+      </div>
+    );
+  }
+
   return (
     <div className="mt-4 rounded-xl border border-slate-200 p-4">
       <div className="flex flex-wrap items-center justify-between gap-2">
@@ -1159,6 +1189,16 @@ function PredictionPanel({ live }) {
       <p className="mt-1 text-xs text-slate-500">
         Estimated chance of a lower price in the next {prediction.horizonDays} days.
       </p>
+
+      {prediction.depth && (
+        <p className="mt-2 text-sm text-slate-600">
+          When it does drop, expect around{' '}
+          <span className="font-semibold text-slate-900">{prediction.depth.percent}% off</span>
+          {prediction.depth.basis === 'seen-before'
+            ? ' — the deepest cut recorded for it so far.'
+            : ' — the usual depth for a game this age, at the store\u2019s standard steps.'}
+        </p>
+      )}
 
       <ul className="mt-3 space-y-1.5 text-sm text-slate-600">
         {prediction.reasons.map((reason) => (
@@ -1256,7 +1296,11 @@ function GameCard({
 }) {
   const prediction = live?.prediction;
   const ratings = live?.ratings ?? game.ratings;
-  const showVerdict = prediction && (prediction.verdict === 'buy-now' || prediction.verdict === 'wait');
+  const showVerdict =
+    prediction &&
+    (prediction.verdict === 'buy-now' ||
+      prediction.verdict === 'wait' ||
+      prediction.verdict === 'included');
 
   return (
     <div className="group relative flex h-full animate-rise-in flex-col overflow-hidden rounded-xl border border-slate-200 bg-white shadow-sm transition-all duration-200 ease-spring hover:-translate-y-1 hover:shadow-lg focus-within:ring-2 focus-within:ring-indigo-500 active:scale-[0.98]">
@@ -2038,13 +2082,16 @@ function StoreGameModal({ game, region, wishlisted, owned, onToggleWishlist, onT
   const [status, setStatus] = useState('loading');
   const [shot, setShot] = useState(null);
   const [expanded, setExpanded] = useState(false);
+  // Joined once so the fetch effect depends on a stable string, not an array
+  // that is a new object on every render.
+  const genreList = (game.genres ?? []).join(',');
 
   useEffect(() => {
     let live = true;
     // Fetching the listing on open is the point of this effect.
     // eslint-disable-next-line react/set-state-in-effect
     setStatus('loading');
-    fetch(`/api/concept?id=${game.id}&cc=${region}`)
+    fetch(`/api/concept?id=${game.id}&cc=${region}&genres=${encodeURIComponent(genreList)}`)
       .then((response) => (response.ok ? response.json() : Promise.reject(new Error('failed'))))
       .then((payload) => {
         if (!live) return;
@@ -2057,7 +2104,7 @@ function StoreGameModal({ game, region, wishlisted, owned, onToggleWishlist, onT
     return () => {
       live = false;
     };
-  }, [game.id, region]);
+  }, [game.id, region, genreList]);
 
   const art = detail?.art ?? game.art;
   const screenshots = detail?.screenshots ?? [];
