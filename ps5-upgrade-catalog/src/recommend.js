@@ -137,6 +137,28 @@ export function recommend(catalog, profile, { exclude, limit = 40, includePs5 = 
   // Without this the top of the list is one genre over and over, because the
   // profile's strongest signal wins every comparison. Each pick makes the next
   // game of the same genre count for a little less.
+  const picked = diversifyByGenre(scored, limit);
+
+  // Reasons are written last so each one can prefer a trait the list has not
+  // already leaned on; otherwise every cozy pick says the same sentence.
+  const usedTraits = new Set();
+  return picked.map(({ game, score, hits, matched }) => {
+    const ranked = [...hits].sort(
+      (a, b) =>
+        b.contribution * (usedTraits.has(b.trait) ? 0.45 : 1) -
+        a.contribution * (usedTraits.has(a.trait) ? 0.45 : 1),
+    );
+    for (const hit of ranked.slice(0, 2)) usedTraits.add(hit.trait);
+    return { game, score, matched, reason: reasonFor(ranked, profile, game.id) };
+  });
+}
+
+/**
+ * The genre-decay trick from `recommend` above, factored out so a plain
+ * quality ranking can use it too: without it the top of any list is one
+ * genre five times over, because nothing else is pulling scores apart.
+ */
+function diversifyByGenre(scored, limit) {
   const picked = [];
   const genreUses = new Map();
   const pool = scored.slice(0, limit * 4);
@@ -155,19 +177,30 @@ export function recommend(catalog, profile, { exclude, limit = 40, includePs5 = 
     genreUses.set(chosen.game.genre, (genreUses.get(chosen.game.genre) ?? 0) + 1);
     picked.push(chosen);
   }
+  return picked;
+}
 
-  // Reasons are written last so each one can prefer a trait the list has not
-  // already leaned on; otherwise every cozy pick says the same sentence.
-  const usedTraits = new Set();
-  return picked.map(({ game, score, hits, matched }) => {
-    const ranked = [...hits].sort(
-      (a, b) =>
-        b.contribution * (usedTraits.has(b.trait) ? 0.45 : 1) -
-        a.contribution * (usedTraits.has(a.trait) ? 0.45 : 1),
-    );
-    for (const hit of ranked.slice(0, 2)) usedTraits.add(hit.trait);
-    return { game, score, matched, reason: reasonFor(ranked, profile, game.id) };
-  });
+/**
+ * A ranking to show before there is any taste to work from: highly rated
+ * across the whole catalog, genre-diversified the same way `recommend` is.
+ * Nobody has told this collection what they like yet, so the reason says
+ * that plainly rather than pretending to a match it does not have.
+ */
+export function starterPicks(catalog, { exclude, limit = 40, includePs5 = true } = {}) {
+  const scored = catalog
+    .filter((game) => !exclude.has(game.id))
+    .filter((game) => includePs5 || game.platform !== 'PS5')
+    .filter((game) => game.ratings?.critic != null || game.ratings?.user != null)
+    .map((game) => ({ game, score: qualityMultiplier(game) }));
+
+  scored.sort((a, b) => b.score - a.score);
+
+  return diversifyByGenre(scored, limit).map(({ game, score }) => ({
+    game,
+    score,
+    matched: 0,
+    reason: 'Highly rated across the catalog',
+  }));
 }
 
 const hashOf = (value) => {

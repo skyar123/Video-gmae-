@@ -38,7 +38,7 @@ import {
   VolumeX,
   X,
 } from 'lucide-react';
-import { buildProfile, recommend } from './recommend.js';
+import { buildProfile, recommend, starterPicks } from './recommend.js';
 import gamesData from './games.json';
 import creatorsData from './creators.json';
 
@@ -63,9 +63,13 @@ const UPGRADES = uniqueValues('ps5Upgrade');
  * Curated views over the catalog. "Best deals" is computed live from current
  * discounts; the rest come from tags in games.json.
  */
+// "Whole store" sits third, not last: on a phone the chip strip only shows
+// about three of these before it has to scroll, and a collection nobody can
+// see reads as a collection that does not exist.
 const COLLECTIONS = [
   { value: 'all', label: 'All games', tag: null },
   { value: 'genius', label: 'Genius picks', tag: null },
+  { value: 'store', label: 'Whole store', tag: null },
   { value: 'deals', label: 'Best deals', tag: null },
   { value: 'graphics', label: 'Best graphics', tag: 'graphics' },
   { value: 'social', label: 'Online & social', tag: 'social' },
@@ -73,7 +77,6 @@ const COLLECTIONS = [
   { value: 'classic', label: 'Classics', tag: 'classic' },
   { value: 'queer', label: 'Queer stories', tag: 'queer' },
   { value: 'disability', label: 'Disability rep', tag: 'disability' },
-  { value: 'store', label: 'Whole store', tag: null },
 ];
 
 const COLLECTION_BLURBS = {
@@ -2845,6 +2848,23 @@ export default function App() {
   const { byTitle, status, updatedAt, progress, refresh } = useLiveData(filters.region);
   const barRef = useRef(null);
   const collectionsRef = useRef(null);
+
+  // A chip with no number on it reads as decorative rather than as a real
+  // collection, so the mirror's size is fetched once, up front — this is a
+  // few hundred bytes, not the 2.7MB index, and costs nothing idle.
+  const [storeSize, setStoreSize] = useState(null);
+  useEffect(() => {
+    let live = true;
+    fetch('/api/store?facets=1')
+      .then((response) => response.json())
+      .then((payload) => {
+        if (live && typeof payload.size === 'number') setStoreSize(payload.size);
+      })
+      .catch(() => {});
+    return () => {
+      live = false;
+    };
+  }, []);
   const [briefing, setBriefing] = useState({ open: false, tab: 'news' });
 
   // The calendar is fetched when the panel opens, and also when something is
@@ -3010,16 +3030,17 @@ export default function App() {
 
   // Recomputed only when the library, wishlist or PS5 toggle changes; it never
   // touches live data, so it stays instant while prices are still loading.
+  // With nothing owned or wishlisted yet there is no taste to work from, so
+  // the collection falls back to a quality ranking rather than sitting empty
+  // — an empty collection reads as broken, not as "add a game first".
+  const profile = useMemo(() => buildProfile(gamesData, library, wishlist), [library, wishlist]);
+  const geniusIsPersonalized = profile != null;
   const geniusPicks = useMemo(() => {
-    const profile = buildProfile(gamesData, library, wishlist);
-    if (!profile) return [];
     const exclude = new Set([...library, ...wishlist, ...hidden]);
-    return recommend(gamesData, profile, {
-      exclude,
-      limit: 48,
-      includePs5: filters.includePs5,
-    });
-  }, [library, wishlist, hidden, filters.includePs5]);
+    return profile
+      ? recommend(gamesData, profile, { exclude, limit: 48, includePs5: filters.includePs5 })
+      : starterPicks(gamesData, { exclude, limit: 48, includePs5: filters.includePs5 });
+  }, [profile, library, wishlist, hidden, filters.includePs5]);
 
   const geniusReasons = useMemo(
     () => new Map(geniusPicks.map((pick) => [pick.game.id, pick.reason])),
@@ -3116,10 +3137,8 @@ export default function App() {
     const counts = {};
     for (const entry of COLLECTIONS) {
       counts[entry.value] =
-        // The mirror's size is only known once its facets load, so the chip
-        // carries no number rather than a wrong one.
         entry.value === 'store'
-          ? null
+          ? storeSize
           : entry.value === 'deals'
             ? saleCount
             : entry.value === 'genius'
@@ -3129,7 +3148,7 @@ export default function App() {
             : visiblePool.length;
     }
     return counts;
-  }, [visiblePool, saleCount, geniusPicks]);
+  }, [visiblePool, saleCount, geniusPicks, storeSize]);
 
   const activeGame = activeGameId ? gamesData.find((game) => game.id === activeGameId) : null;
 
@@ -3514,6 +3533,17 @@ export default function App() {
             {COLLECTION_BLURBS[filters.collection] &&
               ` · ${COLLECTION_BLURBS[filters.collection]}`}
           </p>
+
+          {filters.collection === 'genius' && !geniusIsPersonalized && (
+            <p className="mb-3 inline-flex items-start gap-2 rounded-lg bg-indigo-50 px-3 py-2 text-sm leading-relaxed text-indigo-700">
+              <Sparkles className="mt-0.5 h-4 w-4 shrink-0" />
+              <span>
+                <strong className="font-semibold">Starter picks</strong> — highly rated across the
+                catalog. Tick the check on a game you own, or heart one you want, and these turn
+                into picks based on your own taste.
+              </span>
+            </p>
+          )}
 
           <div className="grid grid-cols-2 gap-3 sm:grid-cols-3 sm:gap-4 lg:grid-cols-4 xl:grid-cols-5">
             {filteredGames.map((game) => (
