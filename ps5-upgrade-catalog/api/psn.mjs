@@ -57,8 +57,14 @@ async function fetchPricePayload(storePath, countryCode, timeoutMs = 12000) {
       const { done, value } = await reader.read();
       if (done) break;
       text += decoder.decode(value, { stream: true });
-      // Stop once the whole webctas block has certainly been seen.
-      if (text.includes('"applicability"') && text.lastIndexOf('"__typename":"Price"') < text.length - 800) {
+      // Stop once a price you can actually buy has been read in full. Waiting
+      // for any price block is not enough: on a game in the PS Plus catalog
+      // the first block is a subscription upsell, and breaking there left the
+      // real price unread and the game looking priceless.
+      if (
+        text.includes('"applicability":"APPLICABLE"') &&
+        text.lastIndexOf('"__typename":"Price"') < text.length - 900
+      ) {
         break;
       }
     }

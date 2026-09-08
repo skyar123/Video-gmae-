@@ -5,6 +5,7 @@ import { CACHE_HEADER, handleGamesRequest } from './api/steam.mjs';
 import { loadGameNews, loadNews } from './api/news.mjs';
 import { loadUpcoming } from './api/upcoming.mjs';
 import { searchStore, storeGenres, storeSize } from './api/store.mjs';
+import { loadConceptDetail } from './api/concept.mjs';
 
 /**
  * Serves the same /api/games responses as the Netlify function during
@@ -88,6 +89,22 @@ function gamesApiPlugin() {
     });
     mountJson(server, '/api/upcoming', loadUpcoming);
     mountStore(server);
+    server.middlewares.use('/api/concept', async (request, response) => {
+      try {
+        const url = new URL(request.url, 'http://localhost');
+        const id = Number(url.searchParams.get('id'));
+        const detail = Number.isFinite(id) && id > 0
+          ? await loadConceptDetail(id, (url.searchParams.get('cc') ?? 'US').toUpperCase())
+          : null;
+        response.statusCode = detail ? 200 : 404;
+        response.setHeader('content-type', 'application/json; charset=utf-8');
+        response.end(JSON.stringify(detail ?? { error: 'not found' }));
+      } catch (error) {
+        response.statusCode = 502;
+        response.setHeader('content-type', 'application/json; charset=utf-8');
+        response.end(JSON.stringify({ error: String(error?.message || error) }));
+      }
+    });
   };
 
   return {

@@ -200,6 +200,9 @@ function writeFiltersToUrl(filters) {
 const WISHLIST_KEY = 'wishlist';
 const LIBRARY_KEY = 'library';
 const HIDDEN_KEY = 'hidden';
+
+/** Store-mirror ids are numeric; prefixing keeps them out of the catalog's namespace. */
+const storeKey = (game) => `store:${game.id}`;
 const SAVED_RELEASES_KEY = 'savedReleases';
 
 function readFavouriteCreators() {
@@ -795,25 +798,32 @@ const trailerSearchLink = (title) =>
     `${title} gameplay PS5`,
   )}`;
 
-function GameModal({
-  game,
-  live,
-  pool,
-  byTitle,
-  wishlisted,
-  owned,
-  reason,
-  onToggleOwned,
-  favouriteCreators,
-  onToggleFavouriteCreator,
-  onToggleWishlist,
-  onOpen,
-  onClose,
-}) {
-  const [selected, setSelected] = useState(null);
+/**
+ * The sheet every detail view lives in: a bottom sheet on a phone, a centred
+ * dialog on a desktop. It owns the things that are easy to get subtly wrong —
+ * the escape key, the background scroll lock, focus on open, and a grab handle
+ * you can drag down to dismiss — so each modal only has to supply its body.
+ */
+function ModalSheet({ labelledBy, onClose, children }) {
   const [drag, setDrag] = useState(0);
   const closeRef = useRef(null);
-  const sheetRef = useRef(null);
+
+  useEffect(() => {
+    closeRef.current?.focus();
+  }, []);
+
+  useEffect(() => {
+    const onKeyDown = (event) => {
+      if (event.key === 'Escape') onClose();
+    };
+    document.addEventListener('keydown', onKeyDown);
+    const { overflow } = document.body.style;
+    document.body.style.overflow = 'hidden';
+    return () => {
+      document.removeEventListener('keydown', onKeyDown);
+      document.body.style.overflow = overflow;
+    };
+  }, [onClose]);
 
   /**
    * Drag-to-dismiss, from the handle only. Dragging the whole sheet would
@@ -845,33 +855,6 @@ function GameModal({
     [onClose],
   );
 
-  // Ratings ship with the catalog; the nightly refresh overrides them.
-  const ratings = live?.ratings ?? game.ratings;
-
-  const videos = live?.videos ?? [];
-  const screenshots = live?.screenshots ?? [];
-
-  // Default view: the trailer's poster frame, falling back to key art.
-  const view =
-    selected ?? (videos[0] ? { kind: 'video-poster', video: videos[0] } : { kind: 'cover' });
-
-  useEffect(() => {
-    closeRef.current?.focus();
-  }, []);
-
-  useEffect(() => {
-    const onKeyDown = (event) => {
-      if (event.key === 'Escape') onClose();
-    };
-    document.addEventListener('keydown', onKeyDown);
-    const { overflow } = document.body.style;
-    document.body.style.overflow = 'hidden';
-    return () => {
-      document.removeEventListener('keydown', onKeyDown);
-      document.body.style.overflow = overflow;
-    };
-  }, [onClose]);
-
   return (
     <div
       className="fixed inset-0 z-50 flex items-end justify-center bg-slate-900/50 backdrop-blur-sm animate-fade-in sm:items-center sm:p-4"
@@ -882,12 +865,11 @@ function GameModal({
       <div
         role="dialog"
         aria-modal="true"
-        aria-labelledby="game-modal-title"
-        ref={sheetRef}
+        aria-labelledby={labelledBy}
         style={drag > 0 ? { transform: `translateY(${drag}px)`, transition: 'none' } : undefined}
-        // A sheet on a phone, a dialog on a desktop. The content scrolls inside
-        // it rather than the backdrop scrolling behind it, which is what stops
-        // iOS rubber-banding the page under an open modal.
+        // The content scrolls inside the sheet rather than the backdrop
+        // scrolling behind it, which is what stops iOS rubber-banding the page
+        // under an open dialog.
         className="panel-scroll relative max-h-[92dvh] w-full overflow-y-auto rounded-t-2xl bg-white pb-[var(--inset-bottom)] shadow-2xl animate-sheet-up sm:my-auto sm:max-h-[90dvh] sm:max-w-3xl sm:rounded-2xl sm:pb-0 sm:animate-pop-in"
       >
         {/* Grab handle: the standard way out of a sheet on a phone. */}
@@ -908,6 +890,41 @@ function GameModal({
           <X className="h-5 w-5" />
         </button>
 
+        {children}
+      </div>
+    </div>
+  );
+}
+
+function GameModal({
+  game,
+  live,
+  pool,
+  byTitle,
+  wishlisted,
+  owned,
+  reason,
+  onToggleOwned,
+  favouriteCreators,
+  onToggleFavouriteCreator,
+  onToggleWishlist,
+  onOpen,
+  onClose,
+}) {
+  const [selected, setSelected] = useState(null);
+
+  // Ratings ship with the catalog; the nightly refresh overrides them.
+  const ratings = live?.ratings ?? game.ratings;
+
+  const videos = live?.videos ?? [];
+  const screenshots = live?.screenshots ?? [];
+
+  // Default view: the trailer's poster frame, falling back to key art.
+  const view =
+    selected ?? (videos[0] ? { kind: 'video-poster', video: videos[0] } : { kind: 'cover' });
+
+  return (
+    <ModalSheet labelledBy="game-modal-title" onClose={onClose}>
         {/* Media stage */}
         <div className="relative aspect-video w-full bg-slate-900">
           {view.kind === 'video' ? (
@@ -1042,8 +1059,7 @@ function GameModal({
 
           <SimilarGames game={game} pool={pool} byTitle={byTitle} onOpen={onOpen} />
         </div>
-      </div>
-    </div>
+    </ModalSheet>
   );
 }
 
@@ -2003,7 +2019,236 @@ function BottomBar({ view, onView, onBriefing, onSurprise, canSurprise, updates 
  * hand-picked ones — no kid-friendly verdict, no representation note, no
  * description — because nobody has read these games, only indexed them.
  */
-function StoreCard({ game, curated, onOpenCurated }) {
+/**
+ * A game from the store mirror, opened.
+ *
+ * The mirror's index only holds enough for a card, so the rest — the
+ * description, the screenshots, the trailer, the live price and the drop
+ * prediction — is read from the store the moment you open one. The card you
+ * tapped is shown immediately and fills in around itself, so this never
+ * starts as a blank sheet.
+ *
+ * What it deliberately does not claim: the kid-friendly verdict, the
+ * representation notes and the pros and cons are hand-made judgements that
+ * exist only for the curated catalog. Rather than fake them, this shows
+ * PlayStation's own star rating and says where everything came from.
+ */
+function StoreGameModal({ game, region, wishlisted, owned, onToggleWishlist, onToggleOwned, onClose }) {
+  const [detail, setDetail] = useState(null);
+  const [status, setStatus] = useState('loading');
+  const [shot, setShot] = useState(null);
+  const [expanded, setExpanded] = useState(false);
+
+  useEffect(() => {
+    let live = true;
+    // Fetching the listing on open is the point of this effect.
+    // eslint-disable-next-line react/set-state-in-effect
+    setStatus('loading');
+    fetch(`/api/concept?id=${game.id}&cc=${region}`)
+      .then((response) => (response.ok ? response.json() : Promise.reject(new Error('failed'))))
+      .then((payload) => {
+        if (!live) return;
+        setDetail(payload);
+        setStatus('ready');
+      })
+      .catch(() => {
+        if (live) setStatus('error');
+      });
+    return () => {
+      live = false;
+    };
+  }, [game.id, region]);
+
+  const art = detail?.art ?? game.art;
+  const screenshots = detail?.screenshots ?? [];
+  const hero = shot ?? art;
+  const stars = detail?.stars ?? game.stars;
+  const votes = detail?.votes ?? game.votes;
+  const release = detail?.releaseDate ?? game.release;
+
+  // PricePanel and PredictionPanel are the catalog's, and take the same shapes.
+  const asGame = { title: game.name, psnStorePath: `concept/${game.id}` };
+  const asLive = detail ? { price: detail.price, prediction: detail.prediction, history: null } : null;
+
+  return (
+    <ModalSheet labelledBy="store-modal-title" onClose={onClose}>
+      <div className="relative aspect-video w-full bg-slate-900">
+        {detail?.trailer && !shot ? (
+          <video
+            src={detail.trailer}
+            poster={art ?? undefined}
+            controls
+            playsInline
+            className="h-full w-full bg-black object-contain"
+          />
+        ) : hero ? (
+          <img
+            src={hero}
+            alt={`Key art for ${game.name}`}
+            onError={(event) => {
+              event.currentTarget.hidden = true;
+            }}
+            className="h-full w-full object-cover"
+          />
+        ) : null}
+      </div>
+
+      {screenshots.length > 0 && (
+        <div className="no-scrollbar flex gap-2 overflow-x-auto bg-slate-50 p-2">
+          {[...(art ? [art] : []), ...screenshots].map((src) => (
+            <button
+              key={src}
+              type="button"
+              onClick={() => setShot(src === art ? null : src)}
+              className={`h-14 w-24 shrink-0 overflow-hidden rounded-md ring-1 transition-transform hover:scale-105 ${
+                (shot ?? art) === src ? 'ring-2 ring-indigo-500' : 'ring-slate-200'
+              }`}
+            >
+              <img src={src} alt="" loading="lazy" className="h-full w-full object-cover" />
+            </button>
+          ))}
+        </div>
+      )}
+
+      <div className="p-6 sm:p-8">
+        <div className="flex flex-col gap-3 sm:flex-row sm:items-start sm:justify-between sm:gap-4">
+          <h2 id="store-modal-title" className="text-2xl font-bold text-slate-900 sm:pr-6">
+            {game.name}
+          </h2>
+          <div className="flex shrink-0 items-center gap-2 sm:gap-1">
+            <WishlistButton wishlisted={wishlisted} onToggle={onToggleWishlist} withLabel />
+            <OwnedButton owned={owned} onToggle={onToggleOwned} withLabel />
+          </div>
+        </div>
+
+        {detail?.tagline && (
+          <p className="mt-2 text-sm font-medium text-slate-500">{detail.tagline}</p>
+        )}
+
+        <div className="mt-4 flex flex-wrap items-center gap-1.5">
+          {stars > 0 && (
+            <span
+              title={`${(votes ?? 0).toLocaleString()} PlayStation ratings`}
+              className="inline-flex items-center gap-1 rounded-md bg-amber-50 px-2.5 py-1 text-sm font-semibold text-amber-700 ring-1 ring-inset ring-amber-600/20"
+            >
+              <Star className="h-3.5 w-3.5 fill-current" />
+              {stars.toFixed(1)}
+              <span className="font-normal opacity-70">
+                {(votes ?? 0).toLocaleString()} ratings
+              </span>
+            </span>
+          )}
+          {(game.platforms ?? []).map((platform) => (
+            <span
+              key={platform}
+              className="rounded-md bg-slate-100 px-2.5 py-1 text-sm font-semibold text-slate-600"
+            >
+              {platform}
+            </span>
+          ))}
+          {(game.genres ?? []).map((genre) => (
+            <span
+              key={genre}
+              className="rounded-md bg-indigo-50 px-2.5 py-1 text-sm font-semibold text-indigo-700"
+            >
+              {genre}
+            </span>
+          ))}
+        </div>
+
+        <div className="mt-5 grid grid-cols-2 gap-3 sm:grid-cols-3 sm:gap-4">
+          {[
+            ['Publisher', detail?.publisher ?? game.publisher],
+            ['Released', release ? new Date(release).toLocaleDateString([], { year: 'numeric', month: 'short', day: 'numeric' }) : null],
+          ]
+            .filter(([, value]) => value)
+            .map(([label, value]) => (
+              <div key={label}>
+                <span className="mb-1 block text-xs font-semibold uppercase tracking-wider text-slate-400">
+                  {label}
+                </span>
+                <span className="font-medium text-slate-800">{value}</span>
+              </div>
+            ))}
+        </div>
+
+        {status === 'loading' && !detail && (
+          <p className="mt-6 flex items-center gap-2 text-sm text-slate-400">
+            <Loader2 className="h-4 w-4 animate-spin" />
+            Reading the store listing...
+          </p>
+        )}
+
+        {detail?.description && (
+          <div className="mt-5">
+            {/* Store copy runs to marketing-page length — several screens of
+                bullet points on a phone. It opens clamped, with the rest one
+                tap away. */}
+            <p
+              className={`whitespace-pre-line leading-relaxed text-slate-700 ${
+                expanded ? '' : 'line-clamp-5'
+              }`}
+            >
+              {detail.description}
+            </p>
+            {detail.description.length > 320 && (
+              <button
+                type="button"
+                onClick={() => setExpanded((open) => !open)}
+                className="mt-1 text-sm font-medium text-indigo-600 hover:underline"
+              >
+                {expanded ? 'Show less' : 'Show more'}
+              </button>
+            )}
+          </div>
+        )}
+
+        <PricePanel game={asGame} live={asLive} />
+        <PredictionPanel live={asLive} />
+
+        <div className="mt-6 grid gap-3 sm:grid-cols-3">
+          <a
+            href={reviewSearchLink(game.name)}
+            target="_blank"
+            rel="noopener noreferrer"
+            className="flex items-center justify-center gap-2 rounded-lg bg-rose-600 px-4 py-2.5 font-medium text-white transition-transform duration-200 ease-spring hover:bg-rose-700 active:scale-95"
+          >
+            <CirclePlay className="h-4 w-4" />
+            Reviews
+          </a>
+          <a
+            href={trailerSearchLink(game.name)}
+            target="_blank"
+            rel="noopener noreferrer"
+            className="flex items-center justify-center gap-2 rounded-lg bg-slate-900 px-4 py-2.5 font-medium text-white transition-transform duration-200 ease-spring hover:bg-slate-800 active:scale-95"
+          >
+            <CirclePlay className="h-4 w-4" />
+            Gameplay
+          </a>
+          <a
+            href={detail?.storeUrl ?? `https://store.playstation.com/en-us/concept/${game.id}`}
+            target="_blank"
+            rel="noopener noreferrer"
+            className="flex items-center justify-center gap-2 rounded-lg bg-indigo-600 px-4 py-2.5 font-medium text-white transition-transform duration-200 ease-spring hover:bg-indigo-700 active:scale-95"
+          >
+            <ExternalLink className="h-4 w-4" />
+            PS Store
+          </a>
+        </div>
+
+        <GameNews title={game.name} />
+
+        <p className="mt-8 border-t border-slate-100 pt-4 text-xs leading-relaxed text-slate-400">
+          Indexed from the PlayStation Store. The rating is PlayStation's own, from{' '}
+          {(votes ?? 0).toLocaleString()} players. This game is not one of the hand-reviewed
+          entries, so there is no kid-friendly verdict or representation note on it.
+        </p>
+      </div>
+    </ModalSheet>
+  );
+}
+
+function StoreCard({ game, curated, onOpenCurated, onOpenStore }) {
   const body = (
     <>
       <div className="relative aspect-[460/215] w-full overflow-hidden bg-slate-100">
@@ -2077,21 +2322,16 @@ function StoreCard({ game, curated, onOpenCurated }) {
   const shell =
     'group flex h-full animate-rise-in flex-col overflow-hidden rounded-xl border border-slate-200 bg-white text-left shadow-sm transition-all duration-200 ease-spring hover:-translate-y-1 hover:shadow-lg active:scale-[0.98]';
 
-  // A game we have written about opens its own page; everything else goes to
-  // the store, because there is nothing more of ours to show.
-  return curated ? (
-    <button type="button" onClick={() => onOpenCurated(curated.id)} className={shell}>
-      {body}
-    </button>
-  ) : (
-    <a
-      href={`https://store.playstation.com/en-us/concept/${game.id}`}
-      target="_blank"
-      rel="noopener noreferrer"
+  // A game we have written about opens its curated page, which has more in it.
+  // Everything else opens its own detail sheet, read from the store listing.
+  return (
+    <button
+      type="button"
+      onClick={() => (curated ? onOpenCurated(curated.id) : onOpenStore(game))}
       className={shell}
     >
       {body}
-    </a>
+    </button>
   );
 }
 
@@ -2152,7 +2392,7 @@ function useStoreSearch({ active, q, genre, sort }) {
  * weighted down until enough people have voted, so the top is genuinely
  * well-liked rather than one five-star review.
  */
-function StorePanel({ query, curatedByName, onOpenCurated }) {
+function StorePanel({ query, curatedByName, onOpenCurated, onOpenStore }) {
   const [genre, setGenre] = useState('');
   const [sort, setSort] = useState('rating');
   const [facets, setFacets] = useState({ genres: [], size: 0 });
@@ -2249,6 +2489,7 @@ function StorePanel({ query, curatedByName, onOpenCurated }) {
                 game={game}
                 curated={curatedByName.get(game.name?.toLowerCase())}
                 onOpenCurated={onOpenCurated}
+                onOpenStore={onOpenStore}
               />
             ))}
           </div>
@@ -2842,6 +3083,9 @@ export default function App() {
   const [favouriteCreators, setFavouriteCreators] = useState(readFavouriteCreators);
   const [library, setLibrary] = useState(readLibrary);
   const [activeGameId, setActiveGameId] = useState(null);
+  // Store-mirror games are keyed apart from catalog ids so both can share one
+  // wishlist and one library without ever colliding.
+  const [activeStoreGame, setActiveStoreGame] = useState(null);
   const [sheetOpen, setSheetOpen] = useState(false);
   const scrolled = useScrollCollapse();
 
@@ -3525,6 +3769,7 @@ export default function App() {
               query={deferredQuery.trim()}
               curatedByName={curatedByName}
               onOpenCurated={setActiveGameId}
+              onOpenStore={setActiveStoreGame}
             />
           ) : (
             <>
@@ -3620,6 +3865,19 @@ export default function App() {
           onToggleWishlist={() => toggleWishlist(activeGame.id)}
           onToggleOwned={() => toggleOwned(activeGame.id)}
           onClose={() => setActiveGameId(null)}
+        />
+      )}
+
+      {activeStoreGame && (
+        <StoreGameModal
+          key={activeStoreGame.id}
+          game={activeStoreGame}
+          region={filters.region}
+          wishlisted={wishlist.has(storeKey(activeStoreGame))}
+          owned={library.has(storeKey(activeStoreGame))}
+          onToggleWishlist={() => toggleWishlist(storeKey(activeStoreGame))}
+          onToggleOwned={() => toggleOwned(storeKey(activeStoreGame))}
+          onClose={() => setActiveStoreGame(null)}
         />
       )}
 
