@@ -4,6 +4,9 @@ import { loadPsnPrice } from '../../api/psn.mjs';
 import { recordAndSummarize, saveBlob } from '../../api/history.mjs';
 import { loadReviewSignal } from '../../api/reviews.mjs';
 import { sweepForReleases } from '../../api/upcoming.mjs';
+import { replayCalibration } from '../../api/backtest.mjs';
+import { loadChunk } from '../../api/history.mjs';
+import { BACKTEST_KEY } from '../../api/keys.mjs';
 
 /**
  * Nightly maintenance.
@@ -65,6 +68,24 @@ export default async () => {
     await saveBlob(`${REVIEW_KEY_PREFIX}${chunk}`, entries);
   }
   console.log('Refreshed review ratings');
+
+  // Score the predictor against what actually happened. Cheap, and the only
+  // thing that will ever say whether the heuristic is worth keeping.
+  try {
+    const histories = {};
+    for (let chunk = 0; chunk < chunkCount; chunk += 1) {
+      histories[`chunk-${chunk}`] = await loadChunk(chunk, regions[0] ?? 'US');
+    }
+    const calibration = replayCalibration(histories);
+    await saveBlob(BACKTEST_KEY, calibration);
+    console.log(
+      calibration.ready
+        ? `Predictor scored: ${calibration.samples} moments, Brier ${calibration.brier} vs ${calibration.baseRateBrier} for the base rate`
+        : `Predictor not scoreable yet: ${calibration.samples} moments so far`,
+    );
+  } catch (error) {
+    console.error('Backtest failed:', error);
+  }
 
   const sweep = await sweepForReleases();
   console.log(

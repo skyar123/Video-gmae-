@@ -6,6 +6,8 @@ import { loadGameNews, loadNews } from './api/news.mjs';
 import { loadUpcoming } from './api/upcoming.mjs';
 import { searchStore, storeGenres, storeSize } from './api/store.mjs';
 import { loadConceptDetail } from './api/concept.mjs';
+import { replayCalibration } from './api/backtest.mjs';
+import { loadChunk } from './api/history.mjs';
 
 /**
  * Serves the same /api/games responses as the Netlify function during
@@ -89,6 +91,15 @@ function gamesApiPlugin() {
     });
     mountJson(server, '/api/upcoming', loadUpcoming);
     mountStore(server);
+    // Computed live in dev so the harness is exercised without waiting for
+    // the nightly job; in production this is read from what that job stored.
+    mountJson(server, '/api/backtest', async () => {
+      const histories = {};
+      for (let chunk = 0; chunk < 20; chunk += 1) {
+        histories[`chunk-${chunk}`] = await loadChunk(chunk, 'US');
+      }
+      return replayCalibration(histories);
+    });
     server.middlewares.use('/api/concept', async (request, response) => {
       try {
         const url = new URL(request.url, 'http://localhost');

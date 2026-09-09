@@ -110,6 +110,9 @@ export async function recordAndSummarize(chunk, countryCode, games, now = new Da
 
     const entry = history[game.id] ?? (history[game.id] = { currency, points: [] });
     entry.currency = currency ?? entry.currency;
+    // Kept so a backtest can replay the predictor exactly as it ran, rather
+    // than replaying it blind to the game's age.
+    if (game.releaseDate && !entry.releaseDate) entry.releaseDate = game.releaseDate;
     const last = entry.points[entry.points.length - 1];
 
     if (!last || last.f !== final || last.p !== (discountPercent || 0)) {

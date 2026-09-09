@@ -1123,10 +1123,36 @@ function PricePanel({ game, live }) {
 }
 
 /**
+ * The predictor's own track record, fetched once and shared by every panel.
+ *
+ * It stays quiet until there is enough history to say anything, which is the
+ * honest state for a while yet. When it does speak it is the only line here
+ * that is measured rather than reasoned.
+ */
+let calibrationPromise = null;
+function useCalibration() {
+  const [calibration, setCalibration] = useState(null);
+  useEffect(() => {
+    let live = true;
+    calibrationPromise ??= fetch('/api/backtest')
+      .then((response) => response.json())
+      .catch(() => null);
+    calibrationPromise.then((value) => {
+      if (live) setCalibration(value);
+    });
+    return () => {
+      live = false;
+    };
+  }, []);
+  return calibration;
+}
+
+/**
  * The drop predictor's reasoning, shown in full. The score is a heuristic, so
  * the panel always says what produced it rather than asking for trust.
  */
 function PredictionPanel({ live }) {
+  const calibration = useCalibration();
   const prediction = live?.prediction;
   if (!prediction || prediction.verdict === 'unknown') return null;
 
@@ -1221,10 +1247,19 @@ function PredictionPanel({ live }) {
 
       <p className="mt-3 text-xs text-slate-400">
         A heuristic from release age, current discount, typical sale windows and the price
-        history this site has recorded — not an announced sale. Confidence:{' '}
+        history this site has recorded, not an announced sale. Confidence:{' '}
         {prediction.confidence}
         {prediction.confidence === 'low' && ', history is still being collected'}.
       </p>
+
+      {calibration?.ready && (
+        <p className="mt-1 text-xs text-slate-400">
+          Scored against what actually happened: over {calibration.samples} past moments it
+          beat a base-rate guess by {calibration.skill > 0 ? '' : '−'}
+          {Math.abs(calibration.skill).toFixed(3)} Brier
+          {calibration.skill > 0 ? '' : ', meaning it is not yet earning its keep'}.
+        </p>
+      )}
     </div>
   );
 }
