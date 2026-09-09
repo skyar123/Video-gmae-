@@ -206,6 +206,7 @@ const HIDDEN_KEY = 'hidden';
 /** Store-mirror ids are numeric; prefixing keeps them out of the catalog's namespace. */
 const storeKey = (game) => `store:${game.id}`;
 const SAVED_RELEASES_KEY = 'savedReleases';
+const WISHLIST_PRICES_KEY = 'wishlistPrices';
 
 function readFavouriteCreators() {
   try {
@@ -237,6 +238,21 @@ function readSavedReleases() {
     return new Map(rows.map((row) => [row.id, row]));
   } catch {
     return new Map();
+  }
+}
+
+/**
+ * What each wishlisted game cost when you added it.
+ *
+ * Recorded once, the first time a live price is seen for something on the
+ * wishlist. It is what turns "you wanted this" into "this is $12 cheaper than
+ * when you wanted it", which is the whole point of keeping a wishlist.
+ */
+function readWishlistPrices() {
+  try {
+    return JSON.parse(localStorage.getItem(WISHLIST_PRICES_KEY) ?? '{}') ?? {};
+  } catch {
+    return {};
   }
 }
 
@@ -795,6 +811,10 @@ function TrailerPlayer({ video, poster, muted = false, className }) {
  * Modal
  * ------------------------------------------------------------------ */
 
+/** Cents to a plain dollar saving, for a sentence rather than a table. */
+const formatSaving = (cents) =>
+  cents % 100 === 0 ? `$${cents / 100}` : `$${(cents / 100).toFixed(2)}`;
+
 const storeLink = (game) =>
   game.psnStorePath
     ? `https://store.playstation.com/en-us/${game.psnStorePath}`
@@ -1324,6 +1344,7 @@ function GameCard({
   wishlisted,
   owned,
   reason,
+  saving,
   onToggleWishlist,
   onToggleOwned,
   onHide,
@@ -1399,12 +1420,19 @@ function GameCard({
             </p>
           )}
           {live?.price && (
-            <p className="mt-auto flex items-baseline gap-2 pt-3 text-sm">
-              <span className="font-semibold text-slate-900">{live.price.finalFormatted}</span>
-              {live.price.discountPercent > 0 && (
-                <span className="text-slate-400 line-through">{live.price.initialFormatted}</span>
+            <div className="mt-auto pt-3">
+              <p className="flex items-baseline gap-2 text-sm">
+                <span className="font-semibold text-slate-900">{live.price.finalFormatted}</span>
+                {live.price.discountPercent > 0 && (
+                  <span className="text-slate-400 line-through">{live.price.initialFormatted}</span>
+                )}
+              </p>
+              {saving > 0 && (
+                <p className="mt-1 text-[11px] font-semibold text-rose-600">
+                  {formatSaving(saving)} cheaper than when you added it
+                </p>
               )}
-            </p>
+            </div>
           )}
         </div>
       </button>
@@ -2050,7 +2078,7 @@ function BottomBar({ view, onView, onBriefing, onSurprise, canSurprise, updates 
     { key: 'grid', label: 'Browse', icon: LayoutGrid, active: view === 'grid' },
     { key: 'feed', label: 'Feed', icon: Rows3, active: view === 'feed' },
     { key: 'news', label: 'News', icon: Newspaper, badge: updates },
-    { key: 'surprise', label: 'Surprise', icon: Dices, disabled: !canSurprise },
+    { key: 'surprise', label: 'Tonight', icon: Dices, disabled: !canSurprise },
   ];
 
   return (
@@ -2085,6 +2113,242 @@ function BottomBar({ view, onView, onBriefing, onSurprise, canSurprise, updates 
         ))}
       </div>
     </nav>
+  );
+}
+
+/* ------------------------------------------------------------------ *
+ * Tonight
+ * ------------------------------------------------------------------ */
+
+/**
+ * Moods, defined against things the catalog actually knows. Each one is a
+ * filter plus the sentence it puts under the pick, so a choice always comes
+ * with a reason rather than arriving out of nowhere.
+ */
+const MOODS = [
+  {
+    value: 'cozy',
+    label: 'Something cozy',
+    emoji: '\u{1F343}',
+    match: (game) => game.tags?.includes('cozy'),
+    why: 'Low stakes, gentle pacing, nothing to lose.',
+  },
+  {
+    value: 'story',
+    label: 'A good story',
+    emoji: '\u{1F4D6}',
+    match: (game) =>
+      game.genre === 'Narrative' ||
+      (game.ratings?.pros ?? []).some((pro) => pro.label === 'Story and writing'),
+    why: 'Players single out the writing on this one.',
+  },
+  {
+    value: 'queer',
+    label: 'Queer stories',
+    emoji: '\u{1F308}',
+    match: (game) =>
+      game.tags?.includes('queer') ||
+      (game.representation ?? []).some((entry) => entry.kind === 'queer'),
+    why: 'Queer characters or relationships that matter to the plot.',
+  },
+  {
+    value: 'people',
+    label: 'With people',
+    emoji: '\u{1F3AE}',
+    match: (game) => game.tags?.includes('social'),
+    why: 'Built for co-op, couch play or playing alongside someone.',
+  },
+  {
+    value: 'beautiful',
+    label: 'Something beautiful',
+    emoji: '\u{2728}',
+    match: (game) => game.tags?.includes('graphics'),
+    why: 'On the list for its art direction, not just its tech.',
+  },
+  {
+    value: 'any',
+    label: 'Anything good',
+    emoji: '\u{1F3B2}',
+    match: () => true,
+    why: 'Highly rated, and you have not ruled it out.',
+  },
+];
+
+/** Quality tips the coin when several games fit the mood equally well. */
+const moodScore = (game) => {
+  const critic = game.ratings?.critic ?? 75;
+  const user = game.ratings?.user?.percentPositive ?? 80;
+  return (critic / 100 + user / 100) / 2;
+};
+
+/**
+ * "What should I actually play tonight."
+ *
+ * Genius picks answers what to buy. Nothing answered the other question, which
+ * for anyone with a backlog is the harder one: you already own things, so
+ * which do you boot up? This prefers your library whenever you have one, and
+ * only falls back to the whole catalog when you do not.
+ */
+function TonightSheet({ catalog, library, hidden, onOpenGame, onClose }) {
+  const [mood, setMood] = useState(null);
+  const [fromLibrary, setFromLibrary] = useState(library.size > 0);
+  const [pick, setPick] = useState(null);
+  const [seen, setSeen] = useState(() => new Set());
+
+  const pool = useMemo(() => {
+    const chosen = MOODS.find((entry) => entry.value === mood);
+    if (!chosen) return [];
+    return catalog.filter(
+      (game) =>
+        !hidden.has(game.id) &&
+        (!fromLibrary || library.has(game.id)) &&
+        chosen.match(game),
+    );
+  }, [catalog, mood, fromLibrary, library, hidden]);
+
+  /** Weighted toward the better-reviewed end without ever being predictable. */
+  const draw = useCallback(
+    (exclude) => {
+      const fresh = pool.filter((game) => !exclude.has(game.id));
+      const candidates = fresh.length > 0 ? fresh : pool;
+      if (candidates.length === 0) return null;
+      const ranked = [...candidates].sort((a, b) => moodScore(b) - moodScore(a));
+      // Pick from the better half, at random inside it.
+      const top = ranked.slice(0, Math.max(3, Math.ceil(ranked.length / 2)));
+      return top[Math.floor(Math.random() * top.length)];
+    },
+    [pool],
+  );
+
+  const choose = (value) => {
+    setMood(value);
+    setSeen(new Set());
+    setPick(null);
+  };
+
+  useEffect(() => {
+    if (!mood) return;
+    // eslint-disable-next-line react/set-state-in-effect
+    setPick(draw(new Set()));
+  }, [mood, fromLibrary, draw]);
+
+  const again = () => {
+    const nextSeen = new Set(seen);
+    if (pick) nextSeen.add(pick.id);
+    setSeen(nextSeen);
+    setPick(draw(nextSeen));
+  };
+
+  const chosenMood = MOODS.find((entry) => entry.value === mood);
+
+  return (
+    <ModalSheet labelledBy="tonight-title" onClose={onClose}>
+      <div className="p-6 sm:p-8">
+        <h2 id="tonight-title" className="text-2xl font-bold text-slate-900">
+          What are you in the mood for?
+        </h2>
+
+        {library.size > 0 && (
+          <div className="mt-4 flex gap-1.5">
+            {[
+              [true, `From my ${library.size} owned`],
+              [false, 'Anything in the catalog'],
+            ].map(([value, label]) => (
+              <button
+                key={String(value)}
+                type="button"
+                onClick={() => setFromLibrary(value)}
+                aria-pressed={fromLibrary === value}
+                className={`rounded-full px-3 py-1.5 text-xs font-medium transition-all duration-200 ease-spring active:scale-95 ${
+                  fromLibrary === value
+                    ? 'bg-slate-900 text-white'
+                    : 'bg-slate-100 text-slate-600 hover:bg-slate-200'
+                }`}
+              >
+                {label}
+              </button>
+            ))}
+          </div>
+        )}
+
+        <div className="mt-4 grid grid-cols-2 gap-2">
+          {MOODS.map((entry) => (
+            <button
+              key={entry.value}
+              type="button"
+              onClick={() => choose(entry.value)}
+              aria-pressed={mood === entry.value}
+              className={`flex min-h-[3rem] items-center gap-2 rounded-xl px-3 py-2.5 text-left text-sm font-medium transition-all duration-200 ease-spring active:scale-[0.97] ${
+                mood === entry.value
+                  ? 'bg-indigo-600 text-white'
+                  : 'bg-slate-100 text-slate-700 hover:bg-slate-200'
+              }`}
+            >
+              <span aria-hidden="true">{entry.emoji}</span>
+              {entry.label}
+            </button>
+          ))}
+        </div>
+
+        {mood && !pick && (
+          <p className="mt-6 rounded-xl bg-amber-50 px-4 py-3 text-sm text-amber-800">
+            Nothing in {fromLibrary ? 'your library' : 'the catalog'} matches that yet.
+            {fromLibrary && ' Try the whole catalog, or mark a few more games as owned.'}
+          </p>
+        )}
+
+        {pick && (
+          <div className="mt-6 animate-rise-in overflow-hidden rounded-2xl border border-slate-200 shadow-sm">
+            <button
+              type="button"
+              onClick={() => onOpenGame(pick.id)}
+              className="block w-full text-left"
+            >
+              <div className="aspect-[460/215] w-full bg-slate-100">
+                <CoverArt game={pick} live={null} className="h-full w-full" />
+              </div>
+              <div className="p-4">
+                <p className="text-xs font-semibold uppercase tracking-wider text-indigo-500">
+                  {fromLibrary ? 'From your library' : 'Worth a look'}
+                </p>
+                <h3 className="mt-1 text-xl font-bold text-slate-900">{pick.title}</h3>
+                <p className="mt-1 text-sm text-slate-500">{chosenMood?.why}</p>
+                <p className="mt-2 line-clamp-2 text-sm leading-relaxed text-slate-600">
+                  {pick.description}
+                </p>
+              </div>
+            </button>
+
+            <div className="grid grid-cols-2 divide-x divide-slate-100 border-t border-slate-100">
+              <button
+                type="button"
+                onClick={again}
+                className="flex h-12 items-center justify-center gap-2 text-sm font-medium text-slate-600 transition-colors active:bg-slate-100"
+              >
+                <Dices className="h-4 w-4" />
+                Something else
+              </button>
+              <button
+                type="button"
+                onClick={() => onOpenGame(pick.id)}
+                className="flex h-12 items-center justify-center gap-2 text-sm font-medium text-indigo-600 transition-colors active:bg-slate-100"
+              >
+                <Info className="h-4 w-4" />
+                Tell me more
+              </button>
+            </div>
+          </div>
+        )}
+
+        {!mood && (
+          <p className="mt-6 text-sm leading-relaxed text-slate-500">
+            {library.size > 0
+              ? `Picks come from the ${library.size} games you have marked as owned, so this answers what to play rather than what to buy.`
+              : 'Mark a few games as owned and this starts picking from your own shelf instead of the whole catalog.'}
+          </p>
+        )}
+      </div>
+    </ModalSheet>
   );
 }
 
@@ -3168,6 +3432,8 @@ export default function App() {
   // Store-mirror games are keyed apart from catalog ids so both can share one
   // wishlist and one library without ever colliding.
   const [activeStoreGame, setActiveStoreGame] = useState(null);
+  const [tonightOpen, setTonightOpen] = useState(false);
+  const [wishlistPrices, setWishlistPrices] = useState(readWishlistPrices);
   const [sheetOpen, setSheetOpen] = useState(false);
   const scrolled = useScrollCollapse();
 
@@ -3371,6 +3637,59 @@ export default function App() {
   const geniusReasons = useMemo(
     () => new Map(geniusPicks.map((pick) => [pick.game.id, pick.reason])),
     [geniusPicks],
+  );
+
+  // Lay down the baseline price for anything newly wishlisted, once its live
+  // price arrives. Written once per game and never revised, so the comparison
+  // stays anchored to the day you added it.
+  useEffect(() => {
+    if (wishlist.size === 0) return;
+    let added = false;
+    const next = { ...wishlistPrices };
+    for (const game of gamesData) {
+      if (!wishlist.has(game.id) || next[game.id]) continue;
+      const price = byTitle.get(game.title)?.price;
+      if (!price || typeof price.final !== 'number') continue;
+      next[game.id] = {
+        final: price.final,
+        formatted: price.finalFormatted,
+        at: new Date().toISOString().slice(0, 10),
+      };
+      added = true;
+    }
+    if (!added) return;
+    // eslint-disable-next-line react/set-state-in-effect
+    setWishlistPrices(next);
+    try {
+      localStorage.setItem(WISHLIST_PRICES_KEY, JSON.stringify(next));
+    } catch {
+      // Storage is a convenience; the comparison just resets next visit.
+    }
+  }, [wishlist, byTitle, wishlistPrices]);
+
+  /** Wishlisted games that are cheaper now than when they went on the list. */
+  const wishlistDrops = useMemo(() => {
+    const drops = [];
+    for (const game of gamesData) {
+      if (!wishlist.has(game.id)) continue;
+      const price = byTitle.get(game.title)?.price;
+      const baseline = wishlistPrices[game.id];
+      if (!price || !baseline || typeof price.final !== 'number') continue;
+      if (price.final < baseline.final) {
+        drops.push({
+          game,
+          price,
+          baseline,
+          savedCents: baseline.final - price.final,
+        });
+      }
+    }
+    return drops.sort((a, b) => b.savedCents - a.savedCents);
+  }, [wishlist, byTitle, wishlistPrices]);
+
+  const savingsById = useMemo(
+    () => new Map(wishlistDrops.map((drop) => [drop.game.id, drop.savedCents])),
+    [wishlistDrops],
   );
 
   // Keeps typing responsive while React re-filters in the background.
@@ -3584,14 +3903,9 @@ export default function App() {
 
             <button
               type="button"
-              onClick={() => {
-                if (filteredGames.length === 0) return;
-                const pick = filteredGames[Math.floor(Math.random() * filteredGames.length)];
-                setActiveGameId(pick.id);
-              }}
-              disabled={filteredGames.length === 0}
-              aria-label="Surprise me with a random game"
-              title="Surprise me"
+              onClick={() => setTonightOpen(true)}
+              aria-label="Pick something to play"
+              title="What should I play?"
               className="pointer-only inline-flex h-9 w-9 shrink-0 items-center justify-center rounded-full bg-amber-100 text-amber-700 transition-all duration-200 ease-spring hover:rotate-12 hover:bg-amber-200 active:scale-90 disabled:opacity-40"
             >
               <Dices className="h-4 w-4" />
@@ -3861,6 +4175,22 @@ export default function App() {
               ` · ${COLLECTION_BLURBS[filters.collection]}`}
           </p>
 
+          {wishlistDrops.length > 0 && !filters.wishlist && (
+            <button
+              type="button"
+              onClick={() => set('wishlist', true)}
+              className="mb-3 flex w-full items-center gap-2 rounded-xl bg-rose-50 px-3 py-2.5 text-left text-sm font-medium text-rose-800 ring-1 ring-inset ring-rose-200 transition-transform duration-200 ease-spring active:scale-[0.99]"
+            >
+              <Heart className="h-4 w-4 shrink-0 fill-current" />
+              <span className="flex-1">
+                {wishlistDrops.length === 1
+                  ? `${wishlistDrops[0].game.title} is ${formatSaving(wishlistDrops[0].savedCents)} cheaper than when you added it`
+                  : `${wishlistDrops.length} on your wishlist are cheaper than when you added them`}
+              </span>
+              <ChevronRight className="h-4 w-4 shrink-0" />
+            </button>
+          )}
+
           {filters.collection === 'genius' && !geniusIsPersonalized && (
             <p className="mb-3 inline-flex items-start gap-2 rounded-lg bg-indigo-50 px-3 py-2 text-sm leading-relaxed text-indigo-700">
               <Sparkles className="mt-0.5 h-4 w-4 shrink-0" />
@@ -3881,6 +4211,7 @@ export default function App() {
                 wishlisted={wishlist.has(game.id)}
                 owned={library.has(game.id)}
                 reason={filters.collection === 'genius' ? geniusReasons.get(game.id) : undefined}
+                saving={savingsById.get(game.id)}
                 onToggleWishlist={() => toggleWishlist(game.id)}
                 onToggleOwned={() => toggleOwned(game.id)}
                 onHide={() => hideGame(game.id)}
@@ -3950,6 +4281,19 @@ export default function App() {
         />
       )}
 
+      {tonightOpen && (
+        <TonightSheet
+          catalog={gamesData}
+          library={library}
+          hidden={hidden}
+          onOpenGame={(id) => {
+            setTonightOpen(false);
+            setActiveGameId(id);
+          }}
+          onClose={() => setTonightOpen(false)}
+        />
+      )}
+
       {activeStoreGame && (
         <StoreGameModal
           key={activeStoreGame.id}
@@ -3972,11 +4316,8 @@ export default function App() {
             tab: releaseChanges.length > 0 ? 'upcoming' : briefing.tab,
           })
         }
-        onSurprise={() => {
-          if (filteredGames.length === 0) return;
-          setActiveGameId(filteredGames[Math.floor(Math.random() * filteredGames.length)].id);
-        }}
-        canSurprise={filteredGames.length > 0}
+        onSurprise={() => setTonightOpen(true)}
+        canSurprise
         updates={releaseChanges.length}
       />
 
