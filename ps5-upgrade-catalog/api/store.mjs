@@ -15,18 +15,12 @@
 import baked from './store-index.json' with { type: 'json' };
 import { loadBlob } from './history.mjs';
 import { DISCOVERED_KEY } from './keys.mjs';
+import { fold, indexText, parseQuery, scoreMatch } from './search.mjs';
 
 const PAGE_SIZE = 36;
 const MERGE_TTL_MS = 30 * 60 * 1000;
 
 let merged = null;
-
-const normalise = (value) =>
-  value
-    .toLowerCase()
-    .replace(/[‘’']/g, '')
-    .replace(/[^a-z0-9]+/g, ' ')
-    .trim();
 
 /** Baked at deploy, topped up by the nightly sweep. */
 async function index() {
@@ -37,23 +31,9 @@ async function index() {
   for (const row of baked) byId.set(row.id, row);
   for (const row of discovered) byId.set(row.id, row);
 
-  const rows = [...byId.values()].map((row) => ({ ...row, search: normalise(row.name ?? '') }));
+  const rows = [...byId.values()].map((row) => ({ ...row, search: indexText(row.name ?? '') }));
   merged = { rows, at: Date.now() };
   return rows;
-}
-
-/**
- * Ranks a name match by how early and how completely it matches, so "stray"
- * finds Stray before Straylight and before Gone Astray.
- */
-function scoreName(row, needle) {
-  const at = row.search.indexOf(needle);
-  if (at < 0) return -1;
-  let score = 100 - at;
-  if (at === 0) score += 60;
-  if (row.search === needle) score += 120;
-  score -= Math.min(row.search.length - needle.length, 40) / 2;
-  return score;
 }
 
 /** PlayStation's own rating, discounted until enough people have voted. */
@@ -72,21 +52,21 @@ export async function searchStore({
   exclude = [],
 } = {}) {
   const rows = await index();
-  const needle = normalise(q);
-  const skip = new Set(exclude.map((title) => normalise(title)));
+  const query = parseQuery(q);
+  const skip = new Set(exclude.map((title) => fold(title)));
 
   let hits = rows.filter((row) => {
     if (!row.name) return false;
-    if (skip.has(row.search)) return false;
+    if (skip.has(row.search.folded)) return false;
     if (genre && !(row.genres ?? []).includes(genre)) return false;
     if (platform && !(row.platforms ?? []).includes(platform)) return false;
     return true;
   });
 
-  if (needle) {
+  if (query.folded) {
     hits = hits
-      .map((row) => ({ row, score: scoreName(row, needle) }))
-      .filter((entry) => entry.score >= 0)
+      .map((row) => ({ row, score: scoreMatch(row.search, query) }))
+      .filter((entry) => entry.score > 0)
       .sort((a, b) => b.score - a.score || ratingScore(b.row) - ratingScore(a.row))
       .map((entry) => entry.row);
   } else if (sort === 'new') {

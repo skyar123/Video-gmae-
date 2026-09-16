@@ -39,8 +39,29 @@ import {
   X,
 } from 'lucide-react';
 import { buildProfile, recommend, starterPicks } from './recommend.js';
+import { indexText, parseQuery, scoreMatch } from '../api/search.mjs';
 import gamesData from './games.json';
 import creatorsData from './creators.json';
+
+/**
+ * The catalog's searchable text, built once.
+ *
+ * Titles carry the match; the second line is a fallback so that typing a
+ * genre or a tag finds something rather than nothing. They are kept apart
+ * because a title match should always win: searching "Stray" must not be
+ * outranked by a cat game whose notes mention strays.
+ */
+const SEARCH_ROWS = new Map(
+  gamesData.map((game) => [
+    game.id,
+    {
+      title: indexText(game.title),
+      meta: indexText(
+        [game.genre, game.artStyle, game.protagonist, ...(game.tags ?? [])].join(' '),
+      ),
+    },
+  ]),
+);
 
 /* ------------------------------------------------------------------ *
  * Filter options
@@ -3695,9 +3716,30 @@ export default function App() {
   // Keeps typing responsive while React re-filters in the background.
   const deferredQuery = useDeferredValue(filters.q);
 
-  const filteredGames = useMemo(() => {
-    const needle = deferredQuery.trim().toLowerCase();
+  // Relevance for the current query, or null when nothing is being searched.
+  // Title matches decide the result on their own; the genre/tag pass only runs
+  // when no title matched at all, so "roguelike" finds roguelikes without
+  // letting tags dilute a search for a name.
+  const searchScores = useMemo(() => {
+    const query = parseQuery(deferredQuery);
+    if (!query.folded) return null;
 
+    const titles = new Map();
+    for (const game of gamesData) {
+      const score = scoreMatch(SEARCH_ROWS.get(game.id).title, query);
+      if (score > 0) titles.set(game.id, score);
+    }
+    if (titles.size > 0) return titles;
+
+    const meta = new Map();
+    for (const game of gamesData) {
+      const score = scoreMatch(SEARCH_ROWS.get(game.id).meta, query);
+      if (score > 0) meta.set(game.id, score);
+    }
+    return meta;
+  }, [deferredQuery]);
+
+  const filteredGames = useMemo(() => {
     const collection = COLLECTIONS.find((entry) => entry.value === filters.collection);
 
     const isGenius = filters.collection === 'genius';
@@ -3712,7 +3754,7 @@ export default function App() {
       if (collection?.tag && !game.tags.includes(collection.tag)) return false;
       if (filters.collection === 'deals' && !(byTitle.get(game.title)?.price?.discountPercent > 0))
         return false;
-      if (needle && !game.title.toLowerCase().includes(needle)) return false;
+      if (searchScores && !searchScores.has(game.id)) return false;
       if (filters.genre !== 'All' && game.genre !== filters.genre) return false;
       if (filters.protagonist !== 'All' && game.protagonist !== filters.protagonist) return false;
       if (filters.artStyle !== 'All' && game.artStyle !== filters.artStyle) return false;
@@ -3724,6 +3766,15 @@ export default function App() {
       if (filters.sale && !(byTitle.get(game.title)?.price?.discountPercent > 0)) return false;
       return true;
     });
+
+    // While a search is running, closeness to what was typed is the order
+    // that makes sense; an explicit sort still overrides it.
+    if (searchScores && filters.sort === 'catalog') {
+      return [...matches].sort(
+        (a, b) =>
+          searchScores.get(b.id) - searchScores.get(a.id) || a.title.localeCompare(b.title),
+      );
+    }
 
     const liveFor = (game) => byTitle.get(game.title);
 
@@ -3761,7 +3812,7 @@ export default function App() {
       if (filters.sort === 'buy') return buyScoreOf(a) - buyScoreOf(b);
       return discountOf(b) - discountOf(a);
     });
-  }, [deferredQuery, filters, wishlist, library, hidden, byTitle, geniusPicks]);
+  }, [searchScores, filters, wishlist, library, hidden, byTitle, geniusPicks]);
 
   const visiblePool = useMemo(
     () => gamesData.filter((game) => filters.includePs5 || game.platform !== 'PS5'),
