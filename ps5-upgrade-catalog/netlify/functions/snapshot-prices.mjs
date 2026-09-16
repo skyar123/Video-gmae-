@@ -7,6 +7,7 @@ import { sweepForReleases } from '../../api/upcoming.mjs';
 import { replayCalibration } from '../../api/backtest.mjs';
 import { loadChunk } from '../../api/history.mjs';
 import { BACKTEST_KEY } from '../../api/keys.mjs';
+import { runAlerts } from '../../api/alerts.mjs';
 
 /**
  * Nightly maintenance.
@@ -21,6 +22,9 @@ import { BACKTEST_KEY } from '../../api/keys.mjs';
  * Calendar: a slice of the store's concept IDs is swept each night, so newly
  * announced games reach the release calendar without a deploy.
  *
+ * Alerts: the prices read above are exactly what a price-drop email needs, so
+ * subscriptions are checked here rather than in a second pass over the store.
+ *
  * Scheduled functions only run on published deploys.
  */
 export default async () => {
@@ -30,6 +34,8 @@ export default async () => {
     .filter(Boolean);
 
   const chunkCount = Math.ceil(catalog.length / CHUNK_SIZE);
+  // Alerts go out for the first region only: a subscriber has one currency.
+  const pricesForAlerts = new Map();
 
   for (const countryCode of regions) {
     for (let chunk = 0; chunk < chunkCount; chunk += 1) {
@@ -44,6 +50,9 @@ export default async () => {
         price: prices[index] ?? null,
       }));
       await recordAndSummarize(chunk, countryCode, games);
+      if (countryCode === regions[0]) {
+        for (const game of games) pricesForAlerts.set(game.id, game.price);
+      }
     }
     console.log(`Recorded prices for ${catalog.length} games in ${countryCode}`);
   }
@@ -85,6 +94,17 @@ export default async () => {
     );
   } catch (error) {
     console.error('Backtest failed:', error);
+  }
+
+  try {
+    const alerts = await runAlerts(pricesForAlerts);
+    console.log(
+      alerts.skipped
+        ? `Price alerts skipped: ${alerts.skipped}`
+        : `Price alerts: ${alerts.mailed} emails covering ${alerts.drops} drops, ${alerts.subscribers} subscribed`,
+    );
+  } catch (error) {
+    console.error('Price alerts failed:', error);
   }
 
   const sweep = await sweepForReleases();

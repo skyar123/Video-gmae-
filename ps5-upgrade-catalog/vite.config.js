@@ -8,6 +8,7 @@ import { searchStore, storeGenres, storeSize } from './api/store.mjs';
 import { loadConceptDetail } from './api/concept.mjs';
 import { replayCalibration } from './api/backtest.mjs';
 import { loadChunk } from './api/history.mjs';
+import { handleAlertsRequest } from './api/alerts.mjs';
 
 /**
  * Serves the same /api/games responses as the Netlify function during
@@ -99,6 +100,30 @@ function gamesApiPlugin() {
         histories[`chunk-${chunk}`] = await loadChunk(chunk, 'US');
       }
       return replayCalibration(histories);
+    });
+    server.middlewares.use('/api/alerts', async (request, response) => {
+      try {
+        const url = new URL(request.url, 'http://localhost');
+        let body = null;
+        if (request.method === 'POST') {
+          const chunks = [];
+          for await (const chunk of request) chunks.push(chunk);
+          try {
+            body = JSON.parse(Buffer.concat(chunks).toString('utf8'));
+          } catch {
+            body = null;
+          }
+        }
+        const result = await handleAlertsRequest({ method: request.method, url, body });
+        response.statusCode = result.status;
+        response.setHeader('content-type', result.type);
+        response.setHeader('cache-control', 'no-store');
+        response.end(result.body);
+      } catch (error) {
+        response.statusCode = 502;
+        response.setHeader('content-type', 'application/json; charset=utf-8');
+        response.end(JSON.stringify({ error: String(error?.message || error) }));
+      }
     });
     server.middlewares.use('/api/concept', async (request, response) => {
       try {

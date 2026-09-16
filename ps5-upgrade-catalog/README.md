@@ -60,7 +60,8 @@ the Netlify CLI.
 The app lives in this subdirectory, so set **Base directory** to
 `ps5-upgrade-catalog` in the Netlify UI. `netlify.toml` supplies the rest: build
 command, `dist` as the publish directory, and the function in
-`netlify/functions/`. No environment variables and no API keys are needed.
+`netlify/functions/`. Everything except email alerts works with no environment
+variables and no API keys.
 
 ## Where the live data comes from
 
@@ -218,6 +219,36 @@ request reads and writes exactly one blob. Locally it falls back to a gitignored
 Set `HISTORY_REGIONS` (for example `US,GB`) to snapshot more than one region
 nightly. It defaults to `US`.
 
+## Email price alerts
+
+The wishlist lives in `localStorage` and nothing else does, so an email alert is
+the one feature that needs the server to remember something. What it stores is an
+address, the ids and titles it watches, and the price each was at when it was
+added. Nothing else.
+
+An address is only ever mailed after clicking a confirmation link, because anyone
+can type anyone's address into a public form. Every alert carries a one-click
+unsubscribe that deletes the whole record, no return visit and no password.
+
+Alerts ride on the nightly price pass rather than adding a second one. A game is
+mailed about when it is below both the price it was at when you added it and the
+last price you were told about, at or past your chosen discount, and not within
+five days of the last note about it, so a sale that rolls over night after night
+arrives once.
+
+Two variables switch it on:
+
+| Variable | What it is |
+| --- | --- |
+| `RESEND_API_KEY` | A [Resend](https://resend.com) API key |
+| `MAIL_FROM` | The sender, on a domain verified with Resend |
+
+Without both, `/api/alerts` reports `configured: false`, the sign-up never appears
+in the app, and nothing is sent. That is deliberate: a subscribe button that
+cannot deliver is worse than no button. `SITE_URL` overrides the origin used in
+confirmation and unsubscribe links if Netlify's own `URL` is not what you want,
+and `RESEND_ENDPOINT` points the sender at a stub for local testing.
+
 ## Layout of the code
 
 ```
@@ -225,8 +256,12 @@ api/steam.mjs              storefront client: matching, caching, normalising
 api/predict.mjs            the price-drop heuristic
 api/reviews.mjs            player ratings and review-derived pros and cons
 api/history.mjs            recorded price history (Netlify Blobs, or a local file)
+api/search.mjs             title matching, shared by the catalog and the mirror
+api/alerts.mjs             email price alerts: subscriptions, matching, sending
+api/mail.mjs               the mail provider
 netlify/functions/games.mjs            /api/games in production
-netlify/functions/snapshot-prices.mjs  nightly price snapshot
+netlify/functions/alerts.mjs           /api/alerts: subscribe, confirm, unsubscribe
+netlify/functions/snapshot-prices.mjs  nightly price snapshot, and the alert pass
 vite.config.js             the same route during development
 src/App.jsx                the entire UI
 src/games.json             the 254-game catalog, each entry carrying its store id

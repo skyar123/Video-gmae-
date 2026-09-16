@@ -12,6 +12,7 @@ import {
   BadgePercent,
   Bell,
   CalendarDays,
+  Check,
   ChevronDown,
   ChevronRight,
   CircleCheck,
@@ -24,6 +25,7 @@ import {
   Info,
   LayoutGrid,
   Loader2,
+  Mail,
   Newspaper,
   RefreshCw,
   Rows3,
@@ -35,6 +37,7 @@ import {
   ThumbsUp,
   TrendingDown,
   Users,
+  Volume2,
   VolumeX,
   X,
 } from 'lucide-react';
@@ -784,8 +787,30 @@ function PriceSparkline({ points }) {
  * Plays a storefront trailer. Steam serves adaptive streams only, so hls.js is
  * loaded on demand — browsers with native HLS (Safari) skip the download.
  */
-function TrailerPlayer({ video, poster, muted = false, className }) {
+function TrailerPlayer({
+  video,
+  poster,
+  muted = false,
+  // In a modal, sound and native controls arrive together and the trailer
+  // plays once. The feed wants neither of those but still wants sound, so
+  // both are separable; the defaults keep the modal's behaviour unchanged.
+  controls = !muted,
+  loop = muted,
+  className,
+}) {
   const videoRef = useRef(null);
+
+  /**
+   * Muting is set on the element rather than left to the attribute. React
+   * does update the property, but a browser that paused on an unmute needs
+   * play() called from the same gesture, and that has to happen here.
+   */
+  useEffect(() => {
+    const element = videoRef.current;
+    if (!element) return;
+    element.muted = muted;
+    if (!muted) element.play().catch(() => {});
+  }, [muted]);
 
   useEffect(() => {
     const element = videoRef.current;
@@ -818,9 +843,9 @@ function TrailerPlayer({ video, poster, muted = false, className }) {
     <video
       ref={videoRef}
       poster={poster}
-      controls={!muted}
+      controls={controls}
       muted={muted}
-      loop={muted}
+      loop={loop}
       autoPlay
       playsInline
       className={className ?? 'h-full w-full bg-black object-contain'}
@@ -1869,13 +1894,15 @@ function FeedSlide({
   wishlisted,
   owned,
   reason,
+  muted,
+  onToggleMuted,
   onToggleWishlist,
   onToggleOwned,
   onOpen,
 }) {
-  // The trailer plays only while this slide is the one on screen, muted, the
-  // way a feed behaves. Anything off screen is torn down so a long scroll
-  // never leaves a stack of decoding videos behind.
+  // The trailer plays only while this slide is the one on screen, and starts
+  // muted the way a feed does. Anything off screen is torn down so a long
+  // scroll never leaves a stack of decoding videos behind.
   const slideRef = useRef(null);
   const [centred, setCentred] = useState(false);
 
@@ -1923,7 +1950,11 @@ function FeedSlide({
         <TrailerPlayer
           video={trailer}
           poster={background}
-          muted
+          muted={muted}
+          // A feed slide loops and never shows the browser's own controls,
+          // whether or not the sound is on.
+          controls={false}
+          loop
           className="absolute inset-0 h-full w-full object-cover"
         />
       )}
@@ -2022,12 +2053,17 @@ function FeedSlide({
               <Info className="h-5 w-5" />
             </button>
             {trailer && (
-              <span
-                title="Trailer plays muted"
-                className="rounded-full bg-white/15 p-3 text-white backdrop-blur"
+              <button
+                type="button"
+                onClick={onToggleMuted}
+                aria-pressed={!muted}
+                aria-label={muted ? 'Turn trailer sound on' : 'Turn trailer sound off'}
+                className={`rounded-full p-3 text-white backdrop-blur transition-transform duration-200 ease-spring active:scale-90 ${
+                  muted ? 'bg-white/15 hover:bg-white/25' : 'bg-white/90 text-slate-900 hover:bg-white'
+                }`}
               >
-                <VolumeX className="h-5 w-5" />
-              </span>
+                {muted ? <VolumeX className="h-5 w-5" /> : <Volume2 className="h-5 w-5" />}
+              </button>
             )}
             <a
               href={storeLink(game)}
@@ -2210,6 +2246,340 @@ const moodScore = (game) => {
  * which do you boot up? This prefers your library whenever you have one, and
  * only falls back to the whole catalog when you do not.
  */
+/* ------------------------------------------------------------------ *
+ * Email price alerts
+ * ------------------------------------------------------------------ */
+
+const FEED_MUTED_KEY = 'feedMuted';
+
+/**
+ * Sound in the feed, remembered. Muted to start with, because a page that
+ * makes noise on open is a page you close; once you have asked for sound it
+ * should stay on across slides and across visits.
+ */
+const readFeedMuted = () => {
+  try {
+    return localStorage.getItem(FEED_MUTED_KEY) !== '0';
+  } catch {
+    return true;
+  }
+};
+
+const ALERT_TOKEN_KEY = 'alertToken';
+
+const readAlertToken = () => {
+  try {
+    return localStorage.getItem(ALERT_TOKEN_KEY);
+  } catch {
+    return null;
+  }
+};
+
+/** Whole percentages people actually think in. */
+const ALERT_THRESHOLDS = [
+  [0, 'Any drop'],
+  [20, '20% or more'],
+  [33, 'A third off'],
+  [50, 'Half price'],
+];
+
+/**
+ * The state behind "email me when this drops".
+ *
+ * The wishlist stays where it lives, in localStorage. What goes to the server
+ * is the address, the ids being watched and their titles, and nothing else.
+ * The token the server returns is kept here so a later wishlist edit can be
+ * synced without asking for the address a second time.
+ */
+function useAlerts(wishlist, region) {
+  const [token, setToken] = useState(readAlertToken);
+  const [state, setState] = useState({
+    status: 'loading',
+    configured: null,
+    confirmed: false,
+    email: null,
+    watching: 0,
+    minDiscount: 20,
+  });
+
+  // Only catalog games get a nightly price reading, so only those can be
+  // watched. Saying otherwise would promise an email that never comes.
+  const watchable = useMemo(
+    () => gamesData.filter((game) => wishlist.has(game.id)).map((game) => ({ id: game.id, title: game.title })),
+    [wishlist],
+  );
+
+  useEffect(() => {
+    let live = true;
+    const url = token ? `/api/alerts?status=${encodeURIComponent(token)}` : '/api/alerts';
+    fetch(url)
+      .then((response) => response.json())
+      .then((payload) => {
+        if (!live) return;
+        if (token && payload.ok) {
+          setState((previous) => ({ ...previous, ...payload, status: 'ready', configured: true }));
+        } else if (token) {
+          // The subscription is gone; forget the token rather than pretend.
+          try {
+            localStorage.removeItem(ALERT_TOKEN_KEY);
+          } catch {
+            // Nothing to clean up if storage is unavailable.
+          }
+          setToken(null);
+          setState((previous) => ({ ...previous, status: 'ready', confirmed: false }));
+        } else {
+          setState((previous) => ({
+            ...previous,
+            status: 'ready',
+            configured: payload.configured ?? null,
+          }));
+        }
+      })
+      .catch(() => {
+        if (live) setState((previous) => ({ ...previous, status: 'ready' }));
+      });
+    return () => {
+      live = false;
+    };
+  }, [token]);
+
+  // Keep the watched set in step with the wishlist, quietly and after the
+  // tapping has stopped.
+  useEffect(() => {
+    if (!token) return undefined;
+    const timer = setTimeout(() => {
+      fetch('/api/alerts', {
+        method: 'POST',
+        headers: { 'content-type': 'application/json' },
+        body: JSON.stringify({ action: 'sync', token, games: watchable, region }),
+      })
+        .then((response) => response.json())
+        .then((payload) => {
+          if (payload.ok) setState((previous) => ({ ...previous, ...payload }));
+        })
+        .catch(() => {});
+    }, 900);
+    return () => clearTimeout(timer);
+  }, [token, watchable, region]);
+
+  const subscribe = useCallback(
+    async (email, minDiscount) => {
+      const response = await fetch('/api/alerts', {
+        method: 'POST',
+        headers: { 'content-type': 'application/json' },
+        body: JSON.stringify({ action: 'subscribe', email, games: watchable, minDiscount, region }),
+      });
+      const payload = await response.json();
+      if (payload.ok) {
+        try {
+          localStorage.setItem(ALERT_TOKEN_KEY, payload.token);
+        } catch {
+          // Without storage the token lives only for this visit.
+        }
+        setToken(payload.token);
+        setState((previous) => ({ ...previous, ...payload, email, minDiscount, status: 'ready' }));
+      }
+      return payload;
+    },
+    [watchable, region],
+  );
+
+  const setThreshold = useCallback(
+    (minDiscount) => {
+      setState((previous) => ({ ...previous, minDiscount }));
+      if (!token) return;
+      fetch('/api/alerts', {
+        method: 'POST',
+        headers: { 'content-type': 'application/json' },
+        body: JSON.stringify({ action: 'sync', token, games: watchable, minDiscount, region }),
+      }).catch(() => {});
+    },
+    [token, watchable, region],
+  );
+
+  const stop = useCallback(async () => {
+    if (token) {
+      await fetch('/api/alerts', {
+        method: 'POST',
+        headers: { 'content-type': 'application/json' },
+        body: JSON.stringify({ action: 'unsubscribe', token }),
+      }).catch(() => {});
+    }
+    try {
+      localStorage.removeItem(ALERT_TOKEN_KEY);
+    } catch {
+      // Already gone as far as this browser is concerned.
+    }
+    setToken(null);
+    setState((previous) => ({ ...previous, confirmed: false, email: null, watching: 0 }));
+  }, [token]);
+
+  return { ...state, token, watchable, subscribe, setThreshold, stop };
+}
+
+/**
+ * The sign-up sheet. Four states, and each one says exactly where things
+ * stand: mail not switched on, not signed up, waiting on a confirmation
+ * click, or running.
+ */
+function AlertsSheet({ alerts, onClose }) {
+  const [email, setEmail] = useState('');
+  const [busy, setBusy] = useState(false);
+  const [error, setError] = useState(null);
+  const [sent, setSent] = useState(false);
+
+  const submit = async (event) => {
+    event.preventDefault();
+    setBusy(true);
+    setError(null);
+    const result = await alerts.subscribe(email.trim(), alerts.minDiscount);
+    setBusy(false);
+    if (result.ok) setSent(true);
+    else setError(result.error ?? 'That did not work. Try again in a moment.');
+  };
+
+  const count = alerts.watchable.length;
+
+  return (
+    <ModalSheet labelledBy="alerts-title" onClose={onClose}>
+      <div className="p-6 sm:p-8">
+        <h2 id="alerts-title" className="flex items-center gap-2 text-2xl font-bold text-slate-900">
+          <Mail className="h-6 w-6 text-indigo-600" aria-hidden="true" />
+          Email me when it drops
+        </h2>
+
+        {alerts.configured === false ? (
+          <p className="mt-4 rounded-xl bg-amber-50 px-4 py-3 text-sm leading-relaxed text-amber-900">
+            Email is not switched on for this site yet, so signing up would
+            promise you something that never arrives. It needs a mail provider
+            key (<code className="font-mono text-xs">RESEND_API_KEY</code>) and a
+            sender address (<code className="font-mono text-xs">MAIL_FROM</code>)
+            in the Netlify environment. Once those are set this page works with
+            no other change.
+          </p>
+        ) : alerts.confirmed ? (
+          <>
+            <p className="mt-4 inline-flex items-start gap-2 rounded-xl bg-emerald-50 px-4 py-3 text-sm leading-relaxed text-emerald-900">
+              <Check className="mt-0.5 h-4 w-4 shrink-0" aria-hidden="true" />
+              <span>
+                Alerts are on for <strong className="font-semibold">{alerts.email}</strong>, watching{' '}
+                {count === 1 ? '1 game' : `${count} games`} on your wishlist. Heart
+                a game and it joins the list on its own.
+              </span>
+            </p>
+
+            <p className="mt-6 text-sm font-semibold text-slate-700">Tell me when it is</p>
+            <div className="mt-2 grid grid-cols-2 gap-2">
+              {ALERT_THRESHOLDS.map(([value, label]) => (
+                <button
+                  key={value}
+                  type="button"
+                  onClick={() => alerts.setThreshold(value)}
+                  aria-pressed={alerts.minDiscount === value}
+                  className={`min-h-[2.75rem] rounded-xl px-3 py-2 text-sm font-medium transition-all duration-200 ease-spring active:scale-[0.97] ${
+                    alerts.minDiscount === value
+                      ? 'bg-indigo-600 text-white'
+                      : 'bg-slate-100 text-slate-700 hover:bg-slate-200'
+                  }`}
+                >
+                  {label}
+                </button>
+              ))}
+            </div>
+
+            <p className="mt-4 text-xs leading-relaxed text-slate-500">
+              One email a night at most, only when something actually got cheaper
+              than it was when you added it, and never twice for the same sale.
+            </p>
+
+            <button
+              type="button"
+              onClick={() => {
+                alerts.stop();
+                onClose();
+              }}
+              className="mt-6 min-h-[2.75rem] w-full rounded-xl bg-slate-100 px-4 text-sm font-medium text-slate-700 transition-transform duration-200 ease-spring active:scale-[0.98] hover:bg-slate-200"
+            >
+              Turn alerts off and delete my address
+            </button>
+          </>
+        ) : sent || alerts.token ? (
+          <p className="mt-4 inline-flex items-start gap-2 rounded-xl bg-indigo-50 px-4 py-3 text-sm leading-relaxed text-indigo-900">
+            <Mail className="mt-0.5 h-4 w-4 shrink-0" aria-hidden="true" />
+            <span>
+              Check your inbox. There is a confirmation link waiting, and nothing
+              else will be sent until you click it. Look in spam if it is not
+              there in a minute.
+            </span>
+          </p>
+        ) : (
+          <form onSubmit={submit}>
+            <p className="mt-3 text-sm leading-relaxed text-slate-600">
+              {count === 0
+                ? 'Heart a few games first and they become the list this watches. You can sign up now either way.'
+                : `Watching the ${count === 1 ? 'game' : `${count} games`} on your wishlist. Heart another and it joins on its own.`}
+            </p>
+
+            <label htmlFor="alert-email" className="mt-5 block text-sm font-semibold text-slate-700">
+              Your email
+            </label>
+            <input
+              id="alert-email"
+              type="email"
+              autoComplete="email"
+              inputMode="email"
+              required
+              placeholder="you@example.com"
+              value={email}
+              onChange={(event) => setEmail(event.target.value)}
+              className="mt-2 min-h-[2.75rem] w-full rounded-xl border border-slate-300 px-3 text-base outline-none transition-all duration-200 focus:border-indigo-500 focus:ring-2 focus:ring-indigo-500"
+            />
+
+            <p className="mt-5 text-sm font-semibold text-slate-700">Tell me when it is</p>
+            <div className="mt-2 grid grid-cols-2 gap-2">
+              {ALERT_THRESHOLDS.map(([value, label]) => (
+                <button
+                  key={value}
+                  type="button"
+                  onClick={() => alerts.setThreshold(value)}
+                  aria-pressed={alerts.minDiscount === value}
+                  className={`min-h-[2.75rem] rounded-xl px-3 py-2 text-sm font-medium transition-all duration-200 ease-spring active:scale-[0.97] ${
+                    alerts.minDiscount === value
+                      ? 'bg-indigo-600 text-white'
+                      : 'bg-slate-100 text-slate-700 hover:bg-slate-200'
+                  }`}
+                >
+                  {label}
+                </button>
+              ))}
+            </div>
+
+            {error && (
+              <p role="alert" className="mt-4 rounded-xl bg-rose-50 px-4 py-3 text-sm text-rose-800">
+                {error}
+              </p>
+            )}
+
+            <button
+              type="submit"
+              disabled={busy}
+              className="mt-5 min-h-[2.75rem] w-full rounded-xl bg-indigo-600 px-4 text-sm font-semibold text-white transition-transform duration-200 ease-spring active:scale-[0.98] hover:bg-indigo-700 disabled:opacity-60"
+            >
+              {busy ? 'Sending confirmation…' : 'Email me about drops'}
+            </button>
+
+            <p className="mt-4 text-xs leading-relaxed text-slate-500">
+              We store your address and the game ids it watches. Nothing else, no
+              tracking, no sharing. Every email has a one-click unsubscribe that
+              deletes the lot.
+            </p>
+          </form>
+        )}
+      </div>
+    </ModalSheet>
+  );
+}
+
 function TonightSheet({ catalog, library, hidden, onOpenGame, onClose }) {
   const [mood, setMood] = useState(null);
   const [fromLibrary, setFromLibrary] = useState(library.size > 0);
@@ -3454,6 +3824,20 @@ export default function App() {
   // wishlist and one library without ever colliding.
   const [activeStoreGame, setActiveStoreGame] = useState(null);
   const [tonightOpen, setTonightOpen] = useState(false);
+  const [alertsOpen, setAlertsOpen] = useState(false);
+  const [feedMuted, setFeedMuted] = useState(readFeedMuted);
+
+  const toggleFeedMuted = useCallback(() => {
+    setFeedMuted((previous) => {
+      const next = !previous;
+      try {
+        localStorage.setItem(FEED_MUTED_KEY, next ? '1' : '0');
+      } catch {
+        // A browser refusing storage just means sound resets next visit.
+      }
+      return next;
+    });
+  }, []);
   const [wishlistPrices, setWishlistPrices] = useState(readWishlistPrices);
   const [sheetOpen, setSheetOpen] = useState(false);
   const scrolled = useScrollCollapse();
@@ -3712,6 +4096,10 @@ export default function App() {
     () => new Map(wishlistDrops.map((drop) => [drop.game.id, drop.savedCents])),
     [wishlistDrops],
   );
+
+  // The wishlist can only be mailed about if the server knows it exists, so
+  // this is the one thing the app keeps off the phone, and only once asked.
+  const alerts = useAlerts(wishlist, filters.region);
 
   // Keeps typing responsive while React re-filters in the background.
   const deferredQuery = useDeferredValue(filters.q);
@@ -4194,6 +4582,8 @@ export default function App() {
               wishlisted={wishlist.has(game.id)}
               owned={library.has(game.id)}
               reason={filters.collection === 'genius' ? geniusReasons.get(game.id) : undefined}
+              muted={feedMuted}
+              onToggleMuted={toggleFeedMuted}
               onToggleWishlist={() => toggleWishlist(game.id)}
               onToggleOwned={() => toggleOwned(game.id)}
               onOpen={() => setActiveGameId(game.id)}
@@ -4237,6 +4627,34 @@ export default function App() {
                 {wishlistDrops.length === 1
                   ? `${wishlistDrops[0].game.title} is ${formatSaving(wishlistDrops[0].savedCents)} cheaper than when you added it`
                   : `${wishlistDrops.length} on your wishlist are cheaper than when you added them`}
+              </span>
+              <ChevronRight className="h-4 w-4 shrink-0" />
+            </button>
+          )}
+
+          {/* The one place the offer makes sense: you have things you want, and
+              they are the things an email would be about. */}
+          {wishlist.size > 0 && alerts.configured !== false && (
+            <button
+              type="button"
+              onClick={() => setAlertsOpen(true)}
+              className={`mb-3 flex w-full items-center gap-2 rounded-xl px-3 py-2.5 text-left text-sm font-medium ring-1 ring-inset transition-transform duration-200 ease-spring active:scale-[0.99] ${
+                alerts.confirmed
+                  ? 'bg-emerald-50 text-emerald-800 ring-emerald-200'
+                  : 'bg-indigo-50 text-indigo-800 ring-indigo-200'
+              }`}
+            >
+              {alerts.confirmed ? (
+                <Check className="h-4 w-4 shrink-0" />
+              ) : (
+                <Mail className="h-4 w-4 shrink-0" />
+              )}
+              <span className="flex-1">
+                {alerts.confirmed
+                  ? `Emailing you about ${alerts.watching === 1 ? '1 game' : `${alerts.watching} games`}`
+                  : alerts.token
+                    ? 'Confirm your email to start getting drop alerts'
+                    : `Email me when ${wishlist.size === 1 ? 'it goes' : 'these go'} on sale`}
               </span>
               <ChevronRight className="h-4 w-4 shrink-0" />
             </button>
@@ -4331,6 +4749,8 @@ export default function App() {
           onClose={() => setActiveGameId(null)}
         />
       )}
+
+      {alertsOpen && <AlertsSheet alerts={alerts} onClose={() => setAlertsOpen(false)} />}
 
       {tonightOpen && (
         <TonightSheet
