@@ -31,6 +31,7 @@ import {
   Rows3,
   Search,
   SlidersHorizontal,
+  Smartphone,
   Sparkles,
   Star,
   ThumbsDown,
@@ -2267,6 +2268,35 @@ const readFeedMuted = () => {
 
 const ALERT_TOKEN_KEY = 'alertToken';
 
+/**
+ * Whether this browser can be pushed to at all.
+ *
+ * On an iPhone the answer is no until the site has been added to the Home
+ * Screen, and Safari does not expose PushManager before that, so the check
+ * doubles as the detection for "tell them to install it first".
+ */
+const pushSupported = () =>
+  typeof window !== 'undefined' &&
+  'serviceWorker' in navigator &&
+  'PushManager' in window &&
+  'Notification' in window;
+
+const isInstalled = () =>
+  typeof window !== 'undefined' &&
+  (window.matchMedia?.('(display-mode: standalone)').matches || navigator.standalone === true);
+
+const isApple = () =>
+  typeof navigator !== 'undefined' && /iPhone|iPad|iPod/.test(navigator.userAgent);
+
+/** VAPID keys travel as base64url; subscribe() wants the raw bytes. */
+function decodeKey(base64) {
+  const padded = `${base64}${'='.repeat((4 - (base64.length % 4)) % 4)}`
+    .replace(/-/g, '+')
+    .replace(/_/g, '/');
+  const raw = atob(padded);
+  return Uint8Array.from(raw, (char) => char.charCodeAt(0));
+}
+
 const readAlertToken = () => {
   try {
     return localStorage.getItem(ALERT_TOKEN_KEY);
@@ -2296,6 +2326,10 @@ function useAlerts(wishlist, region) {
   const [state, setState] = useState({
     status: 'loading',
     configured: null,
+    pushAvailable: null,
+    vapidPublicKey: null,
+    pushEnabled: false,
+    emailConfirmed: false,
     confirmed: false,
     email: null,
     watching: 0,
@@ -2309,16 +2343,21 @@ function useAlerts(wishlist, region) {
     [wishlist],
   );
 
+  // Which channels this site has, and where this browser stands with them.
+  // Always asks for both: the capability answer decides what the sheet can
+  // offer, and it is needed whether or not there is a token yet.
   useEffect(() => {
     let live = true;
-    const url = token ? `/api/alerts?status=${encodeURIComponent(token)}` : '/api/alerts';
-    fetch(url)
-      .then((response) => response.json())
-      .then((payload) => {
+    Promise.all([
+      fetch('/api/alerts').then((response) => response.json()),
+      token
+        ? fetch(`/api/alerts?status=${encodeURIComponent(token)}`).then((response) => response.json())
+        : Promise.resolve(null),
+    ])
+      .then(([capability, status]) => {
         if (!live) return;
-        if (token && payload.ok) {
-          setState((previous) => ({ ...previous, ...payload, status: 'ready', configured: true }));
-        } else if (token) {
+
+        if (token && status && !status.ok) {
           // The subscription is gone; forget the token rather than pretend.
           try {
             localStorage.removeItem(ALERT_TOKEN_KEY);
@@ -2326,14 +2365,16 @@ function useAlerts(wishlist, region) {
             // Nothing to clean up if storage is unavailable.
           }
           setToken(null);
-          setState((previous) => ({ ...previous, status: 'ready', confirmed: false }));
-        } else {
-          setState((previous) => ({
-            ...previous,
-            status: 'ready',
-            configured: payload.configured ?? null,
-          }));
         }
+
+        setState((previous) => ({
+          ...previous,
+          ...(status?.ok ? status : { pushEnabled: false, emailConfirmed: false, confirmed: false }),
+          status: 'ready',
+          configured: capability.email ?? capability.configured ?? null,
+          pushAvailable: Boolean(capability.push) && pushSupported(),
+          vapidPublicKey: capability.vapidPublicKey ?? null,
+        }));
       })
       .catch(() => {
         if (live) setState((previous) => ({ ...previous, status: 'ready' }));
@@ -2384,6 +2425,94 @@ function useAlerts(wishlist, region) {
     [watchable, region],
   );
 
+  /**
+   * Turns on notifications for this phone.
+   *
+   * The permission prompt has to come from the tap itself, so everything here
+   * runs in that gesture. Every failure has its own sentence, because "did
+   * not work" on a notification prompt is the least helpful thing an app can
+   * say: blocked, unsupported and not-installed all need different actions.
+   */
+  const enablePush = useCallback(async () => {
+    if (!pushSupported()) {
+      return {
+        ok: false,
+        error:
+          isApple() && !isInstalled()
+            ? 'On an iPhone this needs the app on your Home Screen first. Tap Share, then Add to Home Screen, and open it from there.'
+            : 'This browser cannot do notifications.',
+      };
+    }
+    if (!state.vapidPublicKey) return { ok: false, error: 'Push is not switched on for this site.' };
+
+    const permission = await Notification.requestPermission();
+    if (permission !== 'granted') {
+      return {
+        ok: false,
+        error:
+          permission === 'denied'
+            ? 'Notifications are blocked for this app. Turn them back on in your phone settings, then try again.'
+            : 'Notifications were not allowed.',
+      };
+    }
+
+    try {
+      const registration = await navigator.serviceWorker.ready;
+      // An existing subscription is reused: re-subscribing with a different
+      // key is what makes a browser hand back a dead endpoint.
+      const subscription =
+        (await registration.pushManager.getSubscription()) ??
+        (await registration.pushManager.subscribe({
+          userVisibleOnly: true,
+          applicationServerKey: decodeKey(state.vapidPublicKey),
+        }));
+
+      const response = await fetch('/api/alerts', {
+        method: 'POST',
+        headers: { 'content-type': 'application/json' },
+        body: JSON.stringify({
+          action: 'subscribe-push',
+          token,
+          subscription: subscription.toJSON(),
+          games: watchable,
+          minDiscount: state.minDiscount,
+          region,
+        }),
+      });
+      const payload = await response.json();
+      if (!payload.ok) return payload;
+
+      try {
+        localStorage.setItem(ALERT_TOKEN_KEY, payload.token);
+      } catch {
+        // Without storage the token lives only for this visit.
+      }
+      setToken(payload.token);
+      setState((previous) => ({ ...previous, ...payload }));
+      return payload;
+    } catch (error) {
+      return { ok: false, error: `Could not subscribe this phone (${error?.message ?? error}).` };
+    }
+  }, [state.vapidPublicKey, state.minDiscount, token, watchable, region]);
+
+  const disablePush = useCallback(async () => {
+    try {
+      const registration = await navigator.serviceWorker.ready;
+      const subscription = await registration.pushManager.getSubscription();
+      await subscription?.unsubscribe();
+    } catch {
+      // The server record is what stops the sending; the local one is tidiness.
+    }
+    if (token) {
+      await fetch('/api/alerts', {
+        method: 'POST',
+        headers: { 'content-type': 'application/json' },
+        body: JSON.stringify({ action: 'unsubscribe-push', token }),
+      }).catch(() => {});
+    }
+    setState((previous) => ({ ...previous, pushEnabled: false }));
+  }, [token]);
+
   const setThreshold = useCallback(
     (minDiscount) => {
       setState((previous) => ({ ...previous, minDiscount }));
@@ -2414,7 +2543,7 @@ function useAlerts(wishlist, region) {
     setState((previous) => ({ ...previous, confirmed: false, email: null, watching: 0 }));
   }, [token]);
 
-  return { ...state, token, watchable, subscribe, setThreshold, stop };
+  return { ...state, token, watchable, subscribe, enablePush, disablePush, setThreshold, stop };
 }
 
 /**
@@ -2427,6 +2556,11 @@ function AlertsSheet({ alerts, onClose }) {
   const [busy, setBusy] = useState(false);
   const [error, setError] = useState(null);
   const [sent, setSent] = useState(false);
+  const [pushBusy, setPushBusy] = useState(false);
+  const [pushError, setPushError] = useState(null);
+
+  const count = alerts.watchable.length;
+  const needsHomeScreen = isApple() && !isInstalled();
 
   const submit = async (event) => {
     event.preventDefault();
@@ -2438,142 +2572,188 @@ function AlertsSheet({ alerts, onClose }) {
     else setError(result.error ?? 'That did not work. Try again in a moment.');
   };
 
-  const count = alerts.watchable.length;
+  const togglePush = async () => {
+    setPushBusy(true);
+    setPushError(null);
+    if (alerts.pushEnabled) {
+      await alerts.disablePush();
+    } else {
+      const result = await alerts.enablePush();
+      if (!result.ok) setPushError(result.error ?? 'That did not work.');
+    }
+    setPushBusy(false);
+  };
+
+  const thresholds = (
+    <>
+      <p className="mt-6 text-sm font-semibold text-slate-700">Tell me when it is</p>
+      <div className="mt-2 grid grid-cols-2 gap-2">
+        {ALERT_THRESHOLDS.map(([value, label]) => (
+          <button
+            key={value}
+            type="button"
+            onClick={() => alerts.setThreshold(value)}
+            aria-pressed={alerts.minDiscount === value}
+            className={`min-h-[2.75rem] rounded-xl px-3 py-2 text-sm font-medium transition-all duration-200 ease-spring active:scale-[0.97] ${
+              alerts.minDiscount === value
+                ? 'bg-indigo-600 text-white'
+                : 'bg-slate-100 text-slate-700 hover:bg-slate-200'
+            }`}
+          >
+            {label}
+          </button>
+        ))}
+      </div>
+    </>
+  );
 
   return (
     <ModalSheet labelledBy="alerts-title" onClose={onClose}>
       <div className="p-6 sm:p-8">
         <h2 id="alerts-title" className="flex items-center gap-2 text-2xl font-bold text-slate-900">
-          <Mail className="h-6 w-6 text-indigo-600" aria-hidden="true" />
-          Email me when it drops
+          <Bell className="h-6 w-6 text-indigo-600" aria-hidden="true" />
+          Tell me when it drops
         </h2>
 
-        {alerts.configured === false ? (
-          <p className="mt-4 rounded-xl bg-amber-50 px-4 py-3 text-sm leading-relaxed text-amber-900">
-            Email is not switched on for this site yet, so signing up would
-            promise you something that never arrives. It needs a mail provider
-            key (<code className="font-mono text-xs">RESEND_API_KEY</code>) and a
-            sender address (<code className="font-mono text-xs">MAIL_FROM</code>)
-            in the Netlify environment. Once those are set this page works with
-            no other change.
+        <p className="mt-3 text-sm leading-relaxed text-slate-600">
+          {count === 0
+            ? 'Heart a few games and they become the list this watches.'
+            : `Watching the ${count === 1 ? 'game' : `${count} games`} on your wishlist. Heart another and it joins on its own.`}
+        </p>
+
+        {/* Push first: it is the one that needs nothing set up anywhere. */}
+        <div className="mt-5 rounded-2xl bg-slate-50 p-4 ring-1 ring-inset ring-slate-200">
+          <p className="flex items-center gap-2 text-sm font-semibold text-slate-800">
+            <Smartphone className="h-4 w-4 text-indigo-600" aria-hidden="true" />
+            On this phone
           </p>
-        ) : alerts.confirmed ? (
-          <>
-            <p className="mt-4 inline-flex items-start gap-2 rounded-xl bg-emerald-50 px-4 py-3 text-sm leading-relaxed text-emerald-900">
-              <Check className="mt-0.5 h-4 w-4 shrink-0" aria-hidden="true" />
-              <span>
-                Alerts are on for <strong className="font-semibold">{alerts.email}</strong>, watching{' '}
-                {count === 1 ? '1 game' : `${count} games`} on your wishlist. Heart
-                a game and it joins the list on its own.
-              </span>
+
+          {alerts.pushEnabled ? (
+            <>
+              <p className="mt-2 inline-flex items-start gap-2 text-sm leading-relaxed text-emerald-800">
+                <Check className="mt-0.5 h-4 w-4 shrink-0" aria-hidden="true" />
+                <span>Notifications are on. You will get one the night a wishlist game drops.</span>
+              </p>
+              <button
+                type="button"
+                onClick={togglePush}
+                disabled={pushBusy}
+                className="mt-3 min-h-[2.75rem] w-full rounded-xl bg-white px-4 text-sm font-medium text-slate-700 ring-1 ring-inset ring-slate-300 transition-transform duration-200 ease-spring active:scale-[0.98] hover:bg-slate-100 disabled:opacity-60"
+              >
+                {pushBusy ? 'Turning off…' : 'Turn notifications off'}
+              </button>
+            </>
+          ) : needsHomeScreen ? (
+            <p className="mt-2 text-sm leading-relaxed text-slate-600">
+              iPhone only allows notifications once the app is on your Home
+              Screen. Tap <strong className="font-semibold">Share</strong>, then{' '}
+              <strong className="font-semibold">Add to Home Screen</strong>, open it
+              from there, and this button will work.
             </p>
+          ) : (
+            <>
+              <p className="mt-2 text-sm leading-relaxed text-slate-600">
+                Nothing to sign up for and no address to give. Your phone gets a
+                notification the night something gets cheaper.
+              </p>
+              <button
+                type="button"
+                onClick={togglePush}
+                disabled={pushBusy || alerts.pushAvailable === false}
+                className="mt-3 min-h-[2.75rem] w-full rounded-xl bg-indigo-600 px-4 text-sm font-semibold text-white transition-transform duration-200 ease-spring active:scale-[0.98] hover:bg-indigo-700 disabled:opacity-60"
+              >
+                {pushBusy ? 'Asking…' : 'Notify me on this phone'}
+              </button>
+              {alerts.pushAvailable === false && (
+                <p className="mt-2 text-xs leading-relaxed text-slate-500">
+                  This browser cannot do notifications. Email still works below.
+                </p>
+              )}
+            </>
+          )}
 
-            <p className="mt-6 text-sm font-semibold text-slate-700">Tell me when it is</p>
-            <div className="mt-2 grid grid-cols-2 gap-2">
-              {ALERT_THRESHOLDS.map(([value, label]) => (
-                <button
-                  key={value}
-                  type="button"
-                  onClick={() => alerts.setThreshold(value)}
-                  aria-pressed={alerts.minDiscount === value}
-                  className={`min-h-[2.75rem] rounded-xl px-3 py-2 text-sm font-medium transition-all duration-200 ease-spring active:scale-[0.97] ${
-                    alerts.minDiscount === value
-                      ? 'bg-indigo-600 text-white'
-                      : 'bg-slate-100 text-slate-700 hover:bg-slate-200'
-                  }`}
-                >
-                  {label}
-                </button>
-              ))}
-            </div>
-
-            <p className="mt-4 text-xs leading-relaxed text-slate-500">
-              One email a night at most, only when something actually got cheaper
-              than it was when you added it, and never twice for the same sale.
+          {pushError && (
+            <p role="alert" className="mt-3 rounded-xl bg-rose-50 px-3 py-2 text-sm leading-relaxed text-rose-800">
+              {pushError}
             </p>
+          )}
+        </div>
 
-            <button
-              type="button"
-              onClick={() => {
-                alerts.stop();
-                onClose();
-              }}
-              className="mt-6 min-h-[2.75rem] w-full rounded-xl bg-slate-100 px-4 text-sm font-medium text-slate-700 transition-transform duration-200 ease-spring active:scale-[0.98] hover:bg-slate-200"
-            >
-              Turn alerts off and delete my address
-            </button>
-          </>
-        ) : sent || alerts.token ? (
+        {/* Email second, and only when there is something behind it. */}
+        {alerts.configured === false ? (
+          <p className="mt-4 text-xs leading-relaxed text-slate-500">
+            Email alerts are not switched on for this site. They need a mail
+            provider key (<code className="font-mono">RESEND_API_KEY</code>) in the
+            Netlify environment; notifications above need nothing.
+          </p>
+        ) : alerts.emailConfirmed ? (
+          <p className="mt-4 inline-flex items-start gap-2 rounded-xl bg-emerald-50 px-4 py-3 text-sm leading-relaxed text-emerald-900">
+            <Mail className="mt-0.5 h-4 w-4 shrink-0" aria-hidden="true" />
+            <span>
+              Also emailing <strong className="font-semibold">{alerts.email}</strong>.
+            </span>
+          </p>
+        ) : sent ? (
           <p className="mt-4 inline-flex items-start gap-2 rounded-xl bg-indigo-50 px-4 py-3 text-sm leading-relaxed text-indigo-900">
             <Mail className="mt-0.5 h-4 w-4 shrink-0" aria-hidden="true" />
             <span>
               Check your inbox. There is a confirmation link waiting, and nothing
-              else will be sent until you click it. Look in spam if it is not
-              there in a minute.
+              is sent by email until you click it.
             </span>
           </p>
         ) : (
-          <form onSubmit={submit}>
-            <p className="mt-3 text-sm leading-relaxed text-slate-600">
-              {count === 0
-                ? 'Heart a few games first and they become the list this watches. You can sign up now either way.'
-                : `Watching the ${count === 1 ? 'game' : `${count} games`} on your wishlist. Heart another and it joins on its own.`}
-            </p>
-
-            <label htmlFor="alert-email" className="mt-5 block text-sm font-semibold text-slate-700">
-              Your email
+          <form onSubmit={submit} className="mt-4">
+            <label htmlFor="alert-email" className="block text-sm font-semibold text-slate-700">
+              By email too (optional)
             </label>
-            <input
-              id="alert-email"
-              type="email"
-              autoComplete="email"
-              inputMode="email"
-              required
-              placeholder="you@example.com"
-              value={email}
-              onChange={(event) => setEmail(event.target.value)}
-              className="mt-2 min-h-[2.75rem] w-full rounded-xl border border-slate-300 px-3 text-base outline-none transition-all duration-200 focus:border-indigo-500 focus:ring-2 focus:ring-indigo-500"
-            />
-
-            <p className="mt-5 text-sm font-semibold text-slate-700">Tell me when it is</p>
-            <div className="mt-2 grid grid-cols-2 gap-2">
-              {ALERT_THRESHOLDS.map(([value, label]) => (
-                <button
-                  key={value}
-                  type="button"
-                  onClick={() => alerts.setThreshold(value)}
-                  aria-pressed={alerts.minDiscount === value}
-                  className={`min-h-[2.75rem] rounded-xl px-3 py-2 text-sm font-medium transition-all duration-200 ease-spring active:scale-[0.97] ${
-                    alerts.minDiscount === value
-                      ? 'bg-indigo-600 text-white'
-                      : 'bg-slate-100 text-slate-700 hover:bg-slate-200'
-                  }`}
-                >
-                  {label}
-                </button>
-              ))}
+            <div className="mt-2 flex gap-2">
+              <input
+                id="alert-email"
+                type="email"
+                autoComplete="email"
+                inputMode="email"
+                required
+                placeholder="you@example.com"
+                value={email}
+                onChange={(event) => setEmail(event.target.value)}
+                className="min-h-[2.75rem] w-full flex-1 rounded-xl border border-slate-300 px-3 text-base outline-none transition-all duration-200 focus:border-indigo-500 focus:ring-2 focus:ring-indigo-500"
+              />
+              <button
+                type="submit"
+                disabled={busy}
+                className="min-h-[2.75rem] shrink-0 rounded-xl bg-slate-900 px-4 text-sm font-semibold text-white transition-transform duration-200 ease-spring active:scale-[0.98] hover:bg-slate-800 disabled:opacity-60"
+              >
+                {busy ? 'Sending…' : 'Add'}
+              </button>
             </div>
-
             {error && (
-              <p role="alert" className="mt-4 rounded-xl bg-rose-50 px-4 py-3 text-sm text-rose-800">
+              <p role="alert" className="mt-3 rounded-xl bg-rose-50 px-4 py-3 text-sm text-rose-800">
                 {error}
               </p>
             )}
-
-            <button
-              type="submit"
-              disabled={busy}
-              className="mt-5 min-h-[2.75rem] w-full rounded-xl bg-indigo-600 px-4 text-sm font-semibold text-white transition-transform duration-200 ease-spring active:scale-[0.98] hover:bg-indigo-700 disabled:opacity-60"
-            >
-              {busy ? 'Sending confirmation…' : 'Email me about drops'}
-            </button>
-
-            <p className="mt-4 text-xs leading-relaxed text-slate-500">
-              We store your address and the game ids it watches. Nothing else, no
-              tracking, no sharing. Every email has a one-click unsubscribe that
-              deletes the lot.
-            </p>
           </form>
+        )}
+
+        {thresholds}
+
+        <p className="mt-4 text-xs leading-relaxed text-slate-500">
+          One alert a night at most, only when something is actually cheaper than
+          it was when you added it, and never twice for the same sale. We store
+          the game ids being watched and a way to reach you. Nothing else, no
+          tracking, no sharing.
+        </p>
+
+        {(alerts.pushEnabled || alerts.emailConfirmed || alerts.token) && (
+          <button
+            type="button"
+            onClick={() => {
+              alerts.stop();
+              onClose();
+            }}
+            className="mt-5 min-h-[2.75rem] w-full rounded-xl bg-slate-100 px-4 text-sm font-medium text-slate-700 transition-transform duration-200 ease-spring active:scale-[0.98] hover:bg-slate-200"
+          >
+            Turn everything off and delete what is stored
+          </button>
         )}
       </div>
     </ModalSheet>
@@ -4634,27 +4814,27 @@ export default function App() {
 
           {/* The one place the offer makes sense: you have things you want, and
               they are the things an email would be about. */}
-          {wishlist.size > 0 && alerts.configured !== false && (
+          {wishlist.size > 0 && (
             <button
               type="button"
               onClick={() => setAlertsOpen(true)}
               className={`mb-3 flex w-full items-center gap-2 rounded-xl px-3 py-2.5 text-left text-sm font-medium ring-1 ring-inset transition-transform duration-200 ease-spring active:scale-[0.99] ${
-                alerts.confirmed
+                alerts.pushEnabled || alerts.emailConfirmed
                   ? 'bg-emerald-50 text-emerald-800 ring-emerald-200'
                   : 'bg-indigo-50 text-indigo-800 ring-indigo-200'
               }`}
             >
-              {alerts.confirmed ? (
+              {alerts.pushEnabled || alerts.emailConfirmed ? (
                 <Check className="h-4 w-4 shrink-0" />
               ) : (
-                <Mail className="h-4 w-4 shrink-0" />
+                <Bell className="h-4 w-4 shrink-0" />
               )}
               <span className="flex-1">
-                {alerts.confirmed
-                  ? `Emailing you about ${alerts.watching === 1 ? '1 game' : `${alerts.watching} games`}`
-                  : alerts.token
+                {alerts.pushEnabled || alerts.emailConfirmed
+                  ? `Watching ${alerts.watching === 1 ? '1 game' : `${alerts.watching} games`} for price drops`
+                  : alerts.token && alerts.email
                     ? 'Confirm your email to start getting drop alerts'
-                    : `Email me when ${wishlist.size === 1 ? 'it goes' : 'these go'} on sale`}
+                    : `Tell me when ${wishlist.size === 1 ? 'it goes' : 'these go'} on sale`}
               </span>
               <ChevronRight className="h-4 w-4 shrink-0" />
             </button>

@@ -22,9 +22,13 @@
  *     published, so there is nothing to revalidate.
  *
  * Anything else falls through to the network untouched.
+ *
+ * This file also receives price-drop notifications. That has nothing to do
+ * with caching, but a push can only be delivered to a service worker, so this
+ * is where it has to live.
  */
 
-const VERSION = 'v2';
+const VERSION = 'v3';
 const SHELL = `shell-${VERSION}`;
 const ASSETS = `assets-${VERSION}`;
 const DATA = `data-${VERSION}`;
@@ -134,4 +138,57 @@ self.addEventListener('fetch', (event) => {
   if (MEDIA_HOSTS.includes(url.hostname)) {
     event.respondWith(cacheFirst(request, MEDIA));
   }
+});
+
+
+/**
+ * A price drop, delivered while the app is closed.
+ *
+ * The payload is written by the nightly job. A push that arrives without one,
+ * or with something unreadable in it, still has to show a notification: every
+ * browser that supports push requires one, and staying silent here is what
+ * gets a site's permission revoked.
+ */
+self.addEventListener('push', (event) => {
+  let payload = {};
+  try {
+    payload = event.data ? event.data.json() : {};
+  } catch {
+    payload = {};
+  }
+
+  const title = payload.title || 'A game on your wishlist is cheaper';
+  event.waitUntil(
+    self.registration.showNotification(title, {
+      body: payload.body || 'Open the catalog to see what dropped.',
+      icon: '/icon-192.png',
+      badge: '/icon-192.png',
+      // Tonight's drop replaces last night's rather than stacking up.
+      tag: payload.tag || 'price-drop',
+      data: { url: payload.url || '/?wishlist=1' },
+    }),
+  );
+});
+
+/**
+ * Tapping the notification. Focuses the app if it is already open somewhere
+ * rather than opening a second copy of it.
+ */
+self.addEventListener('notificationclick', (event) => {
+  event.notification.close();
+  const target = event.notification.data?.url || '/?wishlist=1';
+
+  event.waitUntil(
+    (async () => {
+      const clientList = await self.clients.matchAll({ type: 'window', includeUncontrolled: true });
+      for (const client of clientList) {
+        if (new URL(client.url).origin === self.location.origin) {
+          await client.focus();
+          if ('navigate' in client) await client.navigate(target).catch(() => {});
+          return;
+        }
+      }
+      await self.clients.openWindow(target);
+    })(),
+  );
 });

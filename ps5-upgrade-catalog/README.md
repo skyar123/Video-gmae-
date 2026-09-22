@@ -60,8 +60,9 @@ the Netlify CLI.
 The app lives in this subdirectory, so set **Base directory** to
 `ps5-upgrade-catalog` in the Netlify UI. `netlify.toml` supplies the rest: build
 command, `dist` as the publish directory, and the function in
-`netlify/functions/`. Everything except email alerts works with no environment
-variables and no API keys.
+`netlify/functions/`. Everything except alerts works with no environment
+variables and no API keys, and alerts need only keys you generate yourself
+unless you want email too.
 
 ## Where the live data comes from
 
@@ -219,35 +220,63 @@ request reads and writes exactly one blob. Locally it falls back to a gitignored
 Set `HISTORY_REGIONS` (for example `US,GB`) to snapshot more than one region
 nightly. It defaults to `US`.
 
-## Email price alerts
+## Price alerts
 
-The wishlist lives in `localStorage` and nothing else does, so an email alert is
-the one feature that needs the server to remember something. What it stores is an
-address, the ids and titles it watches, and the price each was at when it was
+The wishlist lives in `localStorage` and nothing else does, so alerts are the one
+feature that needs the server to remember something. What it stores is a way to
+reach you, the ids and titles being watched, and the price each was at when it was
 added. Nothing else.
 
-An address is only ever mailed after clicking a confirmation link, because anyone
-can type anyone's address into a public form. Every alert carries a one-click
-unsubscribe that deletes the whole record, no return visit and no password.
+There are two channels, and one record can hold either or both.
 
-Alerts ride on the nightly price pass rather than adding a second one. A game is
-mailed about when it is below both the price it was at when you added it and the
-last price you were told about, at or past your chosen discount, and not within
-five days of the last note about it, so a sale that rolls over night after night
-arrives once.
+**Push notifications** work with nothing to sign up for. The credential is an
+ECDSA keypair generated once, and the message goes straight to the push service
+the phone already talks to, Apple's or Google's. Two variables, both generated
+rather than obtained:
 
-Two variables switch it on:
+```
+node -e "console.log(require('web-push').generateVAPIDKeys())"
+```
+
+| Variable | What it is |
+| --- | --- |
+| `VAPID_PUBLIC_KEY` | Public by design; the browser needs it to subscribe |
+| `VAPID_PRIVATE_KEY` | Secret; signs the request to the push service |
+| `VAPID_SUBJECT` | Optional `mailto:` the push services can complain to |
+
+On an iPhone this only works once the site is on the Home Screen, which is an iOS
+rule rather than a limitation here. The app is already a standalone PWA, so it is
+one tap, and the sheet says so rather than letting the button fail silently.
+
+**Email** needs a sending account to exist first, so it stays hidden until one is
+configured rather than offering something that cannot be delivered.
 
 | Variable | What it is |
 | --- | --- |
 | `RESEND_API_KEY` | A [Resend](https://resend.com) API key |
-| `MAIL_FROM` | The sender, on a domain verified with Resend |
+| `MAIL_FROM` | Optional sender; defaults to `onboarding@resend.dev` |
 
-Without both, `/api/alerts` reports `configured: false`, the sign-up never appears
-in the app, and nothing is sent. That is deliberate: a subscribe button that
-cannot deliver is worse than no button. `SITE_URL` overrides the origin used in
-confirmation and unsubscribe links if Netlify's own `URL` is not what you want,
-and `RESEND_ENDPOINT` points the sender at a stub for local testing.
+The default sender needs no domain and no DNS records, but Resend will only
+deliver from it to the address that owns the account. For one person watching
+their own wishlist that is the whole use case, and it takes the setup down from
+"verify a domain" to "paste one key". Set `MAIL_FROM` to an address on your own
+verified domain to mail anyone else. `SITE_URL` overrides the origin used in
+confirmation and unsubscribe links, and `RESEND_ENDPOINT` points the sender at a
+stub for local testing.
+
+An address is confirmed before anything goes to it, because anyone can type
+anyone's address into a public form. A push subscription needs no such step: the
+browser already asked, and the phone can revoke it without asking us.
+
+Alerts ride on the nightly price pass rather than adding a second one. A game is
+worth telling you about when it is below both the price it was at when you added
+it and the last price you were told about, at or past your chosen discount, and
+not within five days of the last note about it, so a sale that rolls over night
+after night arrives once. Joining while a sale is already running sets the
+baseline and stays quiet, because that price was there before you got here.
+
+A push endpoint that answers 404 or 410 is a phone that reinstalled the app or
+revoked permission; the record is dropped rather than retried every night.
 
 ## Layout of the code
 
@@ -257,8 +286,10 @@ api/predict.mjs            the price-drop heuristic
 api/reviews.mjs            player ratings and review-derived pros and cons
 api/history.mjs            recorded price history (Netlify Blobs, or a local file)
 api/search.mjs             title matching, shared by the catalog and the mirror
-api/alerts.mjs             email price alerts: subscriptions, matching, sending
+api/alerts.mjs             price alerts: subscriptions, matching, sending
+api/push.mjs               web push (no third-party service)
 api/mail.mjs               the mail provider
+public/sw.js               offline shell, and where a push is received
 netlify/functions/games.mjs            /api/games in production
 netlify/functions/alerts.mjs           /api/alerts: subscribe, confirm, unsubscribe
 netlify/functions/snapshot-prices.mjs  nightly price snapshot, and the alert pass

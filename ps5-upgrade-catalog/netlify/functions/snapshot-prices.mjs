@@ -22,8 +22,9 @@ import { runAlerts } from '../../api/alerts.mjs';
  * Calendar: a slice of the store's concept IDs is swept each night, so newly
  * announced games reach the release calendar without a deploy.
  *
- * Alerts: the prices read above are exactly what a price-drop email needs, so
- * subscriptions are checked here rather than in a second pass over the store.
+ * Alerts: the prices read above are exactly what a price-drop notification
+ * needs, so subscriptions are checked here rather than in a second pass over
+ * the store. Push goes to phones; email goes out too when it is configured.
  *
  * Scheduled functions only run on published deploys.
  */
@@ -101,7 +102,7 @@ export default async () => {
     console.log(
       alerts.skipped
         ? `Price alerts skipped: ${alerts.skipped}`
-        : `Price alerts: ${alerts.mailed} emails covering ${alerts.drops} drops, ${alerts.subscribers} subscribed`,
+        : `Price alerts: ${alerts.notified} sent covering ${alerts.drops} drops, ${alerts.subscribers} subscribed`,
     );
   } catch (error) {
     console.error('Price alerts failed:', error);

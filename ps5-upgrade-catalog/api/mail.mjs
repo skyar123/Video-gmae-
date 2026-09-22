@@ -1,18 +1,29 @@
 /**
  * Sending mail.
  *
- * One provider, Resend, because it is a single POST and needs no SDK. The key
- * lives in RESEND_API_KEY and the sender in MAIL_FROM; without both, nothing
- * is sent and every caller is told so plainly rather than being allowed to
- * report success. An alert that silently does not arrive is worse than one
- * that was never offered.
+ * One provider, Resend, because it is a single POST and needs no SDK.
+ *
+ * Only RESEND_API_KEY is required. MAIL_FROM is optional and defaults to the
+ * sender Resend gives every account, which works with no domain and no DNS
+ * records but will only deliver to the address that owns the Resend account.
+ * For one person watching their own wishlist that is exactly right, and it
+ * takes the setup down from "verify a domain" to "paste one key". Set
+ * MAIL_FROM to an address on your own verified domain to mail anyone else.
+ *
+ * Without the key nothing is sent and every caller is told so plainly rather
+ * than being allowed to report success. An alert that silently does not
+ * arrive is worse than one that was never offered.
  */
 
 /** Overridable so the flow can be exercised end to end against a stub. */
 const endpoint = () => process.env.RESEND_ENDPOINT || 'https://api.resend.com/emails';
 
-export const mailConfigured = () =>
-  Boolean(process.env.RESEND_API_KEY && process.env.MAIL_FROM);
+/** Resend's own sender, usable immediately and without a domain. */
+const DEFAULT_FROM = 'onboarding@resend.dev';
+
+export const mailFrom = () => process.env.MAIL_FROM || DEFAULT_FROM;
+
+export const mailConfigured = () => Boolean(process.env.RESEND_API_KEY);
 
 /** Where confirmation and unsubscribe links point. */
 export const siteOrigin = () =>
@@ -32,7 +43,7 @@ export async function sendMail({ to, subject, text, html }) {
         authorization: `Bearer ${process.env.RESEND_API_KEY}`,
         'content-type': 'application/json',
       },
-      body: JSON.stringify({ from: process.env.MAIL_FROM, to: [to], subject, text, html }),
+      body: JSON.stringify({ from: mailFrom(), to: [to], subject, text, html }),
     });
     if (!response.ok) {
       return { sent: false, reason: `provider ${response.status}` };

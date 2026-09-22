@@ -1,29 +1,42 @@
 /**
- * "Email me when this gets cheaper."
+ * "Tell me when this gets cheaper."
  *
  * The wishlist itself never leaves the phone — it is localStorage and nothing
- * more. An email alert cannot work that way, so this is the one piece of the
- * app that keeps something server-side: an address, the games it watches, and
- * the price each was at when it was added. Nothing else. No name, no history,
- * no analytics.
+ * more. An alert cannot work that way, so this is the one piece of the app
+ * that keeps something server-side: a way to reach you, the games being
+ * watched, and the price each was at when it was added. Nothing else. No
+ * name, no history, no analytics.
  *
- * Confirmation is required before a single message is sent, because anyone can
- * type any address into a public form, and the person who owns that address
- * never asked us for anything. Every alert carries a one-click unsubscribe
- * that needs no password and no return visit.
+ * Two ways to be reached, and a record can hold either or both:
+ *
+ *   - A push notification to this phone. Nothing to sign up for, so this is
+ *     the one that works the moment the site is deployed.
+ *   - An email. Better if you want it somewhere other than your phone, but it
+ *     needs a sending account to exist first, so it stays hidden until one is
+ *     configured rather than offering something that cannot be delivered.
+ *
+ * An address is confirmed before a single message goes to it, because anyone
+ * can type anyone's address into a public form, and the person who owns that
+ * address never asked us for anything. A push subscription needs no such step:
+ * the browser already asked, and the phone can revoke it at any time. Both
+ * carry a one-click way out that needs no password and no return visit.
  *
  * The nightly price job already reads every game's price. Alerts ride along on
  * that pass rather than adding a second one.
+ *
+ * Records are keyed by their own token rather than by address, because a
+ * push-only subscriber has no address to be keyed by.
  */
 
 import { loadBlob, saveBlob } from './history.mjs';
 import { ALERTS_KEY } from './keys.mjs';
 import { mailConfigured, sendMail, siteOrigin, wrap } from './mail.mjs';
+import { publicKey as pushPublicKey, pushConfigured, sendPush } from './push.mjs';
 
 /** A personal app, but a public form: both caps are here to bound abuse. */
 const MAX_SUBSCRIBERS = 200;
 const MAX_GAMES_EACH = 200;
-/** Don't mail about the same game twice in a week of a rolling sale. */
+/** Don't tell you about the same game twice during one rolling sale. */
 const QUIET_DAYS = 5;
 
 const DAY_MS = 24 * 60 * 60 * 1000;
@@ -39,8 +52,36 @@ const newToken = () => `${crypto.randomUUID()}${crypto.randomUUID()}`.replace(/-
 const load = async () => (await loadBlob(ALERTS_KEY)) ?? {};
 const save = (all) => saveBlob(ALERTS_KEY, all);
 
-const findByToken = (all, token) =>
-  token ? Object.entries(all).find(([, row]) => row.token === token) : undefined;
+/** Records are keyed by token, so this is a lookup rather than a scan. */
+const byToken = (all, token) => (token && all[token] ? all[token] : null);
+
+const byEmail = (all, email) =>
+  Object.values(all).find((row) => row.email === email) ?? null;
+
+/** A fresh record, reachable by nothing until a channel is added to it. */
+const blank = (token) => ({
+  token,
+  createdAt: new Date().toISOString(),
+  email: null,
+  emailConfirmed: false,
+  push: null,
+  minDiscount: 20,
+  region: 'US',
+  games: {},
+});
+
+/** What the browser is told about its own subscription. */
+const view = (row) => ({
+  ok: true,
+  token: row.token,
+  email: row.email,
+  emailConfirmed: Boolean(row.emailConfirmed),
+  pushEnabled: Boolean(row.push),
+  // Kept for the callers written before push existed.
+  confirmed: Boolean(row.emailConfirmed),
+  watching: Object.keys(row.games ?? {}).length,
+  minDiscount: row.minDiscount ?? 20,
+});
 
 const money = (cents, currency = 'USD') =>
   new Intl.NumberFormat('en-US', { style: 'currency', currency }).format(cents / 100);
@@ -50,13 +91,12 @@ const money = (cents, currency = 'USD') =>
  * ------------------------------------------------------------------ */
 
 /**
- * Creates or updates a subscription and returns a token the browser keeps, so
- * a later wishlist change can be synced without asking for the address again.
+ * Adds an email address to a record, creating one if this browser has none.
  *
  * An address that is already confirmed is not mailed again just for adding a
  * game; only a new or unconfirmed one gets the confirmation note.
  */
-export async function subscribe({ email, games = [], minDiscount = 10, region = 'US' }) {
+export async function subscribe({ token, email, games = [], minDiscount, region = 'US' }) {
   if (!looksLikeEmail(email)) return { ok: false, error: 'That does not look like an email address.' };
   if (!mailConfigured()) {
     return {
@@ -67,36 +107,88 @@ export async function subscribe({ email, games = [], minDiscount = 10, region = 
   }
 
   const all = await load();
-  const key = normaliseEmail(email);
-  const existing = all[key];
+  const address = normaliseEmail(email);
 
-  if (!existing && Object.keys(all).length >= MAX_SUBSCRIBERS) {
+  // Three ways in: this browser's own record, a record that already holds the
+  // address, or a new one. Finding the address first means signing up twice
+  // from two devices keeps one subscription rather than making two.
+  const row = byToken(all, token) ?? byEmail(all, address) ?? blank(newToken());
+
+  if (!all[row.token] && Object.keys(all).length >= MAX_SUBSCRIBERS) {
     return { ok: false, error: 'This site is at its limit for alert sign-ups.' };
   }
 
-  const row = existing ?? {
-    email: key,
-    token: newToken(),
-    confirmed: false,
-    createdAt: new Date().toISOString(),
-    games: {},
-  };
-
-  row.minDiscount = Math.min(Math.max(Number(minDiscount) || 0, 0), 90);
+  // Changing the address means confirming the new one.
+  if (row.email !== address) {
+    row.email = address;
+    row.emailConfirmed = false;
+  }
+  if (minDiscount !== undefined) row.minDiscount = clampDiscount(minDiscount);
   row.region = String(region || 'US').toUpperCase().slice(0, 2);
   row.games = mergeGames(row.games, games);
 
-  all[key] = row;
+  all[row.token] = row;
   await save(all);
 
-  if (!row.confirmed) {
+  if (!row.emailConfirmed) {
     const sent = await sendConfirmation(row);
     if (!sent.sent) return { ok: false, error: `Could not send the confirmation email (${sent.reason}).` };
-    return { ok: true, token: row.token, confirmed: false, watching: Object.keys(row.games).length };
+  }
+  return view(row);
+}
+
+/**
+ * Registers this phone for push, creating a record if there is not one yet.
+ *
+ * No confirmation step: the browser's own permission prompt already asked,
+ * and it can be taken away from the phone at any time without asking us.
+ */
+export async function subscribePush({ token, subscription, games = [], minDiscount, region = 'US' }) {
+  if (!pushConfigured()) {
+    return { ok: false, error: 'Push is not switched on for this site.', code: 'not-configured' };
+  }
+  if (!subscription?.endpoint || !subscription?.keys?.p256dh || !subscription?.keys?.auth) {
+    return { ok: false, error: 'That subscription is missing the keys a push needs.' };
   }
 
-  return { ok: true, token: row.token, confirmed: true, watching: Object.keys(row.games).length };
+  const all = await load();
+  const row = byToken(all, token) ?? blank(newToken());
+
+  if (!all[row.token] && Object.keys(all).length >= MAX_SUBSCRIBERS) {
+    return { ok: false, error: 'This site is at its limit for alert sign-ups.' };
+  }
+
+  row.push = {
+    endpoint: String(subscription.endpoint).slice(0, 700),
+    keys: {
+      p256dh: String(subscription.keys.p256dh).slice(0, 200),
+      auth: String(subscription.keys.auth).slice(0, 100),
+    },
+  };
+  if (minDiscount !== undefined) row.minDiscount = clampDiscount(minDiscount);
+  row.region = String(region || 'US').toUpperCase().slice(0, 2);
+  row.games = mergeGames(row.games, games);
+
+  all[row.token] = row;
+  await save(all);
+  return view(row);
 }
+
+/** Turns push off for this phone without touching an email on the same record. */
+export async function unsubscribePush(token) {
+  const all = await load();
+  const row = byToken(all, token);
+  if (!row) return { ok: false };
+
+  row.push = null;
+  // A record nobody can be reached through is just stored data; drop it.
+  if (!row.email) delete all[token];
+  else all[token] = row;
+  await save(all);
+  return { ok: true };
+}
+
+const clampDiscount = (value) => Math.min(Math.max(Number(value) || 0, 0), 90);
 
 /**
  * Replaces the watched set, keeping the recorded baseline for games that were
@@ -115,7 +207,7 @@ function mergeGames(current = {}, incoming = []) {
       lastSentAt: null,
       lastSentFinal: null,
     };
-    // A renamed catalog entry should still read correctly in the mail.
+    // A renamed catalog entry should still read correctly in the alert.
     if (entry?.title) next[id].title = String(entry.title).slice(0, 200);
   }
   return next;
@@ -124,56 +216,41 @@ function mergeGames(current = {}, incoming = []) {
 /** Syncs the watched set for a browser that already holds a token. */
 export async function syncWatchlist({ token, games = [], minDiscount, region }) {
   const all = await load();
-  const found = findByToken(all, token);
-  if (!found) return { ok: false, error: 'That alert link is no longer active.' };
+  const row = byToken(all, token);
+  if (!row) return { ok: false, error: 'That alert link is no longer active.' };
 
-  const [key, row] = found;
   row.games = mergeGames(row.games, games);
-  if (minDiscount !== undefined) row.minDiscount = Math.min(Math.max(Number(minDiscount) || 0, 0), 90);
+  if (minDiscount !== undefined) row.minDiscount = clampDiscount(minDiscount);
   if (region) row.region = String(region).toUpperCase().slice(0, 2);
-  all[key] = row;
+  all[token] = row;
   await save(all);
-
-  return {
-    ok: true,
-    token: row.token,
-    confirmed: Boolean(row.confirmed),
-    watching: Object.keys(row.games).length,
-    minDiscount: row.minDiscount,
-  };
+  return view(row);
 }
 
 export async function statusFor(token) {
-  const found = findByToken(await load(), token);
-  if (!found) return { ok: false };
-  const [, row] = found;
-  return {
-    ok: true,
-    email: row.email,
-    confirmed: Boolean(row.confirmed),
-    watching: Object.keys(row.games ?? {}).length,
-    minDiscount: row.minDiscount ?? 10,
-  };
+  const row = byToken(await load(), token);
+  return row ? view(row) : { ok: false };
 }
 
 export async function confirm(token) {
   const all = await load();
-  const found = findByToken(all, token);
-  if (!found) return { ok: false };
-  const [key, row] = found;
-  row.confirmed = true;
+  const row = byToken(all, token);
+  if (!row?.email) return { ok: false };
+
+  row.emailConfirmed = true;
   row.confirmedAt = new Date().toISOString();
-  all[key] = row;
+  all[token] = row;
   await save(all);
   return { ok: true, email: row.email };
 }
 
+/** The unsubscribe link in an email: stops everything and deletes the record. */
 export async function unsubscribe(token) {
   const all = await load();
-  const found = findByToken(all, token);
-  if (!found) return { ok: false };
-  const [key, row] = found;
-  delete all[key];
+  const row = byToken(all, token);
+  if (!row) return { ok: false };
+
+  delete all[token];
   await save(all);
   return { ok: true, email: row.email };
 }
@@ -239,6 +316,37 @@ function sendDigest(row, drops) {
   });
 }
 
+/**
+ * The same news, as a notification.
+ *
+ * A phone notification is one line read at a glance, so it says the thing
+ * itself — what it costs now and what that saves — rather than a subject line
+ * that has to be opened to mean anything. Tapping it opens the wishlist.
+ */
+function sendDropPush(row, drops) {
+  const top = drops[0];
+  const title =
+    drops.length === 1
+      ? `${top.title} is ${top.discountPercent}% off`
+      : `${drops.length} wishlist games are cheaper`;
+
+  const body =
+    drops.length === 1
+      ? `${money(top.now, top.currency)}, down from ${money(top.was, top.currency)}. You save ${money(top.was - top.now, top.currency)}.`
+      : drops
+          .slice(0, 3)
+          .map((drop) => `${drop.title} ${money(drop.now, drop.currency)}`)
+          .join(' · ');
+
+  return sendPush(row.push, {
+    title,
+    body,
+    // Replaces last night's notification rather than stacking another one up.
+    tag: 'price-drop',
+    url: '/?wishlist=1',
+  });
+}
+
 const escapeHtml = (value) =>
   String(value).replace(/[&<>"]/g, (ch) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' })[ch]);
 
@@ -291,44 +399,67 @@ function evaluate(watch, price, minDiscount, now) {
  * just read, so this adds no store traffic of its own.
  */
 export async function runAlerts(pricesById, now = Date.now()) {
-  if (!mailConfigured()) return { skipped: 'mail-not-configured' };
+  if (!mailConfigured() && !pushConfigured()) return { skipped: 'no-channel-configured' };
 
   const all = await load();
-  let mailed = 0;
+  let notified = 0;
   let drops = 0;
   let changed = false;
 
-  for (const [key, row] of Object.entries(all)) {
-    if (!row?.confirmed) continue;
+  for (const [token, row] of Object.entries(all)) {
+    const canMail = Boolean(row?.email && row.emailConfirmed && mailConfigured());
+    const canPush = Boolean(row?.push && pushConfigured());
+    if (!canMail && !canPush) continue;
 
     const found = [];
     for (const [id, watch] of Object.entries(row.games ?? {})) {
-      const drop = evaluate(watch, pricesById.get(id), row.minDiscount ?? 10, now);
+      const drop = evaluate(watch, pricesById.get(id), row.minDiscount ?? 20, now);
+      // evaluate() records the baseline on first sighting, so the store has
+      // changed whether or not anything is worth sending.
       changed = true;
       if (drop) found.push({ ...drop, id });
     }
     if (found.length === 0) continue;
 
     found.sort((a, b) => b.discountPercent - a.discountPercent);
-    const result = await sendDigest(row, found);
-    if (!result.sent) {
-      console.error(`Alert to ${key} failed: ${result.reason}`);
-      continue;
+
+    // Both channels are tried; either one arriving counts. A phone that has
+    // gone away is dropped rather than retried every night from here on.
+    let delivered = false;
+
+    if (canPush) {
+      const result = await sendDropPush(row, found);
+      if (result.sent) delivered = true;
+      else if (result.gone) {
+        row.push = null;
+        if (!row.email) delete all[token];
+      } else {
+        console.error(`Push for ${token.slice(0, 8)} failed: ${result.reason}`);
+      }
     }
 
-    // Only a delivered message moves the baseline, so a provider outage means
-    // a late alert rather than a lost one.
+    if (canMail) {
+      const result = await sendDigest(row, found);
+      if (result.sent) delivered = true;
+      else console.error(`Email for ${token.slice(0, 8)} failed: ${result.reason}`);
+    }
+
+    // Only a delivered alert moves the baseline, so an outage at one of the
+    // push services means a late notification rather than a lost one.
+    if (!delivered) continue;
+
     const stamp = new Date(now).toISOString();
     for (const drop of found) {
+      if (!row.games[drop.id]) continue;
       row.games[drop.id].lastSentAt = stamp;
       row.games[drop.id].lastSentFinal = drop.now;
     }
-    mailed += 1;
+    notified += 1;
     drops += found.length;
   }
 
   if (changed) await save(all);
-  return { mailed, drops, subscribers: Object.keys(all).length };
+  return { notified, drops, subscribers: Object.keys(all).length };
 }
 
 /* ------------------------------------------------------------------ *
@@ -375,12 +506,25 @@ export async function handleAlertsRequest({ method, url, body }) {
   const statusToken = url.searchParams.get('status');
   if (statusToken) return json(200, await statusFor(statusToken));
 
-  if (method === 'GET') return json(200, { configured: mailConfigured() });
+  if (method === 'GET') {
+    return json(200, {
+      configured: mailConfigured(),
+      email: mailConfigured(),
+      push: pushConfigured(),
+      // The browser needs this to subscribe. It is public by design.
+      vapidPublicKey: pushPublicKey(),
+    });
+  }
 
   if (method !== 'POST') return json(405, { ok: false, error: 'Method not allowed' });
 
   const action = body?.action;
   if (action === 'sync') return json(200, await syncWatchlist(body));
+  if (action === 'subscribe-push') {
+    const result = await subscribePush(body ?? {});
+    return json(result.ok ? 200 : 400, result);
+  }
+  if (action === 'unsubscribe-push') return json(200, await unsubscribePush(body?.token));
   if (action === 'unsubscribe') {
     const result = await unsubscribe(body?.token);
     return json(200, { ok: result.ok });
