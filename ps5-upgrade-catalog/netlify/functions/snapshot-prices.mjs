@@ -1,0 +1,119 @@
+import catalog from '../../src/games.json' with { type: 'json' };
+import { CHUNK_SIZE, REVIEW_KEY_PREFIX, mapWithConcurrency } from '../../api/steam.mjs';
+import { loadPsnPrice } from '../../api/psn.mjs';
+import { recordAndSummarize, saveBlob } from '../../api/history.mjs';
+import { loadReviewSignal } from '../../api/reviews.mjs';
+import { sweepForReleases } from '../../api/upcoming.mjs';
+import { replayCalibration } from '../../api/backtest.mjs';
+import { loadChunk } from '../../api/history.mjs';
+import { BACKTEST_KEY } from '../../api/keys.mjs';
+import { runAlerts } from '../../api/alerts.mjs';
+
+/**
+ * Nightly maintenance.
+ *
+ * Prices: visits record history too, but only for chunks somebody loaded.
+ * This makes sure every game gets a daily PlayStation Store reading, which is
+ * what the drop predictor learns from.
+ *
+ * Ratings: player scores and the pros and cons drawn from reviews ship baked
+ * into the catalog. Refreshing them here keeps them current between deploys.
+ *
+ * Calendar: a slice of the store's concept IDs is swept each night, so newly
+ * announced games reach the release calendar without a deploy.
+ *
+ * Alerts: the prices read above are exactly what a price-drop notification
+ * needs, so subscriptions are checked here rather than in a second pass over
+ * the store. Push goes to phones; email goes out too when it is configured.
+ *
+ * Scheduled functions only run on published deploys.
+ */
+export default async () => {
+  const regions = (process.env.HISTORY_REGIONS || 'US')
+    .split(',')
+    .map((region) => region.trim().toUpperCase())
+    .filter(Boolean);
+
+  const chunkCount = Math.ceil(catalog.length / CHUNK_SIZE);
+  // Alerts go out for the first region only: a subscriber has one currency.
+  const pricesForAlerts = new Map();
+
+  for (const countryCode of regions) {
+    for (let chunk = 0; chunk < chunkCount; chunk += 1) {
+      const slice = catalog.slice(chunk * CHUNK_SIZE, (chunk + 1) * CHUNK_SIZE);
+      const prices = await mapWithConcurrency(slice, 3, (game) =>
+        loadPsnPrice(game.psnStorePath, countryCode),
+      );
+      const games = slice.map((game, index) => ({
+        id: game.id,
+        title: game.title,
+        matched: Boolean(prices[index]),
+        price: prices[index] ?? null,
+      }));
+      await recordAndSummarize(chunk, countryCode, games);
+      if (countryCode === regions[0]) {
+        for (const game of games) pricesForAlerts.set(game.id, game.price);
+      }
+    }
+    console.log(`Recorded prices for ${catalog.length} games in ${countryCode}`);
+  }
+
+  // Ratings are region-independent, so they only need one pass.
+  const asOf = new Date().toISOString().slice(0, 10);
+  for (let chunk = 0; chunk < chunkCount; chunk += 1) {
+    const slice = catalog.slice(chunk * CHUNK_SIZE, (chunk + 1) * CHUNK_SIZE);
+    const entries = {};
+    for (const game of slice) {
+      if (!game.steamAppId) continue;
+      const signal = await loadReviewSignal(game.steamAppId);
+      if (!signal) continue;
+      entries[game.id] = {
+        critic: game.ratings?.critic ?? null,
+        user: signal.userScore,
+        pros: signal.pros,
+        cons: signal.cons,
+        asOf,
+      };
+    }
+    await saveBlob(`${REVIEW_KEY_PREFIX}${chunk}`, entries);
+  }
+  console.log('Refreshed review ratings');
+
+  // Score the predictor against what actually happened. Cheap, and the only
+  // thing that will ever say whether the heuristic is worth keeping.
+  try {
+    const histories = {};
+    for (let chunk = 0; chunk < chunkCount; chunk += 1) {
+      histories[`chunk-${chunk}`] = await loadChunk(chunk, regions[0] ?? 'US');
+    }
+    const calibration = replayCalibration(histories);
+    await saveBlob(BACKTEST_KEY, calibration);
+    console.log(
+      calibration.ready
+        ? `Predictor scored: ${calibration.samples} moments, Brier ${calibration.brier} vs ${calibration.baseRateBrier} for the base rate`
+        : `Predictor not scoreable yet: ${calibration.samples} moments so far`,
+    );
+  } catch (error) {
+    console.error('Backtest failed:', error);
+  }
+
+  try {
+    const alerts = await runAlerts(pricesForAlerts);
+    console.log(
+      alerts.skipped
+        ? `Price alerts skipped: ${alerts.skipped}`
+        : `Price alerts: ${alerts.notified} sent covering ${alerts.drops} drops, ${alerts.subscribers} subscribed`,
+    );
+  } catch (error) {
+    console.error('Price alerts failed:', error);
+  }
+
+  const sweep = await sweepForReleases();
+  console.log(
+    `Swept concepts ${sweep.from}-${sweep.to}: ${sweep.discovered} upcoming found, ` +
+      `${sweep.seeds} seeds tracked, ${sweep.calendar} on the calendar, ` +
+      `${sweep.recent} just out, ${sweep.mirror} in the store mirror`,
+  );
+};
+
+export const config = { schedule: '@daily' };
