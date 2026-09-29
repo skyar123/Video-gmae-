@@ -153,12 +153,23 @@ function toPrice(entry) {
   };
 }
 
+/**
+ * Whether a cached price has been overtaken by its own sale ending.
+ *
+ * The store tells us when a discount stops. Holding that price for the rest of
+ * the hour after that moment has passed is knowingly showing a deal that is
+ * over, which is the one kind of staleness worth spending a fetch to avoid.
+ */
+const saleHasEnded = (value, now) =>
+  Boolean(value?.saleEndsAt) && Date.parse(value.saleEndsAt) <= now;
+
 /** Current PlayStation Store price for one store path, cached per region. */
 export async function loadPsnPrice(storePath, countryCode = 'US') {
   if (!storePath) return null;
   const key = `${countryCode}:${storePath}`;
   const hit = cache.get(key);
-  if (hit && Date.now() - hit.storedAt < CACHE_TTL_MS) return hit.value;
+  const now = Date.now();
+  if (hit && now - hit.storedAt < CACHE_TTL_MS && !saleHasEnded(hit.value, now)) return hit.value;
   if (inFlight.has(key)) return inFlight.get(key);
 
   const pending = fetchPricePayload(storePath, countryCode)

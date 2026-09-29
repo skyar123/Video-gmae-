@@ -4,7 +4,9 @@ import { feedDiagnostics, loadGameNews, loadNews } from '../../api/news.mjs';
 export default async function handler(request) {
   const params = new URL(request.url).searchParams;
   const game = params.get('game');
-  const base = game ? await loadGameNews(game) : await loadNews();
+  const base = game
+    ? await loadGameNews(game, params.get('perspective'))
+    : await loadNews();
   const payload = params.get('debug') === '1' ? { ...base, feeds: feedDiagnostics() } : base;
   return new Response(JSON.stringify(payload), {
     headers: {

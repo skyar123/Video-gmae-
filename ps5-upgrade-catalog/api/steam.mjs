@@ -484,4 +484,14 @@ export async function handleGamesRequest(url, catalog) {
 }
 
 /** Sale data goes stale, artwork does not; half an hour splits the difference. */
-export const CACHE_HEADER = 'public, max-age=300, s-maxage=1800, stale-while-revalidate=86400';
+/**
+ * Prices are the fastest-moving thing here, so the stale grace is short.
+ *
+ * This used to end in `stale-while-revalidate=86400`, which let the CDN keep
+ * serving a day-old price while it refreshed behind the scenes. That is fine
+ * for a description and wrong for a sale: it could show a discount that had
+ * already ended, or miss one that had started, for up to twenty-four hours.
+ * Ten minutes of CDN freshness with two minutes of grace still collapses a
+ * burst of visits into one upstream read, without ever being a day out.
+ */
+export const CACHE_HEADER = 'public, max-age=120, s-maxage=600, stale-while-revalidate=120';

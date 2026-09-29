@@ -11,6 +11,7 @@ import {
   Baby,
   BadgePercent,
   Bell,
+  BellRing,
   CalendarDays,
   Check,
   ChevronDown,
@@ -232,6 +233,17 @@ const HIDDEN_KEY = 'hidden';
 const storeKey = (game) => `store:${game.id}`;
 const SAVED_RELEASES_KEY = 'savedReleases';
 const WISHLIST_PRICES_KEY = 'wishlistPrices';
+const DEAL_ALERTS_KEY = 'dealAlerts';
+
+/** Games you are waiting on a price for, which is not the same as wanting them. */
+function readDealAlerts() {
+  try {
+    const raw = localStorage.getItem(DEAL_ALERTS_KEY);
+    return new Set(raw ? JSON.parse(raw) : []);
+  } catch {
+    return new Set();
+  }
+}
 
 function readFavouriteCreators() {
   try {
@@ -332,7 +344,11 @@ function useLiveData(region) {
       for (let chunk = 0; chunk < CHUNK_COUNT; chunk += 1) {
         if (runId.current !== run) return;
         try {
-          const response = await fetch(`/api/games?chunk=${chunk}&cc=${region}`, {
+          // `cache: 'reload'` only bypasses the browser's own cache. The CDN
+          // in front of the function would still answer from its copy, so a
+          // deliberate refresh also has to look like a URL it has not seen.
+          const bust = force ? `&fresh=${Date.now()}` : '';
+          const response = await fetch(`/api/games?chunk=${chunk}&cc=${region}${bust}`, {
             cache: force ? 'reload' : 'default',
           });
           if (!response.ok) throw new Error(`request failed: ${response.status}`);
@@ -977,6 +993,8 @@ function GameModal({
   wishlisted,
   owned,
   reason,
+  dealWatched,
+  onToggleDealAlert,
   onToggleOwned,
   favouriteCreators,
   onToggleFavouriteCreator,
@@ -1108,6 +1126,7 @@ function GameModal({
           <AgeDetail ageRating={game.ageRating} />
           <ProsAndCons ratings={ratings} />
           <PricePanel game={game} live={live} />
+          <DealAlertRow watching={dealWatched} live={live} onToggle={onToggleDealAlert} />
           <PredictionPanel live={live} />
 
           <div className="mt-6">
@@ -1328,6 +1347,48 @@ function PredictionPanel({ live }) {
         </p>
       )}
     </div>
+  );
+}
+
+/**
+ * "Tell me when this goes on sale", per game.
+ *
+ * Separate from the wishlist on purpose. A wishlist is a list of things you
+ * want; this is a list of things you are waiting on a price for, and they are
+ * not the same list. Something can be worth an alert without being something
+ * you have decided to buy, and plenty of wishlisted games you already own the
+ * disc of.
+ */
+function DealAlertRow({ watching, live, onToggle }) {
+  const onSale = (live?.price?.discountPercent ?? 0) > 0;
+
+  return (
+    <button
+      type="button"
+      onClick={onToggle}
+      aria-pressed={watching}
+      className={`mt-3 flex w-full items-center gap-2 rounded-xl px-3 py-2.5 text-left text-sm font-medium ring-1 ring-inset transition-transform duration-200 ease-spring active:scale-[0.99] ${
+        watching
+          ? 'bg-emerald-50 text-emerald-800 ring-emerald-200'
+          : 'bg-slate-50 text-slate-700 ring-slate-200 hover:bg-slate-100'
+      }`}
+    >
+      {watching ? (
+        <BellRing className="h-4 w-4 shrink-0" />
+      ) : (
+        <Bell className="h-4 w-4 shrink-0" />
+      )}
+      <span className="flex-1">
+        {watching
+          ? onSale
+            ? 'Watching this. You will hear when it drops further.'
+            : 'Watching this. You will hear when a deal starts.'
+          : onSale
+            ? 'Tell me if this gets cheaper still'
+            : 'Tell me when this goes on sale'}
+      </span>
+      {watching && <Check className="h-4 w-4 shrink-0" />}
+    </button>
   );
 }
 
@@ -1596,6 +1657,31 @@ const reviewSearchLink = (title) =>
 
 const creatorsByHandle = Object.fromEntries(creatorsData.map((creator) => [creator.handle, creator]));
 
+/**
+ * Whose take on a game you want.
+ *
+ * Every creator this app tracks is a woman, trans, or non-binary, so the
+ * coverage list already reads from outside the default games-press voice.
+ * These narrow it further when you want a specific vantage point, and they
+ * match on the identity each creator states for themselves rather than on
+ * anything inferred.
+ */
+const CREATOR_LENSES = [
+  { value: 'any', label: 'Anyone', match: () => true },
+  {
+    value: 'women',
+    label: 'Women',
+    match: (creator) => /woman|she\/they/i.test(creator.identity ?? ''),
+  },
+  {
+    value: 'trans',
+    label: 'Trans & non-binary',
+    match: (creator) => /trans|non-binary|transmasc/i.test(creator.identity ?? ''),
+  },
+];
+
+const lensFor = (value) => CREATOR_LENSES.find((lens) => lens.value === value) ?? CREATOR_LENSES[0];
+
 /** A real video, so the link lands on the video rather than a profile page. */
 const videoLink = (videoId) => `https://www.youtube.com/watch?v=${videoId}`;
 
@@ -1608,21 +1694,32 @@ const videoLink = (videoId) => `https://www.youtube.com/watch?v=${videoId}`;
  */
 function WatchPanel({ game, favourites, onToggleFavourite }) {
   const [showAll, setShowAll] = useState(false);
+  const [lensValue, setLensValue] = useState('any');
+  const lens = lensFor(lensValue);
 
   const covered = useMemo(() => {
     const entries = (game.coverage ?? [])
       .map((entry) => ({ ...entry, creator: creatorsByHandle[entry.handle] }))
-      .filter((entry) => entry.creator);
+      .filter((entry) => entry.creator && lens.match(entry.creator));
     return entries.sort(
       (a, b) =>
         Number(favourites.has(b.handle)) - Number(favourites.has(a.handle)) || b.videos - a.videos,
     );
-  }, [game, favourites]);
+  }, [game, favourites, lens]);
 
+  // The searchable list follows the same lens, so picking one narrows both
+  // what has been found and what is offered to look for.
   const uncovered = useMemo(
-    () => creatorsData.filter((creator) => !covered.some((entry) => entry.handle === creator.handle)),
-    [covered],
+    () =>
+      creatorsData
+        .filter((creator) => lens.match(creator))
+        .filter((creator) => !covered.some((entry) => entry.handle === creator.handle)),
+    [covered, lens],
   );
+
+  // How many videos the lens is hiding, so narrowing never looks like nothing
+  // exists when in fact it was filtered out.
+  const totalCovered = (game.coverage ?? []).filter((entry) => creatorsByHandle[entry.handle]).length;
 
   return (
     <div className="mt-6 border-t border-slate-100 pt-5">
@@ -1651,11 +1748,31 @@ function WatchPanel({ game, favourites, onToggleFavourite }) {
         </a>
       </div>
 
+      <div className="no-scrollbar mb-3 flex gap-1.5 overflow-x-auto pb-0.5">
+        {CREATOR_LENSES.map((entry) => (
+          <button
+            key={entry.value}
+            type="button"
+            onClick={() => setLensValue(entry.value)}
+            aria-pressed={lensValue === entry.value}
+            className={`shrink-0 rounded-full px-2.5 py-1 text-xs font-medium transition-all duration-200 ease-spring active:scale-95 ${
+              lensValue === entry.value
+                ? 'bg-violet-600 text-white'
+                : 'bg-slate-100 text-slate-600 hover:bg-slate-200'
+            }`}
+          >
+            {entry.label}
+          </button>
+        ))}
+      </div>
+
       {covered.length > 0 ? (
         <>
           <p className="mb-2 text-xs text-slate-500">
             {covered.length === 1 ? 'One creator has' : `${covered.length} creators have`} played
             this. Each link opens their actual video.
+            {covered.length < totalCovered &&
+              ` ${totalCovered - covered.length} more hidden by this lens.`}
           </p>
           <ul className="space-y-1.5">
             {covered.map((entry) => (
@@ -1701,7 +1818,9 @@ function WatchPanel({ game, favourites, onToggleFavourite }) {
         </>
       ) : (
         <p className="mb-2 text-xs text-slate-500">
-          None of the tracked creators has a video for this one.
+          {totalCovered > 0
+            ? `${totalCovered} tracked ${totalCovered === 1 ? 'creator has' : 'creators have'} played this, but none matching this lens.`
+            : 'None of the tracked creators has a video for this one.'}
         </p>
       )}
 
@@ -1710,7 +1829,9 @@ function WatchPanel({ game, favourites, onToggleFavourite }) {
         onClick={() => setShowAll((open) => !open)}
         className="mt-3 text-xs font-medium text-indigo-600 hover:underline"
       >
-        {showAll ? 'Hide' : `Search the other ${uncovered.length} channels`}
+        {showAll
+          ? 'Hide'
+          : `Search the other ${uncovered.length} ${uncovered.length === 1 ? 'channel' : 'channels'}`}
       </button>
 
       {showAll && (
@@ -1735,7 +1856,8 @@ function WatchPanel({ game, favourites, onToggleFavourite }) {
       <p className="mt-3 text-xs text-slate-400">
         Coverage comes from indexing every tracked creator's uploads and matching them to this
         title, so these are videos that exist rather than a guess. Channels with no match are
-        searchable above in case they posted since.
+        searchable above in case they posted since. Every creator here is a woman, trans or
+        non-binary, and the lens matches what each states for themselves.
       </p>
     </div>
   );
@@ -1777,12 +1899,19 @@ function similarGames(game, pool, limit = 4) {
  */
 function GameNews({ title }) {
   const [state, setState] = useState({ status: 'loading', items: [] });
+  // Scoped by masthead, which is the only honest way to do it: each of these
+  // sites is an LGBTQ+ outlet or a worker-owned one founded by queer writers.
+  // There is no filter here claiming to find pieces written by a woman, since
+  // a feed does not carry that and guessing from a byline is guessing at
+  // someone's identity. Women critics are surfaced in the list above instead.
+  const [queerOnly, setQueerOnly] = useState(false);
 
   useEffect(() => {
     let live = true;
     // eslint-disable-next-line react/set-state-in-effect
     setState({ status: 'loading', items: [] });
-    fetch(`/api/news?game=${encodeURIComponent(title)}`)
+    const scope = queerOnly ? '&perspective=queer' : '';
+    fetch(`/api/news?game=${encodeURIComponent(title)}${scope}`)
       .then((response) => response.json())
       .then((payload) => {
         if (live) setState({ status: 'ready', items: payload.items ?? [] });
@@ -1793,7 +1922,30 @@ function GameNews({ title }) {
     return () => {
       live = false;
     };
-  }, [title]);
+  }, [title, queerOnly]);
+
+  const toggle = (
+    <div className="mb-3 flex gap-1.5">
+      {[
+        [false, 'All press'],
+        [true, 'Queer & worker-owned'],
+      ].map(([value, label]) => (
+        <button
+          key={String(value)}
+          type="button"
+          onClick={() => setQueerOnly(value)}
+          aria-pressed={queerOnly === value}
+          className={`rounded-full px-2.5 py-1 text-xs font-medium transition-all duration-200 ease-spring active:scale-95 ${
+            queerOnly === value
+              ? 'bg-violet-600 text-white'
+              : 'bg-slate-100 text-slate-600 hover:bg-slate-200'
+          }`}
+        >
+          {label}
+        </button>
+      ))}
+    </div>
+  );
 
   if (state.status === 'loading') {
     return (
@@ -1802,6 +1954,7 @@ function GameNews({ title }) {
           <Newspaper className="h-4 w-4" />
           In the news
         </h3>
+        {toggle}
         <p className="flex items-center gap-2 text-sm text-slate-400">
           <Loader2 className="h-4 w-4 animate-spin" />
           Checking the press...
@@ -1810,14 +1963,20 @@ function GameNews({ title }) {
     );
   }
 
-  if (state.items.length === 0) return null;
-
   return (
     <div className="mt-8 border-t border-slate-100 pt-6">
       <h3 className="mb-3 flex items-center gap-2 text-sm font-bold uppercase tracking-wider text-slate-400">
         <Newspaper className="h-4 w-4" />
         In the news
       </h3>
+      {toggle}
+      {state.items.length === 0 && (
+        <p className="text-sm text-slate-400">
+          {queerOnly
+            ? 'Nothing from the queer or worker-owned press on this one yet.'
+            : 'Nothing in the press on this one right now.'}
+        </p>
+      )}
       <ul className="space-y-1.5">
         {state.items.map((item) => (
           <li key={item.link}>
@@ -2321,7 +2480,7 @@ const ALERT_THRESHOLDS = [
  * The token the server returns is kept here so a later wishlist edit can be
  * synced without asking for the address a second time.
  */
-function useAlerts(wishlist, region) {
+function useAlerts(wishlist, dealAlerts, region) {
   const [token, setToken] = useState(readAlertToken);
   const [state, setState] = useState({
     status: 'loading',
@@ -2336,11 +2495,15 @@ function useAlerts(wishlist, region) {
     minDiscount: 20,
   });
 
-  // Only catalog games get a nightly price reading, so only those can be
-  // watched. Saying otherwise would promise an email that never comes.
+  // Two lists feed this: things you want, and things you asked to be told the
+  // price of. Only catalog games get a nightly price reading, so only those can
+  // be watched at all; saying otherwise would promise an alert that never comes.
   const watchable = useMemo(
-    () => gamesData.filter((game) => wishlist.has(game.id)).map((game) => ({ id: game.id, title: game.title })),
-    [wishlist],
+    () =>
+      gamesData
+        .filter((game) => wishlist.has(game.id) || dealAlerts.has(game.id))
+        .map((game) => ({ id: game.id, title: game.title })),
+    [wishlist, dealAlerts],
   );
 
   // Which channels this site has, and where this browser stands with them.
@@ -3995,6 +4158,7 @@ function Select({ label, value, options, onChange }) {
 export default function App() {
   const [filters, setFilters] = useState(readFiltersFromUrl);
   const [wishlist, setWishlist] = useState(readWishlist);
+  const [dealAlerts, setDealAlerts] = useState(readDealAlerts);
   const [hidden, setHidden] = useState(readHidden);
   const [savedReleases, setSavedReleases] = useState(readSavedReleases);
   const [favouriteCreators, setFavouriteCreators] = useState(readFavouriteCreators);
@@ -4205,6 +4369,20 @@ export default function App() {
     });
   }, []);
 
+  const toggleDealAlert = useCallback((id) => {
+    setDealAlerts((previous) => {
+      const next = new Set(previous);
+      if (next.has(id)) next.delete(id);
+      else next.add(id);
+      try {
+        localStorage.setItem(DEAL_ALERTS_KEY, JSON.stringify([...next]));
+      } catch {
+        // Storage is a convenience here; the in-memory set still works.
+      }
+      return next;
+    });
+  }, []);
+
   // Recomputed only when the library, wishlist or PS5 toggle changes; it never
   // touches live data, so it stays instant while prices are still loading.
   // With nothing owned or wishlisted yet there is no taste to work from, so
@@ -4279,7 +4457,7 @@ export default function App() {
 
   // The wishlist can only be mailed about if the server knows it exists, so
   // this is the one thing the app keeps off the phone, and only once asked.
-  const alerts = useAlerts(wishlist, filters.region);
+  const alerts = useAlerts(wishlist, dealAlerts, filters.region);
 
   // Keeps typing responsive while React re-filters in the background.
   const deferredQuery = useDeferredValue(filters.q);
@@ -4814,7 +4992,7 @@ export default function App() {
 
           {/* The one place the offer makes sense: you have things you want, and
               they are the things an email would be about. */}
-          {wishlist.size > 0 && (
+          {(wishlist.size > 0 || dealAlerts.size > 0) && (
             <button
               type="button"
               onClick={() => setAlertsOpen(true)}
@@ -4834,7 +5012,7 @@ export default function App() {
                   ? `Watching ${alerts.watching === 1 ? '1 game' : `${alerts.watching} games`} for price drops`
                   : alerts.token && alerts.email
                     ? 'Confirm your email to start getting drop alerts'
-                    : `Tell me when ${wishlist.size === 1 ? 'it goes' : 'these go'} on sale`}
+                    : `Tell me when ${alerts.watchable.length === 1 ? 'it goes' : 'these go'} on sale`}
               </span>
               <ChevronRight className="h-4 w-4 shrink-0" />
             </button>
@@ -4924,6 +5102,8 @@ export default function App() {
           wishlisted={wishlist.has(activeGame.id)}
           owned={library.has(activeGame.id)}
           reason={geniusReasons.get(activeGame.id)}
+          dealWatched={dealAlerts.has(activeGame.id)}
+          onToggleDealAlert={() => toggleDealAlert(activeGame.id)}
           onToggleWishlist={() => toggleWishlist(activeGame.id)}
           onToggleOwned={() => toggleOwned(activeGame.id)}
           onClose={() => setActiveGameId(null)}

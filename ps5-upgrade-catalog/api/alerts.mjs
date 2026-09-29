@@ -282,8 +282,10 @@ function sendDigest(row, drops) {
   const stop = `${siteOrigin()}/api/alerts?unsubscribe=${row.token}`;
   const lead =
     drops.length === 1
-      ? `${drops[0].title} is cheaper.`
-      : `${drops.length} games on your wishlist are cheaper.`;
+      ? drops[0].reason === 'deal'
+        ? `${drops[0].title} is on sale again.`
+        : `${drops[0].title} is cheaper.`
+      : `${drops.length} games you watch are on sale.`;
 
   const line = (drop) => {
     const saved = money(drop.was - drop.now, drop.currency);
@@ -328,7 +330,7 @@ function sendDropPush(row, drops) {
   const title =
     drops.length === 1
       ? `${top.title} is ${top.discountPercent}% off`
-      : `${drops.length} wishlist games are cheaper`;
+      : `${drops.length} games you watch are on sale`;
 
   const body =
     drops.length === 1
@@ -355,28 +357,46 @@ const escapeHtml = (value) =>
  * ------------------------------------------------------------------ */
 
 /**
- * Decides whether one watched game is worth an email, and records the baseline
- * the next decision will be measured against.
+ * Decides whether one watched game is worth an alert, and records the state the
+ * next decision will be measured against.
  *
  * A first sighting only sets the baseline: joining while a sale is already on
  * should not fire an alert about a price that was there all along. After that
- * the test is a real drop below both the baseline and whatever was last sent,
- * at or past the discount the reader asked for, and not within the quiet
- * window, so a sale that rolls over night after night is mailed once.
+ * it fires on a new low or on a deal appearing where there was none, at or
+ * past the discount asked for, and never inside the quiet window, so a sale
+ * that rolls over night after night is sent once.
  */
 function evaluate(watch, price, minDiscount, now) {
   if (!price || price.isFree || typeof price.final !== 'number') return null;
+
+  const discount = price.discountPercent ?? 0;
+  const seenDiscount = watch.lastSeenDiscount ?? 0;
 
   const first = watch.basePrice == null;
   if (first) {
     watch.basePrice = price.initial ?? price.final;
     watch.baseFinal = price.final;
+    // Recorded on the first sighting too, so a game added mid-sale does not
+    // read as a sale that "just started" tomorrow night.
+    watch.lastSeenDiscount = discount;
     return null;
   }
 
+  watch.lastSeenDiscount = discount;
+
+  if (discount < minDiscount) return null;
+
   const reference = Math.min(watch.baseFinal ?? watch.basePrice, watch.lastSentFinal ?? Infinity);
-  if (price.final >= reference) return null;
-  if ((price.discountPercent ?? 0) < minDiscount) return null;
+
+  // Two things are worth telling you about. The obvious one is a new low:
+  // cheaper than when you added it and cheaper than the last alert. The other
+  // is a deal appearing at all on something that was at full price, which is
+  // the case a pure price floor misses: a game added during a sale, left to go
+  // back up, and then discounted again lands above the old floor and would
+  // otherwise stay silent forever.
+  const newLow = price.final < reference;
+  const dealJustStarted = seenDiscount === 0 && discount > 0;
+  if (!newLow && !dealJustStarted) return null;
 
   if (watch.lastSentAt && now - new Date(watch.lastSentAt).getTime() < QUIET_DAYS * DAY_MS) {
     return null;
@@ -387,8 +407,11 @@ function evaluate(watch, price, minDiscount, now) {
     was: watch.baseFinal ?? watch.basePrice,
     now: price.final,
     currency: price.currency ?? 'USD',
-    discountPercent: price.discountPercent ?? 0,
+    discountPercent: discount,
     saleEndsAt: price.saleEndsAt ?? null,
+    // Lets the message say "back on sale" rather than "a new low" when that is
+    // what actually happened.
+    reason: newLow ? 'low' : 'deal',
   };
 }
 

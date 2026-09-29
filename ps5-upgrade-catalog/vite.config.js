@@ -81,7 +81,9 @@ function gamesApiPlugin() {
       try {
         const url = new URL(request.url, 'http://localhost');
         const game = url.searchParams.get('game');
-        const payload = game ? await loadGameNews(game) : await loadNews();
+        const payload = game
+          ? await loadGameNews(game, url.searchParams.get('perspective'))
+          : await loadNews();
         response.setHeader('content-type', 'application/json; charset=utf-8');
         response.end(JSON.stringify(payload));
       } catch (error) {

@@ -220,12 +220,58 @@ request reads and writes exactly one blob. Locally it falls back to a gitignored
 Set `HISTORY_REGIONS` (for example `US,GB`) to snapshot more than one region
 nightly. It defaults to `US`.
 
+### Keeping deals current
+
+Prices are the fastest-moving thing here and are cached in three places, so all
+three have to agree that a sale can change at any time:
+
+- The CDN header ends in `stale-while-revalidate=120`, not the day it used to. A
+  day of grace is fine for a description and wrong for a discount: it could show a
+  sale that had already ended for twenty-four hours.
+- A cached price whose own `saleEndsAt` has passed is treated as expired and
+  refetched, rather than held for the rest of its hour while advertising a deal
+  that is over.
+- The in-app refresh adds a cache-busting parameter. `cache: 'reload'` only
+  bypasses the browser's cache; without a URL the CDN has not seen, a deliberate
+  refresh would still be answered from its copy.
+
+## Whose review you get
+
+Every creator the catalog tracks is a woman, trans or non-binary, so the coverage
+list on a game already reads from outside the default games-press voice. Opening a
+game gives two ways to narrow that further:
+
+- **The creator lens** (Anyone / Women / Trans & non-binary) filters both the
+  videos found for this game and the channels offered to search. It matches on the
+  identity each creator states for themselves, and when the lens hides something it
+  says how many, so narrowing never looks like nothing exists.
+- **The press toggle** (All press / Queer & worker-owned) re-runs the per-game
+  article search scoped to LGBTQ+ outlets and the worker-owned sites founded and
+  staffed by queer writers.
+
+The press filter is scoped by masthead, which is the honest way to do it: whether a
+publication is an LGBTQ+ outlet is a fact about the masthead, while who wrote a
+given piece is not something a news feed carries. There is deliberately no filter
+claiming to find reviews "written by a woman", because inferring that from a byline
+means guessing at people's identities. Women critics are surfaced the one place the
+app actually knows the answer, which is the creator list.
+
+Scoping is worth it on quality alone. For Celeste, the general search returns a
+high-school sports page and two local TV bulletins about people named Celeste; the
+queer scope returns Autostraddle on what the game is about and Gayming Magazine on
+Madeline being confirmed trans.
+
 ## Price alerts
 
 The wishlist lives in `localStorage` and nothing else does, so alerts are the one
 feature that needs the server to remember something. What it stores is a way to
 reach you, the ids and titles being watched, and the price each was at when it was
 added. Nothing else.
+
+Two lists feed it, and they are kept apart on purpose. The wishlist is things you
+want. The per-game **"tell me when this goes on sale"** toggle is things you are
+waiting on a price for, which is not the same list: something can be worth an alert
+without being something you have decided to buy.
 
 There are two channels, and one record can hold either or both.
 
@@ -268,12 +314,18 @@ An address is confirmed before anything goes to it, because anyone can type
 anyone's address into a public form. A push subscription needs no such step: the
 browser already asked, and the phone can revoke it without asking us.
 
-Alerts ride on the nightly price pass rather than adding a second one. A game is
-worth telling you about when it is below both the price it was at when you added
-it and the last price you were told about, at or past your chosen discount, and
-not within five days of the last note about it, so a sale that rolls over night
-after night arrives once. Joining while a sale is already running sets the
-baseline and stays quiet, because that price was there before you got here.
+Alerts ride on the nightly price pass rather than adding a second one. Two things
+are worth telling you about, at or past your chosen discount and never inside a
+five-day quiet window:
+
+- **A new low**: cheaper than when you added it and cheaper than the last alert.
+- **A deal appearing** on something that was sitting at full price.
+
+The second case is why a plain price floor is not enough. Add a game during a sale
+at $15, let the sale end and the price return to $30, and a later sale at $20 sits
+above the old floor: a floor-only rule stays silent forever on a game that is
+visibly on sale. Joining while a sale is already running still sets the baseline
+and stays quiet, because that price was there before you got here.
 
 A push endpoint that answers 404 or 410 is a phone that reinstalled the app or
 revoked permission; the record is dropped rather than retried every night.

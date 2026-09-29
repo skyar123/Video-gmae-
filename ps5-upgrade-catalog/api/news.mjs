@@ -239,14 +239,57 @@ const looseMatch = (haystack, needle) => {
   return hits / words.length >= 0.6;
 };
 
-export async function loadGameNews(title) {
-  const key = title.trim().toLowerCase();
-  if (!key) return { items: [], fetchedAt: null };
+/**
+ * Whose coverage to look for.
+ *
+ * "Queer" is scoped by publication, which is the honest way to do it: every
+ * site here is either an LGBTQ+ outlet or a worker-owned one founded and
+ * staffed by queer writers, and that is a fact about the masthead rather than
+ * a guess about who wrote a given piece. There is deliberately no filter that
+ * claims to find reviews "written by a woman" from a headline: authorship is
+ * not something a news feed exposes, and inferring it from a byline would be
+ * guessing at people's identities. Women and trans critics are surfaced the
+ * one place the app actually knows the answer, which is the creator list.
+ */
+const PERSPECTIVE_SITES = {
+  queer: [
+    'gaymingmag.com',
+    'autostraddle.com',
+    'them.us',
+    'aftermath.site',
+    'remapradio.com',
+    'uppercutcrit.com',
+    'rascal.news',
+  ],
+};
+
+export const perspectiveSources = (perspective) => PERSPECTIVE_SITES[perspective] ?? null;
+
+export async function loadGameNews(title, perspective = null) {
+  const key = `${perspective ?? 'any'}:${title.trim().toLowerCase()}`;
+  if (!title.trim()) return { items: [], fetchedAt: null };
 
   const cached = gameNewsCache.get(key);
   if (cached && Date.now() - cached.storedAt < GAME_NEWS_TTL_MS) return cached.value;
 
-  const query = encodeURIComponent(`"${title}" (game OR PlayStation OR PS5)`);
+  const sites = perspectiveSources(perspective);
+  const scope = sites ? ` (${sites.map((site) => `site:${site}`).join(' OR ')})` : '';
+  // Both forms need a context term, because plenty of titles are ordinary
+  // words: unscoped, "Celeste" alone reaches an art review of a person named
+  // Celeste, and scoped, "Stray" reached a novel called Stray City and the
+  // band Stray Kids. The terms differ because the scoped outlets write about
+  // games without always naming the console, so leaning on PlayStation there
+  // would throw away most of what they published.
+  // Compared by hand against the alternatives. The bare word "game" was too
+  // weak to carry the meaning: searching Celeste returned a high-school sports
+  // page and a local TV bulletin about people named Celeste. Quoting the phrase
+  // and naming platforms returned IGN, GamesRadar and Nintendo World Report for
+  // the same title. The scoped form keeps the looser terms, because the queer
+  // outlets write about games without always naming a console.
+  const context = sites
+    ? '(game OR games OR gaming OR review)'
+    : '("video game" OR PlayStation OR PS5 OR Nintendo OR Steam)';
+  const query = encodeURIComponent(`"${title}" ${context}${scope}`);
   const url = `https://news.google.com/rss/search?q=${query}&hl=en-US&gl=US&ceid=US:en`;
 
   const controller = new AbortController();
@@ -277,7 +320,7 @@ export async function loadGameNews(title) {
     clearTimeout(timer);
   }
 
-  const value = { items, fetchedAt: new Date().toISOString() };
+  const value = { items, fetchedAt: new Date().toISOString(), perspective: perspective ?? null };
   gameNewsCache.set(key, { value, storedAt: Date.now() });
   if (gameNewsCache.size > 300) gameNewsCache.delete(gameNewsCache.keys().next().value);
   return value;
