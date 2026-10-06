@@ -994,7 +994,9 @@ function GameModal({
   owned,
   reason,
   dealWatched,
+  alertsArmed,
   onToggleDealAlert,
+  onOpenAlerts,
   onToggleOwned,
   favouriteCreators,
   onToggleFavouriteCreator,
@@ -1126,7 +1128,13 @@ function GameModal({
           <AgeDetail ageRating={game.ageRating} />
           <ProsAndCons ratings={ratings} />
           <PricePanel game={game} live={live} />
-          <DealAlertRow watching={dealWatched} live={live} onToggle={onToggleDealAlert} />
+          <DealAlertRow
+            watching={dealWatched}
+            live={live}
+            armed={alertsArmed}
+            onToggle={onToggleDealAlert}
+            onSetUp={onOpenAlerts}
+          />
           <PredictionPanel live={live} />
 
           <div className="mt-6">
@@ -1359,38 +1367,62 @@ function PredictionPanel({ live }) {
  * you have decided to buy, and plenty of wishlisted games you already own the
  * disc of.
  */
-function DealAlertRow({ watching, live, onToggle }) {
+function DealAlertRow({ watching, live, armed, onToggle, onSetUp }) {
   const onSale = (live?.price?.discountPercent ?? 0) > 0;
 
+  const label = watching
+    ? armed
+      ? onSale
+        ? 'Watching this. You will hear when it drops further.'
+        : 'Watching this. You will hear when a deal starts.'
+      : // Promising an alert that has nowhere to go is the one thing this row
+        // must not do. The game is saved either way; what is missing is a
+        // channel, and saying so is the only way the reader can fix it.
+        onSale
+        ? 'Saved. Turn alerts on to hear if it drops further.'
+        : 'Saved. Turn alerts on to hear when a deal starts.'
+    : onSale
+      ? 'Tell me if this gets cheaper still'
+      : 'Tell me when this goes on sale';
+
   return (
-    <button
-      type="button"
-      onClick={onToggle}
-      aria-pressed={watching}
-      className={`mt-3 flex w-full items-center gap-2 rounded-xl px-3 py-2.5 text-left text-sm font-medium ring-1 ring-inset transition-transform duration-200 ease-spring active:scale-[0.99] ${
-        watching
-          ? 'bg-emerald-50 text-emerald-800 ring-emerald-200'
-          : 'bg-slate-50 text-slate-700 ring-slate-200 hover:bg-slate-100'
-      }`}
-    >
-      {watching ? (
-        <BellRing className="h-4 w-4 shrink-0" />
-      ) : (
-        <Bell className="h-4 w-4 shrink-0" />
+    <div className="mt-3">
+      <button
+        type="button"
+        onClick={onToggle}
+        aria-pressed={watching}
+        className={`flex w-full items-center gap-2 rounded-xl px-3 py-2.5 text-left text-sm font-medium ring-1 ring-inset transition-transform duration-200 ease-spring active:scale-[0.99] ${
+          watching
+            ? armed
+              ? 'bg-emerald-50 text-emerald-800 ring-emerald-200'
+              : 'bg-amber-50 text-amber-900 ring-amber-200'
+            : 'bg-slate-50 text-slate-700 ring-slate-200 hover:bg-slate-100'
+        }`}
+      >
+        {watching ? (
+          <BellRing className="h-4 w-4 shrink-0" />
+        ) : (
+          <Bell className="h-4 w-4 shrink-0" />
+        )}
+        <span className="flex-1">{label}</span>
+        {watching && armed && <Check className="h-4 w-4 shrink-0" />}
+      </button>
+
+      {watching && !armed && (
+        <button
+          type="button"
+          onClick={onSetUp}
+          className="mt-1.5 inline-flex min-h-[2.25rem] items-center gap-1.5 rounded-lg px-2 text-sm font-semibold text-indigo-600 transition-transform duration-200 ease-spring active:scale-95 hover:underline"
+        >
+          <Bell className="h-4 w-4" />
+          Turn alerts on
+          <ChevronRight className="h-4 w-4" />
+        </button>
       )}
-      <span className="flex-1">
-        {watching
-          ? onSale
-            ? 'Watching this. You will hear when it drops further.'
-            : 'Watching this. You will hear when a deal starts.'
-          : onSale
-            ? 'Tell me if this gets cheaper still'
-            : 'Tell me when this goes on sale'}
-      </span>
-      {watching && <Check className="h-4 w-4 shrink-0" />}
-    </button>
+    </div>
   );
 }
+
 
 function WishlistButton({ wishlisted, onToggle, withLabel = false }) {
   return (
@@ -1670,8 +1702,12 @@ const CREATOR_LENSES = [
   { value: 'any', label: 'Anyone', match: () => true },
   {
     value: 'women',
+    // Matches the stated word, never pronouns. Including "she/they" here put a
+    // creator whose stated identity is "non-binary (she/they)" under Women,
+    // which is the pronoun-based inference this file claims not to make. A
+    // pronoun is not an identity, and non-binary is not a subset of women.
     label: 'Women',
-    match: (creator) => /woman|she\/they/i.test(creator.identity ?? ''),
+    match: (creator) => /\bwom(a|e)n\b/i.test(creator.identity ?? ''),
   },
   {
     value: 'trans',
@@ -1972,9 +2008,11 @@ function GameNews({ title }) {
       {toggle}
       {state.items.length === 0 && (
         <p className="text-sm text-slate-400">
-          {queerOnly
-            ? 'Nothing from the queer or worker-owned press on this one yet.'
-            : 'Nothing in the press on this one right now.'}
+          {state.status === 'error'
+            ? 'Could not reach the press just now.'
+            : queerOnly
+              ? 'Nothing from the queer or worker-owned press on this one yet.'
+              : 'Nothing in the press on this one right now.'}
         </p>
       )}
       <ul className="space-y-1.5">
@@ -2780,8 +2818,9 @@ function AlertsSheet({ alerts, onClose }) {
 
         <p className="mt-3 text-sm leading-relaxed text-slate-600">
           {count === 0
-            ? 'Heart a few games and they become the list this watches.'
-            : `Watching the ${count === 1 ? 'game' : `${count} games`} on your wishlist. Heart another and it joins on its own.`}
+            ? 'Heart a game, or tap the bell on one, and it becomes part of the list this watches.'
+            : // Two lists feed this, so the copy cannot name only one of them.
+              `Watching ${count === 1 ? '1 game' : `${count} games`} from your wishlist and your bells. Add to either and it joins on its own.`}
         </p>
 
         {/* Push first: it is the one that needs nothing set up anywhere. */}
@@ -5103,7 +5142,9 @@ export default function App() {
           owned={library.has(activeGame.id)}
           reason={geniusReasons.get(activeGame.id)}
           dealWatched={dealAlerts.has(activeGame.id)}
+          alertsArmed={alerts.pushEnabled || alerts.emailConfirmed}
           onToggleDealAlert={() => toggleDealAlert(activeGame.id)}
+          onOpenAlerts={() => setAlertsOpen(true)}
           onToggleWishlist={() => toggleWishlist(activeGame.id)}
           onToggleOwned={() => toggleOwned(activeGame.id)}
           onClose={() => setActiveGameId(null)}

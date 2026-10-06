@@ -154,14 +154,23 @@ function toPrice(entry) {
 }
 
 /**
- * Whether a cached price has been overtaken by its own sale ending.
+ * Whether a cached price was read before its own sale was due to end.
  *
  * The store tells us when a discount stops. Holding that price for the rest of
  * the hour after that moment has passed is knowingly showing a deal that is
  * over, which is the one kind of staleness worth spending a fetch to avoid.
+ *
+ * The `storedAt` comparison is what keeps this to one extra fetch. The store
+ * does sometimes keep reporting an end time that has already passed, and
+ * re-reading on the strength of the end time alone would then be true forever:
+ * every single request would go upstream instead of one an hour. Once a read
+ * happens after that moment, this is false whatever the payload says, because
+ * the answer is as current as the store is going to give us.
  */
-const saleHasEnded = (value, now) =>
-  Boolean(value?.saleEndsAt) && Date.parse(value.saleEndsAt) <= now;
+const staleThroughSaleEnd = (entry, now) => {
+  const ends = entry?.value?.saleEndsAt ? Date.parse(entry.value.saleEndsAt) : NaN;
+  return Number.isFinite(ends) && ends <= now && entry.storedAt < ends;
+};
 
 /** Current PlayStation Store price for one store path, cached per region. */
 export async function loadPsnPrice(storePath, countryCode = 'US') {
@@ -169,7 +178,7 @@ export async function loadPsnPrice(storePath, countryCode = 'US') {
   const key = `${countryCode}:${storePath}`;
   const hit = cache.get(key);
   const now = Date.now();
-  if (hit && now - hit.storedAt < CACHE_TTL_MS && !saleHasEnded(hit.value, now)) return hit.value;
+  if (hit && now - hit.storedAt < CACHE_TTL_MS && !staleThroughSaleEnd(hit, now)) return hit.value;
   if (inFlight.has(key)) return inFlight.get(key);
 
   const pending = fetchPricePayload(storePath, countryCode)

@@ -362,56 +362,94 @@ const escapeHtml = (value) =>
  *
  * A first sighting only sets the baseline: joining while a sale is already on
  * should not fire an alert about a price that was there all along. After that
- * it fires on a new low or on a deal appearing where there was none, at or
+ * it fires on a new low or on a deal arriving where there was not one, at or
  * past the discount asked for, and never inside the quiet window, so a sale
  * that rolls over night after night is sent once.
+ *
+ * Returns null when there is nothing to send, having already recorded what it
+ * saw. When there is something to send it returns a `commit` the caller must
+ * call once delivery succeeds, so an outage costs a late alert rather than a
+ * lost one.
  */
 function evaluate(watch, price, minDiscount, now) {
   if (!price || price.isFree || typeof price.final !== 'number') return null;
 
   const discount = price.discountPercent ?? 0;
-  const seenDiscount = watch.lastSeenDiscount ?? 0;
+
+  // A record written before this field existed, or before the first sighting,
+  // tells us nothing about yesterday. Absent is not the same as "was at full
+  // price": reading it as zero would announce every sale already running as if
+  // it had just started, to everyone, on the first night after a deploy.
+  const seenDiscount = typeof watch.lastSeenDiscount === 'number' ? watch.lastSeenDiscount : null;
 
   const first = watch.basePrice == null;
-  if (first) {
-    watch.basePrice = price.initial ?? price.final;
-    watch.baseFinal = price.final;
+  if (first || seenDiscount === null) {
+    if (first) {
+      watch.basePrice = price.initial ?? price.final;
+      watch.baseFinal = price.final;
+    }
     // Recorded on the first sighting too, so a game added mid-sale does not
     // read as a sale that "just started" tomorrow night.
     watch.lastSeenDiscount = discount;
     return null;
   }
 
-  watch.lastSeenDiscount = discount;
+  // What counts as "already on a deal" is the reader's own threshold, not any
+  // discount at all. Tracking any discount let one night of a token 10% promo
+  // swallow the 40% sale that followed, which is precisely the case this branch
+  // exists to catch.
+  const wasOnDeal = seenDiscount >= minDiscount;
+  const isOnDeal = discount >= minDiscount;
 
-  if (discount < minDiscount) return null;
+  // Advanced only once the decision is made and, for anything worth sending,
+  // only once it has actually been delivered. `commit` is called by the caller
+  // so that a failed push does not quietly consume the one chance to report a
+  // sale starting.
+  const commit = () => {
+    watch.lastSeenDiscount = discount;
+  };
+
+  if (!isOnDeal) {
+    commit();
+    return null;
+  }
 
   const reference = Math.min(watch.baseFinal ?? watch.basePrice, watch.lastSentFinal ?? Infinity);
 
   // Two things are worth telling you about. The obvious one is a new low:
   // cheaper than when you added it and cheaper than the last alert. The other
-  // is a deal appearing at all on something that was at full price, which is
-  // the case a pure price floor misses: a game added during a sale, left to go
-  // back up, and then discounted again lands above the old floor and would
-  // otherwise stay silent forever.
+  // is a deal arriving on something that was not on one, which a pure price
+  // floor misses: a game added during a sale, left to go back up, and then
+  // discounted again lands above the old floor and would otherwise stay silent
+  // forever.
   const newLow = price.final < reference;
-  const dealJustStarted = seenDiscount === 0 && discount > 0;
-  if (!newLow && !dealJustStarted) return null;
+  const dealJustStarted = !wasOnDeal;
+  if (!newLow && !dealJustStarted) {
+    commit();
+    return null;
+  }
 
   if (watch.lastSentAt && now - new Date(watch.lastSentAt).getTime() < QUIET_DAYS * DAY_MS) {
+    commit();
     return null;
   }
 
   return {
     title: watch.title,
-    was: watch.baseFinal ?? watch.basePrice,
+    // What the price is being compared against has to match the claim. For a
+    // new low that is what it cost when you added it. For a sale arriving it is
+    // the list price the discount is taken off: using the add-time price there
+    // produced "down from $15.00, save -$5.00" on a game that went $15 on sale,
+    // back to $30, then on sale again at $20.
+    was: newLow ? (watch.baseFinal ?? watch.basePrice) : (price.initial ?? price.final),
     now: price.final,
     currency: price.currency ?? 'USD',
     discountPercent: discount,
     saleEndsAt: price.saleEndsAt ?? null,
-    // Lets the message say "back on sale" rather than "a new low" when that is
+    // Lets the message say "on sale again" rather than "cheaper" when that is
     // what actually happened.
     reason: newLow ? 'low' : 'deal',
+    commit,
   };
 }
 
@@ -468,12 +506,16 @@ export async function runAlerts(pricesById, now = Date.now()) {
     }
 
     // Only a delivered alert moves the baseline, so an outage at one of the
-    // push services means a late notification rather than a lost one.
+    // push services means a late notification rather than a lost one. That
+    // includes the record of the discount last seen: advancing it on a failed
+    // send would turn "this sale just started" into old news by morning and
+    // the alert would never be retried.
     if (!delivered) continue;
 
     const stamp = new Date(now).toISOString();
     for (const drop of found) {
       if (!row.games[drop.id]) continue;
+      drop.commit();
       row.games[drop.id].lastSentAt = stamp;
       row.games[drop.id].lastSentFinal = drop.now;
     }
