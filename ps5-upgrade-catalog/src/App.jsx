@@ -2759,6 +2759,7 @@ function AlertsSheet({ alerts, onClose }) {
   const [sent, setSent] = useState(false);
   const [pushBusy, setPushBusy] = useState(false);
   const [pushError, setPushError] = useState(null);
+  const [showPush, setShowPush] = useState(false);
 
   const count = alerts.watchable.length;
   const needsHomeScreen = isApple() && !isInstalled();
@@ -2812,8 +2813,8 @@ function AlertsSheet({ alerts, onClose }) {
     <ModalSheet labelledBy="alerts-title" onClose={onClose}>
       <div className="p-6 sm:p-8">
         <h2 id="alerts-title" className="flex items-center gap-2 text-2xl font-bold text-slate-900">
-          <Bell className="h-6 w-6 text-indigo-600" aria-hidden="true" />
-          Tell me when it drops
+          <Mail className="h-6 w-6 text-indigo-600" aria-hidden="true" />
+          Email me when it drops
         </h2>
 
         <p className="mt-3 text-sm leading-relaxed text-slate-600">
@@ -2823,92 +2824,71 @@ function AlertsSheet({ alerts, onClose }) {
               `Watching ${count === 1 ? '1 game' : `${count} games`} from your wishlist and your bells. Add to either and it joins on its own.`}
         </p>
 
-        {/* Push first: it is the one that needs nothing set up anywhere. */}
+        {/* Email is the channel this app is set up around. It goes first, at
+            full width, and says plainly when it cannot deliver yet. */}
         <div className="mt-5 rounded-2xl bg-slate-50 p-4 ring-1 ring-inset ring-slate-200">
-          <p className="flex items-center gap-2 text-sm font-semibold text-slate-800">
-            <Smartphone className="h-4 w-4 text-indigo-600" aria-hidden="true" />
-            On this phone
-          </p>
-
-          {alerts.pushEnabled ? (
+          {alerts.emailConfirmed ? (
             <>
-              <p className="mt-2 inline-flex items-start gap-2 text-sm leading-relaxed text-emerald-800">
+              <p className="inline-flex items-start gap-2 text-sm leading-relaxed text-emerald-800">
                 <Check className="mt-0.5 h-4 w-4 shrink-0" aria-hidden="true" />
-                <span>Notifications are on. You will get one the night a wishlist game drops.</span>
+                <span>
+                  Emailing <strong className="font-semibold">{alerts.email}</strong> the
+                  night a watched game gets cheaper.
+                </span>
               </p>
               <button
                 type="button"
-                onClick={togglePush}
-                disabled={pushBusy}
-                className="mt-3 min-h-[2.75rem] w-full rounded-xl bg-white px-4 text-sm font-medium text-slate-700 ring-1 ring-inset ring-slate-300 transition-transform duration-200 ease-spring active:scale-[0.98] hover:bg-slate-100 disabled:opacity-60"
+                onClick={() => {
+                  alerts.stop();
+                  onClose();
+                }}
+                className="mt-3 min-h-[2.75rem] w-full rounded-xl bg-white px-4 text-sm font-medium text-slate-700 ring-1 ring-inset ring-slate-300 transition-transform duration-200 ease-spring active:scale-[0.98] hover:bg-slate-100"
               >
-                {pushBusy ? 'Turning off…' : 'Turn notifications off'}
+                Stop emails and delete my address
               </button>
             </>
-          ) : needsHomeScreen ? (
-            <p className="mt-2 text-sm leading-relaxed text-slate-600">
-              iPhone only allows notifications once the app is on your Home
-              Screen. Tap <strong className="font-semibold">Share</strong>, then{' '}
-              <strong className="font-semibold">Add to Home Screen</strong>, open it
-              from there, and this button will work.
+          ) : sent || (alerts.token && alerts.email) ? (
+            <p className="inline-flex items-start gap-2 text-sm leading-relaxed text-indigo-900">
+              <Mail className="mt-0.5 h-4 w-4 shrink-0" aria-hidden="true" />
+              <span>
+                Check your inbox at <strong className="font-semibold">{alerts.email ?? email}</strong>.
+                There is a confirmation link waiting, and nothing is sent until you
+                click it. Look in spam if it is not there in a minute.
+              </span>
             </p>
-          ) : (
+          ) : alerts.configured === false ? (
+            // The reader of this app is also the person who owns the site, so
+            // the honest thing is the actual two steps rather than a shrug.
             <>
-              <p className="mt-2 text-sm leading-relaxed text-slate-600">
-                Nothing to sign up for and no address to give. Your phone gets a
-                notification the night something gets cheaper.
+              <p className="inline-flex items-start gap-2 text-sm leading-relaxed text-amber-900">
+                <Info className="mt-0.5 h-4 w-4 shrink-0" aria-hidden="true" />
+                <span>
+                  Email needs a sending key before anything can arrive, so the form
+                  is hidden rather than pretending.
+                </span>
               </p>
-              <button
-                type="button"
-                onClick={togglePush}
-                disabled={pushBusy || alerts.pushAvailable === false}
-                className="mt-3 min-h-[2.75rem] w-full rounded-xl bg-indigo-600 px-4 text-sm font-semibold text-white transition-transform duration-200 ease-spring active:scale-[0.98] hover:bg-indigo-700 disabled:opacity-60"
-              >
-                {pushBusy ? 'Asking…' : 'Notify me on this phone'}
-              </button>
-              {alerts.pushAvailable === false && (
-                <p className="mt-2 text-xs leading-relaxed text-slate-500">
-                  This browser cannot do notifications. Email still works below.
-                </p>
-              )}
+              <ol className="mt-3 list-decimal space-y-1.5 pl-5 text-sm leading-relaxed text-slate-600">
+                <li>
+                  Get a free API key at <strong className="font-semibold">resend.com</strong>,
+                  signing up with the address you want the alerts at.
+                </li>
+                <li>
+                  In Netlify, add it under Site settings → Environment variables as{' '}
+                  <code className="rounded bg-slate-200 px-1 py-0.5 font-mono text-xs">RESEND_API_KEY</code>,
+                  then redeploy.
+                </li>
+              </ol>
+              <p className="mt-3 text-xs leading-relaxed text-slate-500">
+                No domain and no DNS records needed. The default sender only
+                delivers to the address that owns the Resend account, which is
+                exactly what one person watching their own wishlist wants.
+              </p>
             </>
-          )}
-
-          {pushError && (
-            <p role="alert" className="mt-3 rounded-xl bg-rose-50 px-3 py-2 text-sm leading-relaxed text-rose-800">
-              {pushError}
-            </p>
-          )}
-        </div>
-
-        {/* Email second, and only when there is something behind it. */}
-        {alerts.configured === false ? (
-          <p className="mt-4 text-xs leading-relaxed text-slate-500">
-            Email alerts are not switched on for this site. They need a mail
-            provider key (<code className="font-mono">RESEND_API_KEY</code>) in the
-            Netlify environment; notifications above need nothing.
-          </p>
-        ) : alerts.emailConfirmed ? (
-          <p className="mt-4 inline-flex items-start gap-2 rounded-xl bg-emerald-50 px-4 py-3 text-sm leading-relaxed text-emerald-900">
-            <Mail className="mt-0.5 h-4 w-4 shrink-0" aria-hidden="true" />
-            <span>
-              Also emailing <strong className="font-semibold">{alerts.email}</strong>.
-            </span>
-          </p>
-        ) : sent ? (
-          <p className="mt-4 inline-flex items-start gap-2 rounded-xl bg-indigo-50 px-4 py-3 text-sm leading-relaxed text-indigo-900">
-            <Mail className="mt-0.5 h-4 w-4 shrink-0" aria-hidden="true" />
-            <span>
-              Check your inbox. There is a confirmation link waiting, and nothing
-              is sent by email until you click it.
-            </span>
-          </p>
-        ) : (
-          <form onSubmit={submit} className="mt-4">
-            <label htmlFor="alert-email" className="block text-sm font-semibold text-slate-700">
-              By email too (optional)
-            </label>
-            <div className="mt-2 flex gap-2">
+          ) : (
+            <form onSubmit={submit}>
+              <label htmlFor="alert-email" className="block text-sm font-semibold text-slate-700">
+                Your email
+              </label>
               <input
                 id="alert-email"
                 type="email"
@@ -2918,44 +2898,84 @@ function AlertsSheet({ alerts, onClose }) {
                 placeholder="you@example.com"
                 value={email}
                 onChange={(event) => setEmail(event.target.value)}
-                className="min-h-[2.75rem] w-full flex-1 rounded-xl border border-slate-300 px-3 text-base outline-none transition-all duration-200 focus:border-indigo-500 focus:ring-2 focus:ring-indigo-500"
+                className="mt-2 min-h-[2.75rem] w-full rounded-xl border border-slate-300 px-3 text-base outline-none transition-all duration-200 focus:border-indigo-500 focus:ring-2 focus:ring-indigo-500"
               />
               <button
                 type="submit"
                 disabled={busy}
-                className="min-h-[2.75rem] shrink-0 rounded-xl bg-slate-900 px-4 text-sm font-semibold text-white transition-transform duration-200 ease-spring active:scale-[0.98] hover:bg-slate-800 disabled:opacity-60"
+                className="mt-3 min-h-[2.75rem] w-full rounded-xl bg-indigo-600 px-4 text-sm font-semibold text-white transition-transform duration-200 ease-spring active:scale-[0.98] hover:bg-indigo-700 disabled:opacity-60"
               >
-                {busy ? 'Sending…' : 'Add'}
+                {busy ? 'Sending confirmation…' : 'Email me about drops'}
               </button>
-            </div>
-            {error && (
-              <p role="alert" className="mt-3 rounded-xl bg-rose-50 px-4 py-3 text-sm text-rose-800">
-                {error}
-              </p>
-            )}
-          </form>
-        )}
+              {error && (
+                <p role="alert" className="mt-3 rounded-xl bg-rose-50 px-4 py-3 text-sm text-rose-800">
+                  {error}
+                </p>
+              )}
+            </form>
+          )}
+        </div>
 
         {thresholds}
 
         <p className="mt-4 text-xs leading-relaxed text-slate-500">
-          One alert a night at most, only when something is actually cheaper than
+          One email a night at most, only when something is actually cheaper than
           it was when you added it, and never twice for the same sale. We store
-          the game ids being watched and a way to reach you. Nothing else, no
-          tracking, no sharing.
+          your address and the game ids being watched. Nothing else, no tracking,
+          no sharing, and every email has a one-click unsubscribe.
         </p>
 
-        {(alerts.pushEnabled || alerts.emailConfirmed || alerts.token) && (
-          <button
-            type="button"
-            onClick={() => {
-              alerts.stop();
-              onClose();
-            }}
-            className="mt-5 min-h-[2.75rem] w-full rounded-xl bg-slate-100 px-4 text-sm font-medium text-slate-700 transition-transform duration-200 ease-spring active:scale-[0.98] hover:bg-slate-200"
-          >
-            Turn everything off and delete what is stored
-          </button>
+        {/* Phone notifications still work and cost nothing, but they are not
+            what was asked for, so they sit behind a line of text rather than a
+            button competing with the email form. */}
+        {alerts.pushAvailable !== false && !needsHomeScreen && (
+          <div className="mt-5 border-t border-slate-100 pt-4">
+            {alerts.pushEnabled ? (
+              <p className="flex items-start gap-2 text-sm leading-relaxed text-slate-600">
+                <Smartphone className="mt-0.5 h-4 w-4 shrink-0 text-slate-400" aria-hidden="true" />
+                <span className="flex-1">
+                  This phone is also getting notifications.{' '}
+                  <button
+                    type="button"
+                    onClick={togglePush}
+                    disabled={pushBusy}
+                    className="font-semibold text-indigo-600 hover:underline disabled:opacity-60"
+                  >
+                    {pushBusy ? 'Turning off…' : 'Turn those off'}
+                  </button>
+                </span>
+              </p>
+            ) : showPush ? (
+              <>
+                <p className="text-sm leading-relaxed text-slate-600">
+                  A notification on this phone needs nothing set up, so it works
+                  even while email is waiting on a key.
+                </p>
+                <button
+                  type="button"
+                  onClick={togglePush}
+                  disabled={pushBusy}
+                  className="mt-2 min-h-[2.75rem] w-full rounded-xl bg-white px-4 text-sm font-medium text-slate-700 ring-1 ring-inset ring-slate-300 transition-transform duration-200 ease-spring active:scale-[0.98] hover:bg-slate-100 disabled:opacity-60"
+                >
+                  {pushBusy ? 'Asking…' : 'Notify this phone instead'}
+                </button>
+              </>
+            ) : (
+              <button
+                type="button"
+                onClick={() => setShowPush(true)}
+                className="text-sm font-medium text-slate-500 hover:text-slate-700 hover:underline"
+              >
+                Prefer a phone notification?
+              </button>
+            )}
+
+            {pushError && (
+              <p role="alert" className="mt-3 rounded-xl bg-rose-50 px-3 py-2 text-sm leading-relaxed text-rose-800">
+                {pushError}
+              </p>
+            )}
+          </div>
         )}
       </div>
     </ModalSheet>

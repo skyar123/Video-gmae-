@@ -268,6 +268,13 @@ feature that needs the server to remember something. What it stores is a way to
 reach you, the ids and titles being watched, and the price each was at when it was
 added. Nothing else.
 
+**Email is the channel this is built around.** It leads the sign-up sheet, and
+when no sending key is configured the sheet says so and gives the two steps to
+fix it rather than hiding behind a shrug. Phone notifications still work and
+still need nothing set up, but they sit behind a "Prefer a phone notification?"
+line instead of competing with the email form, and they are hidden altogether on
+an iPhone that is not on the Home Screen, where they cannot work anyway.
+
 Two lists feed it, and they are kept apart on purpose. The wishlist is things you
 want. The per-game **"tell me when this goes on sale"** toggle is things you are
 waiting on a price for, which is not the same list: something can be worth an alert
@@ -275,7 +282,22 @@ without being something you have decided to buy.
 
 There are two channels, and one record can hold either or both.
 
-**Push notifications** work with nothing to sign up for. The credential is an
+**Email** is the primary one.
+
+| Variable | What it is |
+| --- | --- |
+| `RESEND_API_KEY` | A [Resend](https://resend.com) API key. The only thing required. |
+| `MAIL_FROM` | Optional sender; defaults to `onboarding@resend.dev` |
+
+The default sender needs no domain and no DNS records, but Resend will only
+deliver from it to the address that owns the account. For one person watching
+their own wishlist that is the whole use case, and it takes the setup down from
+"verify a domain" to "paste one key". Set `MAIL_FROM` to an address on your own
+verified domain to mail anyone else. `SITE_URL` overrides the origin used in
+confirmation and unsubscribe links, and `RESEND_ENDPOINT` points the sender at a
+stub for local testing.
+
+**Push notifications** are the secondary one, and work with nothing to sign up for. The credential is an
 ECDSA keypair generated once, and the message goes straight to the push service
 the phone already talks to, Apple's or Google's. Two variables, both generated
 rather than obtained:
@@ -293,22 +315,6 @@ node -e "console.log(require('web-push').generateVAPIDKeys())"
 On an iPhone this only works once the site is on the Home Screen, which is an iOS
 rule rather than a limitation here. The app is already a standalone PWA, so it is
 one tap, and the sheet says so rather than letting the button fail silently.
-
-**Email** needs a sending account to exist first, so it stays hidden until one is
-configured rather than offering something that cannot be delivered.
-
-| Variable | What it is |
-| --- | --- |
-| `RESEND_API_KEY` | A [Resend](https://resend.com) API key |
-| `MAIL_FROM` | Optional sender; defaults to `onboarding@resend.dev` |
-
-The default sender needs no domain and no DNS records, but Resend will only
-deliver from it to the address that owns the account. For one person watching
-their own wishlist that is the whole use case, and it takes the setup down from
-"verify a domain" to "paste one key". Set `MAIL_FROM` to an address on your own
-verified domain to mail anyone else. `SITE_URL` overrides the origin used in
-confirmation and unsubscribe links, and `RESEND_ENDPOINT` points the sender at a
-stub for local testing.
 
 An address is confirmed before anything goes to it, because anyone can type
 anyone's address into a public form. A push subscription needs no such step: the
