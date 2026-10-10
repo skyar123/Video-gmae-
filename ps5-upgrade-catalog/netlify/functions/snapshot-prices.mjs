@@ -37,6 +37,10 @@ export default async () => {
   const chunkCount = Math.ceil(catalog.length / CHUNK_SIZE);
   // Alerts go out for the first region only: a subscriber has one currency.
   const pricesForAlerts = new Map();
+  // The recorder already returns each game's summary, so the alert pass can say
+  // whether a drop is actually the cheapest this record has seen without a
+  // second read of anything.
+  const historyForAlerts = new Map();
 
   for (const countryCode of regions) {
     for (let chunk = 0; chunk < chunkCount; chunk += 1) {
@@ -50,9 +54,12 @@ export default async () => {
         matched: Boolean(prices[index]),
         price: prices[index] ?? null,
       }));
-      await recordAndSummarize(chunk, countryCode, games);
+      const summaries = await recordAndSummarize(chunk, countryCode, games);
       if (countryCode === regions[0]) {
-        for (const game of games) pricesForAlerts.set(game.id, game.price);
+        for (const game of games) {
+          pricesForAlerts.set(game.id, game.price);
+          if (summaries?.[game.id]) historyForAlerts.set(game.id, summaries[game.id]);
+        }
       }
     }
     console.log(`Recorded prices for ${catalog.length} games in ${countryCode}`);
@@ -98,7 +105,7 @@ export default async () => {
   }
 
   try {
-    const alerts = await runAlerts(pricesForAlerts);
+    const alerts = await runAlerts(pricesForAlerts, Date.now(), historyForAlerts);
     console.log(
       alerts.skipped
         ? `Price alerts skipped: ${alerts.skipped}`

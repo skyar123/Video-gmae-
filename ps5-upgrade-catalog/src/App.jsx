@@ -45,6 +45,7 @@ import {
 } from 'lucide-react';
 import { buildProfile, recommend, starterPicks } from './recommend.js';
 import { indexText, parseQuery, scoreMatch } from '../api/search.mjs';
+import { priceStanding } from '../api/standing.mjs';
 import gamesData from './games.json';
 import creatorsData from './creators.json';
 
@@ -173,6 +174,7 @@ const DEFAULT_FILTERS = {
   artStyle: 'All',
   upgrade: 'All',
   sale: false,
+  atFloor: false,
   wishlist: false,
   sort: 'catalog',
   region: 'US',
@@ -196,6 +198,7 @@ function readFiltersFromUrl() {
     artStyle: value('art', 'All'),
     upgrade: value('upgrade', 'All'),
     sale: params.get('sale') === '1',
+    atFloor: params.get('floor') === '1',
     wishlist: params.get('wishlist') === '1',
     sort: value('sort', 'catalog'),
     region: (value('cc', localStorage.getItem('region') || 'US') || 'US').toUpperCase(),
@@ -216,6 +219,7 @@ function writeFiltersToUrl(filters) {
   if (filters.artStyle !== 'All') params.set('art', filters.artStyle);
   if (filters.upgrade !== 'All') params.set('upgrade', filters.upgrade);
   if (filters.sale) params.set('sale', '1');
+  if (filters.atFloor) params.set('floor', '1');
   if (filters.wishlist) params.set('wishlist', '1');
   if (filters.sort !== 'catalog') params.set('sort', filters.sort);
   if (filters.region !== 'US') params.set('cc', filters.region);
@@ -1287,30 +1291,6 @@ function GameModal({
  * Everything here is measured, and the window is always stated, because a
  * month of observation is a month of observation and not "the lowest ever".
  */
-/** Below a week of readings there is nothing worth concluding. */
-const STANDING_MIN_DAYS = 7;
-
-/**
- * How today's price stands against the cheapest this record has seen.
- *
- * One function because two places show it: a card has room for two words and
- * the open game has room for a sentence, and they must never disagree about
- * which way the verdict goes.
- */
-function priceStanding(price, history) {
-  const low = history?.lowest;
-  const days = history?.observedDays ?? 0;
-  if (!low || typeof price?.final !== 'number' || days < STANDING_MIN_DAYS) return null;
-
-  return {
-    atLow: price.final <= low.final,
-    low,
-    days,
-    // How much more than the recorded low you would pay today.
-    gap: low.final - price.final,
-  };
-}
-
 function PriceHistoryNote({ price, history }) {
   const standing = priceStanding(price, history);
   if (!standing) return null;
@@ -2343,6 +2323,7 @@ function FeedSlide({
       : null);
   const ratings = live?.ratings ?? game.ratings;
   const price = live?.price;
+  const standing = priceStanding(price, live?.history);
 
   const trailer = live?.videos?.[0] ?? null;
 
@@ -2389,6 +2370,15 @@ function FeedSlide({
               {price?.discountPercent > 0 && (
                 <span className="rounded-md bg-rose-600 px-2 py-1 text-xs font-bold text-white">
                   -{price.discountPercent}%
+                </span>
+              )}
+              {standing && (
+                <span
+                  className={`rounded-md px-2 py-1 text-xs font-bold text-white backdrop-blur ${
+                    standing.atLow ? 'bg-emerald-600' : 'bg-amber-600/90'
+                  }`}
+                >
+                  {standing.atLow ? 'Lowest yet' : `Was ${standing.low.formatted}`}
                 </span>
               )}
             </div>
@@ -4787,6 +4777,13 @@ export default function App() {
       if (filters.owned === 'unowned' && library.has(game.id)) return false;
       if (filters.wishlist && !wishlist.has(game.id)) return false;
       if (filters.sale && !(byTitle.get(game.title)?.price?.discountPercent > 0)) return false;
+      if (filters.atFloor) {
+        const entry = byTitle.get(game.title);
+        // No record is not the same as not at the floor, but it cannot be
+        // shown as one either, so an unproven game is excluded rather than
+        // claimed. The chip says "proven" for exactly that reason.
+        if (!priceStanding(entry?.price, entry?.history)?.atLow) return false;
+      }
       return true;
     });
 
@@ -4869,6 +4866,17 @@ export default function App() {
     [visiblePool, byTitle],
   );
 
+  // Over the whole pool, not the filtered results: a chip that counted its own
+  // output would read zero the moment you switched it on.
+  const atFloorTotal = useMemo(
+    () =>
+      visiblePool.filter((game) => {
+        const entry = byTitle.get(game.title);
+        return priceStanding(entry?.price, entry?.history)?.atLow;
+      }).length,
+    [visiblePool, byTitle],
+  );
+
   const kidFriendlyCount = useMemo(
     () => visiblePool.filter((game) => FAMILY_TIER_VALUES.includes(game.ageRating?.family)).length,
     [visiblePool],
@@ -4913,6 +4921,7 @@ export default function App() {
     if (filters.artStyle !== 'All') add('art', filters.artStyle, () => set('artStyle', 'All'));
     if (filters.upgrade !== 'All') add('upgrade', filters.upgrade, () => set('upgrade', 'All'));
     if (filters.sale) add('sale', 'On sale', () => set('sale', false));
+    if (filters.atFloor) add('floor', 'At its lowest', () => set('atFloor', false));
     if (filters.kidFriendly) add('kids', 'Kid friendly', () => set('kidFriendly', false));
     if (filters.wishlist) add('wishlist', 'Wishlist', () => set('wishlist', false));
     if (filters.owned !== 'any')
@@ -4931,6 +4940,7 @@ export default function App() {
   const filtersActive =
     Boolean(filters.q) ||
     filters.sale ||
+    filters.atFloor ||
     filters.wishlist ||
     filters.kidFriendly ||
     filters.owned !== 'any' ||
@@ -5144,6 +5154,14 @@ export default function App() {
                   label="On sale"
                   count={saleCount}
                   tone="bg-rose-600"
+                />
+                <TogglePill
+                  active={filters.atFloor}
+                  onClick={() => set('atFloor', !filters.atFloor)}
+                  icon={TrendingDown}
+                  label="At its lowest"
+                  count={atFloorTotal}
+                  tone="bg-emerald-600"
                 />
                 <TogglePill
                   active={filters.kidFriendly}

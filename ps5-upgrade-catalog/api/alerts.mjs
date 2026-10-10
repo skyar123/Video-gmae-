@@ -32,6 +32,7 @@ import { loadBlob, saveBlob } from './history.mjs';
 import { ALERTS_KEY } from './keys.mjs';
 import { mailConfigured, sendMail, siteOrigin, wrap } from './mail.mjs';
 import { publicKey as pushPublicKey, pushConfigured, sendPush } from './push.mjs';
+import { priceStanding } from './standing.mjs';
 
 /** A personal app, but a public form: both caps are here to bound abuse. */
 const MAX_SUBSCRIBERS = 200;
@@ -287,21 +288,34 @@ function sendDigest(row, drops) {
         : `${drops[0].title} is cheaper.`
       : `${drops.length} games you watch are on sale.`;
 
+  const standingText = (drop) => {
+    if (!drop.standing) return '';
+    return drop.standing.atLow
+      ? ` — lowest in ${drop.standing.days} days of tracking`
+      : ` — but it was ${drop.standing.low.formatted} on ${new Date(`${drop.standing.low.date}T00:00:00Z`).toLocaleDateString('en-US', { month: 'short', day: 'numeric', timeZone: 'UTC' })}`;
+  };
+
   const line = (drop) => {
     const saved = money(drop.was - drop.now, drop.currency);
     const ends = drop.saleEndsAt
       ? `, ends ${new Date(drop.saleEndsAt).toLocaleDateString('en-US', { month: 'short', day: 'numeric' })}`
       : '';
-    return `${drop.title} — ${money(drop.now, drop.currency)}, down from ${money(drop.was, drop.currency)} (${drop.discountPercent}% off, save ${saved}${ends})`;
+    return `${drop.title} — ${money(drop.now, drop.currency)}, down from ${money(drop.was, drop.currency)} (${drop.discountPercent}% off, save ${saved}${ends})${standingText(drop)}`;
   };
 
   const row_ = (drop) => {
     const ends = drop.saleEndsAt
       ? `<span style="color:#b45309"> · ends ${new Date(drop.saleEndsAt).toLocaleDateString('en-US', { month: 'short', day: 'numeric' })}</span>`
       : '';
+    const standing = drop.standing
+      ? drop.standing.atLow
+        ? `<div style="margin-top:3px;font-size:13px;font-weight:600;color:#047857">Lowest in ${drop.standing.days} days of tracking.</div>`
+        : `<div style="margin-top:3px;font-size:13px;color:#92400e">It was ${drop.standing.low.formatted} on ${new Date(`${drop.standing.low.date}T00:00:00Z`).toLocaleDateString('en-US', { month: 'short', day: 'numeric', timeZone: 'UTC' })}, so this is not its floor.</div>`
+      : '';
     return `<tr><td style="padding:12px 0;border-bottom:1px solid #e2e8f0">
 <div style="font-size:15px;font-weight:600">${escapeHtml(drop.title)}</div>
 <div style="margin-top:4px;font-size:14px;color:#334155"><strong style="color:#047857">${money(drop.now, drop.currency)}</strong> <span style="color:#94a3b8;text-decoration:line-through">${money(drop.was, drop.currency)}</span> · ${drop.discountPercent}% off · save ${money(drop.was - drop.now, drop.currency)}${ends}</div>
+${standing}
 </td></tr>`;
   };
 
@@ -334,7 +348,13 @@ function sendDropPush(row, drops) {
 
   const body =
     drops.length === 1
-      ? `${money(top.now, top.currency)}, down from ${money(top.was, top.currency)}. You save ${money(top.was - top.now, top.currency)}.`
+      ? `${money(top.now, top.currency)}, down from ${money(top.was, top.currency)}.${
+          top.standing
+            ? top.standing.atLow
+              ? ' Lowest it has been.'
+              : ` It was ${top.standing.low.formatted} before, though.`
+            : ` You save ${money(top.was - top.now, top.currency)}.`
+        }`
       : drops
           .slice(0, 3)
           .map((drop) => `${drop.title} ${money(drop.now, drop.currency)}`)
@@ -459,7 +479,7 @@ function evaluate(watch, price, minDiscount, now) {
  * `pricesById` maps a catalog game id to the price object the nightly sweep
  * just read, so this adds no store traffic of its own.
  */
-export async function runAlerts(pricesById, now = Date.now()) {
+export async function runAlerts(pricesById, now = Date.now(), historyById = null) {
   if (!mailConfigured() && !pushConfigured()) return { skipped: 'no-channel-configured' };
 
   const all = await load();
@@ -478,7 +498,14 @@ export async function runAlerts(pricesById, now = Date.now()) {
       // evaluate() records the baseline on first sighting, so the store has
       // changed whether or not anything is worth sending.
       changed = true;
-      if (drop) found.push({ ...drop, id });
+      if (drop) {
+        // Whether this is the cheapest the record has seen is the difference
+        // between an alert worth acting on and one worth ignoring, so it
+        // travels with the drop rather than being left for the app to reveal
+        // once you have already opened it.
+        const standing = priceStanding(pricesById.get(id), historyById?.get(id));
+        found.push({ ...drop, id, standing });
+      }
     }
     if (found.length === 0) continue;
 
