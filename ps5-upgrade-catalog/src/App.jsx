@@ -94,9 +94,12 @@ const UPGRADES = uniqueValues('ps5Upgrade');
 // see reads as a collection that does not exist.
 const COLLECTIONS = [
   { value: 'all', label: 'All games', tag: null },
+  // Deals come second because they are a main reason to open this at all, and
+  // the chip measured at x=415 on a 390px-wide screen: entirely off the edge,
+  // reachable only by discovering that the strip scrolls sideways.
+  { value: 'deals', label: 'Best deals', tag: null },
   { value: 'genius', label: 'Genius picks', tag: null },
   { value: 'store', label: 'Whole store', tag: null },
-  { value: 'deals', label: 'Best deals', tag: null },
   { value: 'graphics', label: 'Best graphics', tag: 'graphics' },
   { value: 'social', label: 'Online & social', tag: 'social' },
   { value: 'cozy', label: 'Cozy', tag: 'cozy' },
@@ -433,6 +436,58 @@ function useLiveData(region) {
     progress: chunksLoaded / CHUNK_COUNT,
     refresh: () => load(true),
   };
+}
+
+/** How many cards exist before you have scrolled anywhere. */
+const PAGE_STEP = 48;
+
+/**
+ * Renders a long list a screenful at a time.
+ *
+ * Every game in the collection used to be in the DOM at once: 242 cards,
+ * 15,784 nodes and 221 images for the default view. Unthrottled that still
+ * scrolls at 60fps, but the cost is all raw per-node work, so it falls apart
+ * exactly where it matters — an older or cheaper phone, or a hot one. Under a
+ * 4x CPU handicap the median frame measured 83ms against the 16.7ms a smooth
+ * 60fps needs.
+ *
+ * So the list grows instead. A sentinel below the last card asks for the next
+ * batch as it comes into view, well before it is reached, which keeps the DOM
+ * to roughly a quarter of what it was without ever showing an empty gap or a
+ * "load more" button to press.
+ */
+function usePagedList(total, resetKey) {
+  const [limit, setLimit] = useState(PAGE_STEP);
+  // A callback ref rather than a ref object: the sentinel is only rendered
+  // while there is more to show, so the observer has to follow it being
+  // mounted and unmounted rather than read a ref during render.
+  const [sentinel, setSentinel] = useState(null);
+
+  // A new filter, sort or collection is a different list, so it starts again
+  // from the top. One scalar key rather than a dependency array, so this stays
+  // statically checkable.
+  useEffect(() => {
+    // eslint-disable-next-line react/set-state-in-effect
+    setLimit(PAGE_STEP);
+  }, [resetKey]);
+
+  useEffect(() => {
+    if (!sentinel || limit >= total) return undefined;
+    const observer = new IntersectionObserver(
+      ([entry]) => {
+        if (entry.isIntersecting) setLimit((current) => Math.min(current + PAGE_STEP, total));
+      },
+      // Start on the next batch a screen and a half early, so the end of the
+      // list is never actually reached.
+      { rootMargin: '150% 0px' },
+    );
+    observer.observe(sentinel);
+    return () => observer.disconnect();
+  }, [sentinel, limit, total]);
+
+  // Named for what it does rather than `ref`, which the lint rule reads as
+  // a ref object being dereferenced mid-render.
+  return { limit, attachEnd: setSentinel, hasMore: limit < total };
 }
 
 /**
@@ -1146,6 +1201,21 @@ function GameModal({
             </p>
           )}
 
+          {/* Price first, with the alert attached to it. Both used to sit
+              under the metadata chips and the upgrade notes, which put the
+              bell at y=1777 on an 844px screen: two screens of scrolling to
+              reach the one control this app exists for. What a game costs is
+              the thing you came to find out. */}
+          <PricePanel game={game} live={live} />
+          <DealAlertRow
+            watching={dealWatched}
+            live={live}
+            armed={alertsArmed}
+            onToggle={onToggleDealAlert}
+            onSetUp={onOpenAlerts}
+          />
+          <PredictionPanel live={live} />
+
           <div className="mt-5 grid grid-cols-3 gap-3 sm:gap-4">
             {[
               ['Genre', game.genre],
@@ -1173,15 +1243,6 @@ function GameModal({
           <RepresentationDetail representation={game.representation} />
           <AgeDetail ageRating={game.ageRating} />
           <ProsAndCons ratings={ratings} />
-          <PricePanel game={game} live={live} />
-          <DealAlertRow
-            watching={dealWatched}
-            live={live}
-            armed={alertsArmed}
-            onToggle={onToggleDealAlert}
-            onSetUp={onOpenAlerts}
-          />
-          <PredictionPanel live={live} />
 
           <div className="mt-6">
             <a
@@ -4684,6 +4745,17 @@ export default function App() {
     });
   }, [searchScores, filters, wishlist, library, hidden, byTitle, geniusPicks]);
 
+  // Cards are added as you reach them rather than all at once; a different
+  // filter, sort or collection is a different list, so it starts over.
+  const { limit: shownLimit, attachEnd, hasMore } = usePagedList(
+    filteredGames.length,
+    `${filters.collection}|${filters.sort}|${filters.view}|${filteredGames.length}`,
+  );
+  const shownGames = useMemo(
+    () => filteredGames.slice(0, shownLimit),
+    [filteredGames, shownLimit],
+  );
+
   const visiblePool = useMemo(
     () => gamesData.filter((game) => filters.includePs5 || game.platform !== 'PS5'),
     [filters.includePs5],
@@ -5056,7 +5128,7 @@ export default function App() {
           className="feed-scroll no-scrollbar h-[calc(100dvh-var(--bar-height))] overflow-y-auto"
           aria-label="Game feed"
         >
-          {filteredGames.map((game) => (
+          {shownGames.map((game) => (
             <FeedSlide
               key={game.id}
               game={game}
@@ -5071,6 +5143,7 @@ export default function App() {
               onOpen={() => setActiveGameId(game.id)}
             />
           ))}
+          {hasMore && <div ref={attachEnd} aria-hidden="true" className="h-px" />}
           {filteredGames.length === 0 && (
             <EmptyState
               filters={filters}
@@ -5154,7 +5227,7 @@ export default function App() {
           )}
 
           <div className="grid grid-cols-2 gap-3 sm:grid-cols-3 sm:gap-4 lg:grid-cols-4 xl:grid-cols-5">
-            {filteredGames.map((game) => (
+            {shownGames.map((game) => (
               <GameCard
                 key={game.id}
                 game={game}
@@ -5170,6 +5243,8 @@ export default function App() {
               />
             ))}
           </div>
+
+          {hasMore && <div ref={attachEnd} aria-hidden="true" className="h-8" />}
 
           {hidden.size > 0 && (
             <p className="mt-6 text-center text-xs text-slate-400">
