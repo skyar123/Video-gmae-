@@ -1275,6 +1275,63 @@ function GameModal({
  * that publishes prices openly, so it is labelled plainly rather than passed
  * off as the PlayStation Store price.
  */
+/**
+ * Whether today's price is actually any good.
+ *
+ * The app has been recording a price a night per game for weeks, and until now
+ * none of it reached the screen: the panel showed what a game costs today and
+ * left the only question that matters unanswered. Outer Wilds at $24.99 reads
+ * fine until you know it was $14.99 sixteen days ago, and Disco Elysium at
+ * $39.99 reads very differently once you know it was $9.99 last month.
+ *
+ * Everything here is measured, and the window is always stated, because a
+ * month of observation is a month of observation and not "the lowest ever".
+ */
+function PriceHistoryNote({ price, history }) {
+  if (!history?.lowest || typeof price?.final !== 'number') return null;
+
+  const low = history.lowest;
+  const days = history.observedDays ?? 0;
+  // Under a fortnight there is nothing worth concluding, and saying so beats
+  // dressing up two data points as a trend.
+  if (days < 7) return null;
+
+  const window = `${days} day${days === 1 ? '' : 's'} of tracking`;
+  const atLow = price.final <= low.final;
+  const gap = low.final - price.final;
+
+  const when = new Date(`${low.date}T00:00:00Z`).toLocaleDateString('en-US', {
+    month: 'short',
+    day: 'numeric',
+    timeZone: 'UTC',
+  });
+
+  return (
+    <div
+      className={`mt-2 w-full rounded-lg px-3 py-2 text-xs leading-relaxed ring-1 ring-inset ${
+        atLow
+          ? 'bg-emerald-50 text-emerald-900 ring-emerald-200'
+          : 'bg-amber-50 text-amber-900 ring-amber-200'
+      }`}
+    >
+      <p className="font-semibold">
+        {atLow
+          ? `Lowest it has been in ${window}.`
+          : `Cheaper before: ${low.formatted} on ${when}${low.discountPercent ? ` (${low.discountPercent}% off)` : ''}.`}
+      </p>
+      <p className="mt-0.5 text-[11px] opacity-80">
+        {atLow
+          ? history.saleCount > 0
+            ? `${history.saleCount} sale${history.saleCount === 1 ? '' : 's'} seen in that time.`
+            : 'No sale seen in that time.'
+          : `${formatSaving(Math.abs(gap))} more than that today, over ${window}.`}
+        {history.deepestDiscount > 0 &&
+          ` Deepest cut seen: ${history.deepestDiscount}%.`}
+      </p>
+    </div>
+  );
+}
+
 function PricePanel({ game, live }) {
   if (!live) {
     return (
@@ -1319,6 +1376,7 @@ function PricePanel({ game, live }) {
           Sale ends {saleEnds.toLocaleDateString([], { month: 'short', day: 'numeric' })}
         </p>
       )}
+      <PriceHistoryNote price={price} history={live.history} />
     </div>
   );
 }
