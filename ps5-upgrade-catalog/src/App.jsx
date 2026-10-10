@@ -855,7 +855,12 @@ function CoverArt({ game, live, className = '' }) {
       <div
         className={`flex items-center justify-center bg-gradient-to-br from-indigo-500 via-violet-500 to-fuchsia-500 ${className}`}
       >
-        <span className="px-4 text-center text-lg font-black uppercase tracking-widest text-white/90">
+        {/* Clamped and sized down. This printed the full title at text-lg
+            with no limit, so anything long overflowed the fixed-ratio box and
+            was sliced off top and bottom: "Disco Elysium: The Final Cut" lost
+            its first and last words. This is what every card shows until art
+            arrives, so it has to survive a long name. */}
+        <span className="line-clamp-3 px-3 text-center text-sm font-black uppercase leading-snug tracking-wide text-white/90">
           {game.title}
         </span>
       </div>
@@ -1364,9 +1369,9 @@ function PricePanel({ game, live }) {
         href={storeLink(game)}
         target="_blank"
         rel="noopener noreferrer"
-        className="ml-auto inline-flex items-center gap-1 text-sm font-medium text-indigo-600 hover:underline"
+        className="inline-flex shrink-0 items-center gap-1 text-sm font-medium text-indigo-600 hover:underline"
       >
-        PlayStation Store
+        Store
         <ArrowUpRight className="h-3.5 w-3.5" />
       </a>
       {saleEnds && (
@@ -1653,14 +1658,8 @@ function GameCard({
   onHide,
   onOpen,
 }) {
-  const prediction = live?.prediction;
   const ratings = live?.ratings ?? game.ratings;
   const standing = priceStanding(live?.price, live?.history);
-  const showVerdict =
-    prediction &&
-    (prediction.verdict === 'buy-now' ||
-      prediction.verdict === 'wait' ||
-      prediction.verdict === 'included');
 
   return (
     <div className="group relative flex h-full animate-rise-in flex-col overflow-hidden rounded-xl border border-slate-200 bg-white shadow-sm transition-all duration-200 ease-spring hover:-translate-y-1 hover:shadow-lg focus-within:ring-2 focus-within:ring-indigo-500 active:scale-[0.98]">
@@ -1690,37 +1689,36 @@ function GameCard({
         </div>
 
         <div className="flex flex-1 flex-col p-2.5 sm:p-4">
-          <h2 className="mb-1.5 text-sm font-bold leading-tight text-slate-800 sm:pr-7 sm:text-base">
+          {/* One quiet row, not three loud ones. A card used to carry up to
+              six chips in five colours — genre, upgrade type, a drop verdict,
+              representation, an age badge and two scores — stacked above two
+              truncated lines of description, which left the price as the
+              smallest and last thing on a card in an app about prices. All of
+              it is still on the open game, where there is room for it. What is
+              left here is what you scan by: the name, a muted line of context,
+              and the price. */}
+          <h2 className="mb-1.5 line-clamp-2 text-sm font-bold leading-tight text-slate-800 sm:pr-7 sm:text-base">
             {game.title}
           </h2>
-          <div className="mb-1.5 flex flex-wrap gap-1">
-            <span className="rounded bg-indigo-50 px-1.5 py-0.5 text-[10px] font-semibold text-indigo-700 sm:text-[11px]">
-              {game.genre}
-            </span>
-            <UpgradeBadge value={game.ps5Upgrade} />
-            {showVerdict && <VerdictBadge prediction={prediction} />}
-          </div>
-          <div className="mb-1.5 flex flex-wrap items-center gap-1">
-            {game.representation?.length > 0 && (
-              <span
-                title={game.representation.map((entry) => entry.note).join(' ')}
-                className="inline-flex items-center gap-1 rounded bg-violet-50 px-1.5 py-0.5 text-[11px] font-semibold text-violet-700 ring-1 ring-inset ring-violet-600/20"
-              >
-                <Sparkles className="h-3 w-3" />
-                {game.representation.map((entry) => REPRESENTATION_LABELS[entry.kind]?.split(' ')[0]).join(' + ')}
-              </span>
+          <p className="mb-2 flex items-center gap-1.5 overflow-hidden text-[11px] font-medium text-slate-400">
+            <span className="truncate">{game.genre}</span>
+            {ratings?.critic != null && (
+              <>
+                <span aria-hidden="true">·</span>
+                <span className="shrink-0 tabular-nums">{ratings.critic}</span>
+              </>
             )}
-            <AgeBadge ageRating={game.ageRating} />
-            <RatingChips ratings={ratings} />
-          </div>
-          {reason ? (
-            <p className="line-clamp-3 text-[11px] font-medium leading-relaxed text-indigo-600 sm:text-xs">
+            {FAMILY_TIER_VALUES.includes(game.ageRating?.family) && (
+              <>
+                <span aria-hidden="true">·</span>
+                <Baby className="h-3 w-3 shrink-0" aria-label="Kid friendly" />
+              </>
+            )}
+          </p>
+          {reason && (
+            <p className="mb-2 line-clamp-2 text-[11px] font-medium leading-relaxed text-indigo-600">
               <Sparkles className="mr-1 inline h-3 w-3 align-[-1px]" />
               {reason}
-            </p>
-          ) : (
-            <p className="line-clamp-2 text-[11px] leading-relaxed text-slate-500 sm:text-xs">
-              {game.description}
             </p>
           )}
           {/* The price row is always here, even before a price arrives and
@@ -1732,10 +1730,14 @@ function GameCard({
           <div className="mt-auto min-h-[2.25rem] pt-3">
             {live?.price ? (
               <>
-                <p className="flex items-baseline gap-2 text-sm">
-                  <span className="font-semibold text-slate-900">{live.price.finalFormatted}</span>
+                <p className="flex items-baseline gap-1.5">
+                  <span className="text-base font-bold tabular-nums text-slate-900 sm:text-lg">
+                    {live.price.finalFormatted}
+                  </span>
                   {live.price.discountPercent > 0 && (
-                    <span className="text-slate-400 line-through">{live.price.initialFormatted}</span>
+                    <span className="text-xs text-slate-400 line-through">
+                      {live.price.initialFormatted}
+                    </span>
                   )}
                 </p>
                 {/* The depth of a cut says nothing on its own. Sorting Best
@@ -1831,7 +1833,7 @@ function GameCard({
   );
 }
 
-function EmptyState({ filters, wishlist, library, status, onClear }) {
+function EmptyState({ filters, wishlist, library, status, onClear, onSearchStore }) {
   if (filters.collection === 'genius' && library.size === 0 && wishlist.size === 0) {
     return (
       <div className="py-20 text-center text-slate-500">
@@ -1845,26 +1847,67 @@ function EmptyState({ filters, wishlist, library, status, onClear }) {
     );
   }
 
+  // Name the thing that actually emptied the list. Searching a word nothing
+  // matches used to be reported as "no games matching those filters", followed
+  // by a tip about PS5-only titles being hidden, which was both the wrong
+  // diagnosis and the wrong remedy: no PS5 toggle brings back a word that is
+  // not in the catalog.
+  const query = filters.q.trim();
+  const searching = query.length > 0;
+
   return (
     <div className="py-20 text-center text-slate-500">
       <Sparkles className="mx-auto mb-3 h-8 w-8 text-slate-300" />
-      <p className="text-lg">No games found matching those filters.</p>
-      {filters.wishlist && wishlist.size === 0 && (
-        <p className="mt-1 text-sm">Your wishlist is empty. Tap the heart on any card.</p>
+      <p className="text-lg text-slate-700">
+        {searching ? `Nothing here matches “${query}”.` : 'No games match these filters.'}
+      </p>
+
+      {searching ? (
+        <p className="mx-auto mt-2 max-w-sm text-sm leading-relaxed">
+          {filters.collection === 'all'
+            ? 'It may still be in the wider store.'
+            : 'You are inside a collection, so this only searched part of the catalog.'}
+        </p>
+      ) : (
+        <>
+          {filters.wishlist && wishlist.size === 0 && (
+            <p className="mt-1 text-sm">Your wishlist is empty. Tap the heart on any card.</p>
+          )}
+          {filters.atFloor && (
+            <p className="mt-1 text-sm">
+              Nothing here is at its lowest recorded price right now.
+            </p>
+          )}
+          {!filters.includePs5 && (
+            <p className="mt-1 text-sm">PS5-only titles are hidden. Turn them on to see more.</p>
+          )}
+          {filters.sale && status === 'loading' && (
+            <p className="mt-1 text-sm">Still checking prices — more may appear.</p>
+          )}
+        </>
       )}
-      {!filters.includePs5 && (
-        <p className="mt-1 text-sm">PS5-only titles are hidden. Turn them on to see more.</p>
-      )}
-      {filters.sale && status === 'loading' && (
-        <p className="mt-1 text-sm">Still checking prices — more may appear.</p>
-      )}
-      <button
-        type="button"
-        onClick={onClear}
-        className="mt-4 font-medium text-indigo-600 hover:underline"
-      >
-        Clear all filters
-      </button>
+
+      <div className="mt-5 flex flex-col items-center gap-3">
+        {/* When a search came up empty the whole store is the useful next move,
+            so it belongs here rather than orphaned at the foot of the page. */}
+        {searching && onSearchStore && (
+          <button
+            type="button"
+            onClick={onSearchStore}
+            className="inline-flex min-h-[2.75rem] items-center gap-1.5 rounded-xl bg-indigo-600 px-4 text-sm font-semibold text-white transition-transform duration-200 ease-spring active:scale-95 hover:bg-indigo-700"
+          >
+            <Search className="h-4 w-4" />
+            Look in the whole store
+          </button>
+        )}
+        <button
+          type="button"
+          onClick={onClear}
+          className="font-medium text-indigo-600 hover:underline"
+        >
+          {searching ? 'Clear search and filters' : 'Clear all filters'}
+        </button>
+      </div>
     </div>
   );
 }
@@ -3739,6 +3782,118 @@ function useStoreSearch({ active, q, genre, sort }) {
  * weighted down until enough people have voted, so the top is genuinely
  * well-liked rather than one five-star review.
  */
+/**
+ * A store game as a feed slide.
+ *
+ * Switching to the feed while Whole store was selected used to show the
+ * curated 242 instead, silently: the collection chip said one thing and the
+ * list was another. The mirror carries art, a name, a price and a rating,
+ * which is everything a slide needs, so it can simply be in the feed like
+ * every other collection.
+ */
+function StoreFeedSlide({ game, curated, onOpenCurated, onOpenStore }) {
+  const open = () => (curated ? onOpenCurated(curated.id) : onOpenStore(game));
+
+  return (
+    <section className="feed-slide relative flex h-full w-full items-end overflow-hidden bg-slate-900">
+      {game.art ? (
+        <img src={game.art} alt="" loading="lazy" decoding="async"
+          className="absolute inset-0 h-full w-full scale-105 object-cover" />
+      ) : (
+        <div className="absolute inset-0 bg-gradient-to-br from-indigo-600 via-violet-600 to-fuchsia-600" />
+      )}
+      <div className="absolute inset-0 bg-gradient-to-t from-slate-950 via-slate-950/70 to-slate-950/10" />
+
+      <div className="relative w-full p-5 pb-[calc(6rem+var(--inset-bottom))] sm:p-8 sm:pb-[calc(6.5rem+var(--inset-bottom))]">
+        <div className="mx-auto flex max-w-3xl items-end justify-between gap-4">
+          <div className="min-w-0">
+            <div className="mb-3 flex flex-wrap items-center gap-1.5">
+              {(game.genres ?? []).slice(0, 1).map((genre) => (
+                <span key={genre} className="rounded-md bg-white/15 px-2 py-1 text-xs font-semibold text-white backdrop-blur">
+                  {genre}
+                </span>
+              ))}
+              {curated && (
+                <span className="rounded-md bg-indigo-500/80 px-2 py-1 text-xs font-semibold text-white backdrop-blur">
+                  In the catalog
+                </span>
+              )}
+            </div>
+
+            <h2 className="text-3xl font-bold leading-tight text-white drop-shadow sm:text-5xl">
+              {game.name}
+            </h2>
+
+            <p className="mt-3 flex flex-wrap items-center gap-x-4 gap-y-1 text-sm text-white/80">
+              {game.price && <span className="text-lg font-bold text-white">{game.price}</span>}
+              {game.stars > 0 && (
+                <span className="inline-flex items-center gap-1.5">
+                  <Star className="h-4 w-4" />
+                  {game.stars.toFixed(1)}
+                </span>
+              )}
+              {game.publisher && <span className="truncate">{game.publisher}</span>}
+            </p>
+          </div>
+
+          <div className="flex shrink-0 flex-col gap-2">
+            <button
+              type="button"
+              onClick={open}
+              aria-label={`Details for ${game.name}`}
+              className="rounded-full bg-white/15 p-3 text-white backdrop-blur transition-transform duration-200 ease-spring active:scale-90 hover:bg-white/25"
+            >
+              <Info className="h-5 w-5" />
+            </button>
+          </div>
+        </div>
+      </div>
+    </section>
+  );
+}
+
+/**
+ * The whole store as a feed, so the view switch means the same thing here as
+ * it does anywhere else.
+ */
+function StoreFeed({ query, curatedByName, onOpenCurated, onOpenStore }) {
+  const results = useStoreSearch({ active: true, q: query, genre: '', sort: 'rating' });
+  const [sentinel, setSentinel] = useState(null);
+  const loadMore = results.more;
+  const hasMore = results.games.length < results.total;
+
+  useEffect(() => {
+    if (!sentinel || !hasMore) return undefined;
+    const observer = new IntersectionObserver(([entry]) => entry.isIntersecting && loadMore(), {
+      rootMargin: '150% 0px',
+    });
+    observer.observe(sentinel);
+    return () => observer.disconnect();
+  }, [sentinel, hasMore, loadMore]);
+
+  if (results.status === 'loading' && results.games.length === 0) {
+    return <PanelMessage icon={Loader2} spin label="Searching the store index..." />;
+  }
+  if (results.games.length === 0) {
+    return <PanelMessage icon={Search} label="Nothing in the index matches that." />;
+  }
+
+  return (
+    <>
+      {results.games.map((game) => (
+        <StoreFeedSlide
+          key={game.id}
+          game={game}
+          curated={curatedByName.get(game.name?.toLowerCase())}
+          onOpenCurated={onOpenCurated}
+          onOpenStore={onOpenStore}
+        />
+      ))}
+      {hasMore && <div ref={setSentinel} aria-hidden="true" className="h-px" />}
+    </>
+  );
+}
+
 function StorePanel({ query, curatedByName, onOpenCurated, onOpenStore }) {
   const [genre, setGenre] = useState('');
   const [sort, setSort] = useState('rating');
@@ -3758,6 +3913,24 @@ function StorePanel({ query, curatedByName, onOpenCurated, onOpenStore }) {
   }, []);
 
   const results = useStoreSearch({ active: true, q: query, genre, sort });
+
+  // Ask for the next page a screen and a half early, so the end of the list is
+  // never actually reached. A callback ref because the sentinel only exists
+  // while there is more to load.
+  const [moreSentinel, setMoreSentinel] = useState(null);
+  const loadMore = results.more;
+  const hasMore = results.games.length < results.total;
+  useEffect(() => {
+    if (!moreSentinel || !hasMore) return undefined;
+    const observer = new IntersectionObserver(
+      ([entry]) => {
+        if (entry.isIntersecting) loadMore();
+      },
+      { rootMargin: '150% 0px' },
+    );
+    observer.observe(moreSentinel);
+    return () => observer.disconnect();
+  }, [moreSentinel, hasMore, loadMore]);
 
   return (
     <>
@@ -3841,15 +4014,11 @@ function StorePanel({ query, curatedByName, onOpenCurated, onOpenStore }) {
             ))}
           </div>
 
+          {/* The rest of the app grows its lists as you reach them; this was
+              the one place that stopped and asked you to press a button. */}
           {results.games.length < results.total && (
-            <div className="mt-6 text-center">
-              <button
-                type="button"
-                onClick={results.more}
-                className="rounded-full bg-slate-900 px-5 py-2 text-sm font-medium text-white transition-transform duration-200 ease-spring active:scale-95"
-              >
-                Show more
-              </button>
+            <div ref={setMoreSentinel} className="mt-6 flex justify-center py-4">
+              <Loader2 className="h-5 w-5 animate-spin text-slate-300" />
             </div>
           )}
         </>
@@ -4406,7 +4575,10 @@ function Select({ label, value, options, onChange }) {
         aria-label={label}
         value={value}
         onChange={(event) => onChange(event.target.value)}
-        className="cursor-pointer rounded-lg border border-slate-300 bg-white px-4 py-2 text-sm outline-none transition-colors focus:border-indigo-500 focus:ring-2 focus:ring-indigo-500"
+        // w-full so a long label like "All Upgrade Types" is the select's
+        // problem to shrink rather than overflowing its box, and a tighter
+        // right pad so the native chevron does not sit on the text.
+        className="w-full min-w-0 cursor-pointer truncate rounded-lg border border-slate-300 bg-white py-2 pl-3 pr-8 text-sm outline-none transition-colors focus:border-indigo-500 focus:ring-2 focus:ring-indigo-500"
       >
         {options.map((option) => {
           const optionValue = typeof option === 'string' ? option : option.value;
@@ -5249,7 +5421,17 @@ export default function App() {
           className="feed-scroll no-scrollbar h-[calc(100dvh-var(--bar-height))] overflow-y-auto"
           aria-label="Game feed"
         >
-          {shownGames.map((game) => (
+          {/* The collection chip has to mean the same thing in both views.
+              Whole store used to fall through to the curated list here. */}
+          {filters.collection === 'store' ? (
+            <StoreFeed
+              query={deferredQuery.trim()}
+              curatedByName={curatedByName}
+              onOpenCurated={setActiveGameId}
+              onOpenStore={setActiveStoreGame}
+            />
+          ) : (
+            shownGames.map((game) => (
             <FeedSlide
               key={game.id}
               game={game}
@@ -5263,15 +5445,19 @@ export default function App() {
               onToggleOwned={() => toggleOwned(game.id)}
               onOpen={() => setActiveGameId(game.id)}
             />
-          ))}
-          {hasMore && <div ref={attachEnd} aria-hidden="true" className="h-px" />}
-          {filteredGames.length === 0 && (
+          ))
+          )}
+          {filters.collection !== 'store' && hasMore && (
+            <div ref={attachEnd} aria-hidden="true" className="h-px" />
+          )}
+          {filters.collection !== 'store' && filteredGames.length === 0 && (
             <EmptyState
               filters={filters}
               wishlist={wishlist}
               library={library}
               status={status}
               onClear={clearFilters}
+              onSearchStore={() => set('collection', 'store')}
             />
           )}
         </main>
@@ -5393,6 +5579,7 @@ export default function App() {
               library={library}
               status={status}
               onClear={clearFilters}
+              onSearchStore={() => set('collection', 'store')}
             />
           )}
 
