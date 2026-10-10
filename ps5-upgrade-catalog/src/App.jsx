@@ -318,11 +318,28 @@ function readWishlist() {
 const CHUNK_SIZE = 15;
 const CHUNK_COUNT = Math.ceil(gamesData.length / CHUNK_SIZE);
 
+/** How many chunk requests may be in flight at once. */
+const LOAD_CONCURRENCY = 6;
+/** Grid repaints are the expensive part, so arriving chunks are grouped. */
+const FLUSH_MS = 180;
+
 /**
  * Pulls artwork, screenshots, trailers, sale prices and drop predictions from
- * /api/games, one fixed chunk at a time. Chunk URLs are identical for every
- * visitor, so the CDN can serve most of these without touching the upstream
- * storefront. Cards render immediately and fill in as chunks land.
+ * /api/games. Chunk URLs are identical for every visitor, so the CDN can serve
+ * most of these without touching the upstream storefront. Cards render
+ * immediately and fill in as chunks land.
+ *
+ * Chunks are fetched several at a time. They used to go one after another,
+ * which was fine whenever the CDN had them all and disastrous whenever it did
+ * not: a chunk the CDN has to fill costs a couple of seconds upstream at the
+ * PlayStation Store, and twenty of those in a row measured 37 to 48 seconds
+ * of prices dribbling in from the top of the page down. The cache only holds
+ * ten minutes, so anyone opening the app after a break paid that nearly every
+ * time. Six in flight brings the same cold load to about five seconds.
+ *
+ * Results are also grouped before they reach state. One commit per chunk meant
+ * forty renders of a 298-card grid during a load; grouping them into a flush
+ * every FLUSH_MS keeps prices appearing promptly without the repaint storm.
  */
 function useLiveData(region) {
   const [byTitle, setByTitle] = useState(() => new Map());
@@ -339,10 +356,26 @@ function useLiveData(region) {
         setChunksLoaded(0);
         setByTitle(new Map());
       }
-      let failed = 0;
 
-      for (let chunk = 0; chunk < CHUNK_COUNT; chunk += 1) {
-        if (runId.current !== run) return;
+      let failed = 0;
+      let done = 0;
+      // Games waiting to be shown, and the last time they were handed over.
+      let pending = [];
+      let flushedAt = 0;
+
+      const flush = () => {
+        if (pending.length === 0) return;
+        const batch = pending;
+        pending = [];
+        flushedAt = Date.now();
+        setByTitle((previous) => {
+          const next = new Map(previous);
+          for (const game of batch) next.set(game.title, game);
+          return next;
+        });
+      };
+
+      const fetchChunk = async (chunk) => {
         try {
           // `cache: 'reload'` only bypasses the browser's own cache. The CDN
           // in front of the function would still answer from its copy, so a
@@ -354,19 +387,32 @@ function useLiveData(region) {
           if (!response.ok) throw new Error(`request failed: ${response.status}`);
           const payload = await response.json();
           if (runId.current !== run) return;
-
-          setByTitle((previous) => {
-            const next = new Map(previous);
-            for (const game of payload.games ?? []) next.set(game.title, game);
-            return next;
-          });
+          pending.push(...(payload.games ?? []));
         } catch {
           failed += 1;
         }
-        setChunksLoaded(chunk + 1);
-      }
+        done += 1;
+        if (runId.current !== run) return;
+        setChunksLoaded(done);
+        if (Date.now() - flushedAt >= FLUSH_MS) flush();
+      };
+
+      // A shared queue rather than fixed slices, so a slow chunk cannot hold
+      // up the ones behind it. Taken in order, so the top of the page fills
+      // first, which is the part anybody is actually looking at.
+      const queue = Array.from({ length: CHUNK_COUNT }, (_, index) => index);
+      const worker = async () => {
+        while (queue.length > 0) {
+          if (runId.current !== run) return;
+          await fetchChunk(queue.shift());
+        }
+      };
+      await Promise.all(
+        Array.from({ length: Math.min(LOAD_CONCURRENCY, CHUNK_COUNT) }, worker),
+      );
 
       if (runId.current !== run) return;
+      flush();
       setStatus(failed === CHUNK_COUNT ? 'error' : 'ready');
       setUpdatedAt(new Date());
     },
@@ -1559,21 +1605,40 @@ function GameCard({
               {game.description}
             </p>
           )}
-          {live?.price && (
-            <div className="mt-auto pt-3">
-              <p className="flex items-baseline gap-2 text-sm">
-                <span className="font-semibold text-slate-900">{live.price.finalFormatted}</span>
-                {live.price.discountPercent > 0 && (
-                  <span className="text-slate-400 line-through">{live.price.initialFormatted}</span>
-                )}
-              </p>
-              {saving > 0 && (
-                <p className="mt-1 text-[11px] font-semibold text-rose-600">
-                  {formatSaving(saving)} cheaper than when you added it
+          {/* The price row is always here, even before a price arrives and
+              even when none ever will. It used to render only once a price
+              existed, which meant every card in the grid grew by a line as
+              its chunk landed — the whole page shuffling under your thumb
+              while you were reading it — and the fifty titles the store has
+              no readable price for just ended early with no explanation. */}
+          <div className="mt-auto min-h-[2.25rem] pt-3">
+            {live?.price ? (
+              <>
+                <p className="flex items-baseline gap-2 text-sm">
+                  <span className="font-semibold text-slate-900">{live.price.finalFormatted}</span>
+                  {live.price.discountPercent > 0 && (
+                    <span className="text-slate-400 line-through">{live.price.initialFormatted}</span>
+                  )}
                 </p>
-              )}
-            </div>
-          )}
+                {saving > 0 && (
+                  <p className="mt-1 text-[11px] font-semibold text-rose-600">
+                    {formatSaving(saving)} cheaper than when you added it
+                  </p>
+                )}
+              </>
+            ) : live ? (
+              // The chunk arrived and carried no price: the store has no page
+              // we can read for this one. Saying so beats an empty gap.
+              <p className="text-[11px] text-slate-400">Price not tracked</p>
+            ) : (
+              // Still in flight. A bar the width of a price keeps the card the
+              // same height it will be a moment from now.
+              <span
+                aria-hidden="true"
+                className="block h-4 w-14 animate-pulse rounded bg-slate-100"
+              />
+            )}
+          </div>
         </div>
       </button>
 
