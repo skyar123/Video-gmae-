@@ -72,6 +72,19 @@ export async function loadBlob(key) {
   return all[key] ?? {};
 }
 
+/**
+ * Serialises local writes.
+ *
+ * Netlify Blobs stores each key separately, so a write there touches nothing
+ * else. The local fallback keeps every key in one file, which means a write is
+ * read-modify-write over shared state, and that was only ever safe because
+ * chunks used to be requested one after another. They are now requested six at
+ * a time, and six readers of the same file each writing their own key back
+ * meant the last one won and silently dropped the other five: a local history
+ * file came back holding chunks 17 to 19 and nothing else.
+ */
+let localWrites = Promise.resolve();
+
 /** Write one JSON blob. Never throws: this data is always an enhancement. */
 export async function saveBlob(key, data) {
   const store = await getBlobStore();
@@ -83,9 +96,15 @@ export async function saveBlob(key, data) {
     }
     return;
   }
-  const all = await readLocalFile();
-  all[key] = data;
-  await writeLocalFile(all);
+
+  // Queued, and re-read inside the queue, so concurrent writers merge rather
+  // than overwrite each other.
+  localWrites = localWrites.then(async () => {
+    const all = await readLocalFile();
+    all[key] = data;
+    await writeLocalFile(all);
+  }).catch(() => {});
+  return localWrites;
 }
 
 export const loadChunk = (chunk, countryCode) => loadBlob(keyFor(chunk, countryCode));

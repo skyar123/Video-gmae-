@@ -1287,18 +1287,36 @@ function GameModal({
  * Everything here is measured, and the window is always stated, because a
  * month of observation is a month of observation and not "the lowest ever".
  */
+/** Below a week of readings there is nothing worth concluding. */
+const STANDING_MIN_DAYS = 7;
+
+/**
+ * How today's price stands against the cheapest this record has seen.
+ *
+ * One function because two places show it: a card has room for two words and
+ * the open game has room for a sentence, and they must never disagree about
+ * which way the verdict goes.
+ */
+function priceStanding(price, history) {
+  const low = history?.lowest;
+  const days = history?.observedDays ?? 0;
+  if (!low || typeof price?.final !== 'number' || days < STANDING_MIN_DAYS) return null;
+
+  return {
+    atLow: price.final <= low.final,
+    low,
+    days,
+    // How much more than the recorded low you would pay today.
+    gap: low.final - price.final,
+  };
+}
+
 function PriceHistoryNote({ price, history }) {
-  if (!history?.lowest || typeof price?.final !== 'number') return null;
+  const standing = priceStanding(price, history);
+  if (!standing) return null;
 
-  const low = history.lowest;
-  const days = history.observedDays ?? 0;
-  // Under a fortnight there is nothing worth concluding, and saying so beats
-  // dressing up two data points as a trend.
-  if (days < 7) return null;
-
+  const { atLow, low, days, gap } = standing;
   const window = `${days} day${days === 1 ? '' : 's'} of tracking`;
-  const atLow = price.final <= low.final;
-  const gap = low.final - price.final;
 
   const when = new Date(`${low.date}T00:00:00Z`).toLocaleDateString('en-US', {
     month: 'short',
@@ -1657,6 +1675,7 @@ function GameCard({
 }) {
   const prediction = live?.prediction;
   const ratings = live?.ratings ?? game.ratings;
+  const standing = priceStanding(live?.price, live?.history);
   const showVerdict =
     prediction &&
     (prediction.verdict === 'buy-now' ||
@@ -1739,6 +1758,21 @@ function GameCard({
                     <span className="text-slate-400 line-through">{live.price.initialFormatted}</span>
                   )}
                 </p>
+                {/* The depth of a cut says nothing on its own. Sorting Best
+                    deals by discount puts 50% off at the top whether that is
+                    the floor or half what it went for last month, and this is
+                    the difference, in the two words a card has room for. */}
+                {standing && (
+                  <p
+                    className={`mt-1 text-[11px] font-semibold ${
+                      standing.atLow ? 'text-emerald-600' : 'text-amber-700'
+                    }`}
+                  >
+                    {standing.atLow
+                      ? 'Lowest yet'
+                      : `Was ${standing.low.formatted}`}
+                  </p>
+                )}
                 {saving > 0 && (
                   <p className="mt-1 text-[11px] font-semibold text-rose-600">
                     {formatSaving(saving)} cheaper than when you added it
@@ -4814,6 +4848,17 @@ export default function App() {
     [filteredGames, shownLimit],
   );
 
+  // Scanning a list of discounts, the useful number is not how many are
+  // discounted but how many are as cheap as this record has ever seen them.
+  const atFloorCount = useMemo(() => {
+    let count = 0;
+    for (const game of filteredGames) {
+      const live = byTitle.get(game.title);
+      if (priceStanding(live?.price, live?.history)?.atLow) count += 1;
+    }
+    return count;
+  }, [filteredGames, byTitle]);
+
   const visiblePool = useMemo(
     () => gamesData.filter((game) => filters.includePs5 || game.platform !== 'PS5'),
     [filters.includePs5],
@@ -5225,6 +5270,12 @@ export default function App() {
             <>
           <p className="mb-3 text-xs font-medium text-slate-400">
             {filteredGames.length} of {visiblePool.length} games
+            {atFloorCount > 0 && (
+              <span className="font-semibold text-emerald-600">
+                {' '}
+                · {atFloorCount} at {atFloorCount === 1 ? 'its' : 'their'} lowest yet
+              </span>
+            )}
             {COLLECTION_BLURBS[filters.collection] &&
               ` · ${COLLECTION_BLURBS[filters.collection]}`}
           </p>
