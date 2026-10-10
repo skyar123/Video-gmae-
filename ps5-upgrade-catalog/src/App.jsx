@@ -33,8 +33,10 @@ import {
   Search,
   SlidersHorizontal,
   Smartphone,
+  Moon,
   Sparkles,
   Star,
+  Sun,
   ThumbsDown,
   ThumbsUp,
   TrendingDown,
@@ -145,22 +147,22 @@ const REGIONS = [
 ];
 
 const UPGRADE_STYLES = {
-  'Free PS5 Upgrade': 'bg-emerald-50 text-emerald-700 ring-emerald-600/20',
-  'PS4 & PS5 Cross-Buy': 'bg-sky-50 text-sky-700 ring-sky-600/20',
-  'Paid PS5 Upgrade': 'bg-amber-50 text-amber-700 ring-amber-600/20',
-  'Backwards Compatible': 'bg-slate-100 text-slate-600 ring-slate-500/20',
-  'PS5 Only': 'bg-violet-50 text-violet-700 ring-violet-600/20',
+  'Free PS5 Upgrade': 'bg-emerald-50 dark:bg-emerald-950/40 text-emerald-700 dark:text-emerald-300 ring-emerald-600/20',
+  'PS4 & PS5 Cross-Buy': 'bg-sky-50 dark:bg-sky-950/40 text-sky-700 dark:text-sky-300 ring-sky-600/20',
+  'Paid PS5 Upgrade': 'bg-amber-50 dark:bg-amber-950/40 text-amber-700 dark:text-amber-300 ring-amber-600/20',
+  'Backwards Compatible': 'bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-300 ring-slate-500/20',
+  'PS5 Only': 'bg-violet-50 dark:bg-violet-950/40 text-violet-700 dark:text-violet-300 ring-violet-600/20',
   'PS Plus Classic': 'bg-teal-50 text-teal-700 ring-teal-600/20',
 };
 
 const VERDICT_STYLES = {
-  'buy-now': 'bg-emerald-50 text-emerald-700 ring-emerald-600/20',
-  wait: 'bg-amber-50 text-amber-700 ring-amber-600/20',
-  hold: 'bg-slate-100 text-slate-600 ring-slate-500/20',
-  'too-new': 'bg-sky-50 text-sky-700 ring-sky-600/20',
+  'buy-now': 'bg-emerald-50 dark:bg-emerald-950/40 text-emerald-700 dark:text-emerald-300 ring-emerald-600/20',
+  wait: 'bg-amber-50 dark:bg-amber-950/40 text-amber-700 dark:text-amber-300 ring-amber-600/20',
+  hold: 'bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-300 ring-slate-500/20',
+  'too-new': 'bg-sky-50 dark:bg-sky-950/40 text-sky-700 dark:text-sky-300 ring-sky-600/20',
   // A subscription already covering the game is its own answer, not a price.
-  included: 'bg-indigo-50 text-indigo-700 ring-indigo-600/20',
-  unknown: 'bg-slate-100 text-slate-500 ring-slate-500/20',
+  included: 'bg-indigo-50 dark:bg-indigo-950/40 text-indigo-700 dark:text-indigo-300 ring-indigo-600/20',
+  unknown: 'bg-slate-100 dark:bg-slate-800 text-slate-500 dark:text-slate-400 ring-slate-500/20',
 };
 
 /* ------------------------------------------------------------------ *
@@ -596,22 +598,22 @@ const FAMILY_TIERS = {
   safe: {
     label: 'Great for kids',
     short: 'Kids',
-    tone: 'bg-emerald-50 text-emerald-700 ring-emerald-600/20',
+    tone: 'bg-emerald-50 dark:bg-emerald-950/40 text-emerald-700 dark:text-emerald-300 ring-emerald-600/20',
   },
   mild: {
     label: 'Fine for most kids',
     short: 'Most kids',
-    tone: 'bg-sky-50 text-sky-700 ring-sky-600/20',
+    tone: 'bg-sky-50 dark:bg-sky-950/40 text-sky-700 dark:text-sky-300 ring-sky-600/20',
   },
   mature: {
     label: 'Mature content',
     short: 'Mature',
-    tone: 'bg-rose-50 text-rose-700 ring-rose-600/20',
+    tone: 'bg-rose-50 dark:bg-rose-950/40 text-rose-700 dark:text-rose-300 ring-rose-600/20',
   },
   unknown: {
     label: 'Not rated',
     short: 'Not rated',
-    tone: 'bg-slate-100 text-slate-500 ring-slate-500/20',
+    tone: 'bg-slate-100 dark:bg-slate-800 text-slate-500 dark:text-slate-400 ring-slate-500/20',
   },
 };
 
@@ -654,7 +656,7 @@ function AgeBadge({ ageRating, size = 'sm' }) {
 function AgeDetail({ ageRating }) {
   if (!ageRating) {
     return (
-      <p className="mt-4 text-sm text-slate-500">
+      <p className="mt-4 text-sm text-slate-500 dark:text-slate-400">
         No age rating found for this title. Check the PS Store listing before handing it to a
         kid.
       </p>
@@ -664,13 +666,13 @@ function AgeDetail({ ageRating }) {
   const ageTier = AGE_TIERS[ageRating.tier] ?? AGE_TIERS.unknown;
 
   return (
-    <div className="mt-4 rounded-xl border border-slate-200 p-4">
+    <div className="mt-4 rounded-xl border border-slate-200 dark:border-slate-700 p-4">
       <div className="flex flex-wrap items-center gap-2">
-        <h3 className="text-sm font-semibold uppercase tracking-wider text-slate-400">
+        <h3 className="text-sm font-semibold uppercase tracking-wider text-slate-400 dark:text-slate-500">
           Kid friendly?
         </h3>
         <AgeBadge ageRating={ageRating} size="lg" />
-        <span className="text-sm text-slate-500">
+        <span className="text-sm text-slate-500 dark:text-slate-400">
           Board says {ageTier.label}
           {ageRating.source && ` (${ageRating.source} ${ageRating.rating})`}
           {!ageRating.official && ', auto-generated'}
@@ -679,14 +681,14 @@ function AgeDetail({ ageRating }) {
 
       {ageRating.concerns.length > 0 && (
         <div className="mt-3">
-          <p className="text-xs font-semibold uppercase tracking-wider text-rose-700">
+          <p className="text-xs font-semibold uppercase tracking-wider text-rose-700 dark:text-rose-300">
             What rules it out
           </p>
           <div className="mt-1.5 flex flex-wrap gap-1.5">
             {ageRating.concerns.map((concern) => (
               <span
                 key={concern}
-                className="rounded-md bg-rose-50 px-2 py-0.5 text-xs text-rose-700"
+                className="rounded-md bg-rose-50 dark:bg-rose-950/40 px-2 py-0.5 text-xs text-rose-700 dark:text-rose-300"
               >
                 {concern}
               </span>
@@ -697,14 +699,14 @@ function AgeDetail({ ageRating }) {
 
       {ageRating.descriptors.length > 0 && (
         <div className="mt-3">
-          <p className="text-xs font-semibold uppercase tracking-wider text-slate-400">
+          <p className="text-xs font-semibold uppercase tracking-wider text-slate-400 dark:text-slate-500">
             Content descriptors
           </p>
           <div className="mt-1.5 flex flex-wrap gap-1.5">
             {ageRating.descriptors.map((descriptor) => (
               <span
                 key={descriptor}
-                className="rounded-md bg-slate-100 px-2 py-0.5 text-xs text-slate-600"
+                className="rounded-md bg-slate-100 dark:bg-slate-800 px-2 py-0.5 text-xs text-slate-600 dark:text-slate-300"
               >
                 {descriptor}
               </span>
@@ -713,9 +715,9 @@ function AgeDetail({ ageRating }) {
         </div>
       )}
 
-      {ageRating.notes && <p className="mt-3 text-sm text-slate-600">{ageRating.notes}</p>}
+      {ageRating.notes && <p className="mt-3 text-sm text-slate-600 dark:text-slate-300">{ageRating.notes}</p>}
 
-      <p className="mt-3 text-xs text-slate-400">
+      <p className="mt-3 text-xs text-slate-400 dark:text-slate-500">
         The verdict is judged on content, not the age number: gore, brutal violence and sexual
         content rule a game out, while mild violence, language and drink or drug references do
         not. A Mature-rated game with none of the former still reads as fine.
@@ -726,9 +728,9 @@ function AgeDetail({ ageRating }) {
 
 /** Green for strong, amber for mixed, rose for poor. */
 function scoreTone(value) {
-  if (value >= 80) return 'bg-emerald-50 text-emerald-700 ring-emerald-600/20';
-  if (value >= 60) return 'bg-amber-50 text-amber-700 ring-amber-600/20';
-  return 'bg-rose-50 text-rose-700 ring-rose-600/20';
+  if (value >= 80) return 'bg-emerald-50 dark:bg-emerald-950/40 text-emerald-700 dark:text-emerald-300 ring-emerald-600/20';
+  if (value >= 60) return 'bg-amber-50 dark:bg-amber-950/40 text-amber-700 dark:text-amber-300 ring-amber-600/20';
+  return 'bg-rose-50 dark:bg-rose-950/40 text-rose-700 dark:text-rose-300 ring-rose-600/20';
 }
 
 /**
@@ -784,13 +786,13 @@ function ProsAndCons({ ratings }) {
         {title}
       </h4>
       {items.length === 0 ? (
-        <p className="text-sm text-slate-400">{empty}</p>
+        <p className="text-sm text-slate-400 dark:text-slate-500">{empty}</p>
       ) : (
-        <ul className="space-y-1.5 text-sm text-slate-600">
+        <ul className="space-y-1.5 text-sm text-slate-600 dark:text-slate-300">
           {items.map((item) => (
             <li key={item.label} className="flex items-baseline justify-between gap-3">
               <span>{item.label}</span>
-              <span className="shrink-0 text-xs text-slate-400">{item.mentions}</span>
+              <span className="shrink-0 text-xs text-slate-400 dark:text-slate-500">{item.mentions}</span>
             </li>
           ))}
         </ul>
@@ -799,12 +801,12 @@ function ProsAndCons({ ratings }) {
   );
 
   return (
-    <div className="mt-4 rounded-xl border border-slate-200 p-4">
+    <div className="mt-4 rounded-xl border border-slate-200 dark:border-slate-700 p-4">
       <div className="grid gap-6 sm:grid-cols-2">
-        {column('What players praise', pros, 'text-emerald-700', ThumbsUp, 'No clear pattern.')}
-        {column('What they complain about', cons, 'text-rose-700', ThumbsDown, 'No recurring complaints.')}
+        {column('What players praise', pros, 'text-emerald-700 dark:text-emerald-300', ThumbsUp, 'No clear pattern.')}
+        {column('What they complain about', cons, 'text-rose-700 dark:text-rose-300', ThumbsDown, 'No recurring complaints.')}
       </div>
-      <p className="mt-4 text-xs text-slate-400">
+      <p className="mt-4 text-xs text-slate-400 dark:text-slate-500">
         Themes counted across a sample of player reviews — the number is how many mentioned it.
         Praise is counted only in positive reviews and complaints only in negative ones.
         {ratings.asOf && ` Sampled ${ratings.asOf}.`}
@@ -822,16 +824,16 @@ const REPRESENTATION_LABELS = { queer: 'Queer representation', disability: 'Disa
 function RepresentationDetail({ representation }) {
   if (!representation?.length) return null;
   return (
-    <div className="mt-4 rounded-xl border border-slate-200 p-4">
+    <div className="mt-4 rounded-xl border border-slate-200 dark:border-slate-700 p-4">
       {representation.map((entry) => (
         <div key={entry.kind} className="not-first:mt-3">
-          <p className="text-xs font-semibold uppercase tracking-wider text-violet-700">
+          <p className="text-xs font-semibold uppercase tracking-wider text-violet-700 dark:text-violet-300">
             {REPRESENTATION_LABELS[entry.kind] ?? entry.kind}
           </p>
-          <p className="mt-1 text-sm text-slate-600">{entry.note}</p>
+          <p className="mt-1 text-sm text-slate-600 dark:text-slate-300">{entry.note}</p>
         </div>
       ))}
-      <p className="mt-3 text-xs text-slate-400">
+      <p className="mt-3 text-xs text-slate-400 dark:text-slate-500">
         Noted by hand, and deliberately specific. If something here is wrong or a game is
         missing, it is worth correcting.
       </p>
@@ -1069,7 +1071,7 @@ function ModalSheet({ labelledBy, onClose, children }) {
         // The content scrolls inside the sheet rather than the backdrop
         // scrolling behind it, which is what stops iOS rubber-banding the page
         // under an open dialog.
-        className="panel-scroll relative max-h-[92dvh] w-full overflow-y-auto rounded-t-2xl bg-white pb-[var(--inset-bottom)] shadow-2xl animate-sheet-up sm:my-auto sm:max-h-[90dvh] sm:max-w-3xl sm:rounded-2xl sm:pb-0 sm:animate-pop-in"
+        className="panel-scroll relative max-h-[92dvh] w-full overflow-y-auto rounded-t-2xl bg-white dark:bg-slate-900 pb-[var(--inset-bottom)] shadow-2xl animate-sheet-up sm:my-auto sm:max-h-[90dvh] sm:max-w-3xl sm:rounded-2xl sm:pb-0 sm:animate-pop-in"
       >
         {/* Grab handle: the standard way out of a sheet on a phone. */}
         <div
@@ -1164,14 +1166,14 @@ function GameModal({
 
         {/* Media thumbnails */}
         {(videos.length > 0 || screenshots.length > 0) && (
-          <div className="flex gap-2 overflow-x-auto border-b border-slate-100 bg-slate-50 px-4 py-3">
+          <div className="flex gap-2 overflow-x-auto border-b border-slate-100 dark:border-slate-800 bg-slate-50 dark:bg-slate-950 px-4 py-3">
             {videos.map((video) => (
               <button
                 key={video.id}
                 type="button"
                 onClick={() => setSelected({ kind: 'video', video })}
                 title={video.name}
-                className="relative h-14 w-24 shrink-0 overflow-hidden rounded-md ring-1 ring-slate-200 transition-transform hover:scale-105"
+                className="relative h-14 w-24 shrink-0 overflow-hidden rounded-md ring-1 ring-slate-200 dark:ring-slate-700 transition-transform hover:scale-105"
               >
                 <img src={video.thumbnail} alt="" className="h-full w-full object-cover" />
                 <CirclePlay className="absolute inset-0 m-auto h-6 w-6 text-white drop-shadow" />
@@ -1182,7 +1184,7 @@ function GameModal({
                 key={shot.thumb}
                 type="button"
                 onClick={() => setSelected({ kind: 'image', src: shot.full })}
-                className="h-14 w-24 shrink-0 overflow-hidden rounded-md ring-1 ring-slate-200 transition-transform hover:scale-105"
+                className="h-14 w-24 shrink-0 overflow-hidden rounded-md ring-1 ring-slate-200 dark:ring-slate-700 transition-transform hover:scale-105"
               >
                 <img src={shot.thumb} alt="" className="h-full w-full object-cover" />
               </button>
@@ -1194,7 +1196,7 @@ function GameModal({
           {/* Stacked on a phone: side by side, the title wraps to two lines to
               make room for two buttons that fit fine on their own row. */}
           <div className="flex flex-col gap-3 sm:flex-row sm:items-start sm:justify-between sm:gap-4">
-            <h2 id="game-modal-title" className="text-2xl font-bold text-slate-900 sm:pr-6">
+            <h2 id="game-modal-title" className="text-2xl font-bold text-slate-900 dark:text-slate-50 sm:pr-6">
               {game.title}
             </h2>
             <div className="flex shrink-0 items-center gap-2 sm:gap-1">
@@ -1204,7 +1206,7 @@ function GameModal({
           </div>
 
           {reason && (
-            <p className="mt-3 inline-flex items-start gap-2 rounded-lg bg-indigo-50 px-3 py-2 text-sm font-medium leading-relaxed text-indigo-700">
+            <p className="mt-3 inline-flex items-start gap-2 rounded-lg bg-indigo-50 dark:bg-indigo-950/40 px-3 py-2 text-sm font-medium leading-relaxed text-indigo-700 dark:text-indigo-300">
               <Sparkles className="mt-0.5 h-4 w-4 shrink-0" />
               <span>Picked for you: {reason.charAt(0).toLowerCase() + reason.slice(1)}.</span>
             </p>
@@ -1232,10 +1234,10 @@ function GameModal({
               ['Art Style', game.artStyle],
             ].map(([label, value]) => (
               <div key={label}>
-                <span className="mb-1 block text-xs font-semibold uppercase tracking-wider text-slate-400">
+                <span className="mb-1 block text-xs font-semibold uppercase tracking-wider text-slate-400 dark:text-slate-500">
                   {label}
                 </span>
-                <span className="font-medium text-slate-800">{value}</span>
+                <span className="font-medium text-slate-800 dark:text-slate-100">{value}</span>
               </div>
             ))}
           </div>
@@ -1245,8 +1247,8 @@ function GameModal({
             <RatingChips ratings={ratings} size="lg" />
           </div>
 
-          <div className="mt-6 rounded-xl border border-slate-100 bg-slate-50 p-4">
-            <p className="leading-relaxed text-slate-700">{game.description}</p>
+          <div className="mt-6 rounded-xl border border-slate-100 dark:border-slate-800 bg-slate-50 dark:bg-slate-950 p-4">
+            <p className="leading-relaxed text-slate-700 dark:text-slate-200">{game.description}</p>
           </div>
 
           <RepresentationDetail representation={game.representation} />
@@ -1313,8 +1315,8 @@ function PriceHistoryNote({ price, history }) {
     <div
       className={`mt-2 w-full rounded-lg px-3 py-2 text-xs leading-relaxed ring-1 ring-inset ${
         atLow
-          ? 'bg-emerald-50 text-emerald-900 ring-emerald-200'
-          : 'bg-amber-50 text-amber-900 ring-amber-200'
+          ? 'bg-emerald-50 dark:bg-emerald-950/40 text-emerald-900 dark:text-emerald-200 ring-emerald-200 dark:ring-emerald-800'
+          : 'bg-amber-50 dark:bg-amber-950/40 text-amber-900 dark:text-amber-200 ring-amber-200 dark:ring-amber-800'
       }`}
     >
       <p className="font-semibold">
@@ -1338,7 +1340,7 @@ function PriceHistoryNote({ price, history }) {
 function PricePanel({ game, live }) {
   if (!live) {
     return (
-      <p className="mt-6 flex items-center gap-2 text-sm text-slate-400">
+      <p className="mt-6 flex items-center gap-2 text-sm text-slate-400 dark:text-slate-500">
         <Loader2 className="h-4 w-4 animate-spin" />
         Checking the PlayStation Store...
       </p>
@@ -1347,7 +1349,7 @@ function PricePanel({ game, live }) {
 
   if (!live.price) {
     return (
-      <p className="mt-6 text-sm text-slate-500">
+      <p className="mt-6 text-sm text-slate-500 dark:text-slate-400">
         No PlayStation Store price found for this title. Open the store listing to check.
       </p>
     );
@@ -1357,11 +1359,11 @@ function PricePanel({ game, live }) {
   const saleEnds = price.saleEndsAt ? new Date(price.saleEndsAt) : null;
 
   return (
-    <div className="mt-6 flex flex-wrap items-center gap-x-4 gap-y-2 rounded-xl border border-slate-200 p-4">
+    <div className="mt-6 flex flex-wrap items-center gap-x-4 gap-y-2 rounded-xl border border-slate-200 dark:border-slate-700 p-4">
       <div className="flex items-baseline gap-2">
-        <span className="text-2xl font-bold text-slate-900">{price.finalFormatted}</span>
+        <span className="text-2xl font-bold text-slate-900 dark:text-slate-50">{price.finalFormatted}</span>
         {price.discountPercent > 0 && (
-          <span className="text-sm text-slate-400 line-through">{price.initialFormatted}</span>
+          <span className="text-sm text-slate-400 dark:text-slate-500 line-through">{price.initialFormatted}</span>
         )}
       </div>
       <DiscountBadge price={price} />
@@ -1369,13 +1371,13 @@ function PricePanel({ game, live }) {
         href={storeLink(game)}
         target="_blank"
         rel="noopener noreferrer"
-        className="inline-flex shrink-0 items-center gap-1 text-sm font-medium text-indigo-600 hover:underline"
+        className="inline-flex shrink-0 items-center gap-1 text-sm font-medium text-indigo-600 dark:text-indigo-300 hover:underline"
       >
         Store
         <ArrowUpRight className="h-3.5 w-3.5" />
       </a>
       {saleEnds && (
-        <p className="w-full text-xs font-medium text-rose-600">
+        <p className="w-full text-xs font-medium text-rose-600 dark:text-rose-300">
           Sale ends {saleEnds.toLocaleDateString([], { month: 'short', day: 'numeric' })}
         </p>
       )}
@@ -1424,14 +1426,14 @@ function PredictionPanel({ live }) {
   // so the panel states that instead of showing a probability of nothing.
   if (prediction.verdict === 'included') {
     return (
-      <div className="mt-4 rounded-xl border border-indigo-200 bg-indigo-50/40 p-4">
+      <div className="mt-4 rounded-xl border border-indigo-200 dark:border-indigo-800 bg-indigo-50/40 p-4">
         <div className="flex flex-wrap items-center justify-between gap-2">
-          <h3 className="text-sm font-semibold uppercase tracking-wider text-slate-400">
+          <h3 className="text-sm font-semibold uppercase tracking-wider text-slate-400 dark:text-slate-500">
             Price outlook
           </h3>
           <VerdictBadge prediction={prediction} />
         </div>
-        <ul className="mt-3 space-y-1.5 text-sm text-slate-600">
+        <ul className="mt-3 space-y-1.5 text-sm text-slate-600 dark:text-slate-300">
           {prediction.reasons.map((reason) => (
             <li key={reason} className="flex gap-2">
               <span className="mt-2 h-1 w-1 shrink-0 rounded-full bg-indigo-300" />
@@ -1444,9 +1446,9 @@ function PredictionPanel({ live }) {
   }
 
   return (
-    <div className="mt-4 rounded-xl border border-slate-200 p-4">
+    <div className="mt-4 rounded-xl border border-slate-200 dark:border-slate-700 p-4">
       <div className="flex flex-wrap items-center justify-between gap-2">
-        <h3 className="text-sm font-semibold uppercase tracking-wider text-slate-400">
+        <h3 className="text-sm font-semibold uppercase tracking-wider text-slate-400 dark:text-slate-500">
           Price outlook
         </h3>
         <VerdictBadge prediction={prediction} />
@@ -1454,7 +1456,7 @@ function PredictionPanel({ live }) {
 
       <div className="mt-3 flex items-center gap-3">
         <div
-          className="h-2 flex-1 overflow-hidden rounded-full bg-slate-100"
+          className="h-2 flex-1 overflow-hidden rounded-full bg-slate-100 dark:bg-slate-800"
           role="meter"
           aria-valuenow={prediction.score}
           aria-valuemin={0}
@@ -1472,23 +1474,23 @@ function PredictionPanel({ live }) {
             style={{ width: `${prediction.score}%` }}
           />
         </div>
-        <span className="text-sm font-semibold text-slate-700">{prediction.score}%</span>
+        <span className="text-sm font-semibold text-slate-700 dark:text-slate-200">{prediction.score}%</span>
       </div>
-      <p className="mt-1 text-xs text-slate-500">
+      <p className="mt-1 text-xs text-slate-500 dark:text-slate-400">
         Estimated chance of a lower price in the next {prediction.horizonDays} days.
       </p>
 
       {prediction.depth && (
-        <p className="mt-2 text-sm text-slate-600">
+        <p className="mt-2 text-sm text-slate-600 dark:text-slate-300">
           When it does drop, expect around{' '}
-          <span className="font-semibold text-slate-900">{prediction.depth.percent}% off</span>
+          <span className="font-semibold text-slate-900 dark:text-slate-50">{prediction.depth.percent}% off</span>
           {prediction.depth.basis === 'seen-before'
             ? ' — the deepest cut recorded for it so far.'
             : ' — the usual depth for a game this age, at the store\u2019s standard steps.'}
         </p>
       )}
 
-      <ul className="mt-3 space-y-1.5 text-sm text-slate-600">
+      <ul className="mt-3 space-y-1.5 text-sm text-slate-600 dark:text-slate-300">
         {prediction.reasons.map((reason) => (
           <li key={reason} className="flex gap-2">
             <span className="mt-2 h-1 w-1 shrink-0 rounded-full bg-slate-300" />
@@ -1498,8 +1500,8 @@ function PredictionPanel({ live }) {
       </ul>
 
       {history?.points?.length > 1 && (
-        <div className="mt-4 border-t border-slate-100 pt-3">
-          <p className="text-xs font-medium text-slate-500">
+        <div className="mt-4 border-t border-slate-100 dark:border-slate-800 pt-3">
+          <p className="text-xs font-medium text-slate-500 dark:text-slate-400">
             Recorded since {history.since} · lowest {history.lowest.formatted} on{' '}
             {history.lowest.date}
           </p>
@@ -1507,7 +1509,7 @@ function PredictionPanel({ live }) {
         </div>
       )}
 
-      <p className="mt-3 text-xs text-slate-400">
+      <p className="mt-3 text-xs text-slate-400 dark:text-slate-500">
         A heuristic from release age, current discount, typical sale windows and the price
         history this site has recorded, not an announced sale. Confidence:{' '}
         {prediction.confidence}
@@ -1515,7 +1517,7 @@ function PredictionPanel({ live }) {
       </p>
 
       {calibration?.ready && (
-        <p className="mt-1 text-xs text-slate-400">
+        <p className="mt-1 text-xs text-slate-400 dark:text-slate-500">
           Scored against what actually happened: over {calibration.samples} past moments it
           beat a base-rate guess by {calibration.skill > 0 ? '' : '−'}
           {Math.abs(calibration.skill).toFixed(3)} Brier
@@ -1562,9 +1564,9 @@ function DealAlertRow({ watching, live, armed, onToggle, onSetUp }) {
         className={`flex w-full items-center gap-2 rounded-xl px-3 py-2.5 text-left text-sm font-medium ring-1 ring-inset transition-transform duration-200 ease-spring active:scale-[0.99] ${
           watching
             ? armed
-              ? 'bg-emerald-50 text-emerald-800 ring-emerald-200'
-              : 'bg-amber-50 text-amber-900 ring-amber-200'
-            : 'bg-slate-50 text-slate-700 ring-slate-200 hover:bg-slate-100'
+              ? 'bg-emerald-50 dark:bg-emerald-950/40 text-emerald-800 dark:text-emerald-200 ring-emerald-200 dark:ring-emerald-800'
+              : 'bg-amber-50 dark:bg-amber-950/40 text-amber-900 dark:text-amber-200 ring-amber-200 dark:ring-amber-800'
+            : 'bg-slate-50 dark:bg-slate-950 text-slate-700 dark:text-slate-200 ring-slate-200 dark:ring-slate-700 hover:bg-slate-100'
         }`}
       >
         {watching ? (
@@ -1580,7 +1582,7 @@ function DealAlertRow({ watching, live, armed, onToggle, onSetUp }) {
         <button
           type="button"
           onClick={onSetUp}
-          className="mt-1.5 inline-flex min-h-[2.25rem] items-center gap-1.5 rounded-lg px-2 text-sm font-semibold text-indigo-600 transition-transform duration-200 ease-spring active:scale-95 hover:underline"
+          className="mt-1.5 inline-flex min-h-[2.25rem] items-center gap-1.5 rounded-lg px-2 text-sm font-semibold text-indigo-600 dark:text-indigo-300 transition-transform duration-200 ease-spring active:scale-95 hover:underline"
         >
           <Bell className="h-4 w-4" />
           Turn alerts on
@@ -1604,8 +1606,8 @@ function WishlistButton({ wishlisted, onToggle, withLabel = false }) {
       aria-label={wishlisted ? 'Remove from wishlist' : 'Add to wishlist'}
       className={`inline-flex h-10 shrink-0 items-center justify-center gap-1.5 rounded-lg px-2.5 text-sm transition-colors sm:h-8 ${
         wishlisted
-          ? 'bg-rose-50 text-rose-600 hover:bg-rose-100'
-          : 'text-slate-400 hover:bg-slate-100 hover:text-slate-600'
+          ? 'bg-rose-50 dark:bg-rose-950/40 text-rose-600 dark:text-rose-300 hover:bg-rose-100'
+          : 'text-slate-400 dark:text-slate-500 hover:bg-slate-100 hover:text-slate-600'
       }`}
     >
       <Heart className={`h-4 w-4 ${wishlisted ? 'fill-current' : ''}`} />
@@ -1632,8 +1634,8 @@ function OwnedButton({ owned, onToggle, withLabel = false }) {
       title={owned ? 'In your library' : 'Mark as owned'}
       className={`inline-flex h-10 shrink-0 items-center justify-center gap-1.5 rounded-lg px-2.5 text-sm transition-colors sm:h-8 ${
         owned
-          ? 'bg-emerald-50 text-emerald-600 hover:bg-emerald-100'
-          : 'text-slate-400 hover:bg-slate-100 hover:text-slate-600'
+          ? 'bg-emerald-50 dark:bg-emerald-950/40 text-emerald-600 dark:text-emerald-300 hover:bg-emerald-100'
+          : 'text-slate-400 dark:text-slate-500 hover:bg-slate-100 hover:text-slate-600'
       }`}
     >
       <CircleCheck className="h-4 w-4" />
@@ -1662,13 +1664,13 @@ function GameCard({
   const standing = priceStanding(live?.price, live?.history);
 
   return (
-    <div className="group relative flex h-full animate-rise-in flex-col overflow-hidden rounded-xl border border-slate-200 bg-white shadow-sm transition-all duration-200 ease-spring hover:-translate-y-1 hover:shadow-lg focus-within:ring-2 focus-within:ring-indigo-500 active:scale-[0.98]">
+    <div className="group relative flex h-full animate-rise-in flex-col overflow-hidden rounded-xl border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-900 shadow-sm transition-all duration-200 ease-spring hover:-translate-y-1 hover:shadow-lg focus-within:ring-2 focus-within:ring-indigo-500 active:scale-[0.98]">
       <button
         type="button"
         onClick={onOpen}
         className="flex flex-1 flex-col text-left focus:outline-none"
       >
-        <div className="relative aspect-[460/215] w-full overflow-hidden bg-slate-100">
+        <div className="relative aspect-[460/215] w-full overflow-hidden bg-slate-100 dark:bg-slate-800">
           <CoverArt game={game} live={live} className="h-full w-full" />
           {live?.videos?.length > 0 && (
             <span className="absolute bottom-2 right-2 rounded-full bg-slate-900/70 p-1.5 text-white opacity-0 transition-opacity group-hover:opacity-100">
@@ -1697,10 +1699,10 @@ function GameCard({
               it is still on the open game, where there is room for it. What is
               left here is what you scan by: the name, a muted line of context,
               and the price. */}
-          <h2 className="mb-1.5 line-clamp-2 text-sm font-bold leading-tight text-slate-800 sm:pr-7 sm:text-base">
+          <h2 className="mb-1.5 line-clamp-2 text-sm font-bold leading-tight text-slate-800 dark:text-slate-100 sm:pr-7 sm:text-base">
             {game.title}
           </h2>
-          <p className="mb-2 flex items-center gap-1.5 overflow-hidden text-[11px] font-medium text-slate-400">
+          <p className="mb-2 flex items-center gap-1.5 overflow-hidden text-[11px] font-medium text-slate-400 dark:text-slate-500">
             <span className="truncate">{game.genre}</span>
             {ratings?.critic != null && (
               <>
@@ -1716,7 +1718,7 @@ function GameCard({
             )}
           </p>
           {reason && (
-            <p className="mb-2 line-clamp-2 text-[11px] font-medium leading-relaxed text-indigo-600">
+            <p className="mb-2 line-clamp-2 text-[11px] font-medium leading-relaxed text-indigo-600 dark:text-indigo-300">
               <Sparkles className="mr-1 inline h-3 w-3 align-[-1px]" />
               {reason}
             </p>
@@ -1731,11 +1733,11 @@ function GameCard({
             {live?.price ? (
               <>
                 <p className="flex items-baseline gap-1.5">
-                  <span className="text-base font-bold tabular-nums text-slate-900 sm:text-lg">
+                  <span className="text-base font-bold tabular-nums text-slate-900 dark:text-slate-50 sm:text-lg">
                     {live.price.finalFormatted}
                   </span>
                   {live.price.discountPercent > 0 && (
-                    <span className="text-xs text-slate-400 line-through">
+                    <span className="text-xs text-slate-400 dark:text-slate-500 line-through">
                       {live.price.initialFormatted}
                     </span>
                   )}
@@ -1747,7 +1749,7 @@ function GameCard({
                 {standing && (
                   <p
                     className={`mt-1 text-[11px] font-semibold ${
-                      standing.atLow ? 'text-emerald-600' : 'text-amber-700'
+                      standing.atLow ? 'text-emerald-600 dark:text-emerald-300' : 'text-amber-700 dark:text-amber-300'
                     }`}
                   >
                     {standing.atLow
@@ -1756,7 +1758,7 @@ function GameCard({
                   </p>
                 )}
                 {saving > 0 && (
-                  <p className="mt-1 text-[11px] font-semibold text-rose-600">
+                  <p className="mt-1 text-[11px] font-semibold text-rose-600 dark:text-rose-300">
                     {formatSaving(saving)} cheaper than when you added it
                   </p>
                 )}
@@ -1764,13 +1766,13 @@ function GameCard({
             ) : live ? (
               // The chunk arrived and carried no price: the store has no page
               // we can read for this one. Saying so beats an empty gap.
-              <p className="text-[11px] text-slate-400">Price not tracked</p>
+              <p className="text-[11px] text-slate-400 dark:text-slate-500">Price not tracked</p>
             ) : (
               // Still in flight. A bar the width of a price keeps the card the
               // same height it will be a moment from now.
               <span
                 aria-hidden="true"
-                className="block h-4 w-14 animate-pulse rounded bg-slate-100"
+                className="block h-4 w-14 animate-pulse rounded bg-slate-100 dark:bg-slate-800"
               />
             )}
           </div>
@@ -1780,7 +1782,7 @@ function GameCard({
       {/* Pointer: a hover rail tucked into the corner, out of the way until
           wanted. Touch: three full-height targets in a row, because a stack of
           36px buttons over the art is a mis-tap waiting to happen. */}
-      <div className="pointer-only absolute right-1.5 top-1.5 flex flex-col items-end gap-0.5 rounded-xl bg-white/75 p-0.5 backdrop-blur-sm">
+      <div className="pointer-only absolute right-1.5 top-1.5 flex flex-col items-end gap-0.5 rounded-xl bg-white/75 dark:bg-slate-900/75 p-0.5 backdrop-blur-sm">
         <WishlistButton wishlisted={wishlisted} onToggle={onToggleWishlist} />
         <OwnedButton owned={owned} onToggle={onToggleOwned} />
         <button
@@ -1791,20 +1793,20 @@ function GameCard({
           }}
           aria-label={`Stop showing ${game.title}`}
           title="Not for me"
-          className="inline-flex h-8 items-center justify-center rounded-lg px-2.5 text-slate-300 opacity-0 transition-all duration-200 hover:bg-slate-100 hover:text-slate-600 focus:opacity-100 group-hover:opacity-100"
+          className="inline-flex h-8 items-center justify-center rounded-lg px-2.5 text-slate-300 dark:text-slate-600 opacity-0 transition-all duration-200 hover:bg-slate-100 hover:text-slate-600 focus:opacity-100 group-hover:opacity-100"
         >
           <X className="h-4 w-4" />
         </button>
       </div>
 
-      <div className="touch-only grid grid-cols-3 divide-x divide-slate-100 border-t border-slate-100">
+      <div className="touch-only grid grid-cols-3 divide-x divide-slate-100 dark:divide-slate-800 border-t border-slate-100 dark:border-slate-800">
         <button
           type="button"
           onClick={onToggleWishlist}
           aria-pressed={wishlisted}
           aria-label={wishlisted ? `Remove ${game.title} from wishlist` : `Add ${game.title} to wishlist`}
           className={`flex h-11 items-center justify-center transition-colors active:bg-slate-100 ${
-            wishlisted ? 'bg-rose-50 text-rose-600' : 'text-slate-400'
+            wishlisted ? 'bg-rose-50 dark:bg-rose-950/40 text-rose-600 dark:text-rose-300' : 'text-slate-400 dark:text-slate-500'
           }`}
         >
           <Heart className={`h-[18px] w-[18px] ${wishlisted ? 'fill-current' : ''}`} />
@@ -1815,7 +1817,7 @@ function GameCard({
           aria-pressed={owned}
           aria-label={owned ? `Remove ${game.title} from library` : `Mark ${game.title} as owned`}
           className={`flex h-11 items-center justify-center transition-colors active:bg-slate-100 ${
-            owned ? 'bg-emerald-50 text-emerald-600' : 'text-slate-400'
+            owned ? 'bg-emerald-50 dark:bg-emerald-950/40 text-emerald-600 dark:text-emerald-300' : 'text-slate-400 dark:text-slate-500'
           }`}
         >
           <CircleCheck className="h-[18px] w-[18px]" />
@@ -1824,7 +1826,7 @@ function GameCard({
           type="button"
           onClick={onHide}
           aria-label={`Stop showing ${game.title}`}
-          className="flex h-11 items-center justify-center text-slate-300 transition-colors active:bg-slate-100"
+          className="flex h-11 items-center justify-center text-slate-300 dark:text-slate-600 transition-colors active:bg-slate-100"
         >
           <X className="h-[18px] w-[18px]" />
         </button>
@@ -1836,9 +1838,9 @@ function GameCard({
 function EmptyState({ filters, wishlist, library, status, onClear, onSearchStore }) {
   if (filters.collection === 'genius' && library.size === 0 && wishlist.size === 0) {
     return (
-      <div className="py-20 text-center text-slate-500">
+      <div className="py-20 text-center text-slate-500 dark:text-slate-400">
         <Sparkles className="mx-auto mb-3 h-8 w-8 text-indigo-300" />
-        <p className="text-lg text-slate-700">Nothing to work from yet.</p>
+        <p className="text-lg text-slate-700 dark:text-slate-200">Nothing to work from yet.</p>
         <p className="mx-auto mt-2 max-w-sm text-sm leading-relaxed">
           Tick the check on a few games you already own, or heart the ones you want. Picks
           appear as soon as there is one, and get sharper with every game you add.
@@ -1856,9 +1858,9 @@ function EmptyState({ filters, wishlist, library, status, onClear, onSearchStore
   const searching = query.length > 0;
 
   return (
-    <div className="py-20 text-center text-slate-500">
-      <Sparkles className="mx-auto mb-3 h-8 w-8 text-slate-300" />
-      <p className="text-lg text-slate-700">
+    <div className="py-20 text-center text-slate-500 dark:text-slate-400">
+      <Sparkles className="mx-auto mb-3 h-8 w-8 text-slate-300 dark:text-slate-600" />
+      <p className="text-lg text-slate-700 dark:text-slate-200">
         {searching ? `Nothing here matches “${query}”.` : 'No games match these filters.'}
       </p>
 
@@ -1903,7 +1905,7 @@ function EmptyState({ filters, wishlist, library, status, onClear, onSearchStore
         <button
           type="button"
           onClick={onClear}
-          className="font-medium text-indigo-600 hover:underline"
+          className="font-medium text-indigo-600 dark:text-indigo-300 hover:underline"
         >
           {searching ? 'Clear search and filters' : 'Clear all filters'}
         </button>
@@ -1999,8 +2001,8 @@ function WatchPanel({ game, favourites, onToggleFavourite }) {
   const totalCovered = (game.coverage ?? []).filter((entry) => creatorsByHandle[entry.handle]).length;
 
   return (
-    <div className="mt-6 border-t border-slate-100 pt-5">
-      <h3 className="mb-3 text-sm font-semibold uppercase tracking-wider text-slate-400">
+    <div className="mt-6 border-t border-slate-100 dark:border-slate-800 pt-5">
+      <h3 className="mb-3 text-sm font-semibold uppercase tracking-wider text-slate-400 dark:text-slate-500">
         Watch it first
       </h3>
 
@@ -2035,7 +2037,7 @@ function WatchPanel({ game, favourites, onToggleFavourite }) {
             className={`shrink-0 rounded-full px-2.5 py-1 text-xs font-medium transition-all duration-200 ease-spring active:scale-95 ${
               lensValue === entry.value
                 ? 'bg-violet-600 text-white'
-                : 'bg-slate-100 text-slate-600 hover:bg-slate-200'
+                : 'bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-300 hover:bg-slate-200'
             }`}
           >
             {entry.label}
@@ -2045,7 +2047,7 @@ function WatchPanel({ game, favourites, onToggleFavourite }) {
 
       {covered.length > 0 ? (
         <>
-          <p className="mb-2 text-xs text-slate-500">
+          <p className="mb-2 text-xs text-slate-500 dark:text-slate-400">
             {covered.length === 1 ? 'One creator has' : `${covered.length} creators have`} played
             this. Each link opens their actual video.
             {covered.length < totalCovered &&
@@ -2062,7 +2064,7 @@ function WatchPanel({ game, favourites, onToggleFavourite }) {
                   className={`shrink-0 rounded p-1 transition-transform duration-200 ease-spring active:scale-90 ${
                     favourites.has(entry.handle)
                       ? 'text-amber-500'
-                      : 'text-slate-300 hover:text-slate-500'
+                      : 'text-slate-300 dark:text-slate-600 hover:text-slate-500'
                   }`}
                 >
                   <Star className={`h-4 w-4 ${favourites.has(entry.handle) ? 'fill-current' : ''}`} />
@@ -2075,26 +2077,26 @@ function WatchPanel({ game, favourites, onToggleFavourite }) {
                 >
                   <span className="min-w-0 flex-1">
                     <span className="flex flex-wrap items-baseline gap-x-2">
-                      <span className="text-sm font-medium text-slate-800 group-hover:text-indigo-600">
+                      <span className="text-sm font-medium text-slate-800 dark:text-slate-100 group-hover:text-indigo-600">
                         {entry.creator.name}
                       </span>
-                      <span className="text-[11px] text-violet-600">{entry.creator.identity}</span>
-                      <span className="text-[11px] text-slate-400">
+                      <span className="text-[11px] text-violet-600 dark:text-violet-300">{entry.creator.identity}</span>
+                      <span className="text-[11px] text-slate-400 dark:text-slate-500">
                         {entry.videos === 1 ? '1 video' : `${entry.videos} videos`}
                       </span>
                     </span>
-                    <span className="block truncate text-xs text-slate-500">
+                    <span className="block truncate text-xs text-slate-500 dark:text-slate-400">
                       {entry.videoTitle}
                     </span>
                   </span>
-                  <CirclePlay className="h-4 w-4 shrink-0 text-slate-300 group-hover:text-rose-600" />
+                  <CirclePlay className="h-4 w-4 shrink-0 text-slate-300 dark:text-slate-600 group-hover:text-rose-600" />
                 </a>
               </li>
             ))}
           </ul>
         </>
       ) : (
-        <p className="mb-2 text-xs text-slate-500">
+        <p className="mb-2 text-xs text-slate-500 dark:text-slate-400">
           {totalCovered > 0
             ? `${totalCovered} tracked ${totalCovered === 1 ? 'creator has' : 'creators have'} played this, but none matching this lens.`
             : 'None of the tracked creators has a video for this one.'}
@@ -2104,7 +2106,7 @@ function WatchPanel({ game, favourites, onToggleFavourite }) {
       <button
         type="button"
         onClick={() => setShowAll((open) => !open)}
-        className="mt-3 text-xs font-medium text-indigo-600 hover:underline"
+        className="mt-3 text-xs font-medium text-indigo-600 dark:text-indigo-300 hover:underline"
       >
         {showAll
           ? 'Hide'
@@ -2120,7 +2122,7 @@ function WatchPanel({ game, favourites, onToggleFavourite }) {
                 target="_blank"
                 rel="noopener noreferrer"
                 title={`${creator.identity} — ${creator.note}`}
-                className="inline-flex items-center gap-1 rounded-full bg-slate-100 px-2.5 py-1 text-xs text-slate-600 transition-colors hover:bg-slate-200"
+                className="inline-flex items-center gap-1 rounded-full bg-slate-100 dark:bg-slate-800 px-2.5 py-1 text-xs text-slate-600 dark:text-slate-300 transition-colors hover:bg-slate-200"
               >
                 {creator.name}
                 <ArrowUpRight className="h-3 w-3" />
@@ -2130,7 +2132,7 @@ function WatchPanel({ game, favourites, onToggleFavourite }) {
         </ul>
       )}
 
-      <p className="mt-3 text-xs text-slate-400">
+      <p className="mt-3 text-xs text-slate-400 dark:text-slate-500">
         Coverage comes from indexing every tracked creator's uploads and matching them to this
         title, so these are videos that exist rather than a guess. Channels with no match are
         searchable above in case they posted since. Every creator here is a woman, trans or
@@ -2215,7 +2217,7 @@ function GameNews({ title }) {
           className={`rounded-full px-2.5 py-1 text-xs font-medium transition-all duration-200 ease-spring active:scale-95 ${
             queerOnly === value
               ? 'bg-violet-600 text-white'
-              : 'bg-slate-100 text-slate-600 hover:bg-slate-200'
+              : 'bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-300 hover:bg-slate-200'
           }`}
         >
           {label}
@@ -2226,13 +2228,13 @@ function GameNews({ title }) {
 
   if (state.status === 'loading') {
     return (
-      <div className="mt-8 border-t border-slate-100 pt-6">
-        <h3 className="mb-3 flex items-center gap-2 text-sm font-bold uppercase tracking-wider text-slate-400">
+      <div className="mt-8 border-t border-slate-100 dark:border-slate-800 pt-6">
+        <h3 className="mb-3 flex items-center gap-2 text-sm font-bold uppercase tracking-wider text-slate-400 dark:text-slate-500">
           <Newspaper className="h-4 w-4" />
           In the news
         </h3>
         {toggle}
-        <p className="flex items-center gap-2 text-sm text-slate-400">
+        <p className="flex items-center gap-2 text-sm text-slate-400 dark:text-slate-500">
           <Loader2 className="h-4 w-4 animate-spin" />
           Checking the press...
         </p>
@@ -2241,14 +2243,14 @@ function GameNews({ title }) {
   }
 
   return (
-    <div className="mt-8 border-t border-slate-100 pt-6">
-      <h3 className="mb-3 flex items-center gap-2 text-sm font-bold uppercase tracking-wider text-slate-400">
+    <div className="mt-8 border-t border-slate-100 dark:border-slate-800 pt-6">
+      <h3 className="mb-3 flex items-center gap-2 text-sm font-bold uppercase tracking-wider text-slate-400 dark:text-slate-500">
         <Newspaper className="h-4 w-4" />
         In the news
       </h3>
       {toggle}
       {state.items.length === 0 && (
-        <p className="text-sm text-slate-400">
+        <p className="text-sm text-slate-400 dark:text-slate-500">
           {state.status === 'error'
             ? 'Could not reach the press just now.'
             : queerOnly
@@ -2265,13 +2267,13 @@ function GameNews({ title }) {
               rel="noopener noreferrer"
               className="group flex items-baseline gap-2 rounded-lg px-2 py-1.5 -mx-2 transition-colors hover:bg-slate-50"
             >
-              <span className="shrink-0 rounded bg-slate-100 px-1.5 py-0.5 text-[11px] font-semibold text-slate-600">
+              <span className="shrink-0 rounded bg-slate-100 dark:bg-slate-800 px-1.5 py-0.5 text-[11px] font-semibold text-slate-600 dark:text-slate-300">
                 {item.source}
               </span>
-              <span className="min-w-0 flex-1 text-sm leading-snug text-slate-700 group-hover:text-slate-900">
+              <span className="min-w-0 flex-1 text-sm leading-snug text-slate-700 dark:text-slate-200 group-hover:text-slate-900">
                 {item.title}
               </span>
-              <span className="shrink-0 text-[11px] text-slate-400">
+              <span className="shrink-0 text-[11px] text-slate-400 dark:text-slate-500">
                 {relativeTime(item.publishedAt)}
               </span>
             </a>
@@ -2287,8 +2289,8 @@ function SimilarGames({ game, pool, byTitle, onOpen }) {
   if (similar.length === 0) return null;
 
   return (
-    <div className="mt-6 border-t border-slate-100 pt-5">
-      <h3 className="mb-3 text-sm font-semibold uppercase tracking-wider text-slate-400">
+    <div className="mt-6 border-t border-slate-100 dark:border-slate-800 pt-5">
+      <h3 className="mb-3 text-sm font-semibold uppercase tracking-wider text-slate-400 dark:text-slate-500">
         More like this
       </h3>
       <div className="grid grid-cols-2 gap-2 sm:grid-cols-4">
@@ -2299,16 +2301,16 @@ function SimilarGames({ game, pool, byTitle, onOpen }) {
               key={other.id}
               type="button"
               onClick={() => onOpen(other.id)}
-              className="group overflow-hidden rounded-lg border border-slate-200 text-left transition-all duration-200 ease-spring hover:-translate-y-0.5 hover:shadow-md active:scale-95"
+              className="group overflow-hidden rounded-lg border border-slate-200 dark:border-slate-700 text-left transition-all duration-200 ease-spring hover:-translate-y-0.5 hover:shadow-md active:scale-95"
             >
-              <div className="aspect-[460/215] w-full overflow-hidden bg-slate-100">
+              <div className="aspect-[460/215] w-full overflow-hidden bg-slate-100 dark:bg-slate-800">
                 <CoverArt game={other} live={live} className="h-full w-full" />
               </div>
               <div className="p-2">
-                <p className="line-clamp-2 text-xs font-semibold leading-tight text-slate-700">
+                <p className="line-clamp-2 text-xs font-semibold leading-tight text-slate-700 dark:text-slate-200">
                   {other.title}
                 </p>
-                <p className="mt-0.5 text-[11px] text-slate-400">{other.genre}</p>
+                <p className="mt-0.5 text-[11px] text-slate-400 dark:text-slate-500">{other.genre}</p>
               </div>
             </button>
           );
@@ -2508,7 +2510,7 @@ function FeedSlide({
                 aria-pressed={!muted}
                 aria-label={muted ? 'Turn trailer sound on' : 'Turn trailer sound off'}
                 className={`rounded-full p-3 text-white backdrop-blur transition-transform duration-200 ease-spring active:scale-90 ${
-                  muted ? 'bg-white/15 hover:bg-white/25' : 'bg-white/90 text-slate-900 hover:bg-white'
+                  muted ? 'bg-white/15 hover:bg-white/25' : 'bg-white/90 text-slate-900 dark:text-slate-50 hover:bg-white'
                 }`}
               >
                 {muted ? <VolumeX className="h-5 w-5" /> : <Volume2 className="h-5 w-5" />}
@@ -2590,7 +2592,7 @@ function BottomBar({ view, onView, onBriefing, onSurprise, canSurprise, updates 
   return (
     <nav
       aria-label="Sections"
-      className="touch-only fixed inset-x-0 bottom-0 z-30 border-t border-slate-200 bg-white/90 pb-[var(--inset-bottom)] backdrop-blur"
+      className="touch-only fixed inset-x-0 bottom-0 z-30 border-t border-slate-200 dark:border-slate-700 bg-white/90 dark:bg-slate-900/90 pb-[var(--inset-bottom)] backdrop-blur"
     >
       <div className="flex">
         {items.map((item) => (
@@ -2605,7 +2607,7 @@ function BottomBar({ view, onView, onBriefing, onSurprise, canSurprise, updates 
               else onView(item.key);
             }}
             className={`relative flex h-14 flex-1 flex-col items-center justify-center gap-0.5 transition-colors active:bg-slate-100 disabled:opacity-40 ${
-              item.active ? 'text-indigo-600' : 'text-slate-500'
+              item.active ? 'text-indigo-600 dark:text-indigo-300' : 'text-slate-500 dark:text-slate-400'
             }`}
           >
             <item.icon className={`h-[22px] w-[22px] ${item.active ? 'stroke-[2.4]' : ''}`} />
@@ -2698,6 +2700,55 @@ const moodScore = (game) => {
 /* ------------------------------------------------------------------ *
  * Email price alerts
  * ------------------------------------------------------------------ */
+
+const THEME_KEY = 'theme';
+
+/**
+ * Light, dark, or whatever the phone says.
+ *
+ * The class is already set before first paint by a script in index.html, so
+ * this only has to keep it in step afterwards. "System" is the default and
+ * stays live: changing the phone's appearance while the app is open moves
+ * the app with it, which is the behaviour anyone who schedules dark mode at
+ * sunset expects.
+ */
+function useTheme() {
+  const [choice, setChoice] = useState(() => {
+    try {
+      return localStorage.getItem(THEME_KEY) ?? 'system';
+    } catch {
+      return 'system';
+    }
+  });
+
+  useEffect(() => {
+    const media = window.matchMedia('(prefers-color-scheme: dark)');
+    const apply = () => {
+      const dark = choice === 'dark' || (choice === 'system' && media.matches);
+      document.documentElement.classList.toggle('dark', dark);
+      document
+        .querySelector('meta[name="theme-color"]')
+        ?.setAttribute('content', dark ? '#020617' : '#ffffff');
+    };
+    apply();
+
+    if (choice !== 'system') return undefined;
+    media.addEventListener('change', apply);
+    return () => media.removeEventListener('change', apply);
+  }, [choice]);
+
+  const set = useCallback((next) => {
+    setChoice(next);
+    try {
+      if (next === 'system') localStorage.removeItem(THEME_KEY);
+      else localStorage.setItem(THEME_KEY, next);
+    } catch {
+      // Without storage the choice lasts for this visit only.
+    }
+  }, []);
+
+  return [choice, set];
+}
 
 const FEED_MUTED_KEY = 'feedMuted';
 
@@ -3039,7 +3090,7 @@ function AlertsSheet({ alerts, onClose }) {
 
   const thresholds = (
     <>
-      <p className="mt-6 text-sm font-semibold text-slate-700">Tell me when it is</p>
+      <p className="mt-6 text-sm font-semibold text-slate-700 dark:text-slate-200">Tell me when it is</p>
       <div className="mt-2 grid grid-cols-2 gap-2">
         {ALERT_THRESHOLDS.map(([value, label]) => (
           <button
@@ -3050,7 +3101,7 @@ function AlertsSheet({ alerts, onClose }) {
             className={`min-h-[2.75rem] rounded-xl px-3 py-2 text-sm font-medium transition-all duration-200 ease-spring active:scale-[0.97] ${
               alerts.minDiscount === value
                 ? 'bg-indigo-600 text-white'
-                : 'bg-slate-100 text-slate-700 hover:bg-slate-200'
+                : 'bg-slate-100 dark:bg-slate-800 text-slate-700 dark:text-slate-200 hover:bg-slate-200'
             }`}
           >
             {label}
@@ -3063,12 +3114,12 @@ function AlertsSheet({ alerts, onClose }) {
   return (
     <ModalSheet labelledBy="alerts-title" onClose={onClose}>
       <div className="p-6 sm:p-8">
-        <h2 id="alerts-title" className="flex items-center gap-2 text-2xl font-bold text-slate-900">
-          <Mail className="h-6 w-6 text-indigo-600" aria-hidden="true" />
+        <h2 id="alerts-title" className="flex items-center gap-2 text-2xl font-bold text-slate-900 dark:text-slate-50">
+          <Mail className="h-6 w-6 text-indigo-600 dark:text-indigo-300" aria-hidden="true" />
           Email me when it drops
         </h2>
 
-        <p className="mt-3 text-sm leading-relaxed text-slate-600">
+        <p className="mt-3 text-sm leading-relaxed text-slate-600 dark:text-slate-300">
           {count === 0
             ? 'Heart a game, or tap the bell on one, and it becomes part of the list this watches.'
             : // Two lists feed this, so the copy cannot name only one of them.
@@ -3077,10 +3128,10 @@ function AlertsSheet({ alerts, onClose }) {
 
         {/* Email is the channel this app is set up around. It goes first, at
             full width, and says plainly when it cannot deliver yet. */}
-        <div className="mt-5 rounded-2xl bg-slate-50 p-4 ring-1 ring-inset ring-slate-200">
+        <div className="mt-5 rounded-2xl bg-slate-50 dark:bg-slate-950 p-4 ring-1 ring-inset ring-slate-200 dark:ring-slate-700">
           {alerts.emailConfirmed ? (
             <>
-              <p className="inline-flex items-start gap-2 text-sm leading-relaxed text-emerald-800">
+              <p className="inline-flex items-start gap-2 text-sm leading-relaxed text-emerald-800 dark:text-emerald-200">
                 <Check className="mt-0.5 h-4 w-4 shrink-0" aria-hidden="true" />
                 <span>
                   Emailing <strong className="font-semibold">{alerts.email}</strong> the
@@ -3093,13 +3144,13 @@ function AlertsSheet({ alerts, onClose }) {
                   alerts.stop();
                   onClose();
                 }}
-                className="mt-3 min-h-[2.75rem] w-full rounded-xl bg-white px-4 text-sm font-medium text-slate-700 ring-1 ring-inset ring-slate-300 transition-transform duration-200 ease-spring active:scale-[0.98] hover:bg-slate-100"
+                className="mt-3 min-h-[2.75rem] w-full rounded-xl bg-white dark:bg-slate-900 px-4 text-sm font-medium text-slate-700 dark:text-slate-200 ring-1 ring-inset ring-slate-300 dark:ring-slate-600 transition-transform duration-200 ease-spring active:scale-[0.98] hover:bg-slate-100"
               >
                 Stop emails and delete my address
               </button>
             </>
           ) : sent || (alerts.token && alerts.email) ? (
-            <p className="inline-flex items-start gap-2 text-sm leading-relaxed text-indigo-900">
+            <p className="inline-flex items-start gap-2 text-sm leading-relaxed text-indigo-900 dark:text-indigo-200">
               <Mail className="mt-0.5 h-4 w-4 shrink-0" aria-hidden="true" />
               <span>
                 Check your inbox at <strong className="font-semibold">{alerts.email ?? email}</strong>.
@@ -3111,25 +3162,25 @@ function AlertsSheet({ alerts, onClose }) {
             // The reader of this app is also the person who owns the site, so
             // the honest thing is the actual two steps rather than a shrug.
             <>
-              <p className="inline-flex items-start gap-2 text-sm leading-relaxed text-amber-900">
+              <p className="inline-flex items-start gap-2 text-sm leading-relaxed text-amber-900 dark:text-amber-200">
                 <Info className="mt-0.5 h-4 w-4 shrink-0" aria-hidden="true" />
                 <span>
                   Email needs a sending key before anything can arrive, so the form
                   is hidden rather than pretending.
                 </span>
               </p>
-              <ol className="mt-3 list-decimal space-y-1.5 pl-5 text-sm leading-relaxed text-slate-600">
+              <ol className="mt-3 list-decimal space-y-1.5 pl-5 text-sm leading-relaxed text-slate-600 dark:text-slate-300">
                 <li>
                   Get a free API key at <strong className="font-semibold">resend.com</strong>,
                   signing up with the address you want the alerts at.
                 </li>
                 <li>
                   In Netlify, add it under Site settings → Environment variables as{' '}
-                  <code className="rounded bg-slate-200 px-1 py-0.5 font-mono text-xs">RESEND_API_KEY</code>,
+                  <code className="rounded bg-slate-200 dark:bg-slate-700 px-1 py-0.5 font-mono text-xs">RESEND_API_KEY</code>,
                   then redeploy.
                 </li>
               </ol>
-              <p className="mt-3 text-xs leading-relaxed text-slate-500">
+              <p className="mt-3 text-xs leading-relaxed text-slate-500 dark:text-slate-400">
                 No domain and no DNS records needed. The default sender only
                 delivers to the address that owns the Resend account, which is
                 exactly what one person watching their own wishlist wants.
@@ -3137,7 +3188,7 @@ function AlertsSheet({ alerts, onClose }) {
             </>
           ) : (
             <form onSubmit={submit}>
-              <label htmlFor="alert-email" className="block text-sm font-semibold text-slate-700">
+              <label htmlFor="alert-email" className="block text-sm font-semibold text-slate-700 dark:text-slate-200">
                 Your email
               </label>
               <input
@@ -3149,7 +3200,7 @@ function AlertsSheet({ alerts, onClose }) {
                 placeholder="you@example.com"
                 value={email}
                 onChange={(event) => setEmail(event.target.value)}
-                className="mt-2 min-h-[2.75rem] w-full rounded-xl border border-slate-300 px-3 text-base outline-none transition-all duration-200 focus:border-indigo-500 focus:ring-2 focus:ring-indigo-500"
+                className="mt-2 min-h-[2.75rem] w-full rounded-xl border border-slate-300 dark:border-slate-600 px-3 text-base outline-none transition-all duration-200 focus:border-indigo-500 focus:ring-2 focus:ring-indigo-500"
               />
               <button
                 type="submit"
@@ -3159,7 +3210,7 @@ function AlertsSheet({ alerts, onClose }) {
                 {busy ? 'Sending confirmation…' : 'Email me about drops'}
               </button>
               {error && (
-                <p role="alert" className="mt-3 rounded-xl bg-rose-50 px-4 py-3 text-sm text-rose-800">
+                <p role="alert" className="mt-3 rounded-xl bg-rose-50 dark:bg-rose-950/40 px-4 py-3 text-sm text-rose-800 dark:text-rose-200">
                   {error}
                 </p>
               )}
@@ -3169,7 +3220,7 @@ function AlertsSheet({ alerts, onClose }) {
 
         {thresholds}
 
-        <p className="mt-4 text-xs leading-relaxed text-slate-500">
+        <p className="mt-4 text-xs leading-relaxed text-slate-500 dark:text-slate-400">
           One email a night at most, only when something is actually cheaper than
           it was when you added it, and never twice for the same sale. We store
           your address and the game ids being watched. Nothing else, no tracking,
@@ -3180,17 +3231,17 @@ function AlertsSheet({ alerts, onClose }) {
             what was asked for, so they sit behind a line of text rather than a
             button competing with the email form. */}
         {alerts.pushAvailable !== false && !needsHomeScreen && (
-          <div className="mt-5 border-t border-slate-100 pt-4">
+          <div className="mt-5 border-t border-slate-100 dark:border-slate-800 pt-4">
             {alerts.pushEnabled ? (
-              <p className="flex items-start gap-2 text-sm leading-relaxed text-slate-600">
-                <Smartphone className="mt-0.5 h-4 w-4 shrink-0 text-slate-400" aria-hidden="true" />
+              <p className="flex items-start gap-2 text-sm leading-relaxed text-slate-600 dark:text-slate-300">
+                <Smartphone className="mt-0.5 h-4 w-4 shrink-0 text-slate-400 dark:text-slate-500" aria-hidden="true" />
                 <span className="flex-1">
                   This phone is also getting notifications.{' '}
                   <button
                     type="button"
                     onClick={togglePush}
                     disabled={pushBusy}
-                    className="font-semibold text-indigo-600 hover:underline disabled:opacity-60"
+                    className="font-semibold text-indigo-600 dark:text-indigo-300 hover:underline disabled:opacity-60"
                   >
                     {pushBusy ? 'Turning off…' : 'Turn those off'}
                   </button>
@@ -3198,7 +3249,7 @@ function AlertsSheet({ alerts, onClose }) {
               </p>
             ) : showPush ? (
               <>
-                <p className="text-sm leading-relaxed text-slate-600">
+                <p className="text-sm leading-relaxed text-slate-600 dark:text-slate-300">
                   A notification on this phone needs nothing set up, so it works
                   even while email is waiting on a key.
                 </p>
@@ -3206,7 +3257,7 @@ function AlertsSheet({ alerts, onClose }) {
                   type="button"
                   onClick={togglePush}
                   disabled={pushBusy}
-                  className="mt-2 min-h-[2.75rem] w-full rounded-xl bg-white px-4 text-sm font-medium text-slate-700 ring-1 ring-inset ring-slate-300 transition-transform duration-200 ease-spring active:scale-[0.98] hover:bg-slate-100 disabled:opacity-60"
+                  className="mt-2 min-h-[2.75rem] w-full rounded-xl bg-white dark:bg-slate-900 px-4 text-sm font-medium text-slate-700 dark:text-slate-200 ring-1 ring-inset ring-slate-300 dark:ring-slate-600 transition-transform duration-200 ease-spring active:scale-[0.98] hover:bg-slate-100 disabled:opacity-60"
                 >
                   {pushBusy ? 'Asking…' : 'Notify this phone instead'}
                 </button>
@@ -3215,14 +3266,14 @@ function AlertsSheet({ alerts, onClose }) {
               <button
                 type="button"
                 onClick={() => setShowPush(true)}
-                className="text-sm font-medium text-slate-500 hover:text-slate-700 hover:underline"
+                className="text-sm font-medium text-slate-500 dark:text-slate-400 hover:text-slate-700 hover:underline"
               >
                 Prefer a phone notification?
               </button>
             )}
 
             {pushError && (
-              <p role="alert" className="mt-3 rounded-xl bg-rose-50 px-3 py-2 text-sm leading-relaxed text-rose-800">
+              <p role="alert" className="mt-3 rounded-xl bg-rose-50 dark:bg-rose-950/40 px-3 py-2 text-sm leading-relaxed text-rose-800 dark:text-rose-200">
                 {pushError}
               </p>
             )}
@@ -3288,7 +3339,7 @@ function TonightSheet({ catalog, library, hidden, onOpenGame, onClose }) {
   return (
     <ModalSheet labelledBy="tonight-title" onClose={onClose}>
       <div className="p-6 sm:p-8">
-        <h2 id="tonight-title" className="text-2xl font-bold text-slate-900">
+        <h2 id="tonight-title" className="text-2xl font-bold text-slate-900 dark:text-slate-50">
           What are you in the mood for?
         </h2>
 
@@ -3305,8 +3356,8 @@ function TonightSheet({ catalog, library, hidden, onOpenGame, onClose }) {
                 aria-pressed={fromLibrary === value}
                 className={`rounded-full px-3 py-1.5 text-xs font-medium transition-all duration-200 ease-spring active:scale-95 ${
                   fromLibrary === value
-                    ? 'bg-slate-900 text-white'
-                    : 'bg-slate-100 text-slate-600 hover:bg-slate-200'
+                    ? 'bg-slate-900 text-white dark:bg-slate-100 dark:text-slate-900'
+                    : 'bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-300 hover:bg-slate-200'
                 }`}
               >
                 {label}
@@ -3325,7 +3376,7 @@ function TonightSheet({ catalog, library, hidden, onOpenGame, onClose }) {
               className={`flex min-h-[3rem] items-center gap-2 rounded-xl px-3 py-2.5 text-left text-sm font-medium transition-all duration-200 ease-spring active:scale-[0.97] ${
                 mood === entry.value
                   ? 'bg-indigo-600 text-white'
-                  : 'bg-slate-100 text-slate-700 hover:bg-slate-200'
+                  : 'bg-slate-100 dark:bg-slate-800 text-slate-700 dark:text-slate-200 hover:bg-slate-200'
               }`}
             >
               <span aria-hidden="true">{entry.emoji}</span>
@@ -3335,39 +3386,39 @@ function TonightSheet({ catalog, library, hidden, onOpenGame, onClose }) {
         </div>
 
         {mood && !pick && (
-          <p className="mt-6 rounded-xl bg-amber-50 px-4 py-3 text-sm text-amber-800">
+          <p className="mt-6 rounded-xl bg-amber-50 dark:bg-amber-950/40 px-4 py-3 text-sm text-amber-800 dark:text-amber-200">
             Nothing in {fromLibrary ? 'your library' : 'the catalog'} matches that yet.
             {fromLibrary && ' Try the whole catalog, or mark a few more games as owned.'}
           </p>
         )}
 
         {pick && (
-          <div className="mt-6 animate-rise-in overflow-hidden rounded-2xl border border-slate-200 shadow-sm">
+          <div className="mt-6 animate-rise-in overflow-hidden rounded-2xl border border-slate-200 dark:border-slate-700 shadow-sm">
             <button
               type="button"
               onClick={() => onOpenGame(pick.id)}
               className="block w-full text-left"
             >
-              <div className="aspect-[460/215] w-full bg-slate-100">
+              <div className="aspect-[460/215] w-full bg-slate-100 dark:bg-slate-800">
                 <CoverArt game={pick} live={null} className="h-full w-full" />
               </div>
               <div className="p-4">
                 <p className="text-xs font-semibold uppercase tracking-wider text-indigo-500">
                   {fromLibrary ? 'From your library' : 'Worth a look'}
                 </p>
-                <h3 className="mt-1 text-xl font-bold text-slate-900">{pick.title}</h3>
-                <p className="mt-1 text-sm text-slate-500">{chosenMood?.why}</p>
-                <p className="mt-2 line-clamp-2 text-sm leading-relaxed text-slate-600">
+                <h3 className="mt-1 text-xl font-bold text-slate-900 dark:text-slate-50">{pick.title}</h3>
+                <p className="mt-1 text-sm text-slate-500 dark:text-slate-400">{chosenMood?.why}</p>
+                <p className="mt-2 line-clamp-2 text-sm leading-relaxed text-slate-600 dark:text-slate-300">
                   {pick.description}
                 </p>
               </div>
             </button>
 
-            <div className="grid grid-cols-2 divide-x divide-slate-100 border-t border-slate-100">
+            <div className="grid grid-cols-2 divide-x divide-slate-100 dark:divide-slate-800 border-t border-slate-100 dark:border-slate-800">
               <button
                 type="button"
                 onClick={again}
-                className="flex h-12 items-center justify-center gap-2 text-sm font-medium text-slate-600 transition-colors active:bg-slate-100"
+                className="flex h-12 items-center justify-center gap-2 text-sm font-medium text-slate-600 dark:text-slate-300 transition-colors active:bg-slate-100"
               >
                 <Dices className="h-4 w-4" />
                 Something else
@@ -3375,7 +3426,7 @@ function TonightSheet({ catalog, library, hidden, onOpenGame, onClose }) {
               <button
                 type="button"
                 onClick={() => onOpenGame(pick.id)}
-                className="flex h-12 items-center justify-center gap-2 text-sm font-medium text-indigo-600 transition-colors active:bg-slate-100"
+                className="flex h-12 items-center justify-center gap-2 text-sm font-medium text-indigo-600 dark:text-indigo-300 transition-colors active:bg-slate-100"
               >
                 <Info className="h-4 w-4" />
                 Tell me more
@@ -3385,7 +3436,7 @@ function TonightSheet({ catalog, library, hidden, onOpenGame, onClose }) {
         )}
 
         {!mood && (
-          <p className="mt-6 text-sm leading-relaxed text-slate-500">
+          <p className="mt-6 text-sm leading-relaxed text-slate-500 dark:text-slate-400">
             {library.size > 0
               ? `Picks come from the ${library.size} games you have marked as owned, so this answers what to play rather than what to buy.`
               : 'Mark a few games as owned and this starts picking from your own shelf instead of the whole catalog.'}
@@ -3484,14 +3535,14 @@ function StoreGameModal({ game, region, wishlisted, owned, onToggleWishlist, onT
       </div>
 
       {screenshots.length > 0 && (
-        <div className="no-scrollbar flex gap-2 overflow-x-auto bg-slate-50 p-2">
+        <div className="no-scrollbar flex gap-2 overflow-x-auto bg-slate-50 dark:bg-slate-950 p-2">
           {[...(art ? [art] : []), ...screenshots].map((src) => (
             <button
               key={src}
               type="button"
               onClick={() => setShot(src === art ? null : src)}
               className={`h-14 w-24 shrink-0 overflow-hidden rounded-md ring-1 transition-transform hover:scale-105 ${
-                (shot ?? art) === src ? 'ring-2 ring-indigo-500' : 'ring-slate-200'
+                (shot ?? art) === src ? 'ring-2 ring-indigo-500' : 'ring-slate-200 dark:ring-slate-700'
               }`}
             >
               <img src={src} alt="" loading="lazy" className="h-full w-full object-cover" />
@@ -3502,7 +3553,7 @@ function StoreGameModal({ game, region, wishlisted, owned, onToggleWishlist, onT
 
       <div className="p-6 sm:p-8">
         <div className="flex flex-col gap-3 sm:flex-row sm:items-start sm:justify-between sm:gap-4">
-          <h2 id="store-modal-title" className="text-2xl font-bold text-slate-900 sm:pr-6">
+          <h2 id="store-modal-title" className="text-2xl font-bold text-slate-900 dark:text-slate-50 sm:pr-6">
             {game.name}
           </h2>
           <div className="flex shrink-0 items-center gap-2 sm:gap-1">
@@ -3512,14 +3563,14 @@ function StoreGameModal({ game, region, wishlisted, owned, onToggleWishlist, onT
         </div>
 
         {detail?.tagline && (
-          <p className="mt-2 text-sm font-medium text-slate-500">{detail.tagline}</p>
+          <p className="mt-2 text-sm font-medium text-slate-500 dark:text-slate-400">{detail.tagline}</p>
         )}
 
         <div className="mt-4 flex flex-wrap items-center gap-1.5">
           {stars > 0 && (
             <span
               title={`${(votes ?? 0).toLocaleString()} PlayStation ratings`}
-              className="inline-flex items-center gap-1 rounded-md bg-amber-50 px-2.5 py-1 text-sm font-semibold text-amber-700 ring-1 ring-inset ring-amber-600/20"
+              className="inline-flex items-center gap-1 rounded-md bg-amber-50 dark:bg-amber-950/40 px-2.5 py-1 text-sm font-semibold text-amber-700 dark:text-amber-300 ring-1 ring-inset ring-amber-600/20"
             >
               <Star className="h-3.5 w-3.5 fill-current" />
               {stars.toFixed(1)}
@@ -3531,7 +3582,7 @@ function StoreGameModal({ game, region, wishlisted, owned, onToggleWishlist, onT
           {(game.platforms ?? []).map((platform) => (
             <span
               key={platform}
-              className="rounded-md bg-slate-100 px-2.5 py-1 text-sm font-semibold text-slate-600"
+              className="rounded-md bg-slate-100 dark:bg-slate-800 px-2.5 py-1 text-sm font-semibold text-slate-600 dark:text-slate-300"
             >
               {platform}
             </span>
@@ -3539,7 +3590,7 @@ function StoreGameModal({ game, region, wishlisted, owned, onToggleWishlist, onT
           {(game.genres ?? []).map((genre) => (
             <span
               key={genre}
-              className="rounded-md bg-indigo-50 px-2.5 py-1 text-sm font-semibold text-indigo-700"
+              className="rounded-md bg-indigo-50 dark:bg-indigo-950/40 px-2.5 py-1 text-sm font-semibold text-indigo-700 dark:text-indigo-300"
             >
               {genre}
             </span>
@@ -3554,16 +3605,16 @@ function StoreGameModal({ game, region, wishlisted, owned, onToggleWishlist, onT
             .filter(([, value]) => value)
             .map(([label, value]) => (
               <div key={label}>
-                <span className="mb-1 block text-xs font-semibold uppercase tracking-wider text-slate-400">
+                <span className="mb-1 block text-xs font-semibold uppercase tracking-wider text-slate-400 dark:text-slate-500">
                   {label}
                 </span>
-                <span className="font-medium text-slate-800">{value}</span>
+                <span className="font-medium text-slate-800 dark:text-slate-100">{value}</span>
               </div>
             ))}
         </div>
 
         {status === 'loading' && !detail && (
-          <p className="mt-6 flex items-center gap-2 text-sm text-slate-400">
+          <p className="mt-6 flex items-center gap-2 text-sm text-slate-400 dark:text-slate-500">
             <Loader2 className="h-4 w-4 animate-spin" />
             Reading the store listing...
           </p>
@@ -3575,7 +3626,7 @@ function StoreGameModal({ game, region, wishlisted, owned, onToggleWishlist, onT
                 bullet points on a phone. It opens clamped, with the rest one
                 tap away. */}
             <p
-              className={`whitespace-pre-line leading-relaxed text-slate-700 ${
+              className={`whitespace-pre-line leading-relaxed text-slate-700 dark:text-slate-200 ${
                 expanded ? '' : 'line-clamp-5'
               }`}
             >
@@ -3585,7 +3636,7 @@ function StoreGameModal({ game, region, wishlisted, owned, onToggleWishlist, onT
               <button
                 type="button"
                 onClick={() => setExpanded((open) => !open)}
-                className="mt-1 text-sm font-medium text-indigo-600 hover:underline"
+                className="mt-1 text-sm font-medium text-indigo-600 dark:text-indigo-300 hover:underline"
               >
                 {expanded ? 'Show less' : 'Show more'}
               </button>
@@ -3628,7 +3679,7 @@ function StoreGameModal({ game, region, wishlisted, owned, onToggleWishlist, onT
 
         <GameNews title={game.name} />
 
-        <p className="mt-8 border-t border-slate-100 pt-4 text-xs leading-relaxed text-slate-400">
+        <p className="mt-8 border-t border-slate-100 dark:border-slate-800 pt-4 text-xs leading-relaxed text-slate-400 dark:text-slate-500">
           Indexed from the PlayStation Store. The rating is PlayStation's own, from{' '}
           {(votes ?? 0).toLocaleString()} players. This game is not one of the hand-reviewed
           entries, so there is no kid-friendly verdict or representation note on it.
@@ -3641,7 +3692,7 @@ function StoreGameModal({ game, region, wishlisted, owned, onToggleWishlist, onT
 function StoreCard({ game, curated, onOpenCurated, onOpenStore }) {
   const body = (
     <>
-      <div className="relative aspect-[460/215] w-full overflow-hidden bg-slate-100">
+      <div className="relative aspect-[460/215] w-full overflow-hidden bg-slate-100 dark:bg-slate-800">
         {game.art ? (
           <img
             src={game.art}
@@ -3661,7 +3712,7 @@ function StoreCard({ game, curated, onOpenCurated, onOpenStore }) {
       </div>
 
       <div className="flex flex-1 flex-col p-3">
-        <h3 className="mb-1.5 line-clamp-2 text-sm font-bold leading-tight text-slate-800">
+        <h3 className="mb-1.5 line-clamp-2 text-sm font-bold leading-tight text-slate-800 dark:text-slate-100">
           {game.name}
         </h3>
 
@@ -3669,13 +3720,13 @@ function StoreCard({ game, curated, onOpenCurated, onOpenStore }) {
           {(game.genres ?? []).slice(0, 2).map((genre) => (
             <span
               key={genre}
-              className="rounded bg-slate-100 px-1.5 py-0.5 text-[11px] font-semibold text-slate-600"
+              className="rounded bg-slate-100 dark:bg-slate-800 px-1.5 py-0.5 text-[11px] font-semibold text-slate-600 dark:text-slate-300"
             >
               {genre}
             </span>
           ))}
           {game.platforms?.length > 0 && (
-            <span className="rounded bg-slate-100 px-1.5 py-0.5 text-[11px] font-semibold text-slate-600">
+            <span className="rounded bg-slate-100 dark:bg-slate-800 px-1.5 py-0.5 text-[11px] font-semibold text-slate-600 dark:text-slate-300">
               {game.platforms.join(' / ')}
             </span>
           )}
@@ -3685,7 +3736,7 @@ function StoreCard({ game, curated, onOpenCurated, onOpenStore }) {
           {game.stars > 0 && (
             <span
               title={`${game.votes?.toLocaleString() ?? 0} PlayStation ratings`}
-              className="inline-flex items-center gap-1 rounded bg-amber-50 px-1.5 py-0.5 font-semibold text-amber-700"
+              className="inline-flex items-center gap-1 rounded bg-amber-50 dark:bg-amber-950/40 px-1.5 py-0.5 font-semibold text-amber-700 dark:text-amber-300"
             >
               <Star className="h-3 w-3 fill-current" />
               {game.stars.toFixed(1)}
@@ -3697,20 +3748,20 @@ function StoreCard({ game, curated, onOpenCurated, onOpenStore }) {
             </span>
           )}
           {game.release && (
-            <span className="text-slate-400">{game.release.slice(0, 4)}</span>
+            <span className="text-slate-400 dark:text-slate-500">{game.release.slice(0, 4)}</span>
           )}
         </div>
 
-        <p className="mt-auto truncate pt-2 text-xs text-slate-400">{game.publisher}</p>
+        <p className="mt-auto truncate pt-2 text-xs text-slate-400 dark:text-slate-500">{game.publisher}</p>
         {game.price && (
-          <p className="pt-1 text-sm font-semibold text-slate-900">{game.price}</p>
+          <p className="pt-1 text-sm font-semibold text-slate-900 dark:text-slate-50">{game.price}</p>
         )}
       </div>
     </>
   );
 
   const shell =
-    'group flex h-full animate-rise-in flex-col overflow-hidden rounded-xl border border-slate-200 bg-white text-left shadow-sm transition-all duration-200 ease-spring hover:-translate-y-1 hover:shadow-lg active:scale-[0.98]';
+    'group flex h-full animate-rise-in flex-col overflow-hidden rounded-xl border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-900 text-left shadow-sm transition-all duration-200 ease-spring hover:-translate-y-1 hover:shadow-lg active:scale-[0.98]';
 
   // A game we have written about opens its curated page, which has more in it.
   // Everything else opens its own detail sheet, read from the store listing.
@@ -3934,7 +3985,7 @@ function StorePanel({ query, curatedByName, onOpenCurated, onOpenStore }) {
 
   return (
     <>
-      <p className="mb-3 text-xs font-medium text-slate-400">
+      <p className="mb-3 text-xs font-medium text-slate-400 dark:text-slate-500">
         {results.total.toLocaleString()} of {facets.size.toLocaleString()} games indexed ·{' '}
         {COLLECTION_BLURBS.store}
       </p>
@@ -3951,20 +4002,20 @@ function StorePanel({ query, curatedByName, onOpenCurated, onOpenStore }) {
             aria-pressed={sort === value}
             className={`shrink-0 rounded-full px-2.5 py-1 text-xs font-medium transition-all duration-200 ease-spring active:scale-95 ${
               sort === value
-                ? 'bg-slate-900 text-white'
-                : 'bg-slate-100 text-slate-600 hover:bg-slate-200'
+                ? 'bg-slate-900 text-white dark:bg-slate-100 dark:text-slate-900'
+                : 'bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-300 hover:bg-slate-200'
             }`}
           >
             {label}
           </button>
         ))}
-        <span className="w-px shrink-0 self-stretch bg-slate-200" />
+        <span className="w-px shrink-0 self-stretch bg-slate-200 dark:bg-slate-700" />
         <button
           type="button"
           onClick={() => setGenre('')}
           aria-pressed={genre === ''}
           className={`shrink-0 rounded-full px-2.5 py-1 text-xs font-medium transition-all duration-200 ease-spring active:scale-95 ${
-            genre === '' ? 'bg-slate-900 text-white' : 'bg-slate-100 text-slate-600 hover:bg-slate-200'
+            genre === '' ? 'bg-slate-900 text-white dark:bg-slate-100 dark:text-slate-900' : 'bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-300 hover:bg-slate-200'
           }`}
         >
           Any genre
@@ -3977,12 +4028,12 @@ function StorePanel({ query, curatedByName, onOpenCurated, onOpenStore }) {
             aria-pressed={genre === entry.genre}
             className={`inline-flex shrink-0 items-center gap-1.5 rounded-full px-2.5 py-1 text-xs font-medium transition-all duration-200 ease-spring active:scale-95 ${
               genre === entry.genre
-                ? 'bg-slate-900 text-white'
-                : 'bg-slate-100 text-slate-600 hover:bg-slate-200'
+                ? 'bg-slate-900 text-white dark:bg-slate-100 dark:text-slate-900'
+                : 'bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-300 hover:bg-slate-200'
             }`}
           >
             {entry.genre}
-            <span className={genre === entry.genre ? 'text-white/60' : 'text-slate-400'}>
+            <span className={genre === entry.genre ? 'text-white/60' : 'text-slate-400 dark:text-slate-500'}>
               {entry.count}
             </span>
           </button>
@@ -4018,7 +4069,7 @@ function StorePanel({ query, curatedByName, onOpenCurated, onOpenStore }) {
               the one place that stopped and asked you to press a button. */}
           {results.games.length < results.total && (
             <div ref={setMoreSentinel} className="mt-6 flex justify-center py-4">
-              <Loader2 className="h-5 w-5 animate-spin text-slate-300" />
+              <Loader2 className="h-5 w-5 animate-spin text-slate-300 dark:text-slate-600" />
             </div>
           )}
         </>
@@ -4066,9 +4117,9 @@ function useDeferredEndpoint(url, active) {
 }
 
 const TONE_STYLES = {
-  queer: 'bg-violet-100 text-violet-700',
-  playstation: 'bg-indigo-100 text-indigo-700',
-  general: 'bg-slate-100 text-slate-600',
+  queer: 'bg-violet-100 text-violet-700 dark:text-violet-300',
+  playstation: 'bg-indigo-100 text-indigo-700 dark:text-indigo-300',
+  general: 'bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-300',
 };
 
 function relativeTime(iso) {
@@ -4114,8 +4165,8 @@ function NewsPanel({ items, status, onReload }) {
             aria-pressed={tone === value}
             className={`shrink-0 rounded-full px-2.5 py-1 text-xs font-medium transition-all duration-200 ease-spring active:scale-95 ${
               tone === value
-                ? 'bg-slate-900 text-white'
-                : 'bg-white text-slate-600 ring-1 ring-inset ring-slate-200 hover:bg-slate-100'
+                ? 'bg-slate-900 text-white dark:bg-slate-100 dark:text-slate-900'
+                : 'bg-white dark:bg-slate-900 text-slate-600 dark:text-slate-300 ring-1 ring-inset ring-slate-200 dark:ring-slate-700 hover:bg-slate-100'
             }`}
           >
             {label}
@@ -4134,7 +4185,7 @@ function NewsPanel({ items, status, onReload }) {
             href={item.link}
             target="_blank"
             rel="noopener noreferrer"
-            className="flex gap-3 rounded-xl border border-slate-200 bg-white p-2.5 transition-all duration-200 ease-spring hover:-translate-y-0.5 hover:border-slate-300 hover:shadow-sm active:scale-[0.99]"
+            className="flex gap-3 rounded-xl border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-900 p-2.5 transition-all duration-200 ease-spring hover:-translate-y-0.5 hover:border-slate-300 hover:shadow-sm active:scale-[0.99]"
           >
             {item.image && (
               <img
@@ -4144,7 +4195,7 @@ function NewsPanel({ items, status, onReload }) {
                 onError={(event) => {
                   event.currentTarget.hidden = true;
                 }}
-                className="h-16 w-24 shrink-0 rounded-lg bg-slate-100 object-cover"
+                className="h-16 w-24 shrink-0 rounded-lg bg-slate-100 dark:bg-slate-800 object-cover"
               />
             )}
             <div className="min-w-0 flex-1">
@@ -4155,13 +4206,13 @@ function NewsPanel({ items, status, onReload }) {
                 {tone === 'queer' && item.note && (
                   <span className="truncate font-normal text-violet-500">{item.note}</span>
                 )}
-                <span className="shrink-0 text-slate-400">{relativeTime(item.publishedAt)}</span>
+                <span className="shrink-0 text-slate-400 dark:text-slate-500">{relativeTime(item.publishedAt)}</span>
               </div>
-              <p className="line-clamp-2 text-sm font-semibold leading-snug text-slate-800">
+              <p className="line-clamp-2 text-sm font-semibold leading-snug text-slate-800 dark:text-slate-100">
                 {item.title}
               </p>
               {item.summary && (
-                <p className="mt-0.5 line-clamp-2 text-xs leading-relaxed text-slate-500">
+                <p className="mt-0.5 line-clamp-2 text-xs leading-relaxed text-slate-500 dark:text-slate-400">
                   {item.summary}
                 </p>
               )}
@@ -4242,13 +4293,13 @@ function UpcomingPanel({
             aria-pressed={when === value}
             className={`inline-flex shrink-0 items-center gap-1.5 rounded-full px-2.5 py-1 text-xs font-medium transition-all duration-200 ease-spring active:scale-95 ${
               when === value
-                ? 'bg-slate-900 text-white'
-                : 'bg-white text-slate-600 ring-1 ring-inset ring-slate-200 hover:bg-slate-100'
+                ? 'bg-slate-900 text-white dark:bg-slate-100 dark:text-slate-900'
+                : 'bg-white dark:bg-slate-900 text-slate-600 dark:text-slate-300 ring-1 ring-inset ring-slate-200 dark:ring-slate-700 hover:bg-slate-100'
             }`}
           >
             {value === 'saved' && <Bell className="h-3.5 w-3.5" />}
             {label}
-            <span className={when === value ? 'text-white/60' : 'text-slate-400'}>{count}</span>
+            <span className={when === value ? 'text-white/60' : 'text-slate-400 dark:text-slate-500'}>{count}</span>
           </button>
         ))}
       </div>
@@ -4257,7 +4308,7 @@ function UpcomingPanel({
         <button
           type="button"
           onClick={() => setWhen('saved')}
-          className="flex w-full items-center gap-2 rounded-xl bg-amber-50 px-3 py-2 text-left text-sm font-medium text-amber-800 ring-1 ring-inset ring-amber-200 transition-transform duration-200 ease-spring active:scale-[0.99]"
+          className="flex w-full items-center gap-2 rounded-xl bg-amber-50 dark:bg-amber-950/40 px-3 py-2 text-left text-sm font-medium text-amber-800 dark:text-amber-200 ring-1 ring-inset ring-amber-200 dark:ring-amber-800 transition-transform duration-200 ease-spring active:scale-[0.99]"
         >
           <Bell className="h-4 w-4 shrink-0" />
           <span className="flex-1">
@@ -4284,7 +4335,7 @@ function UpcomingPanel({
 
       {months.map(([month, entries]) => (
         <section key={month}>
-          <h3 className="sticky top-0 z-10 -mx-1 mb-2 bg-slate-50/95 px-1 py-1 text-xs font-bold uppercase tracking-wider text-slate-400 backdrop-blur">
+          <h3 className="sticky top-0 z-10 -mx-1 mb-2 bg-slate-50/95 px-1 py-1 text-xs font-bold uppercase tracking-wider text-slate-400 dark:text-slate-500 backdrop-blur">
             {month}
           </h3>
           <ul className="space-y-2">
@@ -4296,7 +4347,7 @@ function UpcomingPanel({
               const isPlaying = playing === game.id;
 
               return (
-                <li key={game.id} className="rounded-xl border border-slate-200 bg-white">
+                <li key={game.id} className="rounded-xl border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-900">
                   <div className="flex items-stretch gap-3 p-2.5">
                     <div className="flex w-12 shrink-0 flex-col items-center justify-center self-center rounded-lg bg-slate-900 py-1.5 text-white">
                       <span className="text-[10px] font-semibold uppercase tracking-wide text-white/60">
@@ -4313,7 +4364,7 @@ function UpcomingPanel({
                         onClick={() => game.trailer && setPlaying(isPlaying ? null : game.id)}
                         disabled={!game.trailer}
                         aria-label={game.trailer ? `Play the ${game.title} trailer` : undefined}
-                        className="relative h-14 w-14 shrink-0 self-center overflow-hidden rounded-lg bg-slate-100 disabled:cursor-default"
+                        className="relative h-14 w-14 shrink-0 self-center overflow-hidden rounded-lg bg-slate-100 dark:bg-slate-800 disabled:cursor-default"
                       >
                         <img
                           src={game.art}
@@ -4338,34 +4389,34 @@ function UpcomingPanel({
                       rel="noopener noreferrer"
                       className="min-w-0 flex-1"
                     >
-                      <p className="line-clamp-2 text-sm font-semibold leading-snug text-slate-800">
+                      <p className="line-clamp-2 text-sm font-semibold leading-snug text-slate-800 dark:text-slate-100">
                         {game.title}
                       </p>
-                      <p className="truncate text-xs text-slate-500">
+                      <p className="truncate text-xs text-slate-500 dark:text-slate-400">
                         {game.publisher}
                         {game.genres?.length > 0 && ` · ${game.genres.join(', ')}`}
                       </p>
                       <div className="mt-1 flex flex-wrap items-center gap-1">
                         {update && (
-                          <span className="rounded bg-amber-100 px-1.5 py-0.5 text-[11px] font-semibold text-amber-800">
+                          <span className="rounded bg-amber-100 px-1.5 py-0.5 text-[11px] font-semibold text-amber-800 dark:text-amber-200">
                             {UPDATE_TEXT[update.kind](update)}
                           </span>
                         )}
-                        <span className="rounded bg-slate-100 px-1.5 py-0.5 text-[11px] font-semibold text-slate-600">
+                        <span className="rounded bg-slate-100 dark:bg-slate-800 px-1.5 py-0.5 text-[11px] font-semibold text-slate-600 dark:text-slate-300">
                           {game.platforms?.join(' / ') || 'PS5'}
                         </span>
                         {away > 0 && away <= 30 && (
-                          <span className="rounded bg-amber-100 px-1.5 py-0.5 text-[11px] font-semibold text-amber-700">
+                          <span className="rounded bg-amber-100 px-1.5 py-0.5 text-[11px] font-semibold text-amber-700 dark:text-amber-300">
                             {away <= 1 ? 'Tomorrow' : `in ${away} days`}
                           </span>
                         )}
                         {game.price && (
-                          <span className="rounded bg-emerald-50 px-1.5 py-0.5 text-[11px] font-semibold text-emerald-700">
+                          <span className="rounded bg-emerald-50 dark:bg-emerald-950/40 px-1.5 py-0.5 text-[11px] font-semibold text-emerald-700 dark:text-emerald-300">
                             {game.price}
                           </span>
                         )}
                         {inCatalog && (
-                          <span className="rounded bg-indigo-50 px-1.5 py-0.5 text-[11px] font-semibold text-indigo-700">
+                          <span className="rounded bg-indigo-50 dark:bg-indigo-950/40 px-1.5 py-0.5 text-[11px] font-semibold text-indigo-700 dark:text-indigo-300">
                             In catalog
                           </span>
                         )}
@@ -4384,8 +4435,8 @@ function UpcomingPanel({
                       title={saved.has(game.id) ? 'Following' : 'Tell me if this changes'}
                       className={`tap inline-flex shrink-0 items-center justify-center self-center rounded-lg transition-colors ${
                         saved.has(game.id)
-                          ? 'bg-amber-50 text-amber-600'
-                          : 'text-slate-300 hover:bg-slate-100 hover:text-slate-600'
+                          ? 'bg-amber-50 dark:bg-amber-950/40 text-amber-600 dark:text-amber-300'
+                          : 'text-slate-300 dark:text-slate-600 hover:bg-slate-100 hover:text-slate-600'
                       }`}
                     >
                       <Bell className={`h-4 w-4 ${saved.has(game.id) ? 'fill-current' : ''}`} />
@@ -4393,7 +4444,7 @@ function UpcomingPanel({
                   </div>
 
                   {isPlaying && game.trailer && (
-                    <div className="border-t border-slate-100 p-2.5 pt-2">
+                    <div className="border-t border-slate-100 dark:border-slate-800 p-2.5 pt-2">
                       <video
                         src={game.trailer}
                         poster={game.art ?? undefined}
@@ -4416,8 +4467,8 @@ function UpcomingPanel({
 
 function PanelMessage({ icon: Icon, label, spin = false, action }) {
   return (
-    <div className="py-16 text-center text-slate-500">
-      <Icon className={`mx-auto mb-3 h-7 w-7 text-slate-300 ${spin ? 'animate-spin' : ''}`} />
+    <div className="py-16 text-center text-slate-500 dark:text-slate-400">
+      <Icon className={`mx-auto mb-3 h-7 w-7 text-slate-300 dark:text-slate-600 ${spin ? 'animate-spin' : ''}`} />
       <p className="text-sm">{label}</p>
       {action && (
         <button
@@ -4470,8 +4521,8 @@ function BriefingDrawer({
         onClick={onClose}
         className="absolute inset-0 animate-fade-in bg-slate-900/40 backdrop-blur-sm"
       />
-      <aside className="relative flex h-full w-full max-w-md animate-slide-in flex-col border-l border-slate-200 bg-slate-50 pt-[var(--inset-top)] shadow-2xl">
-        <header className="flex items-center gap-2 border-b border-slate-200 bg-white px-3 py-2.5">
+      <aside className="relative flex h-full w-full max-w-md animate-slide-in flex-col border-l border-slate-200 dark:border-slate-700 bg-slate-50 dark:bg-slate-950 pt-[var(--inset-top)] shadow-2xl">
+        <header className="flex items-center gap-2 border-b border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-900 px-3 py-2.5">
           <div className="flex flex-1 gap-1">
             {[
               ['news', 'News', Newspaper],
@@ -4484,8 +4535,8 @@ function BriefingDrawer({
                 aria-pressed={tab === value}
                 className={`inline-flex h-10 items-center gap-1.5 rounded-full px-3.5 text-sm font-medium transition-all duration-200 ease-spring active:scale-95 sm:h-9 ${
                   tab === value
-                    ? 'bg-slate-900 text-white'
-                    : 'bg-slate-100 text-slate-600 hover:bg-slate-200'
+                    ? 'bg-slate-900 text-white dark:bg-slate-100 dark:text-slate-900'
+                    : 'bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-300 hover:bg-slate-200'
                 }`}
               >
                 <Icon className="h-4 w-4" />
@@ -4497,7 +4548,7 @@ function BriefingDrawer({
             type="button"
             onClick={active.reload}
             aria-label="Refresh"
-            className="tap inline-flex items-center justify-center rounded-full text-slate-400 transition-colors hover:bg-slate-100 hover:text-slate-700 sm:h-9 sm:min-h-0 sm:w-9 sm:min-w-0"
+            className="tap inline-flex items-center justify-center rounded-full text-slate-400 dark:text-slate-500 transition-colors hover:bg-slate-100 hover:text-slate-700 sm:h-9 sm:min-h-0 sm:w-9 sm:min-w-0"
           >
             <RefreshCw className={`h-4 w-4 ${active.status === 'loading' ? 'animate-spin' : ''}`} />
           </button>
@@ -4505,7 +4556,7 @@ function BriefingDrawer({
             type="button"
             onClick={onClose}
             aria-label="Close panel"
-            className="tap inline-flex items-center justify-center rounded-full text-slate-400 transition-colors hover:bg-slate-100 hover:text-slate-700 sm:h-9 sm:min-h-0 sm:w-9 sm:min-w-0"
+            className="tap inline-flex items-center justify-center rounded-full text-slate-400 dark:text-slate-500 transition-colors hover:bg-slate-100 hover:text-slate-700 sm:h-9 sm:min-h-0 sm:w-9 sm:min-w-0"
           >
             <X className="h-5 w-5" />
           </button>
@@ -4532,7 +4583,7 @@ function BriefingDrawer({
           )}
         </div>
 
-        <footer className="border-t border-slate-200 bg-white px-3 pb-[calc(0.5rem+var(--inset-bottom))] pt-2 text-[11px] text-slate-400">
+        <footer className="border-t border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-900 px-3 pb-[calc(0.5rem+var(--inset-bottom))] pt-2 text-[11px] text-slate-400 dark:text-slate-500">
           {tab === 'news'
             ? 'Headlines link straight to the publisher. Feeds refresh every 15 minutes.'
             : 'Read from the PS Store nightly, so delayed games move themselves and new ones turn up on their own.'}
@@ -4554,19 +4605,59 @@ function TogglePill({ active, onClick, icon: Icon, label, count, tone }) {
       onClick={onClick}
       aria-pressed={active}
       className={`inline-flex items-center gap-1.5 rounded-full px-2.5 py-1 text-xs font-medium transition-all duration-200 ease-spring active:scale-95 ${
-        active ? `${tone} text-white` : 'bg-slate-100 text-slate-600 hover:bg-slate-200'
+        active ? `${tone} text-white` : 'bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-300 hover:bg-slate-200'
       }`}
     >
       <Icon className={`h-3.5 w-3.5 ${active && label === 'Wishlist' ? 'fill-current' : ''}`} />
       {label}
       {count !== undefined && count !== 0 && (
-        <span className={active ? 'text-white/60' : 'text-slate-400'}>{count}</span>
+        <span className={active ? 'text-white/60' : 'text-slate-400 dark:text-slate-500'}>{count}</span>
       )}
     </button>
   );
 }
 
 /** Options are plain strings, or {value, label} when the two differ. */
+/** A small caps label that turns one long panel into a few short ones. */
+function SheetGroup({ label, children, className = '' }) {
+  return (
+    <div className={className}>
+      <p className="mb-1.5 text-[11px] font-semibold uppercase tracking-wider text-slate-400 dark:text-slate-500">
+        {label}
+      </p>
+      {children}
+    </div>
+  );
+}
+
+/** Light, dark, or follow the phone. */
+function ThemePicker({ value, onChange }) {
+  return (
+    <div className="flex gap-1.5">
+      {[
+        ['system', 'Auto', Smartphone],
+        ['light', 'Light', Sun],
+        ['dark', 'Dark', Moon],
+      ].map(([key, label, Icon]) => (
+        <button
+          key={key}
+          type="button"
+          onClick={() => onChange(key)}
+          aria-pressed={value === key}
+          className={`inline-flex min-h-[2.25rem] flex-1 items-center justify-center gap-1.5 rounded-lg px-2 text-xs font-medium transition-all duration-200 ease-spring active:scale-95 ${
+            value === key
+              ? 'bg-slate-900 text-white dark:bg-slate-100 dark:text-slate-900'
+              : 'bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-300 hover:bg-slate-200'
+          }`}
+        >
+          <Icon className="h-3.5 w-3.5" />
+          {label}
+        </button>
+      ))}
+    </div>
+  );
+}
+
 function Select({ label, value, options, onChange }) {
   return (
     <label className="flex flex-col gap-1">
@@ -4578,7 +4669,7 @@ function Select({ label, value, options, onChange }) {
         // w-full so a long label like "All Upgrade Types" is the select's
         // problem to shrink rather than overflowing its box, and a tighter
         // right pad so the native chevron does not sit on the text.
-        className="w-full min-w-0 cursor-pointer truncate rounded-lg border border-slate-300 bg-white py-2 pl-3 pr-8 text-sm outline-none transition-colors focus:border-indigo-500 focus:ring-2 focus:ring-indigo-500"
+        className="w-full min-w-0 cursor-pointer truncate rounded-lg border border-slate-300 dark:border-slate-600 bg-white dark:bg-slate-900 py-2 pl-3 pr-8 text-sm outline-none transition-colors focus:border-indigo-500 focus:ring-2 focus:ring-indigo-500"
       >
         {options.map((option) => {
           const optionValue = typeof option === 'string' ? option : option.value;
@@ -4608,6 +4699,7 @@ export default function App() {
   const [activeStoreGame, setActiveStoreGame] = useState(null);
   const [tonightOpen, setTonightOpen] = useState(false);
   const [alertsOpen, setAlertsOpen] = useState(false);
+  const [theme, setTheme] = useTheme();
   const [feedMuted, setFeedMuted] = useState(readFeedMuted);
 
   const toggleFeedMuted = useCallback(() => {
@@ -5119,31 +5211,33 @@ export default function App() {
     activeFilterCount > 0;
 
   return (
-    <div className="min-h-screen bg-slate-50 font-sans text-slate-900">
+    <div className="min-h-screen bg-slate-50 dark:bg-slate-950 font-sans text-slate-900 dark:text-slate-50">
       {/* Control bar. Collapses to a single compact row as soon as you scroll
           down, and springs back the moment you scroll up. */}
       <header
         ref={barRef}
         style={{ paddingTop: 'calc(var(--inset-top) + var(--bar-pad))' }}
-        className={`gutter sticky top-0 z-20 border-b border-slate-200 bg-white/90 backdrop-blur transition-[padding] duration-300 ease-swift ${
-          compact ? '[--bar-pad:0.5rem] pb-2' : '[--bar-pad:0.75rem] pb-3 sm:pb-4 sm:[--bar-pad:1rem]'
-        }`}
+        className={`gutter sticky top-0 z-20 transition-[padding] duration-300 ease-swift ${
+          filters.view === 'feed'
+            ? 'feed-header absolute inset-x-0 border-b-0 bg-transparent'
+            : 'border-b border-slate-200 dark:border-slate-700 bg-white/90 dark:bg-slate-900/90 backdrop-blur'
+        } ${compact ? '[--bar-pad:0.5rem] pb-2' : '[--bar-pad:0.75rem] pb-3 sm:pb-4 sm:[--bar-pad:1rem]'}`}
       >
         <div className="mx-auto max-w-7xl">
           {/* Always-visible row: identity, search, filters, view switch. */}
           <div className="flex items-center gap-2">
             <h1
-              className={`hidden shrink-0 font-bold tracking-tight text-slate-800 transition-all duration-300 ease-swift sm:block ${
+              className={`hidden shrink-0 font-bold tracking-tight text-slate-800 dark:text-slate-100 transition-all duration-300 ease-swift sm:block ${
                 compact ? 'text-base' : 'text-lg sm:text-2xl'
               }`}
             >
-              PS<span className="text-indigo-600">4→5</span>
+              PS<span className="text-indigo-600 dark:text-indigo-300">4→5</span>
               <span className="hidden sm:inline"> Catalog</span>
             </h1>
 
             <div className="relative min-w-0 flex-1">
               <Search
-                className="pointer-events-none absolute left-2.5 top-1/2 h-4 w-4 -translate-y-1/2 text-slate-400"
+                className="pointer-events-none absolute left-2.5 top-1/2 h-4 w-4 -translate-y-1/2 text-slate-400 dark:text-slate-500"
                 aria-hidden="true"
               />
               <input
@@ -5151,7 +5245,7 @@ export default function App() {
                 aria-label="Search titles"
                 placeholder="Search games"
                 enterKeyHint="search"
-                className="w-full rounded-full border border-slate-300 bg-white py-2 pl-8 pr-3 text-base outline-none transition-all duration-200 focus:border-indigo-500 focus:ring-2 focus:ring-indigo-500 sm:py-1.5 sm:text-sm"
+                className="w-full rounded-full border border-slate-300 dark:border-slate-600 bg-white dark:bg-slate-900 py-2 pl-8 pr-3 text-base outline-none transition-all duration-200 focus:border-indigo-500 focus:ring-2 focus:ring-indigo-500 sm:py-1.5 sm:text-sm"
                 value={filters.q}
                 onChange={(event) => set('q', event.target.value)}
               />
@@ -5164,8 +5258,8 @@ export default function App() {
               aria-label="Filters"
               className={`inline-flex h-11 shrink-0 items-center gap-1.5 rounded-full px-3 text-sm font-medium transition-all duration-200 ease-spring active:scale-95 sm:h-9 ${
                 sheetOpen || activeFilterCount > 0
-                  ? 'bg-slate-900 text-white'
-                  : 'bg-slate-100 text-slate-600 hover:bg-slate-200'
+                  ? 'bg-slate-900 text-white dark:bg-slate-100 dark:text-slate-900'
+                  : 'bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-300 hover:bg-slate-200'
               }`}
             >
               <SlidersHorizontal className="h-4 w-4" />
@@ -5184,7 +5278,7 @@ export default function App() {
               onClick={() => setTonightOpen(true)}
               aria-label="Pick something to play"
               title="What should I play?"
-              className="pointer-only inline-flex h-9 w-9 shrink-0 items-center justify-center rounded-full bg-amber-100 text-amber-700 transition-all duration-200 ease-spring hover:rotate-12 hover:bg-amber-200 active:scale-90 disabled:opacity-40"
+              className="pointer-only inline-flex h-9 w-9 shrink-0 items-center justify-center rounded-full bg-amber-100 text-amber-700 dark:text-amber-300 transition-all duration-200 ease-spring hover:rotate-12 hover:bg-amber-200 active:scale-90 disabled:opacity-40"
             >
               <Dices className="h-4 w-4" />
             </button>
@@ -5203,7 +5297,7 @@ export default function App() {
                   : 'News and upcoming releases'
               }
               title="News & upcoming"
-              className="relative pointer-only inline-flex h-9 w-9 shrink-0 items-center justify-center rounded-full bg-sky-100 text-sky-700 transition-all duration-200 ease-spring hover:bg-sky-200 active:scale-90"
+              className="relative pointer-only inline-flex h-9 w-9 shrink-0 items-center justify-center rounded-full bg-sky-100 text-sky-700 dark:text-sky-300 transition-all duration-200 ease-spring hover:bg-sky-200 active:scale-90"
             >
               <Newspaper className="h-4 w-4" />
               {releaseChanges.length > 0 && (
@@ -5218,7 +5312,7 @@ export default function App() {
               onClick={() => set('view', filters.view === 'feed' ? 'grid' : 'feed')}
               aria-label={filters.view === 'feed' ? 'Switch to grid' : 'Switch to feed'}
               title={filters.view === 'feed' ? 'Grid view' : 'Feed view'}
-              className="pointer-only inline-flex h-9 w-9 shrink-0 items-center justify-center rounded-full bg-slate-100 text-slate-600 transition-all duration-200 ease-spring hover:bg-slate-200 active:scale-90"
+              className="pointer-only inline-flex h-9 w-9 shrink-0 items-center justify-center rounded-full bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-300 transition-all duration-200 ease-spring hover:bg-slate-200 active:scale-90"
             >
               {filters.view === 'feed' ? (
                 <LayoutGrid className="h-4 w-4" />
@@ -5250,8 +5344,8 @@ export default function App() {
                     aria-current={active ? 'true' : undefined}
                     className={`inline-flex h-9 shrink-0 items-center gap-1.5 rounded-full px-3 text-xs font-medium transition-all duration-200 ease-spring active:scale-95 sm:h-7 ${
                       active
-                        ? 'bg-slate-900 text-white'
-                        : 'bg-slate-100 text-slate-600 hover:bg-slate-200'
+                        ? 'bg-slate-900 text-white dark:bg-slate-100 dark:text-slate-900'
+                        : 'bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-300 hover:bg-slate-200'
                     }`}
                   >
                     {entry.value === 'deals' && <BadgePercent className="h-3.5 w-3.5" />}
@@ -5259,7 +5353,7 @@ export default function App() {
                     {entry.label}
                     {collectionCounts[entry.value] != null && (
                       <span
-                        className={`tabular-nums ${active ? 'text-white/60' : 'text-slate-400'}`}
+                        className={`tabular-nums ${active ? 'text-white/60' : 'text-slate-400 dark:text-slate-500'}`}
                       >
                         {collectionCounts[entry.value]}
                       </span>
@@ -5272,7 +5366,8 @@ export default function App() {
 
           {/* Filter sheet: everything else lives here instead of on screen. */}
           {sheetOpen && (
-            <div className="mt-3 animate-sheet-down rounded-xl border border-slate-200 bg-white p-3 shadow-sm">
+            <div className="mt-3 animate-sheet-down space-y-3 rounded-xl border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-900 p-3 shadow-sm">
+              <SheetGroup label="Refine">
               <div className="grid grid-cols-2 gap-2 sm:grid-cols-3 lg:grid-cols-6">
                 <Select
                   label="All Genres"
@@ -5318,7 +5413,10 @@ export default function App() {
                 />
               </div>
 
-              <div className="mt-3 flex flex-wrap items-center gap-1.5">
+              </SheetGroup>
+
+              <SheetGroup label="Show only">
+              <div className="flex flex-wrap items-center gap-1.5">
                 <TogglePill
                   active={filters.sale}
                   onClick={() => set('sale', !filters.sale)}
@@ -5375,23 +5473,33 @@ export default function App() {
                   tone="bg-violet-600"
                 />
 
-                <div className="ml-auto flex items-center gap-3">
-                  <LiveStatus
-                    status={status}
-                    progress={progress}
-                    updatedAt={updatedAt}
-                    onRefresh={refresh}
-                  />
-                  {filtersActive && (
-                    <button
-                      type="button"
-                      onClick={clearFilters}
-                      className="text-xs font-medium text-slate-500 hover:text-slate-800"
-                    >
-                      Clear
-                    </button>
-                  )}
-                </div>
+              </div>
+              </SheetGroup>
+
+              <div className="grid gap-3 sm:grid-cols-2">
+                <SheetGroup label="Appearance">
+                  <ThemePicker value={theme} onChange={setTheme} />
+                </SheetGroup>
+
+                <SheetGroup label="Live data">
+                  <div className="flex items-center justify-between gap-3">
+                    <LiveStatus
+                      status={status}
+                      progress={progress}
+                      updatedAt={updatedAt}
+                      onRefresh={refresh}
+                    />
+                    {filtersActive && (
+                      <button
+                        type="button"
+                        onClick={clearFilters}
+                        className="shrink-0 text-xs font-medium text-slate-500 dark:text-slate-400 hover:text-slate-800 dark:hover:text-slate-200"
+                      >
+                        Clear all
+                      </button>
+                    )}
+                  </div>
+                </SheetGroup>
               </div>
             </div>
           )}
@@ -5404,7 +5512,7 @@ export default function App() {
                   key={chip.key}
                   type="button"
                   onClick={chip.clear}
-                  className="inline-flex shrink-0 items-center gap-1 rounded-full bg-indigo-50 px-2.5 py-1 text-xs font-medium text-indigo-700 transition-transform duration-200 ease-spring active:scale-95"
+                  className="inline-flex shrink-0 items-center gap-1 rounded-full bg-indigo-50 dark:bg-indigo-950/40 px-2.5 py-1 text-xs font-medium text-indigo-700 dark:text-indigo-300 transition-transform duration-200 ease-spring active:scale-95"
                 >
                   {chip.label}
                   <X className="h-3 w-3" />
@@ -5472,10 +5580,10 @@ export default function App() {
             />
           ) : (
             <>
-          <p className="mb-3 text-xs font-medium text-slate-400">
+          <p className="mb-3 text-xs font-medium text-slate-400 dark:text-slate-500">
             {filteredGames.length} of {visiblePool.length} games
             {atFloorCount > 0 && (
-              <span className="font-semibold text-emerald-600">
+              <span className="font-semibold text-emerald-600 dark:text-emerald-300">
                 {' '}
                 · {atFloorCount} at {atFloorCount === 1 ? 'its' : 'their'} lowest yet
               </span>
@@ -5488,7 +5596,7 @@ export default function App() {
             <button
               type="button"
               onClick={() => set('wishlist', true)}
-              className="mb-3 flex w-full items-center gap-2 rounded-xl bg-rose-50 px-3 py-2.5 text-left text-sm font-medium text-rose-800 ring-1 ring-inset ring-rose-200 transition-transform duration-200 ease-spring active:scale-[0.99]"
+              className="mb-3 flex w-full items-center gap-2 rounded-xl bg-rose-50 dark:bg-rose-950/40 px-3 py-2.5 text-left text-sm font-medium text-rose-800 dark:text-rose-200 ring-1 ring-inset ring-rose-200 dark:ring-rose-800 transition-transform duration-200 ease-spring active:scale-[0.99]"
             >
               <Heart className="h-4 w-4 shrink-0 fill-current" />
               <span className="flex-1">
@@ -5508,8 +5616,8 @@ export default function App() {
               onClick={() => setAlertsOpen(true)}
               className={`mb-3 flex w-full items-center gap-2 rounded-xl px-3 py-2.5 text-left text-sm font-medium ring-1 ring-inset transition-transform duration-200 ease-spring active:scale-[0.99] ${
                 alerts.pushEnabled || alerts.emailConfirmed
-                  ? 'bg-emerald-50 text-emerald-800 ring-emerald-200'
-                  : 'bg-indigo-50 text-indigo-800 ring-indigo-200'
+                  ? 'bg-emerald-50 dark:bg-emerald-950/40 text-emerald-800 dark:text-emerald-200 ring-emerald-200 dark:ring-emerald-800'
+                  : 'bg-indigo-50 dark:bg-indigo-950/40 text-indigo-800 dark:text-indigo-200 ring-indigo-200 dark:ring-indigo-800'
               }`}
             >
               {alerts.pushEnabled || alerts.emailConfirmed ? (
@@ -5529,7 +5637,7 @@ export default function App() {
           )}
 
           {filters.collection === 'genius' && !geniusIsPersonalized && (
-            <p className="mb-3 inline-flex items-start gap-2 rounded-lg bg-indigo-50 px-3 py-2 text-sm leading-relaxed text-indigo-700">
+            <p className="mb-3 inline-flex items-start gap-2 rounded-lg bg-indigo-50 dark:bg-indigo-950/40 px-3 py-2 text-sm leading-relaxed text-indigo-700 dark:text-indigo-300">
               <Sparkles className="mt-0.5 h-4 w-4 shrink-0" />
               <span>
                 <strong className="font-semibold">Starter picks</strong> — highly rated across the
@@ -5560,12 +5668,12 @@ export default function App() {
           {hasMore && <div ref={attachEnd} aria-hidden="true" className="h-8" />}
 
           {hidden.size > 0 && (
-            <p className="mt-6 text-center text-xs text-slate-400">
+            <p className="mt-6 text-center text-xs text-slate-400 dark:text-slate-500">
               {hidden.size} hidden.{' '}
               <button
                 type="button"
                 onClick={unhideAll}
-                className="font-medium text-indigo-600 hover:underline"
+                className="font-medium text-indigo-600 dark:text-indigo-300 hover:underline"
               >
                 Show them again
               </button>
@@ -5589,7 +5697,7 @@ export default function App() {
               <button
                 type="button"
                 onClick={() => set('collection', 'store')}
-                className="inline-flex items-center gap-1.5 text-sm font-medium text-indigo-600 hover:underline"
+                className="inline-flex items-center gap-1.5 text-sm font-medium text-indigo-600 dark:text-indigo-300 hover:underline"
               >
                 <Search className="h-4 w-4" />
                 Look for &ldquo;{deferredQuery.trim()}&rdquo; in the whole store
@@ -5689,7 +5797,7 @@ export default function App() {
 function LiveStatus({ status, progress, updatedAt, onRefresh }) {
   if (status === 'loading') {
     return (
-      <span className="inline-flex items-center gap-2 text-sm text-slate-500">
+      <span className="inline-flex items-center gap-2 text-sm text-slate-500 dark:text-slate-400">
         <Loader2 className="h-4 w-4 animate-spin" />
         Loading live prices and art... {Math.round(progress * 100)}%
       </span>
@@ -5701,7 +5809,7 @@ function LiveStatus({ status, progress, updatedAt, onRefresh }) {
       <button
         type="button"
         onClick={onRefresh}
-        className="inline-flex items-center gap-2 text-sm font-medium text-amber-600 hover:underline"
+        className="inline-flex items-center gap-2 text-sm font-medium text-amber-600 dark:text-amber-300 hover:underline"
       >
         <ImageIcon className="h-4 w-4" />
         Live data unavailable — retry
@@ -5713,7 +5821,7 @@ function LiveStatus({ status, progress, updatedAt, onRefresh }) {
     <button
       type="button"
       onClick={onRefresh}
-      className="inline-flex items-center gap-2 text-sm text-slate-500 transition-colors hover:text-slate-800"
+      className="inline-flex items-center gap-2 text-sm text-slate-500 dark:text-slate-400 transition-colors hover:text-slate-800"
     >
       <RefreshCw className="h-4 w-4" />
       Prices updated{' '}

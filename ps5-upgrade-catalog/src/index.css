@@ -149,6 +149,27 @@
   }
 }
 
+/* The feed is edge to edge, so its controls float over the art rather than
+   sitting on a band above it. A soft scrim keeps them legible against a bright
+   screenshot without drawing a hard line across the picture. */
+.feed-header {
+  background: linear-gradient(to bottom, rgb(2 6 23 / 0.55), rgb(2 6 23 / 0));
+}
+
+.feed-header input {
+  background-color: rgb(255 255 255 / 0.12);
+  border-color: rgb(255 255 255 / 0.25);
+  color: #fff;
+}
+
+.feed-header input::placeholder {
+  color: rgb(255 255 255 / 0.7);
+}
+
+.feed-header svg {
+  color: rgb(255 255 255 / 0.85);
+}
+
 /* Respect the visitor's motion preference for every transition here. */
 @media (prefers-reduced-motion: reduce) {
   html {
