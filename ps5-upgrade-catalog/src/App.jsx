@@ -126,7 +126,7 @@ const COLLECTION_BLURBS = {
   queer: 'Games with queer characters or relationships that matter to the story, not background detail.',
   disability: 'Games with disabled or neurodivergent characters, or landmark accessibility work.',
   store:
-    "Everything indexed from the PlayStation Store itself. No hand-written notes on these — store facts and PlayStation's own star rating only.",
+    "Everything indexed from the PlayStation Store itself. No hand-written notes on these: store facts and PlayStation's own star rating only.",
 };
 
 const SORTS = [
@@ -1659,6 +1659,7 @@ function GameCard({
   owned,
   reason,
   saving,
+  actions = true,
   onToggleWishlist,
   onToggleOwned,
   onHide,
@@ -1706,20 +1707,50 @@ function GameCard({
           <h2 className="mb-1.5 line-clamp-2 text-sm font-bold leading-tight text-slate-800 dark:text-slate-100 sm:pr-7 sm:text-base">
             {game.title}
           </h2>
+          {/* Assembled as a list and joined, rather than each part carrying
+              its own leading separator. Thirteen of every hundred store rows
+              have no genre, and those used to read as "· 4.9" with the dot
+              hanging off the front of the line.
+
+              The store's star rating waits for ten votes: five-from-one-vote
+              is the commonest number in the mirror and the least telling. */}
           <p className="mb-2 flex items-center gap-1.5 overflow-hidden text-[11px] font-medium text-slate-400 dark:text-slate-500">
-            <span className="truncate">{game.genre}</span>
-            {ratings?.critic != null && (
-              <>
-                <span aria-hidden="true">·</span>
-                <span className="shrink-0 tabular-nums">{ratings.critic}</span>
-              </>
-            )}
-            {FAMILY_TIER_VALUES.includes(game.ageRating?.family) && (
-              <>
-                <span aria-hidden="true">·</span>
-                <Baby className="h-3 w-3 shrink-0" aria-label="Kid friendly" />
-              </>
-            )}
+            {[
+              game.genre ? (
+                <span key="genre" className="truncate">
+                  {game.genre}
+                </span>
+              ) : null,
+              ratings?.critic != null ? (
+                <span key="critic" className="shrink-0 tabular-nums">
+                  {ratings.critic}
+                </span>
+              ) : null,
+              FAMILY_TIER_VALUES.includes(game.ageRating?.family) ? (
+                <Baby key="kids" className="h-3 w-3 shrink-0" aria-label="Kid friendly" />
+              ) : null,
+              game.stars != null && (game.votes ?? 0) >= 10 ? (
+                <span
+                  key="stars"
+                  className="inline-flex shrink-0 items-center gap-0.5 tabular-nums"
+                  title={`${game.stars.toFixed(1)} out of 5 from ${game.votes.toLocaleString()} players`}
+                >
+                  <Star className="h-3 w-3" />
+                  {game.stars.toFixed(1)}
+                </span>
+              ) : null,
+            ]
+              .filter(Boolean)
+              .flatMap((part, index) =>
+                index === 0
+                  ? [part]
+                  : [
+                      <span key={`sep-${part.key}`} aria-hidden="true">
+                        ·
+                      </span>,
+                      part,
+                    ],
+              )}
           </p>
           {reason && (
             <p className="mb-2 line-clamp-2 text-[11px] font-medium leading-relaxed text-indigo-600 dark:text-indigo-300">
@@ -1785,7 +1816,13 @@ function GameCard({
 
       {/* Pointer: a hover rail tucked into the corner, out of the way until
           wanted. Touch: three full-height targets in a row, because a stack of
-          36px buttons over the art is a mis-tap waiting to happen. */}
+          36px buttons over the art is a mis-tap waiting to happen.
+
+          A store row has nowhere to live in the wishlist yet, so it renders
+          without the rail rather than with a heart that quietly does nothing
+          when you press it. */}
+      {actions && (
+        <>
       <div className="pointer-only absolute right-1.5 top-1.5 flex flex-col items-end gap-0.5 rounded-xl bg-white/75 dark:bg-slate-900/75 p-0.5 backdrop-blur-sm">
         <WishlistButton wishlisted={wishlisted} onToggle={onToggleWishlist} />
         <OwnedButton owned={owned} onToggle={onToggleOwned} />
@@ -1835,6 +1872,8 @@ function GameCard({
           <X className="h-[18px] w-[18px]" />
         </button>
       </div>
+        </>
+      )}
     </div>
   );
 }
@@ -2339,6 +2378,7 @@ function FeedSlide({
   wishlisted,
   owned,
   reason,
+  actions = true,
   muted,
   onToggleMuted,
   onToggleWishlist,
@@ -2477,6 +2517,8 @@ function FeedSlide({
 
           {/* Action rail, thumb-reachable on a phone. */}
           <div className="flex shrink-0 flex-col items-center gap-3">
+            {actions && (
+              <>
             <button
               type="button"
               onClick={onToggleWishlist}
@@ -2499,6 +2541,8 @@ function FeedSlide({
             >
               <CircleCheck className="h-5 w-5" />
             </button>
+              </>
+            )}
             <button
               type="button"
               onClick={onOpen}
@@ -3695,91 +3739,57 @@ function StoreGameModal({ game, region, wishlisted, owned, onToggleWishlist, onT
   );
 }
 
-function StoreCard({ game, curated, onOpenCurated, onOpenStore }) {
-  const body = (
-    <>
-      <div className="relative aspect-[460/215] w-full overflow-hidden bg-slate-100 dark:bg-slate-800">
-        {game.art ? (
-          <img
-            src={game.art}
-            alt=""
-            loading="lazy"
-            onError={(event) => {
-              event.currentTarget.hidden = true;
-            }}
-            className="h-full w-full object-cover"
-          />
-        ) : null}
-        {curated && (
-          <span className="absolute left-2 top-2 rounded-full bg-indigo-600 px-2 py-0.5 text-[11px] font-semibold text-white shadow-sm">
-            In your catalog
-          </span>
-        )}
-      </div>
+/**
+ * A store row wearing the catalog's shape.
+ *
+ * The mirror publishes nine facts and the catalog carries fifteen, so the six
+ * that are hand-made come back empty rather than invented, and `coverage`
+ * records which kind of row this is. Every card in the app reads these field
+ * names, which is the whole point: one card, not two of them drifting apart.
+ *
+ * The id is namespaced because concept ids and catalog ids are different
+ * numbering schemes, and an accidental collision would heart the wrong game.
+ */
+function storeRowAsGame(row) {
+  return {
+    id: `store:${row.id}`,
+    storeId: row.id,
+    title: row.name,
+    genre: (row.genres ?? [])[0] ?? null,
+    platform: (row.platforms ?? []).join(' / ') || null,
+    publisher: row.publisher ?? null,
+    releaseDate: row.release ?? null,
+    stars: row.stars ?? null,
+    votes: row.votes ?? null,
+    coverage: 'store',
+    // None of this is knowable from the mirror, and guessing it is how a
+    // store row would start pretending to be a curated one.
+    artStyle: null,
+    protagonist: null,
+    tags: [],
+    representation: [],
+    ageRating: null,
+    ratings: null,
+    description: null,
+    steamAppId: null,
+    ps5Upgrade: null,
+  };
+}
 
-      <div className="flex flex-1 flex-col p-3">
-        <h3 className="mb-1.5 line-clamp-2 text-sm font-bold leading-tight text-slate-800 dark:text-slate-100">
-          {game.name}
-        </h3>
-
-        <div className="mb-2 flex flex-wrap gap-1">
-          {(game.genres ?? []).slice(0, 2).map((genre) => (
-            <span
-              key={genre}
-              className="rounded bg-slate-100 dark:bg-slate-800 px-1.5 py-0.5 text-[11px] font-semibold text-slate-600 dark:text-slate-300"
-            >
-              {genre}
-            </span>
-          ))}
-          {game.platforms?.length > 0 && (
-            <span className="rounded bg-slate-100 dark:bg-slate-800 px-1.5 py-0.5 text-[11px] font-semibold text-slate-600 dark:text-slate-300">
-              {game.platforms.join(' / ')}
-            </span>
-          )}
-        </div>
-
-        <div className="mb-1 flex flex-wrap items-center gap-2 text-[11px]">
-          {game.stars > 0 && (
-            <span
-              title={`${game.votes?.toLocaleString() ?? 0} PlayStation ratings`}
-              className="inline-flex items-center gap-1 rounded bg-amber-50 dark:bg-amber-950/40 px-1.5 py-0.5 font-semibold text-amber-700 dark:text-amber-300"
-            >
-              <Star className="h-3 w-3 fill-current" />
-              {game.stars.toFixed(1)}
-              <span className="font-normal text-amber-600/70">
-                {(game.votes ?? 0) >= 1000
-                  ? `${Math.round(game.votes / 1000)}k`
-                  : (game.votes ?? 0)}
-              </span>
-            </span>
-          )}
-          {game.release && (
-            <span className="text-slate-400 dark:text-slate-500">{game.release.slice(0, 4)}</span>
-          )}
-        </div>
-
-        <p className="mt-auto truncate pt-2 text-xs text-slate-400 dark:text-slate-500">{game.publisher}</p>
-        {game.price && (
-          <p className="pt-1 text-sm font-semibold text-slate-900 dark:text-slate-50">{game.price}</p>
-        )}
-      </div>
-    </>
-  );
-
-  const shell =
-    'group flex h-full animate-rise-in flex-col overflow-hidden rounded-xl border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-900 text-left shadow-sm transition-all duration-200 ease-spring hover:-translate-y-1 hover:shadow-lg active:scale-[0.98]';
-
-  // A game we have written about opens its curated page, which has more in it.
-  // Everything else opens its own detail sheet, read from the store listing.
-  return (
-    <button
-      type="button"
-      onClick={() => (curated ? onOpenCurated(curated.id) : onOpenStore(game))}
-      className={shell}
-    >
-      {body}
-    </button>
-  );
+/**
+ * The live-data shape a card expects, built from the row itself.
+ *
+ * Store rows carry their own art and price, so they never wait on the live
+ * endpoint the catalog uses. `ratings` stays null deliberately: PlayStation's
+ * stars run to five and are often five-from-one-vote, and dropping them into
+ * the slot that holds Metacritic's hundred would read as a perfect score.
+ */
+function storeRowAsLive(row) {
+  return {
+    heroImage: row.art ?? null,
+    price: row.price ? { finalFormatted: row.price, discountPercent: 0 } : null,
+    ratings: null,
+  };
 }
 
 /** Query state for the mirror, kept out of the component that renders it. */
@@ -3840,80 +3850,10 @@ function useStoreSearch({ active, q, genre, sort }) {
  * well-liked rather than one five-star review.
  */
 /**
- * A store game as a feed slide.
- *
- * Switching to the feed while Whole store was selected used to show the
- * curated 242 instead, silently: the collection chip said one thing and the
- * list was another. The mirror carries art, a name, a price and a rating,
- * which is everything a slide needs, so it can simply be in the feed like
- * every other collection.
- */
-function StoreFeedSlide({ game, curated, onOpenCurated, onOpenStore }) {
-  const open = () => (curated ? onOpenCurated(curated.id) : onOpenStore(game));
-
-  return (
-    <section className="feed-slide relative flex h-full w-full items-end overflow-hidden bg-slate-900">
-      {game.art ? (
-        <img src={game.art} alt="" loading="lazy" decoding="async"
-          className="absolute inset-0 h-full w-full scale-105 object-cover" />
-      ) : (
-        <div className="absolute inset-0 bg-gradient-to-br from-indigo-600 via-violet-600 to-fuchsia-600" />
-      )}
-      <div className="absolute inset-0 bg-gradient-to-t from-slate-950 via-slate-950/70 to-slate-950/10" />
-
-      <div className="relative w-full p-5 pb-[calc(6rem+var(--inset-bottom))] sm:p-8 sm:pb-[calc(6.5rem+var(--inset-bottom))]">
-        <div className="mx-auto flex max-w-3xl items-end justify-between gap-4">
-          <div className="min-w-0">
-            <div className="mb-3 flex flex-wrap items-center gap-1.5">
-              {(game.genres ?? []).slice(0, 1).map((genre) => (
-                <span key={genre} className="rounded-md bg-white/15 px-2 py-1 text-xs font-semibold text-white backdrop-blur">
-                  {genre}
-                </span>
-              ))}
-              {curated && (
-                <span className="rounded-md bg-indigo-500/80 px-2 py-1 text-xs font-semibold text-white backdrop-blur">
-                  In the catalog
-                </span>
-              )}
-            </div>
-
-            <h2 className="text-3xl font-bold leading-tight text-white drop-shadow sm:text-5xl">
-              {game.name}
-            </h2>
-
-            <p className="mt-3 flex flex-wrap items-center gap-x-4 gap-y-1 text-sm text-white/80">
-              {game.price && <span className="text-lg font-bold text-white">{game.price}</span>}
-              {game.stars > 0 && (
-                <span className="inline-flex items-center gap-1.5">
-                  <Star className="h-4 w-4" />
-                  {game.stars.toFixed(1)}
-                </span>
-              )}
-              {game.publisher && <span className="truncate">{game.publisher}</span>}
-            </p>
-          </div>
-
-          <div className="flex shrink-0 flex-col gap-2">
-            <button
-              type="button"
-              onClick={open}
-              aria-label={`Details for ${game.name}`}
-              className="rounded-full bg-white/15 p-3 text-white backdrop-blur transition-transform duration-200 ease-spring active:scale-90 hover:bg-white/25"
-            >
-              <Info className="h-5 w-5" />
-            </button>
-          </div>
-        </div>
-      </div>
-    </section>
-  );
-}
-
-/**
  * The whole store as a feed, so the view switch means the same thing here as
  * it does anywhere else.
  */
-function StoreFeed({ query, curatedByName, onOpenCurated, onOpenStore }) {
+function StoreFeed({ query, curatedByName, muted, onToggleMuted, onOpenCurated, onOpenStore }) {
   const results = useStoreSearch({ active: true, q: query, genre: '', sort: 'rating' });
   const [sentinel, setSentinel] = useState(null);
   const loadMore = results.more;
@@ -3937,15 +3877,21 @@ function StoreFeed({ query, curatedByName, onOpenCurated, onOpenStore }) {
 
   return (
     <>
-      {results.games.map((game) => (
-        <StoreFeedSlide
-          key={game.id}
-          game={game}
-          curated={curatedByName.get(game.name?.toLowerCase())}
-          onOpenCurated={onOpenCurated}
-          onOpenStore={onOpenStore}
-        />
-      ))}
+      {results.games.map((row) => {
+        const twin = curatedByName.get(row.name?.toLowerCase());
+        return (
+          <FeedSlide
+            key={row.id}
+            game={storeRowAsGame(row)}
+            live={storeRowAsLive(row)}
+            reason={twin ? 'In your catalog, with the full write-up' : undefined}
+            actions={false}
+            muted={muted}
+            onToggleMuted={onToggleMuted}
+            onOpen={() => (twin ? onOpenCurated(twin.id) : onOpenStore(row))}
+          />
+        );
+      })}
       {hasMore && <div ref={setSentinel} aria-hidden="true" className="h-px" />}
     </>
   );
@@ -4060,15 +4006,19 @@ function StorePanel({ query, curatedByName, onOpenCurated, onOpenStore }) {
       ) : (
         <>
           <div className="grid grid-cols-2 gap-3 sm:grid-cols-3 sm:gap-4 lg:grid-cols-4 xl:grid-cols-5">
-            {results.games.map((game) => (
-              <StoreCard
-                key={game.id}
-                game={game}
-                curated={curatedByName.get(game.name?.toLowerCase())}
-                onOpenCurated={onOpenCurated}
-                onOpenStore={onOpenStore}
-              />
-            ))}
+            {results.games.map((row) => {
+              const twin = curatedByName.get(row.name?.toLowerCase());
+              return (
+                <GameCard
+                  key={row.id}
+                  game={storeRowAsGame(row)}
+                  live={storeRowAsLive(row)}
+                  reason={twin ? 'In your catalog, with the full write-up' : undefined}
+                  actions={false}
+                  onOpen={() => (twin ? onOpenCurated(twin.id) : onOpenStore(row))}
+                />
+              );
+            })}
           </div>
 
           {/* The rest of the app grows its lists as you reach them; this was
@@ -5825,6 +5775,8 @@ export default function App() {
             <StoreFeed
               query={deferredQuery.trim()}
               curatedByName={curatedByName}
+              muted={feedMuted}
+              onToggleMuted={toggleFeedMuted}
               onOpenCurated={setActiveGameId}
               onOpenStore={setActiveStoreGame}
             />
