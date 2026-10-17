@@ -18,8 +18,10 @@ import {
   ChevronRight,
   CircleCheck,
   CirclePlay,
+  Clapperboard,
   Dices,
   ExternalLink,
+  Flame,
   Gamepad2,
   Heart,
   Image as ImageIcon,
@@ -27,6 +29,8 @@ import {
   LayoutGrid,
   Loader2,
   Mail,
+  Mic,
+  MessageCircle,
   Newspaper,
   RefreshCw,
   Rows3,
@@ -2585,6 +2589,7 @@ function BottomBar({ view, onView, onBriefing, onSurprise, canSurprise, updates 
   const items = [
     { key: 'grid', label: 'Browse', icon: LayoutGrid, active: view === 'grid' },
     { key: 'feed', label: 'Feed', icon: Rows3, active: view === 'feed' },
+    { key: 'goss', label: 'Goss', icon: Flame },
     { key: 'news', label: 'News', icon: Newspaper, badge: updates },
     { key: 'surprise', label: 'Tonight', icon: Dices, disabled: !canSurprise },
   ];
@@ -2602,7 +2607,8 @@ function BottomBar({ view, onView, onBriefing, onSurprise, canSurprise, updates 
             disabled={item.disabled}
             aria-current={item.active ? 'page' : undefined}
             onClick={() => {
-              if (item.key === 'news') onBriefing();
+              if (item.key === 'goss') onBriefing('goss');
+              else if (item.key === 'news') onBriefing();
               else if (item.key === 'surprise') onSurprise();
               else onView(item.key);
             }}
@@ -4225,6 +4231,279 @@ function NewsPanel({ items, status, onReload }) {
   );
 }
 
+/* ------------------------------------------------------------------ *
+ * The Goss
+ * ------------------------------------------------------------------ */
+
+const GOSS_SEEN_KEY = 'gossSeenAt';
+
+/**
+ * Each kind gets its own colour and its own word, because the whole point of
+ * the panel is telling at a glance what sort of thing you are looking at.
+ */
+const GOSS_KINDS = {
+  beef: {
+    label: 'Beef',
+    icon: Flame,
+    pill: 'bg-rose-500 text-white',
+    glow: 'from-rose-500/15 dark:from-rose-500/10',
+  },
+  trailer: {
+    label: 'Trailers',
+    icon: Clapperboard,
+    pill: 'bg-indigo-500 text-white',
+    glow: 'from-indigo-500/15 dark:from-indigo-500/10',
+  },
+  review: {
+    label: 'Reviews',
+    icon: Star,
+    pill: 'bg-amber-500 text-white',
+    glow: 'from-amber-500/15 dark:from-amber-500/10',
+  },
+  pod: {
+    label: 'Heard it',
+    icon: Mic,
+    pill: 'bg-emerald-500 text-white',
+    glow: 'from-emerald-500/15 dark:from-emerald-500/10',
+  },
+  buzz: {
+    label: 'Buzz',
+    icon: MessageCircle,
+    pill: 'bg-sky-500 text-white',
+    glow: 'from-sky-500/15 dark:from-sky-500/10',
+  },
+};
+
+const GOSS_ORDER = ['beef', 'trailer', 'review', 'pod', 'buzz'];
+
+const heatLabel = (heat) =>
+  heat >= 1000 ? `${(heat / 1000).toFixed(heat >= 10_000 ? 0 : 1)}k` : String(heat);
+
+const hostOf = (url) => {
+  try {
+    return new URL(url).hostname.replace(/^www\./, '');
+  } catch {
+    return null;
+  }
+};
+
+/**
+ * One burst.
+ *
+ * A post and a headline are not the same object and should not look the same:
+ * a post *is* the story, so it gets the author's face and its full text, while
+ * a headline is a pointer to one, so it gets the picture and a summary. Both
+ * always name who said it, which is the only honest way to carry gossip about
+ * real people.
+ */
+function GossCard({ burst, fresh }) {
+  const kind = GOSS_KINDS[burst.kind] ?? GOSS_KINDS.buzz;
+  const post = burst.source === 'Bluesky';
+  const external = burst.externalLink ? hostOf(burst.externalLink) : null;
+
+  return (
+    <a
+      href={burst.link}
+      target="_blank"
+      rel="noopener noreferrer"
+      className="group relative block overflow-hidden rounded-2xl border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-900 p-3 transition-all duration-200 ease-spring hover:-translate-y-0.5 hover:border-slate-300 hover:shadow-md active:scale-[0.99]"
+    >
+      <span
+        aria-hidden="true"
+        className={`pointer-events-none absolute inset-x-0 top-0 h-24 bg-gradient-to-b to-transparent ${kind.glow}`}
+      />
+
+      <div className="relative">
+        <div className="mb-2 flex items-center gap-1.5">
+          <span
+            className={`inline-flex shrink-0 items-center gap-1 rounded-full px-2 py-0.5 text-[10px] font-black uppercase tracking-wide ${kind.pill}`}
+          >
+            <kind.icon className="h-3 w-3" />
+            {kind.label}
+          </span>
+          {fresh && (
+            <span
+              className="h-2 w-2 shrink-0 animate-pulse rounded-full bg-rose-500"
+              title="New since you last looked"
+            />
+          )}
+          {burst.heat > 0 && (
+            <span className="inline-flex shrink-0 items-center gap-0.5 text-[11px] font-bold text-rose-500">
+              <Flame className="h-3 w-3" />
+              {heatLabel(burst.heat)}
+            </span>
+          )}
+          <span className="ml-auto shrink-0 text-[11px] text-slate-400 dark:text-slate-500">
+            {relativeTime(burst.publishedAt)}
+          </span>
+        </div>
+
+        <div className="flex gap-3">
+          {post && burst.avatar && (
+            <img
+              src={burst.avatar}
+              alt=""
+              loading="lazy"
+              onError={(event) => {
+                event.currentTarget.hidden = true;
+              }}
+              className="h-9 w-9 shrink-0 rounded-full bg-slate-100 dark:bg-slate-800 object-cover"
+            />
+          )}
+          {!post && burst.image && (
+            <img
+              src={burst.image}
+              alt=""
+              loading="lazy"
+              onError={(event) => {
+                event.currentTarget.hidden = true;
+              }}
+              className="h-16 w-24 shrink-0 rounded-lg bg-slate-100 dark:bg-slate-800 object-cover"
+            />
+          )}
+
+          <div className="min-w-0 flex-1">
+            <p className="mb-0.5 truncate text-[11px] font-semibold text-slate-500 dark:text-slate-400">
+              {post ? (burst.authorName ?? burst.author) : burst.source}
+              {burst.note && (
+                <span className="font-normal text-slate-400 dark:text-slate-500"> · {burst.note}</span>
+              )}
+            </p>
+            <p className="line-clamp-3 text-sm font-semibold leading-snug text-slate-800 dark:text-slate-100">
+              {burst.title}
+            </p>
+            {burst.summary && (
+              <p className="mt-1 line-clamp-2 text-xs leading-relaxed text-slate-500 dark:text-slate-400">
+                {burst.summary}
+              </p>
+            )}
+            {post && burst.image && (
+              <img
+                src={burst.image}
+                alt=""
+                loading="lazy"
+                onError={(event) => {
+                  event.currentTarget.hidden = true;
+                }}
+                className="mt-2 h-32 w-full rounded-lg bg-slate-100 dark:bg-slate-800 object-cover"
+              />
+            )}
+            {external && (
+              <p className="mt-1.5 inline-flex items-center gap-1 text-[11px] font-medium text-indigo-500 dark:text-indigo-300">
+                <ExternalLink className="h-3 w-3" />
+                {external}
+              </p>
+            )}
+          </div>
+        </div>
+      </div>
+    </a>
+  );
+}
+
+/**
+ * The gossip column.
+ *
+ * Bursts arrive already interleaved by kind, so scrolling gives you a beef,
+ * then a trailer, then a review, rather than eighteen layoff stories in a row.
+ * The chips are there for when you want only one of those.
+ */
+function GossPanel({ bursts, counts, status, onReload }) {
+  const [kind, setKind] = useState('all');
+
+  // Read once per mount, then immediately record this visit: the dots have to
+  // keep pointing at the same things while you scroll, but a reopen tomorrow
+  // should compare against today.
+  const [seenAt] = useState(() => {
+    try {
+      return Number(localStorage.getItem(GOSS_SEEN_KEY)) || 0;
+    } catch {
+      return 0;
+    }
+  });
+
+  const loaded = bursts.length > 0;
+  useEffect(() => {
+    if (!loaded) return;
+    try {
+      localStorage.setItem(GOSS_SEEN_KEY, String(Date.now()));
+    } catch {
+      // Without storage every burst simply reads as new.
+    }
+  }, [loaded]);
+
+  const isFresh = (burst) => {
+    const at = burst.publishedAt ? Date.parse(burst.publishedAt) : NaN;
+    return Boolean(seenAt) && Number.isFinite(at) && at > seenAt;
+  };
+
+  if (status === 'loading' && bursts.length === 0) {
+    return <PanelMessage icon={Loader2} spin label="Getting into it..." />;
+  }
+  if (bursts.length === 0) {
+    return (
+      <PanelMessage
+        icon={Flame}
+        label="Nothing to report. Suspiciously quiet."
+        action={{ label: 'Try again', onClick: onReload }}
+      />
+    );
+  }
+
+  const shown = kind === 'all' ? bursts : bursts.filter((burst) => burst.kind === kind);
+  const freshCount = bursts.filter(isFresh).length;
+  const chips = [
+    ['all', 'Everything', bursts.length],
+    ...GOSS_ORDER.filter((key) => (counts?.[key] ?? 0) > 0).map((key) => [
+      key,
+      GOSS_KINDS[key].label,
+      counts[key],
+    ]),
+  ];
+
+  return (
+    <>
+      {freshCount > 0 && (
+        <p className="mb-2 inline-flex items-center gap-1.5 rounded-full bg-rose-50 dark:bg-rose-950/50 px-2.5 py-1 text-xs font-semibold text-rose-600 dark:text-rose-300">
+          <span className="h-2 w-2 animate-pulse rounded-full bg-rose-500" />
+          {freshCount} new since you last looked
+        </p>
+      )}
+
+      <div className="no-scrollbar mb-2 flex gap-1.5 overflow-x-auto">
+        {chips.map(([value, label, count]) => (
+          <button
+            key={value}
+            type="button"
+            onClick={() => setKind(value)}
+            aria-pressed={kind === value}
+            className={`shrink-0 rounded-full px-2.5 py-1 text-xs font-medium transition-all duration-200 ease-spring active:scale-95 ${
+              kind === value
+                ? 'bg-slate-900 text-white dark:bg-slate-100 dark:text-slate-900'
+                : 'bg-white dark:bg-slate-900 text-slate-600 dark:text-slate-300 ring-1 ring-inset ring-slate-200 dark:ring-slate-700 hover:bg-slate-100'
+            }`}
+          >
+            {label}
+            <span className="ml-1 opacity-60">{count}</span>
+          </button>
+        ))}
+      </div>
+
+      {shown.length === 0 && (
+        <PanelMessage icon={Flame} label="Nothing of that sort right now." />
+      )}
+
+      <ul className="space-y-2">
+        {shown.map((burst) => (
+          <li key={burst.link}>
+            <GossCard burst={burst} fresh={isFresh(burst)} />
+          </li>
+        ))}
+      </ul>
+    </>
+  );
+}
+
 const MONTH_LABEL = (iso) =>
   new Date(iso).toLocaleDateString([], { month: 'long', year: 'numeric' });
 
@@ -4499,6 +4778,7 @@ function BriefingDrawer({
   updates,
 }) {
   const news = useDeferredEndpoint('/api/news', open);
+  const goss = useDeferredEndpoint('/api/goss', open);
 
   useEffect(() => {
     if (!open) return undefined;
@@ -4511,7 +4791,7 @@ function BriefingDrawer({
 
   if (!open) return null;
 
-  const active = tab === 'upcoming' ? upcoming : news;
+  const active = tab === 'upcoming' ? upcoming : tab === 'goss' ? goss : news;
 
   return (
     <div className="fixed inset-0 z-40 flex justify-end" role="dialog" aria-modal="true" aria-label="News and releases">
@@ -4525,6 +4805,7 @@ function BriefingDrawer({
         <header className="flex items-center gap-2 border-b border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-900 px-3 py-2.5">
           <div className="flex flex-1 gap-1">
             {[
+              ['goss', 'Goss', Flame],
               ['news', 'News', Newspaper],
               ['upcoming', 'Upcoming', CalendarDays],
             ].map(([value, label, Icon]) => (
@@ -4563,7 +4844,14 @@ function BriefingDrawer({
         </header>
 
         <div className="no-scrollbar panel-scroll flex-1 overflow-y-auto p-3">
-          {tab === 'news' ? (
+          {tab === 'goss' ? (
+            <GossPanel
+              bursts={goss.data?.bursts ?? []}
+              counts={goss.data?.counts ?? null}
+              status={goss.status}
+              onReload={goss.reload}
+            />
+          ) : tab === 'news' ? (
             <NewsPanel
               items={news.data?.items ?? []}
               status={news.status}
@@ -4584,9 +4872,11 @@ function BriefingDrawer({
         </div>
 
         <footer className="border-t border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-900 px-3 pb-[calc(0.5rem+var(--inset-bottom))] pt-2 text-[11px] text-slate-400 dark:text-slate-500">
-          {tab === 'news'
-            ? 'Headlines link straight to the publisher. Feeds refresh every 15 minutes.'
-            : 'Read from the PS Store nightly, so delayed games move themselves and new ones turn up on their own.'}
+          {tab === 'goss'
+            ? 'Posts, headlines and episodes from the people who said them. Tap through for the source.'
+            : tab === 'news'
+              ? 'Headlines link straight to the publisher. Feeds refresh every 15 minutes.'
+              : 'Read from the PS Store nightly, so delayed games move themselves and new ones turn up on their own.'}
         </footer>
       </aside>
     </div>
@@ -5764,10 +6054,10 @@ export default function App() {
       <BottomBar
         view={filters.view}
         onView={(view) => set('view', view)}
-        onBriefing={() =>
+        onBriefing={(tab) =>
           setBriefing({
             open: true,
-            tab: releaseChanges.length > 0 ? 'upcoming' : briefing.tab,
+            tab: tab ?? (releaseChanges.length > 0 ? 'upcoming' : briefing.tab),
           })
         }
         onSurprise={() => setTonightOpen(true)}

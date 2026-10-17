@@ -3,6 +3,7 @@ import { defineConfig } from 'vite';
 import react from '@vitejs/plugin-react';
 import { CACHE_HEADER, handleGamesRequest } from './api/steam.mjs';
 import { loadGameNews, loadNews } from './api/news.mjs';
+import { loadGoss } from './api/goss.mjs';
 import { loadUpcoming } from './api/upcoming.mjs';
 import { searchStore, storeGenres, storeSize } from './api/store.mjs';
 import { loadConceptDetail } from './api/concept.mjs';
@@ -92,6 +93,7 @@ function gamesApiPlugin() {
         response.end(JSON.stringify({ error: String(error?.message || error) }));
       }
     });
+    mountJson(server, '/api/goss', loadGoss);
     mountJson(server, '/api/upcoming', loadUpcoming);
     mountStore(server);
     // Computed live in dev so the harness is exercised without waiting for
