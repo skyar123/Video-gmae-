@@ -18785,5 +18785,103 @@
     "ratings": null,
     "coverage": [],
     "description": "A party-based RPG against a tear in the Veil, where each companion carries a personal thread you can finish or leave undone."
+  },
+  {
+    "id": "psychonauts-2",
+    "title": "Psychonauts 2",
+    "genre": "Platformer",
+    "artStyle": "Stylized",
+    "protagonist": "Male",
+    "ps5Upgrade": "Backwards Compatible",
+    "platform": "PS4",
+    "tags": [
+      "disability",
+      "graphics"
+    ],
+    "representation": [
+      {
+        "kind": "disability",
+        "note": "Every level is the inside of one person’s mind, built out of their anxiety, grief or addiction, and the game treats those as things to understand rather than enemies to beat."
+      }
+    ],
+    "steamAppId": 607080,
+    "psnStorePath": "concept/10002422",
+    "ageRating": null,
+    "ratings": null,
+    "coverage": [],
+    "description": "A platformer set inside people’s heads, where each mind is a world shaped by whatever its owner cannot put down."
+  },
+  {
+    "id": "omori",
+    "title": "OMORI",
+    "genre": "RPG",
+    "artStyle": "Pixel Art",
+    "protagonist": "Male",
+    "ps5Upgrade": "Backwards Compatible",
+    "platform": "PS4",
+    "tags": [
+      "disability"
+    ],
+    "representation": [
+      {
+        "kind": "disability",
+        "note": "Built around a boy’s depression and a memory he will not look at, and it opens by telling you plainly that it is going there."
+      }
+    ],
+    "steamAppId": 1150690,
+    "psnStorePath": "concept/10005141",
+    "ageRating": null,
+    "ratings": null,
+    "coverage": [],
+    "description": "A turn-based RPG that moves between a colour-pencil dream world and the bedroom its hero has not left, with the two slowly explaining each other."
+  },
+  {
+    "id": "rainbow-billy",
+    "title": "Rainbow Billy: The Curse of the Leviathan",
+    "genre": "Narrative",
+    "artStyle": "Stylized",
+    "protagonist": "Custom",
+    "ps5Upgrade": "Backwards Compatible",
+    "platform": "PS4",
+    "tags": [
+      "queer",
+      "cozy"
+    ],
+    "representation": [
+      {
+        "kind": "queer",
+        "note": "You choose your pronouns at the start, they/them among them, and every encounter is talking a creature back into colour rather than fighting it."
+      }
+    ],
+    "steamAppId": 1106830,
+    "psnStorePath": "concept/10001189",
+    "ageRating": null,
+    "ratings": null,
+    "coverage": [],
+    "description": "A world drained of colour, restored by listening: encounters are conversations where you work out what a creature needs rather than how to beat it."
+  },
+  {
+    "id": "stray-gods",
+    "title": "Stray Gods: The Roleplaying Musical",
+    "genre": "Narrative",
+    "artStyle": "Hand-drawn",
+    "protagonist": "Female",
+    "ps5Upgrade": "PS4 & PS5 Cross-Buy",
+    "platform": "PS4",
+    "tags": [
+      "queer"
+    ],
+    "representation": [
+      {
+        "kind": "queer",
+        "note": "Grace can romance the cast regardless of gender, her best friend Freddie among them, and the romance you pursue changes what the songs become."
+      }
+    ],
+    "steamAppId": 1920780,
+    "psnStorePath": "concept/10007748",
+    "ageRating": null,
+    "ratings": null,
+    "coverage": [],
+    "description": "A murder mystery among the last Greek gods, argued in song: your dialogue choices pick the next line and the music bends to follow."
   }
 ]
