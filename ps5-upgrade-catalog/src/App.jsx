@@ -107,6 +107,7 @@ const COLLECTIONS = [
   { value: 'deals', label: 'Best deals', tag: null },
   { value: 'genius', label: 'Genius picks', tag: null },
   { value: 'store', label: 'Whole store', tag: null },
+  { value: 'soon', label: 'Coming soon', tag: null },
   { value: 'graphics', label: 'Best graphics', tag: 'graphics' },
   { value: 'social', label: 'Online & social', tag: 'social' },
   { value: 'cozy', label: 'Cozy', tag: 'cozy' },
@@ -127,6 +128,7 @@ const COLLECTION_BLURBS = {
   disability: 'Games with disabled or neurodivergent characters, or landmark accessibility work.',
   store:
     "Everything indexed from the PlayStation Store itself. No hand-written notes on these: store facts and PlayStation's own star rating only.",
+  soon: 'Out in the next few weeks, and everything from the last sixty days. Heart one and it stays on your wishlist through release.',
 };
 
 const SORTS = [
@@ -1666,6 +1668,15 @@ function OwnedButton({ owned, onToggle, withLabel = false }) {
  * Card
  * ------------------------------------------------------------------ */
 
+/** A date still ahead of us, which is the only kind worth printing on a card. */
+const isUnreleased = (iso) => {
+  const at = iso ? Date.parse(iso) : NaN;
+  return Number.isFinite(at) && at > Date.now();
+};
+
+const releaseLabel = (iso) =>
+  new Date(iso).toLocaleDateString([], { day: 'numeric', month: 'short' });
+
 function GameCard({
   game,
   live,
@@ -1681,6 +1692,7 @@ function GameCard({
 }) {
   const ratings = live?.ratings ?? game.ratings;
   const standing = priceStanding(live?.price, live?.history);
+  const unreleased = isUnreleased(game.releaseDate);
 
   return (
     <div className="group relative flex h-full animate-rise-in flex-col overflow-hidden rounded-xl border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-900 shadow-sm transition-all duration-200 ease-spring hover:-translate-y-1 hover:shadow-lg focus-within:ring-2 focus-within:ring-indigo-500 active:scale-[0.98]">
@@ -1795,6 +1807,11 @@ function GameCard({
                     deals by discount puts 50% off at the top whether that is
                     the floor or half what it went for last month, and this is
                     the difference, in the two words a card has room for. */}
+                {unreleased ? (
+                  <p className="mt-1 text-[11px] font-semibold text-indigo-600 dark:text-indigo-300">
+                    Out {releaseLabel(game.releaseDate)}
+                  </p>
+                ) : null}
                 {standing && (
                   <p
                     className={`mt-1 text-[11px] font-semibold ${
@@ -3764,7 +3781,30 @@ function StoreGameModal({ game, region, wishlisted, owned, onToggleWishlist, onT
  * The id is namespaced because concept ids and catalog ids are different
  * numbering schemes, and an accidental collision would heart the wrong game.
  */
-function storeRowAsGame(row) {
+/**
+ * An upcoming release in the mirror's shape.
+ *
+ * Both come from the same place: a PlayStation Store concept id. The upcoming
+ * endpoint simply names its fields differently. Normalising here means one
+ * adapter, one key namespace and one saved cache rather than three of each,
+ * and a game you saved before release stays the same game afterwards.
+ */
+function upcomingAsStoreRow(row) {
+  return {
+    id: row.id,
+    name: row.title,
+    release: row.releaseDate,
+    platforms: row.platforms,
+    genres: row.genres,
+    publisher: row.publisher,
+    price: row.price,
+    stars: row.stars,
+    votes: row.votes,
+    art: row.art,
+  };
+}
+
+function storeRowAsGame(row, coverage = 'store') {
   return {
     id: `store:${row.id}`,
     storeId: row.id,
@@ -3778,7 +3818,7 @@ function storeRowAsGame(row) {
     releaseDate: row.release ?? null,
     stars: row.stars ?? null,
     votes: row.votes ?? null,
-    coverage: 'store',
+    coverage,
     // None of this is knowable from the mirror, and guessing it is how a
     // store row would start pretending to be a curated one.
     artStyle: null,
@@ -3794,6 +3834,9 @@ function storeRowAsGame(row) {
     // feed, which is keyed by catalog title, so without this its card would
     // sit on the loading shimmer for ever.
     storeLive: storeRowAsLive(row),
+    // The row this was built from, so a card can open the store view for it
+    // and hearting it can cache it without having to find it again.
+    raw: row,
     // The catalog's search index is built once from games.json and cannot
     // know about these, so each row brings its own.
     searchRow: {
@@ -5128,7 +5171,9 @@ export default function App() {
   // before you go looking.
   const upcoming = useDeferredEndpoint(
     '/api/upcoming',
-    (briefing.open && briefing.tab === 'upcoming') || savedReleases.size > 0,
+    (briefing.open && briefing.tab === 'upcoming') ||
+      savedReleases.size > 0 ||
+      filters.collection === 'soon',
   );
 
   const releaseChanges = useMemo(
@@ -5331,6 +5376,34 @@ export default function App() {
     [wishlist, library, hidden, toggleStoreSaved, hideGame],
   );
 
+  /**
+   * Opening a game from any list.
+   *
+   * A curated game opens its write-up. Anything carrying a mirror row opens
+   * the store view instead, which is the one that knows how to fetch detail
+   * for a concept id. Without this a store game saved to the wishlist simply
+   * did nothing when tapped, because the write-up is looked up in games.json
+   * and a store id is not in there.
+   */
+  const openGame = useCallback((game) => {
+    if (game.raw) setActiveStoreGame(game.raw);
+    else setActiveGameId(game.id);
+  }, []);
+
+  /**
+   * Hearting or owning from any list.
+   *
+   * A non-curated game has to leave its row behind as well as its id, or the
+   * wishlist would hold something it cannot draw.
+   */
+  const saveGame = useCallback(
+    (game, kind) => {
+      if (game.raw) rememberStoreRow(game.raw);
+      (kind === 'owned' ? toggleOwned : toggleWishlist)(game.id);
+    },
+    [rememberStoreRow, toggleOwned, toggleWishlist],
+  );
+
   const toggleDealAlert = useCallback((id) => {
     setDealAlerts((previous) => {
       const next = new Set(previous);
@@ -5448,12 +5521,41 @@ export default function App() {
     [savedStoreGames],
   );
 
+  /**
+   * Upcoming and just-released games, in the catalog's shape.
+   *
+   * Unlike the store mirror this is small enough to hold in full, so it needs
+   * no server paging and no special render path: it is simply the pool the
+   * "Coming soon" collection filters, and every sort, chip and card works on
+   * it unchanged.
+   */
+  const upcomingGames = useMemo(() => {
+    const rows = [...(upcoming.data?.games ?? []), ...(upcoming.data?.recent ?? [])];
+    return rows
+      .filter((row) => row?.id && row?.title)
+      .map((row) => storeRowAsGame(upcomingAsStoreRow(row), 'upcoming'));
+  }, [upcoming.data]);
+
+  const pool = useMemo(
+    () => (filters.collection === 'soon' ? upcomingGames : catalog),
+    [filters.collection, upcomingGames, catalog],
+  );
+
+  /**
+   * The PS5 toggle is a fact about the curated catalog, which is built around
+   * PS4 games that have an upgrade path. Almost everything releasing now is
+   * PS5 only, so applying it to upcoming releases emptied the collection:
+   * a hundred and thirty-seven games showed as fifteen, and every one of the
+   * genuinely unreleased ones was among the hidden.
+   */
+  const ignorePs5Filter = filters.collection === 'soon';
+
   const searchScores = useMemo(() => {
     const query = parseQuery(deferredQuery);
     if (!query.folded) return null;
 
     const titles = new Map();
-    for (const game of catalog) {
+    for (const game of pool) {
       const row = SEARCH_ROWS.get(game.id) ?? game.searchRow;
       const score = scoreMatch(row.title, query);
       if (score > 0) titles.set(game.id, score);
@@ -5461,13 +5563,13 @@ export default function App() {
     if (titles.size > 0) return titles;
 
     const meta = new Map();
-    for (const game of catalog) {
+    for (const game of pool) {
       const row = SEARCH_ROWS.get(game.id) ?? game.searchRow;
       const score = scoreMatch(row.meta, query);
       if (score > 0) meta.set(game.id, score);
     }
     return meta;
-  }, [deferredQuery, catalog]);
+  }, [deferredQuery, pool]);
 
   const filteredGames = useMemo(() => {
     const collection = COLLECTIONS.find((entry) => entry.value === filters.collection);
@@ -5477,9 +5579,21 @@ export default function App() {
       ? new Map(geniusPicks.map((pick, index) => [pick.game.id, index]))
       : null;
 
-    const matches = catalog.filter((game) => {
+    const matches = pool.filter((game) => {
       if (hidden.has(game.id)) return false;
-      if (!filters.includePs5 && game.platform === 'PS5') return false;
+      // Hiding PS5 only titles is a browse default, and saving something is
+      // not browsing. Without this last clause, hearting an upcoming game
+      // (almost all of which are PS5 only) put it in a wishlist that then
+      // refused to show it.
+      if (
+        !ignorePs5Filter &&
+        !filters.includePs5 &&
+        game.platform === 'PS5' &&
+        !wishlist.has(game.id) &&
+        !library.has(game.id)
+      ) {
+        return false;
+      }
       if (isGenius && !geniusRank.has(game.id)) return false;
       if (collection?.tag && !game.tags.includes(collection.tag)) return false;
       if (filters.collection === 'deals' && !(byTitle.get(game.title)?.price?.discountPercent > 0))
@@ -5549,7 +5663,7 @@ export default function App() {
       if (filters.sort === 'buy') return buyScoreOf(a) - buyScoreOf(b);
       return discountOf(b) - discountOf(a);
     });
-  }, [catalog, searchScores, filters, wishlist, library, hidden, byTitle, geniusPicks]);
+  }, [pool, ignorePs5Filter, searchScores, filters, wishlist, library, hidden, byTitle, geniusPicks]);
 
   // Cards are added as you reach them rather than all at once; a different
   // filter, sort or collection is a different list, so it starts over.
@@ -5574,13 +5688,20 @@ export default function App() {
   }, [filteredGames, byTitle]);
 
   const visiblePool = useMemo(
+    () => pool.filter((game) => ignorePs5Filter || filters.includePs5 || game.platform !== 'PS5'),
+    [pool, ignorePs5Filter, filters.includePs5],
+  );
+
+  // Chip counts have to keep describing the catalog whatever is being
+  // browsed, or switching to Coming soon would read every other chip as zero.
+  const catalogPool = useMemo(
     () => catalog.filter((game) => filters.includePs5 || game.platform !== 'PS5'),
     [catalog, filters.includePs5],
   );
 
   const saleCount = useMemo(
-    () => visiblePool.filter((game) => byTitle.get(game.title)?.price?.discountPercent > 0).length,
-    [visiblePool, byTitle],
+    () => catalogPool.filter((game) => byTitle.get(game.title)?.price?.discountPercent > 0).length,
+    [catalogPool, byTitle],
   );
 
   // Over the whole pool, not the filtered results: a chip that counted its own
@@ -5595,8 +5716,8 @@ export default function App() {
   );
 
   const kidFriendlyCount = useMemo(
-    () => visiblePool.filter((game) => FAMILY_TIER_VALUES.includes(game.ageRating?.family)).length,
-    [visiblePool],
+    () => catalogPool.filter((game) => FAMILY_TIER_VALUES.includes(game.ageRating?.family)).length,
+    [catalogPool],
   );
 
   const collectionCounts = useMemo(() => {
@@ -5605,16 +5726,18 @@ export default function App() {
       counts[entry.value] =
         entry.value === 'store'
           ? storeSize
-          : entry.value === 'deals'
-            ? saleCount
-            : entry.value === 'genius'
-              ? geniusPicks.length
-              : entry.tag
-            ? visiblePool.filter((game) => game.tags.includes(entry.tag)).length
-            : visiblePool.length;
+          : entry.value === 'soon'
+            ? upcomingGames.length
+            : entry.value === 'deals'
+              ? saleCount
+              : entry.value === 'genius'
+                ? geniusPicks.length
+                : entry.tag
+                  ? catalogPool.filter((game) => game.tags.includes(entry.tag)).length
+                  : catalogPool.length;
     }
     return counts;
-  }, [visiblePool, saleCount, geniusPicks, storeSize]);
+  }, [catalogPool, saleCount, geniusPicks, storeSize, upcomingGames]);
 
   const activeGame = activeGameId ? gamesData.find((game) => game.id === activeGameId) : null;
 
@@ -6005,9 +6128,9 @@ export default function App() {
               reason={filters.collection === 'genius' ? geniusReasons.get(game.id) : undefined}
               muted={feedMuted}
               onToggleMuted={toggleFeedMuted}
-              onToggleWishlist={() => toggleWishlist(game.id)}
-              onToggleOwned={() => toggleOwned(game.id)}
-              onOpen={() => setActiveGameId(game.id)}
+              onToggleWishlist={() => saveGame(game, 'wishlist')}
+              onToggleOwned={() => saveGame(game, 'owned')}
+              onOpen={() => openGame(game)}
             />
           ))
           )}
@@ -6114,10 +6237,10 @@ export default function App() {
                 owned={library.has(game.id)}
                 reason={filters.collection === 'genius' ? geniusReasons.get(game.id) : undefined}
                 saving={savingsById.get(game.id)}
-                onToggleWishlist={() => toggleWishlist(game.id)}
-                onToggleOwned={() => toggleOwned(game.id)}
+                onToggleWishlist={() => saveGame(game, 'wishlist')}
+                onToggleOwned={() => saveGame(game, 'owned')}
                 onHide={() => hideGame(game.id)}
-                onOpen={() => setActiveGameId(game.id)}
+                onOpen={() => openGame(game)}
               />
             ))}
           </div>
