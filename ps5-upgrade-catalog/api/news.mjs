@@ -66,6 +66,25 @@ const FEEDS = [
 ];
 
 const CACHE_TTL_MS = 15 * 60 * 1000;
+
+/**
+ * Every feed is already fetched in full, so these are the only thing
+ * standing between the reader and about five times as many stories. Six per
+ * publisher still stops the hourly outlets burying everyone else.
+ */
+const PER_SOURCE = 6;
+const MAX_ITEMS = 72;
+
+/**
+ * Nothing older than this is news.
+ *
+ * The slower outlets are kept visible by guaranteeing each feed its newest
+ * story, but a feed that has not posted in years would otherwise have that
+ * guarantee drag in whatever it last published. Raising the per-publisher cap
+ * made it worse, because six slots for a quarterly outlet reaches back a long
+ * way: one story in the list was a thousand days old.
+ */
+const MAX_AGE_MS = 45 * 24 * 60 * 60 * 1000;
 let cache = null;
 
 const decodeEntities = (value) =>
@@ -167,6 +186,7 @@ export const feedDiagnostics = () => Object.fromEntries(feedStatus);
 export async function loadNews() {
   if (cache && Date.now() - cache.storedAt < CACHE_TTL_MS) return cache.value;
 
+  const cutoff = Date.now() - MAX_AGE_MS;
   const batches = await Promise.all(FEEDS.map(fetchFeed));
   const items = batches
     .flatMap((batch, index) => {
@@ -175,21 +195,25 @@ export async function loadNews() {
       const relevant = filter
         ? batch.filter((item) => filter.test(`${item.title} ${item.summary}`))
         : batch;
-      return relevant.slice(0, 8);
+      return relevant.slice(0, 12);
     })
-    .filter((item) => item.title && item.link)
+    .filter((item) => {
+      if (!item.title || !item.link) return false;
+      const at = item.publishedAt ? Date.parse(item.publishedAt) : NaN;
+      return Number.isFinite(at) && at >= cutoff;
+    })
     .sort((a, b) => new Date(b.publishedAt ?? 0) - new Date(a.publishedAt ?? 0));
 
   const perSource = new Map();
   const balanced = [];
   for (const item of items) {
     const count = perSource.get(item.source) ?? 0;
-    if (count >= 3) continue;
+    if (count >= PER_SOURCE) continue;
     perSource.set(item.source, count + 1);
     balanced.push(item);
   }
 
-  const kept = balanced.slice(0, 30);
+  const kept = balanced.slice(0, MAX_ITEMS);
   const links = new Set(kept.map((item) => item.link));
 
   // Sorting by recency alone buries anyone who does not publish hourly, which

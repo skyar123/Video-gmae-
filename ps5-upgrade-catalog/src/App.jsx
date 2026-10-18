@@ -4133,7 +4133,20 @@ const NEWS_TONES = [
   ['all', 'Everything'],
   ['playstation', 'PlayStation'],
   ['queer', 'Queer press'],
+  ['general', 'Everyone else'],
 ];
+
+/** Today, Yesterday, then the weekday, then the date. */
+function newsDayLabel(iso) {
+  const at = iso ? new Date(iso) : null;
+  if (!at || Number.isNaN(at.getTime())) return 'Earlier';
+  const midnight = (date) => new Date(date.getFullYear(), date.getMonth(), date.getDate());
+  const days = Math.round((midnight(new Date()) - midnight(at)) / 86_400_000);
+  if (days <= 0) return 'Today';
+  if (days === 1) return 'Yesterday';
+  if (days < 7) return at.toLocaleDateString([], { weekday: 'long' });
+  return at.toLocaleDateString([], { month: 'long', day: 'numeric' });
+}
 
 function NewsPanel({ items, status, onReload }) {
   const [tone, setTone] = useState('all');
@@ -4152,73 +4165,161 @@ function NewsPanel({ items, status, onReload }) {
     );
   }
 
+  // The lead wants a picture, and the newest story does not always have one,
+  // so this reaches a little way down rather than heading the page with a
+  // grey box.
+  const leadIndex = shown.findIndex((item, index) => item.image && index < 5);
+  const lead = leadIndex >= 0 ? shown[leadIndex] : shown[0];
+
+  // Grouped by day so a long scroll reads as a week rather than one column of
+  // undifferentiated headlines. The lead is grouped along with everything
+  // else: pulled out above the first date it looked like it came from a
+  // different day than the stories under it, which at one point meant a story
+  // from "3h ago" sitting above a heading that said Yesterday.
+  const days = [];
+  for (const item of shown) {
+    const label = newsDayLabel(item.publishedAt);
+    const last = days[days.length - 1];
+    if (last && last.label === label) last.items.push(item);
+    else days.push({ label, items: [item] });
+  }
+
   return (
     <>
-      <div className="no-scrollbar mb-2 flex gap-1.5 overflow-x-auto">
-        {NEWS_TONES.map(([value, label]) => (
-          <button
-            key={value}
-            type="button"
-            onClick={() => setTone(value)}
-            aria-pressed={tone === value}
-            className={`shrink-0 rounded-full px-2.5 py-1 text-xs font-medium transition-all duration-200 ease-spring active:scale-95 ${
-              tone === value
-                ? 'bg-slate-900 text-white dark:bg-slate-100 dark:text-slate-900'
-                : 'bg-white dark:bg-slate-900 text-slate-600 dark:text-slate-300 ring-1 ring-inset ring-slate-200 dark:ring-slate-700 hover:bg-slate-100'
-            }`}
-          >
-            {label}
-          </button>
-        ))}
+      <div className="no-scrollbar mb-3 flex gap-1.5 overflow-x-auto">
+        {NEWS_TONES.map(([value, label]) => {
+          const count =
+            value === 'all' ? items.length : items.filter((item) => item.tone === value).length;
+          if (count === 0 && value !== 'all') return null;
+          return (
+            <button
+              key={value}
+              type="button"
+              onClick={() => setTone(value)}
+              aria-pressed={tone === value}
+              className={`shrink-0 rounded-full px-2.5 py-1 text-xs font-medium transition-all duration-200 ease-spring active:scale-95 ${
+                tone === value
+                  ? 'bg-slate-900 text-white dark:bg-slate-100 dark:text-slate-900'
+                  : 'bg-white dark:bg-slate-900 text-slate-600 dark:text-slate-300 ring-1 ring-inset ring-slate-200 dark:ring-slate-700 hover:bg-slate-100'
+              }`}
+            >
+              {label}
+              <span className="ml-1 opacity-60">{count}</span>
+            </button>
+          );
+        })}
       </div>
 
-      {shown.length === 0 && (
+      {shown.length === 0 ? (
         <PanelMessage icon={Newspaper} label="Nothing from that corner right now." />
-      )}
-
-      <ul className="space-y-2">
-        {shown.map((item) => (
-        <li key={item.link}>
+      ) : (
+        <>
+          {days.map((day) => (
+            <section key={day.label} className="mb-4">
+              <h4 className="sticky top-0 z-10 -mx-3 bg-slate-50/90 px-3 py-1.5 text-[11px] font-bold uppercase tracking-wide text-slate-400 backdrop-blur dark:bg-slate-950/90 dark:text-slate-500">
+                {day.label}
+              </h4>
+              <ul className="space-y-2 pt-2">
+                {day.items.map((item) =>
+                  item === lead ? (
+                    <li key={item.link}>
           <a
-            href={item.link}
+            href={lead.link}
             target="_blank"
             rel="noopener noreferrer"
-            className="flex gap-3 rounded-xl border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-900 p-2.5 transition-all duration-200 ease-spring hover:-translate-y-0.5 hover:border-slate-300 hover:shadow-sm active:scale-[0.99]"
+            className="group mb-4 block overflow-hidden rounded-2xl border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-900 transition-all duration-200 ease-spring hover:-translate-y-0.5 hover:shadow-lg active:scale-[0.99]"
           >
-            {item.image && (
-              <img
-                src={item.image}
-                alt=""
-                loading="lazy"
-                onError={(event) => {
-                  event.currentTarget.hidden = true;
-                }}
-                className="h-16 w-24 shrink-0 rounded-lg bg-slate-100 dark:bg-slate-800 object-cover"
-              />
-            )}
-            <div className="min-w-0 flex-1">
-              <div className="mb-1 flex items-center gap-1.5 text-[11px] font-semibold">
-                <span className={`rounded px-1.5 py-0.5 ${TONE_STYLES[item.tone] ?? TONE_STYLES.general}`}>
-                  {item.source}
-                </span>
-                {tone === 'queer' && item.note && (
-                  <span className="truncate font-normal text-violet-500">{item.note}</span>
-                )}
-                <span className="shrink-0 text-slate-400 dark:text-slate-500">{relativeTime(item.publishedAt)}</span>
+            {lead.image && (
+              <div className="aspect-[16/9] w-full overflow-hidden bg-slate-100 dark:bg-slate-800">
+                <img
+                  src={lead.image}
+                  alt=""
+                  loading="lazy"
+                  onError={(event) => {
+                    // Hiding only the image would leave the sixteen by nine
+                    // box behind it as a large empty panel.
+                    const box = event.currentTarget.parentElement;
+                    if (box) box.hidden = true;
+                    else event.currentTarget.hidden = true;
+                  }}
+                  className="h-full w-full object-cover transition-transform duration-500 group-hover:scale-105"
+                />
               </div>
-              <p className="line-clamp-2 text-sm font-semibold leading-snug text-slate-800 dark:text-slate-100">
-                {item.title}
-              </p>
-              {item.summary && (
-                <p className="mt-0.5 line-clamp-2 text-xs leading-relaxed text-slate-500 dark:text-slate-400">
-                  {item.summary}
+            )}
+            <div className="p-3.5">
+              <div className="mb-1.5 flex items-center gap-1.5 text-[11px] font-semibold">
+                <span className={`rounded px-1.5 py-0.5 ${TONE_STYLES[lead.tone] ?? TONE_STYLES.general}`}>
+                  {lead.source}
+                </span>
+                {lead.note && (
+                  <span className="truncate font-normal text-violet-500">{lead.note}</span>
+                )}
+                <span className="ml-auto shrink-0 text-slate-400 dark:text-slate-500">
+                  {relativeTime(lead.publishedAt)}
+                </span>
+              </div>
+              <h3 className="text-lg font-bold leading-snug text-slate-900 dark:text-slate-50">
+                {lead.title}
+              </h3>
+              {lead.summary && (
+                <p className="mt-1.5 line-clamp-3 text-sm leading-relaxed text-slate-500 dark:text-slate-400">
+                  {lead.summary}
                 </p>
               )}
             </div>
           </a>
-        </li>
-        ))}
-      </ul>
+                    </li>
+                  ) : (
+                  <li key={item.link}>
+                    <a
+                      href={item.link}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="flex gap-3 rounded-xl border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-900 p-2.5 transition-all duration-200 ease-spring hover:-translate-y-0.5 hover:border-slate-300 hover:shadow-sm active:scale-[0.99]"
+                    >
+                      {item.image && (
+                        <img
+                          src={item.image}
+                          alt=""
+                          loading="lazy"
+                          onError={(event) => {
+                            event.currentTarget.hidden = true;
+                          }}
+                          className="h-16 w-24 shrink-0 rounded-lg bg-slate-100 dark:bg-slate-800 object-cover"
+                        />
+                      )}
+                      <div className="min-w-0 flex-1">
+                        <div className="mb-1 flex items-center gap-1.5 text-[11px] font-semibold">
+                          <span
+                            className={`rounded px-1.5 py-0.5 ${TONE_STYLES[item.tone] ?? TONE_STYLES.general}`}
+                          >
+                            {item.source}
+                          </span>
+                          {tone === 'queer' && item.note && (
+                            <span className="truncate font-normal text-violet-500">{item.note}</span>
+                          )}
+                          <span className="ml-auto shrink-0 text-slate-400 dark:text-slate-500">
+                            {relativeTime(item.publishedAt)}
+                          </span>
+                        </div>
+                        <p className="line-clamp-2 text-sm font-semibold leading-snug text-slate-800 dark:text-slate-100">
+                          {item.title}
+                        </p>
+                        {item.summary && (
+                          <p className="mt-0.5 line-clamp-2 text-xs leading-relaxed text-slate-500 dark:text-slate-400">
+                            {item.summary}
+                          </p>
+                        )}
+                      </div>
+                    </a>
+                  </li>
+                  ),
+                )}
+              </ul>
+            </section>
+          ))}
+        </>
+      )}
     </>
   );
 }
@@ -4793,7 +4894,7 @@ function BriefingDrawer({
         onClick={onClose}
         className="absolute inset-0 animate-fade-in bg-slate-900/40 backdrop-blur-sm"
       />
-      <aside className="relative flex h-full w-full max-w-md animate-slide-in flex-col border-l border-slate-200 dark:border-slate-700 bg-slate-50 dark:bg-slate-950 pt-[var(--inset-top)] shadow-2xl">
+      <aside className="relative flex h-full w-full max-w-md animate-slide-in flex-col border-l border-slate-200 dark:border-slate-700 bg-slate-50 dark:bg-slate-950 pt-[var(--inset-top)] shadow-2xl sm:max-w-lg lg:max-w-2xl">
         <header className="flex items-center gap-2 border-b border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-900 px-3 py-2.5">
           <div className="flex flex-1 gap-1">
             {[
