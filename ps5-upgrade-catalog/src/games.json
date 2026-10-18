@@ -8522,9 +8522,15 @@
     "ps5Upgrade": "Paid PS5 Upgrade",
     "platform": "PS4",
     "tags": [
-      "graphics"
+      "graphics",
+      "disability"
     ],
-    "representation": null,
+    "representation": [
+      {
+        "kind": "disability",
+        "note": "Introduces Hailey Cooper, a Deaf character you play as for a stretch, with her ASL signed on screen."
+      }
+    ],
     "steamAppId": 1817190,
     "psnStorePath": "concept/10000649",
     "ageRating": {
@@ -9601,9 +9607,15 @@
     "ps5Upgrade": "PS5 Only",
     "platform": "PS5",
     "tags": [
-      "graphics"
+      "graphics",
+      "disability"
     ],
-    "representation": null,
+    "representation": [
+      {
+        "kind": "disability",
+        "note": "Hailey Cooper, a Deaf character introduced in Miles Morales, returns as a playable one, with ASL on screen rather than subtitled over."
+      }
+    ],
     "steamAppId": 2651280,
     "psnStorePath": "concept/10002456",
     "ageRating": {
@@ -10571,12 +10583,17 @@
     "platform": "PS5",
     "tags": [
       "graphics",
-      "queer"
+      "queer",
+      "disability"
     ],
     "representation": [
       {
         "kind": "queer",
         "note": "The Left Behind chapter centres Ellie's first romance with another girl."
+      },
+      {
+        "kind": "disability",
+        "note": "Rebuilt with over sixty accessibility settings, including audio description and a combination that makes the game completable without sight."
       }
     ],
     "steamAppId": 1888930,
@@ -18670,5 +18687,103 @@
     },
     "coverage": null,
     "description": "Build a town on the back of a vast walking creature, and decide how much you take from it to survive."
+  },
+  {
+    "id": "guilty-gear-strive",
+    "title": "Guilty Gear -Strive-",
+    "genre": "Action",
+    "artStyle": "Cel-shaded",
+    "protagonist": "Ensemble",
+    "ps5Upgrade": "PS4 & PS5 Cross-Buy",
+    "platform": "PS4",
+    "tags": [
+      "queer",
+      "graphics"
+    ],
+    "representation": [
+      {
+        "kind": "queer",
+        "note": "Bridget comes out as a trans woman in her 2022 arcade story, and the series has written her that way since."
+      }
+    ],
+    "steamAppId": 1384160,
+    "psnStorePath": "concept/10000453",
+    "ageRating": null,
+    "ratings": null,
+    "coverage": [],
+    "description": "A fighting game whose cel-shaded 3D is built to read as hand-drawn animation, with a deliberately small roster and a heavy-metal score."
+  },
+  {
+    "id": "mass-effect-legendary-edition",
+    "title": "Mass Effect Legendary Edition",
+    "genre": "RPG",
+    "artStyle": "3D",
+    "protagonist": "Custom",
+    "ps5Upgrade": "Backwards Compatible",
+    "platform": "PS4",
+    "tags": [
+      "queer"
+    ],
+    "representation": [
+      {
+        "kind": "queer",
+        "note": "Same-sex romances run through all three games, and the remaster opened options the originals had restricted by gender."
+      }
+    ],
+    "steamAppId": 1328670,
+    "psnStorePath": "concept/10000606",
+    "ageRating": null,
+    "ratings": null,
+    "coverage": [],
+    "description": "The first three Mass Effect games remastered together, carrying your choices forward across a single trilogy-long save."
+  },
+  {
+    "id": "god-of-war-ragnarok",
+    "title": "God of War Ragnarök",
+    "genre": "Action",
+    "artStyle": "Photorealistic",
+    "protagonist": "Male",
+    "ps5Upgrade": "Paid PS5 Upgrade",
+    "platform": "PS4",
+    "tags": [
+      "graphics",
+      "disability"
+    ],
+    "representation": [
+      {
+        "kind": "disability",
+        "note": "Ships with more than seventy accessibility settings, including audio description for cinematics and high-contrast play, and took The Game Awards innovation in accessibility award."
+      }
+    ],
+    "steamAppId": 2322010,
+    "psnStorePath": "concept/10001850",
+    "ageRating": null,
+    "ratings": null,
+    "coverage": [],
+    "description": "Kratos and Atreus cross the nine realms as the prophesied end of the world closes in, held in one unbroken camera shot."
+  },
+  {
+    "id": "dragon-age-the-veilguard",
+    "title": "Dragon Age: The Veilguard",
+    "genre": "RPG",
+    "artStyle": "Stylized",
+    "protagonist": "Custom",
+    "ps5Upgrade": "PS5 Only",
+    "platform": "PS5",
+    "tags": [
+      "queer"
+    ],
+    "representation": [
+      {
+        "kind": "queer",
+        "note": "Taash is a non-binary companion whose coming out is written into the main story, and the character creator keeps body and gender separate and offers top-surgery scars."
+      }
+    ],
+    "steamAppId": 1845910,
+    "psnStorePath": "concept/10000586",
+    "ageRating": null,
+    "ratings": null,
+    "coverage": [],
+    "description": "A party-based RPG against a tear in the Veil, where each companion carries a personal thread you can finish or leave undone."
   }
 ]
