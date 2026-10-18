@@ -94,7 +94,11 @@ function toPlainText(value) {
     .replace(/<br\s*\/?>/gi, '\n')
     .replace(/<\/p>/gi, '\n\n')
     .replace(/<[^>]*>/g, '')
-    .replace(/&[#a-z0-9]+;/gi, (entity) => ENTITIES[entity.toLowerCase()] ?? entity)
+    // The named few by table, and any numeric one by its code point, so a
+    // title or a blurb is not at the mercy of which escapes the store used.
+    .replace(/&#x([0-9a-f]+);/gi, (_, hex) => String.fromCodePoint(parseInt(hex, 16)))
+    .replace(/&#(\d+);/g, (_, code) => String.fromCodePoint(Number(code)))
+    .replace(/&[a-z]+;/gi, (entity) => ENTITIES[entity.toLowerCase()] ?? entity)
     .replace(/\n{3,}/g, '\n\n')
     .replace(/[ \t]+/g, ' ')
     .trim();
@@ -111,7 +115,9 @@ const mediaByRole = (html, role) => [
 ];
 
 function parse(id, html) {
-  const title = (html.match(/<title>([^<]*)<\/title>/) || [])[1]?.trim();
+  // Through the same decoder as everything else: the store escapes titles,
+  // so a raw match hands back "Belmont&#x27;s Curse".
+  const title = toPlainText((html.match(/<title>([^<]*)<\/title>/) || [])[1])?.trim();
   if (!title) return null;
 
   const stars = html.match(/"averageRating":([\d.]+),"totalRatingsCount":(\d+)/);
