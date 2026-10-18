@@ -3871,6 +3871,7 @@ function upcomingAsStoreRow(row) {
     stars: row.stars,
     votes: row.votes,
     art: row.art,
+    steamAppId: row.steamAppId ?? null,
   };
 }
 
@@ -3901,7 +3902,10 @@ function storeRowAsGame(row, coverage = 'store') {
     ageRating: row.ageRating ?? null,
     ratings: null,
     description: null,
-    steamAppId: null,
+    // Known once the nightly matcher has tied this concept to a Steam
+    // listing, which is what lets the store view show a player score and the
+    // pros and cons counted from it.
+    steamAppId: row.steamAppId ?? null,
     ps5Upgrade: null,
     // Carried on the row itself: a saved store game is not in the live price
     // feed, which is keyed by catalog title, so without this its card would

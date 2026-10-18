@@ -3,7 +3,7 @@ import { CHUNK_SIZE, REVIEW_KEY_PREFIX, mapWithConcurrency } from '../../api/ste
 import { loadPsnPrice } from '../../api/psn.mjs';
 import { recordAndSummarize, saveBlob } from '../../api/history.mjs';
 import { loadReviewSignal } from '../../api/reviews.mjs';
-import { sweepForReleases } from '../../api/upcoming.mjs';
+import { loadUpcoming, sweepForReleases } from '../../api/upcoming.mjs';
 import { replayCalibration } from '../../api/backtest.mjs';
 import { loadChunk } from '../../api/history.mjs';
 import { BACKTEST_KEY } from '../../api/keys.mjs';
@@ -153,9 +153,27 @@ export default async () => {
     const stored = (await loadBlob(STEAM_MATCH_KEY)) ?? { byId: {}, missing: [] };
     const byId = stored.byId ?? {};
     const missing = new Set(stored.missing ?? []);
-    const todo = storeIndex
-      .filter((row) => row.name && byId[row.id] == null && !missing.has(row.id))
-      .slice(0, STEAM_MATCH_BATCH);
+    // The calendar first: those are the games somebody is waiting on, and
+    // there are only a few hundred of them, so they are matched within a
+    // night or two rather than whenever the mirror walk reaches them.
+    const calendar = await loadUpcoming();
+    const candidates = [
+      ...[...(calendar.games ?? []), ...(calendar.recent ?? [])].map((row) => ({
+        id: row.id,
+        name: row.title,
+      })),
+      ...storeIndex.map((row) => ({ id: row.id, name: row.name })),
+    ];
+
+    const queued = new Set();
+    const todo = [];
+    for (const row of candidates) {
+      if (todo.length >= STEAM_MATCH_BATCH) break;
+      if (!row.name || queued.has(row.id)) continue;
+      if (byId[row.id] != null || missing.has(row.id)) continue;
+      queued.add(row.id);
+      todo.push(row);
+    }
 
     let found = 0;
     for (const row of todo) {

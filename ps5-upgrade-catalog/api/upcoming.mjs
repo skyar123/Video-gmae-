@@ -10,7 +10,7 @@
 import bakedSeeds from './upcoming-seeds.json' with { type: 'json' };
 import snapshot from './upcoming-snapshot.json' with { type: 'json' };
 import { loadBlob, saveBlob } from './history.mjs';
-import { DISCOVERED_KEY } from './keys.mjs';
+import { DISCOVERED_KEY, STEAM_MATCH_KEY } from './keys.mjs';
 import { ratingFromConcept } from './rating.mjs';
 
 const UA = 'Mozilla/5.0 (compatible; ps5-upgrade-catalog/1.0)';
@@ -227,7 +227,20 @@ export async function loadUpcoming() {
     // A missing blob reads back as {}, so presence is judged on the data.
     const stored = await loadBlob(BLOB_KEY);
     const source = Array.isArray(stored?.games) && stored.games.length > 0 ? stored : snapshot;
-    const value = reslice(source);
+    const sliced = reslice(source);
+
+    // A calendar game is a store concept like any other, so the Steam ids the
+    // nightly matcher finds apply here too and a game keeps the same match
+    // after release that it had before it.
+    const matches = (await loadBlob(STEAM_MATCH_KEY))?.byId ?? {};
+    const withSteam = (rows) =>
+      rows.map((row) => ({ ...row, steamAppId: row.steamAppId ?? matches[row.id] ?? null }));
+
+    const value = {
+      ...sliced,
+      games: withSteam(sliced.games),
+      recent: withSteam(sliced.recent),
+    };
     memory = { value, storedAt: Date.now() };
     return value;
   })().finally(() => {
