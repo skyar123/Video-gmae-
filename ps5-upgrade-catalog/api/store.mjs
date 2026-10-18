@@ -14,7 +14,7 @@
 
 import baked from './store-index.json' with { type: 'json' };
 import { loadBlob } from './history.mjs';
-import { DISCOVERED_KEY } from './keys.mjs';
+import { DISCOVERED_KEY, STEAM_MATCH_KEY } from './keys.mjs';
 import { fold, indexText, parseQuery, scoreMatch } from './search.mjs';
 
 const PAGE_SIZE = 36;
@@ -31,7 +31,17 @@ async function index() {
   for (const row of baked) byId.set(row.id, row);
   for (const row of discovered) byId.set(row.id, row);
 
-  const rows = [...byId.values()].map((row) => ({ ...row, search: indexText(row.name ?? '') }));
+  // Steam ids found by the nightly matcher, which is what lets a mirror game
+  // carry review scores and the pros and cons drawn from them. Absent until
+  // that game's turn comes round, and absent for good for the many console
+  // releases that are not on Steam at all.
+  const matches = (await loadBlob(STEAM_MATCH_KEY))?.byId ?? {};
+
+  const rows = [...byId.values()].map((row) => ({
+    ...row,
+    steamAppId: row.steamAppId ?? matches[row.id] ?? null,
+    search: indexText(row.name ?? ''),
+  }));
   merged = { rows, at: Date.now() };
   return rows;
 }

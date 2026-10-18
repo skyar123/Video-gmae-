@@ -12,7 +12,13 @@ export default async function handler(request) {
   }
 
   const genres = (params.get('genres') ?? '').split(',').map((g) => g.trim()).filter(Boolean);
-  const detail = await loadConceptDetail(id, (params.get('cc') ?? 'US').toUpperCase(), genres);
+  const steamAppId = Number(params.get('steam'));
+  const detail = await loadConceptDetail(
+    id,
+    (params.get('cc') ?? 'US').toUpperCase(),
+    genres,
+    Number.isFinite(steamAppId) && steamAppId > 0 ? steamAppId : null,
+  );
   return new Response(JSON.stringify(detail ?? { error: 'not found' }), {
     status: detail ? 200 : 404,
     headers: {

@@ -8,6 +8,10 @@ import { replayCalibration } from '../../api/backtest.mjs';
 import { loadChunk } from '../../api/history.mjs';
 import { BACKTEST_KEY } from '../../api/keys.mjs';
 import { conceptPathFor, runAlerts, watchedConceptIds } from '../../api/alerts.mjs';
+import { loadBlob } from '../../api/history.mjs';
+import { STEAM_MATCH_KEY } from '../../api/keys.mjs';
+import { resolveSteamAppId } from '../../api/steam-match.mjs';
+import storeIndex from '../../api/store-index.json' with { type: 'json' };
 
 /**
  * Nightly maintenance.
@@ -28,6 +32,9 @@ import { conceptPathFor, runAlerts, watchedConceptIds } from '../../api/alerts.m
  *
  * Scheduled functions only run on published deploys.
  */
+/** One run's worth of name searches: about a minute of polite requests. */
+const STEAM_MATCH_BATCH = 300;
+
 export default async () => {
   const regions = (process.env.HISTORY_REGIONS || 'US')
     .split(',')
@@ -132,6 +139,46 @@ export default async () => {
     );
   } catch (error) {
     console.error('Price alerts failed:', error);
+  }
+
+  // Tie mirror games to their Steam listings, a slice at a time.
+  //
+  // This is what lets a store game carry review scores and the pros and cons
+  // drawn from them, which was the last thing it lacked against a curated
+  // one. Matching is one search per game, so the whole mirror cannot be done
+  // in one run; a few hundred a night works through it over a couple of
+  // weeks and then only new arrivals remain. Games with no Steam listing are
+  // recorded as a miss so they are not asked about again every night.
+  try {
+    const stored = (await loadBlob(STEAM_MATCH_KEY)) ?? { byId: {}, missing: [] };
+    const byId = stored.byId ?? {};
+    const missing = new Set(stored.missing ?? []);
+    const todo = storeIndex
+      .filter((row) => row.name && byId[row.id] == null && !missing.has(row.id))
+      .slice(0, STEAM_MATCH_BATCH);
+
+    let found = 0;
+    for (const row of todo) {
+      const appId = await resolveSteamAppId(row.name);
+      if (appId) {
+        byId[row.id] = appId;
+        found += 1;
+      } else {
+        missing.add(row.id);
+      }
+      await new Promise((resolve) => setTimeout(resolve, 200));
+    }
+
+    if (todo.length > 0) {
+      await saveBlob(STEAM_MATCH_KEY, { byId, missing: [...missing] });
+      const seen = Object.keys(byId).length + missing.size;
+      console.log(
+        `Steam matching: ${found} found of ${todo.length} tried, ` +
+          `${Object.keys(byId).length} matched overall, ${seen}/${storeIndex.length} of the mirror checked`,
+      );
+    }
+  } catch (error) {
+    console.error('Steam matching failed:', error);
   }
 
   const sweep = await sweepForReleases();

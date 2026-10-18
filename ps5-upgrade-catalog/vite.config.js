@@ -135,7 +135,12 @@ function gamesApiPlugin() {
         const id = Number(url.searchParams.get('id'));
         const genres = (url.searchParams.get('genres') ?? '').split(',').map((g) => g.trim()).filter(Boolean);
         const detail = Number.isFinite(id) && id > 0
-          ? await loadConceptDetail(id, (url.searchParams.get('cc') ?? 'US').toUpperCase(), genres)
+          ? await loadConceptDetail(
+              id,
+              (url.searchParams.get('cc') ?? 'US').toUpperCase(),
+              genres,
+              Number(url.searchParams.get('steam')) || null,
+            )
           : null;
         response.statusCode = detail ? 200 : 404;
         response.setHeader('content-type', 'application/json; charset=utf-8');

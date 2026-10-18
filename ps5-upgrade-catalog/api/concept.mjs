@@ -15,6 +15,7 @@ import { loadPsnPrice, localeFor } from './psn.mjs';
 import { predictPriceDrop } from './predict.mjs';
 
 import { ratingFromConcept } from './rating.mjs';
+import { loadReviewSignal } from './reviews.mjs';
 
 const STORE_ORIGIN = 'https://store.playstation.com';
 const CACHE_TTL_MS = 60 * 60 * 1000;
@@ -145,8 +146,8 @@ function parse(id, html) {
  * There is no recorded price history for mirror games, so the predictor works
  * from release age and the current sale alone and says so in its confidence.
  */
-export async function loadConceptDetail(id, countryCode = 'US', genres = []) {
-  const key = `${countryCode}:${id}`;
+export async function loadConceptDetail(id, countryCode = 'US', genres = [], steamAppId = null) {
+  const key = `${countryCode}:${id}:${steamAppId ?? ''}`;
   const hit = cache.get(key);
   if (hit && Date.now() - hit.storedAt < CACHE_TTL_MS) return hit.value;
   if (inFlight.has(key)) return inFlight.get(key);
@@ -177,7 +178,21 @@ export async function loadConceptDetail(id, countryCode = 'US', genres = []) {
         })
       : null;
 
-    const value = { ...detail, price: price ?? null, prediction };
+    // The review scores and the pros and cons are the last thing a mirror
+    // game lacked against a curated one, and they come from Steam's review
+    // corpus, so they arrive only for a game the matcher has tied to a Steam
+    // listing. A failure here costs the scores, not the page.
+    const ratings = steamAppId ? await loadReviewSignal(steamAppId).catch(() => null) : null;
+
+    const value = {
+      ...detail,
+      price: price ?? null,
+      prediction,
+      ratings: ratings
+        ? { critic: null, user: ratings.userScore, pros: ratings.pros, cons: ratings.cons }
+        : null,
+      steamAppId: steamAppId ?? null,
+    };
     cache.set(key, { value, storedAt: Date.now() });
     return value;
   })()

@@ -3553,10 +3553,16 @@ function TonightSheet({ catalog, library, hidden, onOpenGame, onClose }) {
  * tapped is shown immediately and fills in around itself, so this never
  * starts as a blank sheet.
  *
- * What it deliberately does not claim: the kid-friendly verdict, the
- * representation notes and the pros and cons are hand-made judgements that
- * exist only for the curated catalog. Rather than fake them, this shows
- * PlayStation's own star rating and says where everything came from.
+ * Most of what used to be curated-only now arrives here too, because it
+ * turned out to be derivable rather than written: the age rating and its
+ * descriptors come from the store's own rating block, and the player score
+ * and the pros and cons are counted from Steam's review corpus once the
+ * nightly matcher has tied this game to its Steam listing. A game with no
+ * Steam release simply has none, which is the honest answer.
+ *
+ * What it still does not claim is the representation note, because that is
+ * a judgement somebody has to make and sign, not a fact to be read off a
+ * page. Those exist only where one has been written.
  */
 function StoreGameModal({
   game,
@@ -3584,7 +3590,10 @@ function StoreGameModal({
     // Fetching the listing on open is the point of this effect.
     // eslint-disable-next-line react/set-state-in-effect
     setStatus('loading');
-    fetch(`/api/concept?id=${game.id}&cc=${region}&genres=${encodeURIComponent(genreList)}`)
+    fetch(
+      `/api/concept?id=${game.id}&cc=${region}&genres=${encodeURIComponent(genreList)}` +
+        (game.steamAppId ? `&steam=${game.steamAppId}` : ''),
+    )
       .then((response) => (response.ok ? response.json() : Promise.reject(new Error('failed'))))
       .then((payload) => {
         if (!live) return;
@@ -3597,7 +3606,7 @@ function StoreGameModal({
     return () => {
       live = false;
     };
-  }, [game.id, region, genreList]);
+  }, [game.id, region, genreList, game.steamAppId]);
 
   const art = detail?.art ?? game.art;
   const screenshots = detail?.screenshots ?? [];
@@ -3667,6 +3676,9 @@ function StoreGameModal({
         )}
 
         <div className="mt-4 flex flex-wrap items-center gap-1.5">
+          {/* Two different things, kept visibly apart: PlayStation's stars out
+              of five, and the share of Steam reviewers who liked it. */}
+          <RatingChips ratings={detail?.ratings} size="lg" />
           {stars > 0 && (
             <span
               title={`${(votes ?? 0).toLocaleString()} PlayStation ratings`}
@@ -3712,6 +3724,12 @@ function StoreGameModal({
               </div>
             ))}
         </div>
+
+        {detail?.ratings && (
+          <div className="mt-5">
+            <ProsAndCons ratings={detail.ratings} />
+          </div>
+        )}
 
         {ageRating && (
           <div className="mt-5">
