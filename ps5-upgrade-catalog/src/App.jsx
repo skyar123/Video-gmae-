@@ -244,6 +244,9 @@ const HIDDEN_KEY = 'hidden';
 
 /** Store-mirror ids are numeric; prefixing keeps them out of the catalog's namespace. */
 const storeKey = (game) => `store:${game.id}`;
+const SAVED_STORE_KEY = 'savedStoreGames';
+/** Enough to never be reached in practice, low enough to bound the key. */
+const MAX_SAVED_STORE = 500;
 const SAVED_RELEASES_KEY = 'savedReleases';
 const WISHLIST_PRICES_KEY = 'wishlistPrices';
 const DEAL_ALERTS_KEY = 'dealAlerts';
@@ -312,6 +315,17 @@ function readHidden() {
     return new Set(raw ? JSON.parse(raw) : []);
   } catch {
     return new Set();
+  }
+}
+
+/** Raw mirror rows for the store games that have been saved. */
+function readSavedStoreRows() {
+  try {
+    const raw = localStorage.getItem(SAVED_STORE_KEY);
+    const rows = raw ? JSON.parse(raw) : [];
+    return Array.isArray(rows) ? rows : [];
+  } catch {
+    return [];
   }
 }
 
@@ -3756,7 +3770,10 @@ function storeRowAsGame(row) {
     storeId: row.id,
     title: row.name,
     genre: (row.genres ?? [])[0] ?? null,
-    platform: (row.platforms ?? []).join(' / ') || null,
+    // The catalog's platform field is one of PS4 or PS5 and the "show PS5
+    // only titles" filter compares against it, so a joined list would read as
+    // neither and quietly escape the filter.
+    platform: (row.platforms ?? []).length === 1 && row.platforms[0] === 'PS5' ? 'PS5' : 'PS4',
     publisher: row.publisher ?? null,
     releaseDate: row.release ?? null,
     stars: row.stars ?? null,
@@ -3773,6 +3790,16 @@ function storeRowAsGame(row) {
     description: null,
     steamAppId: null,
     ps5Upgrade: null,
+    // Carried on the row itself: a saved store game is not in the live price
+    // feed, which is keyed by catalog title, so without this its card would
+    // sit on the loading shimmer for ever.
+    storeLive: storeRowAsLive(row),
+    // The catalog's search index is built once from games.json and cannot
+    // know about these, so each row brings its own.
+    searchRow: {
+      title: indexText(row.name ?? ''),
+      meta: indexText([...(row.genres ?? []), row.publisher ?? ''].join(' ')),
+    },
   };
 }
 
@@ -3853,7 +3880,7 @@ function useStoreSearch({ active, q, genre, sort }) {
  * The whole store as a feed, so the view switch means the same thing here as
  * it does anywhere else.
  */
-function StoreFeed({ query, curatedByName, muted, onToggleMuted, onOpenCurated, onOpenStore }) {
+function StoreFeed({ query, curatedByName, saved, muted, onToggleMuted, onOpenCurated, onOpenStore }) {
   const results = useStoreSearch({ active: true, q: query, genre: '', sort: 'rating' });
   const [sentinel, setSentinel] = useState(null);
   const loadMore = results.more;
@@ -3877,27 +3904,34 @@ function StoreFeed({ query, curatedByName, muted, onToggleMuted, onOpenCurated, 
 
   return (
     <>
-      {results.games.map((row) => {
-        const twin = curatedByName.get(row.name?.toLowerCase());
-        return (
-          <FeedSlide
-            key={row.id}
-            game={storeRowAsGame(row)}
-            live={storeRowAsLive(row)}
-            reason={twin ? 'In your catalog, with the full write-up' : undefined}
-            actions={false}
-            muted={muted}
-            onToggleMuted={onToggleMuted}
-            onOpen={() => (twin ? onOpenCurated(twin.id) : onOpenStore(row))}
-          />
-        );
-      })}
+      {results.games
+        .filter((row) => !saved.hidden.has(storeKey(row)))
+        .map((row) => {
+          const twin = curatedByName.get(row.name?.toLowerCase());
+          const game = storeRowAsGame(row);
+          const key = twin ? twin.id : game.id;
+          return (
+            <FeedSlide
+              key={game.id}
+              game={game}
+              live={game.storeLive}
+              reason={twin ? 'In your catalog, with the full write-up' : undefined}
+              wishlisted={saved.wishlist.has(key)}
+              owned={saved.library.has(key)}
+              muted={muted}
+              onToggleMuted={onToggleMuted}
+              onToggleWishlist={() => saved.toggle(row, twin, 'wishlist')}
+              onToggleOwned={() => saved.toggle(row, twin, 'owned')}
+              onOpen={() => (twin ? onOpenCurated(twin.id) : onOpenStore(row))}
+            />
+          );
+        })}
       {hasMore && <div ref={setSentinel} aria-hidden="true" className="h-px" />}
     </>
   );
 }
 
-function StorePanel({ query, curatedByName, onOpenCurated, onOpenStore }) {
+function StorePanel({ query, curatedByName, saved, onOpenCurated, onOpenStore }) {
   const [genre, setGenre] = useState('');
   const [sort, setSort] = useState('rating');
   const [facets, setFacets] = useState({ genres: [], size: 0 });
@@ -4006,19 +4040,27 @@ function StorePanel({ query, curatedByName, onOpenCurated, onOpenStore }) {
       ) : (
         <>
           <div className="grid grid-cols-2 gap-3 sm:grid-cols-3 sm:gap-4 lg:grid-cols-4 xl:grid-cols-5">
-            {results.games.map((row) => {
-              const twin = curatedByName.get(row.name?.toLowerCase());
-              return (
-                <GameCard
-                  key={row.id}
-                  game={storeRowAsGame(row)}
-                  live={storeRowAsLive(row)}
-                  reason={twin ? 'In your catalog, with the full write-up' : undefined}
-                  actions={false}
-                  onOpen={() => (twin ? onOpenCurated(twin.id) : onOpenStore(row))}
-                />
-              );
-            })}
+            {results.games
+              .filter((row) => !saved.hidden.has(storeKey(row)))
+              .map((row) => {
+                const twin = curatedByName.get(row.name?.toLowerCase());
+                const game = storeRowAsGame(row);
+                const key = twin ? twin.id : game.id;
+                return (
+                  <GameCard
+                    key={game.id}
+                    game={game}
+                    live={game.storeLive}
+                    reason={twin ? 'In your catalog, with the full write-up' : undefined}
+                    wishlisted={saved.wishlist.has(key)}
+                    owned={saved.library.has(key)}
+                    onToggleWishlist={() => saved.toggle(row, twin, 'wishlist')}
+                    onToggleOwned={() => saved.toggle(row, twin, 'owned')}
+                    onHide={() => saved.hide(key)}
+                    onOpen={() => (twin ? onOpenCurated(twin.id) : onOpenStore(row))}
+                  />
+                );
+              })}
           </div>
 
           {/* The rest of the app grows its lists as you reach them; this was
@@ -4933,6 +4975,7 @@ export default function App() {
   const [savedReleases, setSavedReleases] = useState(readSavedReleases);
   const [favouriteCreators, setFavouriteCreators] = useState(readFavouriteCreators);
   const [library, setLibrary] = useState(readLibrary);
+  const [storeRowCache, setStoreRowCache] = useState(readSavedStoreRows);
   const [activeGameId, setActiveGameId] = useState(null);
   // Store-mirror games are keyed apart from catalog ids so both can share one
   // wishlist and one library without ever colliding.
@@ -5140,6 +5183,53 @@ export default function App() {
     });
   }, []);
 
+  /**
+   * Keeps the row itself, not just its id.
+   *
+   * The wishlist draws from the catalog and a store game is not in it, so
+   * hearting one has to keep enough of the row to draw a card from later.
+   * The cache is additive and capped; what actually shows is whatever it
+   * holds that is still hearted or owned, so un-hearting needs no bookkeeping.
+   */
+  const rememberStoreRow = useCallback((row) => {
+    setStoreRowCache((previous) => {
+      if (previous.some((entry) => entry.id === row.id)) return previous;
+      const next = [...previous, row].slice(-MAX_SAVED_STORE);
+      try {
+        localStorage.setItem(SAVED_STORE_KEY, JSON.stringify(next));
+      } catch {
+        // Without storage the row lasts for this visit only.
+      }
+      return next;
+    });
+  }, []);
+
+  /**
+   * Hearting or owning a store game.
+   *
+   * A store row that is also in the curated catalog is saved under the
+   * curated id, never its own: otherwise the same game could sit in the
+   * wishlist twice, once with a write-up and once without. Everything else
+   * caches its row first so the wishlist has something to draw.
+   */
+  const toggleStoreSaved = useCallback(
+    (row, twin, kind) => {
+      const toggle = kind === 'owned' ? toggleOwned : toggleWishlist;
+      if (twin) {
+        toggle(twin.id);
+        return;
+      }
+      rememberStoreRow(row);
+      toggle(storeKey(row));
+    },
+    [rememberStoreRow, toggleOwned, toggleWishlist],
+  );
+
+  const storeSaved = useMemo(
+    () => ({ wishlist, library, hidden, toggle: toggleStoreSaved, hide: hideGame }),
+    [wishlist, library, hidden, toggleStoreSaved, hideGame],
+  );
+
   const toggleDealAlert = useCallback((id) => {
     setDealAlerts((previous) => {
       const next = new Set(previous);
@@ -5237,24 +5327,46 @@ export default function App() {
   // Title matches decide the result on their own; the genre/tag pass only runs
   // when no title matched at all, so "roguelike" finds roguelikes without
   // letting tags dilute a search for a name.
+  const savedStoreGames = useMemo(
+    () =>
+      storeRowCache
+        .map(storeRowAsGame)
+        .filter((game) => wishlist.has(game.id) || library.has(game.id)),
+    [storeRowCache, wishlist, library],
+  );
+
+  /**
+   * The catalog, plus every store game that has been saved.
+   *
+   * Below this line nothing tells the two apart: same filters, same sorts,
+   * same cards. A store row simply carries fewer facts, so the hand-made
+   * filters pass over it on their own rather than having to be told to.
+   */
+  const catalog = useMemo(
+    () => (savedStoreGames.length > 0 ? [...gamesData, ...savedStoreGames] : gamesData),
+    [savedStoreGames],
+  );
+
   const searchScores = useMemo(() => {
     const query = parseQuery(deferredQuery);
     if (!query.folded) return null;
 
     const titles = new Map();
-    for (const game of gamesData) {
-      const score = scoreMatch(SEARCH_ROWS.get(game.id).title, query);
+    for (const game of catalog) {
+      const row = SEARCH_ROWS.get(game.id) ?? game.searchRow;
+      const score = scoreMatch(row.title, query);
       if (score > 0) titles.set(game.id, score);
     }
     if (titles.size > 0) return titles;
 
     const meta = new Map();
-    for (const game of gamesData) {
-      const score = scoreMatch(SEARCH_ROWS.get(game.id).meta, query);
+    for (const game of catalog) {
+      const row = SEARCH_ROWS.get(game.id) ?? game.searchRow;
+      const score = scoreMatch(row.meta, query);
       if (score > 0) meta.set(game.id, score);
     }
     return meta;
-  }, [deferredQuery]);
+  }, [deferredQuery, catalog]);
 
   const filteredGames = useMemo(() => {
     const collection = COLLECTIONS.find((entry) => entry.value === filters.collection);
@@ -5264,7 +5376,7 @@ export default function App() {
       ? new Map(geniusPicks.map((pick, index) => [pick.game.id, index]))
       : null;
 
-    const matches = gamesData.filter((game) => {
+    const matches = catalog.filter((game) => {
       if (hidden.has(game.id)) return false;
       if (!filters.includePs5 && game.platform === 'PS5') return false;
       if (isGenius && !geniusRank.has(game.id)) return false;
@@ -5336,7 +5448,7 @@ export default function App() {
       if (filters.sort === 'buy') return buyScoreOf(a) - buyScoreOf(b);
       return discountOf(b) - discountOf(a);
     });
-  }, [searchScores, filters, wishlist, library, hidden, byTitle, geniusPicks]);
+  }, [catalog, searchScores, filters, wishlist, library, hidden, byTitle, geniusPicks]);
 
   // Cards are added as you reach them rather than all at once; a different
   // filter, sort or collection is a different list, so it starts over.
@@ -5361,8 +5473,8 @@ export default function App() {
   }, [filteredGames, byTitle]);
 
   const visiblePool = useMemo(
-    () => gamesData.filter((game) => filters.includePs5 || game.platform !== 'PS5'),
-    [filters.includePs5],
+    () => catalog.filter((game) => filters.includePs5 || game.platform !== 'PS5'),
+    [catalog, filters.includePs5],
   );
 
   const saleCount = useMemo(
@@ -5775,6 +5887,7 @@ export default function App() {
             <StoreFeed
               query={deferredQuery.trim()}
               curatedByName={curatedByName}
+              saved={storeSaved}
               muted={feedMuted}
               onToggleMuted={toggleFeedMuted}
               onOpenCurated={setActiveGameId}
@@ -5785,7 +5898,7 @@ export default function App() {
             <FeedSlide
               key={game.id}
               game={game}
-              live={byTitle.get(game.title)}
+              live={byTitle.get(game.title) ?? game.storeLive}
               wishlisted={wishlist.has(game.id)}
               owned={library.has(game.id)}
               reason={filters.collection === 'genius' ? geniusReasons.get(game.id) : undefined}
@@ -5817,6 +5930,7 @@ export default function App() {
             <StorePanel
               query={deferredQuery.trim()}
               curatedByName={curatedByName}
+              saved={storeSaved}
               onOpenCurated={setActiveGameId}
               onOpenStore={setActiveStoreGame}
             />
@@ -5894,7 +6008,7 @@ export default function App() {
               <GameCard
                 key={game.id}
                 game={game}
-                live={byTitle.get(game.title)}
+                live={byTitle.get(game.title) ?? game.storeLive}
                 wishlisted={wishlist.has(game.id)}
                 owned={library.has(game.id)}
                 reason={filters.collection === 'genius' ? geniusReasons.get(game.id) : undefined}
