@@ -78,6 +78,9 @@ const PODCASTS = [
   { source: 'Triple Click', url: 'https://feeds.simplecast.com/6WD3bDj7' },
 ];
 
+/** Enough to scroll for a while; the panel sorts and filters what it gets. */
+const MAX_BURSTS = 140;
+
 const DAY_MS = 24 * 60 * 60 * 1000;
 const CACHE_TTL_MS = 15 * 60 * 1000;
 const SEARCH_WINDOW_DAYS = 7;
@@ -478,13 +481,26 @@ export async function loadGoss() {
   }
 
   for (const [kind, bucket] of byKind) {
-    // Bluesky bursts rank on engagement, everything else on recency.
-    bucket.sort((a, b) => (b.heat - a.heat) || newest(a, b));
-    byKind.set(kind, bucket.slice(0, kind === 'beef' ? 18 : 12));
+    // Kept by both measures, not one.
+    //
+    // Ranking purely on engagement and then cutting at twelve threw away two
+    // thirds of what had been found, and everything that survived was a few
+    // days old: a post needs time to gather likes, so the newest thing in the
+    // feed could never be the loudest. Each kind now keeps its loudest and
+    // its newest, which is also what makes a Latest view worth having.
+    const loudest = [...bucket].sort((a, b) => b.heat - a.heat || newest(a, b));
+    const freshest = [...bucket].sort(newest);
+    const hotCap = kind === 'beef' ? 30 : 20;
+    const freshCap = kind === 'beef' ? 20 : 15;
+
+    const chosen = new Map();
+    for (const burst of loudest.slice(0, hotCap)) chosen.set(burst.link, burst);
+    for (const burst of freshest.slice(0, freshCap)) chosen.set(burst.link, burst);
+    byKind.set(kind, [...chosen.values()]);
   }
 
   const value = {
-    bursts: interleave(byKind).slice(0, 60),
+    bursts: interleave(byKind).slice(0, MAX_BURSTS),
     counts: Object.fromEntries([...byKind].map(([kind, bucket]) => [kind, bucket.length])),
     fetchedAt: new Date(now).toISOString(),
   };

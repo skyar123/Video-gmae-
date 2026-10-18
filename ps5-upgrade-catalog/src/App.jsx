@@ -19,6 +19,7 @@ import {
   CircleCheck,
   CirclePlay,
   Clapperboard,
+  Clock,
   Dices,
   ExternalLink,
   Flame,
@@ -4574,6 +4575,7 @@ function GossCard({ burst, fresh }) {
  */
 function GossPanel({ bursts, counts, status, onReload }) {
   const [kind, setKind] = useState('all');
+  const [order, setOrder] = useState('top');
 
   // Read once per mount, then immediately record this visit: the dots have to
   // keep pointing at the same things while you scroll, but a reopen tomorrow
@@ -4614,7 +4616,21 @@ function GossPanel({ bursts, counts, status, onReload }) {
     );
   }
 
-  const shown = kind === 'all' ? bursts : bursts.filter((burst) => burst.kind === kind);
+  const picked = kind === 'all' ? bursts : bursts.filter((burst) => burst.kind === kind);
+
+  // Top ranks on how much a post is being talked about. Podcasts and
+  // headlines carry no engagement number at all, so they sort among
+  // themselves by recency underneath rather than being given a made-up one.
+  const shown =
+    order === 'latest'
+      ? [...picked].sort(
+          (a, b) => new Date(b.publishedAt ?? 0) - new Date(a.publishedAt ?? 0),
+        )
+      : [...picked].sort(
+          (a, b) =>
+            (b.heat ?? 0) - (a.heat ?? 0) ||
+            new Date(b.publishedAt ?? 0) - new Date(a.publishedAt ?? 0),
+        );
   const freshCount = bursts.filter(isFresh).length;
   const chips = [
     ['all', 'Everything', bursts.length],
@@ -4633,6 +4649,28 @@ function GossPanel({ bursts, counts, status, onReload }) {
           {freshCount} new since you last looked
         </p>
       )}
+
+      <div className="mb-2 flex gap-1.5">
+        {[
+          ['top', 'Top', Flame],
+          ['latest', 'Latest', Clock],
+        ].map(([value, label, Icon]) => (
+          <button
+            key={value}
+            type="button"
+            onClick={() => setOrder(value)}
+            aria-pressed={order === value}
+            className={`inline-flex flex-1 items-center justify-center gap-1.5 rounded-full px-3 py-1.5 text-xs font-bold transition-all duration-200 ease-spring active:scale-95 ${
+              order === value
+                ? 'bg-slate-900 text-white dark:bg-slate-100 dark:text-slate-900'
+                : 'bg-white dark:bg-slate-900 text-slate-600 dark:text-slate-300 ring-1 ring-inset ring-slate-200 dark:ring-slate-700 hover:bg-slate-100'
+            }`}
+          >
+            <Icon className="h-3.5 w-3.5" />
+            {label}
+          </button>
+        ))}
+      </div>
 
       <div className="no-scrollbar mb-2 flex gap-1.5 overflow-x-auto">
         {chips.map(([value, label, count]) => (
