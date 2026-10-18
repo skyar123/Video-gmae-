@@ -14,6 +14,8 @@
 import { loadPsnPrice, localeFor } from './psn.mjs';
 import { predictPriceDrop } from './predict.mjs';
 
+import { ratingFromConcept } from './rating.mjs';
+
 const STORE_ORIGIN = 'https://store.playstation.com';
 const CACHE_TTL_MS = 60 * 60 * 1000;
 /** Description, screenshots, rating and date all land well inside this. */
@@ -122,6 +124,8 @@ function parse(id, html) {
     tagline: short && short !== long ? short : null,
     description: long ?? short ?? null,
     releaseDate: (html.match(/"releaseDate":"([^"]+)"/) || [])[1] ?? null,
+    // Quoted from the store's own rating block, descriptors and all.
+    ageRating: ratingFromConcept(html),
     publisher: (html.match(/"publisherName":"([^"]*)"/) || [])[1] ?? null,
     stars: stars ? Number(stars[1]) : null,
     votes: stars ? Number(stars[2]) : null,

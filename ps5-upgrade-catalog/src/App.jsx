@@ -3605,6 +3605,7 @@ function StoreGameModal({
   const stars = detail?.stars ?? game.stars;
   const votes = detail?.votes ?? game.votes;
   const release = detail?.releaseDate ?? game.release;
+  const ageRating = detail?.ageRating ?? game.ageRating ?? null;
 
   // PricePanel and PredictionPanel are the catalog's, and take the same shapes.
   const asGame = { title: game.name, psnStorePath: `concept/${game.id}` };
@@ -3711,6 +3712,28 @@ function StoreGameModal({
               </div>
             ))}
         </div>
+
+        {ageRating && (
+          <div className="mt-5">
+            <span className="mb-1.5 block text-xs font-semibold uppercase tracking-wider text-slate-400 dark:text-slate-500">
+              Rated
+            </span>
+            <div className="flex flex-wrap items-center gap-1.5">
+              <AgeBadge ageRating={ageRating} size="lg" />
+              {/* The board's own descriptors, quoted. This is the whole
+                  reason the badge can be trusted: it is not a guess from the
+                  genre, it is what the rating was issued on. */}
+              {[...ageRating.descriptors, ...(ageRating.interactive ?? [])].map((entry) => (
+                <span
+                  key={entry}
+                  className="rounded bg-slate-100 dark:bg-slate-800 px-1.5 py-0.5 text-[11px] font-medium text-slate-600 dark:text-slate-300"
+                >
+                  {entry}
+                </span>
+              ))}
+            </div>
+          </div>
+        )}
 
         {status === 'loading' && !detail && (
           <p className="mt-6 flex items-center gap-2 text-sm text-slate-400 dark:text-slate-500">
@@ -3854,7 +3877,10 @@ function storeRowAsGame(row, coverage = 'store') {
     protagonist: null,
     tags: [],
     representation: [],
-    ageRating: null,
+    // Present on upcoming rows and on mirror rows swept since ratings were
+    // read; absent on older ones, where null means "not known" rather than
+    // "fine for children", which is why the kid filter excludes it.
+    ageRating: row.ageRating ?? null,
     ratings: null,
     description: null,
     steamAppId: null,

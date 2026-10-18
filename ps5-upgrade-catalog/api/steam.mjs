@@ -174,7 +174,7 @@ const SEVERITY_PATTERNS = {
   ],
 };
 
-function severityOf(descriptor) {
+export function severityOf(descriptor) {
   const text = descriptor.toLowerCase();
   if (SEVERITY_PATTERNS.high.some((pattern) => text.includes(pattern))) return 'high';
   if (SEVERITY_PATTERNS.low.some((pattern) => text.includes(pattern))) return 'low';
@@ -185,12 +185,26 @@ function severityOf(descriptor) {
 /** With no descriptors at all, the age tier is the only signal left. */
 const TIER_FALLBACK = { everyone: 'safe', everyone10: 'safe', teen: 'mild', mature: 'mature' };
 
-function toFamilyVerdict(allDescriptors, tier) {
+export function toFamilyVerdict(allDescriptors, tier) {
   if (allDescriptors.length === 0) return TIER_FALLBACK[tier] ?? 'unknown';
   const severities = allDescriptors.map(severityOf);
-  if (severities.includes('high')) return 'mature';
-  if (severities.includes('medium')) return 'mild';
-  return 'safe';
+  const fromDescriptors = severities.includes('high')
+    ? 'mature'
+    : severities.includes('medium')
+      ? 'mild'
+      : 'safe';
+
+  // The board's own tier is a floor, not another opinion to be outvoted.
+  //
+  // Severity is read off descriptor wording, and a board can rate a game
+  // Mature on wording that reads mildly: one horror game carries exactly
+  // "Mild Violence, Strong Language" and came out as mild, which is a rating
+  // the kid-friendly filter shows. Two games already in the catalog were
+  // filed that way. Whatever the descriptors say, an M stays mature and a
+  // Teen rating never reads as safe.
+  if (tier === 'mature') return 'mature';
+  if (tier === 'teen' && fromDescriptors === 'safe') return 'mild';
+  return fromDescriptors;
 }
 
 function toAgeRating(data) {

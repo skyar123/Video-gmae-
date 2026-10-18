@@ -16,6 +16,7 @@
  */
 
 import { readFileSync, writeFileSync } from 'node:fs';
+import { ratingFromConcept } from '../api/rating.mjs';
 
 const INDEX = new URL('../api/store-index.json', import.meta.url);
 const CAP = 190_000;
@@ -110,6 +111,7 @@ function parse(id, html) {
     price,
     stars: stars ? Number(stars[1]) : null,
     votes: stars ? Number(stars[2]) : null,
+    ageRating: ratingFromConcept(html),
     art:
       artFor(html, 'GAMEHUB_COVER_ART') ||
       artFor(html, 'SIXTEEN_BY_NINE_BANNER') ||

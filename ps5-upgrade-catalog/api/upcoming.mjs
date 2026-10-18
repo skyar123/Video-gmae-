@@ -11,6 +11,7 @@ import bakedSeeds from './upcoming-seeds.json' with { type: 'json' };
 import snapshot from './upcoming-snapshot.json' with { type: 'json' };
 import { loadBlob, saveBlob } from './history.mjs';
 import { DISCOVERED_KEY } from './keys.mjs';
+import { ratingFromConcept } from './rating.mjs';
 
 const UA = 'Mozilla/5.0 (compatible; ps5-upgrade-catalog/1.0)';
 const READ_CAP = 190_000; // Release date, art, price and genres all land inside this.
@@ -114,6 +115,7 @@ function parseConcept(id, html) {
   const basePrice = (html.match(/"basePrice":"([^"]+)"/) || [])[1];
   const discounted = (html.match(/"discountedPrice":"([^"]+)"/) || [])[1];
   const stars = html.match(/"averageRating":([\d.]+),"totalRatingsCount":(\d+)/);
+  const ageRating = ratingFromConcept(html);
   // The store ships the official trailer on the page: role PREVIEW, type VIDEO.
   const trailer =
     (html.match(/"role":"PREVIEW","type":"VIDEO","url":"([^"]+)"/) || [])[1] ||
@@ -134,6 +136,7 @@ function parseConcept(id, html) {
     basePrice: basePrice ?? null,
     stars: stars ? Number(stars[1]) : null,
     votes: stars ? Number(stars[2]) : null,
+    ageRating,
     trailer,
     art:
       artFor(html, 'GAMEHUB_COVER_ART') ||
