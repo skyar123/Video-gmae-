@@ -51,7 +51,7 @@ import {
   X,
 } from 'lucide-react';
 import { buildProfile, recommend, starterPicks } from './recommend.js';
-import { indexText, parseQuery, scoreMatch } from '../api/search.mjs';
+import { fold, indexText, parseQuery, scoreMatch } from '../api/search.mjs';
 import { priceStanding } from '../api/standing.mjs';
 import gamesData from './games.json';
 import creatorsData from './creators.json';
@@ -5656,10 +5656,44 @@ export default function App() {
       .map((row) => storeRowAsGame(upcomingAsStoreRow(row), 'upcoming'));
   }, [upcoming.data]);
 
-  const pool = useMemo(
-    () => (filters.collection === 'soon' ? upcomingGames : catalog),
-    [filters.collection, upcomingGames, catalog],
-  );
+  /**
+   * Searching looks in the whole store as well as the catalog.
+   *
+   * Typing a game's name and being told it is "not here, try the wider
+   * store" is the clearest way the two halves gave themselves away as two
+   * halves. The mirror is searched server side alongside the local catalog,
+   * and the results arrive as ordinary games.
+   *
+   * The collection that already is the store does its own searching, and the
+   * calendar is its own pool, so neither needs this.
+   */
+  const searchingWidely =
+    deferredQuery.trim().length > 1 &&
+    filters.collection !== 'store' &&
+    filters.collection !== 'soon';
+
+  const storeSearch = useStoreSearch({
+    active: searchingWidely,
+    q: searchingWidely ? deferredQuery.trim() : '',
+    genre: '',
+    sort: 'relevance',
+  });
+
+  const storeMatches = useMemo(() => {
+    if (!searchingWidely) return [];
+    // A game that is in the catalog, or already saved from the store, is
+    // itself: the richer copy wins and the duplicate is dropped.
+    const known = new Set(gamesData.map((game) => fold(game.title)));
+    const saved = new Set(savedStoreGames.map((game) => game.id));
+    return (storeSearch.games ?? [])
+      .filter((row) => row?.name && !known.has(fold(row.name)) && !saved.has(`store:${row.id}`))
+      .map((row) => storeRowAsGame(row));
+  }, [searchingWidely, storeSearch.games, savedStoreGames]);
+
+  const pool = useMemo(() => {
+    if (filters.collection === 'soon') return upcomingGames;
+    return storeMatches.length > 0 ? [...catalog, ...storeMatches] : catalog;
+  }, [filters.collection, upcomingGames, catalog, storeMatches]);
 
   /**
    * The PS5 toggle is a fact about the curated catalog, which is built around
@@ -5667,8 +5701,13 @@ export default function App() {
    * PS5 only, so applying it to upcoming releases emptied the collection:
    * a hundred and thirty-seven games showed as fifteen, and every one of the
    * genuinely unreleased ones was among the hidden.
+   *
+   * Typing a game's name is the same kind of explicit request as saving one.
+   * Searching "Wishing Well Simulator" and being told nothing matches, when
+   * the only reason is that it happens to be PS5 only, is the browse default
+   * answering a question nobody asked it.
    */
-  const ignorePs5Filter = filters.collection === 'soon';
+  const ignorePs5Filter = filters.collection === 'soon' || deferredQuery.trim().length > 1;
 
   const searchScores = useMemo(() => {
     const query = parseQuery(deferredQuery);
@@ -6281,7 +6320,12 @@ export default function App() {
           ) : (
             <>
           <p className="mb-3 text-xs font-medium text-slate-400 dark:text-slate-500">
-            {filteredGames.length} of {visiblePool.length} games
+            {/* While the store is being searched too, the denominator is
+                whatever the search happened to pull back, which is not a
+                number that means anything. The count of matches is. */}
+            {storeMatches.length > 0
+              ? `${filteredGames.length} ${filteredGames.length === 1 ? 'match' : 'matches'}, catalog and store`
+              : `${filteredGames.length} of ${visiblePool.length} games`}
             {atFloorCount > 0 && (
               <span className="font-semibold text-emerald-600 dark:text-emerald-300">
                 {' '}
