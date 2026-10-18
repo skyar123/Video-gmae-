@@ -53,6 +53,38 @@ const newToken = () => `${crypto.randomUUID()}${crypto.randomUUID()}`.replace(/-
 const load = async () => (await loadBlob(ALERTS_KEY)) ?? {};
 const save = (all) => saveBlob(ALERTS_KEY, all);
 
+/** The browser namespaces store ids so they cannot collide with catalog ones. */
+export const CONCEPT_PREFIX = 'store:';
+
+export const conceptPathFor = (id) =>
+  id.startsWith(CONCEPT_PREFIX) ? `concept/${id.slice(CONCEPT_PREFIX.length)}` : null;
+
+/**
+ * Store games somebody is waiting on.
+ *
+ * Catalog games get a nightly price reading because the catalog is walked
+ * anyway. A store game is not in that walk, so the nightly job has to be told
+ * which concepts to read, and this is the list: only ids that actually have a
+ * reachable subscriber behind them, capped so that a few hundred wishlists
+ * cannot turn into tens of thousands of store reads.
+ */
+const MAX_WATCHED_CONCEPTS = 300;
+
+export async function watchedConceptIds() {
+  const all = await load();
+  const ids = new Set();
+  for (const row of Object.values(all)) {
+    const reachable = Boolean(row?.push) || Boolean(row?.email && row.emailConfirmed);
+    if (!reachable) continue;
+    for (const id of Object.keys(row.games ?? {})) {
+      if (!id.startsWith(CONCEPT_PREFIX)) continue;
+      ids.add(id);
+      if (ids.size >= MAX_WATCHED_CONCEPTS) return [...ids];
+    }
+  }
+  return [...ids];
+}
+
 /** Records are keyed by token, so this is a lookup rather than a scan. */
 const byToken = (all, token) => (token && all[token] ? all[token] : null);
 

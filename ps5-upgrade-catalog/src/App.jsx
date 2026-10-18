@@ -2901,7 +2901,7 @@ const ALERT_THRESHOLDS = [
  * The token the server returns is kept here so a later wishlist edit can be
  * synced without asking for the address a second time.
  */
-function useAlerts(wishlist, dealAlerts, region) {
+function useAlerts(wishlist, dealAlerts, region, saved = []) {
   const [token, setToken] = useState(readAlertToken);
   const [state, setState] = useState({
     status: 'loading',
@@ -2917,14 +2917,19 @@ function useAlerts(wishlist, dealAlerts, region) {
   });
 
   // Two lists feed this: things you want, and things you asked to be told the
-  // price of. Only catalog games get a nightly price reading, so only those can
-  // be watched at all; saying otherwise would promise an alert that never comes.
+  // price of. Saved store games are in here too now. They are not in the
+  // nightly catalog walk, so the job reads their price from the concept page
+  // instead; what it cannot do is say a drop is the lowest ever, because
+  // nothing has been recording them.
   const watchable = useMemo(
-    () =>
-      gamesData
-        .filter((game) => wishlist.has(game.id) || dealAlerts.has(game.id))
-        .map((game) => ({ id: game.id, title: game.title })),
-    [wishlist, dealAlerts],
+    () => {
+      const wanted = (game) => wishlist.has(game.id) || dealAlerts.has(game.id);
+      return [...gamesData.filter(wanted), ...saved.filter(wanted)].map((game) => ({
+        id: game.id,
+        title: game.title,
+      }));
+    },
+    [wishlist, dealAlerts, saved],
   );
 
   // Which channels this site has, and where this browser stands with them.
@@ -3552,7 +3557,19 @@ function TonightSheet({ catalog, library, hidden, onOpenGame, onClose }) {
  * exist only for the curated catalog. Rather than fake them, this shows
  * PlayStation's own star rating and says where everything came from.
  */
-function StoreGameModal({ game, region, wishlisted, owned, onToggleWishlist, onToggleOwned, onClose }) {
+function StoreGameModal({
+  game,
+  region,
+  wishlisted,
+  owned,
+  dealWatched,
+  alertsArmed,
+  onToggleDealAlert,
+  onOpenAlerts,
+  onToggleWishlist,
+  onToggleOwned,
+  onClose,
+}) {
   const [detail, setDetail] = useState(null);
   const [status, setStatus] = useState('loading');
   const [shot, setShot] = useState(null);
@@ -3726,6 +3743,17 @@ function StoreGameModal({ game, region, wishlisted, owned, onToggleWishlist, onT
         )}
 
         <PricePanel game={asGame} live={asLive} />
+        {/* The nightly job reads a price for every watched store game from
+            its concept page, so this promises nothing it cannot keep. What it
+            cannot say is that a drop is the lowest ever: only catalog games
+            have their prices recorded night after night. */}
+        <DealAlertRow
+          watching={dealWatched}
+          live={asLive}
+          armed={alertsArmed}
+          onToggle={onToggleDealAlert}
+          onSetUp={onOpenAlerts}
+        />
         <PredictionPanel live={asLive} />
 
         <div className="mt-6 grid gap-3 sm:grid-cols-3">
@@ -5404,6 +5432,22 @@ export default function App() {
     [rememberStoreRow, toggleOwned, toggleWishlist],
   );
 
+  /**
+   * The same thing from a bare mirror row, which is what the store view holds.
+   *
+   * Every path that saves a non-curated game has to come through one of these
+   * two. The store view used to toggle the id directly and keep no row, so a
+   * game hearted from inside it went into a wishlist that then showed nothing
+   * at all.
+   */
+  const saveStoreRow = useCallback(
+    (row, kind) => {
+      rememberStoreRow(row);
+      (kind === 'owned' ? toggleOwned : toggleWishlist)(storeKey(row));
+    },
+    [rememberStoreRow, toggleOwned, toggleWishlist],
+  );
+
   const toggleDealAlert = useCallback((id) => {
     setDealAlerts((previous) => {
       const next = new Set(previous);
@@ -5417,6 +5461,15 @@ export default function App() {
       return next;
     });
   }, []);
+
+  /** Watching a store game for deals keeps its row for the same reason. */
+  const watchStoreRow = useCallback(
+    (row) => {
+      rememberStoreRow(row);
+      toggleDealAlert(storeKey(row));
+    },
+    [rememberStoreRow, toggleDealAlert],
+  );
 
   // Recomputed only when the library, wishlist or PS5 toggle changes; it never
   // touches live data, so it stays instant while prices are still loading.
@@ -5492,21 +5545,14 @@ export default function App() {
 
   // The wishlist can only be mailed about if the server knows it exists, so
   // this is the one thing the app keeps off the phone, and only once asked.
-  const alerts = useAlerts(wishlist, dealAlerts, filters.region);
-
-  // Keeps typing responsive while React re-filters in the background.
-  const deferredQuery = useDeferredValue(filters.q);
-
-  // Relevance for the current query, or null when nothing is being searched.
-  // Title matches decide the result on their own; the genre/tag pass only runs
-  // when no title matched at all, so "roguelike" finds roguelikes without
-  // letting tags dilute a search for a name.
   const savedStoreGames = useMemo(
     () =>
       storeRowCache
         .map(storeRowAsGame)
-        .filter((game) => wishlist.has(game.id) || library.has(game.id)),
-    [storeRowCache, wishlist, library],
+        .filter(
+          (game) => wishlist.has(game.id) || library.has(game.id) || dealAlerts.has(game.id),
+        ),
+    [storeRowCache, wishlist, library, dealAlerts],
   );
 
   /**
@@ -5520,6 +5566,16 @@ export default function App() {
     () => (savedStoreGames.length > 0 ? [...gamesData, ...savedStoreGames] : gamesData),
     [savedStoreGames],
   );
+
+  const alerts = useAlerts(wishlist, dealAlerts, filters.region, savedStoreGames);
+
+  // Keeps typing responsive while React re-filters in the background.
+  const deferredQuery = useDeferredValue(filters.q);
+
+  // Relevance for the current query, or null when nothing is being searched.
+  // Title matches decide the result on their own; the genre/tag pass only runs
+  // when no title matched at all, so "roguelike" finds roguelikes without
+  // letting tags dilute a search for a name.
 
   /**
    * Upcoming and just-released games, in the catalog's shape.
@@ -6335,8 +6391,12 @@ export default function App() {
           region={filters.region}
           wishlisted={wishlist.has(storeKey(activeStoreGame))}
           owned={library.has(storeKey(activeStoreGame))}
-          onToggleWishlist={() => toggleWishlist(storeKey(activeStoreGame))}
-          onToggleOwned={() => toggleOwned(storeKey(activeStoreGame))}
+          dealWatched={dealAlerts.has(storeKey(activeStoreGame))}
+          alertsArmed={alerts.pushEnabled || alerts.emailConfirmed}
+          onToggleDealAlert={() => watchStoreRow(activeStoreGame)}
+          onOpenAlerts={() => setAlertsOpen(true)}
+          onToggleWishlist={() => saveStoreRow(activeStoreGame, 'wishlist')}
+          onToggleOwned={() => saveStoreRow(activeStoreGame, 'owned')}
           onClose={() => setActiveStoreGame(null)}
         />
       )}

@@ -7,7 +7,7 @@ import { sweepForReleases } from '../../api/upcoming.mjs';
 import { replayCalibration } from '../../api/backtest.mjs';
 import { loadChunk } from '../../api/history.mjs';
 import { BACKTEST_KEY } from '../../api/keys.mjs';
-import { runAlerts } from '../../api/alerts.mjs';
+import { conceptPathFor, runAlerts, watchedConceptIds } from '../../api/alerts.mjs';
 
 /**
  * Nightly maintenance.
@@ -102,6 +102,25 @@ export default async () => {
     );
   } catch (error) {
     console.error('Backtest failed:', error);
+  }
+
+  // A store game is watched by id like any other, but it is not in the
+  // catalog walk above, so its price is read from the concept page the same
+  // way the store view reads one. Only ids with a reachable subscriber behind
+  // them, and capped, so a few hundred wishlists cannot become tens of
+  // thousands of reads. There is no recorded history for these, so an alert
+  // for one says what it costs without claiming to know it is the floor.
+  try {
+    const concepts = await watchedConceptIds();
+    if (concepts.length > 0) {
+      const conceptPrices = await mapWithConcurrency(concepts, 3, (id) =>
+        loadPsnPrice(conceptPathFor(id), regions[0] ?? 'US'),
+      );
+      concepts.forEach((id, index) => pricesForAlerts.set(id, conceptPrices[index] ?? null));
+      console.log(`Read prices for ${concepts.length} watched store games`);
+    }
+  } catch (error) {
+    console.error('Watched store prices failed:', error);
   }
 
   try {
