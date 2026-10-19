@@ -5,6 +5,7 @@ import { recordAndSummarize, saveBlob } from '../../api/history.mjs';
 import { loadReviewSignal } from '../../api/reviews.mjs';
 import { loadUpcoming, sweepForReleases } from '../../api/upcoming.mjs';
 import { replayCalibration } from '../../api/backtest.mjs';
+import { warmYouTubePool } from '../../api/goss.mjs';
 import { loadChunk } from '../../api/history.mjs';
 import { BACKTEST_KEY } from '../../api/keys.mjs';
 import { conceptPathFor, runAlerts, watchedConceptIds } from '../../api/alerts.mjs';
@@ -205,6 +206,25 @@ export default async () => {
       `${sweep.seeds} seeds tracked, ${sweep.calendar} on the calendar, ` +
       `${sweep.recent} just out, ${sweep.mirror} in the store mirror`,
   );
+
+  // The gossip feed's video pool, filled the slow way.
+  //
+  // A request has ten seconds, so the live path can only rotate a handful of
+  // feeds at a time and YouTube refuses most of a burst regardless; the pool
+  // sat at 22 videos from 3 of 70 channels. Here there is time to ask for all
+  // of them one at a time, a second apart, which is the pattern YouTube
+  // actually answers. Failing is harmless: every channel keeps whatever it
+  // last had, and the fifteen-minute rotation carries on either way.
+  try {
+    const warmed = await warmYouTubePool();
+    console.log(
+      `YouTube pool: ${warmed.answered.length}/${warmed.asked} channels answered, ` +
+        `${warmed.written} videos stored` +
+        (warmed.silent.length ? `; silent: ${warmed.silent.join(', ')}` : ''),
+    );
+  } catch (error) {
+    console.error('YouTube pool warm failed:', error);
+  }
 };
 
 export const config = { schedule: '@daily' };

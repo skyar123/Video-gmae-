@@ -237,7 +237,18 @@ const YOUTUBE_GAP_MS = 150;
  * thing to configure for no gain.
  */
 const YOUTUBE_SLICE = 7;
-const YOUTUBE_POOL_MAX = 500;
+/*
+ * Above anything the roster can hold, so the global cap never binds.
+ *
+ * Each channel is already capped at ten videos where it is fetched, which is
+ * the balancing that matters: 70 channels can store at most 700. Cutting that
+ * to 500 by recency would have taken the difference from whoever uploads
+ * least often, so Ginny Di's monthly video would lose its place to another
+ * day of Markiplier. That is the same mistake the press cap was making this
+ * morning, and the answer is the same one: when the data is already balanced
+ * per source, a second cap only decides who goes unread.
+ */
+const YOUTUBE_POOL_MAX = 800;
 
 /**
  * The pool is stored one key per channel, not one key for the whole pool.
@@ -653,6 +664,68 @@ const videoKey = (burst) => {
   const head = cut > 8 ? burst.title.slice(0, cut) : burst.title;
   return `${burst.kind}|${head.toLowerCase().replace(/[^a-z0-9]+/g, ' ').trim()}`;
 };
+
+/**
+ * Fill every channel's key in one slow pass, for the nightly job.
+ *
+ * A request has ten seconds and so can only ever ask for a handful of feeds,
+ * which is why the live path rotates: at seven a rebuild, 70 channels take
+ * about two and a half hours to come round, and YouTube refuses most of a
+ * burst anyway, so in practice the pool held 22 videos from 3 channels.
+ *
+ * A scheduled function has minutes. This walks the whole roster one feed at a
+ * time with a full second between them, which is both the politest pattern
+ * available and the one the evidence favours: three feeds asked gently were
+ * answered 3/3, thirty-four asked at once were answered 11/34. Roughly ninety
+ * seconds for the lot.
+ *
+ * It writes the same per-channel keys the live path reads, so the next
+ * rebuild simply finds a full pool. A channel that fails is skipped, never
+ * written empty, exactly as in the rotation.
+ */
+const WARM_MARKER_KEY = 'goss/youtube/_last-warm.json';
+
+export async function warmYouTubePool({ gapMs = 1000, now = Date.now(), minIntervalMs = 0 } = {}) {
+  // A caller that can be triggered from outside says how recently a warm is
+  // allowed to have happened, so hitting it repeatedly cannot turn into 70
+  // YouTube requests a go from this one address. The nightly job passes
+  // nothing and always runs. The marker is not a channel key, so the pool
+  // read never sees it.
+  if (minIntervalMs > 0) {
+    try {
+      const mark = await loadBlob(WARM_MARKER_KEY);
+      const at = mark?.at ? Date.parse(mark.at) : NaN;
+      if (Number.isFinite(at) && now - at < minIntervalMs) {
+        return { skipped: true, lastWarmAt: mark.at, asked: 0, answered: [], silent: [], written: 0 };
+      }
+    } catch {
+      // No marker readable: treat it as never warmed and go ahead.
+    }
+  }
+
+  const cutoff = now - SEARCH_WINDOW_DAYS * DAY_MS;
+  const answered = [];
+  const silent = [];
+  let written = 0;
+
+  for (const channel of YOUTUBE) {
+    const rows = await loadYouTube(channel, cutoff);
+    if (rows.length > 0) {
+      await saveBlob(poolKeyFor(channel.source), {
+        videos: rows,
+        storedAt: new Date(now).toISOString(),
+      });
+      answered.push(`${channel.source}:${rows.length}`);
+      written += rows.length;
+    } else {
+      silent.push(channel.source);
+    }
+    await new Promise((resolve) => setTimeout(resolve, gapMs));
+  }
+
+  await saveBlob(WARM_MARKER_KEY, { at: new Date(now).toISOString(), answered: answered.length });
+  return { skipped: false, asked: YOUTUBE.length, answered, silent, written };
+}
 
 /** This rebuild's ten channels, in waves, against one deadline. */
 async function loadYouTubeAll(cutoff) {
