@@ -905,11 +905,19 @@ export async function loadGoss() {
     const chosen = new Map();
     for (const burst of [
       ...pick('bluesky', wide ? 22 : 14, wide ? 14 : 10),
-      // No real cap on the press: loadNews has already balanced it across
-      // publishers and cut it to about seventy stories, so capping again
-      // here only decides which of those the reader never sees, and it was
-      // cutting the slower queer outlets hardest.
-      ...pick('press', 0, 60),
+      // No cap on the press at all. loadNews has already balanced it across
+      // publishers and guaranteed each one its newest story, so capping
+      // again here only decides which of those the reader never sees, and
+      // because this pick sorts by recency it takes them from whoever
+      // publishes least often, which is most of the queer press.
+      //
+      // Sixty was written when loadNews returned about seventy stories and
+      // the cap almost never bound. Adding eight feeds took it to 101, the
+      // cap started binding, and the queer press fell from 22 to 9 while
+      // Time Extension, Unwinnable and Game Developer vanished from the feed
+      // despite all three serving. The number is above anything loadNews can
+      // produce: MAX_ITEMS is 100, plus one rescued story per silent feed.
+      ...pick('press', 0, 200),
       ...pick('pod', 0, 10),
       // Thirty-odd channels against three: the old allowance of twelve was
       // set when YouTube was a trailer sidecar, and would now be throwing
