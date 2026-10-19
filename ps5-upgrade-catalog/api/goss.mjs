@@ -161,8 +161,24 @@ const YOUTUBE_GAP_MS = 200;
  * thing to configure for no gain.
  */
 const YOUTUBE_SLICE = 5;
-const YOUTUBE_POOL_KEY = 'goss/youtube-pool.json';
 const YOUTUBE_POOL_MAX = 500;
+
+/**
+ * The pool is stored one key per channel, not one key for the whole pool.
+ *
+ * One shared key meant read-modify-write over state several instances share,
+ * and they rebuild on their own clocks: an instance that read a pool of 3 and
+ * added 1 would write 4 over the 16 another instance had just written. It is
+ * the same race the local price-history file hit when chunks went parallel,
+ * and guarding against an empty write only covered the worst case of it.
+ *
+ * Per channel there is no race left to lose: two instances writing the same
+ * channel in the same rotation are writing the same ten videos. A channel
+ * that 404s is simply not written, so it keeps what it last had rather than
+ * having an empty result saved over it.
+ */
+const poolKeyFor = (source) =>
+  `goss/youtube/${source.toLowerCase().replace(/[^a-z0-9]+/g, '-')}.json`;
 
 /**
  * PlayStation's own channel sits outside the rotation and is asked every
@@ -574,13 +590,18 @@ async function loadYouTubeAll(cutoff) {
 
   // Merged newest-wins over what previous rotations found, then aged out.
   // Fetched rows come last so a re-fetch refreshes rather than duplicates.
-  let stored = [];
-  try {
-    const blob = await loadBlob(YOUTUBE_POOL_KEY);
-    if (Array.isArray(blob?.videos)) stored = blob.videos;
-  } catch {
-    // No pool yet, or no store at all. This rebuild's five are the pool.
-  }
+  const stored = (
+    await Promise.all(
+      YOUTUBE.map(async (channel) => {
+        try {
+          const blob = await loadBlob(poolKeyFor(channel.source));
+          return Array.isArray(blob?.videos) ? blob.videos : [];
+        } catch {
+          return [];
+        }
+      }),
+    )
+  ).flat();
 
   const pool = new Map();
   for (const burst of [...stored, ...fetched]) {
@@ -592,25 +613,22 @@ async function loadYouTubeAll(cutoff) {
     .sort((a, b) => (b.publishedAt ?? '').localeCompare(a.publishedAt ?? ''))
     .slice(0, YOUTUBE_POOL_MAX);
 
-  /*
-   * An empty result never overwrites the pool.
-   *
-   * A pool of three came back from the store as zero one rebuild later, and
-   * the cause is this write: loadBlob answers {} for a store that is empty
-   * and for a read that failed, which are not the same thing, and a rebuild
-   * that read nothing and fetched nothing was saving that nothing over a
-   * perfectly good pool. Several instances rebuild independently, so it only
-   * takes one of them having a bad read to wipe what the others found.
-   *
-   * Nothing to add and nothing read means nothing to save. Every other case
-   * can only grow the pool or age it, so it is safe to write.
-   */
-  const worthWriting = fetched.length > 0 || stored.length > 0;
+  // Only the channels that actually answered are written, each to its own
+  // key. A channel that 404d is left alone and keeps what it last had.
+  const answered = new Map();
+  for (const burst of fetched) {
+    if (!answered.has(burst.source)) answered.set(burst.source, []);
+    answered.get(burst.source).push(burst);
+  }
+  const storedAt = new Date().toISOString();
+  await Promise.all(
+    [...answered].map(([source, rows]) => saveBlob(poolKeyFor(source), { videos: rows, storedAt })),
+  );
+
   diagnostics.set(
     'youtube',
-    `asked ${asked.length} (${asked.join(', ')}), got ${fetched.length}, pool ${videos.length} of ${stored.length} stored, ${worthWriting ? 'saved' : 'not saved'}`,
+    `asked ${asked.length} (${asked.join(', ')}), got ${fetched.length} from ${answered.size}, pool ${videos.length} of ${stored.length} stored`,
   );
-  if (worthWriting) await saveBlob(YOUTUBE_POOL_KEY, { videos, storedAt: new Date().toISOString() });
 
   const unique = new Map();
   for (const burst of videos) {
