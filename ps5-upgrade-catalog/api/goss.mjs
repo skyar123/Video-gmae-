@@ -91,8 +91,8 @@ const YOUTUBE = [
   { source: 'PlayStation', id: 'UC-2Y8dQb0S6DtpxNgAKoJKA', pinned: true },
   { source: 'PlayStation Access', id: 'UC6yzV_xgKn8r77FkcmZyMSg' },
   // Outlets. Push Square is the only PlayStation-only one in the list.
-  { source: 'IGN', id: 'UCKy1dAqELo0zrOtPkf0eTMw', pinned: true },
-  { source: 'GameSpot', id: 'UCbu2SsF-Or3Rsn3NxqODImw', pinned: true },
+  { source: 'IGN', id: 'UCKy1dAqELo0zrOtPkf0eTMw' },
+  { source: 'GameSpot', id: 'UCbu2SsF-Or3Rsn3NxqODImw' },
   { source: 'GameSpot Trailers', id: 'UCUnRn1f78foyP26XGkRfWsA' },
   { source: 'Push Square', id: 'UCbI-X9F07inmxYvQKDBOU7Q' },
   { source: 'Eurogamer', id: 'UCciKycgzURdymx-GRSY2_dA' },
@@ -136,8 +136,9 @@ const YOUTUBE = [
  * is what the reader gets, and a slow channel costs the other sources
  * nothing instead of taking the request down with it.
  */
-const YOUTUBE_LANES = 5;
-const YOUTUBE_DEADLINE_MS = 6000;
+const YOUTUBE_DEADLINE_MS = 5000;
+/** A pause between feeds, because the rate is what YouTube objects to. */
+const YOUTUBE_GAP_MS = 200;
 
 /**
  * YouTube rate-limits the burst, not the feed.
@@ -159,19 +160,15 @@ const YOUTUBE_DEADLINE_MS = 6000;
  * handles the local-dev fallback; standing up a second one would be a second
  * thing to configure for no gain.
  */
-const YOUTUBE_SLICE = 10;
+const YOUTUBE_SLICE = 5;
 const YOUTUBE_POOL_KEY = 'goss/youtube-pool.json';
 const YOUTUBE_POOL_MAX = 500;
 
 /**
- * Three channels sit outside the rotation and are asked every time.
- *
- * Waiting your turn is fine for a documentary and wrong for a State of Play:
- * at ten a rotation a channel comes round about every fifty minutes, which
- * is a long time for the feed not to know PlayStation just announced
- * something. These three are also exactly the three that answered 3/3 back
- * when the roster was three, so asking for them every rebuild is the shape
- * already known to work.
+ * PlayStation's own channel sits outside the rotation and is asked every
+ * rebuild. Waiting your turn is fine for a documentary and wrong for a State
+ * of Play, and on a PlayStation app that is the one channel worth a slot of
+ * its own. Everything else takes its turn.
  */
 const YOUTUBE_PINNED = YOUTUBE.filter((channel) => channel.pinned);
 const YOUTUBE_ROTATING = YOUTUBE.filter((channel) => !channel.pinned);
@@ -559,19 +556,21 @@ async function loadYouTubeAll(cutoff) {
   ];
   const asked = queue.map((channel) => channel.source);
 
+  // One at a time, with a pause. Five in parallel was still a burst, and a
+  // burst is the thing being refused: the fourteen requests before this one
+  // all go out at once too, so the lanes were adding to a spike rather than
+  // forming one. Serial, five of them, this phase costs about three seconds.
   const deadline = Date.now() + YOUTUBE_DEADLINE_MS;
   const fetched = [];
-  const lane = async () => {
-    for (let channel = queue.shift(); channel; channel = queue.shift()) {
-      const left = deadline - Date.now();
-      if (left <= 250) {
-        diagnostics.set(`youtube:${channel.source}`, 'out of time');
-        continue;
-      }
-      fetched.push(...(await loadYouTube(channel, cutoff, left)));
+  for (const channel of queue) {
+    const left = deadline - Date.now();
+    if (left <= 400) {
+      diagnostics.set(`youtube:${channel.source}`, 'out of time');
+      continue;
     }
-  };
-  await Promise.all(Array.from({ length: YOUTUBE_LANES }, lane));
+    fetched.push(...(await loadYouTube(channel, cutoff, Math.min(3000, left))));
+    await new Promise((resolve) => setTimeout(resolve, YOUTUBE_GAP_MS));
+  }
 
   // Merged newest-wins over what previous rotations found, then aged out.
   // Fetched rows come last so a re-fetch refreshes rather than duplicates.
