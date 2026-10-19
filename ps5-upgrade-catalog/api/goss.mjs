@@ -86,46 +86,99 @@ const QUERIES = [
  * public uploads feeds, which need no key and know nothing about the reader,
  * so a subscription list is not something this can see.
  */
+/**
+ * YouTube, your own list first.
+ *
+ * The first thirty-nine are the channels you named. Each was resolved by
+ * searching YouTube for the name, then confirmed by loading /channel/<id>
+ * back and checking the page title against what you asked for: all thirty
+ * nine matched, the one apparent exception being "D&amp;D Beyond" coming back
+ * HTML-escaped. Resolving matters because an id is unguessable and a wrong
+ * one fails silently as an empty feed rather than as an error.
+ *
+ * The rest are the ones already here. They are the trailer and news channels
+ * the press feeds do not duplicate in video form, so they stay underneath
+ * yours rather than being dropped.
+ *
+ * There is still no connection to your YouTube account. These are the public
+ * uploads feeds, which need no key and know nothing about the viewer, so
+ * what you are subscribed to is not something this can see. Your list is
+ * here because you typed it out, not because anything read it.
+ */
 const YOUTUBE = [
-  // PlayStation's own, which is where a State of Play lands first.
-  { source: 'PlayStation', id: 'UC-2Y8dQb0S6DtpxNgAKoJKA', pinned: true },
-  { source: 'PlayStation Access', id: 'UC6yzV_xgKn8r77FkcmZyMSg' },
-  // Outlets. Push Square is the only PlayStation-only one in the list.
-  { source: 'IGN', id: 'UCKy1dAqELo0zrOtPkf0eTMw' },
-  { source: 'GameSpot', id: 'UCbu2SsF-Or3Rsn3NxqODImw' },
-  { source: 'GameSpot Trailers', id: 'UCUnRn1f78foyP26XGkRfWsA' },
-  { source: 'Push Square', id: 'UCbI-X9F07inmxYvQKDBOU7Q' },
-  { source: 'Eurogamer', id: 'UCciKycgzURdymx-GRSY2_dA' },
-  { source: 'GamesRadar', id: 'UCk2ipH2l8RvLG0dr-rsBiZw' },
-  { source: 'VGC', id: 'UCuzaJiIORaXi7DsuEs03Gow' },
-  { source: 'Game Informer', id: 'UCK-65DO2oOxxMwphl2tYtcw' },
-  { source: 'Digital Foundry', id: 'UC9PBzalIcEQCsiIkq36PyUA' },
-  // The ones that actually carry the beef, which the press write up second.
-  { source: 'YongYea', id: 'UCT6iAerLNE-0J1S_E97UAuQ' },
-  { source: 'gameranx', id: 'UCNvzD7Z-g64bPXxGzaQaa4g' },
-  { source: 'Bellular News', id: 'UC3nPaf5MeeDTHA2JN7clidg' },
-  { source: 'The Act Man', id: 'UC7WDD6yHgzdqijHluCi1z-Q' },
-  { source: 'penguinz0', id: 'UCq6VFHwMzcMXbuKyG7SQYIg' },
-  { source: 'Luke Stephens', id: 'UCe4_UPAmhz2sqorGbF8oZHA' },
-  { source: 'Alanah Pearce', id: 'UCKpBmnEfSy20al-Fk_2YzVA' },
-  { source: 'Skill Up', id: 'UCZ7AeeVbyslLM_8-nVy2B8Q' },
-  { source: 'Kinda Funny Games', id: 'UCT6QFE3peNry9PdO5uGj96g' },
-  { source: 'Easy Allies', id: 'UCZrxXp1reP8E353rZsB3jaA' },
-  { source: 'Second Wind', id: 'UC1wZGocgLvopgOqBUFCyIJA' },
-  // Essays and documentaries. Slow, but they are the reason a feed is worth
-  // scrolling twice, and the podcast shelf proved the appetite.
-  { source: 'Noclip', id: 'UC0fDG3byEcMtbOqPMymDNbw' },
-  { source: 'People Make Games', id: 'UCZB6V9fUov0Mx_us3MWWILg' },
-  { source: 'Jacob Geller', id: 'UCeTfBygNb1TahcNpZyELO8g' },
-  { source: 'Razbuten', id: 'UCfHmyqCntYHQ81ZukNu66rg' },
-  { source: 'NakeyJakey', id: 'UCSdma21fnJzgmPodhC9SJ3g' },
-  { source: 'Girlfriend Reviews', id: 'UC2eEGT06FrWFU6VBnPOR9lg' },
-  { source: 'MandaloreGaming', id: 'UClOGLGPOqlAiLmOvXW5lKbw' },
-  { source: 'Summoning Salt', id: 'UCtUbO6rBht0daVIOGML3c8w' },
-  { source: 'Caddicarus', id: 'UCOkL7q2SeGZeZuj22njMYEA' },
-  { source: 'ACG', id: 'UCK9_x1DImhU-eolIay5rb2Q' },
-  { source: 'Jauwn', id: 'UC-nIhxjNqjcm8EmpPWBg3wA' },
-  { source: 'videogamedunkey', id: 'UCsvn_Po0SmunchJYOWpOxMg' },
+  // Yours. PlayStation is the one pinned out of the rotation, because a State
+  // of Play should not wait its turn on a PlayStation app.
+  { source: "PlayStation", id: "UC-2Y8dQb0S6DtpxNgAKoJKA", pinned: true },
+  { source: "Gab Smolders", id: "UCYLHs-NR2le96KKqXofUOXg" },
+  { source: "ENFANT TERRIBLE", id: "UCX1sraLIy6wS2R-SMcdoakg" },
+  { source: "Indie Games Hub", id: "UCt8CJiye87FMbEwt0npPMuQ" },
+  { source: "LauraKBuzz", id: "UCgBcTeH9MIsQteTNufpiuxA" },
+  { source: "BlackRose", id: "UCOjP_vCoOxwSZmNaD22WefQ" },
+  { source: "Nintendo of America", id: "UCGIY_O-8vW4rfX98KlMkvRg" },
+  { source: "Pokemon", id: "UCipBC02N5hqOYwVr5KYlExQ" },
+  { source: "Cambonano", id: "UCFk6kGRcHXaXWCzEWq8JEsg" },
+  { source: "Valkyrae", id: "UCWxlUwW9BgGISaakjGM37aw" },
+  { source: "Emiru", id: "UCZprw7Bxzfh2IysXNnl1S3g" },
+  { source: "Sabrinoca", id: "UC9ps3J42mMj5adk_9HxDgOw" },
+  { source: "Serasly", id: "UCMhxi0J2XnvbLChXUpj41Kw" },
+  { source: "lilsimsie", id: "UC_TYFButglZuuDbD-0Q_IzQ" },
+  { source: "Markiplier", id: "UC7_YxT-KID8kRbqZo7MyscQ" },
+  { source: "shofu", id: "UCbr6TI0Mujw2iFAQE4R8yrQ" },
+  { source: "Cinna", id: "UC8I_85S7LB_-gPG8UceWzJg" },
+  { source: "AI Dungeon", id: "UC4MDHO1RIEwGcXOGGRjP4rA" },
+  { source: "Voyage", id: "UCKmVog8RvluGkUOE38PEleQ" },
+  { source: "Ginny Di", id: "UCe5KNXqT7970K8vkHb5BQ5Q" },
+  { source: "Continue?", id: "UCWN49rf6HI1Zb5T-Mism74g" },
+  { source: "Stephanie Sterling", id: "UCWCw2Sd7RlYJ2yuNVHDWNOA" },
+  { source: "Ashikai", id: "UCJsx9l8WXBm2_zD5REgpERA" },
+  { source: "The Sphere Hunter", id: "UCJhsl2VeLfSXzkutwlICyZw" },
+  { source: "Skurry", id: "UCYX2-exnYmc6gDObfooTGZg" },
+  { source: "Kyedae", id: "UCxjdy5n9BxX_6RTL8Dt_7pg" },
+  { source: "Roll20", id: "UCHC1kWACzA7G6D2fqkqsRDg" },
+  { source: "Dicebreaker", id: "UC0jMXccxfvnwXvTpngFwbNA" },
+  { source: "D&D Beyond", id: "UCPy-338BEVgDkQade0qJmkw" },
+  { source: "nickisnotgaming", id: "UCm48V9P_cpk8ObO0BbGoFHQ" },
+  { source: "Lomadiah", id: "UCj_dHQWv08dQ0fv6IrzTChQ" },
+  { source: "Super Best Friends Play", id: "UC84X0epDRFdTrybxEX8ZWkA" },
+  { source: "PewDiePie", id: "UC-lHJZR3Gqxm24_Vd_AJ5Yw" },
+  { source: "Gaming Historian", id: "UCnbvPS_rXp4PC21PG2k1UVg" },
+  { source: "ZombieCleo", id: "UCjI5qxhtyv3srhWr60HemRw" },
+  { source: "PlayStation Europe", id: "UCg_JwOXFtu3iEtbr4ttXm9g" },
+  { source: "BuzzFeed Multiplayer", id: "UCBUVGPsJzc1U8SECMgBaMFw" },
+  // Already here: trailers and games news as video.
+  { source: "PlayStation Access", id: "UC6yzV_xgKn8r77FkcmZyMSg" },
+  { source: "IGN", id: "UCKy1dAqELo0zrOtPkf0eTMw" },
+  { source: "GameSpot", id: "UCbu2SsF-Or3Rsn3NxqODImw" },
+  { source: "GameSpot Trailers", id: "UCUnRn1f78foyP26XGkRfWsA" },
+  { source: "Push Square", id: "UCbI-X9F07inmxYvQKDBOU7Q" },
+  { source: "Eurogamer", id: "UCciKycgzURdymx-GRSY2_dA" },
+  { source: "GamesRadar", id: "UCk2ipH2l8RvLG0dr-rsBiZw" },
+  { source: "VGC", id: "UCuzaJiIORaXi7DsuEs03Gow" },
+  { source: "Game Informer", id: "UCK-65DO2oOxxMwphl2tYtcw" },
+  { source: "Digital Foundry", id: "UC9PBzalIcEQCsiIkq36PyUA" },
+  { source: "YongYea", id: "UCT6iAerLNE-0J1S_E97UAuQ" },
+  { source: "gameranx", id: "UCNvzD7Z-g64bPXxGzaQaa4g" },
+  { source: "Bellular News", id: "UC3nPaf5MeeDTHA2JN7clidg" },
+  { source: "The Act Man", id: "UC7WDD6yHgzdqijHluCi1z-Q" },
+  { source: "penguinz0", id: "UCq6VFHwMzcMXbuKyG7SQYIg" },
+  { source: "Luke Stephens", id: "UCe4_UPAmhz2sqorGbF8oZHA" },
+  { source: "Alanah Pearce", id: "UCKpBmnEfSy20al-Fk_2YzVA" },
+  { source: "Skill Up", id: "UCZ7AeeVbyslLM_8-nVy2B8Q" },
+  { source: "Kinda Funny Games", id: "UCT6QFE3peNry9PdO5uGj96g" },
+  { source: "Easy Allies", id: "UCZrxXp1reP8E353rZsB3jaA" },
+  { source: "Second Wind", id: "UC1wZGocgLvopgOqBUFCyIJA" },
+  { source: "Noclip", id: "UC0fDG3byEcMtbOqPMymDNbw" },
+  { source: "People Make Games", id: "UCZB6V9fUov0Mx_us3MWWILg" },
+  { source: "Jacob Geller", id: "UCeTfBygNb1TahcNpZyELO8g" },
+  { source: "Razbuten", id: "UCfHmyqCntYHQ81ZukNu66rg" },
+  { source: "NakeyJakey", id: "UCSdma21fnJzgmPodhC9SJ3g" },
+  { source: "Girlfriend Reviews", id: "UC2eEGT06FrWFU6VBnPOR9lg" },
+  { source: "MandaloreGaming", id: "UClOGLGPOqlAiLmOvXW5lKbw" },
+  { source: "Summoning Salt", id: "UCtUbO6rBht0daVIOGML3c8w" },
+  { source: "Caddicarus", id: "UCOkL7q2SeGZeZuj22njMYEA" },
+  { source: "ACG", id: "UCK9_x1DImhU-eolIay5rb2Q" },
+  { source: "Jauwn", id: "UC-nIhxjNqjcm8EmpPWBg3wA" },
+  { source: "videogamedunkey", id: "UCsvn_Po0SmunchJYOWpOxMg" },
 ];
 
 /**
@@ -136,9 +189,9 @@ const YOUTUBE = [
  * is what the reader gets, and a slow channel costs the other sources
  * nothing instead of taking the request down with it.
  */
-const YOUTUBE_DEADLINE_MS = 5000;
+const YOUTUBE_DEADLINE_MS = 6000;
 /** A pause between feeds, because the rate is what YouTube objects to. */
-const YOUTUBE_GAP_MS = 200;
+const YOUTUBE_GAP_MS = 150;
 
 /**
  * YouTube rate-limits the burst, not the feed.
@@ -160,7 +213,7 @@ const YOUTUBE_GAP_MS = 200;
  * handles the local-dev fallback; standing up a second one would be a second
  * thing to configure for no gain.
  */
-const YOUTUBE_SLICE = 5;
+const YOUTUBE_SLICE = 7;
 const YOUTUBE_POOL_MAX = 500;
 
 /**
@@ -179,6 +232,23 @@ const YOUTUBE_POOL_MAX = 500;
  */
 const poolKeyFor = (source) =>
   `goss/youtube/${source.toLowerCase().replace(/[^a-z0-9]+/g, '-')}.json`;
+
+/** How many pool keys to have in flight at once. */
+const POOL_READ_LANES = 6;
+
+/** Map over items with a bounded number of them in flight, order preserved. */
+async function mapLimited(items, limit, fn) {
+  const queue = [...items.entries()];
+  const out = new Array(items.length);
+  const lane = async () => {
+    for (let next = queue.shift(); next; next = queue.shift()) {
+      const [index, item] = next;
+      out[index] = await fn(item);
+    }
+  };
+  await Promise.all(Array.from({ length: Math.max(1, Math.min(limit, items.length)) }, lane));
+  return out;
+}
 
 /**
  * PlayStation's own channel sits outside the rotation and is asked every
@@ -588,20 +658,28 @@ async function loadYouTubeAll(cutoff) {
     await new Promise((resolve) => setTimeout(resolve, YOUTUBE_GAP_MS));
   }
 
-  // Merged newest-wins over what previous rotations found, then aged out.
-  // Fetched rows come last so a re-fetch refreshes rather than duplicates.
-  const stored = (
-    await Promise.all(
-      YOUTUBE.map(async (channel) => {
-        try {
-          const blob = await loadBlob(poolKeyFor(channel.source));
-          return Array.isArray(blob?.videos) ? blob.videos : [];
-        } catch {
-          return [];
-        }
-      }),
-    )
-  ).flat();
+  /*
+   * Merged newest-wins over what previous rotations found, then aged out.
+   * Fetched rows come last so a re-fetch refreshes rather than duplicates.
+   *
+   * Six keys in flight, not thirty-four. A rebuild read the whole pool as
+   * empty one rotation after another rebuild had written three channels to
+   * it, and the data was still there when the next rotation looked: the
+   * reads had failed, not the writes. loadBlob answers {} for a read it
+   * could not do, so thirty-four of those at once failing together is
+   * indistinguishable from an empty pool. It is the same bound the price
+   * history settled on for the same store.
+   */
+  const perChannel = await mapLimited(YOUTUBE, POOL_READ_LANES, async (channel) => {
+    try {
+      const blob = await loadBlob(poolKeyFor(channel.source));
+      return Array.isArray(blob?.videos) ? blob.videos : null;
+    } catch {
+      return null;
+    }
+  });
+  const keysWithVideos = perChannel.filter((rows) => rows?.length > 0).length;
+  const stored = perChannel.flatMap((rows) => rows ?? []);
 
   const pool = new Map();
   for (const burst of [...stored, ...fetched]) {
@@ -652,7 +730,7 @@ async function loadYouTubeAll(cutoff) {
 
   diagnostics.set(
     'youtube',
-    `asked ${asked.length} (${asked.join(', ')}), got ${fetched.length} from ${answered.size}, pool ${videos.length} of ${stored.length} stored`,
+    `asked ${asked.length} (${asked.join(', ')}), got ${fetched.length} from ${answered.size}, pool ${videos.length} of ${stored.length} stored across ${keysWithVideos}/${YOUTUBE.length} keys`,
   );
 
   const unique = new Map();
