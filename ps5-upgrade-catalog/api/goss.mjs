@@ -20,6 +20,7 @@
  * this", never as "it is true that".
  */
 
+import { loadBlob, saveBlob } from './history.mjs';
 import { loadNews } from './news.mjs';
 
 const BSKY = 'https://api.bsky.app/xrpc';
@@ -87,11 +88,11 @@ const QUERIES = [
  */
 const YOUTUBE = [
   // PlayStation's own, which is where a State of Play lands first.
-  { source: 'PlayStation', id: 'UC-2Y8dQb0S6DtpxNgAKoJKA' },
+  { source: 'PlayStation', id: 'UC-2Y8dQb0S6DtpxNgAKoJKA', pinned: true },
   { source: 'PlayStation Access', id: 'UC6yzV_xgKn8r77FkcmZyMSg' },
   // Outlets. Push Square is the only PlayStation-only one in the list.
-  { source: 'IGN', id: 'UCKy1dAqELo0zrOtPkf0eTMw' },
-  { source: 'GameSpot', id: 'UCbu2SsF-Or3Rsn3NxqODImw' },
+  { source: 'IGN', id: 'UCKy1dAqELo0zrOtPkf0eTMw', pinned: true },
+  { source: 'GameSpot', id: 'UCbu2SsF-Or3Rsn3NxqODImw', pinned: true },
   { source: 'GameSpot Trailers', id: 'UCUnRn1f78foyP26XGkRfWsA' },
   { source: 'Push Square', id: 'UCbI-X9F07inmxYvQKDBOU7Q' },
   { source: 'Eurogamer', id: 'UCciKycgzURdymx-GRSY2_dA' },
@@ -135,8 +136,45 @@ const YOUTUBE = [
  * is what the reader gets, and a slow channel costs the other sources
  * nothing instead of taking the request down with it.
  */
-const YOUTUBE_LANES = 8;
+const YOUTUBE_LANES = 5;
 const YOUTUBE_DEADLINE_MS = 6000;
+
+/**
+ * YouTube rate-limits the burst, not the feed.
+ *
+ * With three channels, all three answered from production. With thirty-four
+ * asked at once, twenty-three came back 404 and PlayStation and IGN were
+ * among them, having served ten entries each twenty minutes earlier. The
+ * feeds are fine; asking for the whole roster in one breath is not.
+ *
+ * So each rebuild asks for ten channels, the window moves on by ten, and
+ * what comes back is merged into a stored pool rather than replacing it.
+ * Over about an hour of rebuilds the whole roster has been asked, while no
+ * single request ever asks for more than ten. The reader sees the pool, so
+ * the rotation is invisible to them: a channel that answered an hour ago is
+ * still in the feed, and a channel that 404s this time keeps what it had.
+ *
+ * The pool rides in the price-history blob store under its own key prefix.
+ * That store is just "this app's durable JSON" and its helper already
+ * handles the local-dev fallback; standing up a second one would be a second
+ * thing to configure for no gain.
+ */
+const YOUTUBE_SLICE = 10;
+const YOUTUBE_POOL_KEY = 'goss/youtube-pool.json';
+const YOUTUBE_POOL_MAX = 500;
+
+/**
+ * Three channels sit outside the rotation and are asked every time.
+ *
+ * Waiting your turn is fine for a documentary and wrong for a State of Play:
+ * at ten a rotation a channel comes round about every fifty minutes, which
+ * is a long time for the feed not to know PlayStation just announced
+ * something. These three are also exactly the three that answered 3/3 back
+ * when the roster was three, so asking for them every rebuild is the shape
+ * already known to work.
+ */
+const YOUTUBE_PINNED = YOUTUBE.filter((channel) => channel.pinned);
+const YOUTUBE_ROTATING = YOUTUBE.filter((channel) => !channel.pinned);
 
 /** Resolved through the iTunes search API, which needs no key either. */
 const PODCASTS = [
@@ -510,12 +548,19 @@ const videoKey = (burst) => {
   return `${burst.kind}|${head.toLowerCase().replace(/[^a-z0-9]+/g, ' ').trim()}`;
 };
 
-/** Every channel, in waves, against one deadline. */
+/** This rebuild's ten channels, in waves, against one deadline. */
 async function loadYouTubeAll(cutoff) {
-  const deadline = Date.now() + YOUTUBE_DEADLINE_MS;
-  const queue = [...YOUTUBE];
-  const collected = [];
+  const take = Math.max(0, Math.min(YOUTUBE_SLICE - YOUTUBE_PINNED.length, YOUTUBE_ROTATING.length));
+  const turn = Math.floor(Date.now() / CACHE_TTL_MS);
+  const start = (turn * take) % YOUTUBE_ROTATING.length;
+  const queue = [
+    ...YOUTUBE_PINNED,
+    ...Array.from({ length: take }, (_, offset) => YOUTUBE_ROTATING[(start + offset) % YOUTUBE_ROTATING.length]),
+  ];
+  const asked = queue.map((channel) => channel.source);
 
+  const deadline = Date.now() + YOUTUBE_DEADLINE_MS;
+  const fetched = [];
   const lane = async () => {
     for (let channel = queue.shift(); channel; channel = queue.shift()) {
       const left = deadline - Date.now();
@@ -523,18 +568,42 @@ async function loadYouTubeAll(cutoff) {
         diagnostics.set(`youtube:${channel.source}`, 'out of time');
         continue;
       }
-      collected.push(...(await loadYouTube(channel, cutoff, left)));
+      fetched.push(...(await loadYouTube(channel, cutoff, left)));
     }
   };
-
   await Promise.all(Array.from({ length: YOUTUBE_LANES }, lane));
 
+  // Merged newest-wins over what previous rotations found, then aged out.
+  // Fetched rows come last so a re-fetch refreshes rather than duplicates.
+  let stored = [];
+  try {
+    const blob = await loadBlob(YOUTUBE_POOL_KEY);
+    if (Array.isArray(blob?.videos)) stored = blob.videos;
+  } catch {
+    // No pool yet, or no store at all. This rebuild's ten are the pool.
+  }
+
+  const pool = new Map();
+  for (const burst of [...stored, ...fetched]) {
+    if (!burst?.link || !burst.publishedAt) continue;
+    if (Date.parse(burst.publishedAt) < cutoff) continue;
+    pool.set(burst.link, burst);
+  }
+  const videos = [...pool.values()]
+    .sort((a, b) => (b.publishedAt ?? '').localeCompare(a.publishedAt ?? ''))
+    .slice(0, YOUTUBE_POOL_MAX);
+
+  diagnostics.set(
+    'youtube',
+    `asked ${asked.length} (${asked.join(', ')}), got ${fetched.length}, pool ${videos.length} of ${stored.length} stored`,
+  );
+  await saveBlob(YOUTUBE_POOL_KEY, { videos, storedAt: new Date().toISOString() });
+
   const unique = new Map();
-  for (const burst of collected.sort((a, b) => (b.publishedAt ?? '').localeCompare(a.publishedAt ?? ''))) {
+  for (const burst of videos) {
     const key = videoKey(burst);
     if (!unique.has(key)) unique.set(key, burst);
   }
-  diagnostics.set('youtube', `${unique.size} kept of ${collected.length} fetched`);
   return [...unique.values()];
 }
 
