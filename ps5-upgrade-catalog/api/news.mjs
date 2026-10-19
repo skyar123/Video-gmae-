@@ -77,6 +77,13 @@ const FEEDS = [
     note: 'Worker-owned, queer staff',
   },
   {
+    // Kept deliberately while quiet. Its newest piece is 98 days old against
+    // a 45 day window, so it currently contributes nothing and the feed
+    // diagnostic says so plainly ("10 items, 0 in window") rather than
+    // reporting ten and meaning none. A quiet quarter is not a dead site for
+    // a small criticism co-op, and dropping a queer outlet over one is a
+    // worse error than carrying one fetch every fifteen minutes. Revisit if
+    // the gap passes a year, which is what killed Autostraddle's tag feed.
     source: 'Uppercut',
     url: 'https://uppercutcrit.com/feed/',
     tone: 'queer',
