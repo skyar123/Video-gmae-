@@ -579,7 +579,7 @@ async function loadYouTubeAll(cutoff) {
     const blob = await loadBlob(YOUTUBE_POOL_KEY);
     if (Array.isArray(blob?.videos)) stored = blob.videos;
   } catch {
-    // No pool yet, or no store at all. This rebuild's ten are the pool.
+    // No pool yet, or no store at all. This rebuild's five are the pool.
   }
 
   const pool = new Map();
@@ -592,11 +592,25 @@ async function loadYouTubeAll(cutoff) {
     .sort((a, b) => (b.publishedAt ?? '').localeCompare(a.publishedAt ?? ''))
     .slice(0, YOUTUBE_POOL_MAX);
 
+  /*
+   * An empty result never overwrites the pool.
+   *
+   * A pool of three came back from the store as zero one rebuild later, and
+   * the cause is this write: loadBlob answers {} for a store that is empty
+   * and for a read that failed, which are not the same thing, and a rebuild
+   * that read nothing and fetched nothing was saving that nothing over a
+   * perfectly good pool. Several instances rebuild independently, so it only
+   * takes one of them having a bad read to wipe what the others found.
+   *
+   * Nothing to add and nothing read means nothing to save. Every other case
+   * can only grow the pool or age it, so it is safe to write.
+   */
+  const worthWriting = fetched.length > 0 || stored.length > 0;
   diagnostics.set(
     'youtube',
-    `asked ${asked.length} (${asked.join(', ')}), got ${fetched.length}, pool ${videos.length} of ${stored.length} stored`,
+    `asked ${asked.length} (${asked.join(', ')}), got ${fetched.length}, pool ${videos.length} of ${stored.length} stored, ${worthWriting ? 'saved' : 'not saved'}`,
   );
-  await saveBlob(YOUTUBE_POOL_KEY, { videos, storedAt: new Date().toISOString() });
+  if (worthWriting) await saveBlob(YOUTUBE_POOL_KEY, { videos, storedAt: new Date().toISOString() });
 
   const unique = new Map();
   for (const burst of videos) {
