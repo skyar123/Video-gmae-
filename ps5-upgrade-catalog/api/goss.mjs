@@ -65,7 +65,14 @@ const VOICES = [
   { handle: 'nicolecarpenter.bsky.social', note: 'Polygon' },
   { handle: 'polygon.com', note: 'Polygon' },
   { handle: 'unwinnable.com', note: 'Unwinnable' },
-  { handle: 'timeextension.com', note: 'Retro' },
+  // Time Extension is deliberately not here, though its account is real and
+  // was confirmed like the rest. It has an RSS feed in the press list, and
+  // an outlet in both places loses stories: dedupe drops the press copy in
+  // favour of the post carrying engagement, and that post is then subject to
+  // the Bluesky allowance, which the press copy was not. Measured, it turned
+  // six Time Extension stories into two. Kotaku and Polygon are fine in both
+  // because Kotaku's press copies all survive and Polygon has no working
+  // feed to lose.
   { handle: 'lilsimsie.bsky.social', note: 'Sims' },
 ];
 
