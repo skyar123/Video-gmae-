@@ -71,6 +71,21 @@ const QUERIES = [
   'studio shut down',
 ];
 
+/**
+ * Channels whose uploads are mostly trailers and reveals.
+ *
+ * Each id was read off the channel's own page rather than guessed. Whether
+ * this works at all is a live question: the feed endpoint answers 404 from
+ * our build sandbox, but so do four of the news feeds that serve fine from
+ * production, so it is wired up behind the diagnostics and judged there. A
+ * channel that returns nothing simply contributes nothing.
+ */
+const YOUTUBE = [
+  { source: 'PlayStation', id: 'UC-2Y8dQb0S6DtpxNgAKoJKA' },
+  { source: 'IGN', id: 'UCKy1dAqELo0zrOtPkf0eTMw' },
+  { source: 'GameSpot', id: 'UCbu2SsF-Or3Rsn3NxqODImw' },
+];
+
 /** Resolved through the iTunes search API, which needs no key either. */
 const PODCASTS = [
   { source: 'Girl Mode', url: 'https://feeds.acast.com/public/shows/6393ec46b89a2a0010dee819' },
@@ -370,6 +385,65 @@ async function loadPodcast({ source, url }, cutoff) {
 }
 
 /* ------------------------------------------------------------------ *
+ * YouTube
+ * ------------------------------------------------------------------ */
+
+/** The uploads feed is Atom, so entries rather than items. */
+async function loadYouTube({ source, id }, cutoff) {
+  const controller = new AbortController();
+  const timer = setTimeout(() => controller.abort(), 8000);
+  try {
+    const res = await fetch(`https://www.youtube.com/feeds/videos.xml?channel_id=${id}`, {
+      signal: controller.signal,
+      headers: HEADERS,
+      redirect: 'follow',
+    });
+    if (!res.ok) {
+      diagnostics.set(`youtube:${source}`, `http ${res.status}`);
+      return [];
+    }
+    const xml = await res.text();
+    const blocks = xml.match(/<entry>[\s\S]*?<\/entry>/g) ?? [];
+    const kept = blocks
+      .slice(0, 10)
+      .map((block) => {
+        const title = plain(field(block, 'title') ?? '');
+        const link = (block.match(/<link[^>]*href="([^"]+)"/) || [])[1] ?? null;
+        const published = field(block, 'published');
+        const at = published ? Date.parse(plain(published)) : NaN;
+        return {
+          // Classified like anything else: an uploads feed carries
+          // interviews and reviews as well as trailers.
+          kind: classify(title),
+          channel: 'youtube',
+          source,
+          origin: `${source} on YouTube`,
+          note: 'Video',
+          author: source,
+          authorName: source,
+          avatar: null,
+          title,
+          summary: null,
+          link,
+          externalLink: null,
+          image: (block.match(/<media:thumbnail[^>]*url="([^"]+)"/) || [])[1] ?? null,
+          publishedAt: Number.isFinite(at) ? new Date(at).toISOString() : null,
+          heat: 0,
+          at,
+        };
+      })
+      .filter((row) => row.title && row.link && Number.isFinite(row.at) && row.at >= cutoff);
+    diagnostics.set(`youtube:${source}`, `${kept.length}/${blocks.length} recent`);
+    return kept.map(({ at: _at, ...rest }) => rest);
+  } catch (error) {
+    diagnostics.set(`youtube:${source}`, error?.name === 'AbortError' ? 'timeout' : 'failed');
+    return [];
+  } finally {
+    clearTimeout(timer);
+  }
+}
+
+/* ------------------------------------------------------------------ *
  * Press
  * ------------------------------------------------------------------ */
 
@@ -472,13 +546,14 @@ export async function loadGoss() {
   const cutoff = now - SEARCH_WINDOW_DAYS * DAY_MS;
   const since = new Date(cutoff).toISOString();
 
-  const [searched, voices, pods, press] = await Promise.all([
+  const [searched, voices, pods, press, videos] = await Promise.all([
     searchGoss(since),
     voiceGoss(cutoff),
     Promise.all(PODCASTS.map((pod) => loadPodcast(pod, now - 21 * DAY_MS))).then((all) =>
       all.flat(),
     ),
     pressGoss(),
+    Promise.all(YOUTUBE.map((channel) => loadYouTube(channel, cutoff))).then((all) => all.flat()),
   ]);
 
   const byKind = new Map();
@@ -486,7 +561,7 @@ export async function loadGoss() {
 
   // Bluesky first so that when the same story exists as both a post and a
   // headline, the version with the engagement number on it survives dedupe.
-  for (const burst of dedupe([...searched, ...voices, ...pods, ...press])) {
+  for (const burst of dedupe([...searched, ...voices, ...pods, ...videos, ...press])) {
     const bucket = byKind.get(burst.kind);
     if (bucket) bucket.push(burst);
   }
@@ -522,6 +597,7 @@ export async function loadGoss() {
       // cutting the slower queer outlets hardest.
       ...pick('press', 0, 60),
       ...pick('pod', 0, 10),
+      ...pick('youtube', 0, 12),
     ]) {
       chosen.set(burst.link, burst);
     }
