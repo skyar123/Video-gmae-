@@ -1120,6 +1120,7 @@ function ModalSheet({ labelledBy, onClose, children }) {
 
 function GameModal({
   game,
+  onHide,
   live,
   pool,
   byTitle,
@@ -1223,6 +1224,17 @@ function GameModal({
             <div className="flex shrink-0 items-center gap-2 sm:gap-1">
               <WishlistButton wishlisted={wishlisted} onToggle={onToggleWishlist} withLabel />
               <OwnedButton owned={owned} onToggle={onToggleOwned} withLabel />
+              {onHide && (
+                <button
+                  type="button"
+                  onClick={onHide}
+                  aria-label={`Stop showing ${game.title}`}
+                  title="Not for me"
+                  className="tap inline-flex items-center justify-center rounded-lg px-2.5 text-sm text-slate-400 dark:text-slate-500 transition-colors hover:bg-slate-100 dark:hover:bg-slate-800 hover:text-slate-700 sm:h-9 sm:min-h-0"
+                >
+                  <X className="h-4 w-4" />
+                </button>
+              )}
             </div>
           </div>
 
@@ -1687,8 +1699,6 @@ function GameCard({
   saving,
   actions = true,
   onToggleWishlist,
-  onToggleOwned,
-  onHide,
   onOpen,
 }) {
   const ratings = live?.ratings ?? game.ratings;
@@ -1731,7 +1741,12 @@ function GameCard({
               it is still on the open game, where there is room for it. What is
               left here is what you scan by: the name, a muted line of context,
               and the price. */}
-          <h2 className="mb-1.5 line-clamp-2 text-sm font-bold leading-tight text-slate-800 dark:text-slate-100 sm:pr-7 sm:text-base">
+          {/* Always two lines tall, whether the title needs them or not.
+              The grid equalises the height of a row, so a one-line title next
+              to a two-line one left its card stretched with a band of nothing
+              between the genre and the price. Reserving the second line makes
+              the two cards the same height for the same reason. */}
+          <h2 className="mb-1.5 line-clamp-2 min-h-[2.5rem] text-sm font-bold leading-tight text-slate-800 dark:text-slate-100 sm:min-h-[3rem] sm:pr-7 sm:text-base">
             {game.title}
           </h2>
           {/* Assembled as a list and joined, rather than each part carrying
@@ -1791,7 +1806,7 @@ function GameCard({
               its chunk landed — the whole page shuffling under your thumb
               while you were reading it — and the fifty titles the store has
               no readable price for just ended early with no explanation. */}
-          <div className="mt-auto min-h-[2.25rem] pt-3">
+          <div className="mt-auto min-h-[2.25rem] pr-10 pt-2">
             {live?.price ? (
               <>
                 <p className="flex items-baseline gap-1.5">
@@ -1846,65 +1861,31 @@ function GameCard({
         </div>
       </button>
 
-      {/* Pointer: a hover rail tucked into the corner, out of the way until
-          wanted. Touch: three full-height targets in a row, because a stack of
-          36px buttons over the art is a mis-tap waiting to happen.
-
-          A store row has nowhere to live in the wishlist yet, so it renders
-          without the rail rather than with a heart that quietly does nothing
-          when you press it. */}
+      {/* One control on a card, not six.
+          
+          Every card carried three: a hover rail for pointers and a bordered
+          row of three full-width targets for touch. Forty eight cards made
+          that a hundred and forty four buttons on one screen, and the row was
+          the loudest thing on it. Owning and hiding a game are things you do
+          once, from the game itself, so they live in its page now; wanting
+          one is the thing you do while scanning, so it stays here.
+          
+          It sits over the price row rather than below it, so losing the rail
+          took forty four pixels off every card instead of moving them. */}
       {actions && (
-        <>
-      <div className="pointer-only absolute right-1.5 top-1.5 flex flex-col items-end gap-0.5 rounded-xl bg-white/75 dark:bg-slate-900/75 p-0.5 backdrop-blur-sm">
-        <WishlistButton wishlisted={wishlisted} onToggle={onToggleWishlist} />
-        <OwnedButton owned={owned} onToggle={onToggleOwned} />
-        <button
-          type="button"
-          onClick={(event) => {
-            event.stopPropagation();
-            onHide();
-          }}
-          aria-label={`Stop showing ${game.title}`}
-          title="Not for me"
-          className="inline-flex h-8 items-center justify-center rounded-lg px-2.5 text-slate-300 dark:text-slate-600 opacity-0 transition-all duration-200 hover:bg-slate-100 hover:text-slate-600 focus:opacity-100 group-hover:opacity-100"
-        >
-          <X className="h-4 w-4" />
-        </button>
-      </div>
-
-      <div className="touch-only grid grid-cols-3 divide-x divide-slate-100 dark:divide-slate-800 border-t border-slate-100 dark:border-slate-800">
         <button
           type="button"
           onClick={onToggleWishlist}
           aria-pressed={wishlisted}
           aria-label={wishlisted ? `Remove ${game.title} from wishlist` : `Add ${game.title} to wishlist`}
-          className={`flex h-11 items-center justify-center transition-colors active:bg-slate-100 ${
-            wishlisted ? 'bg-rose-50 dark:bg-rose-950/40 text-rose-600 dark:text-rose-300' : 'text-slate-400 dark:text-slate-500'
+          className={`tap absolute bottom-1 right-1 z-10 inline-flex items-center justify-center rounded-full transition-all duration-200 ease-spring active:scale-90 ${
+            wishlisted
+              ? 'text-rose-500'
+              : 'text-slate-300 dark:text-slate-600 hover:text-rose-400'
           }`}
         >
-          <Heart className={`h-[18px] w-[18px] ${wishlisted ? 'fill-current' : ''}`} />
+          <Heart className={`h-[22px] w-[22px] ${wishlisted ? 'fill-current' : ''}`} />
         </button>
-        <button
-          type="button"
-          onClick={onToggleOwned}
-          aria-pressed={owned}
-          aria-label={owned ? `Remove ${game.title} from library` : `Mark ${game.title} as owned`}
-          className={`flex h-11 items-center justify-center transition-colors active:bg-slate-100 ${
-            owned ? 'bg-emerald-50 dark:bg-emerald-950/40 text-emerald-600 dark:text-emerald-300' : 'text-slate-400 dark:text-slate-500'
-          }`}
-        >
-          <CircleCheck className="h-[18px] w-[18px]" />
-        </button>
-        <button
-          type="button"
-          onClick={onHide}
-          aria-label={`Stop showing ${game.title}`}
-          className="flex h-11 items-center justify-center text-slate-300 dark:text-slate-600 transition-colors active:bg-slate-100"
-        >
-          <X className="h-[18px] w-[18px]" />
-        </button>
-      </div>
-        </>
       )}
     </div>
   );
@@ -2408,13 +2389,11 @@ function FeedSlide({
   game,
   live,
   wishlisted,
-  owned,
   reason,
   actions = true,
   muted,
   onToggleMuted,
   onToggleWishlist,
-  onToggleOwned,
   onOpen,
 }) {
   // The trailer plays only while this slide is the one on screen, and starts
@@ -2547,7 +2526,13 @@ function FeedSlide({
             </div>
           </div>
 
-          {/* Action rail, thumb-reachable on a phone. */}
+          {/* Action rail, thumb-reachable on a phone.
+              
+              Three things, not five. Marking a game owned and opening its
+              store page both sat here and both already live on the game's
+              own page, which is one tap away through the middle button. What
+              is left is what you actually do while scrolling: want it, look
+              at it, hear it. */}
           <div className="flex shrink-0 flex-col items-center gap-3">
             {actions && (
               <>
@@ -2561,17 +2546,6 @@ function FeedSlide({
               }`}
             >
               <Heart className={`h-5 w-5 ${wishlisted ? 'fill-current' : ''}`} />
-            </button>
-            <button
-              type="button"
-              onClick={onToggleOwned}
-              aria-pressed={owned}
-              aria-label={owned ? 'Remove from library' : 'Add to library'}
-              className={`rounded-full p-3 backdrop-blur transition-transform duration-200 ease-spring active:scale-90 ${
-                owned ? 'bg-emerald-600 text-white' : 'bg-white/15 text-white hover:bg-white/25'
-              }`}
-            >
-              <CircleCheck className="h-5 w-5" />
             </button>
               </>
             )}
@@ -2596,15 +2570,6 @@ function FeedSlide({
                 {muted ? <VolumeX className="h-5 w-5" /> : <Volume2 className="h-5 w-5" />}
               </button>
             )}
-            <a
-              href={storeLink(game)}
-              target="_blank"
-              rel="noopener noreferrer"
-              aria-label={`${game.title} on the PS Store`}
-              className="rounded-full bg-white/15 p-3 text-white backdrop-blur transition-transform duration-200 ease-spring hover:bg-white/25 active:scale-90"
-            >
-              <ExternalLink className="h-5 w-5" />
-            </a>
           </div>
         </div>
       </div>
@@ -4037,11 +4002,9 @@ function StoreFeed({ query, curatedByName, saved, muted, onToggleMuted, onOpenCu
               live={game.storeLive}
               reason={twin ? 'In your catalog, with the full write-up' : undefined}
               wishlisted={saved.wishlist.has(key)}
-              owned={saved.library.has(key)}
               muted={muted}
               onToggleMuted={onToggleMuted}
               onToggleWishlist={() => saved.toggle(row, twin, 'wishlist')}
-              onToggleOwned={() => saved.toggle(row, twin, 'owned')}
               onOpen={() => (twin ? onOpenCurated(twin.id) : onOpenStore(row))}
             />
           );
@@ -4175,8 +4138,6 @@ function StorePanel({ query, curatedByName, saved, onOpenCurated, onOpenStore })
                     wishlisted={saved.wishlist.has(key)}
                     owned={saved.library.has(key)}
                     onToggleWishlist={() => saved.toggle(row, twin, 'wishlist')}
-                    onToggleOwned={() => saved.toggle(row, twin, 'owned')}
-                    onHide={() => saved.hide(key)}
                     onOpen={() => (twin ? onOpenCurated(twin.id) : onOpenStore(row))}
                   />
                 );
@@ -6305,12 +6266,10 @@ export default function App() {
               game={game}
               live={byTitle.get(game.title) ?? game.storeLive}
               wishlisted={wishlist.has(game.id)}
-              owned={library.has(game.id)}
               reason={filters.collection === 'genius' ? geniusReasons.get(game.id) : undefined}
               muted={feedMuted}
               onToggleMuted={toggleFeedMuted}
               onToggleWishlist={() => saveGame(game, 'wishlist')}
-              onToggleOwned={() => saveGame(game, 'owned')}
               onOpen={() => openGame(game)}
             />
           ))
@@ -6424,8 +6383,6 @@ export default function App() {
                 reason={filters.collection === 'genius' ? geniusReasons.get(game.id) : undefined}
                 saving={savingsById.get(game.id)}
                 onToggleWishlist={() => saveGame(game, 'wishlist')}
-                onToggleOwned={() => saveGame(game, 'owned')}
-                onHide={() => hideGame(game.id)}
                 onOpen={() => openGame(game)}
               />
             ))}
@@ -6489,6 +6446,10 @@ export default function App() {
           wishlisted={wishlist.has(activeGame.id)}
           owned={library.has(activeGame.id)}
           reason={geniusReasons.get(activeGame.id)}
+          onHide={() => {
+            hideGame(activeGame.id);
+            setActiveGameId(null);
+          }}
           dealWatched={dealAlerts.has(activeGame.id)}
           alertsArmed={alerts.pushEnabled || alerts.emailConfirmed}
           onToggleDealAlert={() => toggleDealAlert(activeGame.id)}
