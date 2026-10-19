@@ -2630,8 +2630,7 @@ function BottomBar({ view, onView, onBriefing, onSurprise, canSurprise, updates 
   const items = [
     { key: 'grid', label: 'Browse', icon: LayoutGrid, active: view === 'grid' },
     { key: 'feed', label: 'Feed', icon: Rows3, active: view === 'feed' },
-    { key: 'goss', label: 'Goss', icon: Flame },
-    { key: 'news', label: 'News', icon: Newspaper, badge: updates },
+    { key: 'goss', label: 'Goss', icon: Flame, badge: updates },
     { key: 'surprise', label: 'Tonight', icon: Dices, disabled: !canSurprise },
   ];
 
@@ -2648,8 +2647,7 @@ function BottomBar({ view, onView, onBriefing, onSurprise, canSurprise, updates 
             disabled={item.disabled}
             aria-current={item.active ? 'page' : undefined}
             onClick={() => {
-              if (item.key === 'goss') onBriefing('goss');
-              else if (item.key === 'news') onBriefing();
+              if (item.key === 'goss') onBriefing();
               else if (item.key === 'surprise') onSurprise();
               else onView(item.key);
             }}
@@ -4195,12 +4193,6 @@ function useDeferredEndpoint(url, active) {
   return { ...state, reload: () => load(true) };
 }
 
-const TONE_STYLES = {
-  queer: 'bg-violet-100 text-violet-700 dark:text-violet-300',
-  playstation: 'bg-indigo-100 text-indigo-700 dark:text-indigo-300',
-  general: 'bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-300',
-};
-
 function relativeTime(iso) {
   if (!iso) return '';
   const minutes = Math.round((Date.now() - new Date(iso).getTime()) / 60000);
@@ -4208,201 +4200,6 @@ function relativeTime(iso) {
   if (minutes < 60) return `${Math.max(minutes, 1)}m ago`;
   if (minutes < 1440) return `${Math.round(minutes / 60)}h ago`;
   return `${Math.round(minutes / 1440)}d ago`;
-}
-
-const NEWS_TONES = [
-  ['all', 'Everything'],
-  ['playstation', 'PlayStation'],
-  ['queer', 'Queer press'],
-  ['general', 'Everyone else'],
-];
-
-/** Today, Yesterday, then the weekday, then the date. */
-function newsDayLabel(iso) {
-  const at = iso ? new Date(iso) : null;
-  if (!at || Number.isNaN(at.getTime())) return 'Earlier';
-  const midnight = (date) => new Date(date.getFullYear(), date.getMonth(), date.getDate());
-  const days = Math.round((midnight(new Date()) - midnight(at)) / 86_400_000);
-  if (days <= 0) return 'Today';
-  if (days === 1) return 'Yesterday';
-  if (days < 7) return at.toLocaleDateString([], { weekday: 'long' });
-  return at.toLocaleDateString([], { month: 'long', day: 'numeric' });
-}
-
-function NewsPanel({ items, status, onReload }) {
-  const [tone, setTone] = useState('all');
-  const shown = tone === 'all' ? items : items.filter((item) => item.tone === tone);
-
-  if (status === 'loading' && items.length === 0) {
-    return <PanelMessage icon={Loader2} spin label="Reading the feeds..." />;
-  }
-  if (items.length === 0) {
-    return (
-      <PanelMessage
-        icon={Newspaper}
-        label="No stories came back just now."
-        action={{ label: 'Try again', onClick: onReload }}
-      />
-    );
-  }
-
-  // The lead wants a picture, and the newest story does not always have one,
-  // so this reaches a little way down rather than heading the page with a
-  // grey box.
-  const leadIndex = shown.findIndex((item, index) => item.image && index < 5);
-  const lead = leadIndex >= 0 ? shown[leadIndex] : shown[0];
-
-  // Grouped by day so a long scroll reads as a week rather than one column of
-  // undifferentiated headlines. The lead is grouped along with everything
-  // else: pulled out above the first date it looked like it came from a
-  // different day than the stories under it, which at one point meant a story
-  // from "3h ago" sitting above a heading that said Yesterday.
-  const days = [];
-  for (const item of shown) {
-    const label = newsDayLabel(item.publishedAt);
-    const last = days[days.length - 1];
-    if (last && last.label === label) last.items.push(item);
-    else days.push({ label, items: [item] });
-  }
-
-  return (
-    <>
-      <div className="no-scrollbar mb-3 flex gap-1.5 overflow-x-auto">
-        {NEWS_TONES.map(([value, label]) => {
-          const count =
-            value === 'all' ? items.length : items.filter((item) => item.tone === value).length;
-          if (count === 0 && value !== 'all') return null;
-          return (
-            <button
-              key={value}
-              type="button"
-              onClick={() => setTone(value)}
-              aria-pressed={tone === value}
-              className={`shrink-0 rounded-full px-2.5 py-1 text-xs font-medium transition-all duration-200 ease-spring active:scale-95 ${
-                tone === value
-                  ? 'bg-slate-900 text-white dark:bg-slate-100 dark:text-slate-900'
-                  : 'bg-white dark:bg-slate-900 text-slate-600 dark:text-slate-300 ring-1 ring-inset ring-slate-200 dark:ring-slate-700 hover:bg-slate-100'
-              }`}
-            >
-              {label}
-              <span className="ml-1 opacity-60">{count}</span>
-            </button>
-          );
-        })}
-      </div>
-
-      {shown.length === 0 ? (
-        <PanelMessage icon={Newspaper} label="Nothing from that corner right now." />
-      ) : (
-        <>
-          {days.map((day) => (
-            <section key={day.label} className="mb-4">
-              <h4 className="sticky top-0 z-10 -mx-3 bg-slate-50/90 px-3 py-1.5 text-[11px] font-bold uppercase tracking-wide text-slate-400 backdrop-blur dark:bg-slate-950/90 dark:text-slate-500">
-                {day.label}
-              </h4>
-              <ul className="space-y-2 pt-2">
-                {day.items.map((item) =>
-                  item === lead ? (
-                    <li key={item.link}>
-          <a
-            href={lead.link}
-            target="_blank"
-            rel="noopener noreferrer"
-            className="group mb-4 block overflow-hidden rounded-2xl border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-900 transition-all duration-200 ease-spring hover:-translate-y-0.5 hover:shadow-lg active:scale-[0.99]"
-          >
-            {lead.image && (
-              <div className="aspect-[16/9] w-full overflow-hidden bg-slate-100 dark:bg-slate-800">
-                <img
-                  src={lead.image}
-                  alt=""
-                  loading="lazy"
-                  onError={(event) => {
-                    // Hiding only the image would leave the sixteen by nine
-                    // box behind it as a large empty panel.
-                    const box = event.currentTarget.parentElement;
-                    if (box) box.hidden = true;
-                    else event.currentTarget.hidden = true;
-                  }}
-                  className="h-full w-full object-cover transition-transform duration-500 group-hover:scale-105"
-                />
-              </div>
-            )}
-            <div className="p-3.5">
-              <div className="mb-1.5 flex items-center gap-1.5 text-[11px] font-semibold">
-                <span className={`rounded px-1.5 py-0.5 ${TONE_STYLES[lead.tone] ?? TONE_STYLES.general}`}>
-                  {lead.source}
-                </span>
-                {lead.note && (
-                  <span className="truncate font-normal text-violet-500">{lead.note}</span>
-                )}
-                <span className="ml-auto shrink-0 text-slate-400 dark:text-slate-500">
-                  {relativeTime(lead.publishedAt)}
-                </span>
-              </div>
-              <h3 className="text-lg font-bold leading-snug text-slate-900 dark:text-slate-50">
-                {lead.title}
-              </h3>
-              {lead.summary && (
-                <p className="mt-1.5 line-clamp-3 text-sm leading-relaxed text-slate-500 dark:text-slate-400">
-                  {lead.summary}
-                </p>
-              )}
-            </div>
-          </a>
-                    </li>
-                  ) : (
-                  <li key={item.link}>
-                    <a
-                      href={item.link}
-                      target="_blank"
-                      rel="noopener noreferrer"
-                      className="flex gap-3 rounded-xl border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-900 p-2.5 transition-all duration-200 ease-spring hover:-translate-y-0.5 hover:border-slate-300 hover:shadow-sm active:scale-[0.99]"
-                    >
-                      {item.image && (
-                        <img
-                          src={item.image}
-                          alt=""
-                          loading="lazy"
-                          onError={(event) => {
-                            event.currentTarget.hidden = true;
-                          }}
-                          className="h-16 w-24 shrink-0 rounded-lg bg-slate-100 dark:bg-slate-800 object-cover"
-                        />
-                      )}
-                      <div className="min-w-0 flex-1">
-                        <div className="mb-1 flex items-center gap-1.5 text-[11px] font-semibold">
-                          <span
-                            className={`rounded px-1.5 py-0.5 ${TONE_STYLES[item.tone] ?? TONE_STYLES.general}`}
-                          >
-                            {item.source}
-                          </span>
-                          {tone === 'queer' && item.note && (
-                            <span className="truncate font-normal text-violet-500">{item.note}</span>
-                          )}
-                          <span className="ml-auto shrink-0 text-slate-400 dark:text-slate-500">
-                            {relativeTime(item.publishedAt)}
-                          </span>
-                        </div>
-                        <p className="line-clamp-2 text-sm font-semibold leading-snug text-slate-800 dark:text-slate-100">
-                          {item.title}
-                        </p>
-                        {item.summary && (
-                          <p className="mt-0.5 line-clamp-2 text-xs leading-relaxed text-slate-500 dark:text-slate-400">
-                            {item.summary}
-                          </p>
-                        )}
-                      </div>
-                    </a>
-                  </li>
-                  ),
-                )}
-              </ul>
-            </section>
-          ))}
-        </>
-      )}
-    </>
-  );
 }
 
 /* ------------------------------------------------------------------ *
@@ -4540,7 +4337,16 @@ function GossCard({ burst, fresh }) {
             <p className="mb-0.5 truncate text-[11px] font-semibold text-slate-500 dark:text-slate-400">
               {post ? (burst.authorName ?? burst.author) : burst.source}
               {burst.note && (
-                <span className="font-normal text-slate-400 dark:text-slate-500"> · {burst.note}</span>
+                <span
+                  className={`font-normal ${
+                    burst.tone === 'queer'
+                      ? 'text-violet-500 dark:text-violet-300'
+                      : 'text-slate-400 dark:text-slate-500'
+                  }`}
+                >
+                  {' '}
+                  · {burst.note}
+                </span>
               )}
             </p>
             <p className="line-clamp-3 text-sm font-semibold leading-snug text-slate-800 dark:text-slate-100">
@@ -4625,7 +4431,16 @@ function GossPanel({ bursts, counts, status, onReload }) {
     );
   }
 
-  const picked = kind === 'all' ? bursts : bursts.filter((burst) => burst.kind === kind);
+  // "Queer press" filters on where a story came from rather than what sort
+  // of thing it is, which is a different axis to the rest. It is here
+  // because folding the news column into this feed would otherwise have
+  // quietly removed the one filter that column existed to offer.
+  const picked =
+    kind === 'all'
+      ? bursts
+      : kind === 'queer-press'
+        ? bursts.filter((burst) => burst.tone === 'queer')
+        : bursts.filter((burst) => burst.kind === kind);
 
   // Top ranks on how much a post is being talked about. Podcasts and
   // headlines carry no engagement number at all, so they sort among
@@ -4641,6 +4456,7 @@ function GossPanel({ bursts, counts, status, onReload }) {
             new Date(b.publishedAt ?? 0) - new Date(a.publishedAt ?? 0),
         );
   const freshCount = bursts.filter(isFresh).length;
+  const queerPress = bursts.filter((burst) => burst.tone === 'queer').length;
   const chips = [
     ['all', 'Everything', bursts.length],
     ...GOSS_ORDER.filter((key) => (counts?.[key] ?? 0) > 0).map((key) => [
@@ -4648,6 +4464,7 @@ function GossPanel({ bursts, counts, status, onReload }) {
       GOSS_KINDS[key].label,
       counts[key],
     ]),
+    ...(queerPress > 0 ? [['queer-press', 'Queer press', queerPress]] : []),
   ];
 
   return (
@@ -4988,7 +4805,6 @@ function BriefingDrawer({
   onToggleSaved,
   updates,
 }) {
-  const news = useDeferredEndpoint('/api/news', open);
   const goss = useDeferredEndpoint('/api/goss', open);
 
   useEffect(() => {
@@ -5002,7 +4818,7 @@ function BriefingDrawer({
 
   if (!open) return null;
 
-  const active = tab === 'upcoming' ? upcoming : tab === 'goss' ? goss : news;
+  const active = tab === 'upcoming' ? upcoming : goss;
 
   return (
     <div className="fixed inset-0 z-40 flex justify-end" role="dialog" aria-modal="true" aria-label="News and releases">
@@ -5017,7 +4833,6 @@ function BriefingDrawer({
           <div className="flex flex-1 gap-1">
             {[
               ['goss', 'Goss', Flame],
-              ['news', 'News', Newspaper],
               ['upcoming', 'Upcoming', CalendarDays],
             ].map(([value, label, Icon]) => (
               <button
@@ -5062,12 +4877,6 @@ function BriefingDrawer({
               status={goss.status}
               onReload={goss.reload}
             />
-          ) : tab === 'news' ? (
-            <NewsPanel
-              items={news.data?.items ?? []}
-              status={news.status}
-              onReload={news.reload}
-            />
           ) : (
             <UpcomingPanel
               games={upcoming.data?.games ?? []}
@@ -5085,9 +4894,7 @@ function BriefingDrawer({
         <footer className="border-t border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-900 px-3 pb-[calc(0.5rem+var(--inset-bottom))] pt-2 text-[11px] text-slate-400 dark:text-slate-500">
           {tab === 'goss'
             ? 'Posts, headlines and episodes from the people who said them. Tap through for the source.'
-            : tab === 'news'
-              ? 'Headlines link straight to the publisher. Feeds refresh every 15 minutes.'
-              : 'Read from the PS Store nightly, so delayed games move themselves and new ones turn up on their own.'}
+            : 'Read from the PS Store nightly, so delayed games move themselves and new ones turn up on their own.'}
         </footer>
       </aside>
     </div>
@@ -5239,7 +5046,7 @@ export default function App() {
       live = false;
     };
   }, []);
-  const [briefing, setBriefing] = useState({ open: false, tab: 'news' });
+  const [briefing, setBriefing] = useState({ open: false, tab: 'goss' });
 
   // The calendar is fetched when the panel opens, and also when something is
   // being followed — that is the only way the header can say a date moved

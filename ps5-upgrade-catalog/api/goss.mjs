@@ -78,8 +78,12 @@ const PODCASTS = [
   { source: 'Triple Click', url: 'https://feeds.simplecast.com/6WD3bDj7' },
 ];
 
-/** Enough to scroll for a while; the panel sorts and filters what it gets. */
-const MAX_BURSTS = 140;
+/**
+ * Enough to scroll for a while; the panel sorts and filters what it gets.
+ * Higher since the news column was folded in, because this is now the only
+ * feed and has to carry what both of them did.
+ */
+const MAX_BURSTS = 220;
 
 const DAY_MS = 24 * 60 * 60 * 1000;
 const CACHE_TTL_MS = 15 * 60 * 1000;
@@ -213,6 +217,7 @@ function toBurst(post, { minLikes, origin, note = null }) {
 
   return {
     kind,
+    channel: 'bluesky',
     source: 'Bluesky',
     origin,
     note,
@@ -335,6 +340,7 @@ async function loadPodcast({ source, url }, cutoff) {
       );
       return {
         kind: 'pod',
+        channel: 'pod',
         source,
         origin: source,
         note: 'Podcast',
@@ -376,8 +382,13 @@ async function pressGoss() {
       .filter((item) => item.title && item.link)
       .map((item) => ({
         kind: classify(`${item.title} ${item.summary ?? ''}`),
+        channel: 'press',
         source: item.source,
         origin: item.source,
+        // Which shelf of the press this came from, so the merged feed can
+        // still be narrowed to the queer and worker-owned outlets the way
+        // the separate news column could.
+        tone: item.tone ?? null,
         note: item.note ?? null,
         author: item.source,
         authorName: item.source,
@@ -481,21 +492,39 @@ export async function loadGoss() {
   }
 
   for (const [kind, bucket] of byKind) {
-    // Kept by both measures, not one.
+    // Kept by both measures, and per channel.
     //
-    // Ranking purely on engagement and then cutting at twelve threw away two
-    // thirds of what had been found, and everything that survived was a few
-    // days old: a post needs time to gather likes, so the newest thing in the
-    // feed could never be the loudest. Each kind now keeps its loudest and
-    // its newest, which is also what makes a Latest view worth having.
-    const loudest = [...bucket].sort((a, b) => b.heat - a.heat || newest(a, b));
-    const freshest = [...bucket].sort(newest);
-    const hotCap = kind === 'beef' ? 30 : 20;
-    const freshCap = kind === 'beef' ? 20 : 15;
+    // Ranking purely on engagement and cutting at twelve threw away two
+    // thirds of what had been found, and everything that survived was days
+    // old: a post needs time to gather likes, so the newest thing could never
+    // be the loudest. Each kind keeps its loudest and its newest, which is
+    // what makes a Latest view worth having.
+    //
+    // And it does that per channel, because they are not comparable. A
+    // Bluesky post carries an engagement count and a headline does not, so
+    // one list ranked by heat is a list of posts: when the news column was
+    // folded into this feed, the press went from seventy two stories to about
+    // twenty. Each channel gets its own allowance instead.
+    const pick = (channel, hot, fresh) => {
+      const rows = bucket.filter((burst) => burst.channel === channel);
+      const loudest = [...rows].sort((a, b) => b.heat - a.heat || newest(a, b));
+      const freshest = [...rows].sort(newest);
+      return [...loudest.slice(0, hot), ...freshest.slice(0, fresh)];
+    };
 
+    const wide = kind === 'beef';
     const chosen = new Map();
-    for (const burst of loudest.slice(0, hotCap)) chosen.set(burst.link, burst);
-    for (const burst of freshest.slice(0, freshCap)) chosen.set(burst.link, burst);
+    for (const burst of [
+      ...pick('bluesky', wide ? 22 : 14, wide ? 14 : 10),
+      // No real cap on the press: loadNews has already balanced it across
+      // publishers and cut it to about seventy stories, so capping again
+      // here only decides which of those the reader never sees, and it was
+      // cutting the slower queer outlets hardest.
+      ...pick('press', 0, 60),
+      ...pick('pod', 0, 10),
+    ]) {
+      chosen.set(burst.link, burst);
+    }
     byKind.set(kind, [...chosen.values()]);
   }
 
