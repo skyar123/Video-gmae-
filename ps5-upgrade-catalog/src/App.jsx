@@ -1,4 +1,5 @@
 import {
+  Fragment,
   useCallback,
   useDeferredValue,
   useEffect,
@@ -97,24 +98,25 @@ const UPGRADES = uniqueValues('ps5Upgrade');
  * Curated views over the catalog. "Best deals" is computed live from current
  * discounts; the rest come from tags in games.json.
  */
-// "Whole store" sits third, not last: on a phone the chip strip only shows
-// about three of these before it has to scroll, and a collection nobody can
-// see reads as a collection that does not exist.
+// Two axes share one strip: the first five are places to look, the rest are
+// moods. Both labels and counts are cut back hard, because eleven chips at
+// their full length measured 1308px wide on a 390px phone, three and a half
+// screens of sideways scrolling to reach the last one, and a collection
+// nobody can see reads as a collection that does not exist. One word where
+// one word will do; the blurb under the results carries the full sentence.
 const COLLECTIONS = [
-  { value: 'all', label: 'All games', tag: null },
-  // Deals come second because they are a main reason to open this at all, and
-  // the chip measured at x=415 on a 390px-wide screen: entirely off the edge,
-  // reachable only by discovering that the strip scrolls sideways.
-  { value: 'deals', label: 'Best deals', tag: null },
-  { value: 'genius', label: 'Genius picks', tag: null },
-  { value: 'store', label: 'Whole store', tag: null },
-  { value: 'soon', label: 'Coming soon', tag: null },
-  { value: 'graphics', label: 'Best graphics', tag: 'graphics' },
-  { value: 'social', label: 'Online & social', tag: 'social' },
-  { value: 'cozy', label: 'Cozy', tag: 'cozy' },
-  { value: 'classic', label: 'Classics', tag: 'classic' },
-  { value: 'queer', label: 'Queer stories', tag: 'queer' },
-  { value: 'disability', label: 'Disability rep', tag: 'disability' },
+  { value: 'all', label: 'All', tag: null },
+  // Deals come second because they are a main reason to open this at all.
+  { value: 'deals', label: 'Deals', tag: null },
+  { value: 'genius', label: 'For you', tag: null },
+  { value: 'store', label: 'Store', tag: null },
+  { value: 'soon', label: 'Soon', tag: null },
+  { value: 'graphics', label: 'Graphics', tag: 'graphics', mood: true },
+  { value: 'social', label: 'Social', tag: 'social', mood: true },
+  { value: 'cozy', label: 'Cozy', tag: 'cozy', mood: true },
+  { value: 'classic', label: 'Classics', tag: 'classic', mood: true },
+  { value: 'queer', label: 'Queer', tag: 'queer', mood: true },
+  { value: 'disability', label: 'Disability', tag: 'disability', mood: true },
 ];
 
 const COLLECTION_BLURBS = {
@@ -657,7 +659,7 @@ function AgeBadge({ ageRating, size = 'sm' }) {
     : 'No board rating found';
   return (
     <span
-      title={`${family.label} — content based. Board rating: ${board}`}
+      title={`${family.label}, content based. Board rating: ${board}`}
       className={`inline-flex items-center gap-1 rounded font-semibold ring-1 ring-inset ${pad} ${family.tone}`}
     >
       <Baby className="h-3.5 w-3.5" aria-hidden="true" />
@@ -780,7 +782,7 @@ function RatingChips({ ratings, size = 'sm' }) {
       )}
       {user != null && (
         <span
-          title={`${user.total.toLocaleString()} player reviews${user.label ? ` — ${user.label}` : ''}`}
+          title={`${user.total.toLocaleString()} player reviews${user.label ? `, ${user.label}` : ''}`}
           className={`inline-flex items-center gap-1 rounded-md font-semibold ring-1 ring-inset ${pad} ${scoreTone(user.percentPositive)}`}
         >
           <Users className="h-3.5 w-3.5" aria-hidden="true" />
@@ -828,7 +830,7 @@ function ProsAndCons({ ratings }) {
         {column('What they complain about', cons, 'text-rose-700 dark:text-rose-300', ThumbsDown, 'No recurring complaints.')}
       </div>
       <p className="mt-4 text-xs text-slate-400 dark:text-slate-500">
-        Themes counted across a sample of player reviews — the number is how many mentioned it.
+        Themes counted across a sample of player reviews. The number is how many mentioned it.
         Praise is counted only in positive reviews and complaints only in negative ones.
         {ratings.asOf && ` Sampled ${ratings.asOf}.`}
       </p>
@@ -1518,8 +1520,8 @@ function PredictionPanel({ live }) {
           When it does drop, expect around{' '}
           <span className="font-semibold text-slate-900 dark:text-slate-50">{prediction.depth.percent}% off</span>
           {prediction.depth.basis === 'seen-before'
-            ? ' — the deepest cut recorded for it so far.'
-            : ' — the usual depth for a game this age, at the store\u2019s standard steps.'}
+            ? ', the deepest cut recorded for it so far.'
+            : ', the usual depth for a game this age, at the store\u2019s standard steps.'}
         </p>
       )}
 
@@ -1940,7 +1942,7 @@ function EmptyState({ filters, wishlist, library, status, onClear, onSearchStore
             <p className="mt-1 text-sm">PS5-only titles are hidden. Turn them on to see more.</p>
           )}
           {filters.sale && status === 'loading' && (
-            <p className="mt-1 text-sm">Still checking prices — more may appear.</p>
+            <p className="mt-1 text-sm">Still checking prices, so more may appear.</p>
           )}
         </>
       )}
@@ -2177,7 +2179,7 @@ function WatchPanel({ game, favourites, onToggleFavourite }) {
                 href={creatorSearchLink(creator.handle, game.title)}
                 target="_blank"
                 rel="noopener noreferrer"
-                title={`${creator.identity} — ${creator.note}`}
+                title={`${creator.identity}: ${creator.note}`}
                 className="inline-flex items-center gap-1 rounded-full bg-slate-100 dark:bg-slate-800 px-2.5 py-1 text-xs text-slate-600 dark:text-slate-300 transition-colors hover:bg-slate-200"
               >
                 {creator.name}
@@ -4906,11 +4908,12 @@ function BriefingDrawer({
  * ------------------------------------------------------------------ */
 
 /** Compact on/off control used throughout the filter sheet. */
-function TogglePill({ active, onClick, icon: Icon, label, count, tone }) {
+function TogglePill({ active, onClick, icon: Icon, label, count, tone, ariaLabel }) {
   return (
     <button
       type="button"
       onClick={onClick}
+      aria-label={ariaLabel}
       aria-pressed={active}
       className={`inline-flex items-center gap-1.5 rounded-full px-2.5 py-1 text-xs font-medium transition-all duration-200 ease-spring active:scale-95 ${
         active ? `${tone} text-white` : 'bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-300 hover:bg-slate-200'
@@ -5858,32 +5861,44 @@ export default function App() {
               aria-label="Collections"
               className="no-scrollbar flex gap-1.5 overflow-x-auto pb-0.5"
             >
-              {COLLECTIONS.map((entry) => {
+              {COLLECTIONS.map((entry, index) => {
                 const active = filters.collection === entry.value;
                 return (
-                  <button
-                    key={entry.value}
-                    type="button"
-                    data-active={active ? 'true' : undefined}
-                    onClick={() => set('collection', entry.value)}
-                    aria-current={active ? 'true' : undefined}
-                    className={`inline-flex h-9 shrink-0 items-center gap-1.5 rounded-full px-3 text-xs font-medium transition-all duration-200 ease-spring active:scale-95 sm:h-7 ${
-                      active
-                        ? 'bg-slate-900 text-white dark:bg-slate-100 dark:text-slate-900'
-                        : 'bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-300 hover:bg-slate-200'
-                    }`}
-                  >
-                    {entry.value === 'deals' && <BadgePercent className="h-3.5 w-3.5" />}
-                    {entry.value === 'genius' && <Sparkles className="h-3.5 w-3.5" />}
-                    {entry.label}
-                    {collectionCounts[entry.value] != null && (
+                  <Fragment key={entry.value}>
+                    {/* The moods are a different question from the places, so
+                        the strip shows the seam rather than running eleven
+                        chips together as one undifferentiated row. */}
+                    {entry.mood && !COLLECTIONS[index - 1]?.mood && (
                       <span
-                        className={`tabular-nums ${active ? 'text-white/60' : 'text-slate-400 dark:text-slate-500'}`}
-                      >
-                        {collectionCounts[entry.value]}
-                      </span>
+                        aria-hidden="true"
+                        className="my-1.5 w-px shrink-0 bg-slate-200 dark:bg-slate-700"
+                      />
                     )}
-                  </button>
+                    <button
+                      type="button"
+                      data-active={active ? 'true' : undefined}
+                      onClick={() => set('collection', entry.value)}
+                      aria-current={active ? 'true' : undefined}
+                      className={`inline-flex h-9 shrink-0 items-center gap-1.5 rounded-full px-3 text-xs font-medium transition-all duration-200 ease-spring active:scale-95 sm:h-7 ${
+                        active
+                          ? 'bg-slate-900 text-white dark:bg-slate-100 dark:text-slate-900'
+                          : 'bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-300 hover:bg-slate-200'
+                      }`}
+                    >
+                      {entry.value === 'deals' && <BadgePercent className="h-3.5 w-3.5" />}
+                      {entry.value === 'genius' && <Sparkles className="h-3.5 w-3.5" />}
+                      {entry.label}
+                      {/* Only the open collection shows its size. Eleven
+                          counts spent 240px of a 390px screen telling you ten
+                          numbers you had not asked for, and the one you did
+                          want is for the list you are actually looking at. */}
+                      {active && collectionCounts[entry.value] != null && (
+                        <span className="tabular-nums text-white/60 dark:text-slate-900/50">
+                          {collectionCounts[entry.value]}
+                        </span>
+                      )}
+                    </button>
+                  </Fragment>
                 );
               })}
             </nav>
@@ -5974,27 +5989,46 @@ export default function App() {
                   count={wishlist.size}
                   tone="bg-rose-600"
                 />
+                {/* One pill for one question. Owned and not-owned were two
+                    controls spending two slots of a wrapping row on a single
+                    three-state answer, and they could never both be on. */}
                 <TogglePill
-                  active={filters.owned === 'owned'}
-                  onClick={() => set('owned', filters.owned === 'owned' ? 'any' : 'owned')}
-                  icon={CircleCheck}
-                  label="I own it"
-                  count={library.size}
-                  tone="bg-emerald-600"
+                  active={filters.owned !== 'any'}
+                  onClick={() =>
+                    set(
+                      'owned',
+                      filters.owned === 'any'
+                        ? 'owned'
+                        : filters.owned === 'owned'
+                          ? 'unowned'
+                          : 'any',
+                    )
+                  }
+                  icon={filters.owned === 'unowned' ? Sparkles : CircleCheck}
+                  label={
+                    filters.owned === 'owned'
+                      ? 'I own it'
+                      : filters.owned === 'unowned'
+                        ? 'Not owned'
+                        : 'Owned?'
+                  }
+                  ariaLabel={
+                    filters.owned === 'owned'
+                      ? 'Showing games you own. Tap for games you do not own.'
+                      : filters.owned === 'unowned'
+                        ? 'Showing games you do not own. Tap to stop filtering by library.'
+                        : 'Not filtering by library. Tap for games you own.'
+                  }
+                  count={filters.owned === 'owned' ? library.size : undefined}
+                  tone={filters.owned === 'unowned' ? 'bg-slate-700' : 'bg-emerald-600'}
                 />
-                <TogglePill
-                  active={filters.owned === 'unowned'}
-                  onClick={() => set('owned', filters.owned === 'unowned' ? 'any' : 'unowned')}
-                  icon={Sparkles}
-                  label="Not owned"
-                  tone="bg-slate-700"
-                />
+                {/* The pill's own on state says whether it is on, so the word
+                    "on" next to it was a label for the label. */}
                 <TogglePill
                   active={filters.includePs5}
                   onClick={() => set('includePs5', !filters.includePs5)}
                   icon={Gamepad2}
                   label="PS5-only"
-                  count={filters.includePs5 ? 'on' : 'off'}
                   tone="bg-violet-600"
                 />
 
@@ -6172,7 +6206,7 @@ export default function App() {
             <p className="mb-3 inline-flex items-start gap-2 rounded-lg bg-indigo-50 dark:bg-indigo-950/40 px-3 py-2 text-sm leading-relaxed text-indigo-700 dark:text-indigo-300">
               <Sparkles className="mt-0.5 h-4 w-4 shrink-0" />
               <span>
-                <strong className="font-semibold">Starter picks</strong> — highly rated across the
+                <strong className="font-semibold">Starter picks</strong>, highly rated across the
                 catalog. Tick the check on a game you own, or heart one you want, and these turn
                 into picks based on your own taste.
               </span>
