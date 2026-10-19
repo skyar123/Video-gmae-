@@ -17,6 +17,26 @@ const FEEDS = [
   { source: 'Push Square', url: 'https://www.pushsquare.com/feeds/latest', tone: 'playstation' },
   { source: 'PlayStation Blog', url: 'https://blog.playstation.com/feed/', tone: 'playstation' },
 
+  // Picked against the channels you watch rather than by traffic, and each
+  // one fetched before being listed. Polygon and Dicebreaker are missing from
+  // this list on purpose: both answer 403 to anything that is not a browser,
+  // so Polygon comes in through its Bluesky account instead.
+  { source: 'Game Informer', url: 'https://www.gameinformer.com/rss.xml', tone: 'general' },
+  // Retro, for the Gaming Historian and Continue? end of your list.
+  { source: 'Time Extension', url: 'https://www.timeextension.com/feeds/latest', tone: 'retro' },
+  // You watch Nintendo of America and the Pokemon channel; nothing here
+  // covered either.
+  { source: 'Nintendo Life', url: 'https://www.nintendolife.com/feeds/latest', tone: 'nintendo' },
+  // Games satire. The closest thing in the press to the tone you asked for.
+  { source: 'Hard Drive', url: 'https://hard-drive.net/feed/', tone: 'satire' },
+  // Small, essayistic, and in it for the love of the thing.
+  { source: 'Unwinnable', url: 'https://unwinnable.com/feed/', tone: 'essays' },
+  { source: 'Siliconera', url: 'https://www.siliconera.com/feed/', tone: 'general' },
+  // Trade press: where a layoff or a studio closing is reported first.
+  { source: 'Game Developer', url: 'https://www.gamedeveloper.com/rss.xml', tone: 'trade' },
+  // For the lilsimsie corner of your list, and the Cozy collection.
+  { source: 'Sims Community', url: 'https://simscommunity.info/feed/', tone: 'cozy' },
+
   // The queer shelf is not one magazine. It is the LGBTQ+ gaming press, queer
   // publications that cover games, and the worker-owned sites founded and
   // staffed by queer writers who left the big outlets.
@@ -73,7 +93,10 @@ const CACHE_TTL_MS = 15 * 60 * 1000;
  * publisher still stops the hourly outlets burying everyone else.
  */
 const PER_SOURCE = 6;
-const MAX_ITEMS = 72;
+// Raised with the feed count. At 72 across 24 sources the cut landed on
+// whoever published least recently, which is most of the queer press and all
+// of the small sites that were just added.
+const MAX_ITEMS = 100;
 
 /**
  * Nothing older than this is news.

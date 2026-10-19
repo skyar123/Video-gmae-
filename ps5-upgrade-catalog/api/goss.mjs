@@ -51,6 +51,22 @@ const VOICES = [
   { handle: 'ramiismail.com', note: 'Developer advocate' },
   { handle: 'timoflegend.bsky.social', note: 'Double Fine' },
   { handle: 'doublefine.com', note: 'Studio' },
+
+  // Added against your own list. Every handle below was checked with
+  // getProfile for its display name and follower count, because the handle
+  // existing proves nothing: alyssamercante.bsky.social resolves fine and is
+  // an empty account with no posts, while the real one is alyssamerc. Bluesky
+  // search is no better, offering Alyssa Milano for her and Mark Hamill for
+  // Hard Drive, so nothing here came from search alone.
+  { handle: 'laurakbuzz.bsky.social', note: 'LauraKBuzz' },
+  { handle: 'midimyers.com', note: 'Mothership' },
+  { handle: 'alyssamerc.bsky.social', note: 'Reporter' },
+  { handle: 'ckunzelman.bsky.social', note: 'Rascal, tabletop' },
+  { handle: 'nicolecarpenter.bsky.social', note: 'Polygon' },
+  { handle: 'polygon.com', note: 'Polygon' },
+  { handle: 'unwinnable.com', note: 'Unwinnable' },
+  { handle: 'timeextension.com', note: 'Retro' },
+  { handle: 'lilsimsie.bsky.social', note: 'Sims' },
 ];
 
 /**
