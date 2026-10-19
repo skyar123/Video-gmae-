@@ -27,8 +27,6 @@ const FEEDS = [
   // You watch Nintendo of America and the Pokemon channel; nothing here
   // covered either.
   { source: 'Nintendo Life', url: 'https://www.nintendolife.com/feeds/latest', tone: 'nintendo' },
-  // Games satire. The closest thing in the press to the tone you asked for.
-  { source: 'Hard Drive', url: 'https://hard-drive.net/feed/', tone: 'satire' },
   // Small, essayistic, and in it for the love of the thing.
   { source: 'Unwinnable', url: 'https://unwinnable.com/feed/', tone: 'essays' },
   { source: 'Siliconera', url: 'https://www.siliconera.com/feed/', tone: 'general' },
@@ -47,10 +45,17 @@ const FEEDS = [
     note: 'LGBTQ+ gaming magazine',
   },
   {
+    // The /tag/video-games/ feed was the obvious choice and is where this
+    // started, but its newest post is 606 days old: the tag was abandoned,
+    // not the paper, whose main feed ran something yesterday. So it reads the
+    // main feed through the same games filter Them uses. That currently
+    // matches none of their last twelve posts, which is the honest state of
+    // it: this contributes when they cover games, instead of never.
     source: 'Autostraddle',
-    url: 'https://www.autostraddle.com/tag/video-games/feed/',
+    url: 'https://www.autostraddle.com/feed/',
     tone: 'queer',
-    note: 'Queer publication, games desk',
+    note: 'Queer publication, culture desk',
+    filter: /\b(game|gaming|gamer|console|playstation|nintendo|xbox|steam|indie)\b/i,
   },
   {
     source: 'Them',
@@ -193,7 +198,17 @@ async function fetchFeed(feed) {
       return [];
     }
     const items = parseFeed(await res.text(), feed);
-    feedStatus.set(feed.source, `${items.length} items`);
+    // How many are in window, not just how many came back. "10 items" reads
+    // identically for a healthy feed and for one whose newest post is three
+    // months old, and that is exactly how Hard Drive sat here contributing
+    // nothing while reporting ten, and how Autostraddle's dead tag feed went
+    // unnoticed for far longer.
+    const cutoff = Date.now() - MAX_AGE_MS;
+    const fresh = items.filter((item) => {
+      const at = item.publishedAt ? Date.parse(item.publishedAt) : NaN;
+      return Number.isFinite(at) && at >= cutoff;
+    }).length;
+    feedStatus.set(feed.source, `${items.length} items, ${fresh} in window`);
     return items;
   } catch (error) {
     feedStatus.set(feed.source, error?.name === 'AbortError' ? 'timeout' : 'failed');
