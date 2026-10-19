@@ -625,6 +625,31 @@ async function loadYouTubeAll(cutoff) {
     [...answered].map(([source, rows]) => saveBlob(poolKeyFor(source), { videos: rows, storedAt })),
   );
 
+  /*
+   * Read one key straight back.
+   *
+   * Two rebuilds in a row read the pool as empty right after a rebuild had
+   * written three channels to it, and both halves of that round trip fail
+   * silently: loadBlob answers {} for a read it could not do, and saveBlob
+   * swallows a write it could not do, because this data was only ever meant
+   * to be an enhancement. That is the right default and a terrible way to
+   * find out which one is broken, so the round trip is now reported.
+   */
+  if (answered.size > 0) {
+    const [probe] = [...answered.keys()];
+    try {
+      const back = await loadBlob(poolKeyFor(probe));
+      diagnostics.set(
+        'youtube:store',
+        Array.isArray(back?.videos)
+          ? `round trip ok: ${probe} read back ${back.videos.length}`
+          : `round trip LOST: ${probe} wrote ${answered.get(probe).length}, read back nothing`,
+      );
+    } catch (error) {
+      diagnostics.set('youtube:store', `round trip threw: ${error?.message ?? 'unknown'}`);
+    }
+  }
+
   diagnostics.set(
     'youtube',
     `asked ${asked.length} (${asked.join(', ')}), got ${fetched.length} from ${answered.size}, pool ${videos.length} of ${stored.length} stored`,
