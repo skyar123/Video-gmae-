@@ -72,19 +72,71 @@ const QUERIES = [
 ];
 
 /**
- * Channels whose uploads are mostly trailers and reveals.
+ * YouTube, which turned out to be the best trailer source here: the channels
+ * post a release date trailer the day the press write it up a day later.
  *
- * Each id was read off the channel's own page rather than guessed. Whether
- * this works at all is a live question: the feed endpoint answers 404 from
- * our build sandbox, but so do four of the news feeds that serve fine from
- * production, so it is wired up behind the diagnostics and judged there. A
- * channel that returns nothing simply contributes nothing.
+ * Every id was read off the channel's own page and then confirmed by loading
+ * `/channel/<id>` back and checking the name it answered with, because the
+ * ids are unguessable and a wrong one fails silently as an empty feed. Two
+ * candidates were dropped at that step: the handle `@Nintendo` resolves to a
+ * channel called "koi", and `@Xbox`'s id served a page titled "Forza".
+ *
+ * There is no connection to anyone's own YouTube account here. These are the
+ * public uploads feeds, which need no key and know nothing about the reader,
+ * so a subscription list is not something this can see.
  */
 const YOUTUBE = [
+  // PlayStation's own, which is where a State of Play lands first.
   { source: 'PlayStation', id: 'UC-2Y8dQb0S6DtpxNgAKoJKA' },
+  { source: 'PlayStation Access', id: 'UC6yzV_xgKn8r77FkcmZyMSg' },
+  // Outlets. Push Square is the only PlayStation-only one in the list.
   { source: 'IGN', id: 'UCKy1dAqELo0zrOtPkf0eTMw' },
   { source: 'GameSpot', id: 'UCbu2SsF-Or3Rsn3NxqODImw' },
+  { source: 'GameSpot Trailers', id: 'UCUnRn1f78foyP26XGkRfWsA' },
+  { source: 'Push Square', id: 'UCbI-X9F07inmxYvQKDBOU7Q' },
+  { source: 'Eurogamer', id: 'UCciKycgzURdymx-GRSY2_dA' },
+  { source: 'GamesRadar', id: 'UCk2ipH2l8RvLG0dr-rsBiZw' },
+  { source: 'VGC', id: 'UCuzaJiIORaXi7DsuEs03Gow' },
+  { source: 'Game Informer', id: 'UCK-65DO2oOxxMwphl2tYtcw' },
+  { source: 'Digital Foundry', id: 'UC9PBzalIcEQCsiIkq36PyUA' },
+  // The ones that actually carry the beef, which the press write up second.
+  { source: 'YongYea', id: 'UCT6iAerLNE-0J1S_E97UAuQ' },
+  { source: 'gameranx', id: 'UCNvzD7Z-g64bPXxGzaQaa4g' },
+  { source: 'Bellular News', id: 'UC3nPaf5MeeDTHA2JN7clidg' },
+  { source: 'The Act Man', id: 'UC7WDD6yHgzdqijHluCi1z-Q' },
+  { source: 'penguinz0', id: 'UCq6VFHwMzcMXbuKyG7SQYIg' },
+  { source: 'Luke Stephens', id: 'UCe4_UPAmhz2sqorGbF8oZHA' },
+  { source: 'Alanah Pearce', id: 'UCKpBmnEfSy20al-Fk_2YzVA' },
+  { source: 'Skill Up', id: 'UCZ7AeeVbyslLM_8-nVy2B8Q' },
+  { source: 'Kinda Funny Games', id: 'UCT6QFE3peNry9PdO5uGj96g' },
+  { source: 'Easy Allies', id: 'UCZrxXp1reP8E353rZsB3jaA' },
+  { source: 'Second Wind', id: 'UC1wZGocgLvopgOqBUFCyIJA' },
+  // Essays and documentaries. Slow, but they are the reason a feed is worth
+  // scrolling twice, and the podcast shelf proved the appetite.
+  { source: 'Noclip', id: 'UC0fDG3byEcMtbOqPMymDNbw' },
+  { source: 'People Make Games', id: 'UCZB6V9fUov0Mx_us3MWWILg' },
+  { source: 'Jacob Geller', id: 'UCeTfBygNb1TahcNpZyELO8g' },
+  { source: 'Razbuten', id: 'UCfHmyqCntYHQ81ZukNu66rg' },
+  { source: 'NakeyJakey', id: 'UCSdma21fnJzgmPodhC9SJ3g' },
+  { source: 'Girlfriend Reviews', id: 'UC2eEGT06FrWFU6VBnPOR9lg' },
+  { source: 'MandaloreGaming', id: 'UClOGLGPOqlAiLmOvXW5lKbw' },
+  { source: 'Summoning Salt', id: 'UCtUbO6rBht0daVIOGML3c8w' },
+  { source: 'Caddicarus', id: 'UCOkL7q2SeGZeZuj22njMYEA' },
+  { source: 'ACG', id: 'UCK9_x1DImhU-eolIay5rb2Q' },
+  { source: 'Jauwn', id: 'UC-nIhxjNqjcm8EmpPWBg3wA' },
+  { source: 'videogamedunkey', id: 'UCsvn_Po0SmunchJYOWpOxMg' },
 ];
+
+/**
+ * Thirty-odd uploads feeds is thirty-odd sockets, and the whole response has
+ * to come back inside the function's own timeout, which the rest of the feed
+ * already spends seven seconds of. So the channels go out in small waves
+ * behind one shared deadline: whatever has answered when the clock runs out
+ * is what the reader gets, and a slow channel costs the other sources
+ * nothing instead of taking the request down with it.
+ */
+const YOUTUBE_LANES = 8;
+const YOUTUBE_DEADLINE_MS = 6000;
 
 /** Resolved through the iTunes search API, which needs no key either. */
 const PODCASTS = [
@@ -98,7 +150,7 @@ const PODCASTS = [
  * Higher since the news column was folded in, because this is now the only
  * feed and has to carry what both of them did.
  */
-const MAX_BURSTS = 220;
+const MAX_BURSTS = 280;
 
 const DAY_MS = 24 * 60 * 60 * 1000;
 const CACHE_TTL_MS = 15 * 60 * 1000;
@@ -389,9 +441,9 @@ async function loadPodcast({ source, url }, cutoff) {
  * ------------------------------------------------------------------ */
 
 /** The uploads feed is Atom, so entries rather than items. */
-async function loadYouTube({ source, id }, cutoff) {
+async function loadYouTube({ source, id }, cutoff, budgetMs = 8000) {
   const controller = new AbortController();
-  const timer = setTimeout(() => controller.abort(), 8000);
+  const timer = setTimeout(() => controller.abort(), Math.max(500, budgetMs));
   try {
     const res = await fetch(`https://www.youtube.com/feeds/videos.xml?channel_id=${id}`, {
       signal: controller.signal,
@@ -441,6 +493,49 @@ async function loadYouTube({ source, id }, cutoff) {
   } finally {
     clearTimeout(timer);
   }
+}
+
+/**
+ * Four outlets post the same trailer inside an hour, each with its own
+ * "- Official Trailer | Publisher" tail on the end. Keyed on what is left
+ * once that furniture comes off, the first channel through wins.
+ *
+ * The kind is part of the key, so a game's trailer and its review stay two
+ * separate things: without it, "Silksong - Review" and "Silksong - Official
+ * Trailer" reduce to the same game and one of them disappears.
+ */
+const videoKey = (burst) => {
+  const cut = burst.title.search(/\s+[-|\u2013]\s+/);
+  const head = cut > 8 ? burst.title.slice(0, cut) : burst.title;
+  return `${burst.kind}|${head.toLowerCase().replace(/[^a-z0-9]+/g, ' ').trim()}`;
+};
+
+/** Every channel, in waves, against one deadline. */
+async function loadYouTubeAll(cutoff) {
+  const deadline = Date.now() + YOUTUBE_DEADLINE_MS;
+  const queue = [...YOUTUBE];
+  const collected = [];
+
+  const lane = async () => {
+    for (let channel = queue.shift(); channel; channel = queue.shift()) {
+      const left = deadline - Date.now();
+      if (left <= 250) {
+        diagnostics.set(`youtube:${channel.source}`, 'out of time');
+        continue;
+      }
+      collected.push(...(await loadYouTube(channel, cutoff, left)));
+    }
+  };
+
+  await Promise.all(Array.from({ length: YOUTUBE_LANES }, lane));
+
+  const unique = new Map();
+  for (const burst of collected.sort((a, b) => (b.publishedAt ?? '').localeCompare(a.publishedAt ?? ''))) {
+    const key = videoKey(burst);
+    if (!unique.has(key)) unique.set(key, burst);
+  }
+  diagnostics.set('youtube', `${unique.size} kept of ${collected.length} fetched`);
+  return [...unique.values()];
 }
 
 /* ------------------------------------------------------------------ *
@@ -553,7 +648,7 @@ export async function loadGoss() {
       all.flat(),
     ),
     pressGoss(),
-    Promise.all(YOUTUBE.map((channel) => loadYouTube(channel, cutoff))).then((all) => all.flat()),
+    loadYouTubeAll(cutoff),
   ]);
 
   const byKind = new Map();
@@ -597,7 +692,10 @@ export async function loadGoss() {
       // cutting the slower queer outlets hardest.
       ...pick('press', 0, 60),
       ...pick('pod', 0, 10),
-      ...pick('youtube', 0, 12),
+      // Thirty-odd channels against three: the old allowance of twelve was
+      // set when YouTube was a trailer sidecar, and would now be throwing
+      // away most of the largest channel in the feed.
+      ...pick('youtube', 0, wide ? 26 : 20),
     ]) {
       chosen.set(burst.link, burst);
     }
