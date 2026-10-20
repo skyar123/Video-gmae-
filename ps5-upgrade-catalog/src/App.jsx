@@ -35,6 +35,7 @@ import {
   MessageCircle,
   Newspaper,
   RefreshCw,
+  Play,
   Rows3,
   Search,
   SlidersHorizontal,
@@ -4269,117 +4270,215 @@ const hostOf = (url) => {
  * always name who said it, which is the only honest way to carry gossip about
  * real people.
  */
+/**
+ * The video id out of a watch link, or null for anything that is not one.
+ *
+ * Every YouTube burst carries its id in the link it already has, so the feed
+ * can show a real 16:9 still and play the thing in place without a second
+ * request to find out what it is.
+ */
+function youTubeId(link) {
+  // watch?v=, youtu.be/, /shorts/ and /embed/. Shorts matter: 12 of 59 videos
+  // in one sample were shorts, and matching only watch links left every one
+  // of them as a still with no way to play it.
+  const match = /(?:[?&]v=|youtu\.be\/|\/shorts\/|\/embed\/)([\w-]{11})(?![\w-])/.exec(link ?? '');
+  return match ? match[1] : null;
+}
+
+/**
+ * The media at the top of a card.
+ *
+ * 181 of 222 bursts arrive with a picture and the feed was rendering them as
+ * 64x96 stamps beside the text, which is a column of headlines with postage
+ * on it. The art leads instead, full width and 16:9.
+ *
+ * Video gets the same treatment plus a play control. Nothing from YouTube
+ * loads until it is pressed: the still is a plain image, and only a tap
+ * swaps in the player. That keeps a feed of forty videos to forty images
+ * rather than forty embeds, and means nothing is handed to YouTube for
+ * someone who only scrolled past.
+ */
+function GossMedia({ burst, videoId, playing, onPlay }) {
+  // maxres is the only still that is natively 16:9; the hqdefault the feed
+  // supplies is 4:3 with bars, so it is the fallback rather than the source.
+  const [src, setSrc] = useState(
+    videoId ? `https://i.ytimg.com/vi/${videoId}/maxresdefault.jpg` : burst.image,
+  );
+  const [dead, setDead] = useState(false);
+  if (dead) return null;
+
+  if (playing && videoId) {
+    return (
+      <div className="relative aspect-video w-full bg-black">
+        <iframe
+          src={`https://www.youtube-nocookie.com/embed/${videoId}?autoplay=1&rel=0`}
+          title={burst.title}
+          allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+          allowFullScreen
+          className="absolute inset-0 h-full w-full border-0"
+        />
+      </div>
+    );
+  }
+
+  return (
+    <div className="relative aspect-video w-full overflow-hidden bg-slate-100 dark:bg-slate-800">
+      <img
+        src={src}
+        alt=""
+        loading="lazy"
+        onError={() => {
+          // maxres does not exist for every upload; fall back once, then give
+          // up and let the card be text, rather than showing a broken frame.
+          if (videoId && src !== burst.image && burst.image) setSrc(burst.image);
+          else setDead(true);
+        }}
+        className="h-full w-full object-cover transition-transform duration-500 ease-swift group-hover:scale-[1.03]"
+      />
+      {videoId && (
+        <>
+          <span
+            aria-hidden="true"
+            className="pointer-events-none absolute inset-0 bg-gradient-to-t from-black/55 via-transparent to-transparent"
+          />
+          <button
+            type="button"
+            onClick={onPlay}
+            aria-label={`Play ${burst.title}`}
+            className="tap absolute inset-0 grid place-items-center transition-transform duration-200 ease-spring active:scale-95"
+          >
+            <span className="grid h-14 w-14 place-items-center rounded-full bg-white/90 text-slate-900 shadow-lg backdrop-blur transition-all duration-200 group-hover:bg-white">
+              <Play className="ml-0.5 h-6 w-6 fill-current" />
+            </span>
+          </button>
+        </>
+      )}
+    </div>
+  );
+}
+
 function GossCard({ burst, fresh }) {
   const kind = GOSS_KINDS[burst.kind] ?? GOSS_KINDS.buzz;
   const post = burst.source === 'Bluesky';
   const external = burst.externalLink ? hostOf(burst.externalLink) : null;
+  const videoId = youTubeId(burst.link);
+  const [playing, setPlaying] = useState(false);
+  // A post's picture stays inline under its text, where it reads as something
+  // the person attached. A headline's or a video's picture is the thing
+  // itself, so it leads.
+  const hero = videoId || (!post && burst.image) ? true : false;
 
   return (
-    <a
-      href={burst.link}
-      target="_blank"
-      rel="noopener noreferrer"
-      className="group relative block overflow-hidden rounded-2xl border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-900 p-3 transition-all duration-200 ease-spring hover:-translate-y-0.5 hover:border-slate-300 hover:shadow-md active:scale-[0.99]"
-    >
-      <span
-        aria-hidden="true"
-        className={`pointer-events-none absolute inset-x-0 top-0 h-24 bg-gradient-to-b to-transparent ${kind.glow}`}
-      />
+    <article className="group relative overflow-hidden rounded-2xl border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-900 transition-all duration-200 ease-spring hover:-translate-y-0.5 hover:border-slate-300 hover:shadow-lg">
+      {hero && (
+        <GossMedia
+          burst={burst}
+          videoId={videoId}
+          playing={playing}
+          onPlay={() => setPlaying(true)}
+        />
+      )}
 
-      <div className="relative">
-        <div className="mb-2 flex items-center gap-1.5">
+      <div className="relative p-3">
+        {!hero && (
           <span
-            className={`inline-flex shrink-0 items-center gap-1 rounded-full px-2 py-0.5 text-[10px] font-black uppercase tracking-wide ${kind.pill}`}
-          >
-            <kind.icon className="h-3 w-3" />
-            {kind.label}
-          </span>
-          {fresh && (
+            aria-hidden="true"
+            className={`pointer-events-none absolute inset-x-0 top-0 h-24 bg-gradient-to-b to-transparent ${kind.glow}`}
+          />
+        )}
+
+        <div className="relative">
+          <div className="mb-2 flex items-center gap-1.5">
             <span
-              className="h-2 w-2 shrink-0 animate-pulse rounded-full bg-rose-500"
-              title="New since you last looked"
-            />
-          )}
-          {burst.heat > 0 && (
-            <span className="inline-flex shrink-0 items-center gap-0.5 text-[11px] font-bold text-rose-500">
-              <Flame className="h-3 w-3" />
-              {heatLabel(burst.heat)}
+              className={`inline-flex shrink-0 items-center gap-1 rounded-full px-2 py-0.5 text-[10px] font-black uppercase tracking-wide ${kind.pill}`}
+            >
+              <kind.icon className="h-3 w-3" />
+              {kind.label}
             </span>
-          )}
-          <span className="ml-auto shrink-0 text-[11px] text-slate-400 dark:text-slate-500">
-            {relativeTime(burst.publishedAt)}
-          </span>
-        </div>
-
-        <div className="flex gap-3">
-          {post && burst.avatar && (
-            <img
-              src={burst.avatar}
-              alt=""
-              loading="lazy"
-              onError={(event) => {
-                event.currentTarget.hidden = true;
-              }}
-              className="h-9 w-9 shrink-0 rounded-full bg-slate-100 dark:bg-slate-800 object-cover"
-            />
-          )}
-          {!post && burst.image && (
-            <img
-              src={burst.image}
-              alt=""
-              loading="lazy"
-              onError={(event) => {
-                event.currentTarget.hidden = true;
-              }}
-              className="h-16 w-24 shrink-0 rounded-lg bg-slate-100 dark:bg-slate-800 object-cover"
-            />
-          )}
-
-          <div className="min-w-0 flex-1">
-            <p className="mb-0.5 truncate text-[11px] font-semibold text-slate-500 dark:text-slate-400">
-              {post ? (burst.authorName ?? burst.author) : burst.source}
-              {burst.note && (
-                <span
-                  className={`font-normal ${
-                    burst.tone === 'queer'
-                      ? 'text-violet-500 dark:text-violet-300'
-                      : 'text-slate-400 dark:text-slate-500'
-                  }`}
-                >
-                  {' '}
-                  · {burst.note}
-                </span>
-              )}
-            </p>
-            <p className="line-clamp-3 text-sm font-semibold leading-snug text-slate-800 dark:text-slate-100">
-              {burst.title}
-            </p>
-            {burst.summary && (
-              <p className="mt-1 line-clamp-2 text-xs leading-relaxed text-slate-500 dark:text-slate-400">
-                {burst.summary}
-              </p>
+            {fresh && (
+              <span
+                className="h-2 w-2 shrink-0 animate-pulse rounded-full bg-rose-500"
+                title="New since you last looked"
+              />
             )}
-            {post && burst.image && (
+            {burst.heat > 0 && (
+              <span className="inline-flex shrink-0 items-center gap-0.5 text-[11px] font-bold text-rose-500">
+                <Flame className="h-3 w-3" />
+                {heatLabel(burst.heat)}
+              </span>
+            )}
+            <span className="ml-auto shrink-0 text-[11px] text-slate-400 dark:text-slate-500">
+              {relativeTime(burst.publishedAt)}
+            </span>
+          </div>
+
+          <div className="flex gap-3">
+            {post && burst.avatar && (
               <img
-                src={burst.image}
+                src={burst.avatar}
                 alt=""
                 loading="lazy"
                 onError={(event) => {
                   event.currentTarget.hidden = true;
                 }}
-                className="mt-2 h-32 w-full rounded-lg bg-slate-100 dark:bg-slate-800 object-cover"
+                className="h-9 w-9 shrink-0 rounded-full bg-slate-100 dark:bg-slate-800 object-cover"
               />
             )}
-            {external && (
-              <p className="mt-1.5 inline-flex items-center gap-1 text-[11px] font-medium text-indigo-500 dark:text-indigo-300">
-                <ExternalLink className="h-3 w-3" />
-                {external}
+
+            <div className="min-w-0 flex-1">
+              <p className="mb-0.5 truncate text-[11px] font-semibold text-slate-500 dark:text-slate-400">
+                {post ? (burst.authorName ?? burst.author) : burst.source}
+                {burst.note && (
+                  <span
+                    className={`font-normal ${
+                      burst.tone === 'queer'
+                        ? 'text-violet-500 dark:text-violet-300'
+                        : 'text-slate-400 dark:text-slate-500'
+                    }`}
+                  >
+                    {' '}
+                    · {burst.note}
+                  </span>
+                )}
               </p>
-            )}
+              {/* The link stretches over the text block only, so the picture
+                  above can carry its own play control without nesting a
+                  button inside an anchor. */}
+              <a
+                href={burst.link}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="line-clamp-3 text-sm font-semibold leading-snug text-slate-800 dark:text-slate-100 after:absolute after:inset-0 after:content-[''] hover:underline"
+              >
+                {burst.title}
+              </a>
+              {burst.summary && (
+                <p className="mt-1 line-clamp-2 text-xs leading-relaxed text-slate-500 dark:text-slate-400">
+                  {burst.summary}
+                </p>
+              )}
+              {post && burst.image && (
+                <img
+                  src={burst.image}
+                  alt=""
+                  loading="lazy"
+                  onError={(event) => {
+                    event.currentTarget.hidden = true;
+                  }}
+                  className="mt-2 h-40 w-full rounded-lg bg-slate-100 dark:bg-slate-800 object-cover"
+                />
+              )}
+              {external && (
+                <p className="mt-1.5 inline-flex items-center gap-1 text-[11px] font-medium text-indigo-500 dark:text-indigo-300">
+                  <ExternalLink className="h-3 w-3" />
+                  {external}
+                </p>
+              )}
+            </div>
           </div>
         </div>
       </div>
-    </a>
+    </article>
   );
 }
 
