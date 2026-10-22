@@ -28,7 +28,9 @@
  * is where it has to live.
  */
 
-const VERSION = 'v3';
+// v4: cached API answers are stamped and expire, so the old unstamped
+// entries have to go rather than being treated as fresh forever.
+const VERSION = 'v4';
 const SHELL = `shell-${VERSION}`;
 const ASSETS = `assets-${VERSION}`;
 const DATA = `data-${VERSION}`;
@@ -62,12 +64,37 @@ self.addEventListener('activate', (event) => {
   );
 });
 
-/** Puts a copy away without letting a cache failure break the response. */
+/**
+ * Puts a copy away without letting a cache failure break the response.
+ *
+ * The copy is stamped with the time it was stored. A cached API response has
+ * no expiry of its own, so without a stamp there is no way to tell last
+ * minute's feed from last week's, and the fallback below needs to know.
+ */
 const store = (cacheName, request, response) => {
   if (!response || !response.ok) return response;
   const copy = response.clone();
-  caches.open(cacheName).then((cache) => cache.put(request, copy)).catch(() => {});
+  caches
+    .open(cacheName)
+    .then(async (cache) => {
+      const body = await copy.blob();
+      const headers = new Headers(copy.headers);
+      headers.set('x-sw-cached-at', String(Date.now()));
+      await cache.put(
+        request,
+        new Response(body, { status: copy.status, statusText: copy.statusText, headers }),
+      );
+    })
+    .catch(() => {});
   return response;
+};
+
+/** How old a cached API answer may be before it is not worth showing. */
+const MAX_STALE_MS = 30 * 60 * 1000;
+
+const cachedAge = (response) => {
+  const at = Number(response?.headers?.get('x-sw-cached-at'));
+  return Number.isFinite(at) && at > 0 ? Date.now() - at : Infinity;
 };
 
 async function networkFirst(request, cacheName) {
@@ -93,7 +120,7 @@ async function cacheFirst(request, cacheName) {
  * the timeout still updates the cache, so the next load is current even if
  * this one wasn't.
  */
-async function networkFirstFast(request, cacheName, ms = 4000) {
+async function networkFirstFast(request, cacheName, ms = 6000) {
   const network = fetch(request).then((response) => store(cacheName, request, response));
   const settled = await Promise.race([
     network.then((response) => ({ response })).catch((error) => ({ error })),
@@ -103,8 +130,20 @@ async function networkFirstFast(request, cacheName, ms = 4000) {
   if (settled.response) return settled.response;
 
   const cached = await caches.match(request);
+
+  /*
+   * Old enough and it is worth waiting instead.
+   *
+   * The fallback had no age limit, so a phone that timed out once could be
+   * shown the feed from its previous visit, and if that visit was days ago
+   * then days-old gossip is what it got, silently, with no way to tell. A
+   * feed is only worth reading if it is roughly current, so past half an
+   * hour the network is worth waiting for, and the cache is kept for the
+   * case it was written for: actually being offline.
+   */
+  if (cached && (cachedAge(cached) < MAX_STALE_MS || !settled.timedOut)) return cached;
+  if (settled.timedOut) return network;
   if (cached) return cached;
-  if (settled.timedOut) return network; // No cache yet: worth the wait.
   throw settled.error ?? new Error('offline');
 }
 

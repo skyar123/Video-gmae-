@@ -109,6 +109,9 @@ const COLLECTIONS = [
   { value: 'all', label: 'All', tag: null },
   // Deals come second because they are a main reason to open this at all.
   { value: 'deals', label: 'Deals', tag: null },
+  // You pay for PS Plus already, so the games it covers cost nothing more.
+  // The store marks them "Included" and names the tier that covers them.
+  { value: 'plus', label: 'PS Plus', tag: null },
   { value: 'genius', label: 'For you', tag: null },
   { value: 'store', label: 'Store', tag: null },
   { value: 'soon', label: 'Soon', tag: null },
@@ -124,6 +127,7 @@ const COLLECTION_BLURBS = {
   genius:
     'Worked out from the games you own and want, with the reason for each pick.',
   deals: 'Everything discounted right now, deepest cut first. Updates with the storefront.',
+  plus: 'Already covered by your PlayStation Plus subscription, so there is nothing more to pay. Read from the store, which names the tier each one needs.',
   graphics: 'Technical showcases and standout art direction.',
   social: 'Online play, co-op and couch multiplayer.',
   cozy: 'Low-stress games with gentle pacing and no fail state to speak of.',
@@ -1812,16 +1816,30 @@ function GameCard({
           <div className="mt-auto min-h-[2.25rem] pr-10 pt-2">
             {live?.price ? (
               <>
-                <p className="flex items-baseline gap-1.5">
-                  <span className="text-base font-bold tabular-nums text-slate-900 dark:text-slate-50 sm:text-lg">
-                    {live.price.finalFormatted}
-                  </span>
-                  {live.price.discountPercent > 0 && (
-                    <span className="text-xs text-slate-400 dark:text-slate-500 line-through">
-                      {live.price.initialFormatted}
+                {/* A price you do not have to pay is not the headline. If a
+                    Plus tier covers the game, that is the answer, and the
+                    price it would otherwise cost goes quiet beside it. */}
+                {live.price.plus?.included ? (
+                  <p className="flex items-baseline gap-1.5">
+                    <span className="inline-flex items-center gap-1 rounded-md bg-indigo-600 px-1.5 py-0.5 text-[11px] font-black uppercase tracking-wide text-white">
+                      PS Plus
                     </span>
-                  )}
-                </p>
+                    <span className="text-xs text-slate-400 dark:text-slate-500 line-through">
+                      {live.price.finalFormatted}
+                    </span>
+                  </p>
+                ) : (
+                  <p className="flex items-baseline gap-1.5">
+                    <span className="text-base font-bold tabular-nums text-slate-900 dark:text-slate-50 sm:text-lg">
+                      {live.price.finalFormatted}
+                    </span>
+                    {live.price.discountPercent > 0 && (
+                      <span className="text-xs text-slate-400 dark:text-slate-500 line-through">
+                        {live.price.initialFormatted}
+                      </span>
+                    )}
+                  </p>
+                )}
                 {/* The depth of a cut says nothing on its own. Sorting Best
                     deals by discount puts 50% off at the top whether that is
                     the floor or half what it went for last month, and this is
@@ -5674,6 +5692,8 @@ export default function App() {
       }
       if (isGenius && !geniusRank.has(game.id)) return false;
       if (collection?.tag && !game.tags.includes(collection.tag)) return false;
+      if (filters.collection === 'plus' && !byTitle.get(game.title)?.price?.plus?.included)
+        return false;
       if (filters.collection === 'deals' && !(byTitle.get(game.title)?.price?.discountPercent > 0))
         return false;
       if (searchScores && !searchScores.has(game.id)) return false;
@@ -5782,6 +5802,12 @@ export default function App() {
     [catalogPool, byTitle],
   );
 
+  /** Covered by a Plus tier that carries a game catalog, so nothing to pay. */
+  const plusCount = useMemo(
+    () => catalogPool.filter((game) => byTitle.get(game.title)?.price?.plus?.included).length,
+    [catalogPool, byTitle],
+  );
+
   // Over the whole pool, not the filtered results: a chip that counted its own
   // output would read zero the moment you switched it on.
   const atFloorTotal = useMemo(
@@ -5799,23 +5825,27 @@ export default function App() {
   );
 
   const collectionCounts = useMemo(() => {
+    // A lookup rather than another rung on a ternary ladder: there are now
+    // five collections that count something of their own and the nesting had
+    // stopped being readable.
+    const special = {
+      store: storeSize,
+      soon: upcomingGames.length,
+      deals: saleCount,
+      plus: plusCount,
+      genius: geniusPicks.length,
+    };
     const counts = {};
     for (const entry of COLLECTIONS) {
       counts[entry.value] =
-        entry.value === 'store'
-          ? storeSize
-          : entry.value === 'soon'
-            ? upcomingGames.length
-            : entry.value === 'deals'
-              ? saleCount
-              : entry.value === 'genius'
-                ? geniusPicks.length
-                : entry.tag
-                  ? catalogPool.filter((game) => game.tags.includes(entry.tag)).length
-                  : catalogPool.length;
+        entry.value in special
+          ? special[entry.value]
+          : entry.tag
+            ? catalogPool.filter((game) => game.tags.includes(entry.tag)).length
+            : catalogPool.length;
     }
     return counts;
-  }, [catalogPool, saleCount, geniusPicks, storeSize, upcomingGames]);
+  }, [catalogPool, saleCount, plusCount, geniusPicks, storeSize, upcomingGames]);
 
   const activeGame = activeGameId ? gamesData.find((game) => game.id === activeGameId) : null;
 
