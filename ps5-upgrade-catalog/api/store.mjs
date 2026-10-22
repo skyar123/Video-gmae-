@@ -14,7 +14,7 @@
 
 import baked from './store-index.json' with { type: 'json' };
 import { loadBlob } from './history.mjs';
-import { DISCOVERED_KEY, STEAM_MATCH_KEY } from './keys.mjs';
+import { DISCOVERED_KEY, PLUS_KEY, STEAM_MATCH_KEY } from './keys.mjs';
 import { fold, indexText, parseQuery, scoreMatch } from './search.mjs';
 
 const PAGE_SIZE = 36;
@@ -37,9 +37,15 @@ async function index() {
   // releases that are not on Steam at all.
   const matches = (await loadBlob(STEAM_MATCH_KEY))?.byId ?? {};
 
+  // Covered by PlayStation Plus, refreshed nightly from PlayStation's own
+  // Plus games page. Only a positive is meaningful: that page lists a subset
+  // of the catalog, so an absent game is unknown rather than excluded.
+  const plus = new Set((await loadBlob(PLUS_KEY))?.ids ?? []);
+
   const rows = [...byId.values()].map((row) => ({
     ...row,
     steamAppId: row.steamAppId ?? matches[row.id] ?? null,
+    plusIncluded: plus.has(String(row.id)) || undefined,
     search: indexText(row.name ?? ''),
   }));
   merged = { rows, at: Date.now() };

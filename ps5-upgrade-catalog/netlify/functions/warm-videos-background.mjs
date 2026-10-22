@@ -1,4 +1,7 @@
 import { warmYouTubePool } from '../../api/goss.mjs';
+import { saveBlob } from '../../api/history.mjs';
+import { fetchPlusConceptIds } from '../../api/plus.mjs';
+import { PLUS_KEY } from '../../api/keys.mjs';
 
 /**
  * Fills the gossip feed's video pool on demand.
@@ -13,6 +16,21 @@ import { warmYouTubePool } from '../../api/goss.mjs';
  * safe to leave reachable without a secret to keep somewhere.
  */
 export default async () => {
+  // The PS Plus list rides along: it is one request, it has nothing to do
+  // with the hourly video guard, and waiting until tonight for it would mean
+  // the whole library shows no Plus badges until then.
+  try {
+    const ids = await fetchPlusConceptIds();
+    if (ids) {
+      await saveBlob(PLUS_KEY, { ids, at: new Date().toISOString() });
+      console.log(`PS Plus catalog: ${ids.length} concept ids stored`);
+    } else {
+      console.log('PS Plus catalog: unreadable, keeping the stored list');
+    }
+  } catch (error) {
+    console.error('PS Plus catalog refresh failed:', error);
+  }
+
   const result = await warmYouTubePool({ minIntervalMs: 60 * 60 * 1000 });
   if (result.skipped) {
     console.log(`Video pool warm skipped: last warmed ${result.lastWarmAt}`);

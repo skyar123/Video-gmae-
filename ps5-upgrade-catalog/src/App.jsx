@@ -3928,7 +3928,17 @@ function storeRowAsGame(row, coverage = 'store') {
 function storeRowAsLive(row) {
   return {
     heroImage: row.art ?? null,
-    price: row.price ? { finalFormatted: row.price, discountPercent: 0 } : null,
+    price: row.price
+      ? {
+          finalFormatted: row.price,
+          discountPercent: 0,
+          // Same shape the live price read produces, so the card's PS Plus
+          // badge works for a store row without knowing where it came from.
+          // No tier: the catalog page says a game is included, not which
+          // tier covers it, and inventing one would be worse than omitting.
+          plus: row.plusIncluded ? { included: true, tier: null } : undefined,
+        }
+      : null,
     ratings: null,
   };
 }

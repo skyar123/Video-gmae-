@@ -142,12 +142,16 @@ export function predictPriceDrop(live, history = null, now = new Date(), game = 
   // marginal price for a subscriber is zero, and no discount changes that.
   // Reporting a drop probability here would be answering the wrong question.
   if (price.plus?.included) {
+    // A store row knows a game is included but not which tier covers it, so
+    // the tier is named only when it is actually known. "Included with
+    // undefined" is worse than "Included with PlayStation Plus".
+    const tier = price.plus.tier ?? 'PlayStation Plus';
     return {
       score: null,
       verdict: 'included',
-      headline: `Included with ${price.plus.tier}`,
+      headline: `Included with ${tier}`,
       reasons: [
-        `This is in the ${price.plus.tier} catalog, so a subscription already covers it.`,
+        `This is in the ${tier} catalog, so a subscription already covers it.`,
         `Buying outright costs ${price.finalFormatted}${onSale ? ` (${price.discountPercent}% off)` : ''}, which only matters if you want to keep it after the subscription lapses.`,
       ],
       nextWindow: null,
