@@ -106,6 +106,11 @@ const UPGRADES = uniqueValues('ps5Upgrade');
 // nobody can see reads as a collection that does not exist. One word where
 // one word will do; the blurb under the results carries the full sentence.
 const COLLECTIONS = [
+  // "All" is the whole PlayStation Store, all 8,885 of it, not the 249 with
+  // write-ups. A library that says "All games" and means 3% of the store is
+  // the wrong answer to "what can I play", and the store rows carry their own
+  // art, price and rating, so a card is never empty. The 249 are still in
+  // here, marked, and open to their full write-up.
   { value: 'all', label: 'All', tag: null },
   // Deals come second because they are a main reason to open this at all.
   { value: 'deals', label: 'Deals', tag: null },
@@ -113,7 +118,9 @@ const COLLECTIONS = [
   // The store marks them "Included" and names the tier that covers them.
   { value: 'plus', label: 'PS Plus', tag: null },
   { value: 'genius', label: 'For you', tag: null },
-  { value: 'store', label: 'Store', tag: null },
+  // What used to be "All": the hand-written ones, with upgrade paths, tags,
+  // representation notes and recorded price history behind them.
+  { value: 'curated', label: 'Curated', tag: null },
   { value: 'soon', label: 'Soon', tag: null },
   { value: 'graphics', label: 'Graphics', tag: 'graphics', mood: true },
   { value: 'social', label: 'Social', tag: 'social', mood: true },
@@ -134,8 +141,9 @@ const COLLECTION_BLURBS = {
   classic: 'Older PlayStation games and remasters you can play on a PS4 or PS5 today.',
   queer: 'Games with queer characters or relationships that matter to the story, not background detail.',
   disability: 'Games with disabled or neurodivergent characters, or landmark accessibility work.',
-  store:
-    "Everything indexed from the PlayStation Store itself. No hand-written notes on these: store facts and PlayStation's own star rating only.",
+  all: "Everything on the PlayStation Store. The hand-written ones are marked; the rest carry the store's own art, price and star rating.",
+  curated:
+    'The hand-written ones, with upgrade paths, representation notes, kid-friendly verdicts and recorded price history behind each.',
   soon: 'Out in the next few weeks, and everything from the last sixty days. Heart one and it stays on your wishlist through release.',
 };
 
@@ -218,7 +226,9 @@ function readFiltersFromUrl() {
     wishlist: params.get('wishlist') === '1',
     sort: value('sort', 'catalog'),
     region: (value('cc', localStorage.getItem('region') || 'US') || 'US').toUpperCase(),
-    collection: value('view', 'all'),
+    // ?view=store was the whole store before "All" became it, and ?view=all
+    // meant the curated list. Both still land somewhere sensible.
+    collection: value('view', 'all') === 'store' ? 'all' : value('view', 'all'),
     kidFriendly: params.get('kids') === '1',
     owned: value('owned', 'any'),
     view: params.get('mode') === 'feed' ? 'feed' : 'grid',
@@ -4075,7 +4085,7 @@ function StorePanel({ query, curatedByName, saved, onOpenCurated, onOpenStore })
     <>
       <p className="mb-3 text-xs font-medium text-slate-400 dark:text-slate-500">
         {results.total.toLocaleString()} of {facets.size.toLocaleString()} games indexed ·{' '}
-        {COLLECTION_BLURBS.store}
+        {COLLECTION_BLURBS.all}
       </p>
 
       <div className="no-scrollbar mb-3 flex gap-1.5 overflow-x-auto pb-0.5">
@@ -5606,7 +5616,7 @@ export default function App() {
    */
   const searchingWidely =
     deferredQuery.trim().length > 1 &&
-    filters.collection !== 'store' &&
+    filters.collection !== 'all' &&
     filters.collection !== 'soon';
 
   const storeSearch = useStoreSearch({
@@ -5829,7 +5839,8 @@ export default function App() {
     // five collections that count something of their own and the nesting had
     // stopped being readable.
     const special = {
-      store: storeSize,
+      all: storeSize,
+      curated: catalogPool.length,
       soon: upcomingGames.length,
       deals: saleCount,
       plus: plusCount,
@@ -5839,7 +5850,7 @@ export default function App() {
     for (const entry of COLLECTIONS) {
       counts[entry.value] =
         entry.value in special
-          ? special[entry.value]
+          ? (special[entry.value] ?? null)
           : entry.tag
             ? catalogPool.filter((game) => game.tags.includes(entry.tag)).length
             : catalogPool.length;
@@ -6246,7 +6257,7 @@ export default function App() {
         >
           {/* The collection chip has to mean the same thing in both views.
               Whole store used to fall through to the curated list here. */}
-          {filters.collection === 'store' ? (
+          {filters.collection === 'all' ? (
             <StoreFeed
               query={deferredQuery.trim()}
               curatedByName={curatedByName}
@@ -6271,23 +6282,23 @@ export default function App() {
             />
           ))
           )}
-          {filters.collection !== 'store' && hasMore && (
+          {filters.collection !== 'all' && hasMore && (
             <div ref={attachEnd} aria-hidden="true" className="h-px" />
           )}
-          {filters.collection !== 'store' && filteredGames.length === 0 && (
+          {filters.collection !== 'all' && filteredGames.length === 0 && (
             <EmptyState
               filters={filters}
               wishlist={wishlist}
               library={library}
               status={status}
               onClear={clearFilters}
-              onSearchStore={() => set('collection', 'store')}
+              onSearchStore={() => set('collection', 'all')}
             />
           )}
         </main>
       ) : (
         <main className="gutter pb-nav mx-auto max-w-7xl pt-3">
-          {filters.collection === 'store' ? (
+          {filters.collection === 'all' ? (
             <StorePanel
               query={deferredQuery.trim()}
               curatedByName={curatedByName}
@@ -6407,7 +6418,7 @@ export default function App() {
               library={library}
               status={status}
               onClear={clearFilters}
-              onSearchStore={() => set('collection', 'store')}
+              onSearchStore={() => set('collection', 'all')}
             />
           )}
 
@@ -6416,7 +6427,7 @@ export default function App() {
             <div className="mt-8 text-center">
               <button
                 type="button"
-                onClick={() => set('collection', 'store')}
+                onClick={() => set('collection', 'all')}
                 className="inline-flex items-center gap-1.5 text-sm font-medium text-indigo-600 dark:text-indigo-300 hover:underline"
               >
                 <Search className="h-4 w-4" />
