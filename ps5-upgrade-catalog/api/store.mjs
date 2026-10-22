@@ -116,3 +116,13 @@ export async function storeGenres() {
 }
 
 export const storeSize = async () => (await index()).length;
+
+/**
+ * How much of the mirror is marked as covered by PlayStation Plus.
+ *
+ * Reported because the alternative is guessing. When the badges did not show
+ * up in production there was no way to tell a failed fetch of the Plus page
+ * from a stale merge cache from a blob that never saved, and that is exactly
+ * the blindness the feed diagnostics were added to end this morning.
+ */
+export const storePlusCount = async () => (await index()).filter((row) => row.plusIncluded).length;

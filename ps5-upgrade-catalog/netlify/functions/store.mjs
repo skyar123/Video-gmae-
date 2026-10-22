@@ -1,11 +1,17 @@
-import { searchStore, storeGenres, storeSize } from '../../api/store.mjs';
+import { searchStore, storeGenres, storePlusCount, storeSize } from '../../api/store.mjs';
 
 /** GET /api/store — search the mirrored PlayStation Store index. */
 export default async function handler(request) {
   const url = new URL(request.url);
 
   if (url.searchParams.get('facets') === '1') {
-    const payload = { genres: await storeGenres(), size: await storeSize() };
+    const payload = {
+      genres: await storeGenres(),
+      size: await storeSize(),
+      // How many rows the PS Plus list covers, so a missing badge can be
+      // told apart from a failed refresh without guessing.
+      plus: await storePlusCount(),
+    };
     return json(payload);
   }
 
