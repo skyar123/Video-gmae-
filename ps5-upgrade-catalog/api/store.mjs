@@ -87,6 +87,7 @@ export async function searchStore({
   sort = 'relevance',
   page = 0,
   exclude = [],
+  plusOnly = false,
 } = {}) {
   const rows = await index();
   const plus = await plusIndex();
@@ -95,6 +96,9 @@ export async function searchStore({
 
   let hits = rows.filter((row) => {
     if (!row.name) return false;
+    // Only games the scan has actually confirmed. A game it has not reached
+    // yet is unknown, so it is absent here rather than assumed excluded.
+    if (plusOnly && !plus[row.id]?.included) return false;
     if (skip.has(row.search.folded)) return false;
     if (genre && !(row.genres ?? []).includes(genre)) return false;
     if (platform && !(row.platforms ?? []).includes(platform)) return false;

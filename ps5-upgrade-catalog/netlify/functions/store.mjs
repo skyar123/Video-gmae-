@@ -23,6 +23,7 @@ export default async function handler(request) {
     sort: url.searchParams.get('sort') ?? 'relevance',
     page: Number(url.searchParams.get('page') ?? 0) || 0,
     exclude: (url.searchParams.get('exclude') ?? '').split('\n').filter(Boolean),
+    plusOnly: url.searchParams.get('plus') === '1',
   });
   return json(payload);
 }

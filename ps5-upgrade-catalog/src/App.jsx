@@ -3950,7 +3950,7 @@ function storeRowAsLive(row) {
 }
 
 /** Query state for the mirror, kept out of the component that renders it. */
-function useStoreSearch({ active, q, genre, sort }) {
+function useStoreSearch({ active, q, genre, sort, plusOnly = false }) {
   const [state, setState] = useState({ status: 'idle', games: [], total: 0, page: 0 });
   const request = useRef(0);
 
@@ -3961,6 +3961,7 @@ function useStoreSearch({ active, q, genre, sort }) {
     if (q) params.set('q', q);
     if (genre) params.set('genre', genre);
     if (sort) params.set('sort', sort);
+    if (plusOnly) params.set('plus', '1');
 
     // eslint-disable-next-line react/set-state-in-effect
     setState((previous) => ({ ...previous, status: 'loading' }));
@@ -3977,13 +3978,14 @@ function useStoreSearch({ active, q, genre, sort }) {
     }, q ? 220 : 0);
 
     return () => clearTimeout(timer);
-  }, [active, q, genre, sort]);
+  }, [active, q, genre, sort, plusOnly]);
 
   const more = useCallback(async () => {
     const params = new URLSearchParams();
     if (q) params.set('q', q);
     if (genre) params.set('genre', genre);
     if (sort) params.set('sort', sort);
+    if (plusOnly) params.set('plus', '1');
     params.set('page', String(state.page + 1));
     try {
       const response = await fetch(`/api/store?${params}`);
@@ -3996,7 +3998,7 @@ function useStoreSearch({ active, q, genre, sort }) {
     } catch {
       // A failed "load more" leaves what is already on screen alone.
     }
-  }, [q, genre, sort, state.page]);
+  }, [q, genre, sort, plusOnly, state.page]);
 
   return { ...state, more };
 }
@@ -4010,8 +4012,8 @@ function useStoreSearch({ active, q, genre, sort }) {
  * The whole store as a feed, so the view switch means the same thing here as
  * it does anywhere else.
  */
-function StoreFeed({ query, curatedFirst = [], curatedByName, saved, muted, onToggleMuted, onOpenCurated, onOpenStore }) {
-  const results = useStoreSearch({ active: true, q: query, genre: '', sort: 'rating' });
+function StoreFeed({ query, curatedFirst = [], curatedByName, saved, plusOnly = false, muted, onToggleMuted, onOpenCurated, onOpenStore }) {
+  const results = useStoreSearch({ active: true, q: query, genre: '', sort: 'rating', plusOnly });
   const [sentinel, setSentinel] = useState(null);
   const loadMore = results.more;
   const hasMore = results.games.length < results.total;
@@ -4074,7 +4076,7 @@ function StoreFeed({ query, curatedFirst = [], curatedByName, saved, muted, onTo
   );
 }
 
-function StorePanel({ query, curatedFirst = [], curatedByName, saved, onOpenCurated, onOpenStore }) {
+function StorePanel({ query, curatedFirst = [], curatedByName, saved, plusOnly = false, onOpenCurated, onOpenStore }) {
   const [genre, setGenre] = useState('');
   const [sort, setSort] = useState('rating');
   const [facets, setFacets] = useState({ genres: [], size: 0 });
@@ -4092,7 +4094,7 @@ function StorePanel({ query, curatedFirst = [], curatedByName, saved, onOpenCura
     };
   }, []);
 
-  const results = useStoreSearch({ active: true, q: query, genre, sort });
+  const results = useStoreSearch({ active: true, q: query, genre, sort, plusOnly });
 
   // Ask for the next page a screen and a half early, so the end of the list is
   // never actually reached. A callback ref because the sentinel only exists
@@ -4115,8 +4117,17 @@ function StorePanel({ query, curatedFirst = [], curatedByName, saved, onOpenCura
   return (
     <>
       <p className="mb-3 text-xs font-medium text-slate-400 dark:text-slate-500">
-        {results.total.toLocaleString()} of {facets.size.toLocaleString()} games indexed ·{' '}
-        {COLLECTION_BLURBS.all}
+        {plusOnly ? (
+          <>
+            {(results.total + curatedFirst.length).toLocaleString()} covered so far ·{' '}
+            {COLLECTION_BLURBS.plus}
+          </>
+        ) : (
+          <>
+            {results.total.toLocaleString()} of {facets.size.toLocaleString()} games indexed ·{' '}
+            {COLLECTION_BLURBS.all}
+          </>
+        )}
       </p>
 
       <div className="no-scrollbar mb-3 flex gap-1.5 overflow-x-auto pb-0.5">
@@ -5236,12 +5247,15 @@ export default function App() {
   // collection, so the mirror's size is fetched once, up front — this is a
   // few hundred bytes, not the 2.7MB index, and costs nothing idle.
   const [storeSize, setStoreSize] = useState(null);
+  const [storePlus, setStorePlus] = useState(0);
   useEffect(() => {
     let live = true;
     fetch('/api/store?facets=1')
       .then((response) => response.json())
       .then((payload) => {
-        if (live && typeof payload.size === 'number') setStoreSize(payload.size);
+        if (!live) return;
+        if (typeof payload.size === 'number') setStoreSize(payload.size);
+        if (typeof payload.plus?.included === 'number') setStorePlus(payload.plus.included);
       })
       .catch(() => {});
     return () => {
@@ -5881,11 +5895,19 @@ export default function App() {
     [catalogPool, byTitle],
   );
 
-  /** Covered by a Plus tier that carries a game catalog, so nothing to pay. */
-  const plusCount = useMemo(
-    () => catalogPool.filter((game) => byTitle.get(game.title)?.price?.plus?.included).length,
+  /**
+   * Written-up games a Plus tier covers, read from their live price.
+   *
+   * These and the store's own scan answer the same question from different
+   * ends, and neither covers the other: the price read only runs for the
+   * written-up catalog, and the scan only reaches games that are in the
+   * mirror. So the collection shows both, with these first.
+   */
+  const curatedPlusGames = useMemo(
+    () => catalogPool.filter((game) => byTitle.get(game.title)?.price?.plus?.included),
     [catalogPool, byTitle],
   );
+  const plusCount = curatedPlusGames.length;
 
   // Over the whole pool, not the filtered results: a chip that counted its own
   // output would read zero the moment you switched it on.
@@ -5912,7 +5934,10 @@ export default function App() {
       curated: catalogPool.length,
       soon: upcomingGames.length,
       deals: saleCount,
-      plus: plusCount,
+      // Both ends of the same question. The overlap is small while the scan
+      // is early, and a chip that undercounts is worse than one that is a
+      // little generous about a game appearing on both lists.
+      plus: plusCount + storePlus,
       genius: geniusPicks.length,
     };
     const counts = {};
@@ -5925,7 +5950,7 @@ export default function App() {
             : catalogPool.length;
     }
     return counts;
-  }, [catalogPool, saleCount, plusCount, geniusPicks, storeSize, upcomingGames]);
+  }, [catalogPool, saleCount, plusCount, storePlus, geniusPicks, storeSize, upcomingGames]);
 
   const activeGame = activeGameId ? gamesData.find((game) => game.id === activeGameId) : null;
 
@@ -6326,10 +6351,11 @@ export default function App() {
         >
           {/* The collection chip has to mean the same thing in both views.
               Whole store used to fall through to the curated list here. */}
-          {filters.collection === 'all' ? (
+          {filters.collection === 'all' || filters.collection === 'plus' ? (
             <StoreFeed
               query={deferredQuery.trim()}
-              curatedFirst={curatedOnlyMatches}
+              curatedFirst={filters.collection === 'plus' ? curatedPlusGames : curatedOnlyMatches}
+              plusOnly={filters.collection === 'plus'}
               curatedByName={curatedByName}
               saved={storeSaved}
               muted={feedMuted}
@@ -6352,10 +6378,10 @@ export default function App() {
             />
           ))
           )}
-          {filters.collection !== 'all' && hasMore && (
+          {filters.collection !== 'all' && filters.collection !== 'plus' && hasMore && (
             <div ref={attachEnd} aria-hidden="true" className="h-px" />
           )}
-          {filters.collection !== 'all' && filteredGames.length === 0 && (
+          {filters.collection !== 'all' && filters.collection !== 'plus' && filteredGames.length === 0 && (
             <EmptyState
               filters={filters}
               wishlist={wishlist}
@@ -6368,10 +6394,11 @@ export default function App() {
         </main>
       ) : (
         <main className="gutter pb-nav mx-auto max-w-7xl pt-3">
-          {filters.collection === 'all' ? (
+          {filters.collection === 'all' || filters.collection === 'plus' ? (
             <StorePanel
               query={deferredQuery.trim()}
-              curatedFirst={curatedOnlyMatches}
+              curatedFirst={filters.collection === 'plus' ? curatedPlusGames : curatedOnlyMatches}
+              plusOnly={filters.collection === 'plus'}
               curatedByName={curatedByName}
               saved={storeSaved}
               onOpenCurated={setActiveGameId}
