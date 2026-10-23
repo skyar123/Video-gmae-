@@ -8,7 +8,7 @@ export default async function handler(request) {
   return new Response(JSON.stringify(payload), {
     headers: {
       'content-type': 'application/json; charset=utf-8',
-      'cache-control': 'public, max-age=1800, s-maxage=21600, stale-while-revalidate=86400',
+      'cache-control': 'public, max-age=900, s-maxage=900, stale-while-revalidate=86400',
     },
   });
 }

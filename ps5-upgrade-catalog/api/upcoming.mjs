@@ -15,7 +15,17 @@ import { ratingFromConcept } from './rating.mjs';
 
 const UA = 'Mozilla/5.0 (compatible; ps5-upgrade-catalog/1.0)';
 const READ_CAP = 190_000; // Release date, art, price and genres all land inside this.
-const CACHE_TTL_MS = 6 * 60 * 60 * 1000;
+/*
+ * Fifteen minutes, not six hours.
+ *
+ * The calendar is rebuilt nightly, and this cache sat in front of it for six
+ * hours while the CDN held its own copy for another six. A sweep could write
+ * a new calendar and readers would keep the old one for most of a day, and
+ * the instance that ran the sweep is the only one its `memory = null` reaches.
+ * That is also why a 46-day-old calendar was so hard to see: every probe was
+ * answered from a copy taken before the thing being tested ran.
+ */
+const CACHE_TTL_MS = 15 * 60 * 1000;
 const BLOB_KEY = 'upcoming/us.json';
 
 /** Where the last served calendar came from; read by the debug endpoint. */
