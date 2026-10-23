@@ -24,6 +24,7 @@ export default async function handler(request) {
     page: Number(url.searchParams.get('page') ?? 0) || 0,
     exclude: (url.searchParams.get('exclude') ?? '').split('\n').filter(Boolean),
     plusOnly: url.searchParams.get('plus') === '1',
+    familyOnly: url.searchParams.get('family') === '1',
   });
   return json(payload);
 }

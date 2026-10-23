@@ -672,6 +672,23 @@ const AGE_TIERS = {
 
 const FAMILY_TIER_VALUES = ['safe', 'mild'];
 
+/**
+ * Whether a rating means "a child can play this".
+ *
+ * The content verdict alone was not enough. It is derived from descriptor
+ * wording, and the board's tier is applied as a floor, which lifts a Teen
+ * game with bland descriptors to "mild" — and "mild" was passing this
+ * filter. Across one scan five of the eleven games it returned were ESRB T,
+ * which is 13+, under a control with a baby on it.
+ *
+ * So the board's own tier has a veto. Everyone and Everyone 10+ can pass;
+ * Teen and Mature cannot, whatever their descriptors read like. A rating
+ * that was never read stays excluded: unknown is not an assurance.
+ */
+const isKidFriendly = (ageRating) =>
+  FAMILY_TIER_VALUES.includes(ageRating?.family) &&
+  (ageRating?.tier === 'everyone' || ageRating?.tier === 'everyone10');
+
 function AgeBadge({ ageRating, size = 'sm' }) {
   const family = FAMILY_TIERS[ageRating?.family ?? 'unknown'] ?? FAMILY_TIERS.unknown;
   const pad = size === 'lg' ? 'px-2.5 py-1 text-sm' : 'px-1.5 py-0.5 text-[11px]';
@@ -1791,7 +1808,7 @@ function GameCard({
                   {ratings.critic}
                 </span>
               ) : null,
-              FAMILY_TIER_VALUES.includes(game.ageRating?.family) ? (
+              isKidFriendly(game.ageRating) ? (
                 <Baby key="kids" className="h-3 w-3 shrink-0" aria-label="Kid friendly" />
               ) : null,
               game.stars != null && (game.votes ?? 0) >= 10 ? (
@@ -3950,7 +3967,7 @@ function storeRowAsLive(row) {
 }
 
 /** Query state for the mirror, kept out of the component that renders it. */
-function useStoreSearch({ active, q, genre, sort, plusOnly = false }) {
+function useStoreSearch({ active, q, genre, sort, plusOnly = false, familyOnly = false }) {
   const [state, setState] = useState({ status: 'idle', games: [], total: 0, page: 0 });
   const request = useRef(0);
 
@@ -3962,6 +3979,7 @@ function useStoreSearch({ active, q, genre, sort, plusOnly = false }) {
     if (genre) params.set('genre', genre);
     if (sort) params.set('sort', sort);
     if (plusOnly) params.set('plus', '1');
+    if (familyOnly) params.set('family', '1');
 
     // eslint-disable-next-line react/set-state-in-effect
     setState((previous) => ({ ...previous, status: 'loading' }));
@@ -3978,7 +3996,7 @@ function useStoreSearch({ active, q, genre, sort, plusOnly = false }) {
     }, q ? 220 : 0);
 
     return () => clearTimeout(timer);
-  }, [active, q, genre, sort, plusOnly]);
+  }, [active, q, genre, sort, plusOnly, familyOnly]);
 
   const more = useCallback(async () => {
     const params = new URLSearchParams();
@@ -3986,6 +4004,7 @@ function useStoreSearch({ active, q, genre, sort, plusOnly = false }) {
     if (genre) params.set('genre', genre);
     if (sort) params.set('sort', sort);
     if (plusOnly) params.set('plus', '1');
+    if (familyOnly) params.set('family', '1');
     params.set('page', String(state.page + 1));
     try {
       const response = await fetch(`/api/store?${params}`);
@@ -3998,7 +4017,7 @@ function useStoreSearch({ active, q, genre, sort, plusOnly = false }) {
     } catch {
       // A failed "load more" leaves what is already on screen alone.
     }
-  }, [q, genre, sort, plusOnly, state.page]);
+  }, [q, genre, sort, plusOnly, familyOnly, state.page]);
 
   return { ...state, more };
 }
@@ -4012,8 +4031,8 @@ function useStoreSearch({ active, q, genre, sort, plusOnly = false }) {
  * The whole store as a feed, so the view switch means the same thing here as
  * it does anywhere else.
  */
-function StoreFeed({ query, curatedFirst = [], curatedReason, curatedByName, saved, plusOnly = false, muted, onToggleMuted, onOpenCurated, onOpenStore }) {
-  const results = useStoreSearch({ active: true, q: query, genre: '', sort: 'rating', plusOnly });
+function StoreFeed({ query, curatedFirst = [], curatedReason, curatedByName, saved, plusOnly = false, familyOnly = false, muted, onToggleMuted, onOpenCurated, onOpenStore }) {
+  const results = useStoreSearch({ active: true, q: query, genre: '', sort: 'rating', plusOnly, familyOnly });
   const [sentinel, setSentinel] = useState(null);
   const loadMore = results.more;
   const hasMore = results.games.length < results.total;
@@ -4076,7 +4095,7 @@ function StoreFeed({ query, curatedFirst = [], curatedReason, curatedByName, sav
   );
 }
 
-function StorePanel({ query, curatedFirst = [], curatedReason, curatedByName, saved, plusOnly = false, onOpenCurated, onOpenStore }) {
+function StorePanel({ query, curatedFirst = [], curatedReason, curatedByName, saved, plusOnly = false, familyOnly = false, onOpenCurated, onOpenStore }) {
   const [genre, setGenre] = useState('');
   const [sort, setSort] = useState('rating');
   const [facets, setFacets] = useState({ genres: [], size: 0 });
@@ -4094,7 +4113,7 @@ function StorePanel({ query, curatedFirst = [], curatedReason, curatedByName, sa
     };
   }, []);
 
-  const results = useStoreSearch({ active: true, q: query, genre, sort, plusOnly });
+  const results = useStoreSearch({ active: true, q: query, genre, sort, plusOnly, familyOnly });
 
   // Ask for the next page a screen and a half early, so the end of the list is
   // never actually reached. A callback ref because the sentinel only exists
@@ -5795,7 +5814,7 @@ export default function App() {
       if (filters.protagonist !== 'All' && game.protagonist !== filters.protagonist) return false;
       if (filters.artStyle !== 'All' && game.artStyle !== filters.artStyle) return false;
       if (filters.upgrade !== 'All' && game.ps5Upgrade !== filters.upgrade) return false;
-      if (filters.kidFriendly && !FAMILY_TIER_VALUES.includes(game.ageRating?.family)) return false;
+      if (filters.kidFriendly && !isKidFriendly(game.ageRating)) return false;
       if (filters.owned === 'owned' && !library.has(game.id)) return false;
       if (filters.owned === 'unowned' && library.has(game.id)) return false;
       if (filters.wishlist && !wishlist.has(game.id)) return false;
@@ -5928,7 +5947,7 @@ export default function App() {
   );
 
   const kidFriendlyCount = useMemo(
-    () => catalogPool.filter((game) => FAMILY_TIER_VALUES.includes(game.ageRating?.family)).length,
+    () => catalogPool.filter((game) => isKidFriendly(game.ageRating)).length,
     [catalogPool],
   );
 
@@ -6363,6 +6382,7 @@ export default function App() {
               query={deferredQuery.trim()}
               curatedFirst={filters.collection === 'plus' ? curatedPlusGames : curatedOnlyMatches}
               plusOnly={filters.collection === 'plus'}
+              familyOnly={filters.kidFriendly}
               curatedReason={
                 filters.collection === 'plus'
                   ? 'In your catalog, covered by Plus'
@@ -6411,6 +6431,7 @@ export default function App() {
               query={deferredQuery.trim()}
               curatedFirst={filters.collection === 'plus' ? curatedPlusGames : curatedOnlyMatches}
               plusOnly={filters.collection === 'plus'}
+              familyOnly={filters.kidFriendly}
               curatedReason={
                 filters.collection === 'plus'
                   ? 'In your catalog, covered by Plus'

@@ -34,6 +34,17 @@ let plusCache = null;
  */
 const PLUS_TTL_MS = 60 * 1000;
 
+/**
+ * Whether a rating means a child can play it, matching the catalog's rule.
+ *
+ * The content verdict is not enough on its own: the board tier is applied as
+ * a floor when deriving it, so a Teen game with bland descriptors reads as
+ * "mild", and mild was passing. The tier gets a veto here too.
+ */
+const isKidFriendly = (ageRating) =>
+  ['safe', 'mild'].includes(ageRating?.family) &&
+  (ageRating?.tier === 'everyone' || ageRating?.tier === 'everyone10');
+
 async function plusIndex() {
   if (plusCache && Date.now() - plusCache.at < PLUS_TTL_MS) return plusCache.games;
   const games = (await loadBlob(PLUS_KEY))?.games ?? {};
@@ -88,6 +99,7 @@ export async function searchStore({
   page = 0,
   exclude = [],
   plusOnly = false,
+  familyOnly = false,
 } = {}) {
   const rows = await index();
   const plus = await plusIndex();
@@ -99,6 +111,9 @@ export async function searchStore({
     // Only games the scan has actually confirmed. A game it has not reached
     // yet is unknown, so it is absent here rather than assumed excluded.
     if (plusOnly && !plus[row.id]?.included) return false;
+    // Same rule the curated list follows: a game whose rating has not been
+    // read is unknown, and unknown is not "fine for children".
+    if (familyOnly && !isKidFriendly(plus[row.id]?.ageRating)) return false;
     if (skip.has(row.search.folded)) return false;
     if (genre && !(row.genres ?? []).includes(genre)) return false;
     if (platform && !(row.platforms ?? []).includes(platform)) return false;
@@ -124,10 +139,13 @@ export async function searchStore({
     pageSize: PAGE_SIZE,
     // The normalised name is a search artefact; it does not go over the wire.
     games: hits.slice(start, start + PAGE_SIZE).map(({ search: _search, ...row }) => {
-      const covered = plus[row.id];
-      return covered?.included
-        ? { ...row, plusIncluded: true, plusTier: covered.tier ?? null }
-        : row;
+      const seen = plus[row.id];
+      if (!seen) return row;
+      return {
+        ...row,
+        ...(seen.included ? { plusIncluded: true, plusTier: seen.tier ?? null } : {}),
+        ...(seen.ageRating ? { ageRating: seen.ageRating } : {}),
+      };
     }),
     indexedAt: null,
   };

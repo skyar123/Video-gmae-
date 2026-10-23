@@ -21,6 +21,7 @@
 
 import { loadBlob, saveBlob } from './history.mjs';
 import { PLUS_KEY } from './keys.mjs';
+import { ratingFromConcept } from './rating.mjs';
 
 const HEADERS = {
   'user-agent':
@@ -55,7 +56,18 @@ async function readConcept(id) {
       signal: AbortSignal.timeout(15000),
     });
     if (!response.ok) return null;
-    return parsePlusHtml(await response.text());
+    const html = await response.text();
+    /*
+     * The age rating comes along for free.
+     *
+     * This page is already being fetched and already carries the board
+     * rating and its descriptors, which the mirror has for none of its
+     * 8,885 games. Unlike a price or a Plus tier it does not go stale: a
+     * game is rated once and stays rated, so a reading taken today is still
+     * true a month from now, which is the whole reason it is worth storing
+     * from a scan that only comes round monthly.
+     */
+    return { ...parsePlusHtml(html), ageRating: ratingFromConcept(html) ?? null };
   } catch {
     return null;
   }
