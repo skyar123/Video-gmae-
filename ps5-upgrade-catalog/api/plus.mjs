@@ -31,6 +31,9 @@ const HEADERS = {
 /** A night's worth of polite requests, at roughly one every 400ms. */
 export const PLUS_BATCH = 250;
 
+/** Write progress this often, so a run that is cut short keeps what it got. */
+const CHECKPOINT_EVERY = 50;
+
 /** Rechecked after this long: games join and leave the catalog monthly. */
 const RECHECK_MS = 30 * 24 * 60 * 60 * 1000;
 
@@ -75,19 +78,37 @@ export async function scanPlusBatch(ids, { limit = PLUS_BATCH, gapMs = 400, now 
     return !Number.isFinite(at) || now - at > RECHECK_MS;
   });
 
+  /*
+   * Saved as it goes, not at the end.
+   *
+   * The first version wrote once after the whole batch, and a run that hit
+   * the function's time limit threw away everything it had learned: two
+   * triggers of 1,200 games each left the store reporting nought checked.
+   * At roughly a second a game that batch is twenty minutes, and the limit
+   * is fifteen. Checkpointing means a killed run still moves coverage
+   * forward, and the next one picks up from where it actually got to.
+   */
   let asked = 0;
   let answered = 0;
+  let unsaved = 0;
+  const checkpoint = async () => {
+    if (unsaved === 0) return;
+    await saveBlob(PLUS_KEY, { games, at: new Date(now).toISOString() });
+    unsaved = 0;
+  };
+
   for (const id of due.slice(0, limit)) {
     asked += 1;
     const result = await readConcept(id);
     if (result) {
       answered += 1;
+      unsaved += 1;
       games[id] = { ...result, at: new Date(now).toISOString() };
     }
+    if (unsaved >= CHECKPOINT_EVERY) await checkpoint();
     await new Promise((resolve) => setTimeout(resolve, gapMs));
   }
-
-  if (answered > 0) await saveBlob(PLUS_KEY, { games, at: new Date(now).toISOString() });
+  await checkpoint();
 
   const included = Object.values(games).filter((row) => row.included).length;
   return { asked, answered, checked: Object.keys(games).length, included, remaining: due.length - asked };

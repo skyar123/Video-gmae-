@@ -18,10 +18,11 @@ export default async () => {
   // A PS Plus batch rides along, so coverage can be pushed forward without
   // waiting for tonight. It picks up where the last run stopped.
   try {
-    // A much bigger bite than the nightly job takes. This function has
-    // minutes, and at 8,885 games a 250-a-night scan is five weeks to first
-    // full coverage; at 1,200 a run it is a handful of presses.
-    const plus = await scanPlusBatch(storeIndex.map((row) => String(row.id)), { limit: 1200 });
+    // Sized to the window rather than to optimism. A background function
+    // gets fifteen minutes; at about a second a game, 1,200 was twenty
+    // minutes and got killed. 500 leaves room for the video warm that
+    // follows, and progress is checkpointed either way.
+    const plus = await scanPlusBatch(storeIndex.map((row) => String(row.id)), { limit: 500 });
     console.log(
       `PS Plus scan: ${plus.answered}/${plus.asked} answered, ` +
         `${plus.included} included of ${plus.checked} checked, ${plus.remaining} still to do`,
