@@ -8,8 +8,9 @@ export default async function handler(request) {
     const payload = {
       genres: await storeGenres(),
       size: await storeSize(),
-      // How many rows the PS Plus list covers, so a missing badge can be
-      // told apart from a failed refresh without guessing.
+      // {included, checked, of}: how far the nightly PS Plus scan has got.
+      // A missing badge means "not checked yet" until checked reaches of,
+      // and saying so beats letting absence look like an answer.
       plus: await storePlusCount(),
     };
     return json(payload);

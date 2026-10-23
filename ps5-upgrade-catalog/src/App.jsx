@@ -3936,7 +3936,7 @@ function storeRowAsLive(row) {
           // badge works for a store row without knowing where it came from.
           // No tier: the catalog page says a game is included, not which
           // tier covers it, and inventing one would be worse than omitting.
-          plus: row.plusIncluded ? { included: true, tier: null } : undefined,
+          plus: row.plusIncluded ? { included: true, tier: row.plusTier ?? null } : undefined,
         }
       : null,
     ratings: null,

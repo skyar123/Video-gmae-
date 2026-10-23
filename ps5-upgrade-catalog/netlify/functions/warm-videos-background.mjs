@@ -1,7 +1,6 @@
 import { warmYouTubePool } from '../../api/goss.mjs';
-import { saveBlob } from '../../api/history.mjs';
-import { fetchPlusConceptIds } from '../../api/plus.mjs';
-import { PLUS_KEY } from '../../api/keys.mjs';
+import { scanPlusBatch } from '../../api/plus.mjs';
+import storeIndex from '../../api/store-index.json' with { type: 'json' };
 
 /**
  * Fills the gossip feed's video pool on demand.
@@ -16,19 +15,19 @@ import { PLUS_KEY } from '../../api/keys.mjs';
  * safe to leave reachable without a secret to keep somewhere.
  */
 export default async () => {
-  // The PS Plus list rides along: it is one request, it has nothing to do
-  // with the hourly video guard, and waiting until tonight for it would mean
-  // the whole library shows no Plus badges until then.
+  // A PS Plus batch rides along, so coverage can be pushed forward without
+  // waiting for tonight. It picks up where the last run stopped.
   try {
-    const ids = await fetchPlusConceptIds();
-    if (ids) {
-      await saveBlob(PLUS_KEY, { ids, at: new Date().toISOString() });
-      console.log(`PS Plus catalog: ${ids.length} concept ids stored`);
-    } else {
-      console.log('PS Plus catalog: unreadable, keeping the stored list');
-    }
+    // A much bigger bite than the nightly job takes. This function has
+    // minutes, and at 8,885 games a 250-a-night scan is five weeks to first
+    // full coverage; at 1,200 a run it is a handful of presses.
+    const plus = await scanPlusBatch(storeIndex.map((row) => String(row.id)), { limit: 1200 });
+    console.log(
+      `PS Plus scan: ${plus.answered}/${plus.asked} answered, ` +
+        `${plus.included} included of ${plus.checked} checked, ${plus.remaining} still to do`,
+    );
   } catch (error) {
-    console.error('PS Plus catalog refresh failed:', error);
+    console.error('PS Plus scan failed:', error);
   }
 
   const result = await warmYouTubePool({ minIntervalMs: 60 * 60 * 1000 });

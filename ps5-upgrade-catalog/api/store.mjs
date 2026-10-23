@@ -37,15 +37,16 @@ async function index() {
   // releases that are not on Steam at all.
   const matches = (await loadBlob(STEAM_MATCH_KEY))?.byId ?? {};
 
-  // Covered by PlayStation Plus, refreshed nightly from PlayStation's own
-  // Plus games page. Only a positive is meaningful: that page lists a subset
-  // of the catalog, so an absent game is unknown rather than excluded.
-  const plus = new Set((await loadBlob(PLUS_KEY))?.ids ?? []);
+  // Covered by PlayStation Plus, from each game's own store page, checked a
+  // batch a night. A game absent from this is one whose turn has not come
+  // round yet, not one that is known to be excluded.
+  const plus = (await loadBlob(PLUS_KEY))?.games ?? {};
 
   const rows = [...byId.values()].map((row) => ({
     ...row,
     steamAppId: row.steamAppId ?? matches[row.id] ?? null,
-    plusIncluded: plus.has(String(row.id)) || undefined,
+    plusIncluded: plus[row.id]?.included || undefined,
+    plusTier: plus[row.id]?.included ? (plus[row.id].tier ?? null) : undefined,
     search: indexText(row.name ?? ''),
   }));
   merged = { rows, at: Date.now() };
@@ -125,4 +126,12 @@ export const storeSize = async () => (await index()).length;
  * from a stale merge cache from a blob that never saved, and that is exactly
  * the blindness the feed diagnostics were added to end this morning.
  */
-export const storePlusCount = async () => (await index()).filter((row) => row.plusIncluded).length;
+export const storePlusCount = async () => {
+  const rows = await index();
+  const plus = (await loadBlob(PLUS_KEY))?.games ?? {};
+  return {
+    included: rows.filter((row) => row.plusIncluded).length,
+    checked: Object.keys(plus).length,
+    of: rows.length,
+  };
+};

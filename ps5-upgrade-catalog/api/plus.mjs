@@ -1,42 +1,94 @@
 /**
- * Which store games a PlayStation Plus subscription already covers.
+ * Which store games a PlayStation Plus subscription actually covers.
  *
- * A game's own store page says this precisely, tier and all, and that is
- * what `parsePlus` in psn.mjs reads for the hand-written catalog. It cannot
- * answer for the whole mirror, because that would be 8,885 page fetches.
+ * A game's own store page is the only source that has been right: it carries
+ * `"discountedPrice":"Included"` and names the tier in its upsell text, which
+ * is what `parsePlus` reads for the hand-written catalog.
  *
- * PlayStation's own Plus games page lists the catalog as ordinary concept
- * links, which is one request for the lot. 262 ids came back when this was
- * written, 230 of them matching the mirror. That is a subset rather than the
- * entire Extra catalog, so this marks what it can prove and says nothing
- * about the rest: a game being absent here is not evidence it is excluded.
+ * PlayStation's marketing page at /ps-plus/games/ looks like a shortcut and
+ * is not one. It lists 262 concept ids in a single request, which is tempting,
+ * and spot-checking them against the store itself settled it: Alan Wake 2,
+ * Age of Wonders 4 and AEW: Fight Forever are all on that page and all report
+ * not included, while Horizon Forbidden West and DREDGE are absent from it and
+ * both report included with Extra. Every one of the 47 catalog games the price
+ * read knows to be included was missing from it. Whatever that list is, it is
+ * not the current catalog, and badging a game "free" when it is not is worse
+ * than showing nothing at all.
+ *
+ * So this walks the store itself, a batch a night, the way the Steam matcher
+ * does. Coverage builds instead of arriving, and what it reports is true.
  */
 
-const SOURCE = 'https://www.playstation.com/en-us/ps-plus/games/';
+import { loadBlob, saveBlob } from './history.mjs';
+import { PLUS_KEY } from './keys.mjs';
+
 const HEADERS = {
   'user-agent':
     'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/124.0 Safari/537.36',
   'accept-language': 'en-US,en;q=0.9',
 };
 
-/** Fewer than this and the page shape has changed; keep the old list. */
-const SANITY_FLOOR = 40;
+/** A night's worth of polite requests, at roughly one every 400ms. */
+export const PLUS_BATCH = 250;
+
+/** Rechecked after this long: games join and leave the catalog monthly. */
+const RECHECK_MS = 30 * 24 * 60 * 60 * 1000;
+
+/** The store page's own answer, or null when the page cannot be read. */
+export function parsePlusHtml(html) {
+  if (!/"discountedPrice":"Included"/.test(html)) return { included: false, tier: null };
+  const upsell = (html.match(/"displayUpsellText":"([^"]{5,200})"/) || [])[1] ?? '';
+  const tier = (upsell.match(/PlayStation Plus (Extra|Premium|Deluxe)/) || [])[1] ?? null;
+  // Essential is online play, not a game catalog, so it is not inclusion.
+  if (!tier) return { included: false, tier: null };
+  return { included: true, tier: `PlayStation Plus ${tier}` };
+}
+
+async function readConcept(id) {
+  try {
+    const response = await fetch(`https://store.playstation.com/en-us/concept/${id}`, {
+      headers: HEADERS,
+      redirect: 'follow',
+      signal: AbortSignal.timeout(15000),
+    });
+    if (!response.ok) return null;
+    return parsePlusHtml(await response.text());
+  } catch {
+    return null;
+  }
+}
 
 /**
- * Concept ids currently listed as included, or null if the page could not be
- * read. Null and empty mean different things here: null is "do not touch
- * what is stored", empty would be "nothing is included", which is never
- * true and would wipe every badge in the app.
+ * Checks the next batch of store concepts and folds the answers in.
+ *
+ * Only a page that actually answered is recorded, so a timeout leaves that
+ * game to be asked again next time rather than being filed as excluded.
  */
-export async function fetchPlusConceptIds({ fetchImpl = fetch } = {}) {
-  const response = await fetchImpl(SOURCE, {
-    headers: HEADERS,
-    redirect: 'follow',
-    signal: AbortSignal.timeout(25000),
-  });
-  if (!response.ok) return null;
+export async function scanPlusBatch(ids, { limit = PLUS_BATCH, gapMs = 400, now = Date.now() } = {}) {
+  const stored = (await loadBlob(PLUS_KEY)) ?? {};
+  const games = stored.games ?? {};
 
-  const html = await response.text();
-  const ids = [...new Set((html.match(/\/concept\/(\d+)/g) ?? []).map((href) => href.slice(9)))];
-  return ids.length >= SANITY_FLOOR ? ids : null;
+  const due = ids.filter((id) => {
+    const seen = games[id];
+    if (!seen) return true;
+    const at = seen.at ? Date.parse(seen.at) : NaN;
+    return !Number.isFinite(at) || now - at > RECHECK_MS;
+  });
+
+  let asked = 0;
+  let answered = 0;
+  for (const id of due.slice(0, limit)) {
+    asked += 1;
+    const result = await readConcept(id);
+    if (result) {
+      answered += 1;
+      games[id] = { ...result, at: new Date(now).toISOString() };
+    }
+    await new Promise((resolve) => setTimeout(resolve, gapMs));
+  }
+
+  if (answered > 0) await saveBlob(PLUS_KEY, { games, at: new Date(now).toISOString() });
+
+  const included = Object.values(games).filter((row) => row.included).length;
+  return { asked, answered, checked: Object.keys(games).length, included, remaining: due.length - asked };
 }

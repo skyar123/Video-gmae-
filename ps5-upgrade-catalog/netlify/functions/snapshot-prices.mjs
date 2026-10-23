@@ -6,8 +6,7 @@ import { loadReviewSignal } from '../../api/reviews.mjs';
 import { loadUpcoming, sweepForReleases } from '../../api/upcoming.mjs';
 import { replayCalibration } from '../../api/backtest.mjs';
 import { warmYouTubePool } from '../../api/goss.mjs';
-import { fetchPlusConceptIds } from '../../api/plus.mjs';
-import { PLUS_KEY } from '../../api/keys.mjs';
+import { scanPlusBatch } from '../../api/plus.mjs';
 import { loadChunk } from '../../api/history.mjs';
 import { BACKTEST_KEY } from '../../api/keys.mjs';
 import { conceptPathFor, runAlerts, watchedConceptIds } from '../../api/alerts.mjs';
@@ -210,26 +209,22 @@ export default async () => {
   );
 
   /*
-   * Which store games PlayStation Plus covers.
+   * Which store games PlayStation Plus covers, a batch a night.
    *
-   * One request for the lot, from PlayStation's own Plus games page. Asking
-   * each game's store page instead would be authoritative and would also be
-   * 8,885 fetches, which is not a nightly job, it is a weekend.
-   *
-   * A failed read leaves the stored list alone. Null and empty are different
-   * answers here: empty would mean nothing is included, which is never true
-   * and would wipe every badge in the app.
+   * The marketing page that lists the catalog in one request turned out not
+   * to describe the catalog at all, so this asks each game's own store page,
+   * which is the only source that has been right. Coverage builds over a few
+   * weeks rather than arriving at once, and entries are rechecked monthly
+   * because games join and leave.
    */
   try {
-    const ids = await fetchPlusConceptIds();
-    if (ids) {
-      await saveBlob(PLUS_KEY, { ids, at: new Date().toISOString() });
-      console.log(`PS Plus catalog: ${ids.length} concept ids stored`);
-    } else {
-      console.log('PS Plus catalog: page unreadable or too short, keeping the stored list');
-    }
+    const plus = await scanPlusBatch(storeIndex.map((row) => String(row.id)));
+    console.log(
+      `PS Plus scan: ${plus.answered}/${plus.asked} answered, ` +
+        `${plus.included} included of ${plus.checked} checked, ${plus.remaining} still to do`,
+    );
   } catch (error) {
-    console.error('PS Plus catalog refresh failed:', error);
+    console.error('PS Plus scan failed:', error);
   }
 
   // The gossip feed's video pool, filled the slow way.
