@@ -1729,7 +1729,7 @@ function GameCard({
   const unreleased = isUnreleased(game.releaseDate);
 
   return (
-    <div className="group relative flex h-full animate-rise-in flex-col overflow-hidden rounded-xl border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-900 shadow-sm transition-all duration-200 ease-spring hover:-translate-y-1 hover:shadow-lg focus-within:ring-2 focus-within:ring-indigo-500 active:scale-[0.98]">
+    <div className="card-skip group relative flex h-full animate-rise-in flex-col overflow-hidden rounded-xl border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-900 shadow-sm transition-all duration-200 ease-spring hover:-translate-y-1 hover:shadow-lg focus-within:ring-2 focus-within:ring-indigo-500 active:scale-[0.98]">
       <button
         type="button"
         onClick={onOpen}

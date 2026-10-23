@@ -120,6 +120,25 @@
     }
   }
 
+  /*
+   * Skip the rendering work for cards that are off screen.
+   *
+   * The library became the whole store, and the store grid appends pages
+   * without ever dropping them: sixty flicks reached 32,687 DOM nodes, 3,553
+   * cards and 1,080 images, by which point a single scroll took 376ms, and
+   * there are 8,885 games to keep going through. This leaves the nodes where
+   * they are and tells the browser not to lay out or paint any card that is
+   * not near the viewport, which is the part that was costing the time.
+   *
+   * The intrinsic size is a card's real height at the two-column phone
+   * width, so the scrollbar and any jump-to-position stay honest while the
+   * contents are skipped.
+   */
+  .card-skip {
+    content-visibility: auto;
+    contain-intrinsic-size: auto 320px;
+  }
+
   /* A tap target you can actually hit, without forcing the visual size up. */
   .tap {
     min-width: 44px;
