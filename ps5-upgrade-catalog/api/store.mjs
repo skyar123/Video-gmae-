@@ -21,6 +21,25 @@ const PAGE_SIZE = 36;
 const MERGE_TTL_MS = 30 * 60 * 1000;
 
 let merged = null;
+let plusCache = null;
+
+/*
+ * Read separately from the merged index, and far more often.
+ *
+ * PS Plus coverage was folded into the merge, which is cached for half an
+ * hour. That meant a game the scan had just confirmed could not show its
+ * badge until the merge expired, so the scan appeared to be doing nothing
+ * for up to thirty minutes at a time. The index is expensive and changes
+ * nightly; this is one small blob that changes every fifty games.
+ */
+const PLUS_TTL_MS = 60 * 1000;
+
+async function plusIndex() {
+  if (plusCache && Date.now() - plusCache.at < PLUS_TTL_MS) return plusCache.games;
+  const games = (await loadBlob(PLUS_KEY))?.games ?? {};
+  plusCache = { games, at: Date.now() };
+  return games;
+}
 
 /** Baked at deploy, topped up by the nightly sweep. */
 async function index() {
@@ -37,16 +56,9 @@ async function index() {
   // releases that are not on Steam at all.
   const matches = (await loadBlob(STEAM_MATCH_KEY))?.byId ?? {};
 
-  // Covered by PlayStation Plus, from each game's own store page, checked a
-  // batch a night. A game absent from this is one whose turn has not come
-  // round yet, not one that is known to be excluded.
-  const plus = (await loadBlob(PLUS_KEY))?.games ?? {};
-
   const rows = [...byId.values()].map((row) => ({
     ...row,
     steamAppId: row.steamAppId ?? matches[row.id] ?? null,
-    plusIncluded: plus[row.id]?.included || undefined,
-    plusTier: plus[row.id]?.included ? (plus[row.id].tier ?? null) : undefined,
     search: indexText(row.name ?? ''),
   }));
   merged = { rows, at: Date.now() };
@@ -77,6 +89,7 @@ export async function searchStore({
   exclude = [],
 } = {}) {
   const rows = await index();
+  const plus = await plusIndex();
   const query = parseQuery(q);
   const skip = new Set(exclude.map((title) => fold(title)));
 
@@ -106,7 +119,12 @@ export async function searchStore({
     page,
     pageSize: PAGE_SIZE,
     // The normalised name is a search artefact; it does not go over the wire.
-    games: hits.slice(start, start + PAGE_SIZE).map(({ search: _search, ...row }) => row),
+    games: hits.slice(start, start + PAGE_SIZE).map(({ search: _search, ...row }) => {
+      const covered = plus[row.id];
+      return covered?.included
+        ? { ...row, plusIncluded: true, plusTier: covered.tier ?? null }
+        : row;
+    }),
     indexedAt: null,
   };
 }
@@ -135,12 +153,9 @@ export const storeSize = async () => (await index()).length;
  * the blindness the feed diagnostics were added to end this morning.
  */
 export const storePlusCount = async () => {
-  // Both numbers come from the blob, not from the merged index. The index is
-  // cached for half an hour, so reading `included` from it while reading
-  // `checked` from the blob made the diagnostic disagree with itself during
-  // a scan, which is the one thing a diagnostic must not do.
-  const plus = (await loadBlob(PLUS_KEY))?.games ?? {};
-  const rows = Object.values(plus);
+  // Both numbers come from the same place the rows do, so the diagnostic and
+  // the badges can never disagree about what has been found.
+  const rows = Object.values(await plusIndex());
   return {
     included: rows.filter((row) => row.included).length,
     checked: rows.length,
