@@ -38,6 +38,17 @@ const CHECKPOINT_EVERY = 50;
 /** Rechecked after this long: games join and leave the catalog monthly. */
 const RECHECK_MS = 30 * 24 * 60 * 60 * 1000;
 
+/**
+ * What a stored entry is expected to contain.
+ *
+ * Age ratings were added to this scan after about 1,400 games had already
+ * been recorded, and those entries are not wrong, just thin. Without a
+ * version they would have looked complete and sat unread behind a 30-day
+ * recheck, so the library would have shown no ratings for a month. Bumping
+ * this makes every older entry due again at once.
+ */
+const ENTRY_VERSION = 2;
+
 /** The store page's own answer, or null when the page cannot be read. */
 export function parsePlusHtml(html) {
   if (!/"discountedPrice":"Included"/.test(html)) return { included: false, tier: null };
@@ -86,6 +97,9 @@ export async function scanPlusBatch(ids, { limit = PLUS_BATCH, gapMs = 400, now 
   const due = ids.filter((id) => {
     const seen = games[id];
     if (!seen) return true;
+    // Written by an older version of this scan, so it is missing something
+    // the current one collects.
+    if ((seen.v ?? 1) < ENTRY_VERSION) return true;
     const at = seen.at ? Date.parse(seen.at) : NaN;
     return !Number.isFinite(at) || now - at > RECHECK_MS;
   });
@@ -115,13 +129,20 @@ export async function scanPlusBatch(ids, { limit = PLUS_BATCH, gapMs = 400, now 
     if (result) {
       answered += 1;
       unsaved += 1;
-      games[id] = { ...result, at: new Date(now).toISOString() };
+      games[id] = { ...result, v: ENTRY_VERSION, at: new Date(now).toISOString() };
     }
     if (unsaved >= CHECKPOINT_EVERY) await checkpoint();
     await new Promise((resolve) => setTimeout(resolve, gapMs));
   }
   await checkpoint();
 
-  const included = Object.values(games).filter((row) => row.included).length;
-  return { asked, answered, checked: Object.keys(games).length, included, remaining: due.length - asked };
+  const rows = Object.values(games);
+  return {
+    asked,
+    answered,
+    checked: rows.length,
+    included: rows.filter((row) => row.included).length,
+    rated: rows.filter((row) => row.ageRating).length,
+    remaining: due.length - asked,
+  };
 }

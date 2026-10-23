@@ -30,7 +30,7 @@ export default async () => {
     const plus = await scanPlusBatch(browseOrderIds(), { limit: 500 });
     console.log(
       `PS Plus scan: ${plus.answered}/${plus.asked} answered, ` +
-        `${plus.included} included of ${plus.checked} checked, ${plus.remaining} still to do`,
+        `${plus.included} included and ${plus.rated} rated of ${plus.checked} checked, ${plus.remaining} still to do`,
     );
   } catch (error) {
     console.error('PS Plus scan failed:', error);

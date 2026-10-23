@@ -180,6 +180,7 @@ export const storePlusCount = async () => {
   const rows = Object.values(await plusIndex());
   return {
     included: rows.filter((row) => row.included).length,
+    rated: rows.filter((row) => row.ageRating).length,
     checked: rows.length,
     of: (await index()).length,
   };
