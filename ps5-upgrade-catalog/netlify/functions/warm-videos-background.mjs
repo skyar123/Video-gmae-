@@ -1,5 +1,6 @@
 import { warmYouTubePool } from '../../api/goss.mjs';
 import { scanPlusBatch } from '../../api/plus.mjs';
+import { sweepForReleases } from '../../api/upcoming.mjs';
 import { ratingScore } from '../../api/store.mjs';
 import storeIndex from '../../api/store-index.json' with { type: 'json' };
 
@@ -47,4 +48,24 @@ export default async () => {
       `${result.written} videos stored` +
       (result.silent.length ? `; silent: ${result.silent.join(', ')}` : ''),
   );
+  /*
+   * A short slice of the calendar sweep, last and on a short leash.
+   *
+   * sweep-calendar.mjs runs this nightly with the full budget, and a
+   * scheduled function cannot be invoked over HTTP, so this is the only way
+   * to move a stale calendar on without waiting for tonight. Ninety seconds
+   * and last in the queue, because the first time it was added to this
+   * function it went first with no budget and stopped the PS Plus scan
+   * advancing at all.
+   */
+  try {
+    const sweep = await sweepForReleases({ budgetMs: 90_000 });
+    console.log(
+      `Swept ${sweep.scanned} concepts ${sweep.from}-${sweep.to}` +
+        `${sweep.stoppedEarly ? ' (cut short, resumes from the cursor)' : ''}: ` +
+        `${sweep.calendar} on the calendar, ${sweep.recent} just out`,
+    );
+  } catch (error) {
+    console.error('Calendar sweep failed:', error);
+  }
 };
