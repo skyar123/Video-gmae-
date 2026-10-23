@@ -7,6 +7,7 @@ import { loadUpcoming, sweepForReleases } from '../../api/upcoming.mjs';
 import { replayCalibration } from '../../api/backtest.mjs';
 import { warmYouTubePool } from '../../api/goss.mjs';
 import { scanPlusBatch } from '../../api/plus.mjs';
+import { ratingScore } from '../../api/store.mjs';
 import { loadChunk } from '../../api/history.mjs';
 import { BACKTEST_KEY } from '../../api/keys.mjs';
 import { conceptPathFor, runAlerts, watchedConceptIds } from '../../api/alerts.mjs';
@@ -14,6 +15,10 @@ import { loadBlob } from '../../api/history.mjs';
 import { STEAM_MATCH_KEY } from '../../api/keys.mjs';
 import { resolveSteamAppId } from '../../api/steam-match.mjs';
 import storeIndex from '../../api/store-index.json' with { type: 'json' };
+
+/** The mirror in the order the reader browses it, best rated first. */
+const browseOrderIds = () =>
+  [...storeIndex].sort((a, b) => ratingScore(b) - ratingScore(a)).map((row) => String(row.id));
 
 /**
  * Nightly maintenance.
@@ -218,7 +223,7 @@ export default async () => {
    * because games join and leave.
    */
   try {
-    const plus = await scanPlusBatch(storeIndex.map((row) => String(row.id)));
+    const plus = await scanPlusBatch(browseOrderIds());
     console.log(
       `PS Plus scan: ${plus.answered}/${plus.asked} answered, ` +
         `${plus.included} included of ${plus.checked} checked, ${plus.remaining} still to do`,

@@ -53,8 +53,16 @@ async function index() {
   return rows;
 }
 
-/** PlayStation's own rating, discounted until enough people have voted. */
-const ratingScore = (row) => {
+/**
+ * PlayStation's own rating, discounted until enough people have voted.
+ *
+ * Exported because the PS Plus scan walks the mirror in this order too. It
+ * used to walk index order, which begins with one-vote shovelware, while the
+ * reader's default view is this one. Full coverage takes a couple of hours
+ * of scanning either way; the order decides whether the first badges land on
+ * games anybody is looking at.
+ */
+export const ratingScore = (row) => {
   if (!row.stars) return 0;
   const confidence = Math.min((row.votes ?? 0) / 500, 1);
   return row.stars * confidence;

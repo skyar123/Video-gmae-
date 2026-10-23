@@ -1,6 +1,11 @@
 import { warmYouTubePool } from '../../api/goss.mjs';
 import { scanPlusBatch } from '../../api/plus.mjs';
+import { ratingScore } from '../../api/store.mjs';
 import storeIndex from '../../api/store-index.json' with { type: 'json' };
+
+/** The mirror in the order the reader browses it, best rated first. */
+const browseOrderIds = () =>
+  [...storeIndex].sort((a, b) => ratingScore(b) - ratingScore(a)).map((row) => String(row.id));
 
 /**
  * Fills the gossip feed's video pool on demand.
@@ -22,7 +27,7 @@ export default async () => {
     // gets fifteen minutes; at about a second a game, 1,200 was twenty
     // minutes and got killed. 500 leaves room for the video warm that
     // follows, and progress is checkpointed either way.
-    const plus = await scanPlusBatch(storeIndex.map((row) => String(row.id)), { limit: 500 });
+    const plus = await scanPlusBatch(browseOrderIds(), { limit: 500 });
     console.log(
       `PS Plus scan: ${plus.answered}/${plus.asked} answered, ` +
         `${plus.included} included of ${plus.checked} checked, ${plus.remaining} still to do`,
