@@ -329,6 +329,23 @@ async function runSweep({ budgetMs = SCAN_BUDGET_MS } = {}) {
   const from = cursorState?.next && cursorState.next < SCAN_TO ? cursorState.next : SCAN_FROM;
   const to = Math.min(from + SCAN_WINDOW, SCAN_TO);
 
+  /*
+   * Rebuild the calendar first, before the scan touches the store.
+   *
+   * This used to run last, "against the new seed list so no reader ever pays
+   * for it", and in production it came back empty every time: the scan asks
+   * the store for 1,500 concept pages, and the rebuild's own 139 seed
+   * fetches were then being refused. The sweep reported ok with 1,500
+   * scanned and saved nothing, for 46 days.
+   *
+   * Running first means a seed discovered tonight reaches the calendar
+   * tomorrow rather than tonight. That is the cost, and it is a great deal
+   * cheaper than a calendar that never updates at all.
+   */
+  const rebuilt = await build();
+  const saved = rebuilt.games.length > 0 || rebuilt.recent.length > 0;
+  if (saved) await saveBlob(BLOB_KEY, rebuilt);
+
   const deadline = Date.now() + budgetMs;
   const all = Array.from({ length: to - from }, (_, index) => from + index);
   // The ids are sequential, so an id names its own position in the window
@@ -401,11 +418,6 @@ async function runSweep({ budgetMs = SCAN_BUDGET_MS } = {}) {
   const nextCursor = from + ids.length;
   await saveBlob(CURSOR_KEY, { next: nextCursor >= SCAN_TO ? SCAN_FROM : nextCursor });
 
-  // Rebuild now, against the new seed list, so no reader ever pays for it.
-  // The stored copy is only replaced once the new one comes back non-empty.
-  const rebuilt = await build();
-  const saved = rebuilt.games.length > 0 || rebuilt.recent.length > 0;
-  if (saved) await saveBlob(BLOB_KEY, rebuilt);
   memory = null;
 
   await noteSweep({
