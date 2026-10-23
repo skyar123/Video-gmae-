@@ -3,7 +3,7 @@ import { CHUNK_SIZE, REVIEW_KEY_PREFIX, mapWithConcurrency } from '../../api/ste
 import { loadPsnPrice } from '../../api/psn.mjs';
 import { recordAndSummarize, saveBlob } from '../../api/history.mjs';
 import { loadReviewSignal } from '../../api/reviews.mjs';
-import { loadUpcoming, sweepForReleases } from '../../api/upcoming.mjs';
+import { loadUpcoming } from '../../api/upcoming.mjs';
 import { replayCalibration } from '../../api/backtest.mjs';
 import { warmYouTubePool } from '../../api/goss.mjs';
 import { scanPlusBatch } from '../../api/plus.mjs';
@@ -206,12 +206,10 @@ export default async () => {
     console.error('Steam matching failed:', error);
   }
 
-  const sweep = await sweepForReleases();
-  console.log(
-    `Swept concepts ${sweep.from}-${sweep.to}: ${sweep.discovered} upcoming found, ` +
-      `${sweep.seeds} seeds tracked, ${sweep.calendar} on the calendar, ` +
-      `${sweep.recent} just out, ${sweep.mirror} in the store mirror`,
-  );
+  // The calendar sweep moved to sweep-calendar.mjs. It sat here behind a
+  // price reading for every catalog game, a ratings refresh, the alerts, the
+  // backtest and 300 Steam searches, and never reliably got its turn inside
+  // the fifteen minutes a function has.
 
   /*
    * Which store games PlayStation Plus covers, a batch a night.

@@ -17,6 +17,10 @@ const UA = 'Mozilla/5.0 (compatible; ps5-upgrade-catalog/1.0)';
 const READ_CAP = 190_000; // Release date, art, price and genres all land inside this.
 const CACHE_TTL_MS = 6 * 60 * 60 * 1000;
 const BLOB_KEY = 'upcoming/us.json';
+
+/** Where the last served calendar came from; read by the debug endpoint. */
+let calendarSource = null;
+export const upcomingDiagnostics = () => calendarSource;
 const SEEDS_KEY = 'upcoming/seeds.json';
 const CURSOR_KEY = 'upcoming/cursor.json';
 
@@ -226,7 +230,19 @@ export async function loadUpcoming() {
   inFlight = (async () => {
     // A missing blob reads back as {}, so presence is judged on the data.
     const stored = await loadBlob(BLOB_KEY);
-    const source = Array.isArray(stored?.games) && stored.games.length > 0 ? stored : snapshot;
+    const live = Array.isArray(stored?.games) && stored.games.length > 0;
+    const source = live ? stored : snapshot;
+    // Which of the two answered, because they are indistinguishable from
+    // outside and the difference is whether the nightly sweep is running at
+    // all. The calendar served a deploy-time snapshot for 46 days without
+    // anything saying so.
+    calendarSource = {
+      from: live ? 'nightly sweep' : 'snapshot baked at deploy',
+      sweptAt: source?.fetchedAt ?? null,
+      ageDays: source?.fetchedAt
+        ? Math.round((Date.now() - Date.parse(source.fetchedAt)) / 86_400_000)
+        : null,
+    };
     const sliced = reslice(source);
 
     // A calendar game is a store concept like any other, so the Steam ids the

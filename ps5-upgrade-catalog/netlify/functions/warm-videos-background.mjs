@@ -1,5 +1,6 @@
 import { warmYouTubePool } from '../../api/goss.mjs';
 import { scanPlusBatch } from '../../api/plus.mjs';
+import { sweepForReleases } from '../../api/upcoming.mjs';
 import { ratingScore } from '../../api/store.mjs';
 import storeIndex from '../../api/store-index.json' with { type: 'json' };
 
@@ -20,6 +21,18 @@ const browseOrderIds = () =>
  * safe to leave reachable without a secret to keep somewhere.
  */
 export default async () => {
+  // One slice of the calendar sweep, so a stale calendar can be moved on
+  // without waiting for tonight.
+  try {
+    const sweep = await sweepForReleases();
+    console.log(
+      `Swept concepts ${sweep.from}-${sweep.to}: ${sweep.calendar} on the calendar, ` +
+        `${sweep.recent} just out, ${sweep.mirror} in the store mirror`,
+    );
+  } catch (error) {
+    console.error('Calendar sweep failed:', error);
+  }
+
   // A PS Plus batch rides along, so coverage can be pushed forward without
   // waiting for tonight. It picks up where the last run stopped.
   try {
