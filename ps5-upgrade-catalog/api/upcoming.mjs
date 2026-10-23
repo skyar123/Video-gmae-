@@ -41,6 +41,22 @@ const SCAN_FROM = 10_006_000;
 const SCAN_TO = 10_030_000;
 const SCAN_WINDOW = 1_500;
 
+/*
+ * How long the id scan may take before it stops and banks what it found.
+ *
+ * 1,500 concept pages is about two minutes from here and evidently far
+ * longer from the platform: the sweep never reached its save, so it wrote
+ * neither a calendar nor a record of having failed. Put at the front of the
+ * shared background function it then ate that function's whole budget and
+ * stopped the PS Plus scan advancing as well.
+ *
+ * The scan is the part allowed to be cut short. Rebuilding the calendar and
+ * saving it are not: they run on whatever the scan managed, and the cursor
+ * advances only over ids actually visited, so nothing is skipped. It just
+ * takes more nights.
+ */
+const SCAN_BUDGET_MS = 4 * 60 * 1000;
+
 // A game stays in "just released" for this long after its date, which is how
 // something new reaches the app without the catalog itself being rebuilt.
 const RECENT_DAYS = 60;
@@ -299,25 +315,33 @@ async function noteSweep(outcome) {
   }
 }
 
-export async function sweepForReleases() {
+export async function sweepForReleases(options = {}) {
   try {
-    return await runSweep();
+    return await runSweep(options);
   } catch (error) {
     await noteSweep({ ok: false, error: String(error?.message ?? error).slice(0, 300) });
     throw error;
   }
 }
 
-async function runSweep() {
+async function runSweep({ budgetMs = SCAN_BUDGET_MS } = {}) {
   const cursorState = await loadBlob(CURSOR_KEY);
   const from = cursorState?.next && cursorState.next < SCAN_TO ? cursorState.next : SCAN_FROM;
   const to = Math.min(from + SCAN_WINDOW, SCAN_TO);
 
-  const ids = Array.from({ length: to - from }, (_, index) => from + index);
-  const found = await mapWithConcurrency(ids, 10, async (id) => {
+  const deadline = Date.now() + budgetMs;
+  const all = Array.from({ length: to - from }, (_, index) => from + index);
+  // The ids are sequential, so an id names its own position in the window
+  // and mapWithConcurrency does not need to pass one.
+  let reached = 0;
+  const found = await mapWithConcurrency(all, 10, async (id) => {
+    if (Date.now() > deadline) return null;
+    reached = Math.max(reached, id - from + 1);
     const html = await fetchConcept(id);
     return html ? parseConcept(id, html) : null;
   });
+  const ids = all.slice(0, reached);
+  const stoppedEarly = reached < all.length;
 
   const now = Date.now();
   const fresh = found
@@ -374,7 +398,8 @@ async function runSweep() {
     games: [...mirror.values()].slice(-MAX_MIRROR_ROWS),
     sweptAt: new Date().toISOString(),
   });
-  await saveBlob(CURSOR_KEY, { next: to >= SCAN_TO ? SCAN_FROM : to });
+  const nextCursor = from + ids.length;
+  await saveBlob(CURSOR_KEY, { next: nextCursor >= SCAN_TO ? SCAN_FROM : nextCursor });
 
   // Rebuild now, against the new seed list, so no reader ever pays for it.
   // The stored copy is only replaced once the new one comes back non-empty.
@@ -387,8 +412,9 @@ async function runSweep() {
     ok: true,
     saved,
     scanned: ids.length,
+    stoppedEarly,
     from,
-    to,
+    to: from + ids.length,
     calendar: rebuilt.games.length,
     recent: rebuilt.recent.length,
     mirror: mirror.size,
@@ -396,8 +422,9 @@ async function runSweep() {
 
   return {
     scanned: ids.length,
+    stoppedEarly,
     from,
-    to,
+    to: from + ids.length,
     discovered: fresh.length,
     seeds: kept.size,
     calendar: rebuilt.games.length,
