@@ -10,7 +10,7 @@
 import bakedSeeds from './upcoming-seeds.json' with { type: 'json' };
 import snapshot from './upcoming-snapshot.json' with { type: 'json' };
 import { loadBlob, saveBlob } from './history.mjs';
-import { DISCOVERED_KEY, STEAM_MATCH_KEY } from './keys.mjs';
+import { DISCOVERED_KEY, STEAM_MATCH_KEY, SWEEP_LOG_KEY } from './keys.mjs';
 import { ratingFromConcept } from './rating.mjs';
 
 const UA = 'Mozilla/5.0 (compatible; ps5-upgrade-catalog/1.0)';
@@ -30,7 +30,8 @@ const BLOB_KEY = 'upcoming/us.json';
 
 /** Where the last served calendar came from; read by the debug endpoint. */
 let calendarSource = null;
-export const upcomingDiagnostics = () => calendarSource;
+let lastSweep = null;
+export const upcomingDiagnostics = () => ({ ...calendarSource, lastSweep });
 const SEEDS_KEY = 'upcoming/seeds.json';
 const CURSOR_KEY = 'upcoming/cursor.json';
 
@@ -246,6 +247,7 @@ export async function loadUpcoming() {
     // outside and the difference is whether the nightly sweep is running at
     // all. The calendar served a deploy-time snapshot for 46 days without
     // anything saying so.
+    lastSweep = (await loadBlob(SWEEP_LOG_KEY)) ?? null;
     calendarSource = {
       from: live ? 'nightly sweep' : 'snapshot baked at deploy',
       sweptAt: source?.fetchedAt ?? null,
@@ -281,7 +283,32 @@ export async function loadUpcoming() {
  * window at a time keeps the job inside a scheduled function's budget while
  * still covering the whole range over a handful of nights.
  */
+/**
+ * Records how the last sweep went, because its logs are not readable here.
+ *
+ * The sweep runs inside a try/catch in two callers, so a failure is silent
+ * from outside: the calendar simply keeps serving the snapshot, which is
+ * exactly what it did for 46 days. This writes the outcome where the debug
+ * endpoint can read it.
+ */
+async function noteSweep(outcome) {
+  try {
+    await saveBlob(SWEEP_LOG_KEY, { ...outcome, at: new Date().toISOString() });
+  } catch {
+    // A failure to record a failure is not worth propagating.
+  }
+}
+
 export async function sweepForReleases() {
+  try {
+    return await runSweep();
+  } catch (error) {
+    await noteSweep({ ok: false, error: String(error?.message ?? error).slice(0, 300) });
+    throw error;
+  }
+}
+
+async function runSweep() {
   const cursorState = await loadBlob(CURSOR_KEY);
   const from = cursorState?.next && cursorState.next < SCAN_TO ? cursorState.next : SCAN_FROM;
   const to = Math.min(from + SCAN_WINDOW, SCAN_TO);
@@ -352,10 +379,20 @@ export async function sweepForReleases() {
   // Rebuild now, against the new seed list, so no reader ever pays for it.
   // The stored copy is only replaced once the new one comes back non-empty.
   const rebuilt = await build();
-  if (rebuilt.games.length > 0 || rebuilt.recent.length > 0) {
-    await saveBlob(BLOB_KEY, rebuilt);
-  }
+  const saved = rebuilt.games.length > 0 || rebuilt.recent.length > 0;
+  if (saved) await saveBlob(BLOB_KEY, rebuilt);
   memory = null;
+
+  await noteSweep({
+    ok: true,
+    saved,
+    scanned: ids.length,
+    from,
+    to,
+    calendar: rebuilt.games.length,
+    recent: rebuilt.recent.length,
+    mirror: mirror.size,
+  });
 
   return {
     scanned: ids.length,

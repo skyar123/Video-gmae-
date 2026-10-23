@@ -9,3 +9,5 @@ export const BACKTEST_KEY = 'predict/backtest.json';
 export const ALERTS_KEY = 'alerts/subscribers.json';
 export const STEAM_MATCH_KEY = 'store/steam-matches.json';
 export const PLUS_KEY = 'store/ps-plus.json';
+
+export const SWEEP_LOG_KEY = 'upcoming/last-sweep.json';
