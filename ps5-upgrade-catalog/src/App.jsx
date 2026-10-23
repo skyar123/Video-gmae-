@@ -4012,7 +4012,7 @@ function useStoreSearch({ active, q, genre, sort, plusOnly = false }) {
  * The whole store as a feed, so the view switch means the same thing here as
  * it does anywhere else.
  */
-function StoreFeed({ query, curatedFirst = [], curatedByName, saved, plusOnly = false, muted, onToggleMuted, onOpenCurated, onOpenStore }) {
+function StoreFeed({ query, curatedFirst = [], curatedReason, curatedByName, saved, plusOnly = false, muted, onToggleMuted, onOpenCurated, onOpenStore }) {
   const results = useStoreSearch({ active: true, q: query, genre: '', sort: 'rating', plusOnly });
   const [sentinel, setSentinel] = useState(null);
   const loadMore = results.more;
@@ -4042,7 +4042,7 @@ function StoreFeed({ query, curatedFirst = [], curatedByName, saved, plusOnly = 
           key={`curated-${game.id}`}
           game={game}
           live={game.storeLive}
-          reason="Written up here; the store mirror has no page for it"
+          reason={curatedReason}
           wishlisted={saved.wishlist.has(game.id)}
           muted={muted}
           onToggleMuted={onToggleMuted}
@@ -4076,7 +4076,7 @@ function StoreFeed({ query, curatedFirst = [], curatedByName, saved, plusOnly = 
   );
 }
 
-function StorePanel({ query, curatedFirst = [], curatedByName, saved, plusOnly = false, onOpenCurated, onOpenStore }) {
+function StorePanel({ query, curatedFirst = [], curatedReason, curatedByName, saved, plusOnly = false, onOpenCurated, onOpenStore }) {
   const [genre, setGenre] = useState('');
   const [sort, setSort] = useState('rating');
   const [facets, setFacets] = useState({ genres: [], size: 0 });
@@ -4200,7 +4200,7 @@ function StorePanel({ query, curatedFirst = [], curatedByName, saved, plusOnly =
                 key={`curated-${game.id}`}
                 game={game}
                 live={game.storeLive}
-                reason="Written up here; the store mirror has no page for it"
+                reason={curatedReason}
                 wishlisted={saved.wishlist.has(game.id)}
                 owned={saved.library.has(game.id)}
                 onToggleWishlist={() => saved.toggle(null, game, 'wishlist')}
@@ -5757,8 +5757,9 @@ export default function App() {
     return catalog
       .filter((game) => searchScores.has(game.id) && !hidden.has(game.id))
       .sort((a, b) => (searchScores.get(b.id) ?? 0) - (searchScores.get(a.id) ?? 0))
-      .slice(0, 24);
-  }, [filters.collection, deferredQuery, searchScores, catalog, hidden]);
+      .slice(0, 24)
+      .map((game) => ({ ...game, storeLive: byTitle.get(game.title) ?? game.storeLive }));
+  }, [filters.collection, deferredQuery, searchScores, catalog, hidden, byTitle]);
 
   const filteredGames = useMemo(() => {
     const collection = COLLECTIONS.find((entry) => entry.value === filters.collection);
@@ -5904,7 +5905,13 @@ export default function App() {
    * mirror. So the collection shows both, with these first.
    */
   const curatedPlusGames = useMemo(
-    () => catalogPool.filter((game) => byTitle.get(game.title)?.price?.plus?.included),
+    () =>
+      catalogPool
+        .filter((game) => byTitle.get(game.title)?.price?.plus?.included)
+        // The store panel reads live data off the game, so it has to travel
+        // with it; without this the card shows a loading bar where the price
+        // and the PS Plus badge belong.
+        .map((game) => ({ ...game, storeLive: byTitle.get(game.title) })),
     [catalogPool, byTitle],
   );
   const plusCount = curatedPlusGames.length;
@@ -6356,6 +6363,11 @@ export default function App() {
               query={deferredQuery.trim()}
               curatedFirst={filters.collection === 'plus' ? curatedPlusGames : curatedOnlyMatches}
               plusOnly={filters.collection === 'plus'}
+              curatedReason={
+                filters.collection === 'plus'
+                  ? 'In your catalog, covered by Plus'
+                  : 'Written up here; the store mirror has no page for it'
+              }
               curatedByName={curatedByName}
               saved={storeSaved}
               muted={feedMuted}
@@ -6399,6 +6411,11 @@ export default function App() {
               query={deferredQuery.trim()}
               curatedFirst={filters.collection === 'plus' ? curatedPlusGames : curatedOnlyMatches}
               plusOnly={filters.collection === 'plus'}
+              curatedReason={
+                filters.collection === 'plus'
+                  ? 'In your catalog, covered by Plus'
+                  : 'Written up here; the store mirror has no page for it'
+              }
               curatedByName={curatedByName}
               saved={storeSaved}
               onOpenCurated={setActiveGameId}
