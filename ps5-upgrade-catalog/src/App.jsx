@@ -106,11 +106,17 @@ const UPGRADES = uniqueValues('ps5Upgrade');
 // nobody can see reads as a collection that does not exist. One word where
 // one word will do; the blurb under the results carries the full sentence.
 const COLLECTIONS = [
-  // "All" is the whole PlayStation Store, all 8,885 of it, not the 249 with
-  // write-ups. A library that says "All games" and means 3% of the store is
-  // the wrong answer to "what can I play", and the store rows carry their own
-  // art, price and rating, so a card is never empty. The 249 are still in
-  // here, marked, and open to their full write-up.
+  // "All" is the mirror, 8,885 games, not the few hundred with write-ups. A
+  // library that says "All games" and means 3% of the store is the wrong
+  // answer to "what can I play", and store rows carry their own art, price
+  // and rating, so a card is never empty.
+  //
+  // It is not literally the whole store, and the blurb no longer says it is.
+  // The mirror is built by walking concept ids, and a good part of the PS4
+  // back catalogue has no concept page to walk: 107 of the 306 written-up
+  // games are absent from it, 101 of them PS4, Outer Wilds and No Man's Sky
+  // and Firewatch and Stardew Valley among them. Searching All falls back to
+  // the written-up catalog for exactly that reason.
   { value: 'all', label: 'All', tag: null },
   // Deals come second because they are a main reason to open this at all.
   { value: 'deals', label: 'Deals', tag: null },
@@ -141,7 +147,7 @@ const COLLECTION_BLURBS = {
   classic: 'Older PlayStation games and remasters you can play on a PS4 or PS5 today.',
   queer: 'Games with queer characters or relationships that matter to the story, not background detail.',
   disability: 'Games with disabled or neurodivergent characters, or landmark accessibility work.',
-  all: "Everything on the PlayStation Store. The hand-written ones are marked; the rest carry the store's own art, price and star rating.",
+  all: "8,885 games mirrored from the PlayStation Store, plus the written-up ones the mirror has no page for. Hand-written entries are marked; the rest carry the store's own art, price and star rating.",
   curated:
     'The hand-written ones, with upgrade paths, representation notes, kid-friendly verdicts and recorded price history behind each.',
   soon: 'Out in the next few weeks, and everything from the last sixty days. Heart one and it stays on your wishlist through release.',
@@ -4004,7 +4010,7 @@ function useStoreSearch({ active, q, genre, sort }) {
  * The whole store as a feed, so the view switch means the same thing here as
  * it does anywhere else.
  */
-function StoreFeed({ query, curatedByName, saved, muted, onToggleMuted, onOpenCurated, onOpenStore }) {
+function StoreFeed({ query, curatedFirst = [], curatedByName, saved, muted, onToggleMuted, onOpenCurated, onOpenStore }) {
   const results = useStoreSearch({ active: true, q: query, genre: '', sort: 'rating' });
   const [sentinel, setSentinel] = useState(null);
   const loadMore = results.more;
@@ -4022,14 +4028,29 @@ function StoreFeed({ query, curatedByName, saved, muted, onToggleMuted, onOpenCu
   if (results.status === 'loading' && results.games.length === 0) {
     return <PanelMessage icon={Loader2} spin label="Searching the store index..." />;
   }
-  if (results.games.length === 0) {
+  if (results.games.length === 0 && curatedFirst.length === 0) {
     return <PanelMessage icon={Search} label="Nothing in the index matches that." />;
   }
 
   return (
     <>
+      {/* Written-up games the mirror has no page for, first. */}
+      {curatedFirst.map((game) => (
+        <FeedSlide
+          key={`curated-${game.id}`}
+          game={game}
+          live={game.storeLive}
+          reason="Written up here; the store mirror has no page for it"
+          wishlisted={saved.wishlist.has(game.id)}
+          muted={muted}
+          onToggleMuted={onToggleMuted}
+          onToggleWishlist={() => saved.toggle(null, game, 'wishlist')}
+          onOpen={() => onOpenCurated(game.id)}
+        />
+      ))}
       {results.games
         .filter((row) => !saved.hidden.has(storeKey(row)))
+        .filter((row) => !curatedFirst.some((game) => game.title === row.name))
         .map((row) => {
           const twin = curatedByName.get(row.name?.toLowerCase());
           const game = storeRowAsGame(row);
@@ -4053,7 +4074,7 @@ function StoreFeed({ query, curatedByName, saved, muted, onToggleMuted, onOpenCu
   );
 }
 
-function StorePanel({ query, curatedByName, saved, onOpenCurated, onOpenStore }) {
+function StorePanel({ query, curatedFirst = [], curatedByName, saved, onOpenCurated, onOpenStore }) {
   const [genre, setGenre] = useState('');
   const [sort, setSort] = useState('rating');
   const [facets, setFacets] = useState({ genres: [], size: 0 });
@@ -4148,9 +4169,9 @@ function StorePanel({ query, curatedByName, saved, onOpenCurated, onOpenStore })
         ))}
       </div>
 
-      {results.status === 'loading' && results.games.length === 0 ? (
+      {results.status === 'loading' && results.games.length === 0 && curatedFirst.length === 0 ? (
         <PanelMessage icon={Loader2} spin label="Searching the store index..." />
-      ) : results.games.length === 0 ? (
+      ) : results.games.length === 0 && curatedFirst.length === 0 ? (
         <PanelMessage
           icon={Search}
           label={
@@ -4162,8 +4183,22 @@ function StorePanel({ query, curatedByName, saved, onOpenCurated, onOpenStore })
       ) : (
         <>
           <div className="grid grid-cols-2 gap-3 sm:grid-cols-3 sm:gap-4 lg:grid-cols-4 xl:grid-cols-5">
+            {/* Written-up games the mirror cannot answer for, first. */}
+            {curatedFirst.map((game) => (
+              <GameCard
+                key={`curated-${game.id}`}
+                game={game}
+                live={game.storeLive}
+                reason="Written up here; the store mirror has no page for it"
+                wishlisted={saved.wishlist.has(game.id)}
+                owned={saved.library.has(game.id)}
+                onToggleWishlist={() => saved.toggle(null, game, 'wishlist')}
+                onOpen={() => onOpenCurated(game.id)}
+              />
+            ))}
             {results.games
               .filter((row) => !saved.hidden.has(storeKey(row)))
+              .filter((row) => !curatedFirst.some((game) => game.title === row.name))
               .map((row) => {
                 const twin = curatedByName.get(row.name?.toLowerCase());
                 const game = storeRowAsGame(row);
@@ -5687,6 +5722,30 @@ export default function App() {
     return meta;
   }, [deferredQuery, pool]);
 
+  /**
+   * Curated games the mirror does not have, for a search inside All.
+   *
+   * The mirror is built by walking concept ids, and a good part of the PS4
+   * back catalogue does not have a concept page to walk: Outer Wilds, No
+   * Man's Sky, Firewatch and Stardew Valley are all in the catalog here with
+   * product-path store links, and all four return nothing from the mirror.
+   * 107 of the 306 written-up games are missing from it, 101 of them PS4.
+   *
+   * Making All store-backed therefore broke searching for them from the
+   * default view, which is as basic a thing as this app does. They are put
+   * back in front of the store results, which is also the right order: a game
+   * with a full write-up is a better answer than a store row.
+   */
+  const curatedOnlyMatches = useMemo(() => {
+    if (filters.collection !== 'all') return [];
+    const query = deferredQuery.trim();
+    if (query.length < 2 || !searchScores) return [];
+    return catalog
+      .filter((game) => searchScores.has(game.id) && !hidden.has(game.id))
+      .sort((a, b) => (searchScores.get(b.id) ?? 0) - (searchScores.get(a.id) ?? 0))
+      .slice(0, 24);
+  }, [filters.collection, deferredQuery, searchScores, catalog, hidden]);
+
   const filteredGames = useMemo(() => {
     const collection = COLLECTIONS.find((entry) => entry.value === filters.collection);
 
@@ -6270,6 +6329,7 @@ export default function App() {
           {filters.collection === 'all' ? (
             <StoreFeed
               query={deferredQuery.trim()}
+              curatedFirst={curatedOnlyMatches}
               curatedByName={curatedByName}
               saved={storeSaved}
               muted={feedMuted}
@@ -6311,6 +6371,7 @@ export default function App() {
           {filters.collection === 'all' ? (
             <StorePanel
               query={deferredQuery.trim()}
+              curatedFirst={curatedOnlyMatches}
               curatedByName={curatedByName}
               saved={storeSaved}
               onOpenCurated={setActiveGameId}
