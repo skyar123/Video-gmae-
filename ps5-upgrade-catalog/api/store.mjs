@@ -127,11 +127,15 @@ export const storeSize = async () => (await index()).length;
  * the blindness the feed diagnostics were added to end this morning.
  */
 export const storePlusCount = async () => {
-  const rows = await index();
+  // Both numbers come from the blob, not from the merged index. The index is
+  // cached for half an hour, so reading `included` from it while reading
+  // `checked` from the blob made the diagnostic disagree with itself during
+  // a scan, which is the one thing a diagnostic must not do.
   const plus = (await loadBlob(PLUS_KEY))?.games ?? {};
+  const rows = Object.values(plus);
   return {
-    included: rows.filter((row) => row.plusIncluded).length,
-    checked: Object.keys(plus).length,
-    of: rows.length,
+    included: rows.filter((row) => row.included).length,
+    checked: rows.length,
+    of: (await index()).length,
   };
 };
