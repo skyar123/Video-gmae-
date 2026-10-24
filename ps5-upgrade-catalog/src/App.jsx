@@ -902,13 +902,62 @@ function RepresentationDetail({ representation }) {
   );
 }
 
+/**
+ * The same image, asked for at the size it will be drawn at.
+ *
+ * PlayStation's CDN resizes on `w`, and its originals are not small: a
+ * screenshot is around 900KB and a piece of key art around 300KB. Drawn into
+ * a 180px card or a 96px thumbnail that is almost all waste, and it is paid
+ * for on a phone, on mobile data, before the reader has done anything. Key
+ * art at 440 is 24KB rather than 306KB, and a screenshot at 1280 is 275KB
+ * rather than 900KB, which is also what 960 costs, so 1280 is the sharper
+ * buy at the same price.
+ *
+ * Only PlayStation's image host understands `w`, so everything else is handed
+ * back untouched rather than given a parameter it will ignore.
+ */
+const atWidth = (url, width) =>
+  url && url.includes('image.api.playstation.com')
+    ? `${url}${url.includes('?') ? '&' : '?'}w=${width}&thumb=false`
+    : (url ?? null);
+
+/**
+ * Whether the trailers should stay put.
+ *
+ * A PlayStation trailer is a 30 to 70MB mp4, nothing like the few hundred KB
+ * a short-video feed streams, and the feed would start one on every slide it
+ * passes. On a metered or slow connection that is someone's data allowance
+ * going on autoplay they did not ask for, so the screenshot stands in: the
+ * Save-Data header is an explicit request not to do this, and 2g or 3g is the
+ * browser saying it would not play well regardless.
+ */
+const dataSaverNow = () => {
+  const link = typeof navigator === 'undefined' ? null : navigator.connection;
+  if (!link) return false;
+  return Boolean(link.saveData) || ['slow-2g', '2g', '3g'].includes(link.effectiveType);
+};
+
+function useDataSaver() {
+  const [saving, setSaving] = useState(dataSaverNow);
+
+  useEffect(() => {
+    const link = navigator.connection;
+    if (!link?.addEventListener) return undefined;
+    const update = () => setSaving(dataSaverNow());
+    link.addEventListener('change', update);
+    return () => link.removeEventListener('change', update);
+  }, []);
+
+  return saving;
+}
+
 /** Cover art, or a lettered gradient when the game has no storefront match. */
-function CoverArt({ game, live, className = '' }) {
+function CoverArt({ game, live, className = '', width = 440 }) {
   const [failed, setFailed] = useState(false);
   // The catalog carries the storefront id, so art can render before the live
   // request lands.
   const image =
-    live?.heroImage ??
+    atWidth(live?.heroImage, width) ??
     (game.steamAppId
       ? `https://shared.akamai.steamstatic.com/store_item_assets/steam/apps/${game.steamAppId}/header.jpg`
       : null);
@@ -1241,7 +1290,7 @@ function GameModal({
               </span>
             </button>
           ) : (
-            <CoverArt game={game} live={live} className="h-full w-full" />
+            <CoverArt game={game} live={live} width={1280} className="h-full w-full" />
           )}
         </div>
 
@@ -2453,14 +2502,6 @@ function SimilarGames({ game, pool, byTitle, onOpen }) {
  * Feed view
  * ------------------------------------------------------------------ */
 
-/**
- * PlayStation's image CDN resizes on `w`, and a full-size screenshot runs to
- * about 900KB: far too much to put behind every slide in a feed. Asking for
- * 1280 brings it to 275KB, which is also what 960 costs, so this takes the
- * sharper one.
- */
-const wideShot = (url, width = 1280) =>
-  url ? `${url}${url.includes('?') ? '&' : '?'}w=${width}&thumb=false` : null;
 
 /**
  * Wide media for a store game, read once per concept and kept for the session.
@@ -2577,10 +2618,11 @@ function FeedSlide({
   // concept page for it. Either way a wide shot beats the capsule, which is
   // what `heroImage` holds for a store row.
   const storeMedia = useConceptMedia(game.storeId, near && !(live?.screenshots?.length > 0));
+  const dataSaver = useDataSaver();
 
   const background =
     live?.screenshots?.[0]?.full ??
-    wideShot(storeMedia?.shots?.[0]) ??
+    atWidth(storeMedia?.shots?.[0], 1280) ??
     live?.heroImage ??
     (game.steamAppId
       ? `https://shared.akamai.steamstatic.com/store_item_assets/steam/apps/${game.steamAppId}/header.jpg`
@@ -2607,7 +2649,7 @@ function FeedSlide({
       ) : (
         <div className="absolute inset-0 bg-gradient-to-br from-indigo-600 via-violet-600 to-fuchsia-600" />
       )}
-      {centred && trailer && (
+      {centred && trailer && !dataSaver && (
         <TrailerPlayer
           video={trailer}
           poster={background}
@@ -3753,14 +3795,17 @@ function StoreGameModal({
         {detail?.trailer && !shot ? (
           <video
             src={detail.trailer}
-            poster={art ?? undefined}
+            poster={atWidth(art, 1280) ?? undefined}
             controls
+            // Nothing is fetched until play is pressed: these files run to
+            // tens of megabytes and the poster holds the stage until then.
+            preload="none"
             playsInline
             className="h-full w-full bg-black object-contain"
           />
         ) : hero ? (
           <img
-            src={hero}
+            src={atWidth(hero, 1280)}
             alt={`Key art for ${game.name}`}
             onError={(event) => {
               event.currentTarget.hidden = true;
@@ -3770,6 +3815,12 @@ function StoreGameModal({
         ) : null}
       </div>
 
+      {/*
+        Every image here is asked for at the size it is drawn at. The store
+        serves screenshots around 900KB each, and this strip puts nine of them
+        in 96x56 buttons: opening one game used to pull 15MB of imagery before
+        the reader had done anything at all.
+      */}
       {screenshots.length > 0 && (
         <div className="no-scrollbar flex gap-2 overflow-x-auto bg-slate-50 dark:bg-slate-950 p-2">
           {[...(art ? [art] : []), ...screenshots].map((src) => (
@@ -3781,7 +3832,12 @@ function StoreGameModal({
                 (shot ?? art) === src ? 'ring-2 ring-indigo-500' : 'ring-slate-200 dark:ring-slate-700'
               }`}
             >
-              <img src={src} alt="" loading="lazy" className="h-full w-full object-cover" />
+              <img
+                src={atWidth(src, 256)}
+                alt=""
+                loading="lazy"
+                className="h-full w-full object-cover"
+              />
             </button>
           ))}
         </div>
