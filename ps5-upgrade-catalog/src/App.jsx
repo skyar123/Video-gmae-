@@ -2614,16 +2614,31 @@ function FeedSlide({
 
   // A wide screenshot fills the screen far better than the 460px capsule, so
   // use one as soon as the live data arrives and fall back until then.
-  // Written-up games carry Steam's media already; everything else asks the
-  // concept page for it. Either way a wide shot beats the capsule, which is
-  // what `heroImage` holds for a store row.
+  // Asked for the trailer, mostly. The screenshots come back with it and
+  // stand in where a store row has no art at all, but a row almost always has
+  // some and it is better than they are: see the note on the background.
   const storeMedia = useConceptMedia(game.storeId, near && !(live?.screenshots?.length > 0));
   const dataSaver = useDataSaver();
 
+  // The order here is about what each source actually is, which is not what
+  // the shape of the code suggests.
+  //
+  // A written-up game falls back to Steam's header.jpg, and that really is a
+  // 460x215 capsule, so one of Steam's screenshots fills a phone far better.
+  // That is what the first line is for, and the note this replaces was
+  // written for that case.
+  //
+  // A store row is not that case. `heroImage` holds PlayStation's own key
+  // art, which the mirror carries at 3840x2160, 16:9, measured at eight of
+  // eight: already the wide hero a capsule is not, and drawn by someone paid
+  // to make the game look good. A gameplay screenshot is a lateral move at
+  // best and often a downgrade, which is plain on Sly 3, where bold character
+  // art became a dark and murky frame. So the key art goes ahead of the
+  // screenshots and they stand in only where a row has no art at all.
   const background =
     live?.screenshots?.[0]?.full ??
+    atWidth(live?.heroImage, 1280) ??
     atWidth(storeMedia?.shots?.[0], 1280) ??
-    live?.heroImage ??
     (game.steamAppId
       ? `https://shared.akamai.steamstatic.com/store_item_assets/steam/apps/${game.steamAppId}/header.jpg`
       : null);
