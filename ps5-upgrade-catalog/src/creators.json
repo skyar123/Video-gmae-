@@ -1,0 +1,154 @@
+[
+  {
+    "handle": "GabSmolders",
+    "name": "Gab Smolders",
+    "identity": "woman",
+    "note": "Calm, methodical full playthroughs. Horror and cozy in equal measure.",
+    "focus": ["Mystery", "Narrative", "Life Sim", "Puzzle", "Exploration"],
+    "tags": ["cozy"]
+  },
+  {
+    "handle": "TheSphereHunter",
+    "name": "The Sphere Hunter",
+    "identity": "trans woman",
+    "note": "Survival horror and action-RPG deep dives, especially Resident Evil and Final Fantasy.",
+    "focus": ["Mystery", "Action", "RPG"],
+    "tags": ["graphics"]
+  },
+  {
+    "handle": "LauraKBuzz",
+    "name": "Laura Kate Dale",
+    "identity": "trans woman",
+    "note": "Indie coverage and the most rigorous accessibility reviews anywhere.",
+    "focus": ["Narrative", "Puzzle", "Platformer", "Life Sim"],
+    "tags": ["disability", "queer", "cozy"]
+  },
+  {
+    "handle": "AlanahPearce",
+    "name": "Alanah Pearce",
+    "identity": "woman",
+    "note": "Critic and working AAA developer, so the industry commentary comes from inside.",
+    "focus": ["Action", "RPG", "Narrative"],
+    "tags": ["graphics"]
+  },
+  {
+    "handle": "JimSterling",
+    "name": "Stephanie Sterling",
+    "identity": "trans, non-binary",
+    "note": "Consumer advocacy and unsparing AAA critique. Independent since 2014.",
+    "focus": ["Action", "RPG", "Management"],
+    "tags": []
+  },
+  {
+    "handle": "Skurry",
+    "name": "Skurry",
+    "identity": "trans, non-binary",
+    "note": "Metroidvanias and puzzle games, with a lot of Hollow Knight.",
+    "focus": ["Metroidvania", "Puzzle", "Platformer"],
+    "tags": []
+  },
+  {
+    "handle": "whataboutandy",
+    "name": "WhatAboutAndy",
+    "identity": "non-binary",
+    "note": "Cozy games and long comfortable sessions.",
+    "focus": ["Life Sim", "Creature Collection", "Exploration", "Puzzle"],
+    "tags": ["cozy"]
+  },
+  {
+    "handle": "FunkyFrogBait",
+    "name": "FunkyFrogBait",
+    "identity": "transmasc",
+    "note": "Horror games played for comedy, and video essays that sneak up on you.",
+    "focus": ["Mystery", "Narrative", "Action"],
+    "tags": []
+  },
+  {
+    "handle": "DeadDomain",
+    "name": "Dead Domain",
+    "identity": "trans",
+    "note": "Variety gaming and commentary, heavy on the strange and overlooked.",
+    "focus": ["Narrative", "Mystery", "Action"],
+    "tags": ["queer"]
+  },
+  {
+    "handle": "SuperButterBuns",
+    "name": "SuperButterBuns",
+    "identity": "woman",
+    "note": "Long-form retrospectives, often on games nobody else revisits.",
+    "focus": ["Action", "RPG", "Platformer"],
+    "tags": []
+  },
+  {
+    "handle": "NemesisLacroix",
+    "name": "Nemesis Lacroix",
+    "identity": "trans woman",
+    "note": "Retro, indie and horror, plus live reactions to industry showcases.",
+    "focus": ["Mystery", "Platformer", "Action"],
+    "tags": ["classic"]
+  },
+  {
+    "handle": "Nikatine",
+    "name": "Nikatine",
+    "identity": "trans woman",
+    "note": "Founder of Transmission Gaming. Roleplay, variety and community organising.",
+    "focus": ["RPG", "Narrative", "Party"],
+    "tags": ["queer", "social"]
+  },
+  {
+    "handle": "Mysticat",
+    "name": "mysticat",
+    "identity": "trans, non-binary",
+    "note": "Technical Minecraft and vanilla engineering.",
+    "focus": ["Exploration", "Puzzle"],
+    "tags": ["social"]
+  },
+  {
+    "handle": "zombiecleo",
+    "name": "ZombieCleo",
+    "identity": "non-binary (she/they)",
+    "note": "Minecraft building and variety, a long-running fixture of the scene.",
+    "focus": ["Exploration", "Life Sim"],
+    "tags": ["social", "cozy"]
+  },
+  {
+    "handle": "snapcube",
+    "name": "SnapCube",
+    "identity": "trans woman",
+    "note": "Fandubs and comedic playthroughs. Not a review channel, and all the better for it.",
+    "focus": ["Action", "Platformer", "Mystery"],
+    "tags": ["classic"]
+  },
+  {
+    "handle": "ContraPoints",
+    "name": "ContraPoints",
+    "identity": "trans woman",
+    "note": "Essays on culture and gender rather than games, for when a game raises bigger questions.",
+    "focus": [],
+    "tags": ["queer"]
+  },
+  {
+    "handle": "PhilosophyTube",
+    "name": "Philosophy Tube",
+    "identity": "trans woman",
+    "note": "Theatrical philosophy essays that occasionally take games seriously as texts.",
+    "focus": [],
+    "tags": ["queer"]
+  },
+  {
+    "handle": "MiaMulder",
+    "name": "Mia Mulder",
+    "identity": "trans woman",
+    "note": "Video essays on politics, media and the systems underneath both.",
+    "focus": [],
+    "tags": ["queer"]
+  },
+  {
+    "handle": "Gooseworx",
+    "name": "Gooseworx",
+    "identity": "trans woman",
+    "note": "Animation and music rather than playthroughs, for the art-forward end of the catalogue.",
+    "focus": [],
+    "tags": ["graphics"]
+  }
+]

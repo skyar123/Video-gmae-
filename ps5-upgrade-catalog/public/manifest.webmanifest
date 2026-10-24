@@ -1,0 +1,17 @@
+{
+  "name": "PS4 to PS5 Catalog",
+  "short_name": "PS4→5",
+  "description": "PlayStation games worth playing, with live store prices, a price-drop predictor and picks based on what you own.",
+  "start_url": "/",
+  "scope": "/",
+  "display": "standalone",
+  "orientation": "portrait",
+  "background_color": "#f8fafc",
+  "theme_color": "#ffffff",
+  "categories": ["games", "entertainment", "shopping"],
+  "icons": [
+    { "src": "/icon-192.png", "sizes": "192x192", "type": "image/png", "purpose": "any" },
+    { "src": "/icon-512.png", "sizes": "512x512", "type": "image/png", "purpose": "any" },
+    { "src": "/icon-512-maskable.png", "sizes": "512x512", "type": "image/png", "purpose": "maskable" }
+  ]
+}
