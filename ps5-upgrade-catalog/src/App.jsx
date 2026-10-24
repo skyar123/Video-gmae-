@@ -4136,6 +4136,10 @@ function storeRowAsLive(row) {
 function useStoreSearch({ active, q, genre, sort, plusOnly = false, familyOnly = false }) {
   const [state, setState] = useState({ status: 'idle', games: [], total: 0, page: 0 });
   const request = useRef(0);
+  // Everything that decides which games belong in the list, as against which
+  // of them match what has been typed.
+  const shape = `${genre}|${sort}|${plusOnly}|${familyOnly}`;
+  const lastShape = useRef(shape);
 
   useEffect(() => {
     if (!active) return undefined;
@@ -4147,8 +4151,21 @@ function useStoreSearch({ active, q, genre, sort, plusOnly = false, familyOnly =
     if (plusOnly) params.set('plus', '1');
     if (familyOnly) params.set('family', '1');
 
+    // Rows are kept while a query narrows, because a list shrinking under the
+    // typing is the answer arriving. Changing a filter is not that: the old
+    // rows are not a stale version of the answer, they are the wrong answer.
+    // Tapping PS Plus left the unfiltered library on screen for as long as the
+    // request took, so games that are not on PS Plus sat under the PS Plus
+    // chip, which is exactly what the chip promises they are not.
+    const shapeChanged = lastShape.current !== shape;
+    lastShape.current = shape;
+
     // eslint-disable-next-line react/set-state-in-effect
-    setState((previous) => ({ ...previous, status: 'loading' }));
+    setState((previous) =>
+      shapeChanged
+        ? { status: 'loading', games: [], total: 0, page: 0 }
+        : { ...previous, status: 'loading' },
+    );
     const timer = setTimeout(async () => {
       try {
         const response = await fetch(`/api/store?${params}`);
@@ -4162,7 +4179,7 @@ function useStoreSearch({ active, q, genre, sort, plusOnly = false, familyOnly =
     }, q ? 220 : 0);
 
     return () => clearTimeout(timer);
-  }, [active, q, genre, sort, plusOnly, familyOnly]);
+  }, [active, q, genre, sort, plusOnly, familyOnly, shape]);
 
   const more = useCallback(async () => {
     const params = new URLSearchParams();
