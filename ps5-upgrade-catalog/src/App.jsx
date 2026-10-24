@@ -1004,7 +1004,26 @@ function TrailerPlayer({
 
   useEffect(() => {
     const element = videoRef.current;
-    if (!element || !video?.hls) return undefined;
+    if (!element) return undefined;
+
+    // Steam hands over an HLS manifest and nothing else, so that stays the
+    // first branch and behaves exactly as before. PlayStation hands over a
+    // plain mp4, which a feed slide for a store game passes straight through
+    // as a string, and this effect used to bail on anything without `.hls`:
+    // the element mounted with no source at all, so a store trailer was a
+    // silent black box over the artwork.
+    const file = typeof video === 'string' ? video : (video?.mp4 ?? null);
+    if (!video?.hls && file) {
+      element.src = file;
+      // Muted autoplay is allowed, and the feed is always muted until asked
+      // otherwise; an unmuted player needs the gesture effect below instead.
+      element.play().catch(() => {});
+      return () => {
+        element.removeAttribute('src');
+      };
+    }
+
+    if (!video?.hls) return undefined;
 
     let hls;
     let cancelled = false;
@@ -2435,6 +2454,73 @@ function SimilarGames({ game, pool, byTitle, onOpen }) {
  * ------------------------------------------------------------------ */
 
 /**
+ * PlayStation's image CDN resizes on `w`, and a full-size screenshot runs to
+ * about 900KB: far too much to put behind every slide in a feed. Asking for
+ * 1280 brings it to 275KB, which is also what 960 costs, so this takes the
+ * sharper one.
+ */
+const wideShot = (url, width = 1280) =>
+  url ? `${url}${url.includes('?') ? '&' : '?'}w=${width}&thumb=false` : null;
+
+/**
+ * Wide media for a store game, read once per concept and kept for the session.
+ *
+ * The mirror carries one image per game: the vertical capsule, 460px wide.
+ * Stretched across a phone it is a crop of a crop, and it was all a store
+ * slide ever had, which is why the feed went flat the moment the library
+ * became the whole store rather than the written-up few: those still had
+ * Steam's wide screenshots and their trailer, and the other eight thousand
+ * had neither. The concept page already carries eight screenshots and the
+ * trailer, and the endpoint already returns them. A slide only has to ask,
+ * and only once it is nearly on screen.
+ */
+const conceptMedia = new Map();
+const conceptMediaInFlight = new Map();
+
+function useConceptMedia(storeId, enabled) {
+  const [media, setMedia] = useState(() => (storeId ? conceptMedia.get(storeId) ?? null : null));
+
+  useEffect(() => {
+    if (!enabled || !storeId) return undefined;
+    const cached = conceptMedia.get(storeId);
+    if (cached) {
+      // eslint-disable-next-line react/set-state-in-effect
+      setMedia(cached);
+      return undefined;
+    }
+
+    let alive = true;
+    const read =
+      conceptMediaInFlight.get(storeId) ??
+      fetch(`/api/concept?id=${storeId}`)
+        .then((response) => (response.ok ? response.json() : null))
+        .then((payload) => ({
+          shots: (payload?.screenshots ?? []).filter(Boolean),
+          trailer: payload?.trailer ?? null,
+        }))
+        .catch(() => ({ shots: [], trailer: null }))
+        .then((value) => {
+          // Remembered either way: a slide with no screenshot still has its
+          // key art, so a failed read costs a flourish rather than the card,
+          // and scrolling past it again should not ask a second time.
+          conceptMedia.set(storeId, value);
+          conceptMediaInFlight.delete(storeId);
+          return value;
+        });
+    conceptMediaInFlight.set(storeId, read);
+    read.then((value) => {
+      if (alive) setMedia(value);
+    });
+
+    return () => {
+      alive = false;
+    };
+  }, [storeId, enabled]);
+
+  return media;
+}
+
+/**
  * One full-screen card in the feed. Snap points do the paging, so this only
  * has to look right and get out of the way — the art runs edge to edge and
  * the text sits over a gradient rather than in a panel.
@@ -2467,10 +2553,34 @@ function FeedSlide({
     return () => observer.disconnect();
   }, []);
 
+  // Media is read a screen early so a slide is already dressed by the time it
+  // arrives, rather than swapping its background in under the reader. Once a
+  // slide has been near it stays near: the answer is cached, and re-arming
+  // would only ask again.
+  const [near, setNear] = useState(false);
+  useEffect(() => {
+    const element = slideRef.current;
+    if (!element || near) return undefined;
+    const observer = new IntersectionObserver(
+      ([entry]) => {
+        if (entry.isIntersecting) setNear(true);
+      },
+      { rootMargin: '150% 0px' },
+    );
+    observer.observe(element);
+    return () => observer.disconnect();
+  }, [near]);
+
   // A wide screenshot fills the screen far better than the 460px capsule, so
   // use one as soon as the live data arrives and fall back until then.
+  // Written-up games carry Steam's media already; everything else asks the
+  // concept page for it. Either way a wide shot beats the capsule, which is
+  // what `heroImage` holds for a store row.
+  const storeMedia = useConceptMedia(game.storeId, near && !(live?.screenshots?.length > 0));
+
   const background =
     live?.screenshots?.[0]?.full ??
+    wideShot(storeMedia?.shots?.[0]) ??
     live?.heroImage ??
     (game.steamAppId
       ? `https://shared.akamai.steamstatic.com/store_item_assets/steam/apps/${game.steamAppId}/header.jpg`
@@ -2479,7 +2589,7 @@ function FeedSlide({
   const price = live?.price;
   const standing = priceStanding(price, live?.history);
 
-  const trailer = live?.videos?.[0] ?? null;
+  const trailer = live?.videos?.[0] ?? storeMedia?.trailer ?? null;
 
   return (
     <section
