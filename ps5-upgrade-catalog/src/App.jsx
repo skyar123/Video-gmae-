@@ -5923,16 +5923,24 @@ export default function App() {
    * written-up catalog, and the scan only reaches games that are in the
    * mirror. So the collection shows both, with these first.
    */
-  const curatedPlusGames = useMemo(
-    () =>
-      catalogPool
-        .filter((game) => byTitle.get(game.title)?.price?.plus?.included)
-        // The store panel reads live data off the game, so it has to travel
-        // with it; without this the card shows a loading bar where the price
-        // and the PS Plus badge belong.
-        .map((game) => ({ ...game, storeLive: byTitle.get(game.title) })),
-    [catalogPool, byTitle],
-  );
+  const curatedPlusGames = useMemo(() => {
+    const covered = catalogPool.filter(
+      (game) => byTitle.get(game.title)?.price?.plus?.included,
+    );
+    // Typing in this collection has to narrow it. Without this the written-up
+    // half ignored the query entirely: searching "Dredge" inside PS Plus
+    // still listed Horizon Forbidden West and every other covered game,
+    // while the store half filtered correctly, which reads as the search
+    // being broken rather than as two lists with different rules.
+    const narrowed =
+      deferredQuery.trim().length > 1 && searchScores
+        ? covered.filter((game) => searchScores.has(game.id))
+        : covered;
+    // The store panel reads live data off the game, so it has to travel with
+    // it; without this the card shows a loading bar where the price and the
+    // PS Plus badge belong.
+    return narrowed.map((game) => ({ ...game, storeLive: byTitle.get(game.title) }));
+  }, [catalogPool, byTitle, deferredQuery, searchScores]);
   const plusCount = curatedPlusGames.length;
 
   // Over the whole pool, not the filtered results: a chip that counted its own
