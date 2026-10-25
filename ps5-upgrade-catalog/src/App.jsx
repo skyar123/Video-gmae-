@@ -4255,11 +4255,14 @@ function useStoreSearch({ active, q, genre, sort, plusOnly = false, familyOnly =
  * that announces them. Shown only when that post could actually be read: a
  * panel whose whole job is to say "this one is free" has no business guessing.
  */
-function PlusThisMonth({ now }) {
+function PlusThisMonth({ now, onSearch }) {
   const monthly = now?.monthly;
   const catalog = now?.catalog;
   if (!monthly && !catalog) return null;
 
+  // Each name searches for itself. Being told a game is free and left to
+  // retype its name is a strange place to stop, and the mirror has a page for
+  // most of them.
   const row = (entry, label, tone) => {
     if (!entry) return null;
     return (
@@ -4268,7 +4271,22 @@ function PlusThisMonth({ now }) {
           {label} · {entry.month}
         </p>
         <p className="mt-1 text-sm font-semibold leading-snug text-slate-900 dark:text-white">
-          {entry.games.join(' · ')}
+          {entry.games.map((name, index) => (
+            <Fragment key={name}>
+              {index > 0 && <span className="text-slate-400 dark:text-slate-500"> · </span>}
+              {onSearch ? (
+                <button
+                  type="button"
+                  onClick={() => onSearch(name)}
+                  className="text-left underline decoration-dotted underline-offset-4 hover:decoration-solid"
+                >
+                  {name}
+                </button>
+              ) : (
+                name
+              )}
+            </Fragment>
+          ))}
         </p>
       </div>
     );
@@ -4363,7 +4381,7 @@ function StoreFeed({ query, curatedFirst = [], curatedReason, curatedByName, sav
   );
 }
 
-function StorePanel({ query, curatedFirst = [], curatedReason, curatedByName, saved, plusOnly = false, familyOnly = false, onOpenCurated, onOpenStore }) {
+function StorePanel({ query, curatedFirst = [], curatedReason, curatedByName, saved, plusOnly = false, familyOnly = false, onOpenCurated, onOpenStore, onSearch }) {
   const [genre, setGenre] = useState('');
   const [sort, setSort] = useState('rating');
   const [facets, setFacets] = useState({ genres: [], size: 0 });
@@ -4403,7 +4421,7 @@ function StorePanel({ query, curatedFirst = [], curatedReason, curatedByName, sa
 
   return (
     <>
-      {plusOnly && <PlusThisMonth now={facets.plusNow} />}
+      {plusOnly && <PlusThisMonth now={facets.plusNow} onSearch={onSearch} />}
       <p className="mb-3 text-xs font-medium text-slate-400 dark:text-slate-500">
         {plusOnly ? (
           <>
@@ -4477,6 +4495,26 @@ function StorePanel({ query, curatedFirst = [], curatedReason, curatedByName, sa
             results.status === 'error'
               ? 'The store index is not answering right now.'
               : 'Nothing in the index matches that.'
+          }
+          /*
+           * The mirror is 8,885 games and the store is bigger, so a game can
+           * be real and absent from here: Hunt: Showdown 1896 was October's
+           * monthly game and has no page in the index at all. Being told a
+           * game is free and then shown an empty screen is a dead end, and
+           * the store is where it gets claimed anyway.
+           */
+          action={
+            query && results.status !== 'error'
+              ? {
+                  label: 'Look on the PlayStation Store',
+                  onClick: () =>
+                    window.open(
+                      `https://store.playstation.com/en-us/search/${encodeURIComponent(query)}`,
+                      '_blank',
+                      'noopener,noreferrer',
+                    ),
+                }
+              : undefined
           }
         />
       ) : (
@@ -6718,6 +6756,15 @@ export default function App() {
               saved={storeSaved}
               onOpenCurated={setActiveGameId}
               onOpenStore={setActiveStoreGame}
+              // Out of the PS Plus filter as well as into the search. A
+              // monthly game is claimed and kept, not part of the catalog,
+              // so looking for one inside a list of catalog games finds
+              // nothing: tapping "Hunt: Showdown 1896" there returned an
+              // empty screen, which reads as the search being broken rather
+              // than as the two meanings of "on PS Plus" being different.
+              onSearch={(name) =>
+                setFilters((previous) => ({ ...previous, q: name, collection: 'all' }))
+              }
             />
           ) : (
             <>
