@@ -242,10 +242,37 @@ async function readWithRetry(key, attempts = 3, gapMs = 400) {
  * The old single key is still read, so nothing already stored is stranded,
  * and never written, so it quietly stops being the thing that matters.
  */
-async function readIndex({ attempts = 1, lanes = 6 } = {}) {
+/**
+ * Folds the legacy object and the shard objects into one index.
+ *
+ * Separated from the reading because the interesting part is the judgement,
+ * not the I/O, and this is the path a live outage recovers through. The one
+ * that matters right now: the old single object has stopped reading while no
+ * shard exists yet. Those shards are absent rather than broken, so the run
+ * goes ahead and builds them, and recovery starts on the next scheduled run
+ * rather than waiting for anyone. Only every shard failing at once means the
+ * store itself is unreadable, which is when writing anything is a mistake.
+ *
+ * Takes reads in order: the legacy object first, then one per shard.
+ */
+export function mergeIndexReads(reads) {
+  const [legacy, ...shards] = reads;
   const games = {};
   const failed = new Set();
 
+  if (legacy?.ok) Object.assign(games, legacy.value?.games ?? {});
+  shards.forEach((read, shard) => {
+    if (!read?.ok) {
+      failed.add(shard);
+      return;
+    }
+    Object.assign(games, read.value?.games ?? {});
+  });
+
+  return { ok: failed.size < shards.length, games, failed, legacyOk: Boolean(legacy?.ok) };
+}
+
+async function readIndex({ attempts = 1, lanes = 6 } = {}) {
   // Seventeen objects, six at a time. Sequentially this is seventeen round
   // trips on the first request after the cache lapses, which a reader waits
   // on; the same bound the video pool and the price history settled on for
@@ -259,24 +286,7 @@ async function readIndex({ attempts = 1, lanes = 6 } = {}) {
     );
   }
 
-  const [legacy, ...shards] = reads;
-  if (legacy.ok) Object.assign(games, legacy.value?.games ?? {});
-  shards.forEach((read, shard) => {
-    if (!read.ok) {
-      failed.add(shard);
-      return;
-    }
-    Object.assign(games, read.value?.games ?? {});
-  });
-
-  return {
-    // Everything unreadable at once is the failure the guard exists for.
-    // Some of it unreadable is a partial run, which is worth doing.
-    ok: failed.size < PLUS_SHARDS,
-    games,
-    failed,
-    legacyOk: legacy.ok,
-  };
+  return mergeIndexReads(reads);
 }
 
 async function runPlusBatch(ids, { limit = PLUS_BATCH, gapMs = 400, now = Date.now() } = {}) {

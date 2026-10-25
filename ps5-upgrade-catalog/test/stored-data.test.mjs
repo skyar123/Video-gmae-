@@ -99,3 +99,46 @@ test('subscribing over an unreadable list changes nothing and says so', async ()
   assert.match(JSON.parse(refused.body).error, /Nothing was changed/);
   assert.equal(await readFile(STORE, 'utf8'), before);
 });
+
+/**
+ * How the index is assembled from what could and could not be read.
+ *
+ * This is the path a live outage recovers through, so the cases are the ones
+ * that actually happened rather than the ones that are easy to write.
+ */
+import { mergeIndexReads } from '../api/plus.mjs';
+
+const absent = { ok: true, value: null };
+const broken = { ok: false, value: null, error: 'could not read' };
+const holding = (games) => ({ ok: true, value: { games } });
+const shards = (...reads) => reads;
+
+test('the live case: the old object stopped reading and no shard exists yet', () => {
+  // Absent shards are not broken ones, so the run goes ahead and builds them
+  // rather than standing off and leaving the collection short indefinitely.
+  const index = mergeIndexReads([broken, ...shards(absent, absent, absent, absent)]);
+  assert.equal(index.ok, true, 'the run proceeds');
+  assert.equal(index.legacyOk, false, 'and knows the old object did not read');
+  assert.deepEqual(index.games, {});
+  assert.equal(index.failed.size, 0);
+});
+
+test('whatever the old object still holds is merged in, not stranded', () => {
+  const index = mergeIndexReads([
+    holding({ 1: { included: true } }),
+    ...shards(holding({ 2: { included: false } }), absent),
+  ]);
+  assert.deepEqual(Object.keys(index.games).sort(), ['1', '2']);
+});
+
+test('one unreadable shard costs only its own games', () => {
+  const index = mergeIndexReads([absent, ...shards(holding({ 5: {} }), broken, holding({ 7: {} }))]);
+  assert.equal(index.ok, true);
+  assert.deepEqual([...index.failed], [1], 'the run knows which shard to leave alone');
+  assert.deepEqual(Object.keys(index.games).sort(), ['5', '7']);
+});
+
+test('every shard unreadable means the store is, and nothing should be written', () => {
+  const index = mergeIndexReads([broken, ...shards(broken, broken, broken)]);
+  assert.equal(index.ok, false);
+});
