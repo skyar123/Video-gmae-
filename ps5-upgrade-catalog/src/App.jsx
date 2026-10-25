@@ -4246,6 +4246,59 @@ function useStoreSearch({ active, q, genre, sort, plusOnly = false, familyOnly =
  * The whole store as a feed, so the view switch means the same thing here as
  * it does anywhere else.
  */
+/**
+ * What PlayStation Plus is giving away right now.
+ *
+ * The scan answers "is this in the catalog", which is a different question
+ * from "what is free this month". The monthly games are claimed and kept, and
+ * nothing on a game's store page marks them, so they come from the blog post
+ * that announces them. Shown only when that post could actually be read: a
+ * panel whose whole job is to say "this one is free" has no business guessing.
+ */
+function PlusThisMonth({ now }) {
+  const monthly = now?.monthly;
+  const catalog = now?.catalog;
+  if (!monthly && !catalog) return null;
+
+  const row = (entry, label, tone) => {
+    if (!entry) return null;
+    return (
+      <div className="min-w-0">
+        <p className={`text-[11px] font-bold uppercase tracking-wide ${tone}`}>
+          {label} · {entry.month}
+        </p>
+        <p className="mt-1 text-sm font-semibold leading-snug text-slate-900 dark:text-white">
+          {entry.games.join(' · ')}
+        </p>
+      </div>
+    );
+  };
+
+  const link = monthly?.link ?? catalog?.link;
+
+  return (
+    <div className="mb-3 rounded-2xl bg-gradient-to-br from-indigo-50 to-violet-50 p-4 ring-1 ring-indigo-100 dark:from-indigo-950/50 dark:to-violet-950/40 dark:ring-indigo-900/60">
+      <div className="flex items-start gap-3">
+        <Sparkles className="mt-0.5 h-4 w-4 shrink-0 text-indigo-500 dark:text-indigo-300" />
+        <div className="min-w-0 flex-1 space-y-3">
+          {row(monthly, 'Yours to claim this month', 'text-indigo-600 dark:text-indigo-300')}
+          {row(catalog, 'Just added to the catalog', 'text-violet-600 dark:text-violet-300')}
+          {link && (
+            <a
+              href={link}
+              target="_blank"
+              rel="noreferrer"
+              className="inline-flex items-center gap-1 text-xs font-semibold text-indigo-600 hover:underline dark:text-indigo-300"
+            >
+              PlayStation Blog <ExternalLink className="h-3 w-3" />
+            </a>
+          )}
+        </div>
+      </div>
+    </div>
+  );
+}
+
 function StoreFeed({ query, curatedFirst = [], curatedReason, curatedByName, saved, plusOnly = false, familyOnly = false, muted, onToggleMuted, onOpenCurated, onOpenStore }) {
   const results = useStoreSearch({ active: true, q: query, genre: '', sort: 'rating', plusOnly, familyOnly });
   const [sentinel, setSentinel] = useState(null);
@@ -4350,6 +4403,7 @@ function StorePanel({ query, curatedFirst = [], curatedReason, curatedByName, sa
 
   return (
     <>
+      {plusOnly && <PlusThisMonth now={facets.plusNow} />}
       <p className="mb-3 text-xs font-medium text-slate-400 dark:text-slate-500">
         {plusOnly ? (
           <>

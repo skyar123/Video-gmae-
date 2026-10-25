@@ -1,5 +1,6 @@
 import { searchStore, storeGenres, storePlusCount, storeSize } from '../../api/store.mjs';
 import { lastPlusScan } from '../../api/plus.mjs';
+import { loadPlusAnnouncements } from '../../api/plus-monthly.mjs';
 
 /** GET /api/store — search the mirrored PlayStation Store index. */
 export default async function handler(request) {
@@ -13,6 +14,11 @@ export default async function handler(request) {
       // A missing badge means "not checked yet" until checked reaches of,
       // and saying so beats letting absence look like an answer.
       plus: await storePlusCount(),
+      // What is free to claim this month, and what just joined the catalog.
+      // The per-concept scan cannot know either: a game's store page says
+      // whether it is in the catalog, and nothing on it says "this one is
+      // this month's". Only the announcement does.
+      plusNow: await loadPlusAnnouncements(),
     };
     // ?debug=1 also says what the last scan actually did. Coverage that stops
     // moving looks the same from outside whether the scan is not running,
