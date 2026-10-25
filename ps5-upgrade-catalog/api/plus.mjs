@@ -19,7 +19,7 @@
  * does. Coverage builds instead of arriving, and what it reports is true.
  */
 
-import { loadBlob, saveBlob } from './history.mjs';
+import { loadBlob, readBlob, saveBlob } from './history.mjs';
 import { PLUS_KEY, PLUS_LOG_KEY } from './keys.mjs';
 import { ratingFromConcept } from './rating.mjs';
 
@@ -51,6 +51,9 @@ const ENTRY_VERSION = 2;
 
 /** How much of a run goes to games never seen before, rather than re-reads. */
 const FRESH_SHARE = 0.7;
+
+/** Runs an unreadable index is stepped around before it is rebuilt instead. */
+const READ_FAILURES_BEFORE_REBUILD = 3;
 
 /** The store page's own answer, or null when the page cannot be read. */
 export function parsePlusHtml(html) {
@@ -195,9 +198,68 @@ export function planPlusBatch(fresh, again, limit) {
   );
 }
 
+/**
+ * Reads the index, giving a blip a couple of chances before believing it.
+ *
+ * Most read failures are a moment's trouble rather than a broken object, and
+ * a retry inside the run settles those without involving the rest of this at
+ * all. What survives three tries seconds apart is a real problem.
+ */
+async function readIndex(attempts = 3, gapMs = 400) {
+  let last = { ok: false, value: null, error: 'not attempted' };
+  for (let attempt = 0; attempt < attempts; attempt += 1) {
+    last = await readBlob(PLUS_KEY);
+    if (last.ok) return last;
+    if (attempt < attempts - 1) await new Promise((resolve) => setTimeout(resolve, gapMs));
+  }
+  return last;
+}
+
 async function runPlusBatch(ids, { limit = PLUS_BATCH, gapMs = 400, now = Date.now() } = {}) {
-  const stored = (await loadBlob(PLUS_KEY)) ?? {};
-  const games = stored.games ?? {};
+  /*
+   * A failed read must not become a destructive write.
+   *
+   * This reads the whole index, adds to it and saves it back under one key.
+   * A read that fails is indistinguishable from an empty index unless it
+   * says so, and treating the first as the second means saving a fresh index
+   * holding only what this run collected, over everything already known.
+   *
+   * That is not hypothetical. Coverage went from 1,941 games to zero between
+   * one afternoon and the next: the PS Plus collection answered with nothing,
+   * and every age rating went with it, which took the kid-friendly filter
+   * too, since it reads the same index. So a read that did not work ends the
+   * run, and the index is left exactly as it is for the next one.
+   */
+  const stored = await readIndex();
+  /*
+   * Refusing has to be temporary, or it becomes its own outage.
+   *
+   * An index that cannot be read once is probably a blip worth stepping
+   * around. An index that cannot be read three runs running is not coming
+   * back, and a scan that keeps declining to touch it leaves the PS Plus
+   * collection empty for ever out of respect for data nobody can read.
+   * After three it rebuilds from nothing, which is slow but finite.
+   */
+  const failures = ((await lastPlusScan())?.readFailures ?? 0) + 1;
+  if (!stored.ok && failures < READ_FAILURES_BEFORE_REBUILD) {
+    return {
+      readFailures: failures,
+      asked: 0,
+      answered: 0,
+      due: 0,
+      fresh: 0,
+      waiting: { fresh: 0, again: 0 },
+      offered: ids.length,
+      checked: 0,
+      included: 0,
+      rated: 0,
+      remaining: 0,
+      skipped: `the index could not be read (${failures} of ${READ_FAILURES_BEFORE_REBUILD}), so nothing was written over it`,
+      error: stored.error ?? null,
+    };
+  }
+  const rebuilding = !stored.ok;
+  const games = stored.value?.games ?? {};
 
   const fresh = [];
   const again = [];
@@ -273,6 +335,8 @@ async function runPlusBatch(ids, { limit = PLUS_BATCH, gapMs = 400, now = Date.n
   return {
     asked,
     answered,
+    readFailures: 0,
+    rebuilding: rebuilding || undefined,
     due: due.length,
     // Which queue the work went to. "asked 500, fresh 0" is a migration
     // eating the budget; "asked 500, fresh 350" is coverage growing.

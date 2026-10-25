@@ -39,11 +39,24 @@ async function getBlobStore() {
 }
 
 async function readLocalFile() {
+  const read = await readLocalFileStrict();
+  return read.ok ? read.value : {};
+}
+
+/**
+ * The local fallback, with the same distinction readBlob makes.
+ *
+ * A file that is not there yet is an empty history and perfectly fine. A file
+ * that is there and will not parse is a failure, and answering {} to that is
+ * how a caller comes to write its own partial state over everything in it.
+ */
+async function readLocalFileStrict() {
   try {
     const { readFile } = await import('node:fs/promises');
-    return JSON.parse(await readFile(LOCAL_FILE, 'utf8'));
-  } catch {
-    return {};
+    return { ok: true, value: JSON.parse(await readFile(LOCAL_FILE, 'utf8')) };
+  } catch (error) {
+    if (error?.code === 'ENOENT') return { ok: true, value: {} };
+    return { ok: false, error: String(error?.message ?? error).slice(0, 200) };
   }
 }
 
@@ -59,6 +72,40 @@ async function writeLocalFile(all) {
 const keyFor = (chunk, countryCode) => `${countryCode}/chunk-${chunk}`;
 
 /** Read one JSON blob, falling back to the local file off-platform. */
+/**
+ * A read that says whether it worked.
+ *
+ * loadBlob answers {} both for a key that is not there and for a read that
+ * failed, and the difference matters to anything that then writes the key
+ * back. The PS Plus scan reads the whole index, adds to it and saves it: with
+ * the two cases indistinguishable, one failed read turns into a write that
+ * replaces the index with whatever that run happened to collect. It is the
+ * same trap the video pool fell into, where a rebuild read the pool as empty
+ * and wrote three channels over thirty-four.
+ *
+ * It cost the live site 1,941 scanned games and every age rating with them:
+ * the PS Plus collection answered with nothing at all, and the kid-friendly
+ * filter, which reads the same index, went with it.
+ *
+ * So: { ok: false } for a read that threw, { ok: true, value: null } for a
+ * key that genuinely is not there, and a caller that is about to overwrite
+ * what it read can tell them apart.
+ */
+export async function readBlob(key) {
+  const store = await getBlobStore();
+  if (store) {
+    try {
+      return { ok: true, value: (await store.get(key, { type: 'json' })) ?? null };
+    } catch (error) {
+      return { ok: false, value: null, error: String(error?.message ?? error).slice(0, 200) };
+    }
+  }
+
+  const read = await readLocalFileStrict();
+  if (!read.ok) return { ok: false, value: null, error: read.error };
+  return { ok: true, value: read.value[key] ?? null };
+}
+
 export async function loadBlob(key) {
   const store = await getBlobStore();
   if (store) {
@@ -100,7 +147,14 @@ export async function saveBlob(key, data) {
   // Queued, and re-read inside the queue, so concurrent writers merge rather
   // than overwrite each other.
   localWrites = localWrites.then(async () => {
-    const all = await readLocalFile();
+    const read = await readLocalFileStrict();
+    // Every key shares one file here, so merging into a file that will not
+    // parse would drop every other key in it. On Netlify each key stands
+    // alone and this cannot arise; locally it is the same trap one level
+    // down, so a write waits for a file that can be read rather than
+    // quietly becoming the only thing left in it.
+    if (!read.ok) return;
+    const all = read.value;
     all[key] = data;
     await writeLocalFile(all);
   }).catch(() => {});
