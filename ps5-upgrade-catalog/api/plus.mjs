@@ -295,9 +295,11 @@ async function runPlusBatch(ids, { limit = PLUS_BATCH, gapMs = 400, now = Date.n
    *
    * A read that fails is indistinguishable from an empty index unless it
    * says so, and treating the first as the second means writing what this
-   * run collected over everything already known. Coverage went from 1,941
-   * games to zero that way: the PS Plus collection answered with nothing and
-   * every age rating went with it, which took the kid-friendly filter too.
+   * run collected over everything already known. The live index read as
+   * empty for a few hours this way, taking the PS Plus collection's store
+   * half and every age rating with it. The data was intact and returned by
+   * itself, so nothing was actually lost: a scan running in that window is
+   * all it would have taken, and that nothing did was luck.
    *
    * Now that the index is sharded this is per shard. A shard that will not
    * read is left alone and its games are left out of the run, so its own

@@ -83,9 +83,13 @@ const keyFor = (chunk, countryCode) => `${countryCode}/chunk-${chunk}`;
  * same trap the video pool fell into, where a rebuild read the pool as empty
  * and wrote three channels over thirty-four.
  *
- * It cost the live site 1,941 scanned games and every age rating with them:
- * the PS Plus collection answered with nothing at all, and the kid-friendly
- * filter, which reads the same index, went with it.
+ * The live site showed what that looks like. The index read as empty for a
+ * few hours: the PS Plus collection lost its store half, and the age ratings
+ * with it, which took the kid-friendly filter too. The stored data turned out
+ * to be fine and came back by itself, so this was a read outage rather than a
+ * loss. It was only ever one scan away from being a real one, though. Any run
+ * during that window would have written its couple of hundred findings over
+ * all 1,941 games, and nothing would have brought those back.
  *
  * So: { ok: false } for a read that threw, { ok: true, value: null } for a
  * key that genuinely is not there, and a caller that is about to overwrite

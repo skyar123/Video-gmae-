@@ -58,8 +58,10 @@ const newToken = () => `${crypto.randomUUID()}${crypto.randomUUID()}`.replace(/-
  * Unlike a scan index this cannot be rebuilt by asking the store again. It is
  * confirmed addresses, push keys and watchlists, and the only copy is this.
  *
- * The PS Plus index was lost exactly this way, by a failed read that looked
- * like an empty one, so this refuses to guess. A read that did not work
+ * The PS Plus index spent hours reading as empty exactly this way, by a
+ * failed read that looked like an empty one. That index was rebuildable and
+ * turned out to be intact anyway. This one is neither, so it refuses to
+ * guess. A read that did not work
  * throws, the request fails with something the caller can act on, and the
  * list is left alone. Nobody losing their alerts is worth a failed signup.
  */

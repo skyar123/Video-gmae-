@@ -1,10 +1,11 @@
 /**
  * Not writing over what you could not read.
  *
- * The PS Plus index was lost to this: a read that failed answered the same
- * as a read that found nothing, and the run that followed wrote its own
- * partial findings over 1,941 games. The subscriber list is the same shape
- * and cannot be rebuilt at all, so both are pinned here.
+ * The PS Plus index read as empty for hours because of this: a read that
+ * failed answered the same as a read that found nothing. The stored data was
+ * fine and came back, but any scan running in that window would have written
+ * its couple of hundred findings over all 1,941 games. The subscriber list is
+ * the same shape and cannot be rebuilt at all, so both are pinned here.
  */
 import test, { afterEach } from 'node:test';
 import assert from 'node:assert/strict';
