@@ -933,6 +933,47 @@ let cache = null;
 
 export const gossDiagnostics = () => Object.fromEntries(diagnostics);
 
+/**
+ * Takes rows one source at a time, round by round, until the feed is full.
+ *
+ * Recency alone is not a fair contest when the roster is not uniform.
+ * PlayStation uploads ten times a day and a person uploads weekly, so the
+ * freshest twenty came back as ten PlayStation videos and five of the
+ * thirty-seven channels the reader actually subscribes to, the rest buried
+ * under volume they cannot match. Variety is the whole point of the feed.
+ *
+ * A cap per source was the first attempt and it does not work on its own: a
+ * cap low enough to spread the feed cannot fill it on a quiet day, and
+ * topping the remainder up from the freshest hands those slots straight back
+ * to the channel the cap was there to hold back. Capping at two and filling
+ * to twenty gave PlayStation six.
+ *
+ * Going round the sources instead needs no cap. Everyone is offered a second
+ * video before anyone is offered a third, so the spread is as even as the
+ * roster allows, and the later rounds fill the feed when few channels have
+ * posted. Rows arrive in the order they should be preferred.
+ */
+export function spreadBySource(sorted, total) {
+  const bySource = new Map();
+  for (const row of sorted) {
+    if (!bySource.has(row.source)) bySource.set(row.source, []);
+    bySource.get(row.source).push(row);
+  }
+
+  const out = [];
+  for (let round = 0; out.length < total; round += 1) {
+    let served = false;
+    for (const rows of bySource.values()) {
+      if (out.length >= total) break;
+      if (!rows[round]) continue;
+      out.push(rows[round]);
+      served = true;
+    }
+    if (!served) break;
+  }
+  return out;
+}
+
 export async function loadGoss() {
   if (cache && Date.now() - cache.storedAt < CACHE_TTL_MS) return cache.value;
 
@@ -981,6 +1022,9 @@ export async function loadGoss() {
       return [...loudest.slice(0, hot), ...freshest.slice(0, fresh)];
     };
 
+    const spread = (channel, total) =>
+      spreadBySource(bucket.filter((burst) => burst.channel === channel).sort(newest), total);
+
     const wide = kind === 'beef';
     const chosen = new Map();
     for (const burst of [
@@ -1001,8 +1045,10 @@ export async function loadGoss() {
       ...pick('pod', 0, 10),
       // Thirty-odd channels against three: the old allowance of twelve was
       // set when YouTube was a trailer sidecar, and would now be throwing
-      // away most of the largest channel in the feed.
-      ...pick('youtube', 0, wide ? 26 : 20),
+      // away most of the largest channel in the feed. Spread rather than
+      // picked, so the allowance reaches the roster instead of the loudest
+      // few channels in it.
+      ...spread('youtube', wide ? 26 : 20),
     ]) {
       chosen.set(burst.link, burst);
     }
