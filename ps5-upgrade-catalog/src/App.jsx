@@ -148,7 +148,10 @@ const COLLECTION_BLURBS = {
   classic: 'Older PlayStation games and remasters you can play on a PS4 or PS5 today.',
   queer: 'Games with queer characters or relationships that matter to the story, not background detail.',
   disability: 'Games with disabled or neurodivergent characters, or landmark accessibility work.',
-  all: "8,885 games mirrored from the PlayStation Store, plus the written-up ones the mirror has no page for. Hand-written entries are marked; the rest carry the store's own art, price and star rating.",
+  // No count in here: the mirror grows every time the index is rebuilt, and a
+  // number written into the copy goes stale silently. The line above it
+  // already says how many there are, from the index itself.
+  all: "Mirrored from the PlayStation Store, plus the written-up ones it has no page for. Hand-written entries are marked; the rest carry the store's own art, price and star rating.",
   curated:
     'The hand-written ones, with upgrade paths, representation notes, kid-friendly verdicts and recorded price history behind each.',
   soon: 'Out in the next few weeks, and everything from the last sixty days. Heart one and it stays on your wishlist through release.',
@@ -4364,7 +4367,7 @@ function StoreFeed({ query, curatedFirst = [], curatedReason, curatedByName, sav
           key={`curated-${game.id}`}
           game={game}
           live={game.storeLive}
-          reason={curatedReason}
+          reason={game.curatedReason ?? curatedReason}
           wishlisted={saved.wishlist.has(game.id)}
           muted={muted}
           onToggleMuted={onToggleMuted}
@@ -4543,7 +4546,7 @@ function StorePanel({ query, curatedFirst = [], curatedReason, curatedByName, sa
                 key={`curated-${game.id}`}
                 game={game}
                 live={game.storeLive}
-                reason={curatedReason}
+                reason={game.curatedReason ?? curatedReason}
                 wishlisted={saved.wishlist.has(game.id)}
                 owned={saved.library.has(game.id)}
                 onToggleWishlist={() => saved.toggle(null, game, 'wishlist')}
@@ -6101,7 +6104,25 @@ export default function App() {
       .filter((game) => searchScores.has(game.id) && !hidden.has(game.id))
       .sort((a, b) => (searchScores.get(b.id) ?? 0) - (searchScores.get(a.id) ?? 0))
       .slice(0, 24)
-      .map((game) => ({ ...game, storeLive: byTitle.get(game.title) ?? game.storeLive }));
+      .map((game) => ({
+        ...game,
+        storeLive: byTitle.get(game.title) ?? game.storeLive,
+        /*
+         * Says only what is certain.
+         *
+         * The line used to read "the store mirror has no page for it" for
+         * every written-up game in these results. That was close enough when
+         * the mirror was smaller; it now holds 177 of the 306, so it was
+         * wrong more often than right, and DREDGE sat under a label saying
+         * the store had never heard of it.
+         *
+         * Telling the two apart needs to know whether the mirror has this
+         * title, and nothing here does: byTitle is the live price feed for
+         * the written-up games, so it answers yes for all of them. Rather
+         * than guess, this says the part that is true either way.
+         */
+        curatedReason: 'Written up here, so this one comes first',
+      }));
   }, [filters.collection, deferredQuery, searchScores, catalog, hidden, byTitle]);
 
   const filteredGames = useMemo(() => {
