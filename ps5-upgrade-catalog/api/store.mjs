@@ -42,6 +42,18 @@ const PLUS_TTL_MS = 60 * 1000;
  * a floor when deriving it, so a Teen game with bland descriptors reads as
  * "mild", and mild was passing. The tier gets a veto here too.
  */
+/**
+ * Whether a game asks for money once you are already inside it.
+ *
+ * Straight from the rating board rather than inferred: ESRB publishes these
+ * as interactive elements alongside the content descriptors, and names the
+ * loot-box case separately as "In-Game Purchases (Includes Random Items)".
+ * So this is a fact about the game, not a guess from its genre or its price.
+ */
+const SELLS_INSIDE = /purchases/i;
+export const hasInGamePurchases = (ageRating) =>
+  (ageRating?.interactive ?? []).some((entry) => SELLS_INSIDE.test(entry));
+
 const isKidFriendly = (ageRating) =>
   ['safe', 'mild'].includes(ageRating?.family) &&
   (ageRating?.tier === 'everyone' || ageRating?.tier === 'everyone10');
@@ -123,6 +135,7 @@ export async function searchStore({
   exclude = [],
   plusOnly = false,
   familyOnly = false,
+  noPurchases = false,
 } = {}) {
   const rows = await index();
   const plus = await plusIndex();
@@ -137,6 +150,12 @@ export async function searchStore({
     // Same rule the curated list follows: a game whose rating has not been
     // read is unknown, and unknown is not "fine for children".
     if (familyOnly && !isKidFriendly(plus[row.id]?.ageRating)) return false;
+    // A game nobody has rated is unknown, not innocent, the same rule the
+    // kid filter follows: absence is never read as a clean bill of health.
+    if (noPurchases) {
+      const rating = plus[row.id]?.ageRating;
+      if (!rating || hasInGamePurchases(rating)) return false;
+    }
     if (skip.has(row.search.folded)) return false;
     if (genre && !(row.genres ?? []).includes(genre)) return false;
     if (platform && !(row.platforms ?? []).includes(platform)) return false;

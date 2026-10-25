@@ -143,3 +143,50 @@ test('every shard unreadable means the store is, and nothing should be written',
   const index = mergeIndexReads([broken, ...shards(broken, broken, broken)]);
   assert.equal(index.ok, false);
 });
+
+/**
+ * Filtering on what the rating board says about money.
+ *
+ * ESRB publishes "In-Game Purchases", and separately "In-Game Purchases
+ * (Includes Random Items)" for the loot-box case, as interactive elements
+ * beside the content descriptors. So this is a fact about the game rather
+ * than a guess from its genre or its price.
+ */
+import { searchStore, hasInGamePurchases } from '../api/store.mjs';
+
+const rating = (interactive) => ({
+  family: 'mild', tier: 'everyone', source: 'ESRB', rating: 'E',
+  official: true, descriptors: [], interactive, concerns: [],
+});
+
+test('both wordings the board uses count as selling inside', () => {
+  assert.equal(hasInGamePurchases(rating(['In-Game Purchases'])), true);
+  assert.equal(hasInGamePurchases(rating(['In-Game Purchases (Includes Random Items)'])), true);
+  assert.equal(hasInGamePurchases(rating(['Digital Purchases'])), true);
+  // Online chat is a different concern and must not be swept up with it.
+  assert.equal(hasInGamePurchases(rating(['Users Interact'])), false);
+  assert.equal(hasInGamePurchases(rating([])), false);
+  assert.equal(hasInGamePurchases(null), false);
+});
+
+test('a game that sells inside is dropped, and silence is not a promise', async () => {
+  const { plusShardFor, plusShardKey } = await import('../api/keys.mjs');
+  // DREDGE, told by the board that it sells things inside.
+  const id = 10005693;
+  await write({
+    [plusShardKey(plusShardFor(id))]: {
+      games: { [id]: { v: 2, at: new Date().toISOString(), ageRating: rating(['In-Game Purchases']) } },
+    },
+  });
+
+  const all = await searchStore({ q: 'dredge' });
+  assert.ok((all.games ?? []).some((row) => row.id === id), 'it is there to begin with');
+
+  const filtered = await searchStore({ q: 'dredge', noPurchases: true });
+  assert.ok(!(filtered.games ?? []).some((row) => row.id === id), 'and gone once the filter is on');
+
+  // Everything the scan has not reached is excluded too: not knowing whether
+  // a game sells inside is not the same as knowing it does not.
+  const unknown = (filtered.games ?? []).filter((row) => !row.ageRating);
+  assert.deepEqual(unknown, [], 'nothing unrated slips through');
+});

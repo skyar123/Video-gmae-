@@ -50,6 +50,7 @@ import {
   Users,
   Volume2,
   VolumeX,
+  Wallet,
   X,
 } from 'lucide-react';
 import { buildProfile, recommend, starterPicks } from './recommend.js';
@@ -210,6 +211,7 @@ const DEFAULT_FILTERS = {
   region: 'US',
   collection: 'all',
   kidFriendly: false,
+  noPurchases: false,
   owned: 'any',
   view: 'grid',
   // PS5-only titles are out of the default view: this is a PS4 upgrade
@@ -236,6 +238,7 @@ function readFiltersFromUrl() {
     // meant the curated list. Both still land somewhere sensible.
     collection: value('view', 'all') === 'store' ? 'all' : value('view', 'all'),
     kidFriendly: params.get('kids') === '1',
+    noPurchases: params.get('nomtx') === '1',
     owned: value('owned', 'any'),
     view: params.get('mode') === 'feed' ? 'feed' : 'grid',
     includePs5: params.get('ps5') === '1',
@@ -257,6 +260,7 @@ function writeFiltersToUrl(filters) {
   if (filters.region !== 'US') params.set('cc', filters.region);
   if (filters.collection !== 'all') params.set('view', filters.collection);
   if (filters.kidFriendly) params.set('kids', '1');
+  if (filters.noPurchases) params.set('nomtx', '1');
   if (filters.owned !== 'any') params.set('owned', filters.owned);
   if (filters.view === 'feed') params.set('mode', 'feed');
   if (filters.includePs5) params.set('ps5', '1');
@@ -685,6 +689,17 @@ const FAMILY_TIER_VALUES = ['safe', 'mild'];
  * Teen and Mature cannot, whatever their descriptors read like. A rating
  * that was never read stays excluded: unknown is not an assurance.
  */
+/**
+ * Whether a game asks for money once you are already inside it.
+ *
+ * Straight from the rating board: ESRB publishes these as interactive
+ * elements beside the content descriptors, and names the loot-box case
+ * separately as "In-Game Purchases (Includes Random Items)". So this is a
+ * fact about the game rather than a guess from its genre or its price.
+ */
+const hasInGamePurchases = (ageRating) =>
+  (ageRating?.interactive ?? []).some((entry) => /purchases/i.test(entry));
+
 const isKidFriendly = (ageRating) =>
   FAMILY_TIER_VALUES.includes(ageRating?.family) &&
   (ageRating?.tier === 'everyone' || ageRating?.tier === 'everyone10');
@@ -4165,12 +4180,12 @@ function storeRowAsLive(row) {
 }
 
 /** Query state for the mirror, kept out of the component that renders it. */
-function useStoreSearch({ active, q, genre, sort, plusOnly = false, familyOnly = false }) {
+function useStoreSearch({ active, q, genre, sort, plusOnly = false, familyOnly = false, noPurchases = false }) {
   const [state, setState] = useState({ status: 'idle', games: [], total: 0, page: 0 });
   const request = useRef(0);
   // Everything that decides which games belong in the list, as against which
   // of them match what has been typed.
-  const shape = `${genre}|${sort}|${plusOnly}|${familyOnly}`;
+  const shape = `${genre}|${sort}|${plusOnly}|${familyOnly}|${noPurchases}`;
   const lastShape = useRef(shape);
 
   useEffect(() => {
@@ -4182,6 +4197,7 @@ function useStoreSearch({ active, q, genre, sort, plusOnly = false, familyOnly =
     if (sort) params.set('sort', sort);
     if (plusOnly) params.set('plus', '1');
     if (familyOnly) params.set('family', '1');
+    if (noPurchases) params.set('nopurchases', '1');
 
     // Rows are kept while a query narrows, because a list shrinking under the
     // typing is the answer arriving. Changing a filter is not that: the old
@@ -4211,7 +4227,7 @@ function useStoreSearch({ active, q, genre, sort, plusOnly = false, familyOnly =
     }, q ? 220 : 0);
 
     return () => clearTimeout(timer);
-  }, [active, q, genre, sort, plusOnly, familyOnly, shape]);
+  }, [active, q, genre, sort, plusOnly, familyOnly, noPurchases, shape]);
 
   const more = useCallback(async () => {
     const params = new URLSearchParams();
@@ -4220,6 +4236,7 @@ function useStoreSearch({ active, q, genre, sort, plusOnly = false, familyOnly =
     if (sort) params.set('sort', sort);
     if (plusOnly) params.set('plus', '1');
     if (familyOnly) params.set('family', '1');
+    if (noPurchases) params.set('nopurchases', '1');
     params.set('page', String(state.page + 1));
     try {
       const response = await fetch(`/api/store?${params}`);
@@ -4232,7 +4249,7 @@ function useStoreSearch({ active, q, genre, sort, plusOnly = false, familyOnly =
     } catch {
       // A failed "load more" leaves what is already on screen alone.
     }
-  }, [q, genre, sort, plusOnly, familyOnly, state.page]);
+  }, [q, genre, sort, plusOnly, familyOnly, noPurchases, state.page]);
 
   return { ...state, more };
 }
@@ -4317,8 +4334,8 @@ function PlusThisMonth({ now, onSearch }) {
   );
 }
 
-function StoreFeed({ query, curatedFirst = [], curatedReason, curatedByName, saved, plusOnly = false, familyOnly = false, muted, onToggleMuted, onOpenCurated, onOpenStore }) {
-  const results = useStoreSearch({ active: true, q: query, genre: '', sort: 'rating', plusOnly, familyOnly });
+function StoreFeed({ query, curatedFirst = [], curatedReason, curatedByName, saved, plusOnly = false, familyOnly = false, noPurchases = false, muted, onToggleMuted, onOpenCurated, onOpenStore }) {
+  const results = useStoreSearch({ active: true, q: query, genre: '', sort: 'rating', plusOnly, familyOnly, noPurchases });
   const [sentinel, setSentinel] = useState(null);
   const loadMore = results.more;
   const hasMore = results.games.length < results.total;
@@ -4381,7 +4398,7 @@ function StoreFeed({ query, curatedFirst = [], curatedReason, curatedByName, sav
   );
 }
 
-function StorePanel({ query, curatedFirst = [], curatedReason, curatedByName, saved, plusOnly = false, familyOnly = false, onOpenCurated, onOpenStore, onSearch }) {
+function StorePanel({ query, curatedFirst = [], curatedReason, curatedByName, saved, plusOnly = false, familyOnly = false, noPurchases = false, onOpenCurated, onOpenStore, onSearch }) {
   const [genre, setGenre] = useState('');
   const [sort, setSort] = useState('rating');
   const [facets, setFacets] = useState({ genres: [], size: 0 });
@@ -4399,7 +4416,7 @@ function StorePanel({ query, curatedFirst = [], curatedReason, curatedByName, sa
     };
   }, []);
 
-  const results = useStoreSearch({ active: true, q: query, genre, sort, plusOnly, familyOnly });
+  const results = useStoreSearch({ active: true, q: query, genre, sort, plusOnly, familyOnly, noPurchases });
 
   // Ask for the next page a screen and a half early, so the end of the list is
   // never actually reached. A callback ref because the sentinel only exists
@@ -6122,6 +6139,9 @@ export default function App() {
       if (filters.artStyle !== 'All' && game.artStyle !== filters.artStyle) return false;
       if (filters.upgrade !== 'All' && game.ps5Upgrade !== filters.upgrade) return false;
       if (filters.kidFriendly && !isKidFriendly(game.ageRating)) return false;
+      // Unrated is unknown, not innocent: the same rule the kid filter uses.
+      if (filters.noPurchases && (!game.ageRating || hasInGamePurchases(game.ageRating)))
+        return false;
       if (filters.owned === 'owned' && !library.has(game.id)) return false;
       if (filters.owned === 'unowned' && library.has(game.id)) return false;
       if (filters.wishlist && !wishlist.has(game.id)) return false;
@@ -6266,6 +6286,12 @@ export default function App() {
     [catalogPool],
   );
 
+  const noPurchasesCount = useMemo(
+    () =>
+      catalogPool.filter((game) => game.ageRating && !hasInGamePurchases(game.ageRating)).length,
+    [catalogPool],
+  );
+
   const collectionCounts = useMemo(() => {
     // A lookup rather than another rung on a ternary ladder: there are now
     // five collections that count something of their own and the nesting had
@@ -6317,6 +6343,8 @@ export default function App() {
     if (filters.sale) add('sale', 'On sale', () => set('sale', false));
     if (filters.atFloor) add('floor', 'At its lowest', () => set('atFloor', false));
     if (filters.kidFriendly) add('kids', 'Kid friendly', () => set('kidFriendly', false));
+    if (filters.noPurchases)
+      add('nomtx', 'No in-game purchases', () => set('noPurchases', false));
     if (filters.wishlist) add('wishlist', 'Wishlist', () => set('wishlist', false));
     if (filters.owned !== 'any')
       add('owned', filters.owned === 'owned' ? 'In my library' : 'Not owned', () =>
@@ -6584,6 +6612,14 @@ export default function App() {
                   tone="bg-emerald-600"
                 />
                 <TogglePill
+                  active={filters.noPurchases}
+                  onClick={() => set('noPurchases', !filters.noPurchases)}
+                  icon={Wallet}
+                  label="No in-game purchases"
+                  count={noPurchasesCount}
+                  tone="bg-sky-600"
+                />
+                <TogglePill
                   active={filters.wishlist}
                   onClick={() => set('wishlist', !filters.wishlist)}
                   icon={Heart}
@@ -6698,6 +6734,7 @@ export default function App() {
               curatedFirst={filters.collection === 'plus' ? curatedPlusGames : curatedOnlyMatches}
               plusOnly={filters.collection === 'plus'}
               familyOnly={filters.kidFriendly}
+              noPurchases={filters.noPurchases}
               curatedReason={
                 filters.collection === 'plus'
                   ? 'In your catalog, covered by Plus'
@@ -6747,6 +6784,7 @@ export default function App() {
               curatedFirst={filters.collection === 'plus' ? curatedPlusGames : curatedOnlyMatches}
               plusOnly={filters.collection === 'plus'}
               familyOnly={filters.kidFriendly}
+              noPurchases={filters.noPurchases}
               curatedReason={
                 filters.collection === 'plus'
                   ? 'In your catalog, covered by Plus'
