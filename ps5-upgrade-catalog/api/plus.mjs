@@ -19,7 +19,7 @@
  * does. Coverage builds instead of arriving, and what it reports is true.
  */
 
-import { loadBlob, readBlob, saveBlob } from './history.mjs';
+import { loadBlob, readBlob, saveBlob, writeBlob } from './history.mjs';
 import { PLUS_KEY, PLUS_LOG_KEY } from './keys.mjs';
 import { ratingFromConcept } from './rating.mjs';
 
@@ -312,9 +312,14 @@ async function runPlusBatch(ids, { limit = PLUS_BATCH, gapMs = 400, now = Date.n
   let asked = 0;
   let answered = 0;
   let unsaved = 0;
+  let writeError = null;
   const checkpoint = async () => {
     if (unsaved === 0) return;
-    await saveBlob(PLUS_KEY, { games, at: new Date(now).toISOString() });
+    // Reported rather than swallowed: coverage that never moves looks the
+    // same whether the scan is not running or every write it makes is being
+    // rejected, and those are not the same problem.
+    const written = await writeBlob(PLUS_KEY, { games, at: new Date(now).toISOString() });
+    if (!written.ok) writeError = written.error ?? 'the index could not be written';
     unsaved = 0;
   };
 
@@ -336,6 +341,7 @@ async function runPlusBatch(ids, { limit = PLUS_BATCH, gapMs = 400, now = Date.n
     asked,
     answered,
     readFailures: 0,
+    writeError,
     rebuilding: rebuilding || undefined,
     due: due.length,
     // Which queue the work went to. "asked 500, fresh 0" is a migration

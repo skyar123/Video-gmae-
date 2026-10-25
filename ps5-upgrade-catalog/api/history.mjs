@@ -133,6 +133,32 @@ export async function loadBlob(key) {
 let localWrites = Promise.resolve();
 
 /** Write one JSON blob. Never throws: this data is always an enhancement. */
+/**
+ * A write that says whether it worked.
+ *
+ * saveBlob swallows the error, which is right for a caller that cannot do
+ * anything about it, and wrong for one that needs to know. A scan whose
+ * writes are all failing looks exactly like a scan that is not running: both
+ * leave the stored numbers where they were, and there is no way to tell them
+ * apart afterwards. The same blind spot on the read side cost the PS Plus
+ * index, so the write side gets the same treatment rather than waiting its
+ * turn.
+ */
+export async function writeBlob(key, data) {
+  const store = await getBlobStore();
+  if (store) {
+    try {
+      await store.setJSON(key, data);
+      return { ok: true };
+    } catch (error) {
+      return { ok: false, error: String(error?.message ?? error).slice(0, 200) };
+    }
+  }
+
+  await saveBlob(key, data);
+  return { ok: true };
+}
+
 export async function saveBlob(key, data) {
   const store = await getBlobStore();
   if (store) {
