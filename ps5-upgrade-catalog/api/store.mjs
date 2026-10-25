@@ -13,8 +13,9 @@
  */
 
 import baked from './store-index.json' with { type: 'json' };
+import { loadPlusIndex } from './plus.mjs';
 import { loadBlob } from './history.mjs';
-import { DISCOVERED_KEY, PLUS_KEY, STEAM_MATCH_KEY } from './keys.mjs';
+import { DISCOVERED_KEY, STEAM_MATCH_KEY } from './keys.mjs';
 import { fold, indexText, parseQuery, scoreMatch } from './search.mjs';
 
 const PAGE_SIZE = 36;
@@ -47,7 +48,7 @@ const isKidFriendly = (ageRating) =>
 
 async function plusIndex() {
   if (plusCache && Date.now() - plusCache.at < PLUS_TTL_MS) return plusCache.games;
-  const games = (await loadBlob(PLUS_KEY))?.games ?? {};
+  const games = await loadPlusIndex();
   plusCache = { games, at: Date.now() };
   return games;
 }

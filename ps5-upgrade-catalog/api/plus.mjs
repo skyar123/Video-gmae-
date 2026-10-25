@@ -20,7 +20,7 @@
  */
 
 import { loadBlob, readBlob, saveBlob, writeBlob } from './history.mjs';
-import { PLUS_KEY, PLUS_LOG_KEY } from './keys.mjs';
+import { PLUS_KEY, PLUS_LOG_KEY, PLUS_SHARDS, plusShardFor, plusShardKey } from './keys.mjs';
 import { ratingFromConcept } from './rating.mjs';
 
 const HEADERS = {
@@ -169,6 +169,16 @@ async function notePlusScan(outcome) {
 
 export const lastPlusScan = async () => (await loadBlob(PLUS_LOG_KEY)) ?? null;
 
+/**
+ * The whole index, for readers rather than the scan.
+ *
+ * Shards and the old single key together, so a reader does not need to know
+ * the index moved. A shard that will not read is simply absent, which reads
+ * as "not checked yet" for those games, the same as a game the scan has not
+ * reached: the badges already treat absence that way rather than as a no.
+ */
+export const loadPlusIndex = async () => (await readIndex()).games;
+
 export async function scanPlusBatch(ids, options = {}) {
   try {
     const outcome = await runPlusBatch(ids, options);
@@ -205,32 +215,85 @@ export function planPlusBatch(fresh, again, limit) {
  * a retry inside the run settles those without involving the rest of this at
  * all. What survives three tries seconds apart is a real problem.
  */
-async function readIndex(attempts = 3, gapMs = 400) {
+async function readWithRetry(key, attempts = 3, gapMs = 400) {
   let last = { ok: false, value: null, error: 'not attempted' };
   for (let attempt = 0; attempt < attempts; attempt += 1) {
-    last = await readBlob(PLUS_KEY);
+    last = await readBlob(key);
     if (last.ok) return last;
     if (attempt < attempts - 1) await new Promise((resolve) => setTimeout(resolve, gapMs));
   }
   return last;
 }
 
+/**
+ * The index, spread over sixteen objects rather than held in one.
+ *
+ * One object was the wrong shape twice over. It is rewritten whole at every
+ * checkpoint, so a run of 500 games rewrote a growing multi-megabyte object
+ * ten times to add fifty entries to it. And it is all or nothing: when that
+ * object stopped reading, all 8,885 games' worth of PS Plus flags and age
+ * ratings went at once, which is what emptied the PS Plus collection.
+ *
+ * Sixteen shards by concept id make each write small and each loss partial.
+ * A shard that will not read is skipped for the run, both for reading and
+ * for scanning, so this run cannot write its own partial answers over a
+ * shard whose contents it could not see. The other fifteen carry on.
+ *
+ * The old single key is still read, so nothing already stored is stranded,
+ * and never written, so it quietly stops being the thing that matters.
+ */
+async function readIndex({ attempts = 1, lanes = 6 } = {}) {
+  const games = {};
+  const failed = new Set();
+
+  // Seventeen objects, six at a time. Sequentially this is seventeen round
+  // trips on the first request after the cache lapses, which a reader waits
+  // on; the same bound the video pool and the price history settled on for
+  // the same store.
+  const keys = [PLUS_KEY, ...Array.from({ length: PLUS_SHARDS }, (_, i) => plusShardKey(i))];
+  const reads = [];
+  for (let start = 0; start < keys.length; start += lanes) {
+    const slice = keys.slice(start, start + lanes);
+    reads.push(
+      ...(await Promise.all(slice.map((key) => readWithRetry(key, attempts)))),
+    );
+  }
+
+  const [legacy, ...shards] = reads;
+  if (legacy.ok) Object.assign(games, legacy.value?.games ?? {});
+  shards.forEach((read, shard) => {
+    if (!read.ok) {
+      failed.add(shard);
+      return;
+    }
+    Object.assign(games, read.value?.games ?? {});
+  });
+
+  return {
+    // Everything unreadable at once is the failure the guard exists for.
+    // Some of it unreadable is a partial run, which is worth doing.
+    ok: failed.size < PLUS_SHARDS,
+    games,
+    failed,
+    legacyOk: legacy.ok,
+  };
+}
+
 async function runPlusBatch(ids, { limit = PLUS_BATCH, gapMs = 400, now = Date.now() } = {}) {
   /*
    * A failed read must not become a destructive write.
    *
-   * This reads the whole index, adds to it and saves it back under one key.
    * A read that fails is indistinguishable from an empty index unless it
-   * says so, and treating the first as the second means saving a fresh index
-   * holding only what this run collected, over everything already known.
+   * says so, and treating the first as the second means writing what this
+   * run collected over everything already known. Coverage went from 1,941
+   * games to zero that way: the PS Plus collection answered with nothing and
+   * every age rating went with it, which took the kid-friendly filter too.
    *
-   * That is not hypothetical. Coverage went from 1,941 games to zero between
-   * one afternoon and the next: the PS Plus collection answered with nothing,
-   * and every age rating went with it, which took the kid-friendly filter
-   * too, since it reads the same index. So a read that did not work ends the
-   * run, and the index is left exactly as it is for the next one.
+   * Now that the index is sharded this is per shard. A shard that will not
+   * read is left alone and its games are left out of the run, so its own
+   * contents cannot be written over by answers gathered without them.
    */
-  const stored = await readIndex();
+  const stored = await readIndex({ attempts: 3 });
   /*
    * Refusing has to be temporary, or it becomes its own outage.
    *
@@ -259,11 +322,16 @@ async function runPlusBatch(ids, { limit = PLUS_BATCH, gapMs = 400, now = Date.n
     };
   }
   const rebuilding = !stored.ok;
-  const games = stored.value?.games ?? {};
+  const games = stored.games ?? {};
+  const blind = stored.failed ?? new Set();
 
   const fresh = [];
   const again = [];
   for (const id of ids) {
+    // A shard nobody could read is a shard this run must not write, so its
+    // games are not scanned either: an answer gathered now would go straight
+    // back into the shard whose contents are still unknown.
+    if (blind.has(plusShardFor(id))) continue;
     const seen = games[id];
     if (!seen) {
       fresh.push(id);
@@ -313,14 +381,29 @@ async function runPlusBatch(ids, { limit = PLUS_BATCH, gapMs = 400, now = Date.n
   let answered = 0;
   let unsaved = 0;
   let writeError = null;
+  // Which shards this run has touched, so a checkpoint writes those and
+  // leaves the other fifteen alone instead of rewriting the whole index to
+  // add fifty entries to it.
+  const dirty = new Set();
   const checkpoint = async () => {
     if (unsaved === 0) return;
-    // Reported rather than swallowed: coverage that never moves looks the
-    // same whether the scan is not running or every write it makes is being
-    // rejected, and those are not the same problem.
-    const written = await writeBlob(PLUS_KEY, { games, at: new Date(now).toISOString() });
-    if (!written.ok) writeError = written.error ?? 'the index could not be written';
+    const shards = [...dirty];
+    dirty.clear();
     unsaved = 0;
+    for (const shard of shards) {
+      const rows = {};
+      for (const [id, row] of Object.entries(games)) {
+        if (plusShardFor(id) === shard) rows[id] = row;
+      }
+      // Reported rather than swallowed: coverage that never moves looks the
+      // same whether the scan is not running or every write it makes is
+      // being rejected, and those are not the same problem.
+      const written = await writeBlob(plusShardKey(shard), {
+        games: rows,
+        at: new Date(now).toISOString(),
+      });
+      if (!written.ok) writeError = written.error ?? 'a shard could not be written';
+    }
   };
 
   for (const id of batch) {
@@ -330,6 +413,7 @@ async function runPlusBatch(ids, { limit = PLUS_BATCH, gapMs = 400, now = Date.n
       answered += 1;
       unsaved += 1;
       games[id] = { ...result, v: ENTRY_VERSION, at: new Date(now).toISOString() };
+      dirty.add(plusShardFor(id));
     }
     if (unsaved >= CHECKPOINT_EVERY) await checkpoint();
     await new Promise((resolve) => setTimeout(resolve, gapMs));
@@ -342,6 +426,7 @@ async function runPlusBatch(ids, { limit = PLUS_BATCH, gapMs = 400, now = Date.n
     answered,
     readFailures: 0,
     writeError,
+    blindShards: blind.size || undefined,
     rebuilding: rebuilding || undefined,
     due: due.length,
     // Which queue the work went to. "asked 500, fresh 0" is a migration
