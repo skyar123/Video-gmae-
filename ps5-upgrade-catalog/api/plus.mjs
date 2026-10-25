@@ -15,8 +15,23 @@
  * not the current catalog, and badging a game "free" when it is not is worse
  * than showing nothing at all.
  *
+ * Checked again later, against a real scan rather than spot checks, and the
+ * verdict got worse. Of the 185 games the store itself reported as included,
+ * that page listed 17. It omitted Persona 5 Royal, The Last of Us Part I, God
+ * of War Ragnarok and 165 others, while listing 246 it does not cover,
+ * Age of Wonders 4 and AEW: Fight Forever among them again. Whatever it is
+ * for, it is not the answer to "is this included for me, now".
+ *
  * So this walks the store itself, a batch a night, the way the Steam matcher
  * does. Coverage builds instead of arriving, and what it reports is true.
+ *
+ * One thing it deliberately does not cover: the monthly games, the three
+ * titles an Essential subscription can claim and keep each month. Those are
+ * not marked on a game's store page at all, and the only source that names
+ * them is the PlayStation Blog post announcing them, which rolls off a
+ * ten-item feed within days. Reading it would mean catching the post as it
+ * publishes and storing it, against a title format that cannot be checked
+ * until one appears. Worth doing deliberately; not worth guessing at.
  */
 
 import { loadBlob, readBlob, saveBlob, writeBlob } from './history.mjs';
