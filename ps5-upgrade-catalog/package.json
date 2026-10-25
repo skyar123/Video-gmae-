@@ -8,7 +8,8 @@
     "build": "vite build",
     "lint": "oxlint",
     "preview": "vite preview",
-    "test": "node --test test/*.test.mjs"
+    "test": "node --test test/*.test.mjs",
+    "serve": "node scripts/serve-local.mjs"
   },
   "dependencies": {
     "@netlify/blobs": "^11.0.3",
