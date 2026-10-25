@@ -1,0 +1,101 @@
+/**
+ * Not writing over what you could not read.
+ *
+ * The PS Plus index was lost to this: a read that failed answered the same
+ * as a read that found nothing, and the run that followed wrote its own
+ * partial findings over 1,941 games. The subscriber list is the same shape
+ * and cannot be rebuilt at all, so both are pinned here.
+ */
+import test, { afterEach } from 'node:test';
+import assert from 'node:assert/strict';
+import { writeFile, rm, readFile } from 'node:fs/promises';
+
+import { readBlob } from '../api/history.mjs';
+import { scanPlusBatch, loadPlusIndex } from '../api/plus.mjs';
+import { plusShardFor, plusShardKey } from '../api/keys.mjs';
+import { handleAlertsRequest } from '../api/alerts.mjs';
+
+/** Where the local fallback keeps every key when Netlify Blobs is absent. */
+const STORE = new URL('../.price-history.local.json', import.meta.url).pathname;
+const write = (value) => writeFile(STORE, typeof value === 'string' ? value : JSON.stringify(value));
+
+afterEach(() => rm(STORE, { force: true }));
+
+test('a read says whether it worked, not just what it found', async () => {
+  await write({ 'a/key.json': { hello: true } });
+  assert.deepEqual(await readBlob('a/key.json'), { ok: true, value: { hello: true } });
+
+  // Absent is a fine answer and means empty.
+  assert.deepEqual(await readBlob('not/stored.json'), { ok: true, value: null });
+
+  // Unreadable is not, and must not be reported as empty.
+  await write('{ not json at all');
+  const broken = await readBlob('a/key.json');
+  assert.equal(broken.ok, false);
+  assert.ok(broken.error, 'says why');
+});
+
+test('a scan leaves an index it could not read exactly as it was', async () => {
+  await write('{ not json at all');
+  const before = await readFile(STORE, 'utf8');
+
+  const outcome = await scanPlusBatch(['10005693', '10000661'], { limit: 2, gapMs: 0 });
+
+  assert.equal(outcome.asked, 0, 'asks for nothing');
+  assert.match(outcome.skipped ?? '', /could not be read/);
+  assert.equal(await readFile(STORE, 'utf8'), before, 'and writes nothing');
+});
+
+test('the index is spread over shards, and the old single key is still read', async () => {
+  const id = 10005693;
+  const entry = { included: true, v: 2, at: new Date().toISOString(), ageRating: null };
+  await write({ [plusShardKey(plusShardFor(id))]: { games: { [id]: entry } } });
+
+  const fromShard = await loadPlusIndex();
+  assert.ok(fromShard[id], 'a sharded game is found');
+
+  // Anything written before the move is still part of the index.
+  await write({ 'store/ps-plus.json': { games: { 999: entry } } });
+  assert.ok((await loadPlusIndex())['999'], 'a legacy game is found');
+});
+
+test('subscribing over an unreadable list changes nothing and says so', async () => {
+  const subscribers = {
+    'alerts/subscribers.json': {
+      tokenA: { token: 'tokenA', email: 'a@example.com', emailConfirmed: true, games: {} },
+      tokenB: { token: 'tokenB', email: 'b@example.com', emailConfirmed: true, games: {} },
+    },
+  };
+  await write(subscribers);
+
+  const healthy = await handleAlertsRequest({
+    method: 'POST',
+    url: new URL('https://example.invalid/api/alerts'),
+    body: { action: 'sync', token: 'tokenA', games: [], minDiscount: 10, region: 'US' },
+  });
+  assert.equal(healthy.status, 200);
+  const after = JSON.parse(await readFile(STORE, 'utf8'));
+  assert.equal(Object.keys(after['alerts/subscribers.json']).length, 2, 'both survive');
+
+  await write('{ not json at all');
+  const before = await readFile(STORE, 'utf8');
+  // Subscribing refuses outright unless mail is configured, and that check
+  // comes first, so the guard below is unreachable without this. Nothing is
+  // sent: the read fails before any mail is attempted.
+  const hadKey = process.env.RESEND_API_KEY;
+  process.env.RESEND_API_KEY = 'not-a-real-key';
+  const refused = await handleAlertsRequest({
+    method: 'POST',
+    url: new URL('https://example.invalid/api/alerts'),
+    body: { action: 'subscribe', token: 'new', email: 'new@example.com', games: [] },
+  });
+
+  // 503 and untouched, rather than a signup that quietly becomes the whole
+  // list and takes everyone else's alerts with it.
+  if (hadKey === undefined) delete process.env.RESEND_API_KEY;
+  else process.env.RESEND_API_KEY = hadKey;
+
+  assert.equal(refused.status, 503);
+  assert.match(JSON.parse(refused.body).error, /Nothing was changed/);
+  assert.equal(await readFile(STORE, 'utf8'), before);
+});
