@@ -190,3 +190,26 @@ test('a game that sells inside is dropped, and silence is not a promise', async 
   const unknown = (filtered.games ?? []).filter((row) => !row.ageRating);
   assert.deepEqual(unknown, [], 'nothing unrated slips through');
 });
+
+test('a nightly sweep cannot strip a game of its rating', async () => {
+  // What the sweep writes: release dates and prices, no rating, no PS Plus.
+  // It used to replace the baked row outright, so every game a sweep touched
+  // lost both, 1,500 a night, with nothing about it looking like a failure.
+  const { DISCOVERED_KEY } = await import('../api/keys.mjs');
+  const id = 10005693;
+  await write({
+    [DISCOVERED_KEY]: {
+      games: [{ id, name: 'DREDGE', price: '$4.99', stars: 4.7, votes: 20000, genres: [] }],
+    },
+  });
+
+  // A fresh instance of the module: the merged index is cached for half an
+  // hour, and earlier tests in this file have already built it.
+  const { searchStore } = await import(`../api/store.mjs?sweep=${Date.now()}`);
+  const found = await searchStore({ q: 'dredge' });
+  const row = (found.games ?? []).find((r) => r.id === id);
+  assert.ok(row, 'the game is still there');
+  assert.equal(row.price, '$4.99', 'the sweep wins on what it actually saw');
+  assert.ok(row.ageRating, 'and the rating it never looked at survives');
+  assert.ok((row.genres ?? []).length > 0, 'an empty list is not something it saw');
+});

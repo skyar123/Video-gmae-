@@ -94,7 +94,34 @@ async function index() {
   const discovered = (await loadBlob(DISCOVERED_KEY))?.games ?? [];
   const byId = new Map();
   for (const row of baked) byId.set(row.id, row);
-  for (const row of discovered) byId.set(row.id, row);
+  /*
+   * Folded in, not dropped on top.
+   *
+   * A swept row carries what the sweep collects: name, price, stars, art and
+   * so on. It does not carry the age rating or the PS Plus answer, because
+   * the sweep is looking for release dates. Setting it over the baked row
+   * replaced the whole thing, so every game a sweep touched lost both, and a
+   * sweep touches 1,500 a night. Coverage that took a full crawl to build
+   * would have drained away a night at a time, invisibly, because nothing
+   * about a game quietly losing its rating looks like a failure.
+   *
+   * So the sweep wins on what it actually saw, and anything it does not
+   * collect survives underneath. An empty genre list is not something it saw.
+   */
+  for (const row of discovered) {
+    const base = byId.get(row.id);
+    if (!base) {
+      byId.set(row.id, row);
+      continue;
+    }
+    const merged = { ...base };
+    for (const [key, value] of Object.entries(row)) {
+      if (value == null) continue;
+      if (Array.isArray(value) && value.length === 0) continue;
+      merged[key] = value;
+    }
+    byId.set(row.id, merged);
+  }
 
   // Steam ids found by the nightly matcher, which is what lets a mirror game
   // carry review scores and the pros and cons drawn from them. Absent until
