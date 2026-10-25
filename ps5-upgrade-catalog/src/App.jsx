@@ -3792,6 +3792,23 @@ function StoreGameModal({
     };
   }, [game.id, region, genreList, game.steamAppId]);
 
+  // Some store descriptions open with the tagline verbatim, and the tagline
+  // is already on screen a few lines above: OneShot printed "The World Knows
+  // You Exist." twice, once as the tagline and once as the first sentence of
+  // its own description. One in twelve games checked did this. Dropping the
+  // repeat is better than dropping the tagline, which is usually the better
+  // line of the two and is what the card has room for.
+  const description = useMemo(() => {
+    const text = (detail?.description ?? '').trim();
+    const tagline = (detail?.tagline ?? '').trim();
+    if (!text || !tagline) return text;
+    if (!text.toLowerCase().startsWith(tagline.toLowerCase())) return text;
+    const rest = text.slice(tagline.length).trim();
+    // Only when something is left: a description that is nothing but the
+    // tagline should still say something rather than going blank.
+    return rest.length > 0 ? rest : text;
+  }, [detail?.description, detail?.tagline]);
+
   const art = detail?.art ?? game.art;
   const screenshots = detail?.screenshots ?? [];
   const hero = shot ?? art;
@@ -3958,7 +3975,7 @@ function StoreGameModal({
           </p>
         )}
 
-        {detail?.description && (
+        {description && (
           <div className="mt-5">
             {/* Store copy runs to marketing-page length — several screens of
                 bullet points on a phone. It opens clamped, with the rest one
@@ -3968,9 +3985,9 @@ function StoreGameModal({
                 expanded ? '' : 'line-clamp-5'
               }`}
             >
-              {detail.description}
+              {description}
             </p>
-            {detail.description.length > 320 && (
+            {description.length > 320 && (
               <button
                 type="button"
                 onClick={() => setExpanded((open) => !open)}
