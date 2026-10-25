@@ -1,4 +1,5 @@
 import { searchStore, storeGenres, storePlusCount, storeSize } from '../../api/store.mjs';
+import { lastPlusScan } from '../../api/plus.mjs';
 
 /** GET /api/store — search the mirrored PlayStation Store index. */
 export default async function handler(request) {
@@ -13,6 +14,11 @@ export default async function handler(request) {
       // and saying so beats letting absence look like an answer.
       plus: await storePlusCount(),
     };
+    // ?debug=1 also says what the last scan actually did. Coverage that stops
+    // moving looks the same from outside whether the scan is not running,
+    // running and finding nothing, or throwing, and those need different
+    // fixes. The counts alone cannot tell them apart.
+    if (url.searchParams.get('debug') === '1') payload.lastPlusScan = await lastPlusScan();
     return json(payload);
   }
 

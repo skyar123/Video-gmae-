@@ -20,7 +20,7 @@
  */
 
 import { loadBlob, saveBlob } from './history.mjs';
-import { PLUS_KEY } from './keys.mjs';
+import { PLUS_KEY, PLUS_LOG_KEY } from './keys.mjs';
 import { ratingFromConcept } from './rating.mjs';
 
 const HEADERS = {
@@ -49,6 +49,9 @@ const RECHECK_MS = 30 * 24 * 60 * 60 * 1000;
  */
 const ENTRY_VERSION = 2;
 
+/** How much of a run goes to games never seen before, rather than re-reads. */
+const FRESH_SHARE = 0.7;
+
 /** The store page's own answer, or null when the page cannot be read. */
 export function parsePlusHtml(html) {
   if (!/"discountedPrice":"Included"/.test(html)) return { included: false, tier: null };
@@ -59,6 +62,58 @@ export function parsePlusHtml(html) {
   return { included: true, tier: `PlayStation Plus ${tier}` };
 }
 
+/*
+ * Read until both answers are in hand, then stop.
+ *
+ * These pages run from 430KB to 1.1MB and most of that is reviews and
+ * recommendations. What this scan wants sits much earlier: the price block,
+ * carrying the Plus marker and the tier, around 80KB, and the content rating
+ * about 100KB to 130KB in. Measured across eight games the furthest either
+ * ran was 133KB.
+ *
+ * Downloading the remainder 500 times a run is a few hundred MB for nothing,
+ * on a function with fifteen minutes to live. So the body is read in chunks
+ * and dropped once both blocks have gone by with room to spare.
+ *
+ * It waits for both rather than the first one it sees. Stopping at the price
+ * block alone looked right and was not: a first attempt did that, and the
+ * rating sits well past it, so every game came back correctly flagged for PS
+ * Plus and silently unrated. Eight of eight disagreed with a full read. That
+ * is the shape of mistake this cannot make, because nothing about it looks
+ * like a failure afterwards, so the cap is the backstop rather than the plan
+ * and sits far above anything observed.
+ */
+const READ_CAP = 400_000;
+const PRICE_MARKER = '"discountedPrice"';
+const RATING_MARKER = '"contentRating":{"__typename":"ProductContentRating"';
+/** Past the price block, and past the rating's own 2600-byte window. */
+const PRICE_TAIL = 4000;
+const RATING_TAIL = 3000;
+
+const satisfied = (text) => {
+  const price = text.indexOf(PRICE_MARKER);
+  if (price < 0 || text.length < price + PRICE_TAIL) return false;
+  const rating = text.indexOf(RATING_MARKER);
+  return rating >= 0 && text.length >= rating + RATING_TAIL;
+};
+
+async function readCapped(response) {
+  const reader = response.body.getReader();
+  const decoder = new TextDecoder();
+  let text = '';
+  try {
+    while (text.length < READ_CAP) {
+      const { done, value } = await reader.read();
+      if (done) break;
+      text += decoder.decode(value, { stream: true });
+      if (satisfied(text)) break;
+    }
+  } finally {
+    reader.cancel().catch(() => {});
+  }
+  return text;
+}
+
 async function readConcept(id) {
   try {
     const response = await fetch(`https://store.playstation.com/en-us/concept/${id}`, {
@@ -67,7 +122,7 @@ async function readConcept(id) {
       signal: AbortSignal.timeout(15000),
     });
     if (!response.ok) return null;
-    const html = await response.text();
+    const html = await readCapped(response);
     /*
      * The age rating comes along for free.
      *
@@ -90,19 +145,97 @@ async function readConcept(id) {
  * Only a page that actually answered is recorded, so a timeout leaves that
  * game to be asked again next time rather than being filed as excluded.
  */
-export async function scanPlusBatch(ids, { limit = PLUS_BATCH, gapMs = 400, now = Date.now() } = {}) {
+/**
+ * Records what a scan did, so coverage that stops moving can be read rather
+ * than guessed at.
+ *
+ * Coverage sat at exactly 1,700 of 8,885 for two days running. From outside
+ * there was no way to tell whether the scan was not running, running and
+ * finding nothing, or throwing: the callers catch and log, and the logs are
+ * not something a reader of the site can see. The calendar had the same
+ * problem and the same answer. A scan that refuses to make progress should
+ * say so in the open.
+ */
+async function notePlusScan(outcome) {
+  try {
+    await saveBlob(PLUS_LOG_KEY, { ...outcome, at: new Date().toISOString() });
+  } catch {
+    // A failure to record a failure is not worth propagating.
+  }
+}
+
+export const lastPlusScan = async () => (await loadBlob(PLUS_LOG_KEY)) ?? null;
+
+export async function scanPlusBatch(ids, options = {}) {
+  try {
+    const outcome = await runPlusBatch(ids, options);
+    await notePlusScan({ ok: true, ...outcome });
+    return outcome;
+  } catch (error) {
+    await notePlusScan({ ok: false, error: String(error?.message ?? error).slice(0, 200) });
+    throw error;
+  }
+}
+
+/**
+ * Which games a run spends its budget on, given the two queues.
+ *
+ * Separated out because the arithmetic is the whole point and it is not
+ * obvious by eye: the share has to round, either queue can be shorter than
+ * its share, and whatever one queue cannot use has to go to the other or a
+ * run ends up asking for far less than its limit.
+ */
+export function planPlusBatch(fresh, again, limit) {
+  const freshShare = Math.min(fresh.length, Math.ceil(limit * FRESH_SHARE));
+  const againShare = Math.min(again.length, limit - freshShare);
+  const spare = limit - freshShare - againShare;
+  return [...fresh.slice(0, freshShare + Math.max(0, spare)), ...again.slice(0, againShare)].slice(
+    0,
+    limit,
+  );
+}
+
+async function runPlusBatch(ids, { limit = PLUS_BATCH, gapMs = 400, now = Date.now() } = {}) {
   const stored = (await loadBlob(PLUS_KEY)) ?? {};
   const games = stored.games ?? {};
 
-  const due = ids.filter((id) => {
+  const fresh = [];
+  const again = [];
+  for (const id of ids) {
     const seen = games[id];
-    if (!seen) return true;
+    if (!seen) {
+      fresh.push(id);
+      continue;
+    }
     // Written by an older version of this scan, so it is missing something
     // the current one collects.
-    if ((seen.v ?? 1) < ENTRY_VERSION) return true;
+    if ((seen.v ?? 1) < ENTRY_VERSION) {
+      again.push(id);
+      continue;
+    }
     const at = seen.at ? Date.parse(seen.at) : NaN;
-    return !Number.isFinite(at) || now - at > RECHECK_MS;
-  });
+    if (!Number.isFinite(at) || now - at > RECHECK_MS) again.push(id);
+  }
+
+  /*
+   * A run does both, rather than whichever comes first in browse order.
+   *
+   * It used to take the due list in browse order and cut it at the limit.
+   * Browse order is best-rated first, which is exactly where the already
+   * scanned games are, so after the entry version went up every run spent
+   * its whole budget re-reading games it already knew. Coverage sat at 1,700
+   * of 8,885 for two days while the ratings count climbed underneath it, and
+   * from outside that is indistinguishable from a scan that has died: the
+   * one number that cannot move during a migration is the one being watched.
+   *
+   * Most of a run goes on games never seen before, so coverage grows every
+   * night, and the rest keeps the re-reads moving. Whichever queue runs dry
+   * hands its share to the other, so the last stretch of either is not spent
+   * at a fraction of the batch size.
+   */
+  const batch = planPlusBatch(fresh, again, limit);
+  const freshIds = new Set(fresh);
+  const due = [...fresh, ...again];
 
   /*
    * Saved as it goes, not at the end.
@@ -123,7 +256,7 @@ export async function scanPlusBatch(ids, { limit = PLUS_BATCH, gapMs = 400, now 
     unsaved = 0;
   };
 
-  for (const id of due.slice(0, limit)) {
+  for (const id of batch) {
     asked += 1;
     const result = await readConcept(id);
     if (result) {
@@ -140,6 +273,15 @@ export async function scanPlusBatch(ids, { limit = PLUS_BATCH, gapMs = 400, now 
   return {
     asked,
     answered,
+    due: due.length,
+    // Which queue the work went to. "asked 500, fresh 0" is a migration
+    // eating the budget; "asked 500, fresh 350" is coverage growing.
+    // Counted against the partition taken before the loop, because `games`
+    // is the stored object itself and the loop writes into it: asking it
+    // afterwards which ids were new would answer none of them.
+    fresh: batch.filter((id) => freshIds.has(id)).length,
+    waiting: { fresh: fresh.length, again: again.length },
+    offered: ids.length,
     checked: rows.length,
     included: rows.filter((row) => row.included).length,
     rated: rows.filter((row) => row.ageRating).length,

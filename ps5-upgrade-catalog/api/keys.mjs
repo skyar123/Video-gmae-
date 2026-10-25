@@ -11,3 +11,4 @@ export const STEAM_MATCH_KEY = 'store/steam-matches.json';
 export const PLUS_KEY = 'store/ps-plus.json';
 
 export const SWEEP_LOG_KEY = 'upcoming/last-sweep.json';
+export const PLUS_LOG_KEY = 'store/last-plus-scan.json';
