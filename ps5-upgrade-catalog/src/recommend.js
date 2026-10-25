@@ -42,9 +42,25 @@ const FAMILY_LABELS = {
   mature: 'grown-up',
 };
 
-/** The traits one game contributes, as `kind:value` keys. */
+/**
+ * The traits one game contributes, as `kind:value` keys.
+ *
+ * A trait with nothing in it is left out rather than written as "art:null".
+ * Every hand-written game has an art style and a protagonist, so this never
+ * came up; a game from the store mirror has neither, and the catalog is
+ * mostly those now. Kept as a key, "art:null" is a trait thousands of games
+ * share, which would make not knowing something the strongest signal in the
+ * profile.
+ */
 function traitsOf(game) {
-  const traits = [`genre:${game.genre}`, `art:${game.artStyle}`, `prot:${game.protagonist}`];
+  const traits = [];
+  for (const [kind, value] of [
+    ['genre', game.genre],
+    ['art', game.artStyle],
+    ['prot', game.protagonist],
+  ]) {
+    if (value != null && value !== '') traits.push(`${kind}:${value}`);
+  }
   for (const tag of game.tags ?? []) traits.push(`tag:${tag}`);
   for (const entry of game.representation ?? []) traits.push(`rep:${entry.kind}`);
   if (game.ageRating?.family) traits.push(`family:${game.ageRating.family}`);
@@ -72,10 +88,26 @@ function labelFor(trait) {
 function qualityMultiplier(game) {
   const critic = game.ratings?.critic;
   const user = game.ratings?.user?.percentPositive;
-  if (critic == null && user == null) return 0.95;
-  const parts = [critic, user].filter((value) => value != null);
-  const mean = parts.reduce((sum, value) => sum + value, 0) / parts.length / 100;
-  return 0.8 + 0.4 * Math.min(Math.max(mean, 0), 1);
+  if (critic != null || user != null) {
+    const parts = [critic, user].filter((value) => value != null);
+    const mean = parts.reduce((sum, value) => sum + value, 0) / parts.length / 100;
+    return 0.8 + 0.4 * Math.min(Math.max(mean, 0), 1);
+  }
+
+  /*
+   * A game from the store mirror has no review pass behind it, only the
+   * store's own stars. Without this every one of them scored a flat 0.95 and
+   * the thousands that share a genre came back in whatever order the index
+   * happened to hold them, which is no order at all.
+   *
+   * Five stars from four people is not five stars, so the score is scaled by
+   * how many voted, the same way the browse order does it.
+   */
+  if (game.stars != null) {
+    const confidence = Math.min((game.votes ?? 0) / 500, 1);
+    return 0.8 + 0.4 * Math.min(Math.max((game.stars / 5) * confidence, 0), 1);
+  }
+  return 0.95;
 }
 
 /**

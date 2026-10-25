@@ -17,9 +17,23 @@
 
 import { readFileSync, writeFileSync } from 'node:fs';
 import { ratingFromConcept } from '../api/rating.mjs';
+import { parsePlusHtml } from '../api/plus.mjs';
 
 const INDEX = new URL('../api/store-index.json', import.meta.url);
-const CAP = 190_000;
+/*
+ * The backstop, not the plan.
+ *
+ * It was 190,000, and the genres it is meant to collect sit between 176KB and
+ * 320KB into the page depending on the game: Stray's are at 320,510. So the
+ * read was stopping short of them on most pages and the rows went out with an
+ * empty genre list, which is why genre coverage in the index is patchy rather
+ * than missing. The early stop below means a page is still dropped as soon as
+ * the genres are in hand; this only decides how long to keep going for the
+ * ones that take a while.
+ */
+const CAP = 400_000;
+/** Enough past the genre marker to hold the values that follow it. */
+const GENRE_TAIL = 3_000;
 const CONCURRENCY = 12;
 const UA =
   'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/124.0 Safari/537.36';
@@ -58,8 +72,17 @@ async function page(id) {
       const { done, value } = await reader.read();
       if (done) break;
       text += decoder.decode(value, { stream: true });
-      // Genres are the last field we want; everything else precedes them.
-      if (text.includes('"localizedGenres"')) break;
+      /*
+       * Genres are the last field wanted, and the price block carrying the
+       * PS Plus marker and the content rating both sit well before them. But
+       * stopping the moment "localizedGenres" appears stops before the values
+       * that follow it, and whether that loses them depends on where the
+       * chunk boundary happened to fall: a 401-id trial run quietly emptied
+       * the genres of 37 rows that had them. So the read carries on past the
+       * marker far enough to have them in hand.
+       */
+      const at = text.indexOf('"localizedGenres"');
+      if (at >= 0 && text.length > at + GENRE_TAIL) break;
     }
     reader.cancel().catch(() => {});
     return text;
@@ -112,6 +135,17 @@ function parse(id, html) {
     stars: stars ? Number(stars[1]) : null,
     votes: stars ? Number(stars[2]) : null,
     ageRating: ratingFromConcept(html),
+    /*
+     * PS Plus, from the same page, in the same pass.
+     *
+     * The nightly scan reads these pages one batch at a time and had covered
+     * 2,833 of 8,885 games after weeks of it. This crawler is already holding
+     * the exact bytes that answer the question, so not reading them was the
+     * only reason that took weeks. A full pass fills every game at once and
+     * the nightly scan goes back to being what it is for: keeping up with a
+     * catalog that changes monthly.
+     */
+    plus: parsePlusHtml(html),
     art:
       artFor(html, 'GAMEHUB_COVER_ART') ||
       artFor(html, 'SIXTEEN_BY_NINE_BANNER') ||

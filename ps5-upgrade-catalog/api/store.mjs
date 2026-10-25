@@ -46,9 +46,31 @@ const isKidFriendly = (ageRating) =>
   ['safe', 'mild'].includes(ageRating?.family) &&
   (ageRating?.tier === 'everyone' || ageRating?.tier === 'everyone10');
 
+/*
+ * What is covered by PS Plus, and how old everything is rated, from both
+ * places that know.
+ *
+ * The crawler that bakes the index is already holding the exact bytes that
+ * answer both questions, so it now reads them while it is there. That is the
+ * base: every game in the mirror has an answer the day it ships, rather than
+ * waiting on a nightly scan that had reached 2,833 of 8,885 after weeks.
+ *
+ * The scan still runs and still wins, because the catalog changes monthly and
+ * a baked answer is only as fresh as the last deploy. It goes on top.
+ */
 async function plusIndex() {
   if (plusCache && Date.now() - plusCache.at < PLUS_TTL_MS) return plusCache.games;
-  const games = await loadPlusIndex();
+
+  const games = {};
+  for (const row of await index()) {
+    const baked = {
+      ...(row.plus ?? {}),
+      ...(row.ageRating ? { ageRating: row.ageRating } : {}),
+    };
+    if (Object.keys(baked).length > 0) games[row.id] = baked;
+  }
+  Object.assign(games, await loadPlusIndex());
+
   plusCache = { games, at: Date.now() };
   return games;
 }
@@ -139,7 +161,11 @@ export async function searchStore({
     page,
     pageSize: PAGE_SIZE,
     // The normalised name is a search artefact; it does not go over the wire.
-    games: hits.slice(start, start + PAGE_SIZE).map(({ search: _search, ...row }) => {
+    games: hits
+      .slice(start, start + PAGE_SIZE)
+      // `search` is a search artefact and `plus` is reported by name below,
+      // so neither goes over the wire.
+      .map(({ search: _search, plus: _plus, ...row }) => {
       const seen = plus[row.id];
       if (!seen) return row;
       return {
