@@ -28,7 +28,7 @@
  * push-only subscriber has no address to be keyed by.
  */
 
-import { loadBlob, saveBlob } from './history.mjs';
+import { readBlob, saveBlob } from './history.mjs';
 import { ALERTS_KEY } from './keys.mjs';
 import { mailConfigured, sendMail, siteOrigin, wrap } from './mail.mjs';
 import { publicKey as pushPublicKey, pushConfigured, sendPush } from './push.mjs';
@@ -50,7 +50,26 @@ const normaliseEmail = (value) => value.trim().toLowerCase();
 
 const newToken = () => `${crypto.randomUUID()}${crypto.randomUUID()}`.replace(/-/g, '');
 
-const load = async () => (await loadBlob(ALERTS_KEY)) ?? {};
+/**
+ * Every subscriber lives under one key, and a write replaces all of them.
+ *
+ * So a read that quietly answers "nothing stored" is the dangerous case: the
+ * caller adds its one row and saves, and everybody else's record is gone.
+ * Unlike a scan index this cannot be rebuilt by asking the store again. It is
+ * confirmed addresses, push keys and watchlists, and the only copy is this.
+ *
+ * The PS Plus index was lost exactly this way, by a failed read that looked
+ * like an empty one, so this refuses to guess. A read that did not work
+ * throws, the request fails with something the caller can act on, and the
+ * list is left alone. Nobody losing their alerts is worth a failed signup.
+ */
+class SubscribersUnavailable extends Error {}
+
+const load = async () => {
+  const read = await readBlob(ALERTS_KEY);
+  if (!read.ok) throw new SubscribersUnavailable(read.error ?? 'the subscriber list could not be read');
+  return read.value ?? {};
+};
 const save = (all) => saveBlob(ALERTS_KEY, all);
 
 /** The browser namespaces store ids so they cannot collide with catalog ones. */
@@ -610,7 +629,24 @@ const json = (status, payload) => ({
  * `url` is a URL, `method` the verb, `body` the parsed JSON for a POST.
  * Returns `{status, type, body}` so the caller only has to write it out.
  */
-export async function handleAlertsRequest({ method, url, body }) {
+export async function handleAlertsRequest(request) {
+  try {
+    return await routeAlertsRequest(request);
+  } catch (error) {
+    // The subscriber list could not be read, so nothing was written over it.
+    // Saying so beats a signup that silently did nothing, or worse, one that
+    // appeared to work and took everyone else's alerts with it.
+    if (error instanceof SubscribersUnavailable) {
+      return json(503, {
+        ok: false,
+        error: 'Alerts are briefly unavailable. Nothing was changed; please try again in a minute.',
+      });
+    }
+    throw error;
+  }
+}
+
+async function routeAlertsRequest({ method, url, body }) {
   const confirmToken = url.searchParams.get('confirm');
   if (confirmToken) {
     const result = await confirm(confirmToken);
