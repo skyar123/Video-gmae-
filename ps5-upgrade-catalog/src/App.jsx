@@ -3974,6 +3974,8 @@ function StoreGameModal({
   region,
   wishlisted,
   owned,
+  verdict,
+  onRate,
   dealWatched,
   alertsArmed,
   onToggleDealAlert,
@@ -4104,6 +4106,7 @@ function StoreGameModal({
           <div className="flex shrink-0 items-center gap-2 sm:gap-1">
             <WishlistButton wishlisted={wishlisted} onToggle={onToggleWishlist} withLabel />
             <OwnedButton owned={owned} onToggle={onToggleOwned} withLabel />
+            {onRate && <Verdict verdict={verdict} size="sm" onRate={onRate} />}
           </div>
         </div>
 
@@ -6090,6 +6093,22 @@ export default function App() {
     [rememberStoreRow, toggleOwned, toggleWishlist],
   );
 
+  /**
+   * Rating a game from the store side.
+   *
+   * The row is kept, as it is when a store game is saved. Without that the
+   * rating survives the reload and the game does not, so the profile holds an
+   * opinion about something it can no longer describe, and the signal it was
+   * given counts for nothing.
+   */
+  const rateStoreRow = useCallback(
+    (row, verdict) => {
+      rememberStoreRow(row);
+      rateGame(storeKey(row), verdict);
+    },
+    [rememberStoreRow, rateGame],
+  );
+
   const toggleDealAlert = useCallback((id) => {
     setDealAlerts((previous) => {
       const next = new Set(previous);
@@ -7290,6 +7309,8 @@ export default function App() {
           onOpenAlerts={() => setAlertsOpen(true)}
           onToggleWishlist={() => saveStoreRow(activeStoreGame, 'wishlist')}
           onToggleOwned={() => saveStoreRow(activeStoreGame, 'owned')}
+          verdict={ratings.get(storeKey(activeStoreGame))}
+          onRate={(value) => rateStoreRow(activeStoreGame, value)}
           onClose={() => setActiveStoreGame(null)}
         />
       )}
