@@ -1,77 +1,99 @@
 /**
- * Taste matching, once the pool is the whole store rather than the 306
- * hand-written games.
+ * The ranking shown before anybody has rated anything.
  *
- * Both of these only bite when a game arrives with fields missing, which is
- * every game in the mirror and none of the written-up ones.
+ * This file used to test a trait-matching recommender that genius.js
+ * replaced. Those tests passed for a while after nothing in the app called
+ * the functions any more, which is worse than having none: a green suite
+ * reporting on code no reader can reach. What is tested here now is the one
+ * piece that outlived it, and it is reached on the first run of the app by
+ * everybody.
  */
 import test from 'node:test';
 import assert from 'node:assert/strict';
 
-import { buildProfile, recommend } from '../src/recommend.js';
+import { starterPicks } from '../src/recommend.js';
 
-const written = (over) => ({
-  id: 'w1', title: 'Written Up', genre: 'Narrative', artStyle: 'Painterly',
-  protagonist: 'Woman', tags: ['cozy'], representation: [], platform: 'PS5',
-  ageRating: { family: 'mild' }, ratings: { critic: 90 }, ...over,
+const rated = (over) => ({
+  id: 'a',
+  title: 'A',
+  genre: 'Narrative',
+  platform: 'PS4',
+  ratings: { critic: 90, user: { percentPositive: 90, total: 5000 } },
+  ...over,
 });
-/** What storeRowAsGame produces: a genre and a rating, and nothing else. */
+
+/** What storeRowAsGame produces: a genre and the store's stars, nothing else. */
 const fromStore = (over) => ({
-  id: 's1', title: 'From The Store', genre: 'Narrative', artStyle: null,
-  protagonist: null, tags: [], representation: [], platform: 'PS5',
-  ageRating: null, ratings: null, stars: null, votes: null, ...over,
+  id: 's1',
+  title: 'From The Store',
+  genre: 'Narrative',
+  platform: 'PS4',
+  ratings: null,
+  stars: 4,
+  votes: 800,
+  ...over,
 });
 
-test('not knowing something never becomes a reason to recommend', () => {
-  // Both of these have art and protagonist missing. If that counted as a
-  // shared trait, they would match each other on it, and in a catalog that is
-  // mostly store rows "we know nothing about either" would be the single
-  // strongest signal in the profile.
-  const owned = fromStore({ id: 'seed', genre: 'Strategy' });
-  const profile = buildProfile([owned], new Set(['seed']), new Set());
-  const picks = recommend([fromStore({ id: 'other', genre: 'Racing' })], profile, {
+test('a game nobody has scored is not offered as highly rated', () => {
+  const picks = starterPicks([rated(), { id: 'b', title: 'B', genre: 'RPG', platform: 'PS4' }], {
     exclude: new Set(),
+    limit: 10,
   });
-  assert.deepEqual(picks, [], 'a shared absence is not a match');
+  assert.deepEqual(picks.map((pick) => pick.game.id), ['a']);
 });
 
-test('a real shared trait still matches', () => {
-  const owned = fromStore({ id: 'seed', genre: 'Narrative' });
-  const profile = buildProfile([owned], new Set(['seed']), new Set());
-  const picks = recommend([fromStore({ id: 'other', genre: 'Narrative' })], profile, {
-    exclude: new Set(),
+test('anything ruled out stays out', () => {
+  const picks = starterPicks([rated({ id: 'keep' }), rated({ id: 'drop' })], {
+    exclude: new Set(['drop']),
+    limit: 10,
   });
-  assert.equal(picks.length, 1);
-  assert.match(picks[0].reason, /narrative/i);
+  assert.ok(!picks.some((pick) => pick.game.id === 'drop'));
 });
 
-test('store games are ordered by their stars, not left in index order', () => {
-  const seed = fromStore({ id: 'seed', genre: 'Narrative' });
-  const profile = buildProfile([seed], new Set(['seed']), new Set());
-  const picks = recommend(
+test('the better reviewed game comes first', () => {
+  const picks = starterPicks(
     [
-      fromStore({ id: 'meh', title: 'Thin', stars: 4.9, votes: 3 }),
-      fromStore({ id: 'good', title: 'Loved', stars: 4.6, votes: 9000 }),
-      fromStore({ id: 'none', title: 'Unrated' }),
+      rated({ id: 'weak', ratings: { critic: 55, user: { percentPositive: 50, total: 5000 } } }),
+      rated({ id: 'strong', ratings: { critic: 95, user: { percentPositive: 95, total: 5000 } } }),
     ],
-    profile,
-    { exclude: new Set() },
+    { exclude: new Set(), limit: 10 },
   );
-  // Five stars from three people is not five stars: the one thousands of
-  // players rated comes first.
-  assert.equal(picks[0].game.title, 'Loved');
-  assert.equal(picks.length, 3, 'the others still qualify, just lower');
+  assert.equal(picks[0].game.id, 'strong');
 });
 
-test('a written-up game still outscores a store row on the same genre', () => {
-  const seed = written({ id: 'seed' });
-  const profile = buildProfile([seed], new Set(['seed']), new Set());
-  const picks = recommend(
-    [written({ id: 'rich' }), fromStore({ id: 'thin', stars: 5, votes: 100000 })],
-    profile,
-    { exclude: new Set() },
+test('five stars from four people is not five stars', () => {
+  // Without the vote weighting every store row scored a flat 0.95 and the
+  // thousands sharing a genre came back in whatever order the index held
+  // them, which is no order at all.
+  const picks = starterPicks(
+    [
+      fromStore({ id: 'thin', stars: 5, votes: 3 }),
+      fromStore({ id: 'solid', stars: 4, votes: 4000 }),
+    ],
+    { exclude: new Set(), limit: 10 },
   );
-  // Taste beats a high score: matching on cozy, art and lead counts for more
-  // than a genre plus a lot of votes.
-  assert.equal(picks[0].game.id, 'rich');
+  assert.equal(picks[0].game.id, 'solid');
+});
+
+test('the top of the list is not one genre five times over', () => {
+  const catalog = [
+    ...Array.from({ length: 5 }, (_, i) =>
+      rated({ id: `n${i}`, genre: 'Narrative', ratings: { critic: 95 - i } }),
+    ),
+    rated({ id: 'odd', genre: 'Racing', ratings: { critic: 80 } }),
+  ];
+  const picks = starterPicks(catalog, { exclude: new Set(), limit: 3 });
+  const genres = new Set(picks.map((pick) => pick.game.genre));
+  assert.ok(genres.size > 1, `all ${picks.length} picks were ${[...genres]}`);
+});
+
+test('the reason does not pretend to a match it does not have', () => {
+  const [pick] = starterPicks([rated()], { exclude: new Set(), limit: 1 });
+  assert.match(pick.reason, /Highly rated/);
+  assert.equal(pick.matched, 0, 'nothing was matched, and it says so');
+});
+
+test('asking for more than there is returns what there is', () => {
+  const picks = starterPicks([rated()], { exclude: new Set(), limit: 40 });
+  assert.equal(picks.length, 1);
 });
