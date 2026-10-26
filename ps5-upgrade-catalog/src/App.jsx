@@ -6620,8 +6620,18 @@ export default function App() {
             </button>
           </div>
 
-          {/* Collection strip: one compact scrollable row, hidden once collapsed. */}
+          {/*
+            Collection strip: one compact scrollable row, hidden once
+            collapsed.
+
+            Collapsing is max-height and opacity, which takes it off the
+            screen and leaves it in the tab order, so a keyboard was still
+            walking through twelve chips nobody could see. `inert` takes it
+            out of reach as well as out of sight, which is what "hidden"
+            was supposed to mean.
+          */}
           <div
+            inert={compact && !sheetOpen}
             className={`overflow-hidden transition-all duration-300 ease-swift ${
               compact && !sheetOpen ? 'max-h-0 opacity-0' : 'mt-2 max-h-16 opacity-100'
             }`}
