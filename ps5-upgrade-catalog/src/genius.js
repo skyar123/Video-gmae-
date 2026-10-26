@@ -345,9 +345,25 @@ export function geniusPicks(
   const taste = buildTaste(signals, only);
   if (taste.positives === 0) return { picks: [], taste };
 
+  /*
+   * A game you have already said something about is never suggested back.
+   *
+   * This used to be left to the caller, and the caller got it wrong: when
+   * picks moved over here, owned and wanted games stopped being passed in as
+   * exclusions and started being recommended to the people who owned them.
+   * The diversity pass hid it rather than showing it, because a game matching
+   * your profile exactly is penalised hardest for resembling what is already
+   * picked, so Celeste came back at 48 of 48 instead of at the top.
+   *
+   * Whether a game is already known is something this function can see for
+   * itself, so it no longer depends on being told.
+   */
+  const known = new Set(exclude);
+  for (const { game } of signals) known.add(game.id);
+
   const ranked = [];
   for (const game of pool) {
-    if (exclude.has(game.id)) continue;
+    if (known.has(game.id)) continue;
     const scored = scoreGame(game, taste, tuning);
     if (scored.score <= 0) continue;
     ranked.push({ game, ...scored });

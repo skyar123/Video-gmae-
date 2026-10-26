@@ -235,3 +235,31 @@ test('titles match across punctuation', () => {
   assert.equal(normalizeTitle("Marvel's Spider-Man"), normalizeTitle('Marvel s Spider Man'));
   assert.notEqual(normalizeTitle('Gris'), normalizeTitle('Grid'));
 });
+
+test('a game you have already rated is never suggested back', () => {
+  // Left to the caller, this went wrong the moment picks changed hands: owned
+  // and wanted games stopped being excluded and were recommended to the
+  // people who owned them, sitting at the bottom of the list where the
+  // diversity pass had pushed them rather than anywhere anyone would look.
+  const pool = [written({ id: 'owned' }), written({ id: 'liked' }), written({ id: 'fresh' })];
+  const { picks } = geniusPicks(
+    pool,
+    [
+      { game: written({ id: 'owned' }), kind: 'owned' },
+      { game: written({ id: 'liked' }), kind: 'liked' },
+    ],
+    { limit: 10 },
+  );
+  const ids = picks.map((pick) => pick.game.id);
+  assert.deepEqual(ids, ['fresh'], `suggested back: ${ids.filter((id) => id !== 'fresh')}`);
+});
+
+test('it does not need to be told twice', () => {
+  // The caller may also pass its own exclusions; both must apply.
+  const pool = [written({ id: 'a' }), written({ id: 'b' }), written({ id: 'c' })];
+  const { picks } = geniusPicks(pool, [{ game: written({ id: 'a' }), kind: 'liked' }], {
+    exclude: new Set(['b']),
+    limit: 10,
+  });
+  assert.deepEqual(picks.map((pick) => pick.game.id), ['c']);
+});

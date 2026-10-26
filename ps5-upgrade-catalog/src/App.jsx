@@ -6248,14 +6248,24 @@ export default function App() {
   // Never touches live data, so picks stay instant while prices load.
   const geniusIsPersonalized = signals.some((row) => SIGNAL_WEIGHTS[row.kind] > 0);
   const geniusResult = useMemo(() => {
-    const exclude = new Set([...hidden, ...ratings.keys()]);
+    /*
+     * Owned and wanted games belong here too.
+     *
+     * They were dropped from this list when picks moved over, and the
+     * diversity pass hid it: a game you own matches your own profile almost
+     * exactly, so the penalty for resembling what is already picked drives it
+     * to the bottom rather than the top. Celeste came back at 48 of 48 for
+     * somebody who owned Celeste, which is far enough down to look like
+     * nothing is wrong and is still wrong.
+     */
+    const exclude = new Set([...library, ...wishlist, ...hidden, ...ratings.keys()]);
     if (!geniusIsPersonalized) {
       // No taste to work from yet. An empty collection reads as broken rather
       // than as "rate something first", so it falls back to a quality ranking.
       return { picks: starterPicks(gamesData, { exclude, limit: 48 }), taste: null };
     }
     return geniusPicksFor(rateable, signals, { exclude, limit: 48 });
-  }, [rateable, signals, geniusIsPersonalized, hidden, ratings]);
+  }, [rateable, signals, geniusIsPersonalized, library, wishlist, hidden, ratings]);
 
   const geniusPicks = geniusResult.picks;
 
