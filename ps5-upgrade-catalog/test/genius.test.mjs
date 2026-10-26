@@ -316,3 +316,29 @@ test('a pile of noes cannot drown a handful of yeses', () => {
     `social ${taste.weights.get('tag:social')} vs cozy ${taste.weights.get('tag:cozy')}`,
   );
 });
+
+test('a withdrawn answer counts as a change, not as one answer fewer', () => {
+  // The count behind "work the list out again". Measured as a length it goes
+  // the wrong way when a thumb is taken back, and does not move at all when a
+  // yes is swapped for a no, so the list would sit stale with nothing offered.
+  const countChanges = (before, after) => {
+    const was = new Map(before.map((row) => [row.game.id, row.kind]));
+    const now = new Set();
+    let changed = 0;
+    for (const row of after) {
+      now.add(row.game.id);
+      if (was.get(row.game.id) !== row.kind) changed += 1;
+    }
+    for (const id of was.keys()) if (!now.has(id)) changed += 1;
+    return changed;
+  };
+  const a = { game: written({ id: 'a' }), kind: 'liked' };
+  const b = { game: written({ id: 'b' }), kind: 'liked' };
+  assert.equal(countChanges([a, b], [a]), 1, 'taking one back is one change');
+  assert.equal(
+    countChanges([a, b], [a, { game: written({ id: 'b' }), kind: 'disliked' }]),
+    1,
+    'changing your mind is one change',
+  );
+  assert.equal(countChanges([a, b], [a, b]), 0, 'nothing changed is nothing to apply');
+});

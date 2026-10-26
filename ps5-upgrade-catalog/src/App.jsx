@@ -6435,8 +6435,27 @@ export default function App() {
   }, [geniusSurfaceOpen, frozen, signals, library, wishlist, hidden]);
 
   const rankingSignals = frozen?.signals ?? signals;
-  /** Answers given since this list was built, and so not yet reflected in it. */
-  const unseenAnswers = frozen ? signals.length - frozen.signals.length : 0;
+
+  /**
+   * Answers given since this list was built, and so not yet reflected in it.
+   *
+   * Counted by comparing the answers themselves rather than how many there
+   * are. Taking one thumb back is a change that makes the count smaller, and
+   * swapping a yes for a no leaves it identical, so a length is wrong in both
+   * directions: it would offer nothing to apply while the list was stale.
+   */
+  const unseenAnswers = useMemo(() => {
+    if (!frozen) return 0;
+    const before = new Map(frozen.signals.map((row) => [row.game.id, row.kind]));
+    let changed = 0;
+    const now = new Set();
+    for (const row of signals) {
+      now.add(row.game.id);
+      if (before.get(row.game.id) !== row.kind) changed += 1;
+    }
+    for (const id of before.keys()) if (!now.has(id)) changed += 1;
+    return changed;
+  }, [frozen, signals]);
   const refreshPicks = useCallback(() => setFrozen(null), []);
 
   // Never touches live data, so picks stay instant while prices load.
