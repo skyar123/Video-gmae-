@@ -9,7 +9,8 @@
     "lint": "oxlint",
     "preview": "vite preview",
     "test": "node --test test/*.test.mjs",
-    "serve": "node scripts/serve-local.mjs"
+    "serve": "node scripts/serve-local.mjs",
+    "check:functions": "node scripts/check-functions.mjs"
   },
   "dependencies": {
     "@netlify/blobs": "^11.0.3",
