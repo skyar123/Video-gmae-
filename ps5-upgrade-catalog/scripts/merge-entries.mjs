@@ -49,6 +49,30 @@ function parseDraft(text) {
   return JSON.parse(trimmed.slice(start, end + 1));
 }
 
+const taken = new Set(catalog.map((game) => game.id));
+
+/** The catalog's own id style, with the concept id only to break a tie. */
+function slugFor(row) {
+  const base =
+    String(row.name)
+      .toLowerCase()
+      .replace(/[^a-z0-9]+/g, '-')
+      .replace(/^-+|-+$/g, '')
+      .slice(0, 48) || `game-${row.id}`;
+  let id = base;
+  if (taken.has(id)) id = `${base}-${row.id}`;
+  taken.add(id);
+  return id;
+}
+
+function upgradeFor(platforms) {
+  const ps4 = platforms.includes('PS4');
+  const ps5 = platforms.includes('PS5');
+  if (ps5 && !ps4) return 'PS5 Only';
+  if (ps4 && !ps5) return 'Backwards Compatible';
+  return null;
+}
+
 const draft = parseDraft(readFileSync(file, 'utf8'));
 if (!Array.isArray(draft)) throw new Error('the draft is not an array');
 
@@ -106,7 +130,8 @@ for (const entry of draft) {
   if (bad) continue;
 
   kept.push({
-    id: `store-${row.id}`,
+    // Slugs, because that is what the catalog uses: outer-wilds, not an id.
+    id: slugFor(row),
     title: row.name,
     genre: entry.genre,
     artStyle: entry.artStyle,
@@ -116,7 +141,16 @@ for (const entry of draft) {
     description: words.trim(),
     // Everything factual comes from the store, never from the draft.
     platform: (row.platforms ?? []).length === 1 && row.platforms[0] === 'PS5' ? 'PS5' : 'PS4',
-    ps5Upgrade: (row.platforms ?? []).includes('PS5') ? 'PS4 & PS5 Cross-Buy' : 'Backwards Compatible',
+    /*
+     * Null where the store does not say, rather than a guess.
+     *
+     * A game listed on both PS4 and PS5 might be cross-buy, a free upgrade or
+     * a paid one, and the mirror records none of that. The first version of
+     * this wrote "PS4 & PS5 Cross-Buy" for every one of them, which is a
+     * claim about what someone gets for their money, invented here. The whole
+     * point of this script is that facts come from the store.
+     */
+    ps5Upgrade: upgradeFor(row.platforms ?? []),
     ageRating: row.ageRating ?? null,
     ratings: null,
     steamAppId: null,

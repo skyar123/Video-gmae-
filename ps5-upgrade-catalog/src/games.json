@@ -18883,5 +18883,7201 @@
     "ratings": null,
     "coverage": [],
     "description": "A murder mystery among the last Greek gods, argued in song: your dialogue choices pick the next line and the music bends to follow."
+  },
+  {
+    "id": "dispatch",
+    "title": "Dispatch",
+    "genre": "Narrative",
+    "artStyle": "Cel-shaded",
+    "protagonist": "Male",
+    "tags": [],
+    "representation": [],
+    "description": "As former Mecha Man Robert, assign misfit heroes to emergencies on a city map and navigate office choices between dispatch shifts.",
+    "platform": "PS5",
+    "ps5Upgrade": "PS5 Only",
+    "ageRating": {
+      "family": "mature",
+      "concerns": [
+        "Blood and Gore",
+        "Intense Violence",
+        "Nudity",
+        "Sexual Content"
+      ],
+      "tier": "mature",
+      "source": "ESRB",
+      "rating": "M",
+      "official": true,
+      "esrb": "M",
+      "pegi": null,
+      "descriptors": [
+        "Blood and Gore",
+        "Intense Violence",
+        "Nudity",
+        "Sexual Content",
+        "Strong Language",
+        "Use of Drugs and Alcohol"
+      ],
+      "interactive": [],
+      "notes": null
+    },
+    "ratings": null,
+    "steamAppId": null,
+    "psnStorePath": "concept/10013259",
+    "coverage": []
+  },
+  {
+    "id": "sly-3-honor-among-thieves",
+    "title": "Sly 3: Honor Among Thieves™",
+    "genre": "Platformer",
+    "artStyle": "Cel-shaded",
+    "protagonist": "Ensemble",
+    "tags": [
+      "classic"
+    ],
+    "representation": [],
+    "description": "Sly reunites his old crew for a globe-trotting heist to crack the Cooper Vault, switching between thieves and their specialties.",
+    "platform": "PS4",
+    "ps5Upgrade": null,
+    "ageRating": {
+      "family": "mild",
+      "concerns": [],
+      "tier": "everyone10",
+      "source": "ESRB",
+      "rating": "E10",
+      "official": true,
+      "esrb": "E10",
+      "pegi": null,
+      "descriptors": [
+        "Alcohol Reference",
+        "Mild Fantasy Violence",
+        "Use of Tobacco"
+      ],
+      "interactive": [],
+      "notes": null
+    },
+    "ratings": null,
+    "steamAppId": null,
+    "psnStorePath": "concept/10010692",
+    "coverage": []
+  },
+  {
+    "id": "sly-2-band-of-thieves",
+    "title": "Sly 2: Band of Thieves™",
+    "genre": "Platformer",
+    "artStyle": "Cel-shaded",
+    "protagonist": "Ensemble",
+    "tags": [
+      "classic"
+    ],
+    "representation": [],
+    "description": "Case each hub for clues, pick pockets, and pull off multi-stage heists as Sly, Bentley, and Murray pursue the Clockwerk parts.",
+    "platform": "PS4",
+    "ps5Upgrade": null,
+    "ageRating": {
+      "family": "mild",
+      "concerns": [],
+      "tier": "everyone10",
+      "source": "ESRB",
+      "rating": "E10",
+      "official": true,
+      "esrb": "E10",
+      "pegi": null,
+      "descriptors": [
+        "Alcohol Reference",
+        "Mild Fantasy Violence",
+        "Use of Tobacco"
+      ],
+      "interactive": [],
+      "notes": null
+    },
+    "ratings": null,
+    "steamAppId": null,
+    "psnStorePath": "concept/10010691",
+    "coverage": []
+  },
+  {
+    "id": "sly-cooper-and-the-thievius-raccoonus",
+    "title": "Sly Cooper™ and the Thievius Raccoonus",
+    "genre": "Platformer",
+    "artStyle": "Cel-shaded",
+    "protagonist": "Male",
+    "tags": [
+      "classic"
+    ],
+    "representation": [],
+    "description": "Sneak through hub-world hideouts, steal clue bottles, and master ancestors' moves as Sly reclaims his family's stolen thieving manual.",
+    "platform": "PS4",
+    "ps5Upgrade": null,
+    "ageRating": {
+      "family": "mild",
+      "concerns": [],
+      "tier": "everyone",
+      "source": "ESRB",
+      "rating": "E",
+      "official": true,
+      "esrb": "E",
+      "pegi": null,
+      "descriptors": [
+        "Mild Fantasy Violence",
+        "Tobacco Reference"
+      ],
+      "interactive": [],
+      "notes": null
+    },
+    "ratings": null,
+    "steamAppId": null,
+    "psnStorePath": "concept/10010296",
+    "coverage": []
+  },
+  {
+    "id": "persona-4-golden",
+    "title": "Persona 4 Golden",
+    "genre": "RPG",
+    "artStyle": "3D",
+    "protagonist": "Male",
+    "tags": [
+      "classic"
+    ],
+    "representation": [],
+    "description": "Balance school, friendships, and part-time life in rural Inaba with turn-based dungeon runs through a TV-world murder mystery.",
+    "platform": "PS4",
+    "ps5Upgrade": "Backwards Compatible",
+    "ageRating": {
+      "family": "mature",
+      "concerns": [
+        "Partial Nudity",
+        "Sexual Themes"
+      ],
+      "tier": "mature",
+      "source": "ESRB",
+      "rating": "M",
+      "official": true,
+      "esrb": "M",
+      "pegi": null,
+      "descriptors": [
+        "Alcohol Reference",
+        "Language",
+        "Mild Blood",
+        "Partial Nudity",
+        "Sexual Themes",
+        "Violence"
+      ],
+      "interactive": [],
+      "notes": null
+    },
+    "ratings": null,
+    "steamAppId": null,
+    "psnStorePath": "concept/10003382",
+    "coverage": []
+  },
+  {
+    "id": "until-then",
+    "title": "Until Then",
+    "genre": "Narrative",
+    "artStyle": "Pixel Art",
+    "protagonist": "Male",
+    "tags": [],
+    "representation": [],
+    "description": "Text friends, click through daily routines, and play rhythm minigames as a Filipino student's ordinary life begins to loop and fracture.",
+    "platform": "PS5",
+    "ps5Upgrade": "PS5 Only",
+    "ageRating": {
+      "family": "mature",
+      "concerns": [
+        "Mild Sexual Themes"
+      ],
+      "tier": "mature",
+      "source": "ESRB",
+      "rating": "M",
+      "official": true,
+      "esrb": "M",
+      "pegi": null,
+      "descriptors": [
+        "Mild Sexual Themes",
+        "Strong Language"
+      ],
+      "interactive": [],
+      "notes": null
+    },
+    "ratings": null,
+    "steamAppId": null,
+    "psnStorePath": "concept/10004486",
+    "coverage": []
+  },
+  {
+    "id": "persona-3-reload",
+    "title": "Persona 3 Reload",
+    "genre": "RPG",
+    "artStyle": "3D",
+    "protagonist": "Male",
+    "tags": [],
+    "representation": [],
+    "description": "Lead SEES through Tartarus after midnight while spending daylight on classes, friendships, and a calendar that steadily closes in.",
+    "platform": "PS4",
+    "ps5Upgrade": null,
+    "ageRating": {
+      "family": "mature",
+      "concerns": [
+        "Partial Nudity",
+        "Sexual Themes"
+      ],
+      "tier": "mature",
+      "source": "ESRB",
+      "rating": "M",
+      "official": true,
+      "esrb": "M",
+      "pegi": null,
+      "descriptors": [
+        "Blood",
+        "Partial Nudity",
+        "Sexual Themes",
+        "Strong Language",
+        "Violence"
+      ],
+      "interactive": [],
+      "notes": null
+    },
+    "ratings": null,
+    "steamAppId": null,
+    "psnStorePath": "concept/10001555",
+    "coverage": []
+  },
+  {
+    "id": "vampire-crawlers-the-turbo-wildcard-from-vampire",
+    "title": "Vampire Crawlers: The Turbo Wildcard from Vampire Survivors",
+    "genre": "Deckbuilder",
+    "artStyle": "3D/2D Mix",
+    "protagonist": "Ensemble",
+    "tags": [],
+    "representation": [],
+    "description": "Crawl first-person dungeons with pixel-sprite allies, playing cards in ascending mana order to stack combos and summon familiar survivors.",
+    "platform": "PS5",
+    "ps5Upgrade": "PS5 Only",
+    "ageRating": {
+      "family": "mild",
+      "concerns": [],
+      "tier": "teen",
+      "source": "ESRB",
+      "rating": "T",
+      "official": true,
+      "esrb": "T",
+      "pegi": null,
+      "descriptors": [
+        "Blood",
+        "Violence"
+      ],
+      "interactive": [],
+      "notes": null
+    },
+    "ratings": null,
+    "steamAppId": null,
+    "psnStorePath": "concept/10015481",
+    "coverage": []
+  },
+  {
+    "id": "vampire-survivors",
+    "title": "Vampire Survivors",
+    "genre": "Action",
+    "artStyle": "Pixel Art",
+    "protagonist": "Ensemble",
+    "tags": [
+      "social"
+    ],
+    "representation": [],
+    "description": "Steer an ever-growing storm of automatic weapons through thirty-minute monster swarms, unlocking characters and absurd evolutions between runs.",
+    "platform": "PS4",
+    "ps5Upgrade": null,
+    "ageRating": {
+      "family": "mild",
+      "concerns": [],
+      "tier": "teen",
+      "source": "ESRB",
+      "rating": "T",
+      "official": true,
+      "esrb": "T",
+      "pegi": null,
+      "descriptors": [
+        "Blood",
+        "Violence"
+      ],
+      "interactive": [],
+      "notes": null
+    },
+    "ratings": null,
+    "steamAppId": null,
+    "psnStorePath": "concept/10010458",
+    "coverage": []
+  },
+  {
+    "id": "beamng-drive",
+    "title": "BeamNG.drive",
+    "genre": "Racing",
+    "artStyle": "3D",
+    "protagonist": "Custom",
+    "tags": [],
+    "representation": [],
+    "description": "Crash, deform, and fine-tune vehicles in a soft-body physics sandbox with scenarios, time trials, and free-roam maps.",
+    "platform": "PS5",
+    "ps5Upgrade": "PS5 Only",
+    "ageRating": {
+      "family": "safe",
+      "concerns": [],
+      "tier": "everyone",
+      "source": "ESRB",
+      "rating": "E",
+      "official": true,
+      "esrb": "E",
+      "pegi": null,
+      "descriptors": [],
+      "interactive": [],
+      "notes": null
+    },
+    "ratings": null,
+    "steamAppId": null,
+    "psnStorePath": "concept/10015321",
+    "coverage": []
+  },
+  {
+    "id": "trails-in-the-sky-1st-chapter",
+    "title": "Trails in the Sky 1st Chapter",
+    "genre": "RPG",
+    "artStyle": "3D",
+    "protagonist": "Female",
+    "tags": [],
+    "representation": [],
+    "description": "Travel Liberl with Estelle and Joshua as junior bracers, taking guild jobs and fighting turn-based battles as a conspiracy grows.",
+    "platform": "PS5",
+    "ps5Upgrade": "PS5 Only",
+    "ageRating": {
+      "family": "mild",
+      "concerns": [],
+      "tier": "teen",
+      "source": "ESRB",
+      "rating": "T",
+      "official": true,
+      "esrb": "T",
+      "pegi": null,
+      "descriptors": [
+        "Blood",
+        "Fantasy Violence",
+        "Language",
+        "Suggestive Themes",
+        "Use of Alcohol and Tobacco"
+      ],
+      "interactive": [],
+      "notes": null
+    },
+    "ratings": null,
+    "steamAppId": null,
+    "psnStorePath": "concept/10013078",
+    "coverage": []
+  },
+  {
+    "id": "final-fantasy-vi",
+    "title": "FINAL FANTASY VI",
+    "genre": "RPG",
+    "artStyle": "Pixel Art",
+    "protagonist": "Ensemble",
+    "tags": [
+      "classic"
+    ],
+    "representation": [],
+    "description": "Guide a large rebel party across a world ruined by an empire, combining character-specific abilities with ATB battles and espers.",
+    "platform": "PS4",
+    "ps5Upgrade": "Backwards Compatible",
+    "ageRating": {
+      "family": "mature",
+      "concerns": [
+        "Partial Nudity"
+      ],
+      "tier": "teen",
+      "source": "ESRB",
+      "rating": "T",
+      "official": true,
+      "esrb": "T",
+      "pegi": null,
+      "descriptors": [
+        "Fantasy Violence",
+        "Partial Nudity"
+      ],
+      "interactive": [],
+      "notes": null
+    },
+    "ratings": null,
+    "steamAppId": null,
+    "psnStorePath": "concept/10002344",
+    "coverage": []
+  },
+  {
+    "id": "final-fantasy-resonance",
+    "title": "FINAL FANTASY RESONANCE",
+    "genre": "RPG",
+    "artStyle": "3D/2D Mix",
+    "protagonist": "Male",
+    "tags": [
+      "graphics"
+    ],
+    "representation": [],
+    "description": "Lead Rain, Lasswell, and Fina through turn-based battles, stunning enemies and summoning Visions of earlier Final Fantasy heroes for extra abilities.",
+    "platform": "PS5",
+    "ps5Upgrade": "PS5 Only",
+    "ageRating": {
+      "family": "mild",
+      "concerns": [],
+      "tier": "everyone10",
+      "source": "ESRB",
+      "rating": "E10",
+      "official": true,
+      "esrb": "E10",
+      "pegi": null,
+      "descriptors": [
+        "Alcohol Reference",
+        "Fantasy Violence",
+        "Language",
+        "Suggestive Themes"
+      ],
+      "interactive": [],
+      "notes": null
+    },
+    "ratings": null,
+    "steamAppId": null,
+    "psnStorePath": "concept/10015961",
+    "coverage": []
+  },
+  {
+    "id": "jak-and-daxter-the-precursor-legacy",
+    "title": "Jak and Daxter™: The Precursor Legacy",
+    "genre": "Platformer",
+    "artStyle": "3D",
+    "protagonist": "Male",
+    "tags": [
+      "classic"
+    ],
+    "representation": [],
+    "description": "Explore connected tropical ruins and villages, collecting Power Cells and Precursor Orbs through platforming, vehicle rides, and boss fights.",
+    "platform": "PS4",
+    "ps5Upgrade": null,
+    "ageRating": {
+      "family": "safe",
+      "concerns": [],
+      "tier": "everyone10",
+      "source": "ESRB",
+      "rating": "E10",
+      "official": true,
+      "esrb": "E10",
+      "pegi": null,
+      "descriptors": [
+        "Fantasy Violence",
+        "Mild Suggestive Themes"
+      ],
+      "interactive": [],
+      "notes": null
+    },
+    "ratings": null,
+    "steamAppId": null,
+    "psnStorePath": "concept/10010137",
+    "coverage": []
+  },
+  {
+    "id": "satisfactory",
+    "title": "Satisfactory",
+    "genre": "Management",
+    "artStyle": "3D",
+    "protagonist": "Custom",
+    "tags": [
+      "social"
+    ],
+    "representation": [],
+    "description": "Turn an alien planet into sprawling automated factories, routing belts, pipes, power, and trains alone or in online co-op.",
+    "platform": "PS5",
+    "ps5Upgrade": "PS5 Only",
+    "ageRating": {
+      "family": "mild",
+      "concerns": [],
+      "tier": "teen",
+      "source": "ESRB",
+      "rating": "T",
+      "official": true,
+      "esrb": "T",
+      "pegi": null,
+      "descriptors": [
+        "Violence"
+      ],
+      "interactive": [
+        "Users Interact"
+      ],
+      "notes": null
+    },
+    "ratings": null,
+    "steamAppId": null,
+    "psnStorePath": "concept/10008447",
+    "coverage": []
+  },
+  {
+    "id": "stellar-blade-10006891",
+    "title": "Stellar Blade™",
+    "genre": "Action",
+    "artStyle": "3D",
+    "protagonist": "Female",
+    "tags": [],
+    "representation": [],
+    "description": "Cut through Naytiba with timed dodges, parries, and unlockable skills as EVE explores ruined cities and deserts on a mission to reclaim Earth.",
+    "platform": "PS5",
+    "ps5Upgrade": "PS5 Only",
+    "ageRating": {
+      "family": "mature",
+      "concerns": [
+        "Blood and Gore"
+      ],
+      "tier": "mature",
+      "source": "ESRB",
+      "rating": "M",
+      "official": true,
+      "esrb": "M",
+      "pegi": null,
+      "descriptors": [
+        "Blood and Gore",
+        "Language",
+        "Suggestive Themes",
+        "Violence"
+      ],
+      "interactive": [
+        "In-Game Purchases"
+      ],
+      "notes": null
+    },
+    "ratings": null,
+    "steamAppId": null,
+    "psnStorePath": "concept/10006891",
+    "coverage": []
+  },
+  {
+    "id": "mass-effect-legendary-edition-10000606",
+    "title": "Mass Effect™ Legendary Edition",
+    "genre": "RPG",
+    "artStyle": "3D",
+    "protagonist": "Custom",
+    "tags": [
+      "classic"
+    ],
+    "representation": [],
+    "description": "Command Shepard and a squad across three remastered space operas, mixing cover shooting with decisions that carry between games.",
+    "platform": "PS4",
+    "ps5Upgrade": "Backwards Compatible",
+    "ageRating": {
+      "family": "mature",
+      "concerns": [
+        "Partial Nudity",
+        "Sexual Content"
+      ],
+      "tier": "mature",
+      "source": "ESRB",
+      "rating": "M",
+      "official": true,
+      "esrb": "M",
+      "pegi": null,
+      "descriptors": [
+        "Blood",
+        "Drug Reference",
+        "Partial Nudity",
+        "Sexual Content",
+        "Strong Language",
+        "Use of Alcohol"
+      ],
+      "interactive": [],
+      "notes": null
+    },
+    "ratings": null,
+    "steamAppId": null,
+    "psnStorePath": "concept/10000606",
+    "coverage": []
+  },
+  {
+    "id": "poppy-playtime-chapter-5",
+    "title": "Poppy Playtime: Chapter 5",
+    "genre": "Puzzle",
+    "artStyle": "3D",
+    "protagonist": "Custom",
+    "tags": [],
+    "representation": [],
+    "description": "Flee Huggy through Playtime's labs, solve GrabPack puzzles, and search for the Negation Compound with the Prototype closing in.",
+    "platform": "PS5",
+    "ps5Upgrade": "PS5 Only",
+    "ageRating": {
+      "family": "mild",
+      "concerns": [],
+      "tier": "teen",
+      "source": "ESRB",
+      "rating": "T",
+      "official": true,
+      "esrb": "T",
+      "pegi": null,
+      "descriptors": [
+        "Blood",
+        "Violence"
+      ],
+      "interactive": [],
+      "notes": null
+    },
+    "ratings": null,
+    "steamAppId": null,
+    "psnStorePath": "concept/10018882",
+    "coverage": []
+  },
+  {
+    "id": "absolum",
+    "title": "Absolum",
+    "genre": "Action",
+    "artStyle": "Hand-drawn",
+    "protagonist": "Ensemble",
+    "tags": [
+      "graphics",
+      "social"
+    ],
+    "representation": [],
+    "description": "Fight through Talamh in a side-scrolling roguelite beat ’em up, chaining melee combos and magic across branching paths alone or in co-op.",
+    "platform": "PS4",
+    "ps5Upgrade": null,
+    "ageRating": {
+      "family": "mild",
+      "concerns": [],
+      "tier": "everyone10",
+      "source": "ESRB",
+      "rating": "E10",
+      "official": true,
+      "esrb": "E10",
+      "pegi": null,
+      "descriptors": [
+        "Fantasy Violence",
+        "Mild Blood",
+        "Mild Language",
+        "Use of Tobacco"
+      ],
+      "interactive": [],
+      "notes": null
+    },
+    "ratings": null,
+    "steamAppId": null,
+    "psnStorePath": "concept/10014070",
+    "coverage": []
+  },
+  {
+    "id": "unicorn-overlord",
+    "title": "Unicorn Overlord",
+    "genre": "RPG",
+    "artStyle": "Hand-drawn",
+    "protagonist": "Male",
+    "tags": [
+      "graphics"
+    ],
+    "representation": [],
+    "description": "Lead Alain's Liberation Army across Fevrith, positioning squads in real time before their tactical battles resolve automatically.",
+    "platform": "PS4",
+    "ps5Upgrade": null,
+    "ageRating": {
+      "family": "mild",
+      "concerns": [],
+      "tier": "teen",
+      "source": "ESRB",
+      "rating": "T",
+      "official": true,
+      "esrb": "T",
+      "pegi": null,
+      "descriptors": [
+        "Blood",
+        "Fantasy Violence",
+        "Mild Language",
+        "Mild Suggestive Themes"
+      ],
+      "interactive": [],
+      "notes": null
+    },
+    "ratings": null,
+    "steamAppId": null,
+    "psnStorePath": "concept/10002780",
+    "coverage": []
+  },
+  {
+    "id": "grounded-2",
+    "title": "Grounded 2",
+    "genre": "Action",
+    "artStyle": "3D",
+    "protagonist": "Ensemble",
+    "tags": [
+      "social"
+    ],
+    "representation": [],
+    "description": "Survive a sprawling neighborhood park at insect size, building bases, crafting gear, and riding bugs in solo or cooperative play.",
+    "platform": "PS5",
+    "ps5Upgrade": "PS5 Only",
+    "ageRating": {
+      "family": "mild",
+      "concerns": [],
+      "tier": "teen",
+      "source": "ESRB",
+      "rating": "T",
+      "official": true,
+      "esrb": "T",
+      "pegi": null,
+      "descriptors": [
+        "Blood",
+        "Fantasy Violence"
+      ],
+      "interactive": [
+        "Users Interact"
+      ],
+      "notes": null
+    },
+    "ratings": null,
+    "steamAppId": null,
+    "psnStorePath": "concept/10016651",
+    "coverage": []
+  },
+  {
+    "id": "star-ocean-the-second-story-r",
+    "title": "STAR OCEAN THE SECOND STORY R -",
+    "genre": "RPG",
+    "artStyle": "3D/2D Mix",
+    "protagonist": "Ensemble",
+    "tags": [
+      "graphics"
+    ],
+    "representation": [],
+    "description": "Choose Claude or Rena as your lead, explore 3D towns with a pixel party, and chain skills in fast real-time battles.",
+    "platform": "PS4",
+    "ps5Upgrade": null,
+    "ageRating": {
+      "family": "mild",
+      "concerns": [],
+      "tier": "teen",
+      "source": "ESRB",
+      "rating": "T",
+      "official": true,
+      "esrb": "T",
+      "pegi": null,
+      "descriptors": [
+        "Fantasy Violence",
+        "Mild Blood",
+        "Mild Language",
+        "Mild Suggestive Themes",
+        "Use of Alcohol"
+      ],
+      "interactive": [],
+      "notes": null
+    },
+    "ratings": null,
+    "steamAppId": null,
+    "psnStorePath": "concept/10007308",
+    "coverage": []
+  },
+  {
+    "id": "mouse-p-i-for-hire",
+    "title": "MOUSE: P.I. For Hire",
+    "genre": "Action",
+    "artStyle": "Hand-drawn",
+    "protagonist": "Creature/Animal",
+    "tags": [
+      "graphics"
+    ],
+    "representation": [],
+    "description": "Investigate Mouseburg as Jack Pepper, finding clues between first-person shootouts with cartoon weapons and unlockable traversal moves.",
+    "platform": "PS5",
+    "ps5Upgrade": "PS5 Only",
+    "ageRating": {
+      "family": "mild",
+      "concerns": [],
+      "tier": "teen",
+      "source": "ESRB",
+      "rating": "T",
+      "official": true,
+      "esrb": "T",
+      "pegi": null,
+      "descriptors": [
+        "Blood",
+        "Mild Language",
+        "Violence"
+      ],
+      "interactive": [],
+      "notes": null
+    },
+    "ratings": null,
+    "steamAppId": null,
+    "psnStorePath": "concept/10012945",
+    "coverage": []
+  },
+  {
+    "id": "digimon-story-time-stranger",
+    "title": "Digimon Story Time Stranger",
+    "genre": "Creature Collection",
+    "artStyle": "3D",
+    "protagonist": "Custom",
+    "tags": [],
+    "representation": [],
+    "description": "Travel between Tokyo and the Digital World, recruiting and digivolving a team for turn-based battles across a time-bending mystery.",
+    "platform": "PS5",
+    "ps5Upgrade": "PS5 Only",
+    "ageRating": {
+      "family": "mild",
+      "concerns": [],
+      "tier": "teen",
+      "source": "ESRB",
+      "rating": "T",
+      "official": true,
+      "esrb": "T",
+      "pegi": null,
+      "descriptors": [
+        "Fantasy Violence",
+        "Mild Language",
+        "Suggestive Themes",
+        "Use of Alcohol"
+      ],
+      "interactive": [
+        "In-Game Purchases"
+      ],
+      "notes": null
+    },
+    "ratings": null,
+    "steamAppId": null,
+    "psnStorePath": "concept/10011861",
+    "coverage": []
+  },
+  {
+    "id": "fantasy-life-i-the-girl-who-steals-time-digital-",
+    "title": "FANTASY LIFE i: The Girl Who Steals Time Digital Deluxe Edition",
+    "genre": "Life Sim",
+    "artStyle": "3D",
+    "protagonist": "Custom",
+    "tags": [
+      "cozy",
+      "social"
+    ],
+    "representation": [],
+    "description": "Switch among gathering, crafting, and combat Lives while rebuilding an island, decorating your home, and hopping into friends' worlds.",
+    "platform": "PS4",
+    "ps5Upgrade": null,
+    "ageRating": {
+      "family": "safe",
+      "concerns": [],
+      "tier": "everyone10",
+      "source": "ESRB",
+      "rating": "E10",
+      "official": true,
+      "esrb": "E10",
+      "pegi": null,
+      "descriptors": [
+        "Fantasy Violence"
+      ],
+      "interactive": [
+        "In-Game Purchases",
+        "Users Interact"
+      ],
+      "notes": null
+    },
+    "ratings": null,
+    "steamAppId": null,
+    "psnStorePath": "concept/10013482",
+    "coverage": []
+  },
+  {
+    "id": "brotato",
+    "title": "Brotato",
+    "genre": "Action",
+    "artStyle": "2D",
+    "protagonist": "Creature/Animal",
+    "tags": [
+      "social"
+    ],
+    "representation": [],
+    "description": "A potato guns down alien waves with six weapons at once, then spends each short intermission stacking bizarre stat-bending items.",
+    "platform": "PS4",
+    "ps5Upgrade": null,
+    "ageRating": {
+      "family": "safe",
+      "concerns": [],
+      "tier": "everyone10",
+      "source": "ESRB",
+      "rating": "E10",
+      "official": true,
+      "esrb": "E10",
+      "pegi": null,
+      "descriptors": [
+        "Fantasy Violence",
+        "Mild Blood"
+      ],
+      "interactive": [],
+      "notes": null
+    },
+    "ratings": null,
+    "steamAppId": null,
+    "psnStorePath": "concept/10007282",
+    "coverage": []
+  },
+  {
+    "id": "resident-evil-2",
+    "title": "Resident Evil 2",
+    "genre": "Action",
+    "artStyle": "3D/2D Mix",
+    "protagonist": "Ensemble",
+    "tags": [
+      "classic"
+    ],
+    "representation": [],
+    "description": "Guide Leon and Claire through separate Raccoon City campaigns, managing scarce ammunition and solving puzzles between fixed-camera zombie encounters.",
+    "platform": "PS4",
+    "ps5Upgrade": null,
+    "ageRating": {
+      "family": "mature",
+      "concerns": [
+        "Intense Violence"
+      ],
+      "tier": "mature",
+      "source": "ESRB",
+      "rating": "M",
+      "official": true,
+      "esrb": "M",
+      "pegi": null,
+      "descriptors": [
+        "Blood",
+        "Intense Violence",
+        "Language",
+        "Use of Drugs"
+      ],
+      "interactive": [],
+      "notes": null
+    },
+    "ratings": null,
+    "steamAppId": null,
+    "psnStorePath": "concept/10005150",
+    "coverage": []
+  },
+  {
+    "id": "shin-megami-tensei-v-vengeance",
+    "title": "Shin Megami Tensei V: Vengeance",
+    "genre": "RPG",
+    "artStyle": "3D",
+    "protagonist": "Male",
+    "tags": [
+      "classic"
+    ],
+    "representation": [],
+    "description": "Negotiate with demons, fuse new allies, and exploit elemental weaknesses in turn-based battles across a ruined, open-zone Tokyo.",
+    "platform": "PS4",
+    "ps5Upgrade": null,
+    "ageRating": {
+      "family": "mature",
+      "concerns": [
+        "Partial Nudity",
+        "Sexual Themes"
+      ],
+      "tier": "mature",
+      "source": "ESRB",
+      "rating": "M",
+      "official": true,
+      "esrb": "M",
+      "pegi": null,
+      "descriptors": [
+        "Blood",
+        "Partial Nudity",
+        "Sexual Themes",
+        "Strong Language",
+        "Violence"
+      ],
+      "interactive": [],
+      "notes": null
+    },
+    "ratings": null,
+    "steamAppId": null,
+    "psnStorePath": "concept/10007941",
+    "coverage": []
+  },
+  {
+    "id": "resident-evil-3-nemesis",
+    "title": "Resident Evil 3 Nemesis",
+    "genre": "Action",
+    "artStyle": "3D/2D Mix",
+    "protagonist": "Female",
+    "tags": [
+      "classic"
+    ],
+    "representation": [],
+    "description": "Escape Raccoon City as Jill Valentine while Nemesis stalks between fixed-camera locations, forcing scarce-ammo fights or costly evasions.",
+    "platform": "PS4",
+    "ps5Upgrade": null,
+    "ageRating": {
+      "family": "mature",
+      "concerns": [
+        "Intense Violence"
+      ],
+      "tier": "mature",
+      "source": "ESRB",
+      "rating": "M",
+      "official": true,
+      "esrb": "M",
+      "pegi": null,
+      "descriptors": [
+        "Blood",
+        "Intense Violence",
+        "Language",
+        "Use of Drugs"
+      ],
+      "interactive": [],
+      "notes": null
+    },
+    "ratings": null,
+    "steamAppId": null,
+    "psnStorePath": "concept/10005151",
+    "coverage": []
+  },
+  {
+    "id": "spiritfarer-farewell-edition",
+    "title": "Spiritfarer®: Farewell Edition",
+    "genre": "Management",
+    "artStyle": "Hand-drawn",
+    "protagonist": "Female",
+    "tags": [
+      "cozy",
+      "graphics",
+      "social"
+    ],
+    "representation": [],
+    "description": "Build and tend a boat for spirit passengers, gathering resources and sharing hugs before ferrying each one through the Everdoor.",
+    "platform": "PS4",
+    "ps5Upgrade": "Backwards Compatible",
+    "ageRating": {
+      "family": "mild",
+      "concerns": [],
+      "tier": "teen",
+      "source": "ESRB",
+      "rating": "T",
+      "official": true,
+      "esrb": "T",
+      "pegi": null,
+      "descriptors": [
+        "Language",
+        "Use of Tobacco",
+        "Violent References"
+      ],
+      "interactive": [],
+      "notes": null
+    },
+    "ratings": null,
+    "steamAppId": null,
+    "psnStorePath": "concept/10000752",
+    "coverage": []
+  },
+  {
+    "id": "final-fantasy-tactics-the-ivalice-chronicles-ps4",
+    "title": "FINAL FANTASY TACTICS - The Ivalice Chronicles [PS4 & PS5]",
+    "genre": "RPG",
+    "artStyle": "Isometric",
+    "protagonist": "Male",
+    "tags": [
+      "classic"
+    ],
+    "representation": [],
+    "description": "Command Ramza's company on grid-based battlefields, tuning jobs, equipment, and turn order through a war of succession in Ivalice.",
+    "platform": "PS4",
+    "ps5Upgrade": null,
+    "ageRating": {
+      "family": "mild",
+      "concerns": [],
+      "tier": "teen",
+      "source": "ESRB",
+      "rating": "T",
+      "official": true,
+      "esrb": "T",
+      "pegi": null,
+      "descriptors": [
+        "Blood",
+        "Drug Reference",
+        "Fantasy Violence",
+        "Mild Language",
+        "Mild Suggestive Themes"
+      ],
+      "interactive": [],
+      "notes": null
+    },
+    "ratings": null,
+    "steamAppId": null,
+    "psnStorePath": "concept/10008527",
+    "coverage": []
+  },
+  {
+    "id": "romancing-saga-2-revenge-of-the-seven",
+    "title": "Romancing SaGa 2: Revenge of the Seven -",
+    "genre": "RPG",
+    "artStyle": "3D",
+    "protagonist": "Ensemble",
+    "tags": [],
+    "representation": [],
+    "description": "Pass the imperial throne between generations, developing towns and sparking new techniques through free-form scenarios and turn-based battles.",
+    "platform": "PS4",
+    "ps5Upgrade": null,
+    "ageRating": {
+      "family": "mature",
+      "concerns": [
+        "Partial Nudity"
+      ],
+      "tier": "teen",
+      "source": "ESRB",
+      "rating": "T",
+      "official": true,
+      "esrb": "T",
+      "pegi": null,
+      "descriptors": [
+        "Fantasy Violence",
+        "Mild Blood",
+        "Mild Language",
+        "Partial Nudity"
+      ],
+      "interactive": [],
+      "notes": null
+    },
+    "ratings": null,
+    "steamAppId": null,
+    "psnStorePath": "concept/10008428",
+    "coverage": []
+  },
+  {
+    "id": "the-legend-of-heroes-trails-through-daybreak",
+    "title": "The Legend of Heroes: Trails through Daybreak",
+    "genre": "RPG",
+    "artStyle": "3D",
+    "protagonist": "Male",
+    "tags": [],
+    "representation": [],
+    "description": "Take odd jobs as spriggan Van Arkride in Calvard, switching between field action and command battles while managing alignment choices.",
+    "platform": "PS4",
+    "ps5Upgrade": null,
+    "ageRating": {
+      "family": "mild",
+      "concerns": [],
+      "tier": "teen",
+      "source": "ESRB",
+      "rating": "T",
+      "official": true,
+      "esrb": "T",
+      "pegi": null,
+      "descriptors": [
+        "Blood",
+        "Drug Reference",
+        "Fantasy Violence",
+        "Language",
+        "Suggestive Themes"
+      ],
+      "interactive": [],
+      "notes": null
+    },
+    "ratings": null,
+    "steamAppId": null,
+    "psnStorePath": "concept/10001886",
+    "coverage": []
+  },
+  {
+    "id": "star-wars-republic-commando",
+    "title": "STAR WARS™ Republic Commando™",
+    "genre": "Action",
+    "artStyle": "3D",
+    "protagonist": "Male",
+    "tags": [
+      "classic"
+    ],
+    "representation": [],
+    "description": "Lead Delta Squad through compact Clone Wars missions, combining first-person shooting with contextual orders to slice, breach, and revive.",
+    "platform": "PS4",
+    "ps5Upgrade": "Backwards Compatible",
+    "ageRating": {
+      "family": "mature",
+      "concerns": [
+        "Blood and Gore"
+      ],
+      "tier": "teen",
+      "source": "ESRB",
+      "rating": "T",
+      "official": true,
+      "esrb": "T",
+      "pegi": null,
+      "descriptors": [
+        "Blood and Gore",
+        "Violence"
+      ],
+      "interactive": [],
+      "notes": null
+    },
+    "ratings": null,
+    "steamAppId": null,
+    "psnStorePath": "concept/10000469",
+    "coverage": []
+  },
+  {
+    "id": "sword-of-the-sea",
+    "title": "Sword of the Sea",
+    "genre": "Exploration",
+    "artStyle": "Stylized",
+    "protagonist": "Creature/Animal",
+    "tags": [
+      "graphics"
+    ],
+    "representation": [],
+    "description": "Surf across dunes and half-buried ruins on a hoversword, restoring water and sea life to open new paths through a vast desert.",
+    "platform": "PS5",
+    "ps5Upgrade": "PS5 Only",
+    "ageRating": {
+      "family": "safe",
+      "concerns": [],
+      "tier": "everyone10",
+      "source": "ESRB",
+      "rating": "E10",
+      "official": true,
+      "esrb": "E10",
+      "pegi": null,
+      "descriptors": [
+        "Fantasy Violence"
+      ],
+      "interactive": [],
+      "notes": null
+    },
+    "ratings": null,
+    "steamAppId": null,
+    "psnStorePath": "concept/10011227",
+    "coverage": []
+  },
+  {
+    "id": "octopath-traveler-ii-ps4-ps5",
+    "title": "OCTOPATH TRAVELER II PS4＆PS5",
+    "genre": "RPG",
+    "artStyle": "3D/2D Mix",
+    "protagonist": "Ensemble",
+    "tags": [
+      "graphics"
+    ],
+    "representation": [],
+    "description": "Choose among eight travelers and weave their separate stories through day-night path actions, break-and-boost battles, and crossed paths.",
+    "platform": "PS4",
+    "ps5Upgrade": null,
+    "ageRating": {
+      "family": "mild",
+      "concerns": [],
+      "tier": "teen",
+      "source": "ESRB",
+      "rating": "T",
+      "official": true,
+      "esrb": "T",
+      "pegi": null,
+      "descriptors": [
+        "Fantasy Violence",
+        "Mild Blood",
+        "Mild Language",
+        "Suggestive Themes",
+        "Use of Alcohol and Tobacco"
+      ],
+      "interactive": [],
+      "notes": null
+    },
+    "ratings": null,
+    "steamAppId": null,
+    "psnStorePath": "concept/10005126",
+    "coverage": []
+  },
+  {
+    "id": "like-a-dragon-infinite-wealth",
+    "title": "Like a Dragon: Infinite Wealth",
+    "genre": "RPG",
+    "artStyle": "3D",
+    "protagonist": "Ensemble",
+    "tags": [],
+    "representation": [],
+    "description": "Switch between Ichiban in Hawaii and Kiryu in Japan, leading parties through turn-based street fights, odd jobs, and dense minigames.",
+    "platform": "PS4",
+    "ps5Upgrade": null,
+    "ageRating": {
+      "family": "mature",
+      "concerns": [
+        "Intense Violence",
+        "Partial Nudity",
+        "Sexual Themes"
+      ],
+      "tier": "mature",
+      "source": "ESRB",
+      "rating": "M",
+      "official": true,
+      "esrb": "M",
+      "pegi": null,
+      "descriptors": [
+        "Blood",
+        "Intense Violence",
+        "Partial Nudity",
+        "Sexual Themes",
+        "Strong Language"
+      ],
+      "interactive": [],
+      "notes": null
+    },
+    "ratings": null,
+    "steamAppId": null,
+    "psnStorePath": "concept/10004462",
+    "coverage": []
+  },
+  {
+    "id": "tomb-raider-definitive-survivor-trilogy",
+    "title": "Tomb Raider: Definitive Survivor Trilogy",
+    "genre": "Action",
+    "artStyle": "3D",
+    "protagonist": "Female",
+    "tags": [
+      "classic"
+    ],
+    "representation": [],
+    "description": "Follow Lara Croft through three origin-story expeditions, mixing stealth, bow combat, tomb puzzles, and gear upgrades across hub-like wildernesses.",
+    "platform": "PS4",
+    "ps5Upgrade": "Backwards Compatible",
+    "ageRating": {
+      "family": "mature",
+      "concerns": [
+        "Blood and Gore",
+        "Intense Violence"
+      ],
+      "tier": "mature",
+      "source": "ESRB",
+      "rating": "M",
+      "official": true,
+      "esrb": "M",
+      "pegi": null,
+      "descriptors": [
+        "Blood and Gore",
+        "Drug Reference",
+        "Game Experience May Change During Online Play",
+        "Intense Violence",
+        "Strong Language",
+        "Online Interactions Not Rated by the ESRB"
+      ],
+      "interactive": [
+        "In-Game Purchases"
+      ],
+      "notes": null
+    },
+    "ratings": null,
+    "steamAppId": null,
+    "psnStorePath": "concept/10002774",
+    "coverage": []
+  },
+  {
+    "id": "ball-x-pit",
+    "title": "BALL x PIT",
+    "genre": "Action",
+    "artStyle": "Pixel Art",
+    "protagonist": "Ensemble",
+    "tags": [],
+    "representation": [],
+    "description": "Fire ricocheting balls into descending monsters, then fuse drops into stranger projectiles and rebuild a settlement between pit runs.",
+    "platform": "PS5",
+    "ps5Upgrade": "PS5 Only",
+    "ageRating": {
+      "family": "mild",
+      "concerns": [],
+      "tier": "teen",
+      "source": "ESRB",
+      "rating": "T",
+      "official": true,
+      "esrb": "T",
+      "pegi": null,
+      "descriptors": [
+        "Blood",
+        "Fantasy Violence"
+      ],
+      "interactive": [],
+      "notes": null
+    },
+    "ratings": null,
+    "steamAppId": null,
+    "psnStorePath": "concept/10016190",
+    "coverage": []
+  },
+  {
+    "id": "cairn",
+    "title": "Cairn",
+    "genre": "Sports",
+    "artStyle": "Stylized",
+    "protagonist": "Female",
+    "tags": [
+      "graphics"
+    ],
+    "representation": [],
+    "description": "Place Aava's limbs on each hold, managing posture, stamina, chalk, and pitons as you pick a route up Mount Kami.",
+    "platform": "PS5",
+    "ps5Upgrade": "PS5 Only",
+    "ageRating": {
+      "family": "mature",
+      "concerns": [],
+      "tier": "mature",
+      "source": "ESRB",
+      "rating": "M",
+      "official": true,
+      "esrb": "M",
+      "pegi": null,
+      "descriptors": [
+        "Strong Language",
+        "Use of Drugs"
+      ],
+      "interactive": [],
+      "notes": null
+    },
+    "ratings": null,
+    "steamAppId": null,
+    "psnStorePath": "concept/10014085",
+    "coverage": []
+  },
+  {
+    "id": "crow-country",
+    "title": "Crow Country",
+    "genre": "Action",
+    "artStyle": "3D",
+    "protagonist": "Female",
+    "tags": [],
+    "representation": [],
+    "description": "Search an abandoned theme park as Mara Forest, solving puzzles and rationing ammunition while uncovering what happened to its missing owner.",
+    "platform": "PS4",
+    "ps5Upgrade": null,
+    "ageRating": {
+      "family": "mature",
+      "concerns": [
+        "Blood and Gore"
+      ],
+      "tier": "teen",
+      "source": "ESRB",
+      "rating": "T",
+      "official": true,
+      "esrb": "T",
+      "pegi": null,
+      "descriptors": [
+        "Blood and Gore",
+        "Language",
+        "Violence"
+      ],
+      "interactive": [],
+      "notes": null
+    },
+    "ratings": null,
+    "steamAppId": null,
+    "psnStorePath": "concept/10009392",
+    "coverage": []
+  },
+  {
+    "id": "clive-barker-s-hellraiser-revival",
+    "title": "Clive Barker's Hellraiser: Revival",
+    "genre": "Action",
+    "artStyle": "3D",
+    "protagonist": "Male",
+    "tags": [],
+    "representation": [],
+    "description": "Guide Aidan through the Labyrinth, mixing breakable melee weapons, firearms, stealth, and puzzle-box powers while searching for Sunny.",
+    "platform": "PS5",
+    "ps5Upgrade": "PS5 Only",
+    "ageRating": {
+      "family": "mature",
+      "concerns": [
+        "Blood and Gore",
+        "Intense Violence",
+        "Nudity",
+        "Strong Sexual Content"
+      ],
+      "tier": "mature",
+      "source": "ESRB",
+      "rating": "M",
+      "official": true,
+      "esrb": "M",
+      "pegi": null,
+      "descriptors": [
+        "Blood and Gore",
+        "Intense Violence",
+        "Nudity",
+        "Strong Language",
+        "Strong Sexual Content",
+        "Use of Drugs"
+      ],
+      "interactive": [],
+      "notes": null
+    },
+    "ratings": null,
+    "steamAppId": null,
+    "psnStorePath": "concept/10012313",
+    "coverage": []
+  },
+  {
+    "id": "like-a-dragon-gaiden-the-man-who-erased-his-name",
+    "title": "Like a Dragon Gaiden: The Man Who Erased His Name",
+    "genre": "Action",
+    "artStyle": "3D",
+    "protagonist": "Male",
+    "tags": [],
+    "representation": [],
+    "description": "Play as Kazuma Kiryu under a new alias, brawling through Sotenbori with Agent gadgets, pocket-sized quests, and the Coliseum.",
+    "platform": "PS4",
+    "ps5Upgrade": null,
+    "ageRating": {
+      "family": "mature",
+      "concerns": [
+        "Sexual Themes"
+      ],
+      "tier": "mature",
+      "source": "ESRB",
+      "rating": "M",
+      "official": true,
+      "esrb": "M",
+      "pegi": null,
+      "descriptors": [
+        "Blood",
+        "Sexual Themes",
+        "Strong Language",
+        "Use of Alcohol",
+        "Violence"
+      ],
+      "interactive": [
+        "In-Game Purchases"
+      ],
+      "notes": null
+    },
+    "ratings": null,
+    "steamAppId": null,
+    "psnStorePath": "concept/10008306",
+    "coverage": []
+  },
+  {
+    "id": "kid-a-mnesia-exhibition",
+    "title": "KID A MNESIA EXHIBITION",
+    "genre": "Exploration",
+    "artStyle": "3D",
+    "protagonist": "Custom",
+    "tags": [
+      "graphics"
+    ],
+    "representation": [],
+    "description": "Wander a shifting digital museum built from Radiohead's Kid A and Amnesiac artwork, recordings, and anxious, impossible spaces.",
+    "platform": "PS5",
+    "ps5Upgrade": "PS5 Only",
+    "ageRating": {
+      "family": "mature",
+      "concerns": [
+        "Sexual Themes"
+      ],
+      "tier": "teen",
+      "source": "ESRB",
+      "rating": "T",
+      "official": true,
+      "esrb": "T",
+      "pegi": null,
+      "descriptors": [
+        "Blood",
+        "Drug Reference",
+        "Language",
+        "Sexual Themes",
+        "Violence"
+      ],
+      "interactive": [],
+      "notes": null
+    },
+    "ratings": null,
+    "steamAppId": null,
+    "psnStorePath": "concept/10003085",
+    "coverage": []
+  },
+  {
+    "id": "resonance-a-plague-tale-legacy",
+    "title": "Resonance: A Plague Tale Legacy",
+    "genre": "Action",
+    "artStyle": "3D",
+    "protagonist": "Female",
+    "tags": [],
+    "representation": [],
+    "description": "Fight and parry through Crete as Sophia, shifting between medieval and Minoan timelines and using a stolen sphere to solve light puzzles.",
+    "platform": "PS5",
+    "ps5Upgrade": "PS5 Only",
+    "ageRating": {
+      "family": "mature",
+      "concerns": [],
+      "tier": "mature",
+      "source": "ESRB",
+      "rating": "M",
+      "official": true,
+      "esrb": "M",
+      "pegi": null,
+      "descriptors": [
+        "Blood",
+        "Strong Language",
+        "Violence"
+      ],
+      "interactive": [],
+      "notes": null
+    },
+    "ratings": null,
+    "steamAppId": null,
+    "psnStorePath": "concept/10015413",
+    "coverage": []
+  },
+  {
+    "id": "poppy-playtime-chapter-3",
+    "title": "Poppy Playtime: Chapter 3",
+    "genre": "Puzzle",
+    "artStyle": "3D",
+    "protagonist": "Custom",
+    "tags": [],
+    "representation": [],
+    "description": "Descend into Playcare beneath the factory, using new GrabPack hands to solve puzzles and evade CatNap through a nightmare-filled orphanage.",
+    "platform": "PS5",
+    "ps5Upgrade": "PS5 Only",
+    "ageRating": {
+      "family": "mild",
+      "concerns": [],
+      "tier": "teen",
+      "source": "ESRB",
+      "rating": "T",
+      "official": true,
+      "esrb": "T",
+      "pegi": null,
+      "descriptors": [
+        "Blood",
+        "Mild Language",
+        "Violence"
+      ],
+      "interactive": [],
+      "notes": null
+    },
+    "ratings": null,
+    "steamAppId": null,
+    "psnStorePath": "concept/10010722",
+    "coverage": []
+  },
+  {
+    "id": "sea-of-stars-sunset-edition",
+    "title": "Sea of Stars: Sunset Edition",
+    "genre": "RPG",
+    "artStyle": "Pixel Art",
+    "protagonist": "Ensemble",
+    "tags": [
+      "graphics",
+      "social"
+    ],
+    "representation": [],
+    "description": "Lead Valere and Zale through timed-hits turn-based combat, sailing between islands and solving light-based puzzles without random encounters.",
+    "platform": "PS4",
+    "ps5Upgrade": null,
+    "ageRating": {
+      "family": "safe",
+      "concerns": [],
+      "tier": "everyone10",
+      "source": "ESRB",
+      "rating": "E10",
+      "official": true,
+      "esrb": "E10",
+      "pegi": null,
+      "descriptors": [
+        "Fantasy Violence",
+        "Mild Blood",
+        "Mild Language"
+      ],
+      "interactive": [],
+      "notes": null
+    },
+    "ratings": null,
+    "steamAppId": null,
+    "psnStorePath": "concept/10004226",
+    "coverage": []
+  },
+  {
+    "id": "disco-elysium-the-final-cut",
+    "title": "Disco Elysium - The Final Cut",
+    "genre": "RPG",
+    "artStyle": "Isometric",
+    "protagonist": "Male",
+    "tags": [
+      "classic"
+    ],
+    "representation": [],
+    "description": "Investigate a hanging as an amnesiac detective while competing thoughts argue, skills fail loudly, and dialogue choices reshape the case.",
+    "platform": "PS4",
+    "ps5Upgrade": null,
+    "ageRating": {
+      "family": "mature",
+      "concerns": [
+        "Sexual Themes"
+      ],
+      "tier": "mature",
+      "source": "ESRB",
+      "rating": "M",
+      "official": true,
+      "esrb": "M",
+      "pegi": null,
+      "descriptors": [
+        "Blood",
+        "Sexual Themes",
+        "Strong Language",
+        "Use of Drugs",
+        "Violence"
+      ],
+      "interactive": [],
+      "notes": null
+    },
+    "ratings": null,
+    "steamAppId": null,
+    "psnStorePath": "concept/10002292",
+    "coverage": []
+  },
+  {
+    "id": "armored-core-vi-fires-of-rubicon",
+    "title": "ARMORED CORE™ VI FIRES OF RUBICON™",
+    "genre": "Action",
+    "artStyle": "3D",
+    "protagonist": "Custom",
+    "tags": [],
+    "representation": [],
+    "description": "Build a custom Armored Core, then boost through short, explosive missions where weapon loadouts and energy management decide each engagement.",
+    "platform": "PS4",
+    "ps5Upgrade": null,
+    "ageRating": {
+      "family": "mild",
+      "concerns": [],
+      "tier": "teen",
+      "source": "ESRB",
+      "rating": "T",
+      "official": true,
+      "esrb": "T",
+      "pegi": null,
+      "descriptors": [
+        "Drug Reference",
+        "Language",
+        "Violence"
+      ],
+      "interactive": [
+        "Users Interact"
+      ],
+      "notes": null
+    },
+    "ratings": null,
+    "steamAppId": null,
+    "psnStorePath": "concept/10001815",
+    "coverage": []
+  },
+  {
+    "id": "fatal-frame-maiden-of-black-water",
+    "title": "FATAL FRAME: Maiden of Black Water",
+    "genre": "Action",
+    "artStyle": "3D",
+    "protagonist": "Ensemble",
+    "tags": [
+      "classic"
+    ],
+    "representation": [],
+    "description": "Photograph hostile spirits with the Camera Obscura on Mount Hikami, switching among three investigators and managing film as ammunition.",
+    "platform": "PS4",
+    "ps5Upgrade": null,
+    "ageRating": {
+      "family": "mature",
+      "concerns": [],
+      "tier": "mature",
+      "source": "ESRB",
+      "rating": "M",
+      "official": true,
+      "esrb": "M",
+      "pegi": null,
+      "descriptors": [
+        "Blood",
+        "Suggestive Themes",
+        "Violence"
+      ],
+      "interactive": [],
+      "notes": null
+    },
+    "ratings": null,
+    "steamAppId": null,
+    "psnStorePath": "concept/10003261",
+    "coverage": []
+  },
+  {
+    "id": "the-alters",
+    "title": "The Alters",
+    "genre": "Management",
+    "artStyle": "3D",
+    "protagonist": "Male",
+    "tags": [],
+    "representation": [],
+    "description": "Expand a wheel-shaped base, mine resources, and assign alternate versions of Jan Dolski to jobs while managing their clashing needs.",
+    "platform": "PS5",
+    "ps5Upgrade": "PS5 Only",
+    "ageRating": {
+      "family": "mature",
+      "concerns": [
+        "Blood and Gore"
+      ],
+      "tier": "mature",
+      "source": "ESRB",
+      "rating": "M",
+      "official": true,
+      "esrb": "M",
+      "pegi": null,
+      "descriptors": [
+        "Blood and Gore",
+        "Strong Language",
+        "Use of Drugs and Alcohol",
+        "Violence"
+      ],
+      "interactive": [],
+      "notes": null
+    },
+    "ratings": null,
+    "steamAppId": null,
+    "psnStorePath": "concept/10008217",
+    "coverage": []
+  },
+  {
+    "id": "daxter",
+    "title": "Daxter",
+    "genre": "Platformer",
+    "artStyle": "3D",
+    "protagonist": "Creature/Animal",
+    "tags": [
+      "classic"
+    ],
+    "representation": [],
+    "description": "Play as Daxter in a bug-exterminating spin-off, using a spray gun, hover jets, and vehicle stages to clear Haven City of Metal Bugs.",
+    "platform": "PS4",
+    "ps5Upgrade": null,
+    "ageRating": {
+      "family": "mild",
+      "concerns": [],
+      "tier": "everyone10",
+      "source": "ESRB",
+      "rating": "E10",
+      "official": true,
+      "esrb": "E10",
+      "pegi": null,
+      "descriptors": [
+        "Animated Blood",
+        "Crude Humor",
+        "Fantasy Violence",
+        "Mild Language"
+      ],
+      "interactive": [],
+      "notes": null
+    },
+    "ratings": null,
+    "steamAppId": null,
+    "psnStorePath": "concept/10005947",
+    "coverage": []
+  },
+  {
+    "id": "resident-evil-director-s-cut",
+    "title": "Resident Evil Director’s Cut",
+    "genre": "Action",
+    "artStyle": "3D/2D Mix",
+    "protagonist": "Ensemble",
+    "tags": [
+      "classic"
+    ],
+    "representation": [],
+    "description": "Guide Jill or Chris through the Spencer Mansion, managing scarce ammunition and inventory space while solving puzzles between fixed-camera encounters.",
+    "platform": "PS4",
+    "ps5Upgrade": null,
+    "ageRating": {
+      "family": "mature",
+      "concerns": [
+        "Blood and Gore"
+      ],
+      "tier": "mature",
+      "source": "ESRB",
+      "rating": "M",
+      "official": true,
+      "esrb": "M",
+      "pegi": null,
+      "descriptors": [
+        "Blood and Gore",
+        "Violence"
+      ],
+      "interactive": [],
+      "notes": null
+    },
+    "ratings": null,
+    "steamAppId": null,
+    "psnStorePath": "concept/10005142",
+    "coverage": []
+  },
+  {
+    "id": "final-fantasy-vii-rebirth",
+    "title": "FINAL FANTASY VII REBIRTH",
+    "genre": "RPG",
+    "artStyle": "3D",
+    "protagonist": "Male",
+    "tags": [],
+    "representation": [],
+    "description": "Lead Cloud's party across broad regional maps, combining real-time attacks, synergy abilities, chocobo travel, and card games between story chapters.",
+    "platform": "PS5",
+    "ps5Upgrade": "PS5 Only",
+    "ageRating": {
+      "family": "mild",
+      "concerns": [],
+      "tier": "teen",
+      "source": "ESRB",
+      "rating": "T",
+      "official": true,
+      "esrb": "T",
+      "pegi": null,
+      "descriptors": [
+        "Blood",
+        "Language",
+        "Mild Suggestive Themes",
+        "Use of Alcohol and Tobacco",
+        "Violence"
+      ],
+      "interactive": [],
+      "notes": null
+    },
+    "ratings": null,
+    "steamAppId": null,
+    "psnStorePath": "concept/10003999",
+    "coverage": []
+  },
+  {
+    "id": "the-midnight-walk",
+    "title": "The Midnight Walk",
+    "genre": "Puzzle",
+    "artStyle": "Stylized",
+    "protagonist": "Creature/Animal",
+    "tags": [
+      "graphics"
+    ],
+    "representation": [],
+    "description": "Direct Potboy's flame to light candles, operate mechanisms, and distract monsters as you hide and puzzle through a stop-motion clay world.",
+    "platform": "PS5",
+    "ps5Upgrade": "PS5 Only",
+    "ageRating": {
+      "family": "mild",
+      "concerns": [],
+      "tier": "teen",
+      "source": "ESRB",
+      "rating": "T",
+      "official": true,
+      "esrb": "T",
+      "pegi": null,
+      "descriptors": [
+        "Violence"
+      ],
+      "interactive": [],
+      "notes": null
+    },
+    "ratings": null,
+    "steamAppId": null,
+    "psnStorePath": "concept/10009390",
+    "coverage": []
+  },
+  {
+    "id": "ys-x-nordics",
+    "title": "Ys X: Nordics",
+    "genre": "RPG",
+    "artStyle": "3D",
+    "protagonist": "Ensemble",
+    "tags": [],
+    "representation": [],
+    "description": "Pair Adol and Karja in linked real-time combat, then sail the Obelia Gulf, upgrade your ship, and fight naval battles between islands.",
+    "platform": "PS4",
+    "ps5Upgrade": null,
+    "ageRating": {
+      "family": "mild",
+      "concerns": [],
+      "tier": "teen",
+      "source": "ESRB",
+      "rating": "T",
+      "official": true,
+      "esrb": "T",
+      "pegi": null,
+      "descriptors": [
+        "Blood",
+        "Language",
+        "Violence"
+      ],
+      "interactive": [],
+      "notes": null
+    },
+    "ratings": null,
+    "steamAppId": null,
+    "psnStorePath": "concept/10007199",
+    "coverage": []
+  },
+  {
+    "id": "bendy-and-the-dark-revival",
+    "title": "Bendy and the Dark Revival",
+    "genre": "Action",
+    "artStyle": "3D",
+    "protagonist": "Female",
+    "tags": [
+      "graphics"
+    ],
+    "representation": [],
+    "description": "Guide Audrey through an ink-stained animation studio, sneaking past cartoon horrors, solving environmental puzzles, and using a pipe for close combat.",
+    "platform": "PS4",
+    "ps5Upgrade": "Backwards Compatible",
+    "ageRating": {
+      "family": "mature",
+      "concerns": [
+        "Blood and Gore"
+      ],
+      "tier": "teen",
+      "source": "ESRB",
+      "rating": "T",
+      "official": true,
+      "esrb": "T",
+      "pegi": null,
+      "descriptors": [
+        "Blood and Gore",
+        "Violence"
+      ],
+      "interactive": [],
+      "notes": null
+    },
+    "ratings": null,
+    "steamAppId": null,
+    "psnStorePath": "concept/10006221",
+    "coverage": []
+  },
+  {
+    "id": "life-is-strange-reunion",
+    "title": "Life is Strange: Reunion",
+    "genre": "Narrative",
+    "artStyle": "3D",
+    "protagonist": "Ensemble",
+    "tags": [
+      "queer"
+    ],
+    "representation": [],
+    "description": "Alternate between Max's time rewinds and Chloe's Backtalk while investigating a campus fire and making choices that shape their renewed relationship.",
+    "platform": "PS5",
+    "ps5Upgrade": "PS5 Only",
+    "ageRating": {
+      "family": "mature",
+      "concerns": [],
+      "tier": "mature",
+      "source": "ESRB",
+      "rating": "M",
+      "official": true,
+      "esrb": "M",
+      "pegi": null,
+      "descriptors": [
+        "Mild Violence",
+        "Strong Language",
+        "Suggestive Themes",
+        "Use of Drugs"
+      ],
+      "interactive": [],
+      "notes": null
+    },
+    "ratings": null,
+    "steamAppId": null,
+    "psnStorePath": "concept/10013938",
+    "coverage": []
+  },
+  {
+    "id": "crime-scene-cleaner",
+    "title": "Crime Scene Cleaner",
+    "genre": "Management",
+    "artStyle": "3D",
+    "protagonist": "Male",
+    "tags": [],
+    "representation": [],
+    "description": "Scrub blood, collect evidence, haul bodies, and restore furniture with unlockable cleaning tools before the police arrive at each crime scene.",
+    "platform": "PS5",
+    "ps5Upgrade": "PS5 Only",
+    "ageRating": {
+      "family": "mature",
+      "concerns": [
+        "Blood and Gore"
+      ],
+      "tier": "mature",
+      "source": "ESRB",
+      "rating": "M",
+      "official": true,
+      "esrb": "M",
+      "pegi": null,
+      "descriptors": [
+        "Blood and Gore",
+        "Drug Reference",
+        "Strong Language",
+        "Violence"
+      ],
+      "interactive": [],
+      "notes": null
+    },
+    "ratings": null,
+    "steamAppId": null,
+    "psnStorePath": "concept/10014471",
+    "coverage": []
+  },
+  {
+    "id": "like-a-dragon-pirate-yakuza-in-hawaii",
+    "title": "Like a Dragon: Pirate Yakuza in Hawaii",
+    "genre": "Action",
+    "artStyle": "3D",
+    "protagonist": "Male",
+    "tags": [],
+    "representation": [],
+    "description": "Battle as Majima with Mad Dog and Sea Dog styles, then recruit a crew, upgrade your ship, and raid rival vessels around Hawaii.",
+    "platform": "PS4",
+    "ps5Upgrade": null,
+    "ageRating": {
+      "family": "mature",
+      "concerns": [],
+      "tier": "mature",
+      "source": "ESRB",
+      "rating": "M",
+      "official": true,
+      "esrb": "M",
+      "pegi": null,
+      "descriptors": [
+        "Blood",
+        "Strong Language",
+        "Suggestive Themes",
+        "Violence"
+      ],
+      "interactive": [
+        "In-Game Purchases"
+      ],
+      "notes": null
+    },
+    "ratings": null,
+    "steamAppId": null,
+    "psnStorePath": "concept/10011704",
+    "coverage": []
+  },
+  {
+    "id": "monster-hunter-stories-3-twisted-reflection",
+    "title": "Monster Hunter Stories 3: Twisted Reflection",
+    "genre": "Creature Collection",
+    "artStyle": "3D",
+    "protagonist": "Custom",
+    "tags": [],
+    "representation": [],
+    "description": "Hatch and raise Monsties, restore monster habitats, and read attack patterns in turn-based battles as a customizable Rider caught between two nations.",
+    "platform": "PS5",
+    "ps5Upgrade": "PS5 Only",
+    "ageRating": {
+      "family": "mild",
+      "concerns": [],
+      "tier": "teen",
+      "source": "ESRB",
+      "rating": "T",
+      "official": true,
+      "esrb": "T",
+      "pegi": null,
+      "descriptors": [
+        "Fantasy Violence",
+        "Mild Suggestive Themes"
+      ],
+      "interactive": [
+        "In-Game Purchases"
+      ],
+      "notes": null
+    },
+    "ratings": null,
+    "steamAppId": null,
+    "psnStorePath": "concept/10013075",
+    "coverage": []
+  },
+  {
+    "id": "thank-goodness-you-re-here",
+    "title": "Thank Goodness You're Here!",
+    "genre": "Narrative",
+    "artStyle": "Hand-drawn",
+    "protagonist": "Male",
+    "tags": [
+      "graphics"
+    ],
+    "representation": [],
+    "description": "Wander the interconnected town of Barnsworth as a traveling salesman, jumping and slapping through odd jobs that spiral into cartoon set pieces.",
+    "platform": "PS4",
+    "ps5Upgrade": null,
+    "ageRating": {
+      "family": "mature",
+      "concerns": [],
+      "tier": "mature",
+      "source": "ESRB",
+      "rating": "M",
+      "official": true,
+      "esrb": "M",
+      "pegi": null,
+      "descriptors": [
+        "Mature Humor",
+        "Strong Language"
+      ],
+      "interactive": [],
+      "notes": null
+    },
+    "ratings": null,
+    "steamAppId": null,
+    "psnStorePath": "concept/10007988",
+    "coverage": []
+  },
+  {
+    "id": "killer-frequency",
+    "title": "Killer Frequency",
+    "genre": "Mystery",
+    "artStyle": "3D",
+    "protagonist": "Male",
+    "tags": [],
+    "representation": [],
+    "description": "Host a late-night radio show, question callers stalked by a killer, and use clues around the studio to guide them through deadly situations.",
+    "platform": "PS4",
+    "ps5Upgrade": null,
+    "ageRating": {
+      "family": "mild",
+      "concerns": [],
+      "tier": "teen",
+      "source": "ESRB",
+      "rating": "T",
+      "official": true,
+      "esrb": "T",
+      "pegi": null,
+      "descriptors": [
+        "Language",
+        "Mild Blood",
+        "Violence"
+      ],
+      "interactive": [],
+      "notes": null
+    },
+    "ratings": null,
+    "steamAppId": null,
+    "psnStorePath": "concept/10005847",
+    "coverage": []
+  },
+  {
+    "id": "the-forgotten-city",
+    "title": "The Forgotten City",
+    "genre": "Mystery",
+    "artStyle": "3D",
+    "protagonist": "Custom",
+    "tags": [],
+    "representation": [],
+    "description": "Relive a cursed Roman city's final day, interviewing residents and carrying knowledge across time loops to stop one sin from destroying everyone.",
+    "platform": "PS4",
+    "ps5Upgrade": null,
+    "ageRating": {
+      "family": "mild",
+      "concerns": [],
+      "tier": "teen",
+      "source": "ESRB",
+      "rating": "T",
+      "official": true,
+      "esrb": "T",
+      "pegi": null,
+      "descriptors": [
+        "Alcohol Reference",
+        "Blood",
+        "Mild Language",
+        "Suggestive Themes",
+        "Violence"
+      ],
+      "interactive": [],
+      "notes": null
+    },
+    "ratings": null,
+    "steamAppId": null,
+    "psnStorePath": "concept/10002458",
+    "coverage": []
+  },
+  {
+    "id": "tokyo-xtreme-racer",
+    "title": "Tokyo Xtreme Racer",
+    "genre": "Racing",
+    "artStyle": "3D",
+    "protagonist": "Custom",
+    "tags": [],
+    "representation": [],
+    "description": "Cruise Tokyo's expressways at night, challenge rivals to SP battles, and spend winnings on cars and detailed performance tuning.",
+    "platform": "PS5",
+    "ps5Upgrade": "PS5 Only",
+    "ageRating": {
+      "family": "safe",
+      "concerns": [],
+      "tier": "everyone10",
+      "source": "ESRB",
+      "rating": "E10",
+      "official": true,
+      "esrb": "E10",
+      "pegi": null,
+      "descriptors": [
+        "Fantasy Violence"
+      ],
+      "interactive": [],
+      "notes": null
+    },
+    "ratings": null,
+    "steamAppId": null,
+    "psnStorePath": "concept/10016323",
+    "coverage": []
+  },
+  {
+    "id": "mixtape",
+    "title": "Mixtape",
+    "genre": "Narrative",
+    "artStyle": "Stylized",
+    "protagonist": "Female",
+    "tags": [
+      "graphics"
+    ],
+    "representation": [],
+    "description": "Relive Stacey's last day with her two best friends through licensed-song vignettes featuring skateboarding, rock skipping, and a dinosaur park.",
+    "platform": "PS5",
+    "ps5Upgrade": "PS5 Only",
+    "ageRating": {
+      "family": "mature",
+      "concerns": [
+        "Sexual Themes"
+      ],
+      "tier": "mature",
+      "source": "ESRB",
+      "rating": "M",
+      "official": true,
+      "esrb": "M",
+      "pegi": null,
+      "descriptors": [
+        "Sexual Themes",
+        "Strong Language",
+        "Use of Drugs and Alcohol"
+      ],
+      "interactive": [],
+      "notes": null
+    },
+    "ratings": null,
+    "steamAppId": null,
+    "psnStorePath": "concept/10014780",
+    "coverage": []
+  },
+  {
+    "id": "jurassic-world-evolution-3",
+    "title": "Jurassic World Evolution 3",
+    "genre": "Management",
+    "artStyle": "3D",
+    "protagonist": "Custom",
+    "tags": [],
+    "representation": [],
+    "description": "Build and staff dinosaur parks, breed family groups with juveniles, and balance animal welfare, guest needs, research, and containment.",
+    "platform": "PS5",
+    "ps5Upgrade": "PS5 Only",
+    "ageRating": {
+      "family": "safe",
+      "concerns": [],
+      "tier": "everyone10",
+      "source": "ESRB",
+      "rating": "E10",
+      "official": true,
+      "esrb": "E10",
+      "pegi": null,
+      "descriptors": [
+        "Mild Blood",
+        "Mild Language",
+        "Mild Violence"
+      ],
+      "interactive": [
+        "In-Game Purchases",
+        "Users Interact"
+      ],
+      "notes": null
+    },
+    "ratings": null,
+    "steamAppId": null,
+    "psnStorePath": "concept/10012067",
+    "coverage": []
+  },
+  {
+    "id": "poppy-playtime-chapter-4",
+    "title": "Poppy Playtime: Chapter 4",
+    "genre": "Puzzle",
+    "artStyle": "3D",
+    "protagonist": "Custom",
+    "tags": [],
+    "representation": [],
+    "description": "Descend into the factory's prison levels, using new GrabPack tools to solve puzzles and evade Yarnaby and the Doctor's experiments.",
+    "platform": "PS5",
+    "ps5Upgrade": "PS5 Only",
+    "ageRating": {
+      "family": "mild",
+      "concerns": [],
+      "tier": "teen",
+      "source": "ESRB",
+      "rating": "T",
+      "official": true,
+      "esrb": "T",
+      "pegi": null,
+      "descriptors": [
+        "Blood",
+        "Language",
+        "Violence"
+      ],
+      "interactive": [],
+      "notes": null
+    },
+    "ratings": null,
+    "steamAppId": null,
+    "psnStorePath": "concept/10012036",
+    "coverage": []
+  },
+  {
+    "id": "warhammer-40-000-rogue-trader",
+    "title": "Warhammer 40,000: Rogue Trader",
+    "genre": "RPG",
+    "artStyle": "Isometric",
+    "protagonist": "Custom",
+    "tags": [],
+    "representation": [],
+    "description": "Command a six-character party in turn-based battles, manage a voidship and trade empire, and make choices that reshape a Warhammer 40,000 dynasty.",
+    "platform": "PS5",
+    "ps5Upgrade": "PS5 Only",
+    "ageRating": {
+      "family": "mature",
+      "concerns": [
+        "Blood and Gore"
+      ],
+      "tier": "mature",
+      "source": "ESRB",
+      "rating": "M",
+      "official": true,
+      "esrb": "M",
+      "pegi": null,
+      "descriptors": [
+        "Blood and Gore",
+        "Language",
+        "Suggestive Themes",
+        "Violence"
+      ],
+      "interactive": [
+        "In-Game Purchases"
+      ],
+      "notes": null
+    },
+    "ratings": null,
+    "steamAppId": null,
+    "psnStorePath": "concept/10008102",
+    "coverage": []
+  },
+  {
+    "id": "007-first-light",
+    "title": "007 First Light",
+    "genre": "Action",
+    "artStyle": "3D",
+    "protagonist": "Male",
+    "tags": [],
+    "representation": [],
+    "description": "Play a young James Bond through infiltration missions that mix eavesdropping, disguises, Q Branch gadgets, close combat, gunfights, and car chases.",
+    "platform": "PS5",
+    "ps5Upgrade": "PS5 Only",
+    "ageRating": {
+      "family": "mild",
+      "concerns": [],
+      "tier": "teen",
+      "source": "ESRB",
+      "rating": "T",
+      "official": true,
+      "esrb": "T",
+      "pegi": null,
+      "descriptors": [
+        "Blood",
+        "Language",
+        "Suggestive Themes",
+        "Violence"
+      ],
+      "interactive": [
+        "In-Game Purchases"
+      ],
+      "notes": null
+    },
+    "ratings": null,
+    "steamAppId": null,
+    "psnStorePath": "concept/10006560",
+    "coverage": []
+  },
+  {
+    "id": "abiotic-factor",
+    "title": "Abiotic Factor",
+    "genre": "Action",
+    "artStyle": "3D",
+    "protagonist": "Custom",
+    "tags": [
+      "social"
+    ],
+    "representation": [],
+    "description": "Craft improvised weapons and bases inside a besieged research facility, managing hunger and radiation alone or with up to six scientists.",
+    "platform": "PS5",
+    "ps5Upgrade": "PS5 Only",
+    "ageRating": {
+      "family": "mature",
+      "concerns": [
+        "Blood and Gore"
+      ],
+      "tier": "mature",
+      "source": "ESRB",
+      "rating": "M",
+      "official": true,
+      "esrb": "M",
+      "pegi": null,
+      "descriptors": [
+        "Blood and Gore",
+        "Crude Humor",
+        "Violence"
+      ],
+      "interactive": [
+        "Users Interact"
+      ],
+      "notes": null
+    },
+    "ratings": null,
+    "steamAppId": null,
+    "psnStorePath": "concept/10012483",
+    "coverage": []
+  },
+  {
+    "id": "big-walk",
+    "title": "Big Walk",
+    "genre": "Exploration",
+    "artStyle": "Stylized",
+    "protagonist": "Custom",
+    "tags": [
+      "cozy",
+      "social"
+    ],
+    "representation": [],
+    "description": "Walk across a wide-open island with friends, using proximity voice, gestures, flares, and improvised signals to solve cooperative puzzles.",
+    "platform": "PS5",
+    "ps5Upgrade": "PS5 Only",
+    "ageRating": {
+      "family": "safe",
+      "concerns": [],
+      "tier": "everyone",
+      "source": "ESRB",
+      "rating": "E",
+      "official": true,
+      "esrb": "E",
+      "pegi": null,
+      "descriptors": [],
+      "interactive": [
+        "Users Interact"
+      ],
+      "notes": null
+    },
+    "ratings": null,
+    "steamAppId": null,
+    "psnStorePath": "concept/10017189",
+    "coverage": []
+  },
+  {
+    "id": "assassin-s-creed-black-flag-resynced",
+    "title": "Assassin's Creed Black Flag Resynced",
+    "genre": "Action",
+    "artStyle": "3D",
+    "protagonist": "Male",
+    "tags": [],
+    "representation": [],
+    "description": "Sail the Jackdaw between Caribbean islands, upgrading ship and crew while alternating naval cannon battles with stealth, parkour, and sword fights.",
+    "platform": "PS5",
+    "ps5Upgrade": "PS5 Only",
+    "ageRating": {
+      "family": "mature",
+      "concerns": [
+        "Sexual Themes"
+      ],
+      "tier": "mature",
+      "source": "ESRB",
+      "rating": "M",
+      "official": true,
+      "esrb": "M",
+      "pegi": null,
+      "descriptors": [
+        "Blood",
+        "Sexual Themes",
+        "Strong Language",
+        "Use of Alcohol",
+        "Violence"
+      ],
+      "interactive": [
+        "In-Game Purchases",
+        "Users Interact"
+      ],
+      "notes": null
+    },
+    "ratings": null,
+    "steamAppId": null,
+    "psnStorePath": "concept/10013987",
+    "coverage": []
+  },
+  {
+    "id": "the-blood-of-dawnwalker",
+    "title": "The Blood of Dawnwalker",
+    "genre": "RPG",
+    "artStyle": "3D",
+    "protagonist": "Male",
+    "tags": [],
+    "representation": [],
+    "description": "Spend a limited sequence of days and nights as Coen, mixing swordplay, daytime hexes, and nocturnal vampire powers while choosing who to save.",
+    "platform": "PS5",
+    "ps5Upgrade": "PS5 Only",
+    "ageRating": {
+      "family": "mature",
+      "concerns": [
+        "Blood and Gore",
+        "Intense Violence",
+        "Nudity",
+        "Strong Sexual Content"
+      ],
+      "tier": "mature",
+      "source": "ESRB",
+      "rating": "M",
+      "official": true,
+      "esrb": "M",
+      "pegi": null,
+      "descriptors": [
+        "Blood and Gore",
+        "Intense Violence",
+        "Nudity",
+        "Strong Language",
+        "Strong Sexual Content"
+      ],
+      "interactive": [],
+      "notes": null
+    },
+    "ratings": null,
+    "steamAppId": null,
+    "psnStorePath": "concept/10013855",
+    "coverage": []
+  },
+  {
+    "id": "kingdom-come-deliverance-ii-royal-edition",
+    "title": "Kingdom Come: Deliverance II Royal Edition",
+    "genre": "RPG",
+    "artStyle": "3D",
+    "protagonist": "Male",
+    "tags": [],
+    "representation": [],
+    "description": "Live as Henry in medieval Bohemia, training first-person swordplay and approaching quests through speech, stealth, or force.",
+    "platform": "PS5",
+    "ps5Upgrade": "PS5 Only",
+    "ageRating": {
+      "family": "mature",
+      "concerns": [
+        "Blood and Gore",
+        "Intense Violence",
+        "Partial Nudity",
+        "Sexual Content"
+      ],
+      "tier": "mature",
+      "source": "ESRB",
+      "rating": "M",
+      "official": true,
+      "esrb": "M",
+      "pegi": null,
+      "descriptors": [
+        "Blood and Gore",
+        "Intense Violence",
+        "Partial Nudity",
+        "Sexual Content",
+        "Strong Language",
+        "Use of Alcohol"
+      ],
+      "interactive": [
+        "In-Game Purchases"
+      ],
+      "notes": null
+    },
+    "ratings": null,
+    "steamAppId": null,
+    "psnStorePath": "concept/10006210",
+    "coverage": []
+  },
+  {
+    "id": "signalis",
+    "title": "SIGNALIS",
+    "genre": "Action",
+    "artStyle": "Pixel Art",
+    "protagonist": "Female",
+    "tags": [
+      "graphics",
+      "queer"
+    ],
+    "representation": [],
+    "description": "Guide Elster through a decaying facility, rationing a tiny inventory, solving radio and key puzzles, and evading or fighting distorted machines.",
+    "platform": "PS4",
+    "ps5Upgrade": "Backwards Compatible",
+    "ageRating": {
+      "family": "mature",
+      "concerns": [],
+      "tier": "mature",
+      "source": "ESRB",
+      "rating": "M",
+      "official": true,
+      "esrb": "M",
+      "pegi": null,
+      "descriptors": [
+        "Blood",
+        "Violence"
+      ],
+      "interactive": [],
+      "notes": null
+    },
+    "ratings": null,
+    "steamAppId": null,
+    "psnStorePath": "concept/10005369",
+    "coverage": []
+  },
+  {
+    "id": "doki-doki-literature-club-plus",
+    "title": "Doki Doki Literature Club Plus!",
+    "genre": "Narrative",
+    "artStyle": "2D",
+    "protagonist": "Male",
+    "tags": [
+      "classic"
+    ],
+    "representation": [],
+    "description": "Write poems for three club members in a school dating story that gradually breaks its own interface and turns your choices against you.",
+    "platform": "PS4",
+    "ps5Upgrade": null,
+    "ageRating": {
+      "family": "mature",
+      "concerns": [],
+      "tier": "mature",
+      "source": "ESRB",
+      "rating": "M",
+      "official": true,
+      "esrb": "M",
+      "pegi": null,
+      "descriptors": [
+        "Blood",
+        "Strong Language",
+        "Suggestive Themes",
+        "Violence"
+      ],
+      "interactive": [],
+      "notes": null
+    },
+    "ratings": null,
+    "steamAppId": null,
+    "psnStorePath": "concept/10002895",
+    "coverage": []
+  },
+  {
+    "id": "nier-replicant-ver-1-22474487139",
+    "title": "NieR Replicant ver.1.22474487139...",
+    "genre": "RPG",
+    "artStyle": "3D",
+    "protagonist": "Male",
+    "tags": [
+      "classic"
+    ],
+    "representation": [],
+    "description": "Fight with swords, spears, and magic through shifting camera perspectives while hunting a cure for Yonah across sidequests and repeated endings.",
+    "platform": "PS4",
+    "ps5Upgrade": "Backwards Compatible",
+    "ageRating": {
+      "family": "mature",
+      "concerns": [],
+      "tier": "mature",
+      "source": "ESRB",
+      "rating": "M",
+      "official": true,
+      "esrb": "M",
+      "pegi": null,
+      "descriptors": [
+        "Blood",
+        "Strong Language",
+        "Suggestive Themes",
+        "Violence"
+      ],
+      "interactive": [],
+      "notes": null
+    },
+    "ratings": null,
+    "steamAppId": null,
+    "psnStorePath": "concept/10000272",
+    "coverage": []
+  },
+  {
+    "id": "hellblade-senua-s-sacrifice",
+    "title": "Hellblade: Senua’s Sacrifice",
+    "genre": "Action",
+    "artStyle": "3D",
+    "protagonist": "Female",
+    "tags": [
+      "classic",
+      "disability"
+    ],
+    "representation": [],
+    "description": "Follow Senua into a Norse underworld, hearing surrounding voices while solving rune puzzles and fighting through deliberate melee encounters.",
+    "platform": "PS5",
+    "ps5Upgrade": "PS5 Only",
+    "ageRating": {
+      "family": "mature",
+      "concerns": [
+        "Blood and Gore",
+        "Intense Violence"
+      ],
+      "tier": "mature",
+      "source": "ESRB",
+      "rating": "M",
+      "official": true,
+      "esrb": "M",
+      "pegi": null,
+      "descriptors": [
+        "Blood and Gore",
+        "Intense Violence",
+        "Strong Language"
+      ],
+      "interactive": [],
+      "notes": null
+    },
+    "ratings": null,
+    "steamAppId": null,
+    "psnStorePath": "concept/10013503",
+    "coverage": []
+  },
+  {
+    "id": "five-nights-at-freddy-s-secret-of-the-mimic",
+    "title": "Five Nights at Freddy's: Secret of the Mimic",
+    "genre": "Puzzle",
+    "artStyle": "3D",
+    "protagonist": "Male",
+    "tags": [],
+    "representation": [],
+    "description": "Explore Murray's Costume Manor as technician Arnold, rerouting power and solving puzzles while the Mimic adopts different mascot costumes to hunt you.",
+    "platform": "PS5",
+    "ps5Upgrade": "PS5 Only",
+    "ageRating": {
+      "family": "mild",
+      "concerns": [],
+      "tier": "teen",
+      "source": "ESRB",
+      "rating": "T",
+      "official": true,
+      "esrb": "T",
+      "pegi": null,
+      "descriptors": [
+        "Fantasy Violence"
+      ],
+      "interactive": [],
+      "notes": null
+    },
+    "ratings": null,
+    "steamAppId": null,
+    "psnStorePath": "concept/10012344",
+    "coverage": []
+  },
+  {
+    "id": "the-lord-of-the-rings-war-in-the-north-legacy-ed",
+    "title": "The Lord of the Rings: War in the North™ - Legacy Edition",
+    "genre": "RPG",
+    "artStyle": "3D",
+    "protagonist": "Ensemble",
+    "tags": [
+      "social",
+      "classic"
+    ],
+    "representation": [],
+    "description": "Fight through northern Middle-earth as Eradan, Farin, or Andriel, combining class skills, loot, and a giant eagle ally alone or in three-player co-op.",
+    "platform": "PS5",
+    "ps5Upgrade": "PS5 Only",
+    "ageRating": {
+      "family": "mature",
+      "concerns": [
+        "Blood and Gore",
+        "Intense Violence"
+      ],
+      "tier": "mature",
+      "source": "ESRB",
+      "rating": "M",
+      "official": true,
+      "esrb": "M",
+      "pegi": null,
+      "descriptors": [
+        "Blood and Gore",
+        "Intense Violence"
+      ],
+      "interactive": [
+        "Users Interact"
+      ],
+      "notes": null
+    },
+    "ratings": null,
+    "steamAppId": null,
+    "psnStorePath": "concept/10010865",
+    "coverage": []
+  },
+  {
+    "id": "indiana-jones-and-the-great-circle",
+    "title": "Indiana Jones and the Great Circle",
+    "genre": "Action",
+    "artStyle": "3D",
+    "protagonist": "Male",
+    "tags": [],
+    "representation": [],
+    "description": "Explore as Indiana Jones, using whip swings, disguises, stealth, improvised weapons, and environmental puzzles to solve an archaeological mystery.",
+    "platform": "PS5",
+    "ps5Upgrade": "PS5 Only",
+    "ageRating": {
+      "family": "mature",
+      "concerns": [
+        "Blood and Gore"
+      ],
+      "tier": "teen",
+      "source": "ESRB",
+      "rating": "T",
+      "official": true,
+      "esrb": "T",
+      "pegi": null,
+      "descriptors": [
+        "Blood and Gore",
+        "Drug Reference",
+        "Mild Language",
+        "Violence"
+      ],
+      "interactive": [
+        "In-Game Purchases"
+      ],
+      "notes": null
+    },
+    "ratings": null,
+    "steamAppId": null,
+    "psnStorePath": "concept/10012238",
+    "coverage": []
+  },
+  {
+    "id": "fears-to-fathom-ironbark-lookout",
+    "title": "Fears to Fathom - Ironbark Lookout",
+    "genre": "Narrative",
+    "artStyle": "3D",
+    "protagonist": "Male",
+    "tags": [],
+    "representation": [],
+    "description": "Work a solo fire-watch shift as Jack Nelson, checking trails, radioing for help, and making small choices as strange visitors unsettle the lookout.",
+    "platform": "PS5",
+    "ps5Upgrade": "PS5 Only",
+    "ageRating": {
+      "family": "mature",
+      "concerns": [],
+      "tier": "mature",
+      "source": "ESRB",
+      "rating": "M",
+      "official": true,
+      "esrb": "M",
+      "pegi": null,
+      "descriptors": [
+        "Blood",
+        "Crude Humor",
+        "Drug Reference",
+        "Strong Language",
+        "Suggestive Themes",
+        "Violence"
+      ],
+      "interactive": [],
+      "notes": null
+    },
+    "ratings": null,
+    "steamAppId": null,
+    "psnStorePath": "concept/10011662",
+    "coverage": []
+  },
+  {
+    "id": "escape-the-backrooms",
+    "title": "Escape the Backrooms",
+    "genre": "Puzzle",
+    "artStyle": "3D",
+    "protagonist": "Custom",
+    "tags": [
+      "social"
+    ],
+    "representation": [],
+    "description": "Explore interconnected liminal levels with friends, solving environmental puzzles and managing stamina while hiding from entities that react to noise.",
+    "platform": "PS5",
+    "ps5Upgrade": "PS5 Only",
+    "ageRating": {
+      "family": "mature",
+      "concerns": [
+        "Intense Violence"
+      ],
+      "tier": "mature",
+      "source": "ESRB",
+      "rating": "M",
+      "official": true,
+      "esrb": "M",
+      "pegi": null,
+      "descriptors": [
+        "Blood",
+        "Intense Violence"
+      ],
+      "interactive": [
+        "Users Interact"
+      ],
+      "notes": null
+    },
+    "ratings": null,
+    "steamAppId": null,
+    "psnStorePath": "concept/10010992",
+    "coverage": []
+  },
+  {
+    "id": "lies-of-p",
+    "title": "Lies of P",
+    "genre": "Action",
+    "artStyle": "3D",
+    "protagonist": "Male",
+    "tags": [],
+    "representation": [],
+    "description": "Fight through Krat as Pinocchio, combining interchangeable weapon blades and handles, Legion Arms, timed guards, and choices about when to lie.",
+    "platform": "PS4",
+    "ps5Upgrade": null,
+    "ageRating": {
+      "family": "mature",
+      "concerns": [],
+      "tier": "mature",
+      "source": "ESRB",
+      "rating": "M",
+      "official": true,
+      "esrb": "M",
+      "pegi": null,
+      "descriptors": [
+        "Blood",
+        "Violence"
+      ],
+      "interactive": [],
+      "notes": null
+    },
+    "ratings": null,
+    "steamAppId": null,
+    "psnStorePath": "concept/10006052",
+    "coverage": []
+  },
+  {
+    "id": "the-adventures-of-elliot-the-millennium-tales",
+    "title": "The Adventures of Elliot: The Millennium Tales",
+    "genre": "RPG",
+    "artStyle": "3D/2D Mix",
+    "protagonist": "Male",
+    "tags": [
+      "graphics",
+      "social"
+    ],
+    "representation": [],
+    "description": "Travel through four ages with Elliot and Faie, swapping seven weapons and using magicite and fairy magic in combat and puzzles.",
+    "platform": "PS5",
+    "ps5Upgrade": "PS5 Only",
+    "ageRating": {
+      "family": "mild",
+      "concerns": [],
+      "tier": "teen",
+      "source": "ESRB",
+      "rating": "T",
+      "official": true,
+      "esrb": "T",
+      "pegi": null,
+      "descriptors": [
+        "Fantasy Violence",
+        "Mild Language",
+        "Use of Alcohol"
+      ],
+      "interactive": [],
+      "notes": null
+    },
+    "ratings": null,
+    "steamAppId": null,
+    "psnStorePath": "concept/10007935",
+    "coverage": []
+  },
+  {
+    "id": "the-talos-principle-2",
+    "title": "The Talos Principle 2",
+    "genre": "Puzzle",
+    "artStyle": "3D",
+    "protagonist": "Creature/Animal",
+    "tags": [],
+    "representation": [],
+    "description": "Solve first-person chambers with lasers, connectors, boxes, fans, and new gravity tools, then wander a robot city and its surrounding wilderness.",
+    "platform": "PS5",
+    "ps5Upgrade": "PS5 Only",
+    "ageRating": {
+      "family": "mild",
+      "concerns": [],
+      "tier": "everyone10",
+      "source": "ESRB",
+      "rating": "E10",
+      "official": true,
+      "esrb": "E10",
+      "pegi": null,
+      "descriptors": [
+        "Alcohol Reference",
+        "Language"
+      ],
+      "interactive": [],
+      "notes": null
+    },
+    "ratings": null,
+    "steamAppId": null,
+    "psnStorePath": "concept/10004172",
+    "coverage": []
+  },
+  {
+    "id": "superliminal",
+    "title": "Superliminal",
+    "genre": "Puzzle",
+    "artStyle": "3D",
+    "protagonist": "Custom",
+    "tags": [],
+    "representation": [],
+    "description": "Resize objects through forced perspective, turning tiny chess pieces into ramps and painted doorways into exits from dreamlike test chambers.",
+    "platform": "PS4",
+    "ps5Upgrade": null,
+    "ageRating": {
+      "family": "safe",
+      "concerns": [],
+      "tier": "everyone",
+      "source": "ESRB",
+      "rating": "E",
+      "official": true,
+      "esrb": "E",
+      "pegi": null,
+      "descriptors": [
+        "Mild Blood"
+      ],
+      "interactive": [],
+      "notes": null
+    },
+    "ratings": null,
+    "steamAppId": null,
+    "psnStorePath": "concept/10000602",
+    "coverage": []
+  },
+  {
+    "id": "endling-extinction-is-forever",
+    "title": "Endling - Extinction is Forever",
+    "genre": "Exploration",
+    "artStyle": "Stylized",
+    "protagonist": "Creature/Animal",
+    "tags": [],
+    "representation": [],
+    "description": "Guide a mother fox through a polluted landscape, tracking scents, finding food, avoiding humans, and teaching her cubs skills as they grow.",
+    "platform": "PS4",
+    "ps5Upgrade": null,
+    "ageRating": {
+      "family": "mild",
+      "concerns": [],
+      "tier": "teen",
+      "source": "ESRB",
+      "rating": "T",
+      "official": true,
+      "esrb": "T",
+      "pegi": null,
+      "descriptors": [
+        "Blood",
+        "Fantasy Violence"
+      ],
+      "interactive": [],
+      "notes": null
+    },
+    "ratings": null,
+    "steamAppId": null,
+    "psnStorePath": "concept/10001440",
+    "coverage": []
+  },
+  {
+    "id": "until-dawn-10007897",
+    "title": "Until Dawn™",
+    "genre": "Narrative",
+    "artStyle": "3D",
+    "protagonist": "Ensemble",
+    "tags": [],
+    "representation": [],
+    "description": "Alternate among eight friends on a mountain reunion, making choices, finding totems, and surviving quick-time events that decide who lives.",
+    "platform": "PS5",
+    "ps5Upgrade": "PS5 Only",
+    "ageRating": {
+      "family": "mature",
+      "concerns": [
+        "Blood and Gore",
+        "Intense Violence",
+        "Sexual Themes"
+      ],
+      "tier": "mature",
+      "source": "ESRB",
+      "rating": "M",
+      "official": true,
+      "esrb": "M",
+      "pegi": null,
+      "descriptors": [
+        "Blood and Gore",
+        "Intense Violence",
+        "Sexual Themes",
+        "Strong Language"
+      ],
+      "interactive": [],
+      "notes": null
+    },
+    "ratings": null,
+    "steamAppId": null,
+    "psnStorePath": "concept/10007897",
+    "coverage": []
+  },
+  {
+    "id": "the-walking-dead-saints-sinners",
+    "title": "The Walking Dead: Saints & Sinners",
+    "genre": "Action",
+    "artStyle": "3D",
+    "protagonist": "Custom",
+    "tags": [],
+    "representation": [],
+    "description": "Scavenge a flooded New Orleans in VR, crafting weapons and supplies while stabbing, shooting, and physically holding back walkers at close range.",
+    "platform": "PS5",
+    "ps5Upgrade": "PS5 Only",
+    "ageRating": {
+      "family": "mature",
+      "concerns": [
+        "Blood and Gore",
+        "Intense Violence"
+      ],
+      "tier": "mature",
+      "source": "ESRB",
+      "rating": "M",
+      "official": true,
+      "esrb": "M",
+      "pegi": null,
+      "descriptors": [
+        "Blood and Gore",
+        "Intense Violence",
+        "Strong Language",
+        "Use of Tobacco"
+      ],
+      "interactive": [],
+      "notes": null
+    },
+    "ratings": null,
+    "steamAppId": null,
+    "psnStorePath": "concept/10007284",
+    "coverage": []
+  },
+  {
+    "id": "cocoon",
+    "title": "COCOON",
+    "genre": "Puzzle",
+    "artStyle": "Isometric",
+    "protagonist": "Creature/Animal",
+    "tags": [
+      "graphics"
+    ],
+    "representation": [],
+    "description": "Carry worlds as orbs and jump between them, using each orb's power to activate bridges, switches, and paths for an insectoid traveler.",
+    "platform": "PS4",
+    "ps5Upgrade": null,
+    "ageRating": {
+      "family": "safe",
+      "concerns": [],
+      "tier": "everyone",
+      "source": "ESRB",
+      "rating": "E",
+      "official": true,
+      "esrb": "E",
+      "pegi": null,
+      "descriptors": [
+        "Mild Fantasy Violence"
+      ],
+      "interactive": [],
+      "notes": null
+    },
+    "ratings": null,
+    "steamAppId": null,
+    "psnStorePath": "concept/10005446",
+    "coverage": []
+  },
+  {
+    "id": "far-changing-tides",
+    "title": "FAR: Changing Tides",
+    "genre": "Exploration",
+    "artStyle": "3D",
+    "protagonist": "Male",
+    "tags": [],
+    "representation": [],
+    "description": "Operate a lone ship across flooded ruins, raising sails, repairing machinery, managing fuel, and diving below the surface to clear obstacles.",
+    "platform": "PS4",
+    "ps5Upgrade": null,
+    "ageRating": {
+      "family": "safe",
+      "concerns": [],
+      "tier": "everyone",
+      "source": "ESRB",
+      "rating": "E",
+      "official": true,
+      "esrb": "E",
+      "pegi": null,
+      "descriptors": [],
+      "interactive": [],
+      "notes": null
+    },
+    "ratings": null,
+    "steamAppId": null,
+    "psnStorePath": "concept/10002934",
+    "coverage": []
+  },
+  {
+    "id": "lost-in-random",
+    "title": "Lost in Random™",
+    "genre": "Action",
+    "artStyle": "Stylized",
+    "protagonist": "Female",
+    "tags": [
+      "graphics"
+    ],
+    "representation": [],
+    "description": "Guide Even through six realms, rolling a living die and spending coins on cards that summon weapons, traps, and abilities in battle.",
+    "platform": "PS4",
+    "ps5Upgrade": null,
+    "ageRating": {
+      "family": "mild",
+      "concerns": [],
+      "tier": "everyone10",
+      "source": "ESRB",
+      "rating": "E10",
+      "official": true,
+      "esrb": "E10",
+      "pegi": null,
+      "descriptors": [
+        "Fantasy Violence",
+        "Language",
+        "Use of Alcohol"
+      ],
+      "interactive": [],
+      "notes": null
+    },
+    "ratings": null,
+    "steamAppId": null,
+    "psnStorePath": "concept/10000653",
+    "coverage": []
+  },
+  {
+    "id": "chrono-cross-the-radical-dreamers-edition",
+    "title": "CHRONO CROSS: THE RADICAL DREAMERS EDITION",
+    "genre": "RPG",
+    "artStyle": "3D/2D Mix",
+    "protagonist": "Male",
+    "tags": [
+      "classic"
+    ],
+    "representation": [],
+    "description": "Recruit a sprawling party across parallel worlds, arranging elements by color on a battle grid and chaining physical hits into stronger techniques.",
+    "platform": "PS4",
+    "ps5Upgrade": "Backwards Compatible",
+    "ageRating": {
+      "family": "mild",
+      "concerns": [],
+      "tier": "teen",
+      "source": "ESRB",
+      "rating": "T",
+      "official": true,
+      "esrb": "T",
+      "pegi": null,
+      "descriptors": [
+        "Fantasy Violence",
+        "Mild Blood",
+        "Mild Language",
+        "Mild Suggestive Themes"
+      ],
+      "interactive": [],
+      "notes": null
+    },
+    "ratings": null,
+    "steamAppId": null,
+    "psnStorePath": "concept/10001136",
+    "coverage": []
+  },
+  {
+    "id": "poppy-playtime-chapter-2",
+    "title": "Poppy Playtime: Chapter 2",
+    "genre": "Puzzle",
+    "artStyle": "3D",
+    "protagonist": "Custom",
+    "tags": [],
+    "representation": [],
+    "description": "Explore the Game Station with the GrabPack's new green hand, surviving toy-themed test rooms and escaping Mommy Long Legs through the factory.",
+    "platform": "PS5",
+    "ps5Upgrade": "PS5 Only",
+    "ageRating": {
+      "family": "mild",
+      "concerns": [],
+      "tier": "teen",
+      "source": "ESRB",
+      "rating": "T",
+      "official": true,
+      "esrb": "T",
+      "pegi": null,
+      "descriptors": [
+        "Blood",
+        "Violence"
+      ],
+      "interactive": [],
+      "notes": null
+    },
+    "ratings": null,
+    "steamAppId": null,
+    "psnStorePath": "concept/10010437",
+    "coverage": []
+  },
+  {
+    "id": "the-first-berserker-khazan-standard-edition",
+    "title": "The First Berserker: Khazan Standard Edition",
+    "genre": "Action",
+    "artStyle": "3D",
+    "protagonist": "Male",
+    "tags": [],
+    "representation": [],
+    "description": "Master Khazan's stamina-driven combat with spears, greatswords, and dual blades, learning boss patterns through blocks, parries, and counters.",
+    "platform": "PS5",
+    "ps5Upgrade": "PS5 Only",
+    "ageRating": {
+      "family": "mature",
+      "concerns": [],
+      "tier": "mature",
+      "source": "ESRB",
+      "rating": "M",
+      "official": true,
+      "esrb": "M",
+      "pegi": null,
+      "descriptors": [
+        "Blood",
+        "Strong Language",
+        "Violence"
+      ],
+      "interactive": [],
+      "notes": null
+    },
+    "ratings": null,
+    "steamAppId": null,
+    "psnStorePath": "concept/10009937",
+    "coverage": []
+  },
+  {
+    "id": "dragon-quest-vii-reimagined",
+    "title": "DRAGON QUEST VII Reimagined",
+    "genre": "RPG",
+    "artStyle": "Stylized",
+    "protagonist": "Male",
+    "tags": [
+      "graphics"
+    ],
+    "representation": [],
+    "description": "Collect stone fragments to restore lost islands across time, building a party with two simultaneous vocations in streamlined turn-based battles.",
+    "platform": "PS5",
+    "ps5Upgrade": "PS5 Only",
+    "ageRating": {
+      "family": "mild",
+      "concerns": [],
+      "tier": "everyone10",
+      "source": "ESRB",
+      "rating": "E10",
+      "official": true,
+      "esrb": "E10",
+      "pegi": null,
+      "descriptors": [
+        "Comic Mischief",
+        "Fantasy Violence",
+        "Mild Blood",
+        "Mild Language",
+        "Mild Suggestive Themes",
+        "Use of Alcohol"
+      ],
+      "interactive": [],
+      "notes": null
+    },
+    "ratings": null,
+    "steamAppId": null,
+    "psnStorePath": "concept/10008842",
+    "coverage": []
+  },
+  {
+    "id": "tormented-souls",
+    "title": "Tormented Souls",
+    "genre": "Action",
+    "artStyle": "3D",
+    "protagonist": "Female",
+    "tags": [],
+    "representation": [],
+    "description": "Explore a mansion-hospital as Caroline Walker, managing scarce ammunition and solving inventory puzzles between fixed-camera creature encounters.",
+    "platform": "PS4",
+    "ps5Upgrade": null,
+    "ageRating": {
+      "family": "mature",
+      "concerns": [
+        "Blood and Gore",
+        "Intense Violence",
+        "Partial Nudity"
+      ],
+      "tier": "mature",
+      "source": "ESRB",
+      "rating": "M",
+      "official": true,
+      "esrb": "M",
+      "pegi": null,
+      "descriptors": [
+        "Blood and Gore",
+        "Intense Violence",
+        "Mild Language",
+        "Partial Nudity"
+      ],
+      "interactive": [],
+      "notes": null
+    },
+    "ratings": null,
+    "steamAppId": null,
+    "psnStorePath": "concept/10002062",
+    "coverage": []
+  },
+  {
+    "id": "broken-sword-shadow-of-the-templars-reforged",
+    "title": "Broken Sword - Shadow of the Templars: Reforged",
+    "genre": "Mystery",
+    "artStyle": "Hand-drawn",
+    "protagonist": "Male",
+    "tags": [
+      "classic"
+    ],
+    "representation": [],
+    "description": "Investigate a Templar conspiracy as George Stobbart, combining inventory items and questioning suspects through point-and-click puzzles.",
+    "platform": "PS4",
+    "ps5Upgrade": null,
+    "ageRating": {
+      "family": "mild",
+      "concerns": [],
+      "tier": "teen",
+      "source": "ESRB",
+      "rating": "T",
+      "official": true,
+      "esrb": "T",
+      "pegi": null,
+      "descriptors": [
+        "Blood",
+        "Drug Reference",
+        "Mild Language",
+        "Suggestive Themes",
+        "Use of Alcohol and Tobacco",
+        "Violence"
+      ],
+      "interactive": [],
+      "notes": null
+    },
+    "ratings": null,
+    "steamAppId": null,
+    "psnStorePath": "concept/10008760",
+    "coverage": []
+  },
+  {
+    "id": "cronos-the-new-dawn",
+    "title": "Cronos: The New Dawn",
+    "genre": "Action",
+    "artStyle": "3D",
+    "protagonist": "Female",
+    "tags": [],
+    "representation": [],
+    "description": "Fight through a ruined future as the Traveler, managing scarce ammo and stopping fallen monsters from merging into stronger forms.",
+    "platform": "PS5",
+    "ps5Upgrade": "PS5 Only",
+    "ageRating": {
+      "family": "mature",
+      "concerns": [
+        "Blood and Gore",
+        "Intense Violence"
+      ],
+      "tier": "mature",
+      "source": "ESRB",
+      "rating": "M",
+      "official": true,
+      "esrb": "M",
+      "pegi": null,
+      "descriptors": [
+        "Blood and Gore",
+        "Intense Violence",
+        "Strong Language"
+      ],
+      "interactive": [],
+      "notes": null
+    },
+    "ratings": null,
+    "steamAppId": null,
+    "psnStorePath": "concept/10011556",
+    "coverage": []
+  },
+  {
+    "id": "the-outlast-trials",
+    "title": "The Outlast Trials",
+    "genre": "Action",
+    "artStyle": "3D",
+    "protagonist": "Custom",
+    "tags": [
+      "social"
+    ],
+    "representation": [],
+    "description": "Sneak through lethal trials alone or in co-op, completing objectives while hiding from enemies and using rigs and items to survive.",
+    "platform": "PS4",
+    "ps5Upgrade": null,
+    "ageRating": {
+      "family": "mature",
+      "concerns": [
+        "Blood and Gore",
+        "Intense Violence",
+        "Nudity",
+        "Sexual Themes"
+      ],
+      "tier": "mature",
+      "source": "ESRB",
+      "rating": "M",
+      "official": true,
+      "esrb": "M",
+      "pegi": null,
+      "descriptors": [
+        "Blood and Gore",
+        "Drug Reference",
+        "Intense Violence",
+        "Nudity",
+        "Sexual Themes",
+        "Strong Language"
+      ],
+      "interactive": [
+        "Users Interact"
+      ],
+      "notes": null
+    },
+    "ratings": null,
+    "steamAppId": null,
+    "psnStorePath": "concept/10001988",
+    "coverage": []
+  },
+  {
+    "id": "alien-rogue-incursion-vr",
+    "title": "Alien: Rogue Incursion VR",
+    "genre": "Action",
+    "artStyle": "3D",
+    "protagonist": "Female",
+    "tags": [],
+    "representation": [],
+    "description": "Guide Zula Hendricks through a xenomorph-infested facility in VR, physically aiming firearms, reloading, and checking a motion tracker.",
+    "platform": "PS5",
+    "ps5Upgrade": "PS5 Only",
+    "ageRating": {
+      "family": "mature",
+      "concerns": [
+        "Blood and Gore",
+        "Intense Violence"
+      ],
+      "tier": "mature",
+      "source": "ESRB",
+      "rating": "M",
+      "official": true,
+      "esrb": "M",
+      "pegi": null,
+      "descriptors": [
+        "Blood and Gore",
+        "Intense Violence",
+        "Strong Language"
+      ],
+      "interactive": [],
+      "notes": null
+    },
+    "ratings": null,
+    "steamAppId": null,
+    "psnStorePath": "concept/10004478",
+    "coverage": []
+  },
+  {
+    "id": "monster-hunter-stories-2-wings-of-ruin",
+    "title": "Monster Hunter Stories 2: Wings of Ruin",
+    "genre": "Creature Collection",
+    "artStyle": "3D",
+    "protagonist": "Custom",
+    "tags": [
+      "classic"
+    ],
+    "representation": [],
+    "description": "Hatch and raise Monsties, then fight turn-based battles by reading attack types and building Kinship for mounted special moves.",
+    "platform": "PS4",
+    "ps5Upgrade": "Backwards Compatible",
+    "ageRating": {
+      "family": "mild",
+      "concerns": [],
+      "tier": "everyone10",
+      "source": "ESRB",
+      "rating": "E10",
+      "official": true,
+      "esrb": "E10",
+      "pegi": null,
+      "descriptors": [
+        "Crude Humor",
+        "Fantasy Violence",
+        "Mild Language"
+      ],
+      "interactive": [
+        "In-Game Purchases",
+        "Users Interact"
+      ],
+      "notes": null
+    },
+    "ratings": null,
+    "steamAppId": null,
+    "psnStorePath": "concept/10007583",
+    "coverage": []
+  },
+  {
+    "id": "the-last-faith",
+    "title": "The Last Faith",
+    "genre": "Metroidvania",
+    "artStyle": "Pixel Art",
+    "protagonist": "Male",
+    "tags": [],
+    "representation": [],
+    "description": "Explore a decaying gothic world as Eryk, chaining firearms, melee weapons, and spells while unlocking movement powers to reach new areas.",
+    "platform": "PS4",
+    "ps5Upgrade": null,
+    "ageRating": {
+      "family": "mature",
+      "concerns": [
+        "Blood and Gore",
+        "Partial Nudity"
+      ],
+      "tier": "teen",
+      "source": "ESRB",
+      "rating": "T",
+      "official": true,
+      "esrb": "T",
+      "pegi": null,
+      "descriptors": [
+        "Blood and Gore",
+        "Partial Nudity",
+        "Violence"
+      ],
+      "interactive": [],
+      "notes": null
+    },
+    "ratings": null,
+    "steamAppId": null,
+    "psnStorePath": "concept/10005554",
+    "coverage": []
+  },
+  {
+    "id": "teardown",
+    "title": "Teardown",
+    "genre": "Puzzle",
+    "artStyle": "3D",
+    "protagonist": "Custom",
+    "tags": [],
+    "representation": [],
+    "description": "Plan sixty-second heists by smashing voxel buildings with vehicles and tools, then arranging routes to steal every target before security arrives.",
+    "platform": "PS5",
+    "ps5Upgrade": "PS5 Only",
+    "ageRating": {
+      "family": "mild",
+      "concerns": [],
+      "tier": "teen",
+      "source": "ESRB",
+      "rating": "T",
+      "official": true,
+      "esrb": "T",
+      "pegi": null,
+      "descriptors": [
+        "Drug Reference",
+        "Fantasy Violence",
+        "Mild Language"
+      ],
+      "interactive": [],
+      "notes": null
+    },
+    "ratings": null,
+    "steamAppId": null,
+    "psnStorePath": "concept/10007904",
+    "coverage": []
+  },
+  {
+    "id": "bramble-the-mountain-king",
+    "title": "Bramble: The Mountain King",
+    "genre": "Platformer",
+    "artStyle": "3D",
+    "protagonist": "Male",
+    "tags": [
+      "graphics"
+    ],
+    "representation": [],
+    "description": "Guide Olle through a grim Nordic fable, scrambling across giant roots and ruins, solving environmental puzzles, and evading folklore monsters.",
+    "platform": "PS4",
+    "ps5Upgrade": null,
+    "ageRating": {
+      "family": "mature",
+      "concerns": [
+        "Blood and Gore",
+        "Intense Violence",
+        "Partial Nudity"
+      ],
+      "tier": "mature",
+      "source": "ESRB",
+      "rating": "M",
+      "official": true,
+      "esrb": "M",
+      "pegi": null,
+      "descriptors": [
+        "Blood and Gore",
+        "Intense Violence",
+        "Partial Nudity"
+      ],
+      "interactive": [],
+      "notes": null
+    },
+    "ratings": null,
+    "steamAppId": null,
+    "psnStorePath": "concept/10004805",
+    "coverage": []
+  },
+  {
+    "id": "visage",
+    "title": "VISAGE",
+    "genre": "Puzzle",
+    "artStyle": "3D",
+    "protagonist": "Male",
+    "tags": [],
+    "representation": [],
+    "description": "Explore a shifting house as Dwayne, managing light and sanity while finding key items and solving environmental puzzles without weapons.",
+    "platform": "PS4",
+    "ps5Upgrade": null,
+    "ageRating": {
+      "family": "mature",
+      "concerns": [
+        "Blood and Gore",
+        "Intense Violence"
+      ],
+      "tier": "mature",
+      "source": "ESRB",
+      "rating": "M",
+      "official": true,
+      "esrb": "M",
+      "pegi": null,
+      "descriptors": [
+        "Blood and Gore",
+        "Intense Violence",
+        "Strong Language",
+        "Use of Alcohol"
+      ],
+      "interactive": [],
+      "notes": null
+    },
+    "ratings": null,
+    "steamAppId": null,
+    "psnStorePath": "concept/10001581",
+    "coverage": []
+  },
+  {
+    "id": "south-of-midnight-weaver-s-edition",
+    "title": "South of Midnight Weaver's Edition",
+    "genre": "Action",
+    "artStyle": "Stylized",
+    "protagonist": "Female",
+    "tags": [
+      "graphics"
+    ],
+    "representation": [],
+    "description": "Fight Haints and traverse bayous as Hazel, combining weaving spells, double jumps, gliding, and wall-running through Southern folklore.",
+    "platform": "PS5",
+    "ps5Upgrade": "PS5 Only",
+    "ageRating": {
+      "family": "mature",
+      "concerns": [],
+      "tier": "mature",
+      "source": "ESRB",
+      "rating": "M",
+      "official": true,
+      "esrb": "M",
+      "pegi": null,
+      "descriptors": [
+        "Blood",
+        "Strong Language",
+        "Violence"
+      ],
+      "interactive": [],
+      "notes": null
+    },
+    "ratings": null,
+    "steamAppId": null,
+    "psnStorePath": "concept/10014874",
+    "coverage": []
+  },
+  {
+    "id": "star-wars-zero-company",
+    "title": "STAR WARS Zero Company™",
+    "genre": "RPG",
+    "artStyle": "Isometric",
+    "protagonist": "Custom",
+    "tags": [],
+    "representation": [],
+    "description": "Command customizable mercenary Hawks and a squad in turn-based missions, using cover, class abilities, and bond-powered combat synergies.",
+    "platform": "PS5",
+    "ps5Upgrade": "PS5 Only",
+    "ageRating": {
+      "family": "mild",
+      "concerns": [],
+      "tier": "teen",
+      "source": "ESRB",
+      "rating": "T",
+      "official": true,
+      "esrb": "T",
+      "pegi": null,
+      "descriptors": [
+        "Mild Language",
+        "Violence"
+      ],
+      "interactive": [],
+      "notes": null
+    },
+    "ratings": null,
+    "steamAppId": null,
+    "psnStorePath": "concept/10009029",
+    "coverage": []
+  },
+  {
+    "id": "7-days-to-die-console-edition",
+    "title": "7 Days to Die - Console Edition",
+    "genre": "Action",
+    "artStyle": "3D",
+    "protagonist": "Custom",
+    "tags": [
+      "social"
+    ],
+    "representation": [],
+    "description": "Scavenge and fortify a base against weekly zombie hordes, crafting weapons, traps, and vehicles alone or in online co-op.",
+    "platform": "PS5",
+    "ps5Upgrade": "PS5 Only",
+    "ageRating": {
+      "family": "mature",
+      "concerns": [
+        "Blood and Gore",
+        "Intense Violence"
+      ],
+      "tier": "mature",
+      "source": "ESRB",
+      "rating": "M",
+      "official": true,
+      "esrb": "M",
+      "pegi": null,
+      "descriptors": [
+        "Blood and Gore",
+        "Intense Violence",
+        "Strong Language",
+        "Suggestive Themes",
+        "Use of Alcohol"
+      ],
+      "interactive": [
+        "In-Game Purchases",
+        "Users Interact"
+      ],
+      "notes": null
+    },
+    "ratings": null,
+    "steamAppId": null,
+    "psnStorePath": "concept/10008451",
+    "coverage": []
+  },
+  {
+    "id": "medieval-dynasty",
+    "title": "Medieval Dynasty",
+    "genre": "Life Sim",
+    "artStyle": "3D",
+    "protagonist": "Custom",
+    "tags": [
+      "social"
+    ],
+    "representation": [],
+    "description": "Build a medieval settlement by hunting, farming, crafting, managing villagers' needs, and founding a family dynasty alone or in co-op.",
+    "platform": "PS5",
+    "ps5Upgrade": "PS5 Only",
+    "ageRating": {
+      "family": "mild",
+      "concerns": [],
+      "tier": "teen",
+      "source": "ESRB",
+      "rating": "T",
+      "official": true,
+      "esrb": "T",
+      "pegi": null,
+      "descriptors": [
+        "Blood",
+        "Mild Language",
+        "Suggestive Themes",
+        "Use of Alcohol",
+        "Violence"
+      ],
+      "interactive": [],
+      "notes": null
+    },
+    "ratings": null,
+    "steamAppId": null,
+    "psnStorePath": "concept/10005204",
+    "coverage": []
+  },
+  {
+    "id": "still-wakes-the-deep",
+    "title": "Still Wakes the Deep",
+    "genre": "Narrative",
+    "artStyle": "3D",
+    "protagonist": "Male",
+    "tags": [],
+    "representation": [],
+    "description": "Escape a collapsing oil rig as electrician Caz McLeary, running, climbing, and hiding from creatures with no way to fight back.",
+    "platform": "PS5",
+    "ps5Upgrade": "PS5 Only",
+    "ageRating": {
+      "family": "mature",
+      "concerns": [
+        "Blood and Gore",
+        "Partial Nudity"
+      ],
+      "tier": "mature",
+      "source": "ESRB",
+      "rating": "M",
+      "official": true,
+      "esrb": "M",
+      "pegi": null,
+      "descriptors": [
+        "Blood and Gore",
+        "Partial Nudity",
+        "Strong Language",
+        "Violence"
+      ],
+      "interactive": [],
+      "notes": null
+    },
+    "ratings": null,
+    "steamAppId": null,
+    "psnStorePath": "concept/10005163",
+    "coverage": []
+  },
+  {
+    "id": "untitled-goose-game",
+    "title": "Untitled Goose Game",
+    "genre": "Puzzle",
+    "artStyle": "Stylized",
+    "protagonist": "Creature/Animal",
+    "tags": [
+      "cozy",
+      "social"
+    ],
+    "representation": [],
+    "description": "Waddle through a village as a horrible goose, stealing objects, honking at locals, and completing to-do lists alone or with a second goose.",
+    "platform": "PS4",
+    "ps5Upgrade": "Backwards Compatible",
+    "ageRating": {
+      "family": "safe",
+      "concerns": [],
+      "tier": "everyone",
+      "source": "ESRB",
+      "rating": "E",
+      "official": true,
+      "esrb": "E",
+      "pegi": null,
+      "descriptors": [],
+      "interactive": [],
+      "notes": null
+    },
+    "ratings": null,
+    "steamAppId": null,
+    "psnStorePath": "concept/10000039",
+    "coverage": []
+  },
+  {
+    "id": "contra-operation-galuga",
+    "title": "Contra: Operation Galuga",
+    "genre": "Action",
+    "artStyle": "3D/2D Mix",
+    "protagonist": "Ensemble",
+    "tags": [
+      "social"
+    ],
+    "representation": [],
+    "description": "Run and gun through side-scrolling stages with Bill, Lance, and other commandos, swapping weapons and chaining jumps in two-player co-op.",
+    "platform": "PS4",
+    "ps5Upgrade": null,
+    "ageRating": {
+      "family": "mild",
+      "concerns": [],
+      "tier": "teen",
+      "source": "ESRB",
+      "rating": "T",
+      "official": true,
+      "esrb": "T",
+      "pegi": null,
+      "descriptors": [
+        "Fantasy Violence",
+        "Mild Blood",
+        "Mild Language"
+      ],
+      "interactive": [],
+      "notes": null
+    },
+    "ratings": null,
+    "steamAppId": null,
+    "psnStorePath": "concept/10007962",
+    "coverage": []
+  },
+  {
+    "id": "s-t-a-l-k-e-r-2-heart-of-chornobyl",
+    "title": "S.T.A.L.K.E.R. 2: Heart of Chornobyl",
+    "genre": "Action",
+    "artStyle": "3D",
+    "protagonist": "Male",
+    "tags": [],
+    "representation": [],
+    "description": "Explore the Zone as Skif, scavenging weapons and supplies, scanning for deadly anomalies, and fighting mutants and rival factions.",
+    "platform": "PS5",
+    "ps5Upgrade": "PS5 Only",
+    "ageRating": {
+      "family": "mature",
+      "concerns": [
+        "Blood and Gore",
+        "Intense Violence"
+      ],
+      "tier": "mature",
+      "source": "ESRB",
+      "rating": "M",
+      "official": true,
+      "esrb": "M",
+      "pegi": null,
+      "descriptors": [
+        "Blood and Gore",
+        "Intense Violence",
+        "Strong Language",
+        "Use of Alcohol and Tobacco"
+      ],
+      "interactive": [],
+      "notes": null
+    },
+    "ratings": null,
+    "steamAppId": null,
+    "psnStorePath": "concept/10014084",
+    "coverage": []
+  },
+  {
+    "id": "nioh-3",
+    "title": "Nioh 3",
+    "genre": "Action",
+    "artStyle": "3D",
+    "protagonist": "Custom",
+    "tags": [],
+    "representation": [],
+    "description": "Create a warrior and switch freely between Samurai and Ninja styles, mastering stances, dodges, and skills across open battlefields.",
+    "platform": "PS5",
+    "ps5Upgrade": "PS5 Only",
+    "ageRating": {
+      "family": "mature",
+      "concerns": [
+        "Blood and Gore"
+      ],
+      "tier": "mature",
+      "source": "ESRB",
+      "rating": "M",
+      "official": true,
+      "esrb": "M",
+      "pegi": null,
+      "descriptors": [
+        "Blood and Gore",
+        "Suggestive Themes",
+        "Violence"
+      ],
+      "interactive": [
+        "In-Game Purchases",
+        "Users Interact"
+      ],
+      "notes": null
+    },
+    "ratings": null,
+    "steamAppId": null,
+    "psnStorePath": "concept/10014010",
+    "coverage": []
+  },
+  {
+    "id": "the-elder-scrolls-iv-oblivion-remastered",
+    "title": "The Elder Scrolls IV: Oblivion Remastered",
+    "genre": "RPG",
+    "artStyle": "3D",
+    "protagonist": "Custom",
+    "tags": [
+      "classic"
+    ],
+    "representation": [],
+    "description": "Create a hero, explore Cyrodiil's open world, join guilds, and close Oblivion gates through real-time combat, stealth, and spellcasting.",
+    "platform": "PS5",
+    "ps5Upgrade": "PS5 Only",
+    "ageRating": {
+      "family": "mature",
+      "concerns": [
+        "Blood and Gore",
+        "Sexual Themes"
+      ],
+      "tier": "mature",
+      "source": "ESRB",
+      "rating": "M",
+      "official": true,
+      "esrb": "M",
+      "pegi": null,
+      "descriptors": [
+        "Blood and Gore",
+        "Sexual Themes",
+        "Violence"
+      ],
+      "interactive": [
+        "In-Game Purchases"
+      ],
+      "notes": null
+    },
+    "ratings": null,
+    "steamAppId": null,
+    "psnStorePath": "concept/10010248",
+    "coverage": []
+  },
+  {
+    "id": "viewfinder",
+    "title": "Viewfinder",
+    "genre": "Puzzle",
+    "artStyle": "3D",
+    "protagonist": "Custom",
+    "tags": [
+      "graphics"
+    ],
+    "representation": [],
+    "description": "Hold up photographs and paintings to turn their images into solid spaces, then walk through them to solve perspective-bending puzzles.",
+    "platform": "PS4",
+    "ps5Upgrade": null,
+    "ageRating": {
+      "family": "safe",
+      "concerns": [],
+      "tier": "everyone",
+      "source": "ESRB",
+      "rating": "E",
+      "official": true,
+      "esrb": "E",
+      "pegi": null,
+      "descriptors": [
+        "Mild Language"
+      ],
+      "interactive": [],
+      "notes": null
+    },
+    "ratings": null,
+    "steamAppId": null,
+    "psnStorePath": "concept/10006160",
+    "coverage": []
+  },
+  {
+    "id": "mandragora-whispers-of-the-witch-tree",
+    "title": "Mandragora: Whispers of the Witch Tree",
+    "genre": "Metroidvania",
+    "artStyle": "Stylized",
+    "protagonist": "Custom",
+    "tags": [],
+    "representation": [],
+    "description": "Explore interconnected regions as an Inquisitor, combining class-based combat with grappling and movement upgrades that open new paths.",
+    "platform": "PS5",
+    "ps5Upgrade": "PS5 Only",
+    "ageRating": {
+      "family": "mature",
+      "concerns": [
+        "Blood and Gore"
+      ],
+      "tier": "mature",
+      "source": "ESRB",
+      "rating": "M",
+      "official": true,
+      "esrb": "M",
+      "pegi": null,
+      "descriptors": [
+        "Blood and Gore",
+        "Strong Language",
+        "Suggestive Themes",
+        "Violence"
+      ],
+      "interactive": [],
+      "notes": null
+    },
+    "ratings": null,
+    "steamAppId": null,
+    "psnStorePath": "concept/10004736",
+    "coverage": []
+  },
+  {
+    "id": "crisis-core-final-fantasy-vii-reunion",
+    "title": "CRISIS CORE –FINAL FANTASY VII– REUNION",
+    "genre": "RPG",
+    "artStyle": "3D",
+    "protagonist": "Male",
+    "tags": [
+      "classic"
+    ],
+    "representation": [],
+    "description": "Fight real-time battles as Zack Fair, chaining sword attacks and materia while a slot-like system triggers limit breaks and summons.",
+    "platform": "PS4",
+    "ps5Upgrade": null,
+    "ageRating": {
+      "family": "mild",
+      "concerns": [],
+      "tier": "teen",
+      "source": "ESRB",
+      "rating": "T",
+      "official": true,
+      "esrb": "T",
+      "pegi": null,
+      "descriptors": [
+        "Blood",
+        "Violence"
+      ],
+      "interactive": [],
+      "notes": null
+    },
+    "ratings": null,
+    "steamAppId": null,
+    "psnStorePath": "concept/10004142",
+    "coverage": []
+  },
+  {
+    "id": "nobody-saves-the-world",
+    "title": "Nobody Saves the World",
+    "genre": "RPG",
+    "artStyle": "2D",
+    "protagonist": "Custom",
+    "tags": [
+      "social"
+    ],
+    "representation": [],
+    "description": "Transform Nobody into a rat, ranger, horse, and other forms, combining their abilities to clear dungeons solo or in co-op.",
+    "platform": "PS4",
+    "ps5Upgrade": null,
+    "ageRating": {
+      "family": "mild",
+      "concerns": [],
+      "tier": "teen",
+      "source": "ESRB",
+      "rating": "T",
+      "official": true,
+      "esrb": "T",
+      "pegi": null,
+      "descriptors": [
+        "Animated Blood",
+        "Fantasy Violence",
+        "Mild Language"
+      ],
+      "interactive": [
+        "In-Game Purchases"
+      ],
+      "notes": null
+    },
+    "ratings": null,
+    "steamAppId": null,
+    "psnStorePath": "concept/10000853",
+    "coverage": []
+  },
+  {
+    "id": "honkai-star-rail",
+    "title": "Honkai: Star Rail",
+    "genre": "RPG",
+    "artStyle": "3D",
+    "protagonist": "Custom",
+    "tags": [],
+    "representation": [],
+    "description": "Lead a turn-based party across planets, exploiting elemental weaknesses, timing ultimates, and building teams around complementary Paths.",
+    "platform": "PS5",
+    "ps5Upgrade": "PS5 Only",
+    "ageRating": {
+      "family": "mild",
+      "concerns": [],
+      "tier": "teen",
+      "source": "ESRB",
+      "rating": "T",
+      "official": true,
+      "esrb": "T",
+      "pegi": null,
+      "descriptors": [
+        "Fantasy Violence",
+        "Mild Suggestive Themes",
+        "Simulated Gambling"
+      ],
+      "interactive": [
+        "In-Game Purchases (Includes Random Items)",
+        "Users Interact"
+      ],
+      "notes": null
+    },
+    "ratings": null,
+    "steamAppId": null,
+    "psnStorePath": "concept/10005275",
+    "coverage": []
+  },
+  {
+    "id": "choo-choo-charles",
+    "title": "Choo-Choo Charles",
+    "genre": "Action",
+    "artStyle": "3D",
+    "protagonist": "Custom",
+    "tags": [],
+    "representation": [],
+    "description": "Drive and upgrade an old train across an island, completing errands for scrap and fighting a spider-legged locomotive with mounted guns.",
+    "platform": "PS5",
+    "ps5Upgrade": "PS5 Only",
+    "ageRating": {
+      "family": "mature",
+      "concerns": [],
+      "tier": "mature",
+      "source": "ESRB",
+      "rating": "M",
+      "official": true,
+      "esrb": "M",
+      "pegi": null,
+      "descriptors": [
+        "Blood",
+        "Violence"
+      ],
+      "interactive": [],
+      "notes": null
+    },
+    "ratings": null,
+    "steamAppId": null,
+    "psnStorePath": "concept/10008639",
+    "coverage": []
+  },
+  {
+    "id": "octopath-traveler-ps4-ps5",
+    "title": "OCTOPATH TRAVELER PS4＆PS5",
+    "genre": "RPG",
+    "artStyle": "3D/2D Mix",
+    "protagonist": "Ensemble",
+    "tags": [
+      "graphics",
+      "classic"
+    ],
+    "representation": [],
+    "description": "Choose among eight travelers and explore their separate stories through turn-based battles built around shield breaks, boosts, and job skills.",
+    "platform": "PS4",
+    "ps5Upgrade": null,
+    "ageRating": {
+      "family": "mild",
+      "concerns": [],
+      "tier": "teen",
+      "source": "ESRB",
+      "rating": "T",
+      "official": true,
+      "esrb": "T",
+      "pegi": null,
+      "descriptors": [
+        "Blood",
+        "Fantasy Violence",
+        "Mild Language",
+        "Suggestive Themes",
+        "Use of Alcohol"
+      ],
+      "interactive": [],
+      "notes": null
+    },
+    "ratings": null,
+    "steamAppId": null,
+    "psnStorePath": "concept/10009066",
+    "coverage": []
+  },
+  {
+    "id": "high-on-life",
+    "title": "High On Life",
+    "genre": "Action",
+    "artStyle": "3D",
+    "protagonist": "Custom",
+    "tags": [],
+    "representation": [],
+    "description": "Use talking alien guns to fight through colorful planets, combining shooting with grappling, jetpack traversal, and bounty-hunting upgrades.",
+    "platform": "PS4",
+    "ps5Upgrade": null,
+    "ageRating": {
+      "family": "mature",
+      "concerns": [
+        "Blood and Gore",
+        "Nudity",
+        "Strong Sexual Content"
+      ],
+      "tier": "mature",
+      "source": "ESRB",
+      "rating": "M",
+      "official": true,
+      "esrb": "M",
+      "pegi": null,
+      "descriptors": [
+        "Blood and Gore",
+        "Crude Humor",
+        "Nudity",
+        "Strong Language",
+        "Strong Sexual Content",
+        "Use of Drugs"
+      ],
+      "interactive": [],
+      "notes": null
+    },
+    "ratings": null,
+    "steamAppId": null,
+    "psnStorePath": "concept/10007961",
+    "coverage": []
+  },
+  {
+    "id": "poppy-playtime-chapter-1",
+    "title": "Poppy Playtime: Chapter 1",
+    "genre": "Puzzle",
+    "artStyle": "3D",
+    "protagonist": "Custom",
+    "tags": [],
+    "representation": [],
+    "description": "Explore an abandoned toy factory and use extendable GrabPack hands to conduct electricity, pull objects, and solve puzzles while avoiding Huggy Wuggy.",
+    "platform": "PS5",
+    "ps5Upgrade": "PS5 Only",
+    "ageRating": {
+      "family": "mild",
+      "concerns": [],
+      "tier": "teen",
+      "source": "ESRB",
+      "rating": "T",
+      "official": true,
+      "esrb": "T",
+      "pegi": null,
+      "descriptors": [
+        "Blood",
+        "Violence"
+      ],
+      "interactive": [],
+      "notes": null
+    },
+    "ratings": null,
+    "steamAppId": null,
+    "psnStorePath": "concept/10009028",
+    "coverage": []
+  },
+  {
+    "id": "goat-simulator-3",
+    "title": "Goat Simulator 3",
+    "genre": "Party",
+    "artStyle": "3D",
+    "protagonist": "Creature/Animal",
+    "tags": [
+      "social"
+    ],
+    "representation": [],
+    "description": "Headbutt, lick, and launch objects across an open-world sandbox as a goat, causing physics chaos solo or with up to three friends.",
+    "platform": "PS4",
+    "ps5Upgrade": null,
+    "ageRating": {
+      "family": "mild",
+      "concerns": [],
+      "tier": "teen",
+      "source": "ESRB",
+      "rating": "T",
+      "official": true,
+      "esrb": "T",
+      "pegi": null,
+      "descriptors": [
+        "Crude Humor",
+        "Language",
+        "Violence"
+      ],
+      "interactive": [],
+      "notes": null
+    },
+    "ratings": null,
+    "steamAppId": null,
+    "psnStorePath": "concept/10003123",
+    "coverage": []
+  },
+  {
+    "id": "jurassic-world-evolution-2",
+    "title": "Jurassic World Evolution 2",
+    "genre": "Management",
+    "artStyle": "3D",
+    "protagonist": "Custom",
+    "tags": [],
+    "representation": [],
+    "description": "Build and manage dinosaur parks, balancing power, staff, guest facilities, and animal welfare while containing storms and escaped predators.",
+    "platform": "PS4",
+    "ps5Upgrade": null,
+    "ageRating": {
+      "family": "mild",
+      "concerns": [],
+      "tier": "teen",
+      "source": "ESRB",
+      "rating": "T",
+      "official": true,
+      "esrb": "T",
+      "pegi": null,
+      "descriptors": [
+        "Mild Blood",
+        "Violence"
+      ],
+      "interactive": [],
+      "notes": null
+    },
+    "ratings": null,
+    "steamAppId": null,
+    "psnStorePath": "concept/10002577",
+    "coverage": []
+  },
+  {
+    "id": "darwin-s-paradox",
+    "title": "Darwin's Paradox!",
+    "genre": "Platformer",
+    "artStyle": "3D",
+    "protagonist": "Creature/Animal",
+    "tags": [
+      "graphics"
+    ],
+    "representation": [],
+    "description": "Guide Darwin the octopus through an industrial complex, climbing with suction cups, swimming, camouflaging, and squirting ink to evade machines.",
+    "platform": "PS5",
+    "ps5Upgrade": "PS5 Only",
+    "ageRating": {
+      "family": "mild",
+      "concerns": [],
+      "tier": "everyone10",
+      "source": "ESRB",
+      "rating": "E10",
+      "official": true,
+      "esrb": "E10",
+      "pegi": null,
+      "descriptors": [
+        "Animated Blood",
+        "Crude Humor",
+        "Fantasy Violence"
+      ],
+      "interactive": [],
+      "notes": null
+    },
+    "ratings": null,
+    "steamAppId": null,
+    "psnStorePath": "concept/10014258",
+    "coverage": []
+  },
+  {
+    "id": "lost-records-bloom-rage",
+    "title": "Lost Records: Bloom & Rage",
+    "genre": "Narrative",
+    "artStyle": "3D",
+    "protagonist": "Female",
+    "tags": [
+      "queer"
+    ],
+    "representation": [],
+    "description": "Film the summer of 1995 with a camcorder as Swann, then make dialogue choices in 2022 to reconnect with three former friends.",
+    "platform": "PS5",
+    "ps5Upgrade": "PS5 Only",
+    "ageRating": {
+      "family": "mature",
+      "concerns": [
+        "Sexual Themes"
+      ],
+      "tier": "mature",
+      "source": "ESRB",
+      "rating": "M",
+      "official": true,
+      "esrb": "M",
+      "pegi": null,
+      "descriptors": [
+        "Mild Blood",
+        "Sexual Themes",
+        "Strong Language",
+        "Use of Drugs and Alcohol",
+        "Violence"
+      ],
+      "interactive": [],
+      "notes": null
+    },
+    "ratings": null,
+    "steamAppId": null,
+    "psnStorePath": "concept/10009639",
+    "coverage": []
+  },
+  {
+    "id": "metro-awakening",
+    "title": "Metro Awakening",
+    "genre": "Action",
+    "artStyle": "3D",
+    "protagonist": "Male",
+    "tags": [],
+    "representation": [],
+    "description": "Search the Moscow Metro for Serdar's missing wife in VR, manually reloading guns, replacing gas-mask filters, and sneaking past enemies.",
+    "platform": "PS5",
+    "ps5Upgrade": "PS5 Only",
+    "ageRating": {
+      "family": "mature",
+      "concerns": [
+        "Blood and Gore"
+      ],
+      "tier": "mature",
+      "source": "ESRB",
+      "rating": "M",
+      "official": true,
+      "esrb": "M",
+      "pegi": null,
+      "descriptors": [
+        "Blood and Gore",
+        "Strong Language",
+        "Violence"
+      ],
+      "interactive": [],
+      "notes": null
+    },
+    "ratings": null,
+    "steamAppId": null,
+    "psnStorePath": "concept/10009509",
+    "coverage": []
+  },
+  {
+    "id": "zenless-zone-zero",
+    "title": "Zenless Zone Zero",
+    "genre": "Action",
+    "artStyle": "3D",
+    "protagonist": "Custom",
+    "tags": [],
+    "representation": [],
+    "description": "Assemble three-agent teams for real-time battles, chaining dodges, assists, and attribute attacks between explorations of New Eridu's Hollows.",
+    "platform": "PS5",
+    "ps5Upgrade": "PS5 Only",
+    "ageRating": {
+      "family": "mild",
+      "concerns": [],
+      "tier": "teen",
+      "source": "ESRB",
+      "rating": "T",
+      "official": true,
+      "esrb": "T",
+      "pegi": null,
+      "descriptors": [
+        "Mild Blood",
+        "Mild Language",
+        "Suggestive Themes",
+        "Violence"
+      ],
+      "interactive": [
+        "In-Game Purchases (Includes Random Items)",
+        "Users Interact"
+      ],
+      "notes": null
+    },
+    "ratings": null,
+    "steamAppId": null,
+    "psnStorePath": "concept/10009763",
+    "coverage": []
+  },
+  {
+    "id": "horizon-call-of-the-mountain",
+    "title": "Horizon Call of the Mountain™",
+    "genre": "Action",
+    "artStyle": "3D",
+    "protagonist": "Male",
+    "tags": [],
+    "representation": [],
+    "description": "Climb cliffs and explore the wilds as Ryas in VR, physically scaling rock faces, drawing a bow, and fighting machines.",
+    "platform": "PS5",
+    "ps5Upgrade": "PS5 Only",
+    "ageRating": {
+      "family": "mild",
+      "concerns": [],
+      "tier": "teen",
+      "source": "ESRB",
+      "rating": "T",
+      "official": true,
+      "esrb": "T",
+      "pegi": null,
+      "descriptors": [
+        "Fantasy Violence",
+        "Mild Language"
+      ],
+      "interactive": [],
+      "notes": null
+    },
+    "ratings": null,
+    "steamAppId": null,
+    "psnStorePath": "concept/10004029",
+    "coverage": []
+  },
+  {
+    "id": "nobody-wants-to-die",
+    "title": "Nobody Wants to Die",
+    "genre": "Mystery",
+    "artStyle": "3D",
+    "protagonist": "Male",
+    "tags": [],
+    "representation": [],
+    "description": "Investigate murders as detective James Karra in 2329, using reconstruction technology to rewind crime scenes and choose how to pursue leads.",
+    "platform": "PS5",
+    "ps5Upgrade": "PS5 Only",
+    "ageRating": {
+      "family": "mature",
+      "concerns": [
+        "Sexual Content"
+      ],
+      "tier": "mature",
+      "source": "ESRB",
+      "rating": "M",
+      "official": true,
+      "esrb": "M",
+      "pegi": null,
+      "descriptors": [
+        "Blood",
+        "Sexual Content",
+        "Strong Language",
+        "Use of Alcohol and Tobacco",
+        "Violence"
+      ],
+      "interactive": [],
+      "notes": null
+    },
+    "ratings": null,
+    "steamAppId": null,
+    "psnStorePath": "concept/10003635",
+    "coverage": []
+  },
+  {
+    "id": "copycat",
+    "title": "Copycat",
+    "genre": "Narrative",
+    "artStyle": "3D",
+    "protagonist": "Creature/Animal",
+    "tags": [],
+    "representation": [],
+    "description": "See the world through Dawn, a shelter cat adopted by an older woman, exploring home and neighborhood while another cat takes her place.",
+    "platform": "PS5",
+    "ps5Upgrade": "PS5 Only",
+    "ageRating": {
+      "family": "safe",
+      "concerns": [],
+      "tier": "everyone",
+      "source": "ESRB",
+      "rating": "E",
+      "official": true,
+      "esrb": "E",
+      "pegi": null,
+      "descriptors": [
+        "Mild Fantasy Violence"
+      ],
+      "interactive": [],
+      "notes": null
+    },
+    "ratings": null,
+    "steamAppId": null,
+    "psnStorePath": "concept/10009136",
+    "coverage": []
+  },
+  {
+    "id": "avowed",
+    "title": "Avowed",
+    "genre": "RPG",
+    "artStyle": "3D",
+    "protagonist": "Custom",
+    "tags": [],
+    "representation": [],
+    "description": "Create an envoy and explore the Living Lands, mixing firearms, melee weapons, and magic with companion abilities and branching quest choices.",
+    "platform": "PS5",
+    "ps5Upgrade": "PS5 Only",
+    "ageRating": {
+      "family": "mature",
+      "concerns": [
+        "Blood and Gore"
+      ],
+      "tier": "mature",
+      "source": "ESRB",
+      "rating": "M",
+      "official": true,
+      "esrb": "M",
+      "pegi": null,
+      "descriptors": [
+        "Blood and Gore",
+        "Strong Language",
+        "Violence"
+      ],
+      "interactive": [],
+      "notes": null
+    },
+    "ratings": null,
+    "steamAppId": null,
+    "psnStorePath": "concept/10012632",
+    "coverage": []
+  },
+  {
+    "id": "atelier-yumia-the-alchemist-of-memories-the-envi",
+    "title": "Atelier Yumia: The Alchemist of Memories & the Envisioned Land (PS4 & PS5)",
+    "genre": "RPG",
+    "artStyle": "3D",
+    "protagonist": "Female",
+    "tags": [],
+    "representation": [],
+    "description": "Explore vast regions as Yumia, gathering materials, synthesizing items through alchemy, and switching between melee and ranged attacks in combat.",
+    "platform": "PS4",
+    "ps5Upgrade": null,
+    "ageRating": {
+      "family": "mild",
+      "concerns": [],
+      "tier": "teen",
+      "source": "ESRB",
+      "rating": "T",
+      "official": true,
+      "esrb": "T",
+      "pegi": null,
+      "descriptors": [
+        "Fantasy Violence",
+        "Mild Blood",
+        "Mild Language",
+        "Suggestive Themes"
+      ],
+      "interactive": [],
+      "notes": null
+    },
+    "ratings": null,
+    "steamAppId": null,
+    "psnStorePath": "concept/10012240",
+    "coverage": []
+  },
+  {
+    "id": "silent-hill-f",
+    "title": "SILENT HILL f",
+    "genre": "Action",
+    "artStyle": "3D",
+    "protagonist": "Female",
+    "tags": [],
+    "representation": [],
+    "description": "Navigate 1960s Japan as Hinako, solving environmental puzzles and fighting monsters with melee weapons that degrade with use.",
+    "platform": "PS5",
+    "ps5Upgrade": "PS5 Only",
+    "ageRating": {
+      "family": "mature",
+      "concerns": [
+        "Blood and Gore",
+        "Intense Violence",
+        "Partial Nudity"
+      ],
+      "tier": "mature",
+      "source": "ESRB",
+      "rating": "M",
+      "official": true,
+      "esrb": "M",
+      "pegi": null,
+      "descriptors": [
+        "Blood and Gore",
+        "Intense Violence",
+        "Partial Nudity"
+      ],
+      "interactive": [],
+      "notes": null
+    },
+    "ratings": null,
+    "steamAppId": null,
+    "psnStorePath": "concept/10010242",
+    "coverage": []
+  },
+  {
+    "id": "fate-samurai-remnant-ps4-ps5",
+    "title": "Fate/Samurai Remnant(PS4 & PS5)",
+    "genre": "RPG",
+    "artStyle": "3D",
+    "protagonist": "Male",
+    "tags": [],
+    "representation": [],
+    "description": "Fight as swordsman Miyamoto Iori alongside Servant Saber, switching combat stances and unleashing linked techniques across Edo.",
+    "platform": "PS4",
+    "ps5Upgrade": null,
+    "ageRating": {
+      "family": "mature",
+      "concerns": [
+        "Blood and Gore"
+      ],
+      "tier": "teen",
+      "source": "ESRB",
+      "rating": "T",
+      "official": true,
+      "esrb": "T",
+      "pegi": null,
+      "descriptors": [
+        "Alcohol and Tobacco Reference",
+        "Blood and Gore",
+        "Language",
+        "Suggestive Themes",
+        "Violence"
+      ],
+      "interactive": [],
+      "notes": null
+    },
+    "ratings": null,
+    "steamAppId": null,
+    "psnStorePath": "concept/10004920",
+    "coverage": []
+  },
+  {
+    "id": "wobbly-life",
+    "title": "Wobbly Life",
+    "genre": "Party",
+    "artStyle": "3D",
+    "protagonist": "Custom",
+    "tags": [
+      "cozy",
+      "social"
+    ],
+    "representation": [],
+    "description": "Take odd jobs, drive vehicles, and hunt collectibles across an open island, with ragdoll physics and local or online co-op.",
+    "platform": "PS4",
+    "ps5Upgrade": null,
+    "ageRating": {
+      "family": "mild",
+      "concerns": [],
+      "tier": "everyone",
+      "source": "ESRB",
+      "rating": "E",
+      "official": true,
+      "esrb": "E",
+      "pegi": null,
+      "descriptors": [
+        "Crude Humor",
+        "Mild Fantasy Violence"
+      ],
+      "interactive": [],
+      "notes": null
+    },
+    "ratings": null,
+    "steamAppId": null,
+    "psnStorePath": "concept/10004896",
+    "coverage": []
+  },
+  {
+    "id": "this-war-of-mine-final-cut",
+    "title": "This War of Mine: Final Cut",
+    "genre": "Management",
+    "artStyle": "Hand-drawn",
+    "protagonist": "Ensemble",
+    "tags": [
+      "classic"
+    ],
+    "representation": [],
+    "description": "Control a group of civilians surviving a siege, scavenging at night and managing hunger, illness, shelter upgrades, and moral choices by day.",
+    "platform": "PS5",
+    "ps5Upgrade": "PS5 Only",
+    "ageRating": {
+      "family": "mature",
+      "concerns": [
+        "Mild Sexual Themes"
+      ],
+      "tier": "mature",
+      "source": "ESRB",
+      "rating": "M",
+      "official": true,
+      "esrb": "M",
+      "pegi": null,
+      "descriptors": [
+        "Blood",
+        "Mild Sexual Themes",
+        "Strong Language",
+        "Use of Alcohol and Tobacco",
+        "Violence"
+      ],
+      "interactive": [
+        "In-Game Purchases"
+      ],
+      "notes": null
+    },
+    "ratings": null,
+    "steamAppId": null,
+    "psnStorePath": "concept/10003699",
+    "coverage": []
+  },
+  {
+    "id": "metal-hellsinger-ps5",
+    "title": "Metal: Hellsinger (PS5)",
+    "genre": "Rhythm",
+    "artStyle": "3D",
+    "protagonist": "Female",
+    "tags": [],
+    "representation": [],
+    "description": "Shoot through Hell as the Unknown, timing attacks and reloads to the metal soundtrack to raise the score multiplier and damage output.",
+    "platform": "PS4",
+    "ps5Upgrade": null,
+    "ageRating": {
+      "family": "mature",
+      "concerns": [],
+      "tier": "mature",
+      "source": "ESRB",
+      "rating": "M",
+      "official": true,
+      "esrb": "M",
+      "pegi": null,
+      "descriptors": [
+        "Blood",
+        "Strong Language",
+        "Violence"
+      ],
+      "interactive": [
+        "In-Game Purchases"
+      ],
+      "notes": null
+    },
+    "ratings": null,
+    "steamAppId": null,
+    "psnStorePath": "concept/10001499",
+    "coverage": []
+  },
+  {
+    "id": "five-nights-at-freddy-s-security-breach",
+    "title": "Five Nights at Freddy's: Security Breach",
+    "genre": "Action",
+    "artStyle": "3D",
+    "protagonist": "Male",
+    "tags": [],
+    "representation": [],
+    "description": "Guide Gregory through a sprawling mall after hours, hiding from animatronics, checking security cameras, and completing objectives until morning.",
+    "platform": "PS4",
+    "ps5Upgrade": null,
+    "ageRating": {
+      "family": "mild",
+      "concerns": [],
+      "tier": "teen",
+      "source": "ESRB",
+      "rating": "T",
+      "official": true,
+      "esrb": "T",
+      "pegi": null,
+      "descriptors": [
+        "Fantasy Violence"
+      ],
+      "interactive": [],
+      "notes": null
+    },
+    "ratings": null,
+    "steamAppId": null,
+    "psnStorePath": "concept/10001137",
+    "coverage": []
+  },
+  {
+    "id": "genshin-impact-6th-anniversary",
+    "title": "Genshin Impact 6th Anniversary",
+    "genre": "RPG",
+    "artStyle": "3D",
+    "protagonist": "Custom",
+    "tags": [],
+    "representation": [],
+    "description": "Build a four-character party and explore an open world, chaining elemental reactions, solving puzzles, and upgrading weapons and artifacts.",
+    "platform": "PS5",
+    "ps5Upgrade": "PS5 Only",
+    "ageRating": {
+      "family": "mild",
+      "concerns": [],
+      "tier": "teen",
+      "source": "ESRB",
+      "rating": "T",
+      "official": true,
+      "esrb": "T",
+      "pegi": null,
+      "descriptors": [
+        "Fantasy Violence",
+        "Mild Language",
+        "Mild Suggestive Themes",
+        "Use of Alcohol"
+      ],
+      "interactive": [
+        "In-Game Purchases (Includes Random Items)",
+        "Users Interact"
+      ],
+      "notes": null
+    },
+    "ratings": null,
+    "steamAppId": null,
+    "psnStorePath": "concept/10000896",
+    "coverage": []
+  },
+  {
+    "id": "minecraft-dungeons",
+    "title": "Minecraft Dungeons",
+    "genre": "Action",
+    "artStyle": "Isometric",
+    "protagonist": "Custom",
+    "tags": [
+      "social"
+    ],
+    "representation": [],
+    "description": "Hack through monster-filled dungeons, collect randomized gear and artifacts, and unlock enchantments alone or in four-player local or online co-op.",
+    "platform": "PS4",
+    "ps5Upgrade": "Backwards Compatible",
+    "ageRating": {
+      "family": "safe",
+      "concerns": [],
+      "tier": "everyone10",
+      "source": "ESRB",
+      "rating": "E10",
+      "official": true,
+      "esrb": "E10",
+      "pegi": null,
+      "descriptors": [
+        "Fantasy Violence"
+      ],
+      "interactive": [
+        "In-Game Purchases",
+        "Users Interact"
+      ],
+      "notes": null
+    },
+    "ratings": null,
+    "steamAppId": null,
+    "psnStorePath": "concept/10000378",
+    "coverage": []
+  },
+  {
+    "id": "gladio-mori",
+    "title": "Gladio Mori",
+    "genre": "Action",
+    "artStyle": "3D",
+    "protagonist": "Custom",
+    "tags": [
+      "social"
+    ],
+    "representation": [],
+    "description": "Duel with physics-driven gladiators, editing custom attack animations and targeting muscles, arteries, and organs instead of draining health bars.",
+    "platform": "PS5",
+    "ps5Upgrade": "PS5 Only",
+    "ageRating": {
+      "family": "mature",
+      "concerns": [
+        "Intense Violence"
+      ],
+      "tier": "mature",
+      "source": "ESRB",
+      "rating": "M",
+      "official": true,
+      "esrb": "M",
+      "pegi": null,
+      "descriptors": [
+        "Blood",
+        "Intense Violence"
+      ],
+      "interactive": [
+        "Users Interact"
+      ],
+      "notes": null
+    },
+    "ratings": null,
+    "steamAppId": null,
+    "psnStorePath": "concept/10017920",
+    "coverage": []
+  },
+  {
+    "id": "bomb-rush-cyberfunk",
+    "title": "Bomb Rush Cyberfunk",
+    "genre": "Action",
+    "artStyle": "Cel-shaded",
+    "protagonist": "Male",
+    "tags": [
+      "graphics"
+    ],
+    "representation": [],
+    "description": "Grind, bike, skateboard, and spray graffiti across New Amsterdam, building combos and boosting away from police as Red.",
+    "platform": "PS4",
+    "ps5Upgrade": null,
+    "ageRating": {
+      "family": "mild",
+      "concerns": [],
+      "tier": "teen",
+      "source": "ESRB",
+      "rating": "T",
+      "official": true,
+      "esrb": "T",
+      "pegi": null,
+      "descriptors": [
+        "Blood",
+        "Language",
+        "Suggestive Themes",
+        "Violence"
+      ],
+      "interactive": [],
+      "notes": null
+    },
+    "ratings": null,
+    "steamAppId": null,
+    "psnStorePath": "concept/10004602",
+    "coverage": []
+  },
+  {
+    "id": "runescape-dragonwilds",
+    "title": "RuneScape: Dragonwilds",
+    "genre": "Action",
+    "artStyle": "3D",
+    "protagonist": "Custom",
+    "tags": [
+      "social"
+    ],
+    "representation": [],
+    "description": "Gather, craft, and build bases across Ashenfall, using Anima magic and melee combat to survive and challenge the Dragon Queen in co-op.",
+    "platform": "PS5",
+    "ps5Upgrade": "PS5 Only",
+    "ageRating": {
+      "family": "mild",
+      "concerns": [],
+      "tier": "teen",
+      "source": "ESRB",
+      "rating": "T",
+      "official": true,
+      "esrb": "T",
+      "pegi": null,
+      "descriptors": [
+        "Blood",
+        "Mild Language",
+        "Violence"
+      ],
+      "interactive": [
+        "In-Game Purchases",
+        "Users Interact"
+      ],
+      "notes": null
+    },
+    "ratings": null,
+    "steamAppId": null,
+    "psnStorePath": "concept/10017405",
+    "coverage": []
+  },
+  {
+    "id": "slime-rancher-2",
+    "title": "Slime Rancher 2",
+    "genre": "Creature Collection",
+    "artStyle": "3D",
+    "protagonist": "Female",
+    "tags": [
+      "cozy"
+    ],
+    "representation": [],
+    "description": "Explore Rainbow Island as Beatrix LeBeau, vacuuming up slimes, building corrals, and selling their plorts to expand your conservatory.",
+    "platform": "PS5",
+    "ps5Upgrade": "PS5 Only",
+    "ageRating": {
+      "family": "safe",
+      "concerns": [],
+      "tier": "everyone10",
+      "source": "ESRB",
+      "rating": "E10",
+      "official": true,
+      "esrb": "E10",
+      "pegi": null,
+      "descriptors": [
+        "Fantasy Violence"
+      ],
+      "interactive": [],
+      "notes": null
+    },
+    "ratings": null,
+    "steamAppId": null,
+    "psnStorePath": "concept/10009803",
+    "coverage": []
+  },
+  {
+    "id": "as-dusk-falls",
+    "title": "As Dusk Falls",
+    "genre": "Narrative",
+    "artStyle": "3D/2D Mix",
+    "protagonist": "Ensemble",
+    "tags": [
+      "graphics",
+      "social"
+    ],
+    "representation": [],
+    "description": "Shape two families' intertwined lives across thirty years through dialogue choices, investigation, and quick-time events, alone or by voting in co-op.",
+    "platform": "PS4",
+    "ps5Upgrade": null,
+    "ageRating": {
+      "family": "mature",
+      "concerns": [],
+      "tier": "mature",
+      "source": "ESRB",
+      "rating": "M",
+      "official": true,
+      "esrb": "M",
+      "pegi": null,
+      "descriptors": [
+        "Blood",
+        "Strong Language",
+        "Suggestive Themes",
+        "Use of Drugs and Alcohol",
+        "Violence"
+      ],
+      "interactive": [],
+      "notes": null
+    },
+    "ratings": null,
+    "steamAppId": null,
+    "psnStorePath": "concept/10008922",
+    "coverage": []
+  },
+  {
+    "id": "remnant-ii-standard-edition",
+    "title": "Remnant II® - Standard Edition",
+    "genre": "Action",
+    "artStyle": "3D",
+    "protagonist": "Custom",
+    "tags": [
+      "social"
+    ],
+    "representation": [],
+    "description": "Create a survivor from combined archetypes, then shoot and dodge through shifting worlds with modular firearms, melee weapons, and three-player co-op.",
+    "platform": "PS5",
+    "ps5Upgrade": "PS5 Only",
+    "ageRating": {
+      "family": "mature",
+      "concerns": [
+        "Blood and Gore",
+        "Partial Nudity"
+      ],
+      "tier": "mature",
+      "source": "ESRB",
+      "rating": "M",
+      "official": true,
+      "esrb": "M",
+      "pegi": null,
+      "descriptors": [
+        "Blood and Gore",
+        "Partial Nudity",
+        "Strong Language",
+        "Violence"
+      ],
+      "interactive": [
+        "Users Interact"
+      ],
+      "notes": null
+    },
+    "ratings": null,
+    "steamAppId": null,
+    "psnStorePath": "concept/10004544",
+    "coverage": []
+  },
+  {
+    "id": "the-dark-pictures-anthology-house-of-ashes",
+    "title": "The Dark Pictures Anthology: House of Ashes",
+    "genre": "Narrative",
+    "artStyle": "3D",
+    "protagonist": "Ensemble",
+    "tags": [
+      "social"
+    ],
+    "representation": [],
+    "description": "Guide a military unit and an Iraqi soldier through subterranean ruins, making choices and passing quick-time events to keep them alive.",
+    "platform": "PS4",
+    "ps5Upgrade": null,
+    "ageRating": {
+      "family": "mature",
+      "concerns": [
+        "Blood and Gore",
+        "Intense Violence",
+        "Mild Sexual Themes"
+      ],
+      "tier": "mature",
+      "source": "ESRB",
+      "rating": "M",
+      "official": true,
+      "esrb": "M",
+      "pegi": null,
+      "descriptors": [
+        "Blood and Gore",
+        "Drug Reference",
+        "Intense Violence",
+        "Mild Sexual Themes",
+        "Strong Language"
+      ],
+      "interactive": [
+        "In-Game Purchases",
+        "Users Interact"
+      ],
+      "notes": null
+    },
+    "ratings": null,
+    "steamAppId": null,
+    "psnStorePath": "concept/10001837",
+    "coverage": []
+  },
+  {
+    "id": "the-invincible",
+    "title": "The Invincible",
+    "genre": "Narrative",
+    "artStyle": "3D",
+    "protagonist": "Female",
+    "tags": [
+      "graphics"
+    ],
+    "representation": [],
+    "description": "Search Regis III for a missing crew as astrobiologist Yasna, using scanners, a rover, and dialogue choices to uncover a robotic ecosystem.",
+    "platform": "PS5",
+    "ps5Upgrade": "PS5 Only",
+    "ageRating": {
+      "family": "mature",
+      "concerns": [],
+      "tier": "mature",
+      "source": "ESRB",
+      "rating": "M",
+      "official": true,
+      "esrb": "M",
+      "pegi": null,
+      "descriptors": [
+        "Strong Language",
+        "Violence"
+      ],
+      "interactive": [],
+      "notes": null
+    },
+    "ratings": null,
+    "steamAppId": null,
+    "psnStorePath": "concept/10002666",
+    "coverage": []
+  },
+  {
+    "id": "crimson-desert-enhanced",
+    "title": "Crimson Desert Enhanced",
+    "genre": "Action",
+    "artStyle": "3D",
+    "protagonist": "Male",
+    "tags": [],
+    "representation": [],
+    "description": "Explore Pywel as Kliff, chaining weapon combos, grapples, and elemental attacks while riding mounts, gliding, and rebuilding the Greymanes.",
+    "platform": "PS5",
+    "ps5Upgrade": "PS5 Only",
+    "ageRating": {
+      "family": "mature",
+      "concerns": [
+        "Intense Violence"
+      ],
+      "tier": "mature",
+      "source": "ESRB",
+      "rating": "M",
+      "official": true,
+      "esrb": "M",
+      "pegi": null,
+      "descriptors": [
+        "Blood",
+        "Drug Reference",
+        "Intense Violence",
+        "Strong Language"
+      ],
+      "interactive": [],
+      "notes": null
+    },
+    "ratings": null,
+    "steamAppId": null,
+    "psnStorePath": "concept/10002363",
+    "coverage": []
+  },
+  {
+    "id": "carx-drift-racing-online",
+    "title": "CarX Drift Racing Online",
+    "genre": "Racing",
+    "artStyle": "3D",
+    "protagonist": "Custom",
+    "tags": [],
+    "representation": [],
+    "description": "Tune suspension and power for rear-wheel-drive drift cars, then link corners for points in solo events or online tandem rooms.",
+    "platform": "PS4",
+    "ps5Upgrade": "Backwards Compatible",
+    "ageRating": {
+      "family": "safe",
+      "concerns": [],
+      "tier": "everyone",
+      "source": "ESRB",
+      "rating": "E",
+      "official": true,
+      "esrb": "E",
+      "pegi": null,
+      "descriptors": [],
+      "interactive": [
+        "In-Game Purchases",
+        "Users Interact"
+      ],
+      "notes": null
+    },
+    "ratings": null,
+    "steamAppId": null,
+    "psnStorePath": "concept/10000161",
+    "coverage": []
+  },
+  {
+    "id": "wuthering-waves",
+    "title": "Wuthering Waves",
+    "genre": "RPG",
+    "artStyle": "3D",
+    "protagonist": "Custom",
+    "tags": [],
+    "representation": [],
+    "description": "Swap among three Resonators in real-time combat, chaining dodges, counters, and Echo skills while exploring an open world as the Rover.",
+    "platform": "PS5",
+    "ps5Upgrade": "PS5 Only",
+    "ageRating": {
+      "family": "mild",
+      "concerns": [],
+      "tier": "teen",
+      "source": "ESRB",
+      "rating": "T",
+      "official": true,
+      "esrb": "T",
+      "pegi": null,
+      "descriptors": [
+        "Mild Language",
+        "Suggestive Themes",
+        "Violence"
+      ],
+      "interactive": [
+        "In-Game Purchases (Includes Random Items)",
+        "Users Interact"
+      ],
+      "notes": null
+    },
+    "ratings": null,
+    "steamAppId": null,
+    "psnStorePath": "concept/10010764",
+    "coverage": []
+  },
+  {
+    "id": "fortnite-save-the-world",
+    "title": "Fortnite Save the World",
+    "genre": "Action",
+    "artStyle": "3D",
+    "protagonist": "Custom",
+    "tags": [
+      "social",
+      "classic"
+    ],
+    "representation": [],
+    "description": "Scavenge materials, build trapped forts, and defend objectives against husk waves while upgrading heroes, weapons, and survivor squads in co-op.",
+    "platform": "PS5",
+    "ps5Upgrade": "PS5 Only",
+    "ageRating": {
+      "family": "mild",
+      "concerns": [],
+      "tier": "teen",
+      "source": "ESRB",
+      "rating": "T",
+      "official": true,
+      "esrb": "T",
+      "pegi": null,
+      "descriptors": [
+        "Animated Blood",
+        "Suggestive Themes",
+        "Violence"
+      ],
+      "interactive": [
+        "In-Game Purchases",
+        "Users Interact"
+      ],
+      "notes": null
+    },
+    "ratings": null,
+    "steamAppId": null,
+    "psnStorePath": "concept/10018941",
+    "coverage": []
+  },
+  {
+    "id": "tainted-grail-the-fall-of-avalon",
+    "title": "Tainted Grail: The Fall of Avalon",
+    "genre": "RPG",
+    "artStyle": "3D",
+    "protagonist": "Custom",
+    "tags": [],
+    "representation": [],
+    "description": "Create a character and explore a dark Arthurian open world, mixing melee, ranged combat, and magic while making faction-shaping quest choices.",
+    "platform": "PS5",
+    "ps5Upgrade": "PS5 Only",
+    "ageRating": {
+      "family": "mature",
+      "concerns": [
+        "Blood and Gore",
+        "Intense Violence"
+      ],
+      "tier": "mature",
+      "source": "ESRB",
+      "rating": "M",
+      "official": true,
+      "esrb": "M",
+      "pegi": null,
+      "descriptors": [
+        "Blood and Gore",
+        "Intense Violence",
+        "Language",
+        "Use of Drugs"
+      ],
+      "interactive": [],
+      "notes": null
+    },
+    "ratings": null,
+    "steamAppId": null,
+    "psnStorePath": "concept/10009530",
+    "coverage": []
+  },
+  {
+    "id": "the-pedestrian",
+    "title": "The Pedestrian",
+    "genre": "Puzzle",
+    "artStyle": "3D/2D Mix",
+    "protagonist": "Custom",
+    "tags": [],
+    "representation": [],
+    "description": "Rearrange and connect public signs so a tiny stick figure can cross their doors, ladders, and hazards within a living city backdrop.",
+    "platform": "PS4",
+    "ps5Upgrade": null,
+    "ageRating": {
+      "family": "safe",
+      "concerns": [],
+      "tier": "everyone10",
+      "source": "ESRB",
+      "rating": "E10",
+      "official": true,
+      "esrb": "E10",
+      "pegi": null,
+      "descriptors": [
+        "Fantasy Violence",
+        "Mild Blood"
+      ],
+      "interactive": [],
+      "notes": null
+    },
+    "ratings": null,
+    "steamAppId": null,
+    "psnStorePath": "concept/10001568",
+    "coverage": []
+  },
+  {
+    "id": "high-on-life-2",
+    "title": "High On Life 2",
+    "genre": "Action",
+    "artStyle": "3D",
+    "protagonist": "Custom",
+    "tags": [],
+    "representation": [],
+    "description": "Fire talking alien guns while skateboarding, grinding rails, and solving environmental puzzles across bounty-hunting missions in Circuit Arcadia.",
+    "platform": "PS5",
+    "ps5Upgrade": "PS5 Only",
+    "ageRating": {
+      "family": "mature",
+      "concerns": [
+        "Blood and Gore",
+        "Intense Violence",
+        "Nudity",
+        "Strong Sexual Content"
+      ],
+      "tier": "mature",
+      "source": "ESRB",
+      "rating": "M",
+      "official": true,
+      "esrb": "M",
+      "pegi": null,
+      "descriptors": [
+        "Blood and Gore",
+        "Intense Violence",
+        "Nudity",
+        "Strong Language",
+        "Strong Sexual Content",
+        "Use of Drugs and Alcohol"
+      ],
+      "interactive": [],
+      "notes": null
+    },
+    "ratings": null,
+    "steamAppId": null,
+    "psnStorePath": "concept/10012995",
+    "coverage": []
+  },
+  {
+    "id": "warriors-abyss",
+    "title": "WARRIORS: Abyss",
+    "genre": "Action",
+    "artStyle": "3D",
+    "protagonist": "Custom",
+    "tags": [],
+    "representation": [],
+    "description": "Cut through underworld armies with a chosen hero, recruiting allies and stacking their traits across roguelite runs and boss battles.",
+    "platform": "PS4",
+    "ps5Upgrade": null,
+    "ageRating": {
+      "family": "mild",
+      "concerns": [],
+      "tier": "teen",
+      "source": "ESRB",
+      "rating": "T",
+      "official": true,
+      "esrb": "T",
+      "pegi": null,
+      "descriptors": [
+        "Alcohol Reference",
+        "Blood",
+        "Suggestive Themes",
+        "Violence"
+      ],
+      "interactive": [
+        "In-Game Purchases"
+      ],
+      "notes": null
+    },
+    "ratings": null,
+    "steamAppId": null,
+    "psnStorePath": "concept/10012449",
+    "coverage": []
+  },
+  {
+    "id": "reanimal",
+    "title": "REANIMAL",
+    "genre": "Platformer",
+    "artStyle": "3D",
+    "protagonist": "Ensemble",
+    "tags": [
+      "graphics",
+      "social"
+    ],
+    "representation": [],
+    "description": "Guide two siblings across a monstrous island, coordinating stealth, environmental puzzles, and cinematic platforming alone or in two-player co-op.",
+    "platform": "PS5",
+    "ps5Upgrade": "PS5 Only",
+    "ageRating": {
+      "family": "mature",
+      "concerns": [
+        "Blood and Gore",
+        "Partial Nudity"
+      ],
+      "tier": "mature",
+      "source": "ESRB",
+      "rating": "M",
+      "official": true,
+      "esrb": "M",
+      "pegi": null,
+      "descriptors": [
+        "Blood and Gore",
+        "Partial Nudity",
+        "Violence"
+      ],
+      "interactive": [
+        "In-Game Purchases"
+      ],
+      "notes": null
+    },
+    "ratings": null,
+    "steamAppId": null,
+    "psnStorePath": "concept/10010999",
+    "coverage": []
+  },
+  {
+    "id": "chained-echoes",
+    "title": "Chained Echoes",
+    "genre": "RPG",
+    "artStyle": "Pixel Art",
+    "protagonist": "Ensemble",
+    "tags": [],
+    "representation": [],
+    "description": "Command a party through turn-based battles without random encounters, managing an Overdrive gauge, swapping fighters, and piloting mechs.",
+    "platform": "PS4",
+    "ps5Upgrade": "Backwards Compatible",
+    "ageRating": {
+      "family": "mature",
+      "concerns": [
+        "Sexual Themes"
+      ],
+      "tier": "mature",
+      "source": "ESRB",
+      "rating": "M",
+      "official": true,
+      "esrb": "M",
+      "pegi": null,
+      "descriptors": [
+        "Sexual Themes",
+        "Strong Language"
+      ],
+      "interactive": [],
+      "notes": null
+    },
+    "ratings": null,
+    "steamAppId": null,
+    "psnStorePath": "concept/10003362",
+    "coverage": []
+  },
+  {
+    "id": "scott-pilgrim-vs-the-world-the-game-complete-edi",
+    "title": "Scott Pilgrim vs. The World™: The Game – Complete Edition",
+    "genre": "Action",
+    "artStyle": "Pixel Art",
+    "protagonist": "Ensemble",
+    "tags": [
+      "social",
+      "classic"
+    ],
+    "representation": [],
+    "description": "Brawl through side-scrolling Toronto stages as Scott and friends, collecting coins, buying upgrades, and wielding improvised weapons in local co-op.",
+    "platform": "PS4",
+    "ps5Upgrade": "Backwards Compatible",
+    "ageRating": {
+      "family": "mature",
+      "concerns": [
+        "Partial Nudity"
+      ],
+      "tier": "teen",
+      "source": "ESRB",
+      "rating": "T",
+      "official": true,
+      "esrb": "T",
+      "pegi": null,
+      "descriptors": [
+        "Cartoon Violence",
+        "Language",
+        "Mild Blood",
+        "Partial Nudity"
+      ],
+      "interactive": [
+        "Users Interact"
+      ],
+      "notes": null
+    },
+    "ratings": null,
+    "steamAppId": null,
+    "psnStorePath": "concept/10000698",
+    "coverage": []
+  },
+  {
+    "id": "house-flipper",
+    "title": "House Flipper",
+    "genre": "Management",
+    "artStyle": "3D",
+    "protagonist": "Custom",
+    "tags": [
+      "cozy"
+    ],
+    "representation": [],
+    "description": "Clean, repair, paint, and furnish rundown homes through hands-on jobs, then buy properties and renovate them for resale.",
+    "platform": "PS4",
+    "ps5Upgrade": "Backwards Compatible",
+    "ageRating": {
+      "family": "safe",
+      "concerns": [],
+      "tier": "everyone",
+      "source": "ESRB",
+      "rating": "E",
+      "official": true,
+      "esrb": "E",
+      "pegi": null,
+      "descriptors": [],
+      "interactive": [],
+      "notes": null
+    },
+    "ratings": null,
+    "steamAppId": null,
+    "psnStorePath": "concept/10000044",
+    "coverage": []
+  },
+  {
+    "id": "nascar-25",
+    "title": "NASCAR 25",
+    "genre": "Racing",
+    "artStyle": "3D",
+    "protagonist": "Custom",
+    "tags": [],
+    "representation": [],
+    "description": "Race stock cars through a multi-series career, adjusting setups, managing pit stops, and using drafting and track position to reach the front.",
+    "platform": "PS5",
+    "ps5Upgrade": "PS5 Only",
+    "ageRating": {
+      "family": "mild",
+      "concerns": [],
+      "tier": "everyone",
+      "source": "ESRB",
+      "rating": "E",
+      "official": true,
+      "esrb": "E",
+      "pegi": null,
+      "descriptors": [
+        "Alcohol Reference",
+        "Mild Language"
+      ],
+      "interactive": [
+        "In-Game Purchases",
+        "Users Interact"
+      ],
+      "notes": null
+    },
+    "ratings": null,
+    "steamAppId": null,
+    "psnStorePath": "concept/10014332",
+    "coverage": []
+  },
+  {
+    "id": "the-thaumaturge",
+    "title": "The Thaumaturge",
+    "genre": "RPG",
+    "artStyle": "Isometric",
+    "protagonist": "Male",
+    "tags": [],
+    "representation": [],
+    "description": "Investigate supernatural cases in 1905 Warsaw as Wiktor, using Salutors to read people, exploit character flaws, and win turn-based battles.",
+    "platform": "PS5",
+    "ps5Upgrade": "PS5 Only",
+    "ageRating": {
+      "family": "mature",
+      "concerns": [
+        "Partial Nudity",
+        "Sexual Themes"
+      ],
+      "tier": "mature",
+      "source": "ESRB",
+      "rating": "M",
+      "official": true,
+      "esrb": "M",
+      "pegi": null,
+      "descriptors": [
+        "Blood",
+        "Drug Reference",
+        "Partial Nudity",
+        "Sexual Themes",
+        "Strong Language",
+        "Violence"
+      ],
+      "interactive": [],
+      "notes": null
+    },
+    "ratings": null,
+    "steamAppId": null,
+    "psnStorePath": "concept/10007126",
+    "coverage": []
+  },
+  {
+    "id": "banishers-ghosts-of-new-eden",
+    "title": "Banishers: Ghosts of New Eden",
+    "genre": "RPG",
+    "artStyle": "3D",
+    "protagonist": "Ensemble",
+    "tags": [],
+    "representation": [],
+    "description": "Switch between Red's weapons and Antea's spectral powers to fight spirits, investigate hauntings, and make choices that alter their relationship.",
+    "platform": "PS5",
+    "ps5Upgrade": "PS5 Only",
+    "ageRating": {
+      "family": "mature",
+      "concerns": [
+        "Blood and Gore"
+      ],
+      "tier": "teen",
+      "source": "ESRB",
+      "rating": "T",
+      "official": true,
+      "esrb": "T",
+      "pegi": null,
+      "descriptors": [
+        "Blood and Gore",
+        "Language",
+        "Use of Alcohol and Tobacco",
+        "Violence"
+      ],
+      "interactive": [],
+      "notes": null
+    },
+    "ratings": null,
+    "steamAppId": null,
+    "psnStorePath": "concept/10006098",
+    "coverage": []
+  },
+  {
+    "id": "under-the-waves",
+    "title": "Under The Waves",
+    "genre": "Narrative",
+    "artStyle": "3D",
+    "protagonist": "Male",
+    "tags": [
+      "disability"
+    ],
+    "representation": [],
+    "description": "Pilot a submarine and swim through wrecks as Stan, managing oxygen, salvaging materials, and crafting equipment while confronting isolation and grief.",
+    "platform": "PS4",
+    "ps5Upgrade": null,
+    "ageRating": {
+      "family": "mature",
+      "concerns": [],
+      "tier": "mature",
+      "source": "ESRB",
+      "rating": "M",
+      "official": true,
+      "esrb": "M",
+      "pegi": null,
+      "descriptors": [
+        "Mild Violence",
+        "Strong Language"
+      ],
+      "interactive": [],
+      "notes": null
+    },
+    "ratings": null,
+    "steamAppId": null,
+    "psnStorePath": "concept/10005244",
+    "coverage": []
+  },
+  {
+    "id": "forever-skies",
+    "title": "Forever Skies",
+    "genre": "Exploration",
+    "artStyle": "3D",
+    "protagonist": "Custom",
+    "tags": [
+      "social"
+    ],
+    "representation": [],
+    "description": "Expand and customize an airship above a ruined Earth, then descend to scavenge, craft tools, and manage survival needs alone or in co-op.",
+    "platform": "PS5",
+    "ps5Upgrade": "PS5 Only",
+    "ageRating": {
+      "family": "mild",
+      "concerns": [],
+      "tier": "teen",
+      "source": "ESRB",
+      "rating": "T",
+      "official": true,
+      "esrb": "T",
+      "pegi": null,
+      "descriptors": [
+        "Blood",
+        "Mild Language",
+        "Violence"
+      ],
+      "interactive": [],
+      "notes": null
+    },
+    "ratings": null,
+    "steamAppId": null,
+    "psnStorePath": "concept/10004499",
+    "coverage": []
+  },
+  {
+    "id": "the-quarry-for-ps5",
+    "title": "The Quarry for PS5™",
+    "genre": "Narrative",
+    "artStyle": "3D",
+    "protagonist": "Ensemble",
+    "tags": [
+      "social"
+    ],
+    "representation": [],
+    "description": "Control nine camp counselors through a night of horror, making choices, finding evidence, and passing quick-time events to determine survivors.",
+    "platform": "PS5",
+    "ps5Upgrade": "PS5 Only",
+    "ageRating": {
+      "family": "mature",
+      "concerns": [
+        "Blood and Gore",
+        "Intense Violence",
+        "Mild Sexual Themes"
+      ],
+      "tier": "mature",
+      "source": "ESRB",
+      "rating": "M",
+      "official": true,
+      "esrb": "M",
+      "pegi": null,
+      "descriptors": [
+        "Blood and Gore",
+        "Intense Violence",
+        "Mild Sexual Themes",
+        "Strong Language"
+      ],
+      "interactive": [
+        "Users Interact"
+      ],
+      "notes": null
+    },
+    "ratings": null,
+    "steamAppId": null,
+    "psnStorePath": "concept/10004123",
+    "coverage": []
+  },
+  {
+    "id": "love-live-school-idol-festival-after-school-acti",
+    "title": "Love Live! School Idol Festival ~after school ACTIVITY~ Wai-Wai!Home Meeting!!",
+    "genre": "Rhythm",
+    "artStyle": "3D",
+    "protagonist": "Ensemble",
+    "tags": [
+      "classic"
+    ],
+    "representation": [],
+    "description": "Tap and hold rhythm icons to songs performed by school idol groups, building combos and watching choreographed routines.",
+    "platform": "PS4",
+    "ps5Upgrade": "Backwards Compatible",
+    "ageRating": {
+      "family": "mature",
+      "concerns": [
+        "Sexual Themes"
+      ],
+      "tier": "teen",
+      "source": "ESRB",
+      "rating": "T",
+      "official": true,
+      "esrb": "T",
+      "pegi": null,
+      "descriptors": [
+        "Sexual Themes"
+      ],
+      "interactive": [
+        "In-Game Purchases",
+        "Users Interact"
+      ],
+      "notes": null
+    },
+    "ratings": null,
+    "steamAppId": null,
+    "psnStorePath": "concept/10000306",
+    "coverage": []
+  },
+  {
+    "id": "pistol-whip",
+    "title": "Pistol Whip",
+    "genre": "Rhythm",
+    "artStyle": "3D",
+    "protagonist": "Custom",
+    "tags": [],
+    "representation": [],
+    "description": "Move through VR action scenes on rails, shooting targets and dodging bullets in time with electronic tracks and adjustable modifiers.",
+    "platform": "PS4",
+    "ps5Upgrade": null,
+    "ageRating": {
+      "family": "mild",
+      "concerns": [],
+      "tier": "teen",
+      "source": "ESRB",
+      "rating": "T",
+      "official": true,
+      "esrb": "T",
+      "pegi": null,
+      "descriptors": [
+        "Blood",
+        "Language",
+        "Violence"
+      ],
+      "interactive": [],
+      "notes": null
+    },
+    "ratings": null,
+    "steamAppId": null,
+    "psnStorePath": "concept/10001571",
+    "coverage": []
+  },
+  {
+    "id": "age-of-empires-ii-definitive-edition-standard-ed",
+    "title": "Age of Empires II: Definitive Edition - Standard Edition",
+    "genre": "Management",
+    "artStyle": "Isometric",
+    "protagonist": "Custom",
+    "tags": [
+      "classic"
+    ],
+    "representation": [],
+    "description": "Gather food, wood, gold, and stone to grow a settlement, advance through four ages, and command armies in historical battles.",
+    "platform": "PS5",
+    "ps5Upgrade": "PS5 Only",
+    "ageRating": {
+      "family": "mild",
+      "concerns": [],
+      "tier": "teen",
+      "source": "ESRB",
+      "rating": "T",
+      "official": true,
+      "esrb": "T",
+      "pegi": null,
+      "descriptors": [
+        "Mild Blood",
+        "Mild Language",
+        "Violence"
+      ],
+      "interactive": [],
+      "notes": null
+    },
+    "ratings": null,
+    "steamAppId": null,
+    "psnStorePath": "concept/10009261",
+    "coverage": []
+  },
+  {
+    "id": "sky-children-of-the-light",
+    "title": "Sky: Children of the Light",
+    "genre": "Exploration",
+    "artStyle": "3D",
+    "protagonist": "Custom",
+    "tags": [
+      "cozy",
+      "graphics",
+      "social"
+    ],
+    "representation": [],
+    "description": "Glide through clouded realms as a child of light, collecting winged light, reliving spirit memories, and holding hands with other players.",
+    "platform": "PS4",
+    "ps5Upgrade": "Backwards Compatible",
+    "ageRating": {
+      "family": "safe",
+      "concerns": [],
+      "tier": "everyone10",
+      "source": "ESRB",
+      "rating": "E10",
+      "official": true,
+      "esrb": "E10",
+      "pegi": null,
+      "descriptors": [
+        "Fantasy Violence"
+      ],
+      "interactive": [
+        "In-Game Purchases",
+        "Users Interact"
+      ],
+      "notes": null
+    },
+    "ratings": null,
+    "steamAppId": null,
+    "psnStorePath": "concept/10004206",
+    "coverage": []
+  },
+  {
+    "id": "five-nights-at-freddy-s-help-wanted-2",
+    "title": "Five Nights at Freddy's: Help Wanted 2",
+    "genre": "Action",
+    "artStyle": "3D",
+    "protagonist": "Custom",
+    "tags": [],
+    "representation": [],
+    "description": "Complete VR maintenance and service jobs, repairing animatronics, preparing food, and using tools while watching for sudden attacks.",
+    "platform": "PS5",
+    "ps5Upgrade": "PS5 Only",
+    "ageRating": {
+      "family": "mild",
+      "concerns": [],
+      "tier": "teen",
+      "source": "ESRB",
+      "rating": "T",
+      "official": true,
+      "esrb": "T",
+      "pegi": null,
+      "descriptors": [
+        "Fantasy Violence"
+      ],
+      "interactive": [],
+      "notes": null
+    },
+    "ratings": null,
+    "steamAppId": null,
+    "psnStorePath": "concept/10009325",
+    "coverage": []
+  },
+  {
+    "id": "visions-of-mana",
+    "title": "Visions of Mana",
+    "genre": "RPG",
+    "artStyle": "3D",
+    "protagonist": "Male",
+    "tags": [],
+    "representation": [],
+    "description": "Fight in real time as Val and his companions, switching party members and using Elemental Vessels to change classes and unleash abilities.",
+    "platform": "PS4",
+    "ps5Upgrade": null,
+    "ageRating": {
+      "family": "mild",
+      "concerns": [],
+      "tier": "teen",
+      "source": "ESRB",
+      "rating": "T",
+      "official": true,
+      "esrb": "T",
+      "pegi": null,
+      "descriptors": [
+        "Fantasy Violence",
+        "Mild Suggestive Themes"
+      ],
+      "interactive": [
+        "In-Game Purchases"
+      ],
+      "notes": null
+    },
+    "ratings": null,
+    "steamAppId": null,
+    "psnStorePath": "concept/10008215",
+    "coverage": []
+  },
+  {
+    "id": "the-stanley-parable-ultra-deluxe",
+    "title": "The Stanley Parable: Ultra Deluxe",
+    "genre": "Narrative",
+    "artStyle": "3D",
+    "protagonist": "Male",
+    "tags": [
+      "classic"
+    ],
+    "representation": [],
+    "description": "Explore an office as Stanley, obeying or defying the narrator at each junction to uncover branching routes, jokes, and alternate endings.",
+    "platform": "PS4",
+    "ps5Upgrade": null,
+    "ageRating": {
+      "family": "mild",
+      "concerns": [],
+      "tier": "teen",
+      "source": "ESRB",
+      "rating": "T",
+      "official": true,
+      "esrb": "T",
+      "pegi": null,
+      "descriptors": [
+        "Drug Reference",
+        "Mild Blood",
+        "Mild Language",
+        "Mild Suggestive Themes",
+        "Mild Violence"
+      ],
+      "interactive": [],
+      "notes": null
+    },
+    "ratings": null,
+    "steamAppId": null,
+    "psnStorePath": "concept/10003841",
+    "coverage": []
+  },
+  {
+    "id": "syberia-the-world-before",
+    "title": "Syberia - The World Before",
+    "genre": "Puzzle",
+    "artStyle": "3D",
+    "protagonist": "Ensemble",
+    "tags": [],
+    "representation": [],
+    "description": "Alternate between Kate Walker and Dana Roze in two eras, investigating connected lives through dialogue, inventory items, and mechanical puzzles.",
+    "platform": "PS4",
+    "ps5Upgrade": null,
+    "ageRating": {
+      "family": "mild",
+      "concerns": [],
+      "tier": "teen",
+      "source": "ESRB",
+      "rating": "T",
+      "official": true,
+      "esrb": "T",
+      "pegi": null,
+      "descriptors": [
+        "Mild Blood",
+        "Mild Language",
+        "Use of Alcohol and Tobacco",
+        "Violence"
+      ],
+      "interactive": [],
+      "notes": null
+    },
+    "ratings": null,
+    "steamAppId": null,
+    "psnStorePath": "concept/10001404",
+    "coverage": []
+  },
+  {
+    "id": "farming-simulator-22",
+    "title": "Farming Simulator 22",
+    "genre": "Management",
+    "artStyle": "3D",
+    "protagonist": "Custom",
+    "tags": [
+      "cozy",
+      "social"
+    ],
+    "representation": [],
+    "description": "Operate licensed tractors and harvesters, manage crops, animals, and production chains, and expand a farm through changing seasons alone or in co-op.",
+    "platform": "PS4",
+    "ps5Upgrade": null,
+    "ageRating": {
+      "family": "safe",
+      "concerns": [],
+      "tier": "everyone",
+      "source": "ESRB",
+      "rating": "E",
+      "official": true,
+      "esrb": "E",
+      "pegi": null,
+      "descriptors": [
+        "Game Experience May Change During Online Play",
+        "Online Interactions Not Rated by the ESRB"
+      ],
+      "interactive": [
+        "Users Interact"
+      ],
+      "notes": null
+    },
+    "ratings": null,
+    "steamAppId": null,
+    "psnStorePath": "concept/10001771",
+    "coverage": []
+  },
+  {
+    "id": "chorus",
+    "title": "Chorus",
+    "genre": "Action",
+    "artStyle": "3D",
+    "protagonist": "Female",
+    "tags": [],
+    "representation": [],
+    "description": "Pilot the sentient fighter Forsaken as Nara, drifting through space battles and using teleportation and other Rites to outmaneuver enemies.",
+    "platform": "PS4",
+    "ps5Upgrade": null,
+    "ageRating": {
+      "family": "mild",
+      "concerns": [],
+      "tier": "teen",
+      "source": "ESRB",
+      "rating": "T",
+      "official": true,
+      "esrb": "T",
+      "pegi": null,
+      "descriptors": [
+        "Fantasy Violence",
+        "Mild Language"
+      ],
+      "interactive": [],
+      "notes": null
+    },
+    "ratings": null,
+    "steamAppId": null,
+    "psnStorePath": "concept/10000793",
+    "coverage": []
+  },
+  {
+    "id": "assassin-s-creed-shadows",
+    "title": "Assassin’s Creed Shadows",
+    "genre": "RPG",
+    "artStyle": "3D",
+    "protagonist": "Ensemble",
+    "tags": [],
+    "representation": [],
+    "description": "Switch between Naoe's stealthy shinobi tools and Yasuke's heavy samurai combat while exploring castles, towns, and countryside in feudal Japan.",
+    "platform": "PS5",
+    "ps5Upgrade": "PS5 Only",
+    "ageRating": {
+      "family": "mature",
+      "concerns": [
+        "Blood and Gore",
+        "Intense Violence"
+      ],
+      "tier": "mature",
+      "source": "ESRB",
+      "rating": "M",
+      "official": true,
+      "esrb": "M",
+      "pegi": null,
+      "descriptors": [
+        "Blood and Gore",
+        "Intense Violence",
+        "Language"
+      ],
+      "interactive": [
+        "In-Game Purchases",
+        "Users Interact"
+      ],
+      "notes": null
+    },
+    "ratings": null,
+    "steamAppId": null,
+    "psnStorePath": "concept/10009909",
+    "coverage": []
+  },
+  {
+    "id": "ratchet-clank-size-matters",
+    "title": "Ratchet & Clank: Size Matters",
+    "genre": "Platformer",
+    "artStyle": "3D",
+    "protagonist": "Ensemble",
+    "tags": [
+      "classic"
+    ],
+    "representation": [],
+    "description": "Blast and platform across planets as Ratchet and Clank, upgrading eccentric weapons, using gadgets, and completing hoverboard and robot challenges.",
+    "platform": "PS4",
+    "ps5Upgrade": null,
+    "ageRating": {
+      "family": "safe",
+      "concerns": [],
+      "tier": "everyone10",
+      "source": "ESRB",
+      "rating": "E10",
+      "official": true,
+      "esrb": "E10",
+      "pegi": null,
+      "descriptors": [
+        "Animated Blood",
+        "Fantasy Violence"
+      ],
+      "interactive": [],
+      "notes": null
+    },
+    "ratings": null,
+    "steamAppId": null,
+    "psnStorePath": "concept/10007644",
+    "coverage": []
+  },
+  {
+    "id": "tormented-souls-2",
+    "title": "Tormented Souls 2",
+    "genre": "Action",
+    "artStyle": "3D",
+    "protagonist": "Female",
+    "tags": [],
+    "representation": [],
+    "description": "Guide Caroline Walker through fixed-camera horror locations, managing scarce ammunition, solving inventory puzzles, and surviving grotesque creatures.",
+    "platform": "PS5",
+    "ps5Upgrade": "PS5 Only",
+    "ageRating": {
+      "family": "mature",
+      "concerns": [
+        "Blood and Gore",
+        "Intense Violence",
+        "Partial Nudity"
+      ],
+      "tier": "mature",
+      "source": "ESRB",
+      "rating": "M",
+      "official": true,
+      "esrb": "M",
+      "pegi": null,
+      "descriptors": [
+        "Blood and Gore",
+        "Intense Violence",
+        "Partial Nudity",
+        "Strong Language"
+      ],
+      "interactive": [],
+      "notes": null
+    },
+    "ratings": null,
+    "steamAppId": null,
+    "psnStorePath": "concept/10008744",
+    "coverage": []
+  },
+  {
+    "id": "nte-neverness-to-everness",
+    "title": "NTE: Neverness to Everness",
+    "genre": "RPG",
+    "artStyle": "3D",
+    "protagonist": "Custom",
+    "tags": [],
+    "representation": [],
+    "description": "Build a team of Espers in an open city, swapping characters to trigger combat reactions between driving, property, and business activities.",
+    "platform": "PS5",
+    "ps5Upgrade": "PS5 Only",
+    "ageRating": {
+      "family": "mild",
+      "concerns": [],
+      "tier": "teen",
+      "source": "ESRB",
+      "rating": "T",
+      "official": true,
+      "esrb": "T",
+      "pegi": null,
+      "descriptors": [
+        "Suggestive Themes",
+        "Violence"
+      ],
+      "interactive": [
+        "In-Game Purchases (Includes Random Items)",
+        "Users Interact"
+      ],
+      "notes": null
+    },
+    "ratings": null,
+    "steamAppId": null,
+    "psnStorePath": "concept/10012874",
+    "coverage": []
+  },
+  {
+    "id": "cities-skylines-remastered",
+    "title": "Cities: Skylines - Remastered",
+    "genre": "Management",
+    "artStyle": "3D",
+    "protagonist": "Custom",
+    "tags": [
+      "classic"
+    ],
+    "representation": [],
+    "description": "Zone districts, lay roads, manage utilities and budgets, and respond to traffic and citizen needs as a small settlement grows into a city.",
+    "platform": "PS4",
+    "ps5Upgrade": null,
+    "ageRating": {
+      "family": "safe",
+      "concerns": [],
+      "tier": "everyone",
+      "source": "ESRB",
+      "rating": "E",
+      "official": true,
+      "esrb": "E",
+      "pegi": null,
+      "descriptors": [],
+      "interactive": [],
+      "notes": null
+    },
+    "ratings": null,
+    "steamAppId": null,
+    "psnStorePath": "concept/10005732",
+    "coverage": []
+  },
+  {
+    "id": "the-outer-worlds-spacer-s-choice-edition",
+    "title": "The Outer Worlds: Spacer's Choice Edition",
+    "genre": "RPG",
+    "artStyle": "3D",
+    "protagonist": "Custom",
+    "tags": [
+      "classic"
+    ],
+    "representation": [],
+    "description": "Create a colonist and lead companion crews through first-person quests, mixing gunplay, dialogue choices, stealth, and Tactical Time Dilation.",
+    "platform": "PS4",
+    "ps5Upgrade": null,
+    "ageRating": {
+      "family": "mature",
+      "concerns": [
+        "Blood and Gore",
+        "Intense Violence"
+      ],
+      "tier": "mature",
+      "source": "ESRB",
+      "rating": "M",
+      "official": true,
+      "esrb": "M",
+      "pegi": null,
+      "descriptors": [
+        "Blood and Gore",
+        "Intense Violence",
+        "Strong Language",
+        "Use of Drugs"
+      ],
+      "interactive": [],
+      "notes": null
+    },
+    "ratings": null,
+    "steamAppId": null,
+    "psnStorePath": "concept/10004825",
+    "coverage": []
+  },
+  {
+    "id": "love-is-all-around",
+    "title": "Love is all around",
+    "genre": "Narrative",
+    "artStyle": "Photorealistic",
+    "protagonist": "Male",
+    "tags": [],
+    "representation": [],
+    "description": "Guide indebted entrepreneur Gu Yi through live-action romance scenes, making dialogue choices that change affection and lead to different endings.",
+    "platform": "PS5",
+    "ps5Upgrade": "PS5 Only",
+    "ageRating": {
+      "family": "mature",
+      "concerns": [
+        "Sexual Themes"
+      ],
+      "tier": "teen",
+      "source": "ESRB",
+      "rating": "T",
+      "official": true,
+      "esrb": "T",
+      "pegi": null,
+      "descriptors": [
+        "Language",
+        "Mild Violence",
+        "Sexual Themes",
+        "Use of Alcohol"
+      ],
+      "interactive": [],
+      "notes": null
+    },
+    "ratings": null,
+    "steamAppId": null,
+    "psnStorePath": "concept/10010944",
+    "coverage": []
+  },
+  {
+    "id": "walkabout-mini-golf",
+    "title": "Walkabout Mini Golf",
+    "genre": "Sports",
+    "artStyle": "3D",
+    "protagonist": "Custom",
+    "tags": [
+      "cozy",
+      "social"
+    ],
+    "representation": [],
+    "description": "Putt through imaginative VR courses with realistic ball physics, searching for lost balls and playing solo or with friends online.",
+    "platform": "PS5",
+    "ps5Upgrade": "PS5 Only",
+    "ageRating": {
+      "family": "safe",
+      "concerns": [],
+      "tier": "everyone",
+      "source": "ESRB",
+      "rating": "E",
+      "official": true,
+      "esrb": "E",
+      "pegi": null,
+      "descriptors": [],
+      "interactive": [
+        "In-Game Purchases",
+        "Users Interact"
+      ],
+      "notes": null
+    },
+    "ratings": null,
+    "steamAppId": null,
+    "psnStorePath": "concept/10003851",
+    "coverage": []
+  },
+  {
+    "id": "madison",
+    "title": "MADiSON",
+    "genre": "Puzzle",
+    "artStyle": "3D",
+    "protagonist": "Male",
+    "tags": [],
+    "representation": [],
+    "description": "Explore a haunted house as Luca, developing instant photographs to reveal clues and solve puzzles while evading a demonic presence.",
+    "platform": "PS5",
+    "ps5Upgrade": "PS5 Only",
+    "ageRating": {
+      "family": "mature",
+      "concerns": [
+        "Blood and Gore",
+        "Partial Nudity"
+      ],
+      "tier": "mature",
+      "source": "ESRB",
+      "rating": "M",
+      "official": true,
+      "esrb": "M",
+      "pegi": null,
+      "descriptors": [
+        "Blood and Gore",
+        "Partial Nudity",
+        "Strong Language",
+        "Violence"
+      ],
+      "interactive": [],
+      "notes": null
+    },
+    "ratings": null,
+    "steamAppId": null,
+    "psnStorePath": "concept/10004909",
+    "coverage": []
+  },
+  {
+    "id": "hell-is-us",
+    "title": "Hell is Us",
+    "genre": "Action",
+    "artStyle": "3D",
+    "protagonist": "Male",
+    "tags": [],
+    "representation": [],
+    "description": "Explore a war-torn country as Rémi without quest markers, using melee weapons and a combat drone to fight creatures and uncover clues.",
+    "platform": "PS5",
+    "ps5Upgrade": "PS5 Only",
+    "ageRating": {
+      "family": "mature",
+      "concerns": [],
+      "tier": "mature",
+      "source": "ESRB",
+      "rating": "M",
+      "official": true,
+      "esrb": "M",
+      "pegi": null,
+      "descriptors": [
+        "Blood",
+        "Drug Reference",
+        "Strong Language",
+        "Suggestive Themes",
+        "Violence"
+      ],
+      "interactive": [],
+      "notes": null
+    },
+    "ratings": null,
+    "steamAppId": null,
+    "psnStorePath": "concept/10005051",
+    "coverage": []
+  },
+  {
+    "id": "tabs",
+    "title": "TABS",
+    "genre": "Puzzle",
+    "artStyle": "3D",
+    "protagonist": "Custom",
+    "tags": [],
+    "representation": [],
+    "description": "Arrange wobbling armies against enemy formations, then watch physics decide each battle or possess a unit to join the chaos directly.",
+    "platform": "PS4",
+    "ps5Upgrade": null,
+    "ageRating": {
+      "family": "mild",
+      "concerns": [],
+      "tier": "teen",
+      "source": "ESRB",
+      "rating": "T",
+      "official": true,
+      "esrb": "T",
+      "pegi": null,
+      "descriptors": [
+        "Violence"
+      ],
+      "interactive": [
+        "Users Interact"
+      ],
+      "notes": null
+    },
+    "ratings": null,
+    "steamAppId": null,
+    "psnStorePath": "concept/10003641",
+    "coverage": []
+  },
+  {
+    "id": "peak",
+    "title": "PEAK",
+    "genre": "Exploration",
+    "artStyle": "3D",
+    "protagonist": "Custom",
+    "tags": [
+      "social"
+    ],
+    "representation": [],
+    "description": "Climb a hazardous island mountain as a stranded scout, managing stamina, hunger, and injuries while sharing ropes and supplies in co-op.",
+    "platform": "PS5",
+    "ps5Upgrade": "PS5 Only",
+    "ageRating": {
+      "family": "safe",
+      "concerns": [],
+      "tier": "everyone10",
+      "source": "ESRB",
+      "rating": "E10",
+      "official": true,
+      "esrb": "E10",
+      "pegi": null,
+      "descriptors": [
+        "Fantasy Violence"
+      ],
+      "interactive": [
+        "Users Interact"
+      ],
+      "notes": null
+    },
+    "ratings": null,
+    "steamAppId": null,
+    "psnStorePath": "concept/10017710",
+    "coverage": []
+  },
+  {
+    "id": "halloween-the-game",
+    "title": "Halloween: The Game",
+    "genre": "Action",
+    "artStyle": "3D",
+    "protagonist": "Ensemble",
+    "tags": [
+      "social"
+    ],
+    "representation": [],
+    "description": "Stalk civilians as Michael Myers or cooperate to warn residents, scavenge supplies, and call the police in one-versus-four horror matches.",
+    "platform": "PS5",
+    "ps5Upgrade": "PS5 Only",
+    "ageRating": {
+      "family": "mature",
+      "concerns": [
+        "Blood and Gore",
+        "Intense Violence",
+        "Nudity",
+        "Sexual Themes"
+      ],
+      "tier": "mature",
+      "source": "ESRB",
+      "rating": "M",
+      "official": true,
+      "esrb": "M",
+      "pegi": null,
+      "descriptors": [
+        "Blood and Gore",
+        "Intense Violence",
+        "Nudity",
+        "Sexual Themes",
+        "Strong Language",
+        "Use of Drugs"
+      ],
+      "interactive": [
+        "In-Game Purchases",
+        "Users Interact"
+      ],
+      "notes": null
+    },
+    "ratings": null,
+    "steamAppId": null,
+    "psnStorePath": "concept/10014718",
+    "coverage": []
+  },
+  {
+    "id": "my-little-universe",
+    "title": "My Little Universe",
+    "genre": "Management",
+    "artStyle": "Isometric",
+    "protagonist": "Custom",
+    "tags": [
+      "cozy",
+      "social"
+    ],
+    "representation": [],
+    "description": "Mine, chop, and craft resources to unlock new land tile by tile, fight monsters, and restore portals alone or in local co-op.",
+    "platform": "PS5",
+    "ps5Upgrade": "PS5 Only",
+    "ageRating": {
+      "family": "safe",
+      "concerns": [],
+      "tier": "everyone10",
+      "source": "ESRB",
+      "rating": "E10",
+      "official": true,
+      "esrb": "E10",
+      "pegi": null,
+      "descriptors": [
+        "Fantasy Violence"
+      ],
+      "interactive": [],
+      "notes": null
+    },
+    "ratings": null,
+    "steamAppId": null,
+    "psnStorePath": "concept/10012017",
+    "coverage": []
+  },
+  {
+    "id": "v-rising",
+    "title": "V Rising",
+    "genre": "Action",
+    "artStyle": "Isometric",
+    "protagonist": "Custom",
+    "tags": [
+      "social"
+    ],
+    "representation": [],
+    "description": "Build a vampire castle, hunt enemies for blood types, avoid sunlight, and defeat bosses to unlock powers and crafting recipes online.",
+    "platform": "PS5",
+    "ps5Upgrade": "PS5 Only",
+    "ageRating": {
+      "family": "mild",
+      "concerns": [],
+      "tier": "teen",
+      "source": "ESRB",
+      "rating": "T",
+      "official": true,
+      "esrb": "T",
+      "pegi": null,
+      "descriptors": [
+        "Blood",
+        "Violence"
+      ],
+      "interactive": [
+        "Users Interact"
+      ],
+      "notes": null
+    },
+    "ratings": null,
+    "steamAppId": null,
+    "psnStorePath": "concept/10007965",
+    "coverage": []
+  },
+  {
+    "id": "ai-limit",
+    "title": "AI LIMIT",
+    "genre": "Action",
+    "artStyle": "Cel-shaded",
+    "protagonist": "Female",
+    "tags": [],
+    "representation": [],
+    "description": "Explore ruined Havenswell as Arrisa, chaining weapon attacks and spells while building Sync Rate for damage and spending it on abilities.",
+    "platform": "PS5",
+    "ps5Upgrade": "PS5 Only",
+    "ageRating": {
+      "family": "mild",
+      "concerns": [],
+      "tier": "teen",
+      "source": "ESRB",
+      "rating": "T",
+      "official": true,
+      "esrb": "T",
+      "pegi": null,
+      "descriptors": [
+        "Blood",
+        "Suggestive Themes",
+        "Violence"
+      ],
+      "interactive": [],
+      "notes": null
+    },
+    "ratings": null,
+    "steamAppId": null,
+    "psnStorePath": "concept/10006488",
+    "coverage": []
+  },
+  {
+    "id": "silent-hill-townfall",
+    "title": "SILENT HILL: Townfall",
+    "genre": "Action",
+    "artStyle": "3D",
+    "protagonist": "Male",
+    "tags": [],
+    "representation": [],
+    "description": "Explore a fogbound coastal town as Simon in first person, using a portable screen to detect threats, solve puzzles, and choose stealth or combat.",
+    "platform": "PS5",
+    "ps5Upgrade": "PS5 Only",
+    "ageRating": {
+      "family": "mature",
+      "concerns": [],
+      "tier": "mature",
+      "source": "ESRB",
+      "rating": "M",
+      "official": true,
+      "esrb": "M",
+      "pegi": null,
+      "descriptors": [
+        "Blood",
+        "Strong Language",
+        "Violence"
+      ],
+      "interactive": [],
+      "notes": null
+    },
+    "ratings": null,
+    "steamAppId": null,
+    "psnStorePath": "concept/10016947",
+    "coverage": []
+  },
+  {
+    "id": "killer-klowns-from-outer-space-the-game",
+    "title": "Killer Klowns From Outer Space: The Game",
+    "genre": "Action",
+    "artStyle": "3D",
+    "protagonist": "Ensemble",
+    "tags": [
+      "social"
+    ],
+    "representation": [],
+    "description": "Coordinate as civilians scavenging weapons and escape routes, or hunt them as three Klowns using bizarre gadgets in asymmetric matches.",
+    "platform": "PS5",
+    "ps5Upgrade": "PS5 Only",
+    "ageRating": {
+      "family": "mature",
+      "concerns": [
+        "Blood and Gore",
+        "Intense Violence"
+      ],
+      "tier": "mature",
+      "source": "ESRB",
+      "rating": "M",
+      "official": true,
+      "esrb": "M",
+      "pegi": null,
+      "descriptors": [
+        "Blood and Gore",
+        "Intense Violence",
+        "Strong Language"
+      ],
+      "interactive": [
+        "In-Game Purchases",
+        "Users Interact"
+      ],
+      "notes": null
+    },
+    "ratings": null,
+    "steamAppId": null,
+    "psnStorePath": "concept/10009210",
+    "coverage": []
   }
 ]

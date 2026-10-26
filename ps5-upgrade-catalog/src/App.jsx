@@ -24,7 +24,6 @@ import {
   Dices,
   ExternalLink,
   Flame,
-  Gamepad2,
   Heart,
   Image as ImageIcon,
   Info,
@@ -86,10 +85,22 @@ const SEARCH_ROWS = new Map(
  * new genre or art style puts it in the dropdowns automatically.
  * ------------------------------------------------------------------ */
 
+/*
+ * The values this field actually takes, for a filter to offer.
+ *
+ * Nulls are dropped rather than listed. An entry built from the store mirror
+ * can legitimately not know how a game is sold, because the mirror does not
+ * record whether a PS4-and-PS5 listing is cross-buy, a free upgrade or a paid
+ * one, and inventing an answer there is the one thing that pass of work must
+ * not do. Seventy-four of the catalog's entries now say nothing, and sorting
+ * the list used to call localeCompare on the first of them, which took the
+ * whole app down before it drew a frame.
+ */
 const uniqueValues = (key) =>
-  ['All', ...new Set(gamesData.map((game) => game[key]))].sort((a, b) =>
-    a === 'All' ? -1 : b === 'All' ? 1 : a.localeCompare(b),
-  );
+  [
+    'All',
+    ...new Set(gamesData.map((game) => game[key]).filter((value) => value != null && value !== '')),
+  ].sort((a, b) => (a === 'All' ? -1 : b === 'All' ? 1 : a.localeCompare(b)));
 
 const GENRES = uniqueValues('genre');
 const PROTAGONISTS = uniqueValues('protagonist');
@@ -219,7 +230,6 @@ const DEFAULT_FILTERS = {
   view: 'grid',
   // PS5-only titles are out of the default view: this is a PS4 upgrade
   // catalog first, and they need different hardware.
-  includePs5: false,
 };
 
 function readFiltersFromUrl() {
@@ -244,7 +254,6 @@ function readFiltersFromUrl() {
     noPurchases: params.get('nomtx') === '1',
     owned: value('owned', 'any'),
     view: params.get('mode') === 'feed' ? 'feed' : 'grid',
-    includePs5: params.get('ps5') === '1',
   };
 }
 
@@ -266,7 +275,6 @@ function writeFiltersToUrl(filters) {
   if (filters.noPurchases) params.set('nomtx', '1');
   if (filters.owned !== 'any') params.set('owned', filters.owned);
   if (filters.view === 'feed') params.set('mode', 'feed');
-  if (filters.includePs5) params.set('ps5', '1');
   const query = params.toString();
   window.history.replaceState(null, '', query ? `?${query}` : window.location.pathname);
 }
@@ -600,6 +608,9 @@ function useScrollCollapse(threshold = 120) {
  * ------------------------------------------------------------------ */
 
 function UpgradeBadge({ value, className = '' }) {
+  // The mirror does not say how a game on both consoles is sold, so an entry
+  // built from it can have nothing here. An empty pill is worse than none.
+  if (!value) return null;
   return (
     <span
       className={`rounded px-1.5 py-0.5 text-[11px] font-semibold ring-1 ring-inset ${
@@ -919,6 +930,9 @@ function RepresentationDetail({ representation }) {
     </div>
   );
 }
+
+/** Panes in one slide's gallery. Past this nobody is swiping anyway. */
+const GALLERY_MAX = 8;
 
 /**
  * The same image, asked for at the size it will be drawn at.
@@ -2076,9 +2090,6 @@ function EmptyState({ filters, wishlist, library, status, onClear, onSearchStore
               Nothing here is at its lowest recorded price right now.
             </p>
           )}
-          {!filters.includePs5 && (
-            <p className="mt-1 text-sm">PS5-only titles are hidden. Turn them on to see more.</p>
-          )}
           {filters.sale && status === 'loading' && (
             <p className="mt-1 text-sm">Still checking prices, so more may appear.</p>
           )}
@@ -2666,33 +2677,88 @@ function FeedSlide({
 
   const trailer = live?.videos?.[0] ?? storeMedia?.trailer ?? null;
 
+  /*
+   * The slide is a game's whole gallery, not one picture of it.
+   *
+   * Both sources hand over eight screenshots and the feed was showing one,
+   * which makes a game something to scroll past rather than something to
+   * look at. Swiping sideways moves through them; swiping up still moves to
+   * the next game, which is the gesture people already have.
+   *
+   * The key art leads, because it is drawn to sell the game while a gameplay
+   * frame is whatever the capture caught. Deduplicated, because for a
+   * written-up game the hero already is the first screenshot.
+   */
+  const gallery = useMemo(() => {
+    const shots = live?.screenshots?.length
+      ? live.screenshots.map((shot) => shot.full)
+      : (storeMedia?.shots ?? []).map((shot) => atWidth(shot, 1280));
+    return [...new Set([background, ...shots].filter(Boolean))].slice(0, GALLERY_MAX);
+  }, [background, live, storeMedia]);
+
+  const galleryRef = useRef(null);
+  const [pane, setPane] = useState(0);
+  const onGalleryScroll = useCallback((event) => {
+    const { scrollLeft, clientWidth } = event.currentTarget;
+    if (clientWidth > 0) setPane(Math.round(scrollLeft / clientWidth));
+  }, []);
+
   return (
     <section
       ref={slideRef}
       className="feed-slide relative flex h-full w-full items-end overflow-hidden bg-slate-900"
     >
-      {background ? (
-        <img
-          src={background}
-          alt=""
-          loading="lazy"
-          decoding="async"
-          className="absolute inset-0 h-full w-full scale-105 object-cover"
-        />
-      ) : (
+      {gallery.length === 0 ? (
         <div className="absolute inset-0 bg-gradient-to-br from-indigo-600 via-violet-600 to-fuchsia-600" />
+      ) : (
+        <div
+          ref={galleryRef}
+          onScroll={onGalleryScroll}
+          className="no-scrollbar absolute inset-0 flex snap-x snap-mandatory overflow-y-hidden overflow-x-auto overscroll-x-contain"
+        >
+          {gallery.map((src, index) => (
+            // Clipped to its own pane: the 5% scale that keeps a single
+            // still from showing its edges will otherwise bleed into the
+            // panes either side, so a swipe shows slivers of two other
+            // screenshots down the sides of the one being looked at.
+            <div key={src} className="relative h-full w-full shrink-0 snap-center overflow-hidden">
+              <img
+                src={src}
+                alt=""
+                // The first is the slide; the rest are only worth fetching
+                // once somebody swipes toward them. Eight at 275KB each is
+                // not something to spend on a slide nobody opened.
+                loading={index === 0 ? 'eager' : 'lazy'}
+                decoding="async"
+                className="h-full w-full scale-105 object-cover"
+              />
+              {index === 0 && centred && trailer && !dataSaver && (
+                <TrailerPlayer
+                  video={trailer}
+                  poster={src}
+                  muted={muted}
+                  // A feed slide loops and never shows the browser's own
+                  // controls, whether or not the sound is on.
+                  controls={false}
+                  loop
+                  className="absolute inset-0 h-full w-full object-cover"
+                />
+              )}
+            </div>
+          ))}
+        </div>
       )}
-      {centred && trailer && !dataSaver && (
-        <TrailerPlayer
-          video={trailer}
-          poster={background}
-          muted={muted}
-          // A feed slide loops and never shows the browser's own controls,
-          // whether or not the sound is on.
-          controls={false}
-          loop
-          className="absolute inset-0 h-full w-full object-cover"
-        />
+      {gallery.length > 1 && (
+        <div className="pointer-events-none absolute left-0 right-0 top-3 z-10 flex justify-center gap-1.5">
+          {gallery.map((src, index) => (
+            <span
+              key={src}
+              className={`h-1 rounded-full transition-all duration-200 ${
+                index === pane ? 'w-5 bg-white' : 'w-1.5 bg-white/45'
+              }`}
+            />
+          ))}
+        </div>
       )}
       <div className="absolute inset-0 bg-gradient-to-t from-slate-950 via-slate-950/70 to-slate-950/10" />
 
@@ -2703,9 +2769,11 @@ function FeedSlide({
               <span className="rounded-md bg-white/15 px-2 py-1 text-xs font-semibold text-white backdrop-blur">
                 {game.genre}
               </span>
-              <span className="rounded-md bg-white/15 px-2 py-1 text-xs font-semibold text-white backdrop-blur">
-                {game.ps5Upgrade}
-              </span>
+              {game.ps5Upgrade && (
+                <span className="rounded-md bg-white/15 px-2 py-1 text-xs font-semibold text-white backdrop-blur">
+                  {game.ps5Upgrade}
+                </span>
+              )}
               {price?.discountPercent > 0 && (
                 <span className="rounded-md bg-rose-600 px-2 py-1 text-xs font-bold text-white">
                   -{price.discountPercent}%
@@ -5897,9 +5965,9 @@ export default function App() {
   const geniusPicks = useMemo(() => {
     const exclude = new Set([...library, ...wishlist, ...hidden]);
     return profile
-      ? recommend(gamesData, profile, { exclude, limit: 48, includePs5: filters.includePs5 })
-      : starterPicks(gamesData, { exclude, limit: 48, includePs5: filters.includePs5 });
-  }, [profile, library, wishlist, hidden, filters.includePs5]);
+      ? recommend(gamesData, profile, { exclude, limit: 48 })
+      : starterPicks(gamesData, { exclude, limit: 48 });
+  }, [profile, library, wishlist, hidden]);
 
   const geniusReasons = useMemo(
     () => new Map(geniusPicks.map((pick) => [pick.game.id, pick.reason])),
@@ -6047,19 +6115,6 @@ export default function App() {
     return storeMatches.length > 0 ? [...catalog, ...storeMatches] : catalog;
   }, [filters.collection, upcomingGames, catalog, storeMatches]);
 
-  /**
-   * The PS5 toggle is a fact about the curated catalog, which is built around
-   * PS4 games that have an upgrade path. Almost everything releasing now is
-   * PS5 only, so applying it to upcoming releases emptied the collection:
-   * a hundred and thirty-seven games showed as fifteen, and every one of the
-   * genuinely unreleased ones was among the hidden.
-   *
-   * Typing a game's name is the same kind of explicit request as saving one.
-   * Searching "Wishing Well Simulator" and being told nothing matches, when
-   * the only reason is that it happens to be PS5 only, is the browse default
-   * answering a question nobody asked it.
-   */
-  const ignorePs5Filter = filters.collection === 'soon' || deferredQuery.trim().length > 1;
 
   const searchScores = useMemo(() => {
     const query = parseQuery(deferredQuery);
@@ -6137,17 +6192,6 @@ export default function App() {
       if (hidden.has(game.id)) return false;
       // Hiding PS5 only titles is a browse default, and saving something is
       // not browsing. Without this last clause, hearting an upcoming game
-      // (almost all of which are PS5 only) put it in a wishlist that then
-      // refused to show it.
-      if (
-        !ignorePs5Filter &&
-        !filters.includePs5 &&
-        game.platform === 'PS5' &&
-        !wishlist.has(game.id) &&
-        !library.has(game.id)
-      ) {
-        return false;
-      }
       if (isGenius && !geniusRank.has(game.id)) return false;
       if (collection?.tag && !game.tags.includes(collection.tag)) return false;
       if (filters.collection === 'plus' && !byTitle.get(game.title)?.price?.plus?.included)
@@ -6222,7 +6266,7 @@ export default function App() {
       if (filters.sort === 'buy') return buyScoreOf(a) - buyScoreOf(b);
       return discountOf(b) - discountOf(a);
     });
-  }, [pool, ignorePs5Filter, searchScores, filters, wishlist, library, hidden, byTitle, geniusPicks]);
+  }, [pool, searchScores, filters, wishlist, library, hidden, byTitle, geniusPicks]);
 
   // Cards are added as you reach them rather than all at once; a different
   // filter, sort or collection is a different list, so it starts over.
@@ -6246,17 +6290,14 @@ export default function App() {
     return count;
   }, [filteredGames, byTitle]);
 
-  const visiblePool = useMemo(
-    () => pool.filter((game) => ignorePs5Filter || filters.includePs5 || game.platform !== 'PS5'),
-    [pool, ignorePs5Filter, filters.includePs5],
-  );
+  // Every game, whatever it runs on. The catalog used to hide PS5-only
+  // titles unless asked, which made the default view a smaller library than
+  // the one it reported having.
+  const visiblePool = pool;
 
   // Chip counts have to keep describing the catalog whatever is being
   // browsed, or switching to Coming soon would read every other chip as zero.
-  const catalogPool = useMemo(
-    () => catalog.filter((game) => filters.includePs5 || game.platform !== 'PS5'),
-    [catalog, filters.includePs5],
-  );
+  const catalogPool = catalog;
 
   const saleCount = useMemo(
     () => catalogPool.filter((game) => byTitle.get(game.title)?.price?.discountPercent > 0).length,
@@ -6348,7 +6389,6 @@ export default function App() {
       region: previous.region,
       sort: previous.sort,
       collection: previous.collection,
-      includePs5: previous.includePs5,
     }));
 
   // Removable chips so a collapsed bar still shows what is being filtered.
@@ -6582,13 +6622,7 @@ export default function App() {
                   label="All Upgrade Types"
                   value={filters.upgrade}
                   options={UPGRADES}
-                  onChange={(value) =>
-                    setFilters((previous) => ({
-                      ...previous,
-                      upgrade: value,
-                      includePs5: value === 'PS5 Only' ? true : previous.includePs5,
-                    }))
-                  }
+                  onChange={(value) => set('upgrade', value)}
                 />
                 <Select
                   label="Sort"
@@ -6681,16 +6715,6 @@ export default function App() {
                   count={filters.owned === 'owned' ? library.size : undefined}
                   tone={filters.owned === 'unowned' ? 'bg-slate-700' : 'bg-emerald-600'}
                 />
-                {/* The pill's own on state says whether it is on, so the word
-                    "on" next to it was a label for the label. */}
-                <TogglePill
-                  active={filters.includePs5}
-                  onClick={() => set('includePs5', !filters.includePs5)}
-                  icon={Gamepad2}
-                  label="PS5-only"
-                  tone="bg-violet-600"
-                />
-
               </div>
               </SheetGroup>
 
