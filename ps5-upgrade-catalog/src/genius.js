@@ -253,6 +253,15 @@ export function qualityPrior(game) {
  * lift over a popularity ranking from 1.58x to 1.76x, and the worst split from
  * 1.08x to 1.30x.
  *
+ * One caveat, because it would otherwise be invisible. The sweep ran while
+ * owning a game counted for 1, before a thumbs up existed and owning dropped
+ * to 0.8 to make room above it. So these were fitted against weights that
+ * then moved underneath them. The harness, which trains on owned games, reads
+ * 1.83x at the current weight and 1.74x at the old one, so the change helped
+ * and nothing here needs rescuing. But they are no longer the numbers the
+ * sweep chose, and a re-sweep against the weights as they now stand would be
+ * the honest way to set them again.
+ *
  * The exploration term is the exception: the sweep is indifferent to it,
  * because nothing in a holdout test rewards variety from one day to the next.
  * It is kept at a value the sweep says costs nothing, for a reason the test
