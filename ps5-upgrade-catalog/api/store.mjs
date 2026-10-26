@@ -153,6 +153,9 @@ export const ratingScore = (row) => {
   return row.stars * confidence;
 };
 
+/** What counts as new. A season, which is how storefronts tend to think of it. */
+export const NEW_RELEASE_DAYS = 90;
+
 export async function searchStore({
   q = '',
   genre = '',
@@ -163,11 +166,14 @@ export async function searchStore({
   plusOnly = false,
   familyOnly = false,
   noPurchases = false,
+  newOnly = false,
 } = {}) {
   const rows = await index();
   const plus = await plusIndex();
   const query = parseQuery(q);
   const skip = new Set(exclude.map((title) => fold(title)));
+  const newestFrom = Date.now() - NEW_RELEASE_DAYS * 86_400_000;
+  const now = Date.now();
 
   let hits = rows.filter((row) => {
     if (!row.name) return false;
@@ -182,6 +188,19 @@ export async function searchStore({
     if (noPurchases) {
       const rating = plus[row.id]?.ageRating;
       if (!rating || hasInGamePurchases(rating)) return false;
+    }
+    /*
+     * Out in the last ninety days and already out.
+     *
+     * Both halves matter. The mirror carries games dated months ahead, so
+     * asking only for recent dates hands back a list of things nobody can
+     * play yet, which is the Soon tab's job and not this one. A game with no
+     * date is unknown rather than new, so it is absent here, the same rule
+     * the other filters follow.
+     */
+    if (newOnly) {
+      const at = Date.parse(row.release ?? '');
+      if (!Number.isFinite(at) || at < newestFrom || at > now) return false;
     }
     if (skip.has(row.search.folded)) return false;
     if (genre && !(row.genres ?? []).includes(genre)) return false;

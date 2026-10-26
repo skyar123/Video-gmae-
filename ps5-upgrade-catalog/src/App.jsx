@@ -218,6 +218,22 @@ const VERDICT_STYLES = {
  * URL and local state
  * ------------------------------------------------------------------ */
 
+/** Ninety days, the same window the store half is filtered on. */
+const NEW_RELEASE_WINDOW_MS = 90 * 24 * 60 * 60 * 1000;
+
+/**
+ * Out in the last ninety days, and already out.
+ *
+ * Both halves of that matter. The catalog carries games dated months ahead,
+ * so asking only for a recent date returns things nobody can play yet, which
+ * is what the Soon tab is for. A game with no date at all is unknown rather
+ * than new, the same rule the kid-friendly and purchases filters follow.
+ */
+const isNewRelease = (game, now) => {
+  const at = Date.parse(game.releaseDate ?? game.release ?? '');
+  return Number.isFinite(at) && at >= now - NEW_RELEASE_WINDOW_MS && at <= now;
+};
+
 const DEFAULT_FILTERS = {
   q: '',
   genre: 'All',
@@ -232,6 +248,7 @@ const DEFAULT_FILTERS = {
   collection: 'all',
   kidFriendly: false,
   noPurchases: false,
+  newOnly: false,
   owned: 'any',
   view: 'grid',
   // PS5-only titles are out of the default view: this is a PS4 upgrade
@@ -258,6 +275,7 @@ function readFiltersFromUrl() {
     collection: value('view', 'all') === 'store' ? 'all' : value('view', 'all'),
     kidFriendly: params.get('kids') === '1',
     noPurchases: params.get('nomtx') === '1',
+    newOnly: params.get('new') === '1',
     owned: value('owned', 'any'),
     view: params.get('mode') === 'feed' ? 'feed' : 'grid',
   };
@@ -279,6 +297,7 @@ function writeFiltersToUrl(filters) {
   if (filters.collection !== 'all') params.set('view', filters.collection);
   if (filters.kidFriendly) params.set('kids', '1');
   if (filters.noPurchases) params.set('nomtx', '1');
+  if (filters.newOnly) params.set('new', '1');
   if (filters.owned !== 'any') params.set('owned', filters.owned);
   if (filters.view === 'feed') params.set('mode', 'feed');
   const query = params.toString();
@@ -1877,6 +1896,8 @@ function GameCard({
   owned,
   reason,
   saving,
+  verdict,
+  onRate,
   actions = true,
   onToggleWishlist,
   onOpen,
@@ -1979,6 +2000,13 @@ function GameCard({
               <Sparkles className="mr-1 inline h-3 w-3 align-[-1px]" />
               {reason}
             </p>
+          )}
+          {/* Only where a card is a suggestion. Everywhere else a card is
+              just a game, and a game does not need answering. */}
+          {onRate && (
+            <div className="mb-2" onClick={(event) => event.stopPropagation()} role="presentation">
+              <Verdict verdict={verdict} size="sm" onRate={onRate} />
+            </div>
           )}
           {/* The price row is always here, even before a price arrives and
               even when none ever will. It used to render only once a price
@@ -3983,6 +4011,94 @@ function GeniusSheet({
   );
 }
 
+/**
+ * Picks over the whole store, not just the written-up part of it.
+ *
+ * Two halves arrive from different places and are shown as one list. The 506
+ * write-ups are ranked on the device, where their genres, art styles, leads
+ * and tags live. The other 8,800 are ranked on the server, because the index
+ * is 5MB and ranking it on a phone means shipping it to a phone.
+ *
+ * They interleave by score rather than sitting in two blocks. A written-up
+ * game is not automatically a better answer than one from the mirror, and
+ * stacking them would say it was; the scores are produced by the same
+ * function with the same constants at both ends, so they can be compared.
+ */
+function GeniusPanel({
+  picks,
+  mirror,
+  newOnly,
+  openedAt,
+  ratings,
+  saved,
+  curatedByName,
+  onRate,
+  onOpenCurated,
+  onOpenStore,
+}) {
+  const merged = useMemo(() => {
+    const written = picks
+      .filter((pick) => !newOnly || isNewRelease(pick.game, openedAt))
+      .map((pick) => ({
+      key: `c-${pick.game.id}`,
+      score: pick.score,
+      game: pick.game,
+      reason: pick.reason ?? explain(pick.hits ?? []),
+      row: null,
+    }));
+    const seen = new Set(picks.map((pick) => pick.game.title?.toLowerCase()));
+    const fromStore = (mirror.games ?? [])
+      // A game with a write-up is already above under its own entry, which
+      // says more about it than the mirror's row ever could.
+      .filter((row) => !seen.has(row.name?.toLowerCase()))
+      .map((row) => ({
+        key: `s-${row.id}`,
+        score: row.pickScore ?? 0,
+        game: storeRowAsGame(row),
+        reason: row.reason,
+        row,
+      }));
+    return [...written, ...fromStore].sort((a, b) => b.score - a.score);
+  }, [picks, mirror, newOnly, openedAt]);
+
+  return (
+    <>
+      <p className="mb-3 text-xs font-medium text-slate-400 dark:text-slate-500">
+        {mirror.status === 'loading'
+          ? `${picks.length} from your catalog, still ranking the rest of the store…`
+          : mirror.status === 'error'
+            ? `${picks.length} from your catalog. The rest of the store could not be reached.`
+            : newOnly
+              ? `${merged.length} picks, out in the last ninety days.`
+              : `${merged.length} picks, from across the whole store.`}
+      </p>
+
+      <div className="grid grid-cols-2 gap-3 sm:grid-cols-3 sm:gap-4 lg:grid-cols-4 xl:grid-cols-5">
+        {merged.map((entry) => {
+          const twin = entry.row ? curatedByName.get(entry.row.name?.toLowerCase()) : null;
+          const id = twin ? twin.id : entry.game.id;
+          return (
+            <GameCard
+              key={entry.key}
+              game={entry.game}
+              live={entry.game.storeLive}
+              reason={entry.reason}
+              wishlisted={saved.wishlist.has(id)}
+              owned={saved.library.has(id)}
+              verdict={ratings.get(id)}
+              onRate={(value) => onRate(entry.row, twin, value, id)}
+              onToggleWishlist={() => saved.toggle(entry.row, twin ?? (entry.row ? null : entry.game), 'wishlist')}
+              onOpen={() =>
+                entry.row && !twin ? onOpenStore(entry.row) : onOpenCurated(twin ? twin.id : entry.game.id)
+              }
+            />
+          );
+        })}
+      </div>
+    </>
+  );
+}
+
 /* ------------------------------------------------------------------ *
  * Store mirror
  * ------------------------------------------------------------------ */
@@ -4433,12 +4549,12 @@ function storeRowAsLive(row) {
 }
 
 /** Query state for the mirror, kept out of the component that renders it. */
-function useStoreSearch({ active, q, genre, sort, plusOnly = false, familyOnly = false, noPurchases = false }) {
+function useStoreSearch({ active, q, genre, sort, plusOnly = false, familyOnly = false, noPurchases = false, newOnly = false }) {
   const [state, setState] = useState({ status: 'idle', games: [], total: 0, page: 0 });
   const request = useRef(0);
   // Everything that decides which games belong in the list, as against which
   // of them match what has been typed.
-  const shape = `${genre}|${sort}|${plusOnly}|${familyOnly}|${noPurchases}`;
+  const shape = `${genre}|${sort}|${plusOnly}|${familyOnly}|${noPurchases}|${newOnly}`;
   const lastShape = useRef(shape);
 
   useEffect(() => {
@@ -4451,6 +4567,7 @@ function useStoreSearch({ active, q, genre, sort, plusOnly = false, familyOnly =
     if (plusOnly) params.set('plus', '1');
     if (familyOnly) params.set('family', '1');
     if (noPurchases) params.set('nopurchases', '1');
+    if (newOnly) params.set('new', '1');
 
     // Rows are kept while a query narrows, because a list shrinking under the
     // typing is the answer arriving. Changing a filter is not that: the old
@@ -4480,7 +4597,7 @@ function useStoreSearch({ active, q, genre, sort, plusOnly = false, familyOnly =
     }, q ? 220 : 0);
 
     return () => clearTimeout(timer);
-  }, [active, q, genre, sort, plusOnly, familyOnly, noPurchases, shape]);
+  }, [active, q, genre, sort, plusOnly, familyOnly, noPurchases, newOnly, shape]);
 
   const more = useCallback(async () => {
     const params = new URLSearchParams();
@@ -4490,6 +4607,7 @@ function useStoreSearch({ active, q, genre, sort, plusOnly = false, familyOnly =
     if (plusOnly) params.set('plus', '1');
     if (familyOnly) params.set('family', '1');
     if (noPurchases) params.set('nopurchases', '1');
+    if (newOnly) params.set('new', '1');
     params.set('page', String(state.page + 1));
     try {
       const response = await fetch(`/api/store?${params}`);
@@ -4502,7 +4620,7 @@ function useStoreSearch({ active, q, genre, sort, plusOnly = false, familyOnly =
     } catch {
       // A failed "load more" leaves what is already on screen alone.
     }
-  }, [q, genre, sort, plusOnly, familyOnly, noPurchases, state.page]);
+  }, [q, genre, sort, plusOnly, familyOnly, noPurchases, newOnly, state.page]);
 
   return { ...state, more };
 }
@@ -4587,8 +4705,8 @@ function PlusThisMonth({ now, onSearch }) {
   );
 }
 
-function StoreFeed({ query, curatedFirst = [], curatedReason, curatedByName, saved, plusOnly = false, familyOnly = false, noPurchases = false, muted, onToggleMuted, onOpenCurated, onOpenStore }) {
-  const results = useStoreSearch({ active: true, q: query, genre: '', sort: 'rating', plusOnly, familyOnly, noPurchases });
+function StoreFeed({ query, curatedFirst = [], curatedReason, curatedByName, saved, plusOnly = false, familyOnly = false, noPurchases = false, newOnly = false, muted, onToggleMuted, onOpenCurated, onOpenStore }) {
+  const results = useStoreSearch({ active: true, q: query, genre: '', sort: 'rating', plusOnly, familyOnly, noPurchases, newOnly });
   const [sentinel, setSentinel] = useState(null);
   const loadMore = results.more;
   const hasMore = results.games.length < results.total;
@@ -4655,7 +4773,7 @@ function StoreFeed({ query, curatedFirst = [], curatedReason, curatedByName, sav
   );
 }
 
-function StorePanel({ query, curatedFirst = [], curatedReason, curatedByName, saved, plusOnly = false, familyOnly = false, noPurchases = false, onOpenCurated, onOpenStore, onSearch }) {
+function StorePanel({ query, curatedFirst = [], curatedReason, curatedByName, saved, plusOnly = false, familyOnly = false, noPurchases = false, newOnly = false, onOpenCurated, onOpenStore, onSearch }) {
   const [genre, setGenre] = useState('');
   const [sort, setSort] = useState('rating');
   const [facets, setFacets] = useState({ genres: [], size: 0 });
@@ -4673,7 +4791,7 @@ function StorePanel({ query, curatedFirst = [], curatedReason, curatedByName, sa
     };
   }, []);
 
-  const results = useStoreSearch({ active: true, q: query, genre, sort, plusOnly, familyOnly, noPurchases });
+  const results = useStoreSearch({ active: true, q: query, genre, sort, plusOnly, familyOnly, noPurchases, newOnly });
 
   // Ask for the next page a screen and a half early, so the end of the list is
   // never actually reached. A callback ref because the sentinel only exists
@@ -5821,6 +5939,15 @@ export default function App() {
   // wishlist and one library without ever colliding.
   const [activeStoreGame, setActiveStoreGame] = useState(null);
   const [geniusOpen, setGeniusOpen] = useState(false);
+  /*
+   * One clock for the session.
+   *
+   * Read during render, Date.now() gives a different answer every pass, so a
+   * list filtered against it is never quite the same list twice and React
+   * says so. It is also the wrong behaviour: the ninety-day window has no
+   * business moving while somebody is reading the page.
+   */
+  const [openedAt] = useState(() => Date.now());
   const [alertsOpen, setAlertsOpen] = useState(false);
   const [theme, setTheme] = useTheme();
   const [feedMuted, setFeedMuted] = useState(readFeedMuted);
@@ -6289,11 +6416,18 @@ export default function App() {
       // The mirror knows these games under other ids and slightly other
       // names, so the ids alone do not reach them.
       excludeTitles: ruledOut.map((id) => known.get(id)?.title).filter(Boolean),
-      limit: 12,
+      // Enough for a grid. The sheet shows the first handful of them.
+      limit: 48,
+      newOnly: filters.newOnly,
     });
-  }, [geniusResult, rateable, library, wishlist, hidden, ratings]);
+  }, [geniusResult, rateable, library, wishlist, hidden, ratings, filters.newOnly]);
 
-  const mirrorPicks = useMirrorPicks(mirrorRequest, geniusOpen);
+  // The sheet and the For you tab are the same picks on two surfaces, so
+  // either one being open is reason enough to have ranked the store.
+  const mirrorPicks = useMirrorPicks(
+    mirrorRequest,
+    geniusOpen || filters.collection === 'genius',
+  );
 
   /** Everything said no to, which is a thing worth counting even with no yes. */
   const ruledOutCount = useMemo(
@@ -6539,6 +6673,7 @@ export default function App() {
       if (filters.artStyle !== 'All' && game.artStyle !== filters.artStyle) return false;
       if (filters.upgrade !== 'All' && game.ps5Upgrade !== filters.upgrade) return false;
       if (filters.kidFriendly && !isKidFriendly(game.ageRating)) return false;
+      if (filters.newOnly && !isNewRelease(game, openedAt)) return false;
       // Unrated is unknown, not innocent: the same rule the kid filter uses.
       if (filters.noPurchases && (!game.ageRating || hasInGamePurchases(game.ageRating)))
         return false;
@@ -6601,7 +6736,7 @@ export default function App() {
       if (filters.sort === 'buy') return buyScoreOf(a) - buyScoreOf(b);
       return discountOf(b) - discountOf(a);
     });
-  }, [pool, searchScores, filters, wishlist, library, hidden, byTitle, geniusPicks]);
+  }, [pool, searchScores, filters, wishlist, library, hidden, byTitle, geniusPicks, openedAt]);
 
   // Cards are added as you reach them rather than all at once; a different
   // filter, sort or collection is a different list, so it starts over.
@@ -6689,6 +6824,18 @@ export default function App() {
     [catalogPool],
   );
 
+  /**
+   * Out in the last ninety days and already out.
+   *
+   * Counted over the written-up games, which is what the chip sits above;
+   * the store half is filtered at the other end, where the release dates for
+   * all 9,222 live. A game with no date is unknown rather than new.
+   */
+  const newCount = useMemo(
+    () => catalogPool.filter((game) => isNewRelease(game, openedAt)).length,
+    [catalogPool, openedAt],
+  );
+
   const collectionCounts = useMemo(() => {
     // A lookup rather than another rung on a ternary ladder: there are now
     // five collections that count something of their own and the nesting had
@@ -6741,6 +6888,7 @@ export default function App() {
     if (filters.kidFriendly) add('kids', 'Kid friendly', () => set('kidFriendly', false));
     if (filters.noPurchases)
       add('nomtx', 'No in-game purchases', () => set('noPurchases', false));
+    if (filters.newOnly) add('new', 'New releases', () => set('newOnly', false));
     if (filters.wishlist) add('wishlist', 'Wishlist', () => set('wishlist', false));
     if (filters.owned !== 'any')
       add('owned', filters.owned === 'owned' ? 'In my library' : 'Not owned', () =>
@@ -7012,6 +7160,14 @@ export default function App() {
                   tone="bg-emerald-600"
                 />
                 <TogglePill
+                  active={filters.newOnly}
+                  onClick={() => set('newOnly', !filters.newOnly)}
+                  icon={Sparkles}
+                  label="New releases"
+                  count={newCount}
+                  tone="bg-violet-600"
+                />
+                <TogglePill
                   active={filters.noPurchases}
                   onClick={() => set('noPurchases', !filters.noPurchases)}
                   icon={Wallet}
@@ -7125,6 +7281,7 @@ export default function App() {
               plusOnly={filters.collection === 'plus'}
               familyOnly={filters.kidFriendly}
               noPurchases={filters.noPurchases}
+              newOnly={filters.newOnly}
               curatedReason={
                 filters.collection === 'plus'
                   ? 'In your catalog, covered by Plus'
@@ -7167,13 +7324,29 @@ export default function App() {
         </main>
       ) : (
         <main className="gutter pb-nav mx-auto max-w-7xl pt-3">
-          {filters.collection === 'all' || filters.collection === 'plus' ? (
+          {filters.collection === 'genius' && geniusIsPersonalized ? (
+            <GeniusPanel
+              picks={geniusPicks}
+              mirror={mirrorPicks}
+              newOnly={filters.newOnly}
+              openedAt={openedAt}
+              ratings={ratings}
+              saved={storeSaved}
+              curatedByName={curatedByName}
+              onRate={(row, twin, value, id) =>
+                row && !twin ? rateStoreRow(row, value) : rateGame(id, value)
+              }
+              onOpenCurated={setActiveGameId}
+              onOpenStore={setActiveStoreGame}
+            />
+          ) : filters.collection === 'all' || filters.collection === 'plus' ? (
             <StorePanel
               query={deferredQuery.trim()}
               curatedFirst={filters.collection === 'plus' ? curatedPlusGames : curatedOnlyMatches}
               plusOnly={filters.collection === 'plus'}
               familyOnly={filters.kidFriendly}
               noPurchases={filters.noPurchases}
+              newOnly={filters.newOnly}
               curatedReason={
                 filters.collection === 'plus'
                   ? 'In your catalog, covered by Plus'

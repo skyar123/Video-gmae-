@@ -20,7 +20,7 @@ import {
   normalizeTitle,
   hasDistinctiveReason,
 } from '../src/genius.js';
-import { storeRows } from './store.mjs';
+import { storeRows, NEW_RELEASE_DAYS } from './store.mjs';
 
 /**
  * Bounds, because this endpoint accepts a body from anyone who can reach it.
@@ -68,6 +68,7 @@ export function parsePicksRequest(body) {
 
   const limit = Number(body.limit);
   return {
+    newOnly: body.newOnly === true,
     taste: unpackTaste(body.taste),
     // Ids arrive as numbers from the mirror and strings from the write-ups.
     exclude: new Set(rawExclude.map((id) => String(id))),
@@ -80,7 +81,11 @@ export async function pickFromMirror(body) {
   const parsed = parsePicksRequest(body);
   if (parsed.error) return parsed;
 
-  const { taste, exclude, excludeTitles, limit } = parsed;
+  const { taste, exclude, excludeTitles, limit, newOnly } = parsed;
+  // The same window the store filter uses, so the chip means one thing
+  // whichever list it is sitting over.
+  const newestFrom = Date.now() - NEW_RELEASE_DAYS * 86_400_000;
+  const now = Date.now();
   if (taste.weights.size === 0) return { games: [], total: 0, reason: 'no profile' };
 
   const rows = await storeRows();
@@ -88,6 +93,10 @@ export async function pickFromMirror(body) {
   for (const row of rows) {
     if (exclude.has(String(row.id))) continue;
     if (excludeTitles.has(normalizeTitle(row.name))) continue;
+    if (newOnly) {
+      const at = Date.parse(row.release ?? '');
+      if (!Number.isFinite(at) || at < newestFrom || at > now) continue;
+    }
     const scored = scoreGame(row, taste);
     if (scored.score <= 0) continue;
     ranked.push({ game: row, score: scored.score, hits: scored.hits });

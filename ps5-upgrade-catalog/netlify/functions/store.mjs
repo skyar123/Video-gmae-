@@ -38,6 +38,7 @@ export default async function handler(request) {
     plusOnly: url.searchParams.get('plus') === '1',
     familyOnly: url.searchParams.get('family') === '1',
     noPurchases: url.searchParams.get('nopurchases') === '1',
+    newOnly: url.searchParams.get('new') === '1',
   });
   return json(payload);
 }
