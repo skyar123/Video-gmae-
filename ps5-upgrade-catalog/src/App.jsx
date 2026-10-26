@@ -21,7 +21,6 @@ import {
   CirclePlay,
   Clapperboard,
   Clock,
-  Dices,
   ExternalLink,
   Flame,
   Heart,
@@ -52,7 +51,13 @@ import {
   Wallet,
   X,
 } from 'lucide-react';
-import { buildProfile, recommend, starterPicks } from './recommend.js';
+import { starterPicks } from './recommend.js';
+import {
+  geniusPicks as geniusPicksFor,
+  unify,
+  explain,
+  SIGNAL_WEIGHTS,
+} from './genius.js';
 import { fold, indexText, parseQuery, scoreMatch } from '../api/search.mjs';
 import { priceStanding } from '../api/standing.mjs';
 import gamesData from './games.json';
@@ -150,7 +155,7 @@ const COLLECTIONS = [
 
 const COLLECTION_BLURBS = {
   genius:
-    'Worked out from the games you own and want, with the reason for each pick.',
+    'Worked out from what you have thumbed up and down, what you own and what you want, with the reason for each pick.',
   deals: 'Everything discounted right now, deepest cut first. Updates with the storefront.',
   plus: 'Already covered by your PlayStation Plus subscription, so there is nothing more to pay. Read from the store, which names the tier each one needs.',
   graphics: 'Technical showcases and standout art direction.',
@@ -282,6 +287,7 @@ function writeFiltersToUrl(filters) {
 const WISHLIST_KEY = 'wishlist';
 const LIBRARY_KEY = 'library';
 const HIDDEN_KEY = 'hidden';
+const RATINGS_KEY = 'ratings';
 
 /** Store-mirror ids are numeric; prefixing keeps them out of the catalog's namespace. */
 const storeKey = (game) => `store:${game.id}`;
@@ -348,6 +354,27 @@ function readWishlistPrices() {
     return JSON.parse(localStorage.getItem(WISHLIST_PRICES_KEY) ?? '{}') ?? {};
   } catch {
     return {};
+  }
+}
+
+/**
+ * Thumbs up and thumbs down, by game id.
+ *
+ * The one thing the catalog had no way to record. Owning, wanting and hiding
+ * were all it knew, and all three are indirect: a shelf says what was bought,
+ * a wishlist says what was considered, and hiding says only "not this one".
+ * None of them is a reader saying what they thought of a game, which is the
+ * one thing picks need most.
+ */
+function readRatings() {
+  try {
+    const raw = JSON.parse(localStorage.getItem(RATINGS_KEY) ?? '{}');
+    if (!raw || typeof raw !== 'object' || Array.isArray(raw)) return new Map();
+    return new Map(
+      Object.entries(raw).filter(([, verdict]) => verdict === 'like' || verdict === 'dislike'),
+    );
+  } catch {
+    return new Map();
   }
 }
 
@@ -1259,9 +1286,19 @@ function ModalSheet({ labelledBy, onClose, children }) {
   );
 }
 
+/**
+ * Joins a sentence onto a label without stuttering its punctuation.
+ * The reasons arrive already written as sentences, so they keep their own
+ * full stop rather than being handed a second one.
+ */
+const uncapitalize = (text) =>
+  `${text.charAt(0).toLowerCase()}${text.slice(1)}${/[.!?]$/.test(text) ? '' : '.'}`;
+
 function GameModal({
   game,
   onHide,
+  verdict,
+  onRate,
   live,
   pool,
   byTitle,
@@ -1365,6 +1402,7 @@ function GameModal({
             <div className="flex shrink-0 items-center gap-2 sm:gap-1">
               <WishlistButton wishlisted={wishlisted} onToggle={onToggleWishlist} withLabel />
               <OwnedButton owned={owned} onToggle={onToggleOwned} withLabel />
+              {onRate && <Verdict verdict={verdict} size="sm" onRate={onRate} />}
               {onHide && (
                 <button
                   type="button"
@@ -1382,7 +1420,7 @@ function GameModal({
           {reason && (
             <p className="mt-3 inline-flex items-start gap-2 rounded-lg bg-indigo-50 dark:bg-indigo-950/40 px-3 py-2 text-sm font-medium leading-relaxed text-indigo-700 dark:text-indigo-300">
               <Sparkles className="mt-0.5 h-4 w-4 shrink-0" />
-              <span>Picked for you: {reason.charAt(0).toLowerCase() + reason.slice(1)}.</span>
+              <span>Picked for you: {uncapitalize(reason)}</span>
             </p>
           )}
 
@@ -2046,15 +2084,19 @@ function GameCard({
   );
 }
 
-function EmptyState({ filters, wishlist, library, status, onClear, onSearchStore }) {
-  if (filters.collection === 'genius' && library.size === 0 && wishlist.size === 0) {
+function EmptyState({ filters, personalized, status, onClear, onSearchStore }) {
+  // Asked of the picks themselves rather than of the library and wishlist.
+  // Counting only those two meant somebody who had thumbed twenty games and
+  // owned none was told there was nothing to work from, under a list of
+  // picks worked out from exactly that.
+  if (filters.collection === 'genius' && !personalized) {
     return (
       <div className="py-20 text-center text-slate-500 dark:text-slate-400">
         <Sparkles className="mx-auto mb-3 h-8 w-8 text-indigo-300" />
         <p className="text-lg text-slate-700 dark:text-slate-200">Nothing to work from yet.</p>
         <p className="mx-auto mt-2 max-w-sm text-sm leading-relaxed">
-          Tick the check on a few games you already own, or heart the ones you want. Picks
-          appear as soon as there is one, and get sharper with every game you add.
+          Thumb a few games up or down, tick the ones you own, or heart the ones you want.
+          Picks appear as soon as there is one, and sharpen with every game you rate.
         </p>
       </div>
     );
@@ -3017,7 +3059,7 @@ function BottomBar({ view, onView, onBriefing, onSurprise, canSurprise, updates 
     { key: 'grid', label: 'Browse', icon: LayoutGrid, active: view === 'grid' },
     { key: 'feed', label: 'Feed', icon: Rows3, active: view === 'feed' },
     { key: 'goss', label: 'Goss', icon: Flame, badge: updates },
-    { key: 'surprise', label: 'Tonight', icon: Dices, disabled: !canSurprise },
+    { key: 'surprise', label: 'For you', icon: Sparkles, disabled: !canSurprise },
   ];
 
   return (
@@ -3056,78 +3098,9 @@ function BottomBar({ view, onView, onBriefing, onSurprise, canSurprise, updates 
 }
 
 /* ------------------------------------------------------------------ *
- * Tonight
+ * Genius picks
  * ------------------------------------------------------------------ */
 
-/**
- * Moods, defined against things the catalog actually knows. Each one is a
- * filter plus the sentence it puts under the pick, so a choice always comes
- * with a reason rather than arriving out of nowhere.
- */
-const MOODS = [
-  {
-    value: 'cozy',
-    label: 'Something cozy',
-    emoji: '\u{1F343}',
-    match: (game) => game.tags?.includes('cozy'),
-    why: 'Low stakes, gentle pacing, nothing to lose.',
-  },
-  {
-    value: 'story',
-    label: 'A good story',
-    emoji: '\u{1F4D6}',
-    match: (game) =>
-      game.genre === 'Narrative' ||
-      (game.ratings?.pros ?? []).some((pro) => pro.label === 'Story and writing'),
-    why: 'Players single out the writing on this one.',
-  },
-  {
-    value: 'queer',
-    label: 'Queer stories',
-    emoji: '\u{1F308}',
-    match: (game) =>
-      game.tags?.includes('queer') ||
-      (game.representation ?? []).some((entry) => entry.kind === 'queer'),
-    why: 'Queer characters or relationships that matter to the plot.',
-  },
-  {
-    value: 'people',
-    label: 'With people',
-    emoji: '\u{1F3AE}',
-    match: (game) => game.tags?.includes('social'),
-    why: 'Built for co-op, couch play or playing alongside someone.',
-  },
-  {
-    value: 'beautiful',
-    label: 'Something beautiful',
-    emoji: '\u{2728}',
-    match: (game) => game.tags?.includes('graphics'),
-    why: 'On the list for its art direction, not just its tech.',
-  },
-  {
-    value: 'any',
-    label: 'Anything good',
-    emoji: '\u{1F3B2}',
-    match: () => true,
-    why: 'Highly rated, and you have not ruled it out.',
-  },
-];
-
-/** Quality tips the coin when several games fit the mood equally well. */
-const moodScore = (game) => {
-  const critic = game.ratings?.critic ?? 75;
-  const user = game.ratings?.user?.percentPositive ?? 80;
-  return (critic / 100 + user / 100) / 2;
-};
-
-/**
- * "What should I actually play tonight."
- *
- * Genius picks answers what to buy. Nothing answered the other question, which
- * for anyone with a backlog is the harder one: you already own things, so
- * which do you boot up? This prefers your library whenever you have one, and
- * only falls back to the whole catalog when you do not.
- */
 /* ------------------------------------------------------------------ *
  * Email price alerts
  * ------------------------------------------------------------------ */
@@ -3720,163 +3693,147 @@ function AlertsSheet({ alerts, onClose }) {
   );
 }
 
-function TonightSheet({ catalog, library, hidden, onOpenGame, onClose }) {
-  const [mood, setMood] = useState(null);
-  const [fromLibrary, setFromLibrary] = useState(library.size > 0);
-  const [pick, setPick] = useState(null);
-  const [seen, setSeen] = useState(() => new Set());
-
-  const pool = useMemo(() => {
-    const chosen = MOODS.find((entry) => entry.value === mood);
-    if (!chosen) return [];
-    return catalog.filter(
-      (game) =>
-        !hidden.has(game.id) &&
-        (!fromLibrary || library.has(game.id)) &&
-        chosen.match(game),
-    );
-  }, [catalog, mood, fromLibrary, library, hidden]);
-
-  /** Weighted toward the better-reviewed end without ever being predictable. */
-  const draw = useCallback(
-    (exclude) => {
-      const fresh = pool.filter((game) => !exclude.has(game.id));
-      const candidates = fresh.length > 0 ? fresh : pool;
-      if (candidates.length === 0) return null;
-      const ranked = [...candidates].sort((a, b) => moodScore(b) - moodScore(a));
-      // Pick from the better half, at random inside it.
-      const top = ranked.slice(0, Math.max(3, Math.ceil(ranked.length / 2)));
-      return top[Math.floor(Math.random() * top.length)];
-    },
-    [pool],
+/**
+ * Thumbs up, thumbs down.
+ *
+ * A pair of buttons rather than one, because a catalog that can only be told
+ * yes learns a strange shape of taste: everything unrated looks the same
+ * whether it was never seen or seen and rejected.
+ */
+function Verdict({ verdict, onRate, size = 'md' }) {
+  const box =
+    size === 'sm' ? 'h-9 w-9' : 'h-11 w-11';
+  const icon = size === 'sm' ? 'h-4 w-4' : 'h-5 w-5';
+  const options = [
+    { value: 'like', Icon: ThumbsUp, label: 'More like this', on: 'bg-emerald-600 text-white' },
+    { value: 'dislike', Icon: ThumbsDown, label: 'Less like this', on: 'bg-rose-600 text-white' },
+  ];
+  return (
+    <div className="flex gap-1.5">
+      {options.map(({ value, Icon, label, on }) => (
+        <button
+          key={value}
+          type="button"
+          onClick={() => onRate(value)}
+          aria-pressed={verdict === value}
+          aria-label={label}
+          title={label}
+          className={`flex ${box} items-center justify-center rounded-full transition-all duration-200 ease-spring active:scale-90 ${
+            verdict === value
+              ? on
+              : 'bg-slate-100 dark:bg-slate-800 text-slate-500 dark:text-slate-400 hover:bg-slate-200 dark:hover:bg-slate-700'
+          }`}
+        >
+          <Icon className={icon} />
+        </button>
+      ))}
+    </div>
   );
+}
 
-  const choose = (value) => {
-    setMood(value);
-    setSeen(new Set());
-    setPick(null);
+/**
+ * The picks, and the reason for each.
+ *
+ * This replaced a sheet that asked what you were in the mood for and drew a
+ * game at random from whatever matched. That question had a real problem: it
+ * asked the reader to do the work, every time, and it forgot the answer the
+ * moment the sheet closed. Six moods meant six fixed lists, the same for
+ * everybody, and nothing a reader did ever changed them.
+ *
+ * So this asks nothing and remembers everything. The reasons are the ones the
+ * model actually ranked on, and the thumbs are here rather than only on the
+ * game page because the fastest way to a profile worth having is to be able
+ * to disagree with a pick where it is shown to you.
+ */
+function GeniusSheet({ picks, taste, ratings, onRate, onOpenGame, onClose }) {
+  const [burst, setBurst] = useState(null);
+  const positives = taste?.positives ?? 0;
+
+  const rate = (id, verdict) => {
+    setBurst(ratings.get(id) === verdict ? null : `${id}:${verdict}`);
+    onRate(id, verdict);
   };
-
-  useEffect(() => {
-    if (!mood) return;
-    // eslint-disable-next-line react/set-state-in-effect
-    setPick(draw(new Set()));
-  }, [mood, fromLibrary, draw]);
-
-  const again = () => {
-    const nextSeen = new Set(seen);
-    if (pick) nextSeen.add(pick.id);
-    setSeen(nextSeen);
-    setPick(draw(nextSeen));
-  };
-
-  const chosenMood = MOODS.find((entry) => entry.value === mood);
 
   return (
-    <ModalSheet labelledBy="tonight-title" onClose={onClose}>
+    <ModalSheet labelledBy="genius-title" onClose={onClose}>
       <div className="p-6 sm:p-8">
-        <h2 id="tonight-title" className="text-2xl font-bold text-slate-900 dark:text-slate-50">
-          What are you in the mood for?
+        <h2 id="genius-title" className="text-2xl font-bold text-slate-900 dark:text-slate-50">
+          Genius picks
         </h2>
+        <p className="mt-1.5 text-sm leading-relaxed text-slate-500 dark:text-slate-400">
+          {positives > 0
+            ? `Worked out from ${positives} ${positives === 1 ? 'game' : 'games'} you have rated, owned or wanted. Thumb anything here and the list moves.`
+            : 'Nothing rated yet, so these are simply the best reviewed. Thumb a few and this becomes yours.'}
+        </p>
 
-        {library.size > 0 && (
-          <div className="mt-4 flex gap-1.5">
-            {[
-              [true, `From my ${library.size} owned`],
-              [false, 'Anything in the catalog'],
-            ].map(([value, label]) => (
-              <button
-                key={String(value)}
-                type="button"
-                onClick={() => setFromLibrary(value)}
-                aria-pressed={fromLibrary === value}
-                className={`rounded-full px-3 py-1.5 text-xs font-medium transition-all duration-200 ease-spring active:scale-95 ${
-                  fromLibrary === value
-                    ? 'bg-slate-900 text-white dark:bg-slate-100 dark:text-slate-900'
-                    : 'bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-300 hover:bg-slate-200'
-                }`}
-              >
-                {label}
-              </button>
-            ))}
-          </div>
-        )}
-
-        <div className="mt-4 grid grid-cols-2 gap-2">
-          {MOODS.map((entry) => (
-            <button
-              key={entry.value}
-              type="button"
-              onClick={() => choose(entry.value)}
-              aria-pressed={mood === entry.value}
-              className={`flex min-h-[3rem] items-center gap-2 rounded-xl px-3 py-2.5 text-left text-sm font-medium transition-all duration-200 ease-spring active:scale-[0.97] ${
-                mood === entry.value
-                  ? 'bg-indigo-600 text-white'
-                  : 'bg-slate-100 dark:bg-slate-800 text-slate-700 dark:text-slate-200 hover:bg-slate-200'
-              }`}
-            >
-              <span aria-hidden="true">{entry.emoji}</span>
-              {entry.label}
-            </button>
-          ))}
-        </div>
-
-        {mood && !pick && (
-          <p className="mt-6 rounded-xl bg-amber-50 dark:bg-amber-950/40 px-4 py-3 text-sm text-amber-800 dark:text-amber-200">
-            Nothing in {fromLibrary ? 'your library' : 'the catalog'} matches that yet.
-            {fromLibrary && ' Try the whole catalog, or mark a few more games as owned.'}
+        {picks.length === 0 ? (
+          <p className="mt-6 rounded-xl bg-amber-50 dark:bg-amber-950/40 px-4 py-3 text-sm leading-relaxed text-amber-800 dark:text-amber-200">
+            Everything in the catalog is already owned, wanted, rated or hidden.
+            Nothing left to suggest, which is its own kind of answer.
           </p>
-        )}
-
-        {pick && (
-          <div className="mt-6 animate-rise-in overflow-hidden rounded-2xl border border-slate-200 dark:border-slate-700 shadow-sm">
-            <button
-              type="button"
-              onClick={() => onOpenGame(pick.id)}
-              className="block w-full text-left"
-            >
-              <div className="aspect-[460/215] w-full bg-slate-100 dark:bg-slate-800">
-                <CoverArt game={pick} live={null} className="h-full w-full" />
-              </div>
-              <div className="p-4">
-                <p className="text-xs font-semibold uppercase tracking-wider text-indigo-500">
-                  {fromLibrary ? 'From your library' : 'Worth a look'}
-                </p>
-                <h3 className="mt-1 text-xl font-bold text-slate-900 dark:text-slate-50">{pick.title}</h3>
-                <p className="mt-1 text-sm text-slate-500 dark:text-slate-400">{chosenMood?.why}</p>
-                <p className="mt-2 line-clamp-2 text-sm leading-relaxed text-slate-600 dark:text-slate-300">
-                  {pick.description}
-                </p>
-              </div>
-            </button>
-
-            <div className="grid grid-cols-2 divide-x divide-slate-100 dark:divide-slate-800 border-t border-slate-100 dark:border-slate-800">
-              <button
-                type="button"
-                onClick={again}
-                className="flex h-12 items-center justify-center gap-2 text-sm font-medium text-slate-600 dark:text-slate-300 transition-colors active:bg-slate-100"
-              >
-                <Dices className="h-4 w-4" />
-                Something else
-              </button>
-              <button
-                type="button"
-                onClick={() => onOpenGame(pick.id)}
-                className="flex h-12 items-center justify-center gap-2 text-sm font-medium text-indigo-600 dark:text-indigo-300 transition-colors active:bg-slate-100"
-              >
-                <Info className="h-4 w-4" />
-                Tell me more
-              </button>
-            </div>
-          </div>
-        )}
-
-        {!mood && (
-          <p className="mt-6 text-sm leading-relaxed text-slate-500 dark:text-slate-400">
-            {library.size > 0
-              ? `Picks come from the ${library.size} games you have marked as owned, so this answers what to play rather than what to buy.`
-              : 'Mark a few games as owned and this starts picking from your own shelf instead of the whole catalog.'}
-          </p>
+        ) : (
+          <ul className="mt-5 space-y-3">
+            {picks.map((pick, index) => {
+              const { game } = pick;
+              const verdict = ratings.get(game.id);
+              return (
+                <li
+                  key={game.id}
+                  className="animate-rise-in overflow-hidden rounded-2xl border border-slate-200 dark:border-slate-700 shadow-sm"
+                  style={{ animationDelay: `${Math.min(index, 8) * 35}ms` }}
+                >
+                  <button
+                    type="button"
+                    onClick={() => onOpenGame(game.id)}
+                    className="flex w-full items-stretch gap-3 text-left"
+                  >
+                    <div className="w-28 shrink-0 bg-slate-100 dark:bg-slate-800">
+                      <CoverArt game={game} live={null} className="h-full w-full" />
+                    </div>
+                    <div className="min-w-0 flex-1 py-3 pr-3">
+                      {index === 0 && (
+                        <p className="text-[0.65rem] font-semibold uppercase tracking-wider text-indigo-500">
+                          Top pick
+                        </p>
+                      )}
+                      <h3 className="truncate text-base font-bold text-slate-900 dark:text-slate-50">
+                        {game.title}
+                      </h3>
+                      <p className="mt-0.5 text-xs leading-relaxed text-slate-500 dark:text-slate-400">
+                        {pick.reason ?? explain(pick.hits ?? [])}
+                      </p>
+                    </div>
+                  </button>
+                  <div className="flex items-center justify-between gap-3 border-t border-slate-100 dark:border-slate-800 px-3 py-2">
+                    <span className="truncate text-xs text-slate-400 dark:text-slate-500">
+                      {verdict === 'like'
+                        ? 'More like this'
+                        : verdict === 'dislike'
+                          ? 'Less like this'
+                          : game.fromStore
+                            ? 'From the store'
+                            : 'Written up'}
+                    </span>
+                    <div className="relative">
+                      {burst === `${game.id}:like` && (
+                        <span
+                          aria-hidden="true"
+                          className="pointer-events-none absolute -top-6 right-2 animate-rise-in text-lg"
+                        >
+                          {'\u2728'}
+                        </span>
+                      )}
+                      <Verdict
+                        verdict={verdict}
+                        size="sm"
+                        onRate={(value) => rate(game.id, value)}
+                      />
+                    </div>
+                  </div>
+                </li>
+              );
+            })}
+          </ul>
         )}
       </div>
     </ModalSheet>
@@ -5704,6 +5661,7 @@ export default function App() {
   const [wishlist, setWishlist] = useState(readWishlist);
   const [dealAlerts, setDealAlerts] = useState(readDealAlerts);
   const [hidden, setHidden] = useState(readHidden);
+  const [ratings, setRatings] = useState(readRatings);
   const [savedReleases, setSavedReleases] = useState(readSavedReleases);
   const [favouriteCreators, setFavouriteCreators] = useState(readFavouriteCreators);
   const [library, setLibrary] = useState(readLibrary);
@@ -5712,7 +5670,7 @@ export default function App() {
   // Store-mirror games are keyed apart from catalog ids so both can share one
   // wishlist and one library without ever colliding.
   const [activeStoreGame, setActiveStoreGame] = useState(null);
-  const [tonightOpen, setTonightOpen] = useState(false);
+  const [geniusOpen, setGeniusOpen] = useState(false);
   const [alertsOpen, setAlertsOpen] = useState(false);
   const [theme, setTheme] = useTheme();
   const [feedMuted, setFeedMuted] = useState(readFeedMuted);
@@ -5883,6 +5841,28 @@ export default function App() {
     });
   }, []);
 
+  /**
+   * Thumbs up or down, and tapping the same one again takes it back.
+   *
+   * Takes it back rather than flipping it, because the alternative is that a
+   * mis-tap cannot be undone without stating the opposite of what you think,
+   * and a profile built from corrections nobody meant is worse than a thin
+   * one.
+   */
+  const rateGame = useCallback((id, verdict) => {
+    setRatings((previous) => {
+      const next = new Map(previous);
+      if (next.get(id) === verdict) next.delete(id);
+      else next.set(id, verdict);
+      try {
+        localStorage.setItem(RATINGS_KEY, JSON.stringify(Object.fromEntries(next)));
+      } catch {
+        // Storage is a convenience; the in-memory map still works.
+      }
+      return next;
+    });
+  }, []);
+
   /** "Not for me": the game drops out of every list until you unhide it. */
   const hideGame = useCallback((id) => {
     setHidden((previous) => {
@@ -6034,22 +6014,62 @@ export default function App() {
     [rememberStoreRow, toggleDealAlert],
   );
 
-  // Recomputed only when the library, wishlist or PS5 toggle changes; it never
-  // touches live data, so it stays instant while prices are still loading.
-  // With nothing owned or wishlisted yet there is no taste to work from, so
-  // the collection falls back to a quality ranking rather than sitting empty
-  // — an empty collection reads as broken, not as "add a game first".
-  const profile = useMemo(() => buildProfile(gamesData, library, wishlist), [library, wishlist]);
-  const geniusIsPersonalized = profile != null;
-  const geniusPicks = useMemo(() => {
-    const exclude = new Set([...library, ...wishlist, ...hidden]);
-    return profile
-      ? recommend(gamesData, profile, { exclude, limit: 48 })
-      : starterPicks(gamesData, { exclude, limit: 48 });
-  }, [profile, library, wishlist, hidden]);
+  /**
+   * Everything there is to have an opinion about, as one list.
+   *
+   * The write-ups and the store mirror describe games in different words, and
+   * joining them is what lets a liked write-up say anything about the 8,834
+   * games nobody has written up. Store rows only appear here once they have
+   * been saved, since those are the only ones the phone is holding.
+   */
+  const rateable = useMemo(() => unify(gamesData, storeRowCache), [storeRowCache]);
+
+  /**
+   * What you have said about games, good and bad.
+   *
+   * Hiding is in here as evidence, which it never used to be: the old
+   * recommender read owned and wishlisted only, so it could learn what you
+   * liked and never once learn what you did not. A reader could hide fifty
+   * games and get the same picks as somebody who had hidden none.
+   */
+  const signals = useMemo(() => {
+    const byId = new Map(rateable.map((game) => [game.id, game]));
+    const rows = [];
+    const seen = new Set();
+    const push = (id, kind) => {
+      const game = byId.get(id);
+      if (!game || seen.has(id)) return;
+      seen.add(id);
+      rows.push({ game, kind });
+    };
+    // Strongest first, and each game counts once: a game both owned and
+    // thumbed up is one opinion, not two.
+    for (const [id, verdict] of ratings) push(id, verdict === 'like' ? 'liked' : 'disliked');
+    for (const id of library) push(id, 'owned');
+    for (const id of wishlist) push(id, 'wishlisted');
+    for (const id of hidden) push(id, 'hidden');
+    return rows;
+  }, [rateable, ratings, library, wishlist, hidden]);
+
+  // Never touches live data, so picks stay instant while prices load.
+  const geniusIsPersonalized = signals.some((row) => SIGNAL_WEIGHTS[row.kind] > 0);
+  const geniusResult = useMemo(() => {
+    const exclude = new Set([...hidden, ...ratings.keys()]);
+    if (!geniusIsPersonalized) {
+      // No taste to work from yet. An empty collection reads as broken rather
+      // than as "rate something first", so it falls back to a quality ranking.
+      return { picks: starterPicks(gamesData, { exclude, limit: 48 }), taste: null };
+    }
+    return geniusPicksFor(rateable, signals, { exclude, limit: 48 });
+  }, [rateable, signals, geniusIsPersonalized, hidden, ratings]);
+
+  const geniusPicks = geniusResult.picks;
 
   const geniusReasons = useMemo(
-    () => new Map(geniusPicks.map((pick) => [pick.game.id, pick.reason])),
+    () =>
+      new Map(
+        geniusPicks.map((pick) => [pick.game.id, pick.reason ?? (pick.hits ? explain(pick.hits) : undefined)]),
+      ),
     [geniusPicks],
   );
 
@@ -6573,12 +6593,12 @@ export default function App() {
 
             <button
               type="button"
-              onClick={() => setTonightOpen(true)}
-              aria-label="Pick something to play"
-              title="What should I play?"
-              className="pointer-only inline-flex h-9 w-9 shrink-0 items-center justify-center rounded-full bg-amber-100 text-amber-700 dark:text-amber-300 transition-all duration-200 ease-spring hover:rotate-12 hover:bg-amber-200 active:scale-90 disabled:opacity-40"
+              onClick={() => setGeniusOpen(true)}
+              aria-label="Picks worked out from your ratings"
+              title="Genius picks"
+              className="pointer-only inline-flex h-9 w-9 shrink-0 items-center justify-center rounded-full bg-indigo-100 text-indigo-700 dark:bg-indigo-950/60 dark:text-indigo-300 transition-all duration-200 ease-spring hover:bg-indigo-200 active:scale-90 disabled:opacity-40"
             >
-              <Dices className="h-4 w-4" />
+              <Sparkles className="h-4 w-4" />
             </button>
 
             <button
@@ -6902,8 +6922,7 @@ export default function App() {
           {filters.collection !== 'all' && filters.collection !== 'plus' && filteredGames.length === 0 && (
             <EmptyState
               filters={filters}
-              wishlist={wishlist}
-              library={library}
+              personalized={geniusIsPersonalized}
               status={status}
               onClear={clearFilters}
               onSearchStore={() => set('collection', 'all')}
@@ -7006,8 +7025,8 @@ export default function App() {
               <Sparkles className="mt-0.5 h-4 w-4 shrink-0" />
               <span>
                 <strong className="font-semibold">Starter picks</strong>, highly rated across the
-                catalog. Tick the check on a game you own, or heart one you want, and these turn
-                into picks based on your own taste.
+                catalog. Thumb one up or down and these turn into picks worked out from your
+                own taste, each with the reason it was chosen.
               </span>
             </p>
           )}
@@ -7046,8 +7065,7 @@ export default function App() {
           {filteredGames.length === 0 && (
             <EmptyState
               filters={filters}
-              wishlist={wishlist}
-              library={library}
+              personalized={geniusIsPersonalized}
               status={status}
               onClear={clearFilters}
               onSearchStore={() => set('collection', 'all')}
@@ -7086,6 +7104,8 @@ export default function App() {
           wishlisted={wishlist.has(activeGame.id)}
           owned={library.has(activeGame.id)}
           reason={geniusReasons.get(activeGame.id)}
+          verdict={ratings.get(activeGame.id)}
+          onRate={(value) => rateGame(activeGame.id, value)}
           onHide={() => {
             hideGame(activeGame.id);
             setActiveGameId(null);
@@ -7102,16 +7122,17 @@ export default function App() {
 
       {alertsOpen && <AlertsSheet alerts={alerts} onClose={() => setAlertsOpen(false)} />}
 
-      {tonightOpen && (
-        <TonightSheet
-          catalog={gamesData}
-          library={library}
-          hidden={hidden}
+      {geniusOpen && (
+        <GeniusSheet
+          picks={geniusPicks.slice(0, 12)}
+          taste={geniusResult.taste}
+          ratings={ratings}
+          onRate={rateGame}
           onOpenGame={(id) => {
-            setTonightOpen(false);
+            setGeniusOpen(false);
             setActiveGameId(id);
           }}
-          onClose={() => setTonightOpen(false)}
+          onClose={() => setGeniusOpen(false)}
         />
       )}
 
@@ -7141,7 +7162,7 @@ export default function App() {
             tab: tab ?? (releaseChanges.length > 0 ? 'upcoming' : briefing.tab),
           })
         }
-        onSurprise={() => setTonightOpen(true)}
+        onSurprise={() => setGeniusOpen(true)}
         canSurprise
         updates={releaseChanges.length}
       />

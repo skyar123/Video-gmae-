@@ -134,13 +134,18 @@ export function featuresOf(game, only = null) {
 /**
  * How much each kind of signal counts.
  *
- * Owning a game is the strongest thing a person says about it: they paid.
- * Wanting one is softer, because a wishlist is partly aspiration. A dislike
- * is deliberate and rare, so it carries as much as owning; hiding something
- * is a quieter no, and counts for less.
+ * A thumbs up is first because it is the only one that means exactly what it
+ * says. Owning a game is close behind but not the same thing: people own
+ * games they regret, and a shelf records what was bought, not what was
+ * enjoyed. Wanting one is softer again, because a wishlist is half aspiration.
+ *
+ * On the other side, a thumbs down is deliberate and rare, so it is trusted
+ * as much as a thumbs up. Hiding something is a quieter no, nearer to "not
+ * this one, not now" than to "never show me this", and counts for less.
  */
 export const SIGNAL_WEIGHTS = {
-  owned: 1,
+  liked: 1,
+  owned: 0.8,
   wishlisted: 0.6,
   disliked: -1,
   hidden: -0.45,
@@ -418,4 +423,137 @@ export function unify(curated, storeRows) {
     games.push({ ...row, title: row.name, fromStore: true });
   }
   return games;
+}
+
+/* ------------------------------------------------------------------ *
+ * 7. Sending a profile somewhere else
+ * ------------------------------------------------------------------ */
+
+/**
+ * The learned weights, small enough to put in a request body.
+ *
+ * Ranking the whole mirror has to happen wherever the mirror is, and that is
+ * not a phone: the index is 5MB and grows. What travels instead is the
+ * profile, which is a few hundred short strings and their weights, and which
+ * says nothing about who the reader is. Only features with an opinion behind
+ * them are sent, and tiny ones are dropped since they cannot change an order.
+ */
+export function packTaste(taste, { floor = 0.02 } = {}) {
+  const weights = {};
+  for (const [feature, weight] of taste.weights) {
+    if (Math.abs(weight) < floor) continue;
+    weights[feature] = Math.round(weight * 1000) / 1000;
+  }
+  return { weights, positives: taste.positives, signals: taste.signals };
+}
+
+/** The other end of packTaste. Shapes that are not a profile become an empty one. */
+export function unpackTaste(packed) {
+  const weights = new Map();
+  const entries = packed && typeof packed === 'object' ? packed.weights : null;
+  if (entries && typeof entries === 'object') {
+    for (const [feature, weight] of Object.entries(entries)) {
+      if (typeof feature !== 'string' || typeof weight !== 'number') continue;
+      if (!Number.isFinite(weight)) continue;
+      weights.set(feature, weight);
+    }
+  }
+  return {
+    weights,
+    seen: new Map(),
+    only: null,
+    signals: Number(packed?.signals) || 0,
+    positives: Number(packed?.positives) || 0,
+  };
+}
+
+/* ------------------------------------------------------------------ *
+ * 8. Saying why
+ * ------------------------------------------------------------------ */
+
+const TAG_PHRASES = {
+  graphics: 'how it looks',
+  social: 'playing with people',
+  cozy: 'cozy games',
+  queer: 'queer stories',
+  disability: 'disabled and neurodivergent characters',
+  classic: 'older games',
+};
+
+const LEAD_PHRASES = {
+  Custom: 'making your own character',
+  Female: 'a woman in the lead',
+  Male: 'a man in the lead',
+  Ensemble: 'a cast rather than one hero',
+  'Creature/Animal': 'playing as an animal',
+};
+
+const FAMILY_PHRASES = {
+  safe: 'games anyone can play',
+  mild: 'games with a light touch',
+  mature: 'games written for adults',
+};
+
+const ERA_PHRASES = {
+  now: 'new releases',
+  '2020s': 'games from this decade',
+  '2010s': 'games from the 2010s',
+  older: 'older games',
+};
+
+/**
+ * One feature, in words a person would use.
+ *
+ * Returns null for anything with no good phrasing rather than printing the
+ * raw key. "Because tier:everyone10" is worse than no reason at all: a reason
+ * nobody can read undermines the pick it is attached to.
+ */
+export function describeFeature(feature) {
+  const split = feature.indexOf(':');
+  const kind = feature.slice(0, split);
+  const value = feature.slice(split + 1);
+  switch (kind) {
+    case 'genre':
+    case 'sgenre':
+      return `${value} games`;
+    case 'art':
+      return `the ${value.toLowerCase()} look`;
+    case 'lead':
+      return LEAD_PHRASES[value] ?? null;
+    case 'tag':
+      return TAG_PHRASES[value] ?? null;
+    case 'rep':
+      return TAG_PHRASES[value] ?? null;
+    case 'family':
+      return FAMILY_PHRASES[value] ?? null;
+    case 'era':
+      return ERA_PHRASES[value] ?? null;
+    case 'plus':
+      return 'games your PS Plus already covers';
+    default:
+      return null;
+  }
+}
+
+/**
+ * The sentence under a pick.
+ *
+ * Built from the features that actually earned the game its place, strongest
+ * first, so the reason is the reason rather than a flattering guess. Two is
+ * the limit: a pick justified by six things reads as a machine covering
+ * itself.
+ */
+export function explain(hits, { limit = 2 } = {}) {
+  const phrases = [];
+  const used = new Set();
+  for (const hit of hits) {
+    const phrase = describeFeature(hit.feature);
+    if (!phrase || used.has(phrase)) continue;
+    used.add(phrase);
+    phrases.push(phrase);
+    if (phrases.length === limit) break;
+  }
+  if (phrases.length === 0) return 'Well reviewed, and nothing you have ruled out.';
+  if (phrases.length === 1) return `Because you go for ${phrases[0]}.`;
+  return `Because you go for ${phrases[0]} and ${phrases[1]}.`;
 }

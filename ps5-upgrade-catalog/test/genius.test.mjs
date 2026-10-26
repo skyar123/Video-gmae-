@@ -11,6 +11,8 @@ import {
   normalizeTitle,
   SHARED_NAMESPACES,
   SIGNAL_WEIGHTS,
+  packTaste,
+  unpackTaste,
 } from '../src/genius.js';
 
 const written = (over = {}) => ({
@@ -101,10 +103,35 @@ test('one liked game does not become a law', () => {
 
 test('evidence both ways cancels out', () => {
   const split = buildTaste([
-    { game: written({ id: 'a' }), kind: 'owned' },
+    { game: written({ id: 'a' }), kind: 'liked' },
     { game: written({ id: 'b' }), kind: 'disliked' },
   ]);
   assert.ok(Math.abs(split.weights.get('tag:cozy')) < 0.01);
+});
+
+test('saying so outranks owning, which outranks wanting', () => {
+  // A shelf records what was bought, not what was enjoyed.
+  assert.ok(SIGNAL_WEIGHTS.liked > SIGNAL_WEIGHTS.owned);
+  assert.ok(SIGNAL_WEIGHTS.owned > SIGNAL_WEIGHTS.wishlisted);
+});
+
+test('a profile survives the trip to the server and back', () => {
+  const taste = buildTaste([
+    { game: written(), kind: 'liked' },
+    { game: fromStore(), kind: 'disliked' },
+  ]);
+  const { weights } = unpackTaste(JSON.parse(JSON.stringify(packTaste(taste))));
+  assert.ok(weights.get('tag:cozy') > 0);
+  assert.ok(weights.get('sgenre:Adventure') < 0);
+  assert.equal(scoreGame(written({ id: 'other' }), { weights, only: null }).hits.length > 0, true);
+});
+
+test('a profile that is not one unpacks to an empty profile', () => {
+  for (const junk of [null, undefined, 'nope', 42, { weights: 'no' }, { weights: { a: 'x' } }]) {
+    const taste = unpackTaste(junk);
+    assert.equal(taste.weights.size, 0);
+    assert.equal(scoreGame(written(), taste).hits.length, 0);
+  }
 });
 
 test('a detailed entry does not outrank a good game the mirror says little about', () => {
