@@ -2643,6 +2643,8 @@ function FeedSlide({
   game,
   live,
   wishlisted,
+  verdict,
+  onRate,
   reason,
   actions = true,
   muted,
@@ -2961,7 +2963,14 @@ function FeedSlide({
               store page both sat here and both already live on the game's
               own page, which is one tap away through the middle button. What
               is left is what you actually do while scrolling: want it, look
-              at it, hear it. */}
+              at it, hear it.
+
+              A fourth was added, and only one: no. The heart already says yes
+              and the picks read it, but there was nothing anywhere in a
+              scrolling feed for the commoner verdict, so the model could only
+              ever be taught by the games somebody liked. One tap here is
+              worth more to it than a dozen hearts, because it is the half it
+              never hears. */}
           <div className="flex shrink-0 flex-col items-center gap-3">
             {actions && (
               <>
@@ -2976,6 +2985,23 @@ function FeedSlide({
             >
               <Heart className={`h-5 w-5 ${wishlisted ? 'fill-current' : ''}`} />
             </button>
+            {onRate && (
+              <button
+                type="button"
+                // Tapping it again takes it back: rating is a toggle everywhere else.
+                onClick={() => onRate('dislike')}
+                aria-pressed={verdict === 'dislike'}
+                aria-label={verdict === 'dislike' ? 'Undo not for me' : 'Not for me'}
+                title="Not for me"
+                className={`rounded-full p-3 backdrop-blur transition-transform duration-200 ease-spring active:scale-90 ${
+                  verdict === 'dislike'
+                    ? 'bg-slate-900/80 text-white'
+                    : 'bg-white/15 text-white hover:bg-white/25'
+                }`}
+              >
+                <ThumbsDown className={`h-5 w-5 ${verdict === 'dislike' ? 'fill-current' : ''}`} />
+              </button>
+            )}
               </>
             )}
             <button
@@ -3794,7 +3820,17 @@ function Verdict({ verdict, onRate, size = 'md' }) {
  * game page because the fastest way to a profile worth having is to be able
  * to disagree with a pick where it is shown to you.
  */
-function GeniusSheet({ picks, taste, ratings, mirror, onRate, onOpenGame, onOpenStore, onClose }) {
+function GeniusSheet({
+  picks,
+  taste,
+  ratings,
+  mirror,
+  ruledOut,
+  onRate,
+  onOpenGame,
+  onOpenStore,
+  onClose,
+}) {
   const [burst, setBurst] = useState(null);
   const positives = taste?.positives ?? 0;
 
@@ -3810,9 +3846,17 @@ function GeniusSheet({ picks, taste, ratings, mirror, onRate, onOpenGame, onOpen
           Genius picks
         </h2>
         <p className="mt-1.5 text-sm leading-relaxed text-slate-500 dark:text-slate-400">
+          {/*
+            * Three cases, not two. Somebody who has only ever thumbed games
+            * down has rated plenty, and telling them nothing is rated yet
+            * reads as the app having thrown their answers away, when in fact
+            * every one of them has already been taken out of this list.
+            */}
           {positives > 0
             ? `Worked out from ${positives} ${positives === 1 ? 'game' : 'games'} you have rated, owned or wanted. Thumb anything here and the list moves.`
-            : 'Nothing rated yet, so these are simply the best reviewed. Thumb a few and this becomes yours.'}
+            : ruledOut > 0
+              ? `${ruledOut} ruled out so far and none of them are here. Thumb something up and these stop being just the best reviewed.`
+              : 'Nothing rated yet, so these are simply the best reviewed. Thumb a few and this becomes yours.'}
         </p>
 
         {picks.length === 0 ? (
@@ -4575,6 +4619,8 @@ function StoreFeed({ query, curatedFirst = [], curatedReason, curatedByName, sav
           live={game.storeLive}
           reason={game.curatedReason ?? curatedReason}
           wishlisted={saved.wishlist.has(game.id)}
+          verdict={saved.ratings?.get(game.id)}
+          onRate={saved.rate ? (value) => saved.rate(null, game, value) : undefined}
           muted={muted}
           onToggleMuted={onToggleMuted}
           onToggleWishlist={() => saved.toggle(null, game, 'wishlist')}
@@ -4595,6 +4641,8 @@ function StoreFeed({ query, curatedFirst = [], curatedReason, curatedByName, sav
               live={game.storeLive}
               reason={twin ? 'In your catalog, with the full write-up' : undefined}
               wishlisted={saved.wishlist.has(key)}
+              verdict={saved.ratings?.get(key)}
+              onRate={saved.rate ? (value) => saved.rate(row, twin, value) : undefined}
               muted={muted}
               onToggleMuted={onToggleMuted}
               onToggleWishlist={() => saved.toggle(row, twin, 'wishlist')}
@@ -6044,9 +6092,42 @@ export default function App() {
     [rememberStoreRow, toggleOwned, toggleWishlist],
   );
 
+  /**
+   * Rating a game from the store side.
+   *
+   * The row is kept, as it is when a store game is saved. Without that the
+   * rating survives the reload and the game does not, so the profile holds an
+   * opinion about something it can no longer describe, and the signal it was
+   * given counts for nothing.
+   */
+  const rateStoreRow = useCallback(
+    (row, verdict) => {
+      rememberStoreRow(row);
+      rateGame(storeKey(row), verdict);
+    },
+    [rememberStoreRow, rateGame],
+  );
+
+  /** Mirrors toggleStoreSaved: a game written up under its own id is rated there. */
+  const rateAnywhere = useCallback(
+    (row, twin, verdict) => {
+      if (twin) rateGame(twin.id, verdict);
+      else rateStoreRow(row, verdict);
+    },
+    [rateGame, rateStoreRow],
+  );
+
   const storeSaved = useMemo(
-    () => ({ wishlist, library, hidden, toggle: toggleStoreSaved, hide: hideGame }),
-    [wishlist, library, hidden, toggleStoreSaved, hideGame],
+    () => ({
+      wishlist,
+      library,
+      hidden,
+      ratings,
+      toggle: toggleStoreSaved,
+      rate: rateAnywhere,
+      hide: hideGame,
+    }),
+    [wishlist, library, hidden, ratings, toggleStoreSaved, rateAnywhere, hideGame],
   );
 
   /**
@@ -6091,22 +6172,6 @@ export default function App() {
       (kind === 'owned' ? toggleOwned : toggleWishlist)(storeKey(row));
     },
     [rememberStoreRow, toggleOwned, toggleWishlist],
-  );
-
-  /**
-   * Rating a game from the store side.
-   *
-   * The row is kept, as it is when a store game is saved. Without that the
-   * rating survives the reload and the game does not, so the profile holds an
-   * opinion about something it can no longer describe, and the signal it was
-   * given counts for nothing.
-   */
-  const rateStoreRow = useCallback(
-    (row, verdict) => {
-      rememberStoreRow(row);
-      rateGame(storeKey(row), verdict);
-    },
-    [rememberStoreRow, rateGame],
   );
 
   const toggleDealAlert = useCallback((id) => {
@@ -6219,6 +6284,12 @@ export default function App() {
   }, [geniusResult, rateable, library, wishlist, hidden, ratings]);
 
   const mirrorPicks = useMirrorPicks(mirrorRequest, geniusOpen);
+
+  /** Everything said no to, which is a thing worth counting even with no yes. */
+  const ruledOutCount = useMemo(
+    () => [...ratings.values()].filter((verdict) => verdict === 'dislike').length + hidden.size,
+    [ratings, hidden],
+  );
 
   const geniusReasons = useMemo(
     () =>
@@ -7283,6 +7354,7 @@ export default function App() {
           taste={geniusResult.taste}
           ratings={ratings}
           mirror={mirrorPicks}
+          ruledOut={ruledOutCount}
           onRate={rateGame}
           onOpenStore={(row) => {
             setGeniusOpen(false);
