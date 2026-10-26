@@ -72,8 +72,23 @@ test('picks come back ranked, explained, and without the search index', async ()
     assert.ok(typeof game.reason === 'string' && game.reason.length > 0);
     assert.equal(typeof game.distinctive, 'boolean');
   }
+  /*
+   * Not "best first" all the way down, which is what this used to assert.
+   * The list is re-ranked for variety after scoring, so a slightly weaker
+   * game that is unlike everything above it is meant to outrank a stronger
+   * one that is the fourth of its kind. Demanding descending scores demands
+   * the re-rank does nothing, and the assertion passed for a while only
+   * because the top few happened to come out in that order anyway.
+   *
+   * What does hold: the first pick is chosen before anything can be penalised
+   * for resembling what came before it, so it is the highest scoring.
+   */
   const scores = result.games.map((game) => game.pickScore);
-  assert.deepEqual(scores, [...scores].sort((a, b) => b - a), 'best first');
+  assert.equal(scores[0], Math.max(...scores), 'the first pick is the best one');
+  assert.ok(
+    scores.every((score) => score > 0),
+    'a game is never offered on a negative score',
+  );
 });
 
 test('an excluded title does not come back', async () => {

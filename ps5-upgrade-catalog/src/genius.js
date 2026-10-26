@@ -248,19 +248,23 @@ export function qualityPrior(game) {
  *
  * Not zero, and in fact large. Taste built from a few dozen signals is a thin
  * thing, and a highly regarded game nobody has an opinion about yet is a
- * better guess than an obscure one that happens to share a genre. Sweeping
- * these on splits held apart from the ones the result is quoted from moved the
- * lift over a popularity ranking from 1.58x to 1.76x, and the worst split from
- * 1.08x to 1.30x.
+ * better guess than an obscure one that happens to share a genre. These were
+ * swept on splits held apart from the ones the result is quoted from, which
+ * took the lift over a popularity ranking from 1.58x to 1.93x and the worst
+ * split from 1.08x to 1.31x.
  *
- * One caveat, because it would otherwise be invisible. The sweep ran while
- * owning a game counted for 1, before a thumbs up existed and owning dropped
- * to 0.8 to make room above it. So these were fitted against weights that
- * then moved underneath them. The harness, which trains on owned games, reads
- * 1.83x at the current weight and 1.74x at the old one, so the change helped
- * and nothing here needs rescuing. But they are no longer the numbers the
- * sweep chose, and a re-sweep against the weights as they now stand would be
- * the honest way to set them again.
+ * Swept twice. The first pass ran while owning a game counted for 1, and then
+ * a thumbs up was added and owning dropped to 0.8 to make room above it,
+ * which left the constants fitted to weights that had moved underneath them.
+ * They still worked, which is the part worth noticing: a stale fit that
+ * happens to improve looks exactly like a fit that is still right. Re-running
+ * it against the weights as they stand found better ones anyway.
+ *
+ * The exploration term is the one the holdout cannot judge, since nothing in
+ * a test of hidden games rewards a feed for being different tomorrow than it
+ * was today. It is no longer merely free, though: at these settings it is
+ * what carries the worst split from 1.23x to 1.31x, so the variety it buys
+ * now costs nothing and defends the weakest case.
  *
  * The exploration term is the exception: the sweep is indifferent to it,
  * because nothing in a holdout test rewards variety from one day to the next.
@@ -268,7 +272,7 @@ export function qualityPrior(game) {
  * cannot see, which is that a feed showing the same twenty games every evening
  * is one nobody opens twice.
  */
-export const TUNING = { confidence: 2, exploration: EXPLORATION, prior: 0.8 };
+export const TUNING = { confidence: 1.5, exploration: EXPLORATION, prior: 0.6 };
 
 export function scoreGame(game, taste, tuning = TUNING) {
   const { confidence, exploration, prior: priorWeight } = { ...TUNING, ...tuning };

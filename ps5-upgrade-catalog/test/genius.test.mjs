@@ -263,3 +263,24 @@ test('it does not need to be told twice', () => {
   });
   assert.deepEqual(picks.map((pick) => pick.game.id), ['c']);
 });
+
+test('variety is allowed to outrank a slightly better score', () => {
+  // The guarantee diversify actually makes, pinned so that a test asserting
+  // plain descending order cannot creep back in: the first pick is the
+  // strongest, and after that resemblance is allowed to cost a game its place.
+  const clones = Array.from({ length: 5 }, (_, i) => ({
+    game: written({ id: `clone${i}` }),
+    score: 1 - i * 0.001,
+  }));
+  const different = {
+    game: written({ id: 'different', genre: 'Racing', artStyle: '3D', tags: ['social'] }),
+    score: 0.99,
+  };
+  const picked = diversify([...clones, different], 3);
+  assert.equal(picked[0].game.id, 'clone0', 'nothing is penalised before anything is picked');
+  const order = picked.map((entry) => entry.score);
+  assert.ok(
+    order.some((score, i) => i > 0 && score > order[i - 1]),
+    `variety never overtook score: ${order}`,
+  );
+});
