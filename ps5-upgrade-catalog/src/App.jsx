@@ -3854,6 +3854,8 @@ function GeniusSheet({
   ratings,
   mirror,
   ruledOut,
+  unseenAnswers,
+  onRefresh,
   onRate,
   onOpenGame,
   onOpenStore,
@@ -3886,6 +3888,21 @@ function GeniusSheet({
               ? `${ruledOut} ruled out so far and none of them are here. Thumb something up and these stop being just the best reviewed.`
               : 'Nothing rated yet, so these are simply the best reviewed. Thumb a few and this becomes yours.'}
         </p>
+
+        {/* Same bargain as the tab: the list stays put while it is being
+            read, and anything answered since waits here. */}
+        {unseenAnswers > 0 && (
+          <button
+            type="button"
+            onClick={onRefresh}
+            className="mt-4 inline-flex items-center gap-2 rounded-full bg-indigo-600 px-3.5 py-1.5 text-xs font-semibold text-white transition-transform duration-200 ease-spring active:scale-95 hover:bg-indigo-500"
+          >
+            <Sparkles className="h-3.5 w-3.5" />
+            {unseenAnswers === 1
+              ? 'Work these out again with your answer'
+              : `Work these out again with your ${unseenAnswers} answers`}
+          </button>
+        )}
 
         {picks.length === 0 ? (
           <p className="mt-6 rounded-xl bg-amber-50 dark:bg-amber-950/40 px-4 py-3 text-sm leading-relaxed text-amber-800 dark:text-amber-200">
@@ -4029,6 +4046,8 @@ function GeniusPanel({
   mirror,
   newOnly,
   openedAt,
+  unseenAnswers,
+  onRefresh,
   ratings,
   saved,
   curatedByName,
@@ -4063,6 +4082,22 @@ function GeniusPanel({
 
   return (
     <>
+      {/* The list holds still while it is being read, so anything answered
+          since it was built is waiting here rather than quietly rearranging
+          the page. */}
+      {unseenAnswers > 0 && (
+        <button
+          type="button"
+          onClick={onRefresh}
+          className="mb-3 inline-flex items-center gap-2 rounded-full bg-indigo-600 px-3.5 py-1.5 text-xs font-semibold text-white transition-transform duration-200 ease-spring active:scale-95 hover:bg-indigo-500"
+        >
+          <Sparkles className="h-3.5 w-3.5" />
+          {unseenAnswers === 1
+            ? 'Work the list out again with your answer'
+            : `Work the list out again with your ${unseenAnswers} answers`}
+        </button>
+      )}
+
       <p className="mb-3 text-xs font-medium text-slate-400 dark:text-slate-500">
         {mirror.status === 'loading'
           ? `${picks.length} from your catalog, still ranking the rest of the store…`
@@ -6372,8 +6407,40 @@ export default function App() {
     return rows;
   }, [rateable, ratings, library, wishlist, hidden]);
 
+  /**
+   * The picks hold still while you are looking at them.
+   *
+   * Every rating changes the profile, which re-ranks everything, and a single
+   * thumbs-down measured here moved all 94 cards and dropped 51 games out of
+   * the list altogether. Answering one suggestion rearranged every other
+   * suggestion on screen, so the card under your finger a moment ago is gone
+   * and you cannot tell what you just did.
+   *
+   * So the ranking is built from the signals as they stood when the list was
+   * opened, and the thumbs on the cards go on reflecting the live answers.
+   * What you said is recorded immediately; where it moves things is decided
+   * when you ask, which is what the refresh is for.
+   */
+  const geniusSurfaceOpen = geniusOpen || filters.collection === 'genius';
+  const [frozen, setFrozen] = useState(null);
+
+  useEffect(() => {
+    if (!geniusSurfaceOpen) {
+      // eslint-disable-next-line react/set-state-in-effect
+      if (frozen) setFrozen(null);
+      return;
+    }
+    // eslint-disable-next-line react/set-state-in-effect
+    if (!frozen) setFrozen({ signals, ruledOut: [...library, ...wishlist, ...hidden] });
+  }, [geniusSurfaceOpen, frozen, signals, library, wishlist, hidden]);
+
+  const rankingSignals = frozen?.signals ?? signals;
+  /** Answers given since this list was built, and so not yet reflected in it. */
+  const unseenAnswers = frozen ? signals.length - frozen.signals.length : 0;
+  const refreshPicks = useCallback(() => setFrozen(null), []);
+
   // Never touches live data, so picks stay instant while prices load.
-  const geniusIsPersonalized = signals.some((row) => SIGNAL_WEIGHTS[row.kind] > 0);
+  const geniusIsPersonalized = rankingSignals.some((row) => SIGNAL_WEIGHTS[row.kind] > 0);
   const geniusResult = useMemo(() => {
     /*
      * Owned and wanted games belong here too.
@@ -6385,14 +6452,17 @@ export default function App() {
      * somebody who owned Celeste, which is far enough down to look like
      * nothing is wrong and is still wrong.
      */
-    const exclude = new Set([...library, ...wishlist, ...hidden, ...ratings.keys()]);
+    const exclude = new Set([
+      ...(frozen?.ruledOut ?? [...library, ...wishlist, ...hidden]),
+      ...rankingSignals.map((row) => row.game.id),
+    ]);
     if (!geniusIsPersonalized) {
       // No taste to work from yet. An empty collection reads as broken rather
       // than as "rate something first", so it falls back to a quality ranking.
       return { picks: starterPicks(gamesData, { exclude, limit: 48 }), taste: null };
     }
-    return geniusPicksFor(rateable, signals, { exclude, limit: 48 });
-  }, [rateable, signals, geniusIsPersonalized, library, wishlist, hidden, ratings]);
+    return geniusPicksFor(rateable, rankingSignals, { exclude, limit: 48 });
+  }, [rateable, rankingSignals, geniusIsPersonalized, frozen, library, wishlist, hidden]);
 
   const geniusPicks = geniusResult.picks;
 
@@ -6406,7 +6476,10 @@ export default function App() {
   const mirrorRequest = useMemo(() => {
     const taste = geniusResult.taste;
     if (!taste || taste.positives === 0) return null;
-    const ruledOut = [...library, ...wishlist, ...hidden, ...ratings.keys()];
+    const ruledOut = [
+      ...(frozen?.ruledOut ?? [...library, ...wishlist, ...hidden]),
+      ...rankingSignals.map((row) => row.game.id),
+    ];
     const known = new Map(rateable.map((game) => [game.id, game]));
     return JSON.stringify({
       taste: packTaste(taste),
@@ -6420,14 +6493,11 @@ export default function App() {
       limit: 48,
       newOnly: filters.newOnly,
     });
-  }, [geniusResult, rateable, library, wishlist, hidden, ratings, filters.newOnly]);
+  }, [geniusResult, rateable, frozen, rankingSignals, library, wishlist, hidden, filters.newOnly]);
 
   // The sheet and the For you tab are the same picks on two surfaces, so
   // either one being open is reason enough to have ranked the store.
-  const mirrorPicks = useMirrorPicks(
-    mirrorRequest,
-    geniusOpen || filters.collection === 'genius',
-  );
+  const mirrorPicks = useMirrorPicks(mirrorRequest, geniusSurfaceOpen);
 
   /** Everything said no to, which is a thing worth counting even with no yes. */
   const ruledOutCount = useMemo(
@@ -7330,6 +7400,8 @@ export default function App() {
               mirror={mirrorPicks}
               newOnly={filters.newOnly}
               openedAt={openedAt}
+              unseenAnswers={unseenAnswers}
+              onRefresh={refreshPicks}
               ratings={ratings}
               saved={storeSaved}
               curatedByName={curatedByName}
@@ -7538,6 +7610,8 @@ export default function App() {
           ratings={ratings}
           mirror={mirrorPicks}
           ruledOut={ruledOutCount}
+          unseenAnswers={unseenAnswers}
+          onRefresh={refreshPicks}
           onRate={rateGame}
           onOpenStore={(row) => {
             setGeniusOpen(false);
