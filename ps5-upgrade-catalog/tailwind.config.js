@@ -36,6 +36,13 @@ export default {
           from: { opacity: '0', transform: 'translateY(-10px)' },
           to: { opacity: '1', transform: 'translateY(0)' },
         },
+        // The heart a double tap leaves behind: in fast, hangs, then goes.
+        heartPop: {
+          '0%': { opacity: '0', transform: 'scale(0.4)' },
+          '25%': { opacity: '1', transform: 'scale(1.15)' },
+          '55%': { opacity: '1', transform: 'scale(1)' },
+          '100%': { opacity: '0', transform: 'scale(1.3)' },
+        },
       },
       animation: {
         'fade-in': 'fadeIn 160ms ease-out',
@@ -44,6 +51,7 @@ export default {
         'sheet-up': 'sheetUp 260ms cubic-bezier(0.22, 1, 0.36, 1) both',
         'slide-in': 'slideIn 260ms cubic-bezier(0.22, 1, 0.36, 1) both',
         'sheet-down': 'sheetDown 200ms cubic-bezier(0.34, 1.56, 0.64, 1)',
+        'heart-pop': 'heartPop 900ms cubic-bezier(0.22, 1, 0.36, 1) both',
       },
     },
   },

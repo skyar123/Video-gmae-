@@ -2717,6 +2717,26 @@ function FeedSlide({
       return false;
     }
   });
+  /*
+   * Double tap to save it, which is the one gesture a feed is expected to
+   * have. Counted by hand rather than left to onDoubleClick, because that
+   * does not fire for touch, and touch is what this view is for.
+   *
+   * It only ever adds. Taking something off a wishlist by tapping twice in
+   * the wrong place is a worse surprise than the tap doing nothing, so the
+   * heart below is the way back off.
+   */
+  const lastTap = useRef(0);
+  const [burst, setBurst] = useState(0);
+  const onGalleryTap = useCallback(() => {
+    const now = Date.now();
+    const quick = now - lastTap.current < 320;
+    lastTap.current = quick ? 0 : now;
+    if (!quick) return;
+    setBurst((n) => n + 1);
+    if (!wishlisted) onToggleWishlist();
+  }, [wishlisted, onToggleWishlist]);
+
   const dismissHint = useCallback(() => {
     setHintSeen(true);
     try {
@@ -2746,6 +2766,7 @@ function FeedSlide({
         <div
           ref={galleryRef}
           onScroll={onGalleryScroll}
+          onPointerUp={onGalleryTap}
           className="no-scrollbar absolute inset-0 flex snap-x snap-mandatory overflow-y-hidden overflow-x-auto overscroll-x-contain"
         >
           {gallery.map((src, index) => (
@@ -2780,6 +2801,13 @@ function FeedSlide({
           ))}
         </div>
       )}
+      {burst > 0 && (
+        <Heart
+          key={burst}
+          aria-hidden="true"
+          className="pointer-events-none absolute left-1/2 top-1/2 z-20 h-24 w-24 -translate-x-1/2 -translate-y-1/2 animate-heart-pop fill-white text-white drop-shadow-lg"
+        />
+      )}
       {gallery.length > 1 && centred && !hintSeen && (
         <button
           type="button"
@@ -2803,7 +2831,15 @@ function FeedSlide({
           ))}
         </div>
       )}
-      <div className="absolute inset-0 bg-gradient-to-t from-slate-950 via-slate-950/70 to-slate-950/10" />
+      {/*
+        Transparent to the finger. It covers the whole slide so the text below
+        it stays readable over any screenshot, and until the gallery arrived
+        nothing underneath wanted touching. Now the images do: left as it was,
+        it swallows both the swipe between them and the double tap, and the
+        only reason the swipe looked fine in testing is that the test moved
+        the strip by setting scrollLeft rather than by dragging it.
+      */}
+      <div className="pointer-events-none absolute inset-0 bg-gradient-to-t from-slate-950 via-slate-950/70 to-slate-950/10" />
 
       <div className="relative w-full p-5 pb-[calc(6rem+var(--inset-bottom))] sm:p-8 sm:pb-[calc(6.5rem+var(--inset-bottom))]">
         <div className="mx-auto flex max-w-3xl items-end justify-between gap-4">
