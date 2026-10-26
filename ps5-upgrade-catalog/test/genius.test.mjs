@@ -1,0 +1,210 @@
+import { test } from 'node:test';
+import assert from 'node:assert/strict';
+import {
+  featuresOf,
+  buildTaste,
+  scoreGame,
+  diversify,
+  geniusPicks,
+  qualityPrior,
+  unify,
+  normalizeTitle,
+  SHARED_NAMESPACES,
+  SIGNAL_WEIGHTS,
+} from '../src/genius.js';
+
+const written = (over = {}) => ({
+  id: 'a',
+  title: 'A',
+  genre: 'Narrative',
+  artStyle: 'Pixel Art',
+  protagonist: 'Female',
+  tags: ['cozy'],
+  ageRating: { family: 'mild', tier: 'everyone10' },
+  ...over,
+});
+
+const fromStore = (over = {}) => ({
+  id: 1,
+  name: 'S',
+  genres: ['Adventure'],
+  release: '2021-04-01T00:00:00Z',
+  stars: 4,
+  votes: 900,
+  ageRating: { family: 'mild', tier: 'everyone10', interactive: [] },
+  plus: { included: false, tier: null },
+  ...over,
+});
+
+test('a field with nothing in it contributes no feature', () => {
+  const sparse = featuresOf({ id: 'x', genre: null, artStyle: '', tags: [], protagonist: undefined });
+  assert.equal(sparse.size, 0);
+  // Were empties kept, "art:null" would be the feature thousands of games in
+  // the mirror share, making "we do not know" the loudest signal there is.
+  assert.ok(![...sparse].some((feature) => /null|undefined|:$/.test(feature)));
+});
+
+test('the two halves are described in separate namespaces', () => {
+  const curatedGenre = [...featuresOf(written())].find((f) => f.startsWith('genre:'));
+  const storeGenre = [...featuresOf(fromStore())].find((f) => f.startsWith('sgenre:'));
+  assert.equal(curatedGenre, 'genre:Narrative');
+  assert.equal(storeGenre, 'sgenre:Adventure');
+  // Adventure must not be confused with the hand-written vocabulary: only 3
+  // of its 16 terms exist in the store's at all.
+  assert.ok(!featuresOf(fromStore()).has('genre:Adventure'));
+});
+
+test('publisher, price and content descriptors are not scored', () => {
+  const features = featuresOf(
+    fromStore({
+      publisher: 'Some Studio',
+      price: '$19.99',
+      ageRating: { family: 'mild', tier: 'teen', descriptors: ['Blood', 'Language'] },
+    }),
+  );
+  // Measured as noise against popularity-matched distractors; see genius.js.
+  for (const feature of features) {
+    assert.ok(!feature.startsWith('from:'), `publisher leaked: ${feature}`);
+    assert.ok(!feature.startsWith('price:'), `price leaked: ${feature}`);
+    assert.ok(!feature.startsWith('content:'), `descriptor leaked: ${feature}`);
+  }
+  assert.ok(features.has('tier:teen'), 'the low-cardinality rating is kept');
+});
+
+test('a namespace filter keeps a measurement from reading write-up-only fields', () => {
+  const shared = featuresOf(written(), SHARED_NAMESPACES);
+  assert.ok(!shared.has('genre:Narrative'));
+  assert.ok(!shared.has('art:Pixel Art'));
+  assert.ok(shared.has('family:mild'));
+});
+
+test('dislikes push a feature negative', () => {
+  const liked = buildTaste([{ game: written(), kind: 'owned' }]);
+  const disliked = buildTaste([{ game: written(), kind: 'disliked' }]);
+  assert.ok(liked.weights.get('tag:cozy') > 0);
+  assert.ok(disliked.weights.get('tag:cozy') < 0);
+});
+
+test('hiding counts against a game but less than saying so outright', () => {
+  assert.ok(SIGNAL_WEIGHTS.hidden < 0);
+  assert.ok(Math.abs(SIGNAL_WEIGHTS.hidden) < Math.abs(SIGNAL_WEIGHTS.disliked));
+});
+
+test('one liked game does not become a law', () => {
+  const once = buildTaste([{ game: written({ id: 'a' }), kind: 'owned' }]);
+  const often = buildTaste(
+    Array.from({ length: 8 }, (_, i) => ({ game: written({ id: `g${i}` }), kind: 'owned' })),
+  );
+  assert.ok(often.weights.get('tag:cozy') > once.weights.get('tag:cozy'));
+  assert.ok(once.weights.get('tag:cozy') < 1, 'a single signal stays short of certainty');
+});
+
+test('evidence both ways cancels out', () => {
+  const split = buildTaste([
+    { game: written({ id: 'a' }), kind: 'owned' },
+    { game: written({ id: 'b' }), kind: 'disliked' },
+  ]);
+  assert.ok(Math.abs(split.weights.get('tag:cozy')) < 0.01);
+});
+
+test('a detailed entry does not outrank a good game the mirror says little about', () => {
+  // The bug this pins: scoring by sum meant a write-up carried five fields no
+  // game in the mirror has, so every write-up outranked the entire mirror
+  // regardless of fit, and picks from the store were impossible.
+  const taste = buildTaste([
+    { game: written({ id: 'seed' }), kind: 'owned' },
+    { game: fromStore({ id: 99, genres: ['Adventure'] }), kind: 'owned' },
+  ]);
+  const detailed = scoreGame(written({ id: 'other', tags: ['social'], genre: 'Sports' }), taste);
+  const plain = scoreGame(fromStore({ id: 2, genres: ['Adventure'] }), taste);
+  assert.ok(
+    plain.score > detailed.score,
+    `matching store game ${plain.score} should beat mismatched write-up ${detailed.score}`,
+  );
+});
+
+test('five stars from four people is not five stars', () => {
+  const confident = qualityPrior(fromStore({ stars: 5, votes: 5000 }));
+  const thin = qualityPrior(fromStore({ stars: 5, votes: 4 }));
+  assert.ok(confident > thin);
+  assert.ok(thin < 0.6);
+});
+
+test('both halves score quality on one scale', () => {
+  const store = qualityPrior(fromStore({ stars: 5, votes: 10000 }));
+  const write = qualityPrior(
+    written({ ratings: { critic: 95, user: { percentPositive: 96, total: 50000 } } }),
+  );
+  assert.ok(Math.abs(store - write) < 0.2, `${store} vs ${write} should be comparable`);
+  assert.ok(qualityPrior(written({})) > 0 && qualityPrior(written({})) < 1);
+});
+
+test('diversity breaks up a run of near-identical games', () => {
+  const clones = Array.from({ length: 6 }, (_, i) => ({
+    game: written({ id: `clone${i}` }),
+    score: 1 - i * 0.001,
+  }));
+  const odd = { game: written({ id: 'odd', genre: 'Racing', tags: ['social'], artStyle: '3D' }), score: 0.9 };
+  const picked = diversify([...clones, odd], 3);
+  assert.ok(picked.some((entry) => entry.game.id === 'odd'), 'the different one must surface');
+  assert.equal(picked.length, 3);
+});
+
+test('no signals means no picks rather than a guess', () => {
+  const { picks } = geniusPicks([written(), fromStore()], []);
+  assert.deepEqual(picks, []);
+  const onlyNegative = geniusPicks([written(), fromStore()], [
+    { game: written({ id: 'z' }), kind: 'disliked' },
+  ]);
+  assert.deepEqual(onlyNegative.picks, []);
+});
+
+test('picks never include a game already ruled out', () => {
+  const pool = [written({ id: 'keep' }), written({ id: 'drop' }), fromStore({ id: 7 })];
+  const { picks } = geniusPicks(pool, [{ game: written({ id: 'seed' }), kind: 'owned' }], {
+    exclude: new Set(['drop']),
+    limit: 10,
+  });
+  assert.ok(!picks.some((pick) => pick.game.id === 'drop'));
+});
+
+test('a pick can say why it was picked', () => {
+  const taste = buildTaste([{ game: written(), kind: 'owned' }]);
+  const { hits } = scoreGame(written({ id: 'other' }), taste);
+  assert.ok(hits.length > 0);
+  assert.ok(hits[0].weight >= hits[hits.length - 1].weight, 'strongest reason first');
+});
+
+test('the join folds the mirror into the write-ups without duplicating a game', () => {
+  const games = unify(
+    [written({ title: "Marvel's Spider-Man" })],
+    [fromStore({ id: 5, name: 'Marvel s Spider Man', genres: ['Action'], publisher: 'SIE' })],
+  );
+  assert.equal(games.length, 1, 'one game is one entry');
+  const [game] = games;
+  assert.equal(game.genre, 'Narrative', 'the write-up is kept');
+  assert.deepEqual(game.genres, ['Action'], 'and gains the store fields');
+  assert.equal(game.storeId, 5);
+  // This is what makes picks from the mirror possible: a liked write-up now
+  // teaches store-side features too.
+  assert.ok(featuresOf(game).has('sgenre:Action'));
+});
+
+test('a write-up the mirror has no page for survives the join unchanged', () => {
+  const games = unify([written({ title: 'Outer Wilds' })], [fromStore({ name: 'Something Else' })]);
+  assert.equal(games.length, 2);
+  assert.ok(games.some((game) => game.title === 'Outer Wilds' && game.storeId == null));
+});
+
+test('the hand-written rating wins over the store copy', () => {
+  const [game] = unify(
+    [written({ title: 'X', ageRating: { family: 'mild', tier: 'teen', notes: 'checked by hand' } })],
+    [fromStore({ name: 'X', ageRating: { family: 'safe', tier: 'everyone' } })],
+  );
+  assert.equal(game.ageRating.notes, 'checked by hand');
+});
+
+test('titles match across punctuation', () => {
+  assert.equal(normalizeTitle("Marvel's Spider-Man"), normalizeTitle('Marvel s Spider Man'));
+  assert.notEqual(normalizeTitle('Gris'), normalizeTitle('Grid'));
+});
