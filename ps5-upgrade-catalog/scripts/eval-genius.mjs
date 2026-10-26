@@ -211,6 +211,62 @@ const solo = [...SHARED_NAMESPACES]
 // stops doing so this is a PS Plus tab wearing another name.
 console.log(`strongest single field: ${solo[0].ns} at ${solo[0].lift.toFixed(2)}x`);
 
+/*
+ * Does being told no actually help?
+ *
+ * This is the half of the model nothing else here measures, and it is half
+ * the model: the write-ups record what somebody liked and nothing anywhere
+ * records what they did not, so the weights learned from a thumbs down have
+ * never been checked against anything.
+ *
+ * They can be checked, with one assumption stated plainly. Somebody wrote up
+ * 506 games out of 9,222, so a game drawn at random from the rest is
+ * overwhelmingly likely to be one they passed over. Treating those as
+ * dislikes is the usual implicit-feedback assumption, and it is weaker than a
+ * real thumbs down: passed over is not the same as disliked, and somebody who
+ * actively dislikes a game is saying something sharper than the silence of
+ * 8,834 games nobody mentioned.
+ *
+ * So this measures whether the mechanism works, not how much real dislikes
+ * are worth. The negatives are drawn from games held out of the ranking pool,
+ * because learning to push down the very games about to be ranked would make
+ * the answer come out yes no matter what the model did.
+ */
+console.log('\nwhat being told no is worth:');
+{
+  const negativesFor = (seed, count, excludeIds) => {
+    const random = rng(seed * 31 + 7);
+    const eligible = mirror.filter((game) => !excludeIds.has(game.id));
+    return shuffled(eligible, random)
+      .slice(0, count)
+      .map((game) => ({ game, kind: 'disliked' }));
+  };
+
+  const withNegatives = (count) => {
+    const lifts = REPORTING.map((seed) => {
+      const { signals, ids, pool } = splitFor(seed);
+      const inPool = new Set(pool.map((game) => game.id));
+      const taste = buildTaste(
+        [...signals, ...negativesFor(seed, count, inPool)],
+        SHARED_NAMESPACES,
+      );
+      const ranked = pool
+        .map((game) => ({ game, score: scoreGame(game, taste).score }))
+        .sort((a, b) => b.score - a.score)
+        .map((entry) => entry.game);
+      return recallAt(ranked, ids, 50) / (popularityRecall(seed) || 1e-9);
+    });
+    return { mean: mean(lifts), worst: Math.min(...lifts) };
+  };
+
+  for (const count of [0, 10, 25, 50, 100, 200]) {
+    const { mean: m, worst: w } = withNegatives(count);
+    console.log(
+      `  ${String(count).padStart(3)} games thumbed down   ${m.toFixed(2)}x mean  ${w.toFixed(2)}x worst`,
+    );
+  }
+}
+
 console.log('\nwhat diversity costs:');
 {
   const { signals, ids, pool } = splitFor(REPORTING[0]);

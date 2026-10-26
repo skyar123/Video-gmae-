@@ -164,15 +164,57 @@ const SMOOTHING = 2.5;
  * It is the diagonal of what a linear bandit would learn, which is the part
  * worth having when the evidence is a few dozen games rather than millions.
  */
-export function buildTaste(signals, only = null) {
+/**
+ * How far the noes may outweigh the yeses.
+ *
+ * Without a limit, enough dislikes drown the likes. Measured against held-out
+ * games, being told no helped up to about 25 of them and then turned and hurt:
+ * 1.93x with none, 2.01x at 25, and down to 1.59x by 200, with the worst case
+ * falling the whole way. The weights say why. At 200 dislikes the number of
+ * features with anything good to say had dropped from 32 to 18, and ordinary
+ * store genres carried weights near -0.7, so the profile had stopped
+ * describing a person's taste and started describing the store: most games
+ * are not for you, which is true of everybody and ranks nothing.
+ *
+ * The cause is that a dislike is cheap and a write-up is not. Somebody can
+ * thumb down fifty games in a minute and will never hand-write fifty. So the
+ * noes are not allowed to outweigh the yeses, which makes the twentieth no
+ * worth less than the first without ever ignoring it: 1.46x at a hundred
+ * dislikes against 1.30x uncapped.
+ *
+ * Held at parity rather than lower, though a harder discount measured
+ * slightly better. The negatives in that test are games passed over, not
+ * games anybody thumbed down, because no real dislikes exist in this data. An
+ * ignored game is weak evidence and deserves discounting; somebody taking the
+ * trouble to say no is not, and a result about the first does not license
+ * discounting the second. Parity also keeps one no against one yes a wash,
+ * which is what a reader would expect of it.
+ */
+const NEGATIVE_CAP = 1;
+
+export function buildTaste(signals, only = null, { negativeCap = NEGATIVE_CAP } = {}) {
   const score = new Map();
   const seen = new Map();
   let positives = 0;
+  let yes = 0;
+  let no = 0;
 
-  for (const { game, kind } of signals) {
+  for (const { kind } of signals) {
     const weight = SIGNAL_WEIGHTS[kind];
     if (!weight) continue;
-    if (weight > 0) positives += 1;
+    if (weight > 0) yes += weight;
+    else no -= weight;
+  }
+  // Only once there is something to balance against. With nothing liked yet
+  // there is no positive mass, and scaling to it would zero every dislike and
+  // silently throw away the only thing the reader had said.
+  const damp = yes > 0 && no > yes * negativeCap ? (yes * negativeCap) / no : 1;
+
+  for (const { game, kind } of signals) {
+    const base = SIGNAL_WEIGHTS[kind];
+    if (!base) continue;
+    if (base > 0) positives += 1;
+    const weight = base > 0 ? base : base * damp;
     for (const feature of featuresOf(game, only)) {
       score.set(feature, (score.get(feature) ?? 0) + weight);
       seen.set(feature, (seen.get(feature) ?? 0) + Math.abs(weight));
@@ -290,6 +332,19 @@ export function scoreGame(game, taste, tuning = TUNING) {
     if (weight > 0) hits.push({ feature, weight });
   }
 
+  /*
+   * A thin profile is a weak one, and shrinking it toward reputation does not
+   * help. Measured against held-out games, a profile of five likes ranks
+   * worse than a plain popularity list, which is the worst possible moment to
+   * be wrong: it is when a reader decides whether any of this works. The
+   * obvious cure is to believe the taste term in proportion to the evidence
+   * behind it and let reputation keep the rest. It was tried across profiles
+   * of 5 to 299 likes and made every one of them worse, 1.10x down to 0.89x
+   * at forty likes, so it is not here.
+   *
+   * What does fix a thin profile is more signal, which is why the thumbs are
+   * on the picks, the game pages and the feed rather than buried in settings.
+   */
   const relevance = total / Math.max(known + confidence, 1);
   const novelty = (features.size - known) / features.size;
   const prior = qualityPrior(game);

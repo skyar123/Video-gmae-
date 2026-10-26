@@ -284,3 +284,35 @@ test('variety is allowed to outrank a slightly better score', () => {
     `variety never overtook score: ${order}`,
   );
 });
+
+test('dislikes still count when nothing has been liked yet', () => {
+  // Scaling the noes against the yeses zeroed them outright when there were
+  // no yeses, throwing away the only thing the reader had actually said.
+  const taste = buildTaste([
+    { game: written({ id: 'a' }), kind: 'disliked' },
+    { game: written({ id: 'b' }), kind: 'disliked' },
+  ]);
+  assert.ok(taste.weights.get('tag:cozy') < 0);
+});
+
+test('a pile of noes cannot drown a handful of yeses', () => {
+  // Thumbing down is cheap and writing a game up is not, so without a limit
+  // the profile stops describing a person and starts describing the store:
+  // most games are not for you, which is true of everybody and ranks nothing.
+  const likes = Array.from({ length: 3 }, (_, i) => ({
+    game: written({ id: `like${i}` }),
+    kind: 'liked',
+  }));
+  const manyNoes = Array.from({ length: 60 }, (_, i) => ({
+    game: written({ id: `no${i}`, genre: 'Racing', tags: ['social'], artStyle: '3D' }),
+    kind: 'disliked',
+  }));
+  const taste = buildTaste([...likes, ...manyNoes]);
+  assert.ok(taste.weights.get('tag:cozy') > 0, 'what was liked is still liked');
+  assert.ok(taste.weights.get('tag:social') < 0, 'and what was not is still not');
+  // Sixty noes against three yeses must not end up sixty times as loud.
+  assert.ok(
+    Math.abs(taste.weights.get('tag:social')) < 4 * taste.weights.get('tag:cozy'),
+    `social ${taste.weights.get('tag:social')} vs cozy ${taste.weights.get('tag:cozy')}`,
+  );
+});
