@@ -291,6 +291,7 @@ const MAX_SAVED_STORE = 500;
 const SAVED_RELEASES_KEY = 'savedReleases';
 const WISHLIST_PRICES_KEY = 'wishlistPrices';
 const DEAL_ALERTS_KEY = 'dealAlerts';
+const SWIPE_HINT_KEY = 'seenGallerySwipe';
 
 /** Games you are waiting on a price for, which is not the same as wanting them. */
 function readDealAlerts() {
@@ -2698,10 +2699,41 @@ function FeedSlide({
 
   const galleryRef = useRef(null);
   const [pane, setPane] = useState(0);
-  const onGalleryScroll = useCallback((event) => {
-    const { scrollLeft, clientWidth } = event.currentTarget;
-    if (clientWidth > 0) setPane(Math.round(scrollLeft / clientWidth));
+
+  /*
+   * A gesture nobody knows about is a feature nobody has.
+   *
+   * Sideways on a feed slide is not a thing this app did until now, and the
+   * dots alone read as decoration. So the first gallery a reader meets says
+   * what it is, once, and never again on any device where it was dismissed.
+   * It goes the moment they swipe, because at that point they know.
+   */
+  const [hintSeen, setHintSeen] = useState(() => {
+    try {
+      return localStorage.getItem(SWIPE_HINT_KEY) === '1';
+    } catch {
+      // Private browsing, or storage turned off. Showing the hint again is a
+      // far smaller problem than failing to draw the slide.
+      return false;
+    }
+  });
+  const dismissHint = useCallback(() => {
+    setHintSeen(true);
+    try {
+      localStorage.setItem(SWIPE_HINT_KEY, '1');
+    } catch {
+      // Nothing to do: it will offer the hint again next time.
+    }
   }, []);
+
+  const onGalleryScroll = useCallback(
+    (event) => {
+      const { scrollLeft, clientWidth } = event.currentTarget;
+      if (clientWidth > 0) setPane(Math.round(scrollLeft / clientWidth));
+      if (scrollLeft > 8) dismissHint();
+    },
+    [dismissHint],
+  );
 
   return (
     <section
@@ -2747,6 +2779,17 @@ function FeedSlide({
             </div>
           ))}
         </div>
+      )}
+      {gallery.length > 1 && centred && !hintSeen && (
+        <button
+          type="button"
+          onClick={dismissHint}
+          // Up by the dots it belongs to. Down at the bottom right it sat on
+          // top of the heart, and a long title reached it too.
+          className="absolute right-4 top-8 z-10 flex items-center gap-1.5 rounded-full bg-black/55 px-3 py-1.5 text-xs font-semibold text-white backdrop-blur"
+        >
+          {gallery.length - 1} more <ArrowUpRight className="h-3.5 w-3.5 rotate-45" />
+        </button>
       )}
       {gallery.length > 1 && (
         <div className="pointer-events-none absolute left-0 right-0 top-3 z-10 flex justify-center gap-1.5">
