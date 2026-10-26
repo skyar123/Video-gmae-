@@ -29,6 +29,19 @@
  *
  * What is left is a modest, real effect: about 1.5x a popularity ranking.
  *
+ * One idea was tried here and rejected, which is worth writing down so it is
+ * not thought of again as though it were new. The write-ups and the mirror
+ * share no vocabulary, so the obvious move is to learn a translation from the
+ * 398 games carrying both: work out which store genres tend to accompany
+ * "cozy" or "Metroidvania", and let a taste for the one induce a taste for
+ * the other. Measured across seven splits it made things worse at every
+ * strength worth using, 1.82x falling to 1.36x and the worst split from 1.44x
+ * to 0.70x. The reason is visible in what it learns: cozy maps to an everyone
+ * rating, Metroidvania maps to Action. The translations are real and they are
+ * useless, because they land on the coarse fields the model already reads.
+ * Store-side picks are limited by how little the mirror records, and no
+ * rearrangement of the existing fields escapes that.
+ *
  * Two more honest limits. The catalog was built to cover ground as well as to
  * record enthusiasm, so it is a blunt proxy for one person's taste. And there
  * are no recorded dislikes anywhere in this data, so the half of the model

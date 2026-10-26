@@ -536,19 +536,82 @@ export function describeFeature(feature) {
 }
 
 /**
+ * How much a feature is worth saying out loud.
+ *
+ * Not the same question as how much it is worth scoring. An age rating of
+ * teen is shared by thousands of games, so it can carry real weight in a
+ * ranking while explaining nothing: "because you go for games from this
+ * decade" is true of almost any recommendation and reads as a machine with
+ * nothing to say. A genre or a tag names something a person would recognise
+ * as their own taste, so it is preferred whenever one is among the reasons
+ * the game actually scored on.
+ */
+const SAYING_IT = {
+  tag: 3,
+  rep: 3,
+  genre: 3,
+  sgenre: 2.5,
+  art: 2.5,
+  lead: 2,
+  plus: 1.2,
+  family: 0.6,
+  era: 0.4,
+  tier: 0.3,
+};
+
+/**
  * The sentence under a pick.
  *
- * Built from the features that actually earned the game its place, strongest
- * first, so the reason is the reason rather than a flattering guess. Two is
- * the limit: a pick justified by six things reads as a machine covering
- * itself.
+ * Built only from features the game actually scored on, so the reason is the
+ * reason rather than a flattering guess, but ordered by what is worth saying
+ * rather than by weight alone. Two is the limit: a pick justified by six
+ * things reads as a machine covering itself.
  */
+/**
+ * Below this, a feature is not worth building a sentence around. Age ratings
+ * and release decades describe most of the catalog, so offering one as the
+ * reason for a pick is a claim to insight the model does not have.
+ */
+const WORTH_SAYING = 1.2;
+
+/**
+ * Whether the model has anything particular to say about this pick.
+ *
+ * Worth asking separately from the sentence itself, because a list where
+ * every entry falls back to "well reviewed" is a list the model did not
+ * really choose, and is better not shown than shown with twelve identical
+ * non-reasons under it.
+ */
+export function hasDistinctiveReason(hits) {
+  return hits.some(
+    (hit) =>
+      (SAYING_IT[hit.feature.slice(0, hit.feature.indexOf(':'))] ?? 1) >= WORTH_SAYING &&
+      describeFeature(hit.feature),
+  );
+}
+
 export function explain(hits, { limit = 2 } = {}) {
+  const ranked = hits
+    .map((hit) => ({
+      hit,
+      phrase: describeFeature(hit.feature),
+      value: hit.weight * (SAYING_IT[hit.feature.slice(0, hit.feature.indexOf(':'))] ?? 1),
+    }))
+    .filter((entry) => entry.phrase)
+    .sort((a, b) => b.value - a.value);
+
+  // Nothing distinctive to point at. Saying so beats dressing up an age
+  // rating as taste, which is what made six picks in a row all claim to have
+  // been chosen for being games with a light touch.
+  const distinctive = ranked.filter(
+    (entry) => (SAYING_IT[entry.hit.feature.slice(0, entry.hit.feature.indexOf(':'))] ?? 1) >= WORTH_SAYING,
+  );
+  if (distinctive.length === 0) return 'Well reviewed, and close to what you have been picking.';
+
   const phrases = [];
   const used = new Set();
-  for (const hit of hits) {
-    const phrase = describeFeature(hit.feature);
-    if (!phrase || used.has(phrase)) continue;
+  for (const { phrase } of distinctive) {
+    if (used.has(phrase)) continue;
     used.add(phrase);
     phrases.push(phrase);
     if (phrases.length === limit) break;

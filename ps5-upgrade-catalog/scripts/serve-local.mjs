@@ -19,7 +19,7 @@
  * store comes from this working tree.
  *
  *   npm run build && npm run serve
- *   npm run serve -- --port 4190 --no-proxy
+ *   npm run serve -- --port 4178 --no-proxy
  */
 
 import { createServer } from 'node:http';
@@ -32,7 +32,15 @@ const DIST = join(ROOT, 'dist');
 const LIVE = 'https://ps5-upgrade-catalog.netlify.app';
 
 const args = process.argv.slice(2);
-const port = Number(args[args.indexOf('--port') + 1]) || 4190;
+/*
+ * 4190 is the ManageSieve port, which is on the Fetch specification's blocked
+ * list. Browsers and node's own fetch both refuse to open it, so the default
+ * server could be curled but never driven from a page or a test, which is
+ * most of the reason it exists. PORT is read too, so a harness can pick one
+ * without rewriting the argument list.
+ */
+const DEFAULT_PORT = 4178;
+const port = Number(args[args.indexOf('--port') + 1]) || Number(process.env.PORT) || DEFAULT_PORT;
 const proxy = !args.includes('--no-proxy');
 
 const TYPES = {

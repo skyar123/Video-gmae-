@@ -237,6 +237,15 @@ export async function storeGenres() {
     .map(([genre, count]) => ({ genre, count }));
 }
 
+/**
+ * The merged mirror, for anything that needs to walk all of it.
+ *
+ * Exported rather than rebuilt elsewhere: the merge underneath is the part
+ * that keeps a nightly sweep from stripping games of their ratings, and a
+ * second copy of that reasoning is a second place for it to go wrong.
+ */
+export const storeRows = () => index();
+
 export const storeSize = async () => (await index()).length;
 
 /**

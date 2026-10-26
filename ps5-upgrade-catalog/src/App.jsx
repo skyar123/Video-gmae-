@@ -56,6 +56,7 @@ import {
   geniusPicks as geniusPicksFor,
   unify,
   explain,
+  packTaste,
   SIGNAL_WEIGHTS,
 } from './genius.js';
 import { fold, indexText, parseQuery, scoreMatch } from '../api/search.mjs';
@@ -3101,6 +3102,54 @@ function BottomBar({ view, onView, onBriefing, onSurprise, canSurprise, updates 
  * Genius picks
  * ------------------------------------------------------------------ */
 
+/**
+ * The same picks, run against the whole store rather than the write-ups.
+ *
+ * The phone holds 506 games. The mirror holds 9,222, and the ones nobody has
+ * written up are exactly the ones a reader is least likely to have found on
+ * their own, so leaving them out makes the picks safest where they should be
+ * most useful. Ranking them has to happen on the server, because the index is
+ * 5MB, so what goes up is the profile: a few hundred short strings, no id, no
+ * account, nothing kept at the other end.
+ *
+ * Only while the sheet is open. There is no reason to spend a request on
+ * picks nobody is looking at.
+ */
+function useMirrorPicks(body, enabled) {
+  const [state, setState] = useState({ status: 'idle', games: [] });
+
+  useEffect(() => {
+    if (!enabled || !body) {
+      // eslint-disable-next-line react/set-state-in-effect
+      setState({ status: 'idle', games: [] });
+      return undefined;
+    }
+    let cancelled = false;
+    // eslint-disable-next-line react/set-state-in-effect
+    setState((previous) => ({ ...previous, status: 'loading' }));
+    fetch('/api/picks', {
+      method: 'POST',
+      headers: { 'content-type': 'application/json' },
+      body,
+    })
+      .then((response) => (response.ok ? response.json() : Promise.reject(new Error('bad status'))))
+      .then((payload) => {
+        if (cancelled) return;
+        setState({ status: 'ready', games: payload.games ?? [] });
+      })
+      .catch(() => {
+        // The written-up picks are already on screen and are the better half
+        // anyway, so a failure here quietly shows fewer rather than an error.
+        if (!cancelled) setState({ status: 'error', games: [] });
+      });
+    return () => {
+      cancelled = true;
+    };
+  }, [body, enabled]);
+
+  return state;
+}
+
 /* ------------------------------------------------------------------ *
  * Email price alerts
  * ------------------------------------------------------------------ */
@@ -3745,7 +3794,7 @@ function Verdict({ verdict, onRate, size = 'md' }) {
  * game page because the fastest way to a profile worth having is to be able
  * to disagree with a pick where it is shown to you.
  */
-function GeniusSheet({ picks, taste, ratings, onRate, onOpenGame, onClose }) {
+function GeniusSheet({ picks, taste, ratings, mirror, onRate, onOpenGame, onOpenStore, onClose }) {
   const [burst, setBurst] = useState(null);
   const positives = taste?.positives ?? 0;
 
@@ -3834,6 +3883,56 @@ function GeniusSheet({ picks, taste, ratings, onRate, onOpenGame, onClose }) {
               );
             })}
           </ul>
+        )}
+
+        {/*
+          * Shown only when the model has something particular to say about at
+          * least a few of them. With a profile built entirely from write-ups,
+          * none of which the mirror carries, there is no store-side signal to
+          * rank on and every row falls back to "well reviewed" — which is a
+          * list of good games, not a list of picks, and the app has several
+          * of those already.
+          */}
+        {mirror.status === 'ready' && mirror.games.filter((row) => row.distinctive).length >= 3 && (
+          <>
+            <h3 className="mt-8 text-sm font-semibold uppercase tracking-wider text-slate-500 dark:text-slate-400">
+              From the rest of the store
+            </h3>
+            <p className="mt-1 text-xs leading-relaxed text-slate-400 dark:text-slate-500">
+              Nobody has written these up, which is also why you are unlikely to have come
+              across them. Ranked the same way, on what the store knows.
+            </p>
+            <ul className="mt-3 space-y-2">
+              {mirror.games.map((row) => (
+                <li key={row.id}>
+                  <button
+                    type="button"
+                    onClick={() => onOpenStore(row)}
+                    className="flex w-full items-center gap-3 rounded-xl border border-slate-200 dark:border-slate-700 p-2 text-left transition-colors hover:bg-slate-50 dark:hover:bg-slate-800/60"
+                  >
+                    <div className="h-12 w-20 shrink-0 overflow-hidden rounded-lg bg-slate-100 dark:bg-slate-800">
+                      {row.art && (
+                        <img
+                          src={atWidth(row.art, 160)}
+                          alt=""
+                          loading="lazy"
+                          className="h-full w-full object-cover"
+                        />
+                      )}
+                    </div>
+                    <div className="min-w-0 flex-1">
+                      <p className="truncate text-sm font-semibold text-slate-900 dark:text-slate-50">
+                        {row.name}
+                      </p>
+                      <p className="truncate text-xs text-slate-500 dark:text-slate-400">
+                        {row.reason}
+                      </p>
+                    </div>
+                  </button>
+                </li>
+              ))}
+            </ul>
+          </>
         )}
       </div>
     </ModalSheet>
@@ -6022,7 +6121,18 @@ export default function App() {
    * games nobody has written up. Store rows only appear here once they have
    * been saved, since those are the only ones the phone is holding.
    */
-  const rateable = useMemo(() => unify(gamesData, storeRowCache), [storeRowCache]);
+  const rateable = useMemo(
+    () =>
+      unify(gamesData, storeRowCache).map((game) =>
+        // One id space for both halves. The mirror numbers its games and the
+        // write-ups name theirs, and the rest of the app has always written a
+        // saved store game down as store:123 — so a rating on one was stored
+        // under an id nothing else in the app could look up, and quietly
+        // counted for nothing from the next reload onwards.
+        game.fromStore ? { ...game, id: storeKey(game), storeRowId: game.id } : game,
+      ),
+    [storeRowCache],
+  );
 
   /**
    * What you have said about games, good and bad.
@@ -6064,6 +6174,32 @@ export default function App() {
   }, [rateable, signals, geniusIsPersonalized, hidden, ratings]);
 
   const geniusPicks = geniusResult.picks;
+
+  /**
+   * The profile and what to leave out, as one string.
+   *
+   * A string rather than the objects themselves because the fetch below keys
+   * off it: sets and maps are new on every render, so an effect watching them
+   * would re-request the same picks for as long as the sheet stayed open.
+   */
+  const mirrorRequest = useMemo(() => {
+    const taste = geniusResult.taste;
+    if (!taste || taste.positives === 0) return null;
+    const ruledOut = [...library, ...wishlist, ...hidden, ...ratings.keys()];
+    const known = new Map(rateable.map((game) => [game.id, game]));
+    return JSON.stringify({
+      taste: packTaste(taste),
+      // The mirror knows its own games by number, so anything already ruled
+      // out goes back as the number it was indexed under.
+      exclude: ruledOut.map((id) => known.get(id)?.storeRowId ?? id),
+      // The mirror knows these games under other ids and slightly other
+      // names, so the ids alone do not reach them.
+      excludeTitles: ruledOut.map((id) => known.get(id)?.title).filter(Boolean),
+      limit: 12,
+    });
+  }, [geniusResult, rateable, library, wishlist, hidden, ratings]);
+
+  const mirrorPicks = useMirrorPicks(mirrorRequest, geniusOpen);
 
   const geniusReasons = useMemo(
     () =>
@@ -7127,7 +7263,12 @@ export default function App() {
           picks={geniusPicks.slice(0, 12)}
           taste={geniusResult.taste}
           ratings={ratings}
+          mirror={mirrorPicks}
           onRate={rateGame}
+          onOpenStore={(row) => {
+            setGeniusOpen(false);
+            setActiveStoreGame(row);
+          }}
           onOpenGame={(id) => {
             setGeniusOpen(false);
             setActiveGameId(id);
