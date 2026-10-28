@@ -342,3 +342,33 @@ test('a withdrawn answer counts as a change, not as one answer fewer', () => {
   );
   assert.equal(countChanges([a, b], [a, b]), 0, 'nothing changed is nothing to apply');
 });
+
+test('a cached row that is spoken for is not the one evicted', () => {
+  // The cache turns a stored id back into a game. Evicting a rated game's row
+  // leaves an opinion about something the catalog can no longer describe, and
+  // the signal stops counting with nothing to show for it. This is the
+  // eviction rule from App.jsx, pinned here because it is the part that goes
+  // wrong silently.
+  const CAP = 5;
+  const evict = (rows, spokenFor) => {
+    let over = rows.length - CAP;
+    if (over <= 0) return rows;
+    return rows.filter((row) => {
+      if (over <= 0 || spokenFor.has(`store:${row.id}`)) return true;
+      over -= 1;
+      return false;
+    });
+  };
+
+  const rows = Array.from({ length: 7 }, (_, i) => ({ id: i }));
+  // the two oldest are rated; without the rule they are exactly what goes
+  const kept = evict(rows, new Set(['store:0', 'store:1']));
+  assert.equal(kept.length, CAP);
+  assert.ok(kept.some((row) => row.id === 0), 'the rated row survives');
+  assert.ok(kept.some((row) => row.id === 1), 'and so does the other');
+  assert.ok(!kept.some((row) => row.id === 2), 'an unspoken-for row goes instead');
+
+  // everything spoken for: better over the cap than losing an answer
+  const all = evict(rows, new Set(rows.map((row) => `store:${row.id}`)));
+  assert.equal(all.length, 7);
+});

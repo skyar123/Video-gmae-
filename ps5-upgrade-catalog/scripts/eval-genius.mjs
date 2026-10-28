@@ -49,131 +49,29 @@
  *
  *   node scripts/eval-genius.mjs
  */
-import { readFileSync } from 'node:fs';
+import { buildTaste, scoreGame, geniusPicks, featuresOf, SHARED_NAMESPACES } from '../src/genius.js';
 import {
-  buildTaste,
-  scoreGame,
-  qualityPrior,
-  unify,
-  geniusPicks,
-  featuresOf,
-  SHARED_NAMESPACES,
-} from '../src/genius.js';
+  modelRecall,
+  popularityRecall,
+  splitFor,
+  recallAt,
+  rng,
+  shuffled,
+  joined,
+  mirror,
+  CHOOSING,
+  REPORTING,
+  mean,
+} from './eval-lib.mjs';
 
-const read = (name) => JSON.parse(readFileSync(new URL(name, import.meta.url)));
-const curated = read('../src/games.json');
-const games = unify(curated, read('../api/store-index.json'));
-
-const curatedTitles = new Set(curated.map((entry) => entry.title));
-/** Write-ups that joined a mirror row, so they carry the mirror's fields too. */
-const joined = games.filter((game) => curatedTitles.has(game.title) && game.storeId != null);
-const mirror = games.filter((game) => game.fromStore);
-
-/** Seeded, so a run is comparable with the one before it. */
-function rng(seed) {
-  let state = seed;
-  return () => {
-    state = (state * 1103515245 + 12345) & 0x7fffffff;
-    return state / 0x7fffffff;
-  };
-}
-
-const shuffled = (items, random) => {
-  const copy = [...items];
-  for (let i = copy.length - 1; i > 0; i -= 1) {
-    const j = Math.floor(random() * (i + 1));
-    [copy[i], copy[j]] = [copy[j], copy[i]];
-  }
-  return copy;
-};
-
-/** Review counts span four orders of magnitude, so they are compared by band. */
-const voteBand = (votes) => {
-  const n = votes ?? 0;
-  if (n < 10) return 0;
-  if (n < 50) return 1;
-  if (n < 200) return 2;
-  if (n < 1000) return 3;
-  if (n < 5000) return 4;
-  return 5;
-};
-
-const popularityKey = (game) => `${Math.round(game.stars)}:${voteBand(game.votes)}`;
-
-const pools = new Map();
-for (const game of mirror) {
-  if (game.stars == null) continue;
-  const key = popularityKey(game);
-  if (!pools.has(key)) pools.set(key, []);
-  pools.get(key).push(game);
-}
-
-const PER_POSITIVE = 20;
-
-/** Distractors as famous and as well reviewed as the game they hide. */
-function distractorsFor(heldOut, random) {
-  const picked = [];
-  const used = new Set();
-  for (const target of heldOut) {
-    const candidates = pools.get(popularityKey(target)) ?? [];
-    let taken = 0;
-    for (let guard = 0; guard < 2000 && taken < PER_POSITIVE; guard += 1) {
-      const pick = candidates[Math.floor(random() * candidates.length)];
-      if (!pick || used.has(pick.id)) continue;
-      used.add(pick.id);
-      picked.push(pick);
-      taken += 1;
-    }
-  }
-  return picked;
-}
-
-const splits = new Map();
-function splitFor(seed) {
-  if (splits.has(seed)) return splits.get(seed);
-  const random = rng(seed);
-  const order = shuffled(joined, random);
-  const cut = Math.floor(order.length * 0.25);
-  const heldOut = order.slice(0, cut);
-  const split = {
-    heldOut,
-    ids: new Set(heldOut.map((game) => game.id)),
-    signals: order.slice(cut).map((game) => ({ game, kind: 'owned' })),
-    pool: [...heldOut, ...distractorsFor(heldOut, random)],
-  };
-  splits.set(seed, split);
-  return split;
-}
-
-const recallAt = (ranked, ids, n) =>
-  ranked.slice(0, n).filter((game) => ids.has(game.id)).length / ids.size;
-
-function modelRecall(seed, { only = SHARED_NAMESPACES, n = 50, tuning } = {}) {
-  const { signals, ids, pool } = splitFor(seed);
-  const taste = buildTaste(signals, only);
-  const ranked = pool
-    .map((game) => ({ game, score: scoreGame(game, taste, tuning).score }))
-    .sort((a, b) => b.score - a.score)
-    .map((entry) => entry.game);
-  return recallAt(ranked, ids, n);
-}
-
-function popularityRecall(seed, n = 50) {
-  const { ids, pool } = splitFor(seed);
-  const ranked = [...pool].sort((a, b) => qualityPrior(b) - qualityPrior(a));
-  return recallAt(ranked, ids, n);
-}
-
-/**
- * Splits used for choosing are kept apart from splits used for reporting.
- * Picking the fields on the same data the result is quoted from is how 0.91x
- * gets written up as 1.47x.
- */
-const CHOOSING = [7, 13, 29];
-const REPORTING = [101, 211, 307, 409, 503, 601, 719];
-
-const mean = (values) => values.reduce((sum, value) => sum + value, 0) / values.length;
 const pct = (value) => `${(value * 100).toFixed(1)}%`;
+
+/*
+ * The splits, the pools and the metrics live in eval-lib.mjs, which the
+ * ad-hoc experiments import too. They were copied in here once and had
+ * already drifted from the copy by the time anybody looked, which is the
+ * usual fate of a second copy of a measurement.
+ */
 
 function report(label, seeds, options) {
   const lifts = seeds.map((seed) => {

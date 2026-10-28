@@ -4061,21 +4061,31 @@ function GeniusPanel({
   ratings,
   saved,
   byTitle,
+  storeRowCache,
   curatedByName,
   onRate,
   onOpenCurated,
   onOpenStore,
 }) {
   const merged = useMemo(() => {
+    /*
+     * A game from the store can reach the written half too, because the row
+     * cache keeps rows after the heart that saved them is taken back. It is
+     * then in the catalog, in no signal, and excluded by nothing, so it can
+     * be picked. Opened as a write-up it gets looked up by slug in
+     * games.json, which holds no store:NNN, so the card did nothing at all
+     * when tapped. Its row comes back with it here.
+     */
+    const rowsById = new Map((storeRowCache ?? []).map((row) => [`store:${row.id}`, row]));
     const written = picks
       .filter((pick) => !newOnly || isNewRelease(pick.game, openedAt))
       .map((pick) => ({
-      key: `c-${pick.game.id}`,
-      score: pick.score,
-      game: pick.game,
-      reason: pick.reason ?? explain(pick.hits ?? []),
-      row: null,
-    }));
+        key: `c-${pick.game.id}`,
+        score: pick.score,
+        game: pick.game,
+        reason: pick.reason ?? explain(pick.hits ?? []),
+        row: pick.game.fromStore ? (rowsById.get(pick.game.id) ?? null) : null,
+      }));
     /*
      * The same normalising the join and the server use, not toLowerCase.
      * Trademark signs and curly apostrophes survive a lowercase, so 22 of the
@@ -4095,7 +4105,7 @@ function GeniusPanel({
         row,
       }));
     return [...written, ...fromStore].sort((a, b) => b.score - a.score);
-  }, [picks, mirror, newOnly, openedAt]);
+  }, [picks, mirror, newOnly, openedAt, storeRowCache]);
 
   return (
     <>
@@ -6240,16 +6250,54 @@ export default function App() {
    * The cache is additive and capped; what actually shows is whatever it
    * holds that is still hearted or owned, so un-hearting needs no bookkeeping.
    */
+  /**
+   * Which cached rows something still points at.
+   *
+   * Held in a ref rather than read as state, because the cache is written
+   * from a callback that must not be rebuilt every time a heart or a thumb
+   * moves.
+   */
+  const spokenFor = useRef(new Set());
+  useEffect(() => {
+    spokenFor.current = new Set([...wishlist, ...library, ...hidden, ...ratings.keys()]);
+  }, [wishlist, library, hidden, ratings]);
+
   const rememberStoreRow = useCallback((row) => {
     setStoreRowCache((previous) => {
       if (previous.some((entry) => entry.id === row.id)) return previous;
-      const next = [...previous, row].slice(-MAX_SAVED_STORE);
+      const next = [...previous, row];
+
+      /*
+       * Over the cap, the oldest rows go, but never one that is wishlisted,
+       * owned, hidden or rated.
+       *
+       * This used to take the last 500 regardless. A rating is stored against
+       * an id and the row is what turns that id back into a game, so evicting
+       * a rated game's row left an opinion about something the catalog could
+       * no longer describe, and the signal quietly stopped counting. That is
+       * the exact loss rateStoreRow keeps the row to prevent, undone a few
+       * hundred saves later with nothing to show for it.
+       *
+       * If every row is spoken for the cache is allowed over the cap, which
+       * is the right way round: it is bounded by how many games somebody has
+       * actually answered for.
+       */
+      let over = next.length - MAX_SAVED_STORE;
+      const trimmed =
+        over <= 0
+          ? next
+          : next.filter((entry) => {
+              if (over <= 0 || spokenFor.current.has(storeKey(entry))) return true;
+              over -= 1;
+              return false;
+            });
+
       try {
-        localStorage.setItem(SAVED_STORE_KEY, JSON.stringify(next));
+        localStorage.setItem(SAVED_STORE_KEY, JSON.stringify(trimmed));
       } catch {
         // Without storage the row lasts for this visit only.
       }
-      return next;
+      return trimmed;
     });
   }, []);
 
@@ -7445,6 +7493,7 @@ export default function App() {
               ratings={ratings}
               saved={storeSaved}
               byTitle={byTitle}
+              storeRowCache={storeRowCache}
               curatedByName={curatedByName}
               onRate={(row, twin, value, id) =>
                 row && !twin ? rateStoreRow(row, value) : rateGame(id, value)

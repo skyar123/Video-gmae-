@@ -154,4 +154,15 @@ function popularityRecall(seed, n = 50) {
 export const CHOOSING = [7, 13, 29];
 export const REPORTING = [101, 211, 307, 409, 503, 601, 719];
 export const mean = (values) => values.reduce((sum, value) => sum + value, 0) / values.length;
-export { modelRecall, popularityRecall, splitFor, joined, mirror, games, curatedTitles };
+export {
+  modelRecall,
+  popularityRecall,
+  splitFor,
+  recallAt,
+  rng,
+  shuffled,
+  joined,
+  mirror,
+  games,
+  curatedTitles,
+};
