@@ -63,6 +63,7 @@ import {
 import { fold, indexText, parseQuery, scoreMatch } from '../api/search.mjs';
 import { priceStanding } from '../api/standing.mjs';
 import gamesData from './games.json';
+import { evictStoreRows } from './store-cache.js';
 import creatorsData from './creators.json';
 
 /**
@@ -313,8 +314,6 @@ const RATINGS_KEY = 'ratings';
 /** Store-mirror ids are numeric; prefixing keeps them out of the catalog's namespace. */
 const storeKey = (game) => `store:${game.id}`;
 const SAVED_STORE_KEY = 'savedStoreGames';
-/** Enough to never be reached in practice, low enough to bound the key. */
-const MAX_SAVED_STORE = 500;
 const SAVED_RELEASES_KEY = 'savedReleases';
 const WISHLIST_PRICES_KEY = 'wishlistPrices';
 const DEAL_ALERTS_KEY = 'dealAlerts';
@@ -3869,6 +3868,19 @@ function GeniusSheet({
   const [burst, setBurst] = useState(null);
   const positives = taste?.positives ?? 0;
 
+  /*
+   * Deduped once, and counted from the same list that is shown. The heading
+   * used to be decided by the undeduped one, so it could introduce a list
+   * that had nothing left in it.
+   */
+  const shownFromStore = useMemo(
+    () =>
+      (mirror.games ?? []).filter(
+        (row) => !picks.some((pick) => normalizeTitle(pick.game.title) === normalizeTitle(row.name)),
+      ),
+    [mirror, picks],
+  );
+
   const rate = (id, verdict) => {
     setBurst(ratings.get(id) === verdict ? null : `${id}:${verdict}`);
     onRate(id, verdict);
@@ -3987,7 +3999,7 @@ function GeniusSheet({
           * list of good games, not a list of picks, and the app has several
           * of those already.
           */}
-        {mirror.status === 'ready' && mirror.games.filter((row) => row.distinctive).length >= 3 && (
+        {mirror.status === 'ready' && shownFromStore.filter((row) => row.distinctive).length >= 3 && (
           <>
             <h3 className="mt-8 text-sm font-semibold uppercase tracking-wider text-slate-500 dark:text-slate-400">
               From the rest of the store
@@ -3997,12 +4009,7 @@ function GeniusSheet({
               across them. Ranked the same way, on what the store knows.
             </p>
             <ul className="mt-3 space-y-2">
-              {mirror.games
-                .filter(
-                  (row) =>
-                    !picks.some((pick) => normalizeTitle(pick.game.title) === normalizeTitle(row.name)),
-                )
-                .map((row) => (
+              {shownFromStore.map((row) => (
                 <li key={row.id}>
                   <button
                     type="button"
@@ -4146,7 +4153,19 @@ function GeniusPanel({
               // Written-up games carry no price of their own; the live feed
               // is keyed by title. Reading storeLive off them meant every
               // pick in this tab sat on the loading shimmer for good.
-              live={entry.game.storeLive ?? byTitle.get(entry.game.title)}
+              /*
+               * Three places a price can come from, and a card needs
+               * whichever it has. A store row carries its own; a write-up is
+               * priced by title from the live feed; and a store row that
+               * reached the written half carries neither until its row is
+               * turned back into one, which is why the cards resurrected
+               * above went on shimmering after they started opening.
+               */
+              live={
+                entry.game.storeLive ??
+                byTitle.get(entry.game.title) ??
+                (entry.row ? storeRowAsLive(entry.row) : null)
+              }
               reason={entry.reason}
               wishlisted={saved.wishlist.has(id)}
               owned={saved.library.has(id)}
@@ -6049,6 +6068,7 @@ export default function App() {
         if (!live) return;
         if (typeof payload.size === 'number') setStoreSize(payload.size);
         if (typeof payload.plus?.included === 'number') setStorePlus(payload.plus.included);
+
       })
       .catch(() => {});
     return () => {
@@ -6259,38 +6279,24 @@ export default function App() {
    */
   const spokenFor = useRef(new Set());
   useEffect(() => {
-    spokenFor.current = new Set([...wishlist, ...library, ...hidden, ...ratings.keys()]);
-  }, [wishlist, library, hidden, ratings]);
+    // dealAlerts included: a row cached only by arming a price alert was
+    // evictable, and losing it leaves the alert armed against a game the app
+    // can no longer describe, which is an alert that never fires.
+    spokenFor.current = new Set([
+      ...wishlist,
+      ...library,
+      ...hidden,
+      ...ratings.keys(),
+      ...dealAlerts,
+    ]);
+  }, [wishlist, library, hidden, ratings, dealAlerts]);
 
   const rememberStoreRow = useCallback((row) => {
     setStoreRowCache((previous) => {
       if (previous.some((entry) => entry.id === row.id)) return previous;
       const next = [...previous, row];
 
-      /*
-       * Over the cap, the oldest rows go, but never one that is wishlisted,
-       * owned, hidden or rated.
-       *
-       * This used to take the last 500 regardless. A rating is stored against
-       * an id and the row is what turns that id back into a game, so evicting
-       * a rated game's row left an opinion about something the catalog could
-       * no longer describe, and the signal quietly stopped counting. That is
-       * the exact loss rateStoreRow keeps the row to prevent, undone a few
-       * hundred saves later with nothing to show for it.
-       *
-       * If every row is spoken for the cache is allowed over the cap, which
-       * is the right way round: it is bounded by how many games somebody has
-       * actually answered for.
-       */
-      let over = next.length - MAX_SAVED_STORE;
-      const trimmed =
-        over <= 0
-          ? next
-          : next.filter((entry) => {
-              if (over <= 0 || spokenFor.current.has(storeKey(entry))) return true;
-              over -= 1;
-              return false;
-            });
+      const trimmed = evictStoreRows(next, spokenFor.current);
 
       try {
         localStorage.setItem(SAVED_STORE_KEY, JSON.stringify(trimmed));
@@ -6526,6 +6532,41 @@ export default function App() {
   }, [frozen, signals]);
   const refreshPicks = useCallback(() => setFrozen(null), []);
 
+  /** The chips a hand-checked rating can settle, where the write-up wins. */
+  const passesRatingChips = useCallback(
+    (game) => {
+      if (filters.kidFriendly && !isKidFriendly(game.ageRating)) return false;
+      if (filters.noPurchases && (!game.ageRating || hasInGamePurchases(game.ageRating)))
+        return false;
+      return true;
+    },
+    [filters.kidFriendly, filters.noPurchases],
+  );
+
+  /**
+   * Each half answers the genre in its own words.
+   *
+   * The two vocabularies share only Action, Party and Puzzle, and a game is
+   * often filed differently in each: the store calls Solar Ash Action, its
+   * write-up calls it a Platformer. Neither is wrong, so neither is made to
+   * answer in the other's words. A write-up is matched on its own genre; the
+   * mirror is asked in the store's, and a game the two disagree about turns
+   * up from whichever half recognises the word.
+   *
+   * Matching write-ups against store genres was tried and does not work here:
+   * the catalog on the device is joined only to store rows already cached, so
+   * a write-up has no store genre to match against, and 73 games vanished
+   * from both halves at once.
+   */
+  const passesChips = useCallback(
+    (game) => {
+      const { genre } = filters;
+      if (genre !== 'All' && game.genre !== genre) return false;
+      return passesRatingChips(game);
+    },
+    [filters, passesRatingChips],
+  );
+
   // Never touches live data, so picks stay instant while prices load.
   const geniusIsPersonalized = rankingSignals.some((row) => SIGNAL_WEIGHTS[row.kind] > 0);
   const geniusResult = useMemo(() => {
@@ -6548,8 +6589,15 @@ export default function App() {
       // than as "rate something first", so it falls back to a quality ranking.
       return { picks: starterPicks(gamesData, { exclude, limit: 48 }), taste: null };
     }
-    return geniusPicksFor(rateable, rankingSignals, { exclude, limit: 48 });
-  }, [rateable, rankingSignals, geniusIsPersonalized, frozen, library, wishlist, hidden]);
+    /*
+     * Narrowed before ranking, for the reason the store half is: ranking
+     * first and filtering after answers "which of your 48 picks are kid
+     * friendly", which cut the list to a sixth of itself while 169 games
+     * qualified and were never considered.
+     */
+    const pool = rateable.filter((game) => passesChips(game));
+    return geniusPicksFor(pool, rankingSignals, { exclude, limit: 48 });
+  }, [rateable, rankingSignals, geniusIsPersonalized, frozen, library, wishlist, hidden, passesChips]);
 
   /**
    * The written-up half of the picks, narrowed by the chips.
@@ -6562,23 +6610,8 @@ export default function App() {
    * of each, and the chip is offering whichever list the reader was last
    * looking at.
    */
-  const passesChips = useCallback(
-    (game) => {
-      const { genre, kidFriendly, noPurchases } = filters;
-      if (genre !== 'All' && game.genre !== genre && !(game.genres ?? []).includes(genre))
-        return false;
-      if (kidFriendly && !isKidFriendly(game.ageRating)) return false;
-      if (noPurchases && (!game.ageRating || hasInGamePurchases(game.ageRating))) return false;
-      return true;
-    },
-    [filters],
-  );
-
-  const geniusPicks = useMemo(() => {
-    const { genre, kidFriendly, noPurchases } = filters;
-    if (genre === 'All' && !kidFriendly && !noPurchases) return geniusResult.picks;
-    return geniusResult.picks.filter(({ game }) => passesChips(game));
-  }, [geniusResult, filters, passesChips]);
+  // Already narrowed, because the pool was narrowed before it was ranked.
+  const geniusPicks = geniusResult.picks;
 
   /**
    * The profile and what to leave out, as one string.
@@ -6605,7 +6638,7 @@ export default function App() {
       excludeTitles: [
         ...ruledOut.map((id) => known.get(id)?.title).filter(Boolean),
         /*
-         * Games a write-up has already failed on these chips.
+         * Games a write-up has already failed on a rating chip.
          *
          * The same game can hold two board ratings: Escape Academy is DJCTQ
          * 12 in its write-up and ESRB E10 in the mirror. The written half
@@ -6613,9 +6646,16 @@ export default function App() {
          * half put it straight back on the second, so it sat under "kid
          * friendly" wearing a teen badge. The hand-checked rating wins
          * everywhere else in this app, so it wins here.
+         *
+         * Ratings only, never genre. The two halves disagree about genre by
+         * design rather than by error: the store calls Ender Lilies and Solar
+         * Ash and 71 others Action, while their write-ups call them
+         * Metroidvania and Platformer, and neither is wrong. Suppressing on
+         * that disagreement took 73 games out of both halves at once, which
+         * is worse than the chip having done nothing.
          */
         ...rateable
-          .filter((game) => !game.fromStore && !passesChips(game))
+          .filter((game) => !game.fromStore && !passesRatingChips(game))
           .map((game) => game.title),
       ],
       // Enough for a grid. The sheet shows the first handful of them.
@@ -6625,6 +6665,9 @@ export default function App() {
       // answers "which of your picks are horror"; the question somebody asks
       // by tapping a genre while reading their picks is "what horror is for
       // me", and those are different lists.
+      // Always asked, in the store's own words. If the store has no such
+      // genre it answers with none, which is the true answer: there are no
+      // Metroidvanias in the mirror because the mirror does not use the word.
       genre: filters.genre === 'All' ? '' : filters.genre,
       familyOnly: filters.kidFriendly,
       noPurchases: filters.noPurchases,
@@ -6641,7 +6684,7 @@ export default function App() {
     filters.genre,
     filters.kidFriendly,
     filters.noPurchases,
-    passesChips,
+    passesRatingChips,
   ]);
 
   // The sheet and the For you tab are the same picks on two surfaces, so

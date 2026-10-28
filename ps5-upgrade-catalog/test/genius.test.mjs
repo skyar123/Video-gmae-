@@ -14,6 +14,7 @@ import {
   packTaste,
   unpackTaste,
 } from '../src/genius.js';
+import { evictStoreRows } from '../src/store-cache.js';
 
 const written = (over = {}) => ({
   id: 'a',
@@ -344,31 +345,26 @@ test('a withdrawn answer counts as a change, not as one answer fewer', () => {
 });
 
 test('a cached row that is spoken for is not the one evicted', () => {
-  // The cache turns a stored id back into a game. Evicting a rated game's row
-  // leaves an opinion about something the catalog can no longer describe, and
-  // the signal stops counting with nothing to show for it. This is the
-  // eviction rule from App.jsx, pinned here because it is the part that goes
-  // wrong silently.
-  const CAP = 5;
-  const evict = (rows, spokenFor) => {
-    let over = rows.length - CAP;
-    if (over <= 0) return rows;
-    return rows.filter((row) => {
-      if (over <= 0 || spokenFor.has(`store:${row.id}`)) return true;
-      over -= 1;
-      return false;
-    });
-  };
-
+  // The real rule, imported rather than restated: a copy of it in here could
+  // pass while the app did something else entirely. The cache turns a stored
+  // id back into a game, so evicting a rated game's row leaves an opinion
+  // about something the catalog can no longer describe, and the signal stops
+  // counting with nothing to show for it.
   const rows = Array.from({ length: 7 }, (_, i) => ({ id: i }));
-  // the two oldest are rated; without the rule they are exactly what goes
-  const kept = evict(rows, new Set(['store:0', 'store:1']));
-  assert.equal(kept.length, CAP);
+
+  const kept = evictStoreRows(rows, new Set(['store:0', 'store:1']), 5);
+  assert.equal(kept.length, 5);
   assert.ok(kept.some((row) => row.id === 0), 'the rated row survives');
   assert.ok(kept.some((row) => row.id === 1), 'and so does the other');
   assert.ok(!kept.some((row) => row.id === 2), 'an unspoken-for row goes instead');
 
-  // everything spoken for: better over the cap than losing an answer
-  const all = evict(rows, new Set(rows.map((row) => `store:${row.id}`)));
-  assert.equal(all.length, 7);
+  // Everything spoken for: over the cap beats losing an answer.
+  assert.equal(evictStoreRows(rows, new Set(rows.map((r) => `store:${r.id}`)), 5).length, 7);
+  // Under the cap nothing is touched, and the order is left alone.
+  assert.deepEqual(evictStoreRows(rows, new Set(), 20), rows);
+  assert.deepEqual(
+    evictStoreRows(rows, new Set(), 5).map((r) => r.id),
+    [2, 3, 4, 5, 6],
+    'the oldest unspoken-for rows are the ones that go',
+  );
 });
