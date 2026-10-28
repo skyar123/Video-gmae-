@@ -6551,7 +6551,34 @@ export default function App() {
     return geniusPicksFor(rateable, rankingSignals, { exclude, limit: 48 });
   }, [rateable, rankingSignals, geniusIsPersonalized, frozen, library, wishlist, hidden]);
 
-  const geniusPicks = geniusResult.picks;
+  /**
+   * The written-up half of the picks, narrowed by the chips.
+   *
+   * Without this the chips sat lit above a list that ignored them: turning on
+   * kid friendly in the For you tab changed nothing at all, which reads as
+   * the filter being broken rather than as the tab not taking part.
+   *
+   * Genre is checked against both vocabularies because a joined game has one
+   * of each, and the chip is offering whichever list the reader was last
+   * looking at.
+   */
+  const passesChips = useCallback(
+    (game) => {
+      const { genre, kidFriendly, noPurchases } = filters;
+      if (genre !== 'All' && game.genre !== genre && !(game.genres ?? []).includes(genre))
+        return false;
+      if (kidFriendly && !isKidFriendly(game.ageRating)) return false;
+      if (noPurchases && (!game.ageRating || hasInGamePurchases(game.ageRating))) return false;
+      return true;
+    },
+    [filters],
+  );
+
+  const geniusPicks = useMemo(() => {
+    const { genre, kidFriendly, noPurchases } = filters;
+    if (genre === 'All' && !kidFriendly && !noPurchases) return geniusResult.picks;
+    return geniusResult.picks.filter(({ game }) => passesChips(game));
+  }, [geniusResult, filters, passesChips]);
 
   /**
    * The profile and what to leave out, as one string.
@@ -6575,12 +6602,47 @@ export default function App() {
       exclude: ruledOut.map((id) => known.get(id)?.storeRowId ?? id),
       // The mirror knows these games under other ids and slightly other
       // names, so the ids alone do not reach them.
-      excludeTitles: ruledOut.map((id) => known.get(id)?.title).filter(Boolean),
+      excludeTitles: [
+        ...ruledOut.map((id) => known.get(id)?.title).filter(Boolean),
+        /*
+         * Games a write-up has already failed on these chips.
+         *
+         * The same game can hold two board ratings: Escape Academy is DJCTQ
+         * 12 in its write-up and ESRB E10 in the mirror. The written half
+         * dropped it from a kid-friendly list on the first, and the store
+         * half put it straight back on the second, so it sat under "kid
+         * friendly" wearing a teen badge. The hand-checked rating wins
+         * everywhere else in this app, so it wins here.
+         */
+        ...rateable
+          .filter((game) => !game.fromStore && !passesChips(game))
+          .map((game) => game.title),
+      ],
       // Enough for a grid. The sheet shows the first handful of them.
       limit: 48,
       newOnly: filters.newOnly,
+      // Narrow before ranking, not after. Filtering the picks that came back
+      // answers "which of your picks are horror"; the question somebody asks
+      // by tapping a genre while reading their picks is "what horror is for
+      // me", and those are different lists.
+      genre: filters.genre === 'All' ? '' : filters.genre,
+      familyOnly: filters.kidFriendly,
+      noPurchases: filters.noPurchases,
     });
-  }, [geniusResult, rateable, frozen, rankingSignals, library, wishlist, hidden, filters.newOnly]);
+  }, [
+    geniusResult,
+    rateable,
+    frozen,
+    rankingSignals,
+    library,
+    wishlist,
+    hidden,
+    filters.newOnly,
+    filters.genre,
+    filters.kidFriendly,
+    filters.noPurchases,
+    passesChips,
+  ]);
 
   // The sheet and the For you tab are the same picks on two surfaces, so
   // either one being open is reason enough to have ranked the store.

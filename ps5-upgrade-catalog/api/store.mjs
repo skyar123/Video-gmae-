@@ -54,7 +54,7 @@ const SELLS_INSIDE = /purchases/i;
 export const hasInGamePurchases = (ageRating) =>
   (ageRating?.interactive ?? []).some((entry) => SELLS_INSIDE.test(entry));
 
-const isKidFriendly = (ageRating) =>
+export const isKidFriendly = (ageRating) =>
   ['safe', 'mild'].includes(ageRating?.family) &&
   (ageRating?.tier === 'everyone' || ageRating?.tier === 'everyone10');
 

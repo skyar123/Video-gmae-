@@ -20,7 +20,7 @@ import {
   normalizeTitle,
   hasDistinctiveReason,
 } from '../src/genius.js';
-import { storeRows, NEW_RELEASE_DAYS } from './store.mjs';
+import { storeRows, NEW_RELEASE_DAYS, isKidFriendly, hasInGamePurchases } from './store.mjs';
 
 /**
  * Bounds, because this endpoint accepts a body from anyone who can reach it.
@@ -69,6 +69,18 @@ export function parsePicksRequest(body) {
   const limit = Number(body.limit);
   return {
     newOnly: body.newOnly === true,
+    /*
+     * The same chips the rest of the app filters by.
+     *
+     * Applied here rather than to whatever the ranking happened to return,
+     * because filtering 48 picks after the fact answers "which of your picks
+     * are horror" when the question was "what horror is for you". Those give
+     * very different lists, and the second is the one somebody tapping a
+     * genre while reading their picks is asking.
+     */
+    genre: typeof body.genre === 'string' ? body.genre : '',
+    familyOnly: body.familyOnly === true,
+    noPurchases: body.noPurchases === true,
     taste: unpackTaste(body.taste),
     // Ids arrive as numbers from the mirror and strings from the write-ups.
     exclude: new Set(rawExclude.map((id) => String(id))),
@@ -81,7 +93,7 @@ export async function pickFromMirror(body) {
   const parsed = parsePicksRequest(body);
   if (parsed.error) return parsed;
 
-  const { taste, exclude, excludeTitles, limit, newOnly } = parsed;
+  const { taste, exclude, excludeTitles, limit, newOnly, genre, familyOnly, noPurchases } = parsed;
   // The same window the store filter uses, so the chip means one thing
   // whichever list it is sitting over.
   const newestFrom = Date.now() - NEW_RELEASE_DAYS * 86_400_000;
@@ -97,6 +109,10 @@ export async function pickFromMirror(body) {
       const at = Date.parse(row.release ?? '');
       if (!Number.isFinite(at) || at < newestFrom || at > now) continue;
     }
+    if (genre && !(row.genres ?? []).includes(genre)) continue;
+    // Unrated is unknown, not innocent: the rule the store search follows.
+    if (familyOnly && !isKidFriendly(row.ageRating)) continue;
+    if (noPurchases && (!row.ageRating || hasInGamePurchases(row.ageRating))) continue;
     const scored = scoreGame(row, taste);
     if (scored.score <= 0) continue;
     ranked.push({ game: row, score: scored.score, hits: scored.hits });
