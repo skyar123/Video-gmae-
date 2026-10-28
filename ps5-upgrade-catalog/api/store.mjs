@@ -265,6 +265,18 @@ export async function storeGenres() {
  */
 export const storeRows = () => index();
 
+/**
+ * The ratings the store search filters on, by id.
+ *
+ * Exported so that anything else filtering by age or in-game purchases reads
+ * the same source rather than the rating baked into the row. The two agree on
+ * all 9,222 rows today, which is exactly why this is worth doing now: when a
+ * nightly scan corrects a rating it lands here first, and a second filter
+ * reading the row directly would quietly start giving a different answer to
+ * the same question on a different tab.
+ */
+export const storeRatings = () => plusIndex();
+
 export const storeSize = async () => (await index()).length;
 
 /**

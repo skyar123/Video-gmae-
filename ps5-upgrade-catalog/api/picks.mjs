@@ -20,7 +20,13 @@ import {
   normalizeTitle,
   hasDistinctiveReason,
 } from '../src/genius.js';
-import { storeRows, NEW_RELEASE_DAYS, isKidFriendly, hasInGamePurchases } from './store.mjs';
+import {
+  storeRows,
+  storeRatings,
+  NEW_RELEASE_DAYS,
+  isKidFriendly,
+  hasInGamePurchases,
+} from './store.mjs';
 
 /**
  * Bounds, because this endpoint accepts a body from anyone who can reach it.
@@ -98,9 +104,15 @@ export async function pickFromMirror(body) {
   // whichever list it is sitting over.
   const newestFrom = Date.now() - NEW_RELEASE_DAYS * 86_400_000;
   const now = Date.now();
+  // Reading the rating index costs a blob fetch, so it is only read when a
+  // chip actually asks a question about ratings.
+  const needsRating = familyOnly || noPurchases;
   if (taste.weights.size === 0) return { games: [], total: 0, reason: 'no profile' };
 
   const rows = await storeRows();
+  // The same ratings the store search reads, so one chip cannot mean two
+  // things on two tabs.
+  const ratings = needsRating ? await storeRatings() : null;
   const ranked = [];
   for (const row of rows) {
     if (exclude.has(String(row.id))) continue;
@@ -110,9 +122,12 @@ export async function pickFromMirror(body) {
       if (!Number.isFinite(at) || at < newestFrom || at > now) continue;
     }
     if (genre && !(row.genres ?? []).includes(genre)) continue;
-    // Unrated is unknown, not innocent: the rule the store search follows.
-    if (familyOnly && !isKidFriendly(row.ageRating)) continue;
-    if (noPurchases && (!row.ageRating || hasInGamePurchases(row.ageRating))) continue;
+    if (needsRating) {
+      // Unrated is unknown, not innocent: the rule the store search follows.
+      const rating = ratings[row.id]?.ageRating;
+      if (familyOnly && !isKidFriendly(rating)) continue;
+      if (noPurchases && (!rating || hasInGamePurchases(rating))) continue;
+    }
     const scored = scoreGame(row, taste);
     if (scored.score <= 0) continue;
     ranked.push({ game: row, score: scored.score, hits: scored.hits });
