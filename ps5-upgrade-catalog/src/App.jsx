@@ -57,6 +57,7 @@ import {
   unify,
   explain,
   packTaste,
+  normalizeTitle,
   SIGNAL_WEIGHTS,
 } from './genius.js';
 import { fold, indexText, parseQuery, scoreMatch } from '../api/search.mjs';
@@ -2001,20 +2002,13 @@ function GameCard({
               {reason}
             </p>
           )}
-          {/* Only where a card is a suggestion. Everywhere else a card is
-              just a game, and a game does not need answering. */}
-          {onRate && (
-            <div className="mb-2" onClick={(event) => event.stopPropagation()} role="presentation">
-              <Verdict verdict={verdict} size="sm" onRate={onRate} />
-            </div>
-          )}
           {/* The price row is always here, even before a price arrives and
               even when none ever will. It used to render only once a price
               existed, which meant every card in the grid grew by a line as
               its chunk landed — the whole page shuffling under your thumb
               while you were reading it — and the fifty titles the store has
               no readable price for just ended early with no explanation. */}
-          <div className="mt-auto min-h-[2.25rem] pr-10 pt-2">
+          <div className={`mt-auto min-h-[2.25rem] pr-10 pt-2 ${onRate ? 'pl-[4.75rem]' : ''}`}>
             {live?.price ? (
               <>
                 {/* A price you do not have to pay is not the headline. If a
@@ -2109,11 +2103,22 @@ function GameCard({
           <Heart className={`h-[22px] w-[22px] ${wishlisted ? 'fill-current' : ''}`} />
         </button>
       )}
+
+      {/* Outside the card's own button, for the reason the heart is: a button
+          inside a button is not valid markup, React objects to it, and the
+          inner one stops being reachable by keyboard. Only on a card that is
+          a suggestion; everywhere else a card is just a game, and a game does
+          not need answering. */}
+      {onRate && (
+        <div className="absolute bottom-1 left-2 z-10">
+          <Verdict verdict={verdict} size="sm" onRate={onRate} />
+        </div>
+      )}
     </div>
   );
 }
 
-function EmptyState({ filters, personalized, status, onClear, onSearchStore }) {
+function EmptyState({ filters, personalized, wishlistEmpty, status, onClear, onSearchStore }) {
   // Asked of the picks themselves rather than of the library and wishlist.
   // Counting only those two meant somebody who had thumbed twenty games and
   // owned none was told there was nothing to work from, under a list of
@@ -2154,7 +2159,7 @@ function EmptyState({ filters, personalized, status, onClear, onSearchStore }) {
         </p>
       ) : (
         <>
-          {filters.wishlist && wishlist.size === 0 && (
+          {filters.wishlist && wishlistEmpty && (
             <p className="mt-1 text-sm">Your wishlist is empty. Tap the heart on any card.</p>
           )}
           {filters.atFloor && (
@@ -3992,7 +3997,12 @@ function GeniusSheet({
               across them. Ranked the same way, on what the store knows.
             </p>
             <ul className="mt-3 space-y-2">
-              {mirror.games.map((row) => (
+              {mirror.games
+                .filter(
+                  (row) =>
+                    !picks.some((pick) => normalizeTitle(pick.game.title) === normalizeTitle(row.name)),
+                )
+                .map((row) => (
                 <li key={row.id}>
                   <button
                     type="button"
@@ -4050,6 +4060,7 @@ function GeniusPanel({
   onRefresh,
   ratings,
   saved,
+  byTitle,
   curatedByName,
   onRate,
   onOpenCurated,
@@ -4065,11 +4076,17 @@ function GeniusPanel({
       reason: pick.reason ?? explain(pick.hits ?? []),
       row: null,
     }));
-    const seen = new Set(picks.map((pick) => pick.game.title?.toLowerCase()));
+    /*
+     * The same normalising the join and the server use, not toLowerCase.
+     * Trademark signs and curly apostrophes survive a lowercase, so 22 of the
+     * 398 joined titles slipped past it and listed twice: Horizon Forbidden
+     * West and Marvel's Spider-Man 2 among them.
+     */
+    const seen = new Set(picks.map((pick) => normalizeTitle(pick.game.title)));
     const fromStore = (mirror.games ?? [])
       // A game with a write-up is already above under its own entry, which
       // says more about it than the mirror's row ever could.
-      .filter((row) => !seen.has(row.name?.toLowerCase()))
+      .filter((row) => !seen.has(normalizeTitle(row.name)))
       .map((row) => ({
         key: `s-${row.id}`,
         score: row.pickScore ?? 0,
@@ -4116,7 +4133,10 @@ function GeniusPanel({
             <GameCard
               key={entry.key}
               game={entry.game}
-              live={entry.game.storeLive}
+              // Written-up games carry no price of their own; the live feed
+              // is keyed by title. Reading storeLive off them meant every
+              // pick in this tab sat on the loading shimmer for good.
+              live={entry.game.storeLive ?? byTitle.get(entry.game.title)}
               reason={entry.reason}
               wishlisted={saved.wishlist.has(id)}
               owned={saved.library.has(id)}
@@ -7405,6 +7425,7 @@ export default function App() {
             <EmptyState
               filters={filters}
               personalized={geniusIsPersonalized}
+              wishlistEmpty={wishlist.size === 0}
               status={status}
               onClear={clearFilters}
               onSearchStore={() => set('collection', 'all')}
@@ -7423,6 +7444,7 @@ export default function App() {
               onRefresh={refreshPicks}
               ratings={ratings}
               saved={storeSaved}
+              byTitle={byTitle}
               curatedByName={curatedByName}
               onRate={(row, twin, value, id) =>
                 row && !twin ? rateStoreRow(row, value) : rateGame(id, value)
@@ -7566,6 +7588,7 @@ export default function App() {
             <EmptyState
               filters={filters}
               personalized={geniusIsPersonalized}
+              wishlistEmpty={wishlist.size === 0}
               status={status}
               onClear={clearFilters}
               onSearchStore={() => set('collection', 'all')}
