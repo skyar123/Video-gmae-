@@ -10,7 +10,8 @@
     "preview": "vite preview",
     "test": "node --test test/*.test.mjs",
     "serve": "node scripts/serve-local.mjs",
-    "check:functions": "node scripts/check-functions.mjs"
+    "check:functions": "node scripts/check-functions.mjs",
+    "smoke": "node scripts/smoke.mjs"
   },
   "dependencies": {
     "@netlify/blobs": "^11.0.3",
