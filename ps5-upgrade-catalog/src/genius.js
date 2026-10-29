@@ -310,17 +310,20 @@ export function qualityPrior(game) {
  * happens to improve looks exactly like a fit that is still right. Re-running
  * it against the weights as they stand found better ones anyway.
  *
- * The exploration term is the one the holdout cannot judge, since nothing in
- * a test of hidden games rewards a feed for being different tomorrow than it
- * was today. It is no longer merely free, though: at these settings it is
- * what carries the worst split from 1.23x to 1.31x, so the variety it buys
- * now costs nothing and defends the weakest case.
+ * The exploration term is the one the holdout genuinely cannot judge. The
+ * lift is identical at every value of it, on the splits used for choosing and
+ * on the splits kept for reporting alike, because nothing in a test of hidden
+ * games rewards a feed for being different tomorrow than it was today. So its
+ * value is settled on what the test cannot see: a feed showing the same
+ * twenty games every evening is one nobody opens twice.
  *
- * The exploration term is the exception: the sweep is indifferent to it,
- * because nothing in a holdout test rewards variety from one day to the next.
- * It is kept at a value the sweep says costs nothing, for a reason the test
- * cannot see, which is that a feed showing the same twenty games every evening
- * is one nobody opens twice.
+ * An earlier note here claimed this term carried the worst split from 1.23x
+ * to 1.31x. It did, and that was not a point in its favour. It was scaled by
+ * reputation then, so it lifted famous games the profile did not match, and
+ * the games held out in the test are famous ones: it was scoring on fame
+ * again, in the one place left where fame could still get in. What it
+ * multiplies now is fit, the worst split reads 1.23x, and that number is the
+ * more honest of the two.
  */
 export const TUNING = { confidence: 1.5, exploration: EXPLORATION, prior: 0.6 };
 
@@ -354,12 +357,23 @@ export function scoreGame(game, taste, tuning = TUNING) {
    * on the picks, the game pages and the feed rather than buried in settings.
    */
   const relevance = total / Math.max(known + confidence, 1);
+  /*
+   * Only for a game that already matches something.
+   *
+   * The bonus is novelty scaled by reputation, which on its own rewards being
+   * famous and unlike anything the reader likes: it put Resident Evil 4 at
+   * the top of a list built from Eastshade and A Short Hike, and filled 13 of
+   * 25 cozy picks with mature-rated games. Requiring one thing in common
+   * first keeps the exploring inside the neighbourhood of a taste rather than
+   * outside it, which is the difference between finding something new and
+   * being handed the best-selling thing nobody asked about.
+   */
   const novelty = (features.size - known) / features.size;
   const prior = qualityPrior(game);
 
   hits.sort((a, b) => b.weight - a.weight);
   return {
-    score: relevance + exploration * novelty * prior + priorWeight * prior,
+    score: relevance + exploration * novelty * Math.max(relevance, 0) + priorWeight * prior,
     hits,
     novelty,
   };

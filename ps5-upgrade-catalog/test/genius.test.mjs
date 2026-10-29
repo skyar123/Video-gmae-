@@ -368,3 +368,41 @@ test('a cached row that is spoken for is not the one evicted', () => {
     'the oldest unspoken-for rows are the ones that go',
   );
 });
+
+test('exploring stays near what you like rather than near what is famous', () => {
+  // The bonus for a game the profile knows little about used to be scaled by
+  // the game's reputation, which rewards being famous and unlike anything the
+  // reader likes. It put Resident Evil 4 at the top of a list built from
+  // Eastshade and A Short Hike, and filled 13 of 25 cozy picks with
+  // mature-rated games. It rides on fit now, so an unknown is worth looking at
+  // when it is unknown in the way your taste is, not when it is merely big.
+  const taste = buildTaste([
+    { game: written({ id: 'seed', genre: 'Life Sim', tags: ['cozy'] }), kind: 'liked' },
+  ]);
+
+  // Celebrated, and shares nothing with the profile.
+  const famousStranger = fromStore({
+    id: 900,
+    name: 'Famous Stranger',
+    genres: ['Shooter'],
+    stars: 5,
+    votes: 90_000,
+    ageRating: { family: 'mature', tier: 'mature', interactive: [] },
+  });
+  // Quieter, and in the same territory.
+  const quietMatch = written({
+    id: 'quiet',
+    genre: 'Life Sim',
+    tags: ['cozy'],
+    ratings: { critic: 78, user: { percentPositive: 85, total: 900 } },
+  });
+
+  const stranger = scoreGame(famousStranger, taste);
+  const match = scoreGame(quietMatch, taste);
+  assert.ok(
+    match.score > stranger.score,
+    `a quiet game in your territory (${match.score.toFixed(3)}) should beat a famous one outside it (${stranger.score.toFixed(3)})`,
+  );
+  // And a stranger matching nothing gets no exploration bonus at all.
+  assert.equal(stranger.hits.length, 0, 'nothing in common with the profile');
+});
