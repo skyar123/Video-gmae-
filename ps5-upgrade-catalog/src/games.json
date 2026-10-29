@@ -142,7 +142,13 @@
         "videos": 1
       }
     ],
-    "description": "A wildly unique isometric RPG where you play an amnesiac detective solving a murder through deep dialogue trees and internal psychological skill checks."
+    "description": "A wildly unique isometric RPG where you play an amnesiac detective solving a murder through deep dialogue trees and internal psychological skill checks.",
+    "storeId": 10002292,
+    "storeGenres": [
+      "Role Playing Games"
+    ],
+    "storeRelease": "2021-03-30T17:00:00Z",
+    "plusIncluded": false
   },
   {
     "id": "no-mans-sky",
@@ -359,7 +365,14 @@
       "asOf": "2026-09-06"
     },
     "coverage": null,
-    "description": "Play as a soul-reaping crow in a bleak but beautiful world filled with secrets, environmental puzzles, and challenging boss fights."
+    "description": "Play as a soul-reaping crow in a bleak but beautiful world filled with secrets, environmental puzzles, and challenging boss fights.",
+    "storeId": 10003808,
+    "storeGenres": [
+      "Action",
+      "Adventure"
+    ],
+    "storeRelease": "2021-11-23T14:00:00Z",
+    "plusIncluded": false
   },
   {
     "id": "tunic",
@@ -438,7 +451,13 @@
         "videos": 1
       }
     ],
-    "description": "Guide a small fox across an island filled with forgotten ruins, deciphering mechanics using lost pages of an authentic retro instruction manual."
+    "description": "Guide a small fox across an island filled with forgotten ruins, deciphering mechanics using lost pages of an authentic retro instruction manual.",
+    "storeId": 10002475,
+    "storeGenres": [
+      "Action"
+    ],
+    "storeRelease": "2022-09-27T17:00:00Z",
+    "plusIncluded": false
   },
   {
     "id": "stray",
@@ -503,7 +522,13 @@
       "asOf": "2026-09-06"
     },
     "coverage": null,
-    "description": "Play as an agile stray cat separated from its pack, roaming the vertical alleys and rooftops of a decaying, neon-lit cyberpunk city."
+    "description": "Play as an agile stray cat separated from its pack, roaming the vertical alleys and rooftops of a decaying, neon-lit cyberpunk city.",
+    "storeId": 10001114,
+    "storeGenres": [
+      "Adventure"
+    ],
+    "storeRelease": "2022-07-19T15:00:00Z",
+    "plusIncluded": false
   },
   {
     "id": "sea-of-stars",
@@ -677,7 +702,14 @@
       "asOf": "2026-09-06"
     },
     "coverage": null,
-    "description": "Glide across surreal, gravity-defying terrain inside a massive black hole and climb massive, multi-tiered leviathans."
+    "description": "Glide across surreal, gravity-defying terrain inside a massive black hole and climb massive, multi-tiered leviathans.",
+    "storeId": 10001115,
+    "storeGenres": [
+      "Adventure",
+      "Action"
+    ],
+    "storeRelease": "2021-12-02T17:00:00Z",
+    "plusIncluded": false
   },
   {
     "id": "horizon-forbidden-west",
@@ -763,7 +795,13 @@
         "videos": 1
       }
     ],
-    "description": "Explore photorealistic biomes ranging from dense jungles to submerged ruins, uncovering lost human history and fighting robotic wildlife."
+    "description": "Explore photorealistic biomes ranging from dense jungles to submerged ruins, uncovering lost human history and fighting robotic wildlife.",
+    "storeId": 10000886,
+    "storeGenres": [
+      "Action"
+    ],
+    "storeRelease": "2022-02-18T05:00:00Z",
+    "plusIncluded": true
   },
   {
     "id": "elden-ring",
@@ -874,7 +912,13 @@
         "videos": 1
       }
     ],
-    "description": "An open-ended, non-linear fantasy world design driven entirely by curiosity without map markers or clutter."
+    "description": "An open-ended, non-linear fantasy world design driven entirely by curiosity without map markers or clutter.",
+    "storeId": 10000333,
+    "storeGenres": [
+      "Role Playing Games"
+    ],
+    "storeRelease": "2022-02-25T05:00:00Z",
+    "plusIncluded": false
   },
   {
     "id": "deliver-us-mars",
@@ -922,7 +966,14 @@
       "asOf": "2026-09-06"
     },
     "coverage": null,
-    "description": "Explore derelict space stations, scale steep Martian canyons with climbing picks, and solve environmental puzzles to recover colony ships."
+    "description": "Explore derelict space stations, scale steep Martian canyons with climbing picks, and solve environmental puzzles to recover colony ships.",
+    "storeId": 10003378,
+    "storeGenres": [
+      "Adventure",
+      "Action"
+    ],
+    "storeRelease": "2023-02-02T15:00:00Z",
+    "plusIncluded": false
   },
   {
     "id": "season-letter",
@@ -972,7 +1023,15 @@
       "asOf": "2026-09-06"
     },
     "coverage": null,
-    "description": "Ride a bicycle through a tranquil valley, recording ambient audio, snapping photographs, and journaling before a cataclysm reshapes the world."
+    "description": "Ride a bicycle through a tranquil valley, recording ambient audio, snapping photographs, and journaling before a cataclysm reshapes the world.",
+    "storeId": 10001697,
+    "storeGenres": [
+      "Adventure",
+      "Casual",
+      "Unique"
+    ],
+    "storeRelease": "2023-01-31T17:00:00Z",
+    "plusIncluded": true
   },
   {
     "id": "eastshade",
@@ -1166,7 +1225,14 @@
       "asOf": "2026-09-06"
     },
     "coverage": null,
-    "description": "Visit a Mediterranean island to stop a hotel development by using a smartphone to identify and photograph native bird and animal species."
+    "description": "Visit a Mediterranean island to stop a hotel development by using a smartphone to identify and photograph native bird and animal species.",
+    "storeId": 10002528,
+    "storeGenres": [
+      "Adventure",
+      "Casual"
+    ],
+    "storeRelease": "2021-06-09T14:00:00Z",
+    "plusIncluded": false
   },
   {
     "id": "life-is-strange-true-colors",
@@ -1311,7 +1377,13 @@
         "videos": 1
       }
     ],
-    "description": "Guide Claire, a young bird visiting a provincial park, hiking toward the mountain summit, fishing, and gliding from high cliffs."
+    "description": "Guide Claire, a young bird visiting a provincial park, hiking toward the mountain summit, fishing, and gliding from high cliffs.",
+    "storeId": 10003019,
+    "storeGenres": [
+      "Adventure"
+    ],
+    "storeRelease": "2021-11-16T14:00:00Z",
+    "plusIncluded": false
   },
   {
     "id": "lake",
@@ -1373,7 +1445,15 @@
       "asOf": "2026-09-06"
     },
     "coverage": null,
-    "description": "Fill in for your father as the local mail carrier in 1986 Oregon, driving a mail truck around a tranquil lake and catching up with old friends."
+    "description": "Fill in for your father as the local mail carrier in 1986 Oregon, driving a mail truck around a tranquil lake and catching up with old friends.",
+    "storeId": 10003149,
+    "storeGenres": [
+      "Unique",
+      "Adventure",
+      "Simulation"
+    ],
+    "storeRelease": "2022-04-08T16:00:00Z",
+    "plusIncluded": false
   },
   {
     "id": "sandrock",
@@ -1444,7 +1524,13 @@
         "videos": 1
       }
     ],
-    "description": "Rebuild a rugged desert town, craft massive machines, and socialize with locals in a deep farming and builder simulation."
+    "description": "Rebuild a rugged desert town, craft massive machines, and socialize with locals in a deep farming and builder simulation.",
+    "storeId": 10007685,
+    "storeGenres": [
+      "Adventure"
+    ],
+    "storeRelease": "2023-11-02T10:00:00Z",
+    "plusIncluded": false
   },
   {
     "id": "paleo-pines",
@@ -1497,7 +1583,13 @@
       "asOf": "2026-09-06"
     },
     "coverage": null,
-    "description": "Build a vast ranch, farm crops, and tame a sanctuary of brightly colored, rideable dinosaurs."
+    "description": "Build a vast ranch, farm crops, and tame a sanctuary of brightly colored, rideable dinosaurs.",
+    "storeId": 10005927,
+    "storeGenres": [
+      "Simulation"
+    ],
+    "storeRelease": "2023-09-26T04:00:00Z",
+    "plusIncluded": false
   },
   {
     "id": "bugsnax",
@@ -1548,7 +1640,13 @@
       "asOf": "2026-09-06"
     },
     "coverage": null,
-    "description": "Explore an island to catch bizarre half-bug, half-snack creatures and rebuild a quirky settlement of fuzzy inhabitants."
+    "description": "Explore an island to catch bizarre half-bug, half-snack creatures and rebuild a quirky settlement of fuzzy inhabitants.",
+    "storeId": 10000854,
+    "storeGenres": [
+      "Adventure"
+    ],
+    "storeRelease": "2020-11-12T05:00:00Z",
+    "plusIncluded": false
   },
   {
     "id": "dreamlight-valley",
@@ -1620,7 +1718,13 @@
         "videos": 9
       }
     ],
-    "description": "A massive life-simulation where you design a town, decorate your home, and complete quests alongside classic animated characters."
+    "description": "A massive life-simulation where you design a town, decorate your home, and complete quests alongside classic animated characters.",
+    "storeId": 10002466,
+    "storeGenres": [
+      "Simulation"
+    ],
+    "storeRelease": "2022-09-06T13:00:00Z",
+    "plusIncluded": false
   },
   {
     "id": "cult-of-the-lamb",
@@ -1703,7 +1807,16 @@
         "videos": 1
       }
     ],
-    "description": "Play as a cute possessed lamb managing a woodland cult, balancing base-building with fast-paced dungeon crawling."
+    "description": "Play as a cute possessed lamb managing a woodland cult, balancing base-building with fast-paced dungeon crawling.",
+    "storeId": 10004484,
+    "storeGenres": [
+      "Strategy",
+      "Adventure",
+      "Action",
+      "Simulation"
+    ],
+    "storeRelease": "2022-08-11T16:00:00Z",
+    "plusIncluded": false
   },
   {
     "id": "roots-of-pacha",
@@ -1749,7 +1862,15 @@
       "asOf": "2026-09-06"
     },
     "coverage": null,
-    "description": "A cooperative farming and life simulation game set in the Stone Age. Discover crops, invent early technology, and tame animals."
+    "description": "A cooperative farming and life simulation game set in the Stone Age. Discover crops, invent early technology, and tame animals.",
+    "storeId": 10008955,
+    "storeGenres": [
+      "Simulation",
+      "Role Playing Games",
+      "Adventure"
+    ],
+    "storeRelease": "2023-11-28T16:00:00Z",
+    "plusIncluded": false
   },
   {
     "id": "spiritfarer",
@@ -1825,7 +1946,16 @@
       "asOf": "2026-09-06"
     },
     "coverage": null,
-    "description": "A gentle journey where you navigate an uncharted ocean, dock at hidden islands, and cook for eccentric animal spirits before helping them move on."
+    "description": "A gentle journey where you navigate an uncharted ocean, dock at hidden islands, and cook for eccentric animal spirits before helping them move on.",
+    "storeId": 10000752,
+    "storeGenres": [
+      "Action",
+      "Adventure",
+      "Simulation",
+      "Strategy"
+    ],
+    "storeRelease": "2020-08-18T04:00:00Z",
+    "plusIncluded": false
   },
   {
     "id": "gris",
@@ -1940,7 +2070,13 @@
       "asOf": "2026-09-06"
     },
     "coverage": null,
-    "description": "A delightful, hand-drawn black-and-white adventure focused entirely on solving puzzles by taking photographs for quirky locals."
+    "description": "A delightful, hand-drawn black-and-white adventure focused entirely on solving puzzles by taking photographs for quirky locals.",
+    "storeId": 10003267,
+    "storeGenres": [
+      "Adventure"
+    ],
+    "storeRelease": "2021-09-17T04:00:00Z",
+    "plusIncluded": false
   },
   {
     "id": "dredge",
@@ -2007,7 +2143,13 @@
         "videos": 6
       }
     ],
-    "description": "A fishing exploration game where you upgrade your trawler and catalog ocean life, mixed with light, eerie cosmic horror."
+    "description": "A fishing exploration game where you upgrade your trawler and catalog ocean life, mixed with light, eerie cosmic horror.",
+    "storeId": 10005693,
+    "storeGenres": [
+      "Adventure"
+    ],
+    "storeRelease": "2023-03-30T04:00:00Z",
+    "plusIncluded": true
   },
   {
     "id": "oxenfree-2",
@@ -2054,7 +2196,13 @@
       "asOf": "2026-09-06"
     },
     "coverage": null,
-    "description": "Play as Riley, an environmental researcher investigating strange radio frequencies and time anomalies in a coastal town."
+    "description": "Play as Riley, an environmental researcher investigating strange radio frequencies and time anomalies in a coastal town.",
+    "storeId": 10004538,
+    "storeGenres": [
+      "Adventure"
+    ],
+    "storeRelease": "2023-07-12T00:00:00Z",
+    "plusIncluded": false
   },
   {
     "id": "night-in-the-woods",
@@ -2186,7 +2334,13 @@
       "asOf": "2026-09-06"
     },
     "coverage": null,
-    "description": "Play as Tove, a young girl exploring a snow-covered Scandinavian wilderness filled with ancient folklore creatures."
+    "description": "Play as Tove, a young girl exploring a snow-covered Scandinavian wilderness filled with ancient folklore creatures.",
+    "storeId": 10003640,
+    "storeGenres": [
+      "Adventure"
+    ],
+    "storeRelease": "2021-10-28T04:00:00Z",
+    "plusIncluded": false
   },
   {
     "id": "kena",
@@ -2254,7 +2408,14 @@
       "asOf": "2026-09-06"
     },
     "coverage": null,
-    "description": "Play as a young female spirit guide who fights with a staff and collects adorable fuzzy companions called the Rot."
+    "description": "Play as a young female spirit guide who fights with a staff and collects adorable fuzzy companions called the Rot.",
+    "storeId": 10001235,
+    "storeGenres": [
+      "Action",
+      "Adventure"
+    ],
+    "storeRelease": "2021-09-21T04:00:00Z",
+    "plusIncluded": false
   },
   {
     "id": "chicory",
@@ -2297,7 +2458,13 @@
       "asOf": "2026-09-06"
     },
     "coverage": null,
-    "description": "Play as a dog with a magical paintbrush, restoring color to a black-and-white world while solving environmental puzzles."
+    "description": "Play as a dog with a magical paintbrush, restoring color to a black-and-white world while solving environmental puzzles.",
+    "storeId": 10002468,
+    "storeGenres": [
+      "Adventure"
+    ],
+    "storeRelease": "2021-06-10T18:30:00Z",
+    "plusIncluded": false
   },
   {
     "id": "cassette-beasts",
@@ -2434,7 +2601,13 @@
         "videos": 11
       }
     ],
-    "description": "Scuba dive to spearfish by day, and manage the finances and menu of a bustling sushi restaurant by night."
+    "description": "Scuba dive to spearfish by day, and manage the finances and menu of a bustling sushi restaurant by night.",
+    "storeId": 10009413,
+    "storeGenres": [
+      "Adventure"
+    ],
+    "storeRelease": "2024-04-16T15:00:00Z",
+    "plusIncluded": false
   },
   {
     "id": "tinykin",
@@ -2491,7 +2664,15 @@
       "asOf": "2026-09-06"
     },
     "coverage": null,
-    "description": "Play as a tiny astronaut exploring a massive 1990s house, using hundreds of small alien creatures to carry objects and build ladders."
+    "description": "Play as a tiny astronaut exploring a massive 1990s house, using hundreds of small alien creatures to carry objects and build ladders.",
+    "storeId": 10003847,
+    "storeGenres": [
+      "Adventure",
+      "Family",
+      "Arcade"
+    ],
+    "storeRelease": "2022-08-30T16:00:00Z",
+    "plusIncluded": false
   },
   {
     "id": "balatro",
@@ -2555,7 +2736,14 @@
         "videos": 1
       }
     ],
-    "description": "An endlessly addictive poker roguelike where you buy illegal Joker cards to break the rules of standard poker and score massive multipliers."
+    "description": "An endlessly addictive poker roguelike where you buy illegal Joker cards to break the rules of standard poker and score massive multipliers.",
+    "storeId": 10010334,
+    "storeGenres": [
+      "Strategy",
+      "Simulation"
+    ],
+    "storeRelease": "2024-02-20T16:00:00Z",
+    "plusIncluded": false
   },
   {
     "id": "teenage-exocolonist",
@@ -2620,7 +2808,13 @@
       "asOf": "2026-09-06"
     },
     "coverage": null,
-    "description": "Grow up on an alien planet, making choices over ten years that shape your skills, friendships, and the colony's survival."
+    "description": "Grow up on an alien planet, making choices over ten years that shape your skills, friendships, and the colony's survival.",
+    "storeId": 10005431,
+    "storeGenres": [
+      "Role Playing Games"
+    ],
+    "storeRelease": "2022-08-25T17:00:00Z",
+    "plusIncluded": false
   },
   {
     "id": "tchia",
@@ -2793,7 +2987,13 @@
       "asOf": "2026-09-06"
     },
     "coverage": null,
-    "description": "A white priestess purifies fallen knights in a rain-soaked watercolor kingdom, binding their spirits to fight for her."
+    "description": "A white priestess purifies fallen knights in a rain-soaked watercolor kingdom, binding their spirits to fight for her.",
+    "storeId": 10001655,
+    "storeGenres": [
+      "Action"
+    ],
+    "storeRelease": "2021-07-20T15:00:00Z",
+    "plusIncluded": false
   },
   {
     "id": "blasphemous",
@@ -3136,7 +3336,13 @@
       "asOf": "2026-09-06"
     },
     "coverage": null,
-    "description": "Deedlit the elf swaps between wind and fire spirits to absorb attacks in a loving tribute to classic Igavania design."
+    "description": "Deedlit the elf swaps between wind and fire spirits to absorb attacks in a loving tribute to classic Igavania design.",
+    "storeId": 10003396,
+    "storeGenres": [
+      "Action"
+    ],
+    "storeRelease": "2021-12-16T05:00:00Z",
+    "plusIncluded": false
   },
   {
     "id": "afterimage",
@@ -3193,7 +3399,13 @@
       "asOf": "2026-09-06"
     },
     "coverage": null,
-    "description": "Renee explores a huge hand-painted world of floating ruins with dozens of weapon types and a sprawling skill tree."
+    "description": "Renee explores a huge hand-painted world of floating ruins with dozens of weapon types and a sprawling skill tree.",
+    "storeId": 10007477,
+    "storeGenres": [
+      "Adventure"
+    ],
+    "storeRelease": "2023-04-25T07:00:00Z",
+    "plusIncluded": false
   },
   {
     "id": "grime",
@@ -3243,7 +3455,15 @@
       "asOf": "2026-09-06"
     },
     "coverage": null,
-    "description": "A living black hole absorbs enemy attacks in a surreal world of sculpted stone and flesh, rewarding perfectly timed parries."
+    "description": "A living black hole absorbs enemy attacks in a surreal world of sculpted stone and flesh, rewarding perfectly timed parries.",
+    "storeId": 10002537,
+    "storeGenres": [
+      "Action",
+      "Adventure",
+      "Role Playing Games"
+    ],
+    "storeRelease": "2022-12-15T17:00:00Z",
+    "plusIncluded": false
   },
   {
     "id": "ghost-song",
@@ -3283,7 +3503,14 @@
       "asOf": "2026-09-06"
     },
     "coverage": null,
-    "description": "A deadsuit wakes on a moon of bioluminescent caves and derelict ships, uncovering what happened to the crew that left it behind."
+    "description": "A deadsuit wakes on a moon of bioluminescent caves and derelict ships, uncovering what happened to the crew that left it behind.",
+    "storeId": 10005004,
+    "storeGenres": [
+      "Action",
+      "Adventure"
+    ],
+    "storeRelease": "2022-11-03T16:00:00Z",
+    "plusIncluded": false
   },
   {
     "id": "haiku-the-robot",
@@ -3387,7 +3614,14 @@
       "asOf": "2026-09-06"
     },
     "coverage": null,
-    "description": "An 8-bit style crusade with branching good and evil paths, chunky combat and a map that opens up through blunt force."
+    "description": "An 8-bit style crusade with branching good and evil paths, chunky combat and a map that opens up through blunt force.",
+    "storeId": 10003982,
+    "storeGenres": [
+      "Adventure",
+      "Action"
+    ],
+    "storeRelease": "2022-02-14T14:00:00Z",
+    "plusIncluded": false
   },
   {
     "id": "astalon",
@@ -3441,7 +3675,14 @@
       "asOf": "2026-09-06"
     },
     "coverage": null,
-    "description": "Three adventurers trade places mid-run inside a tower that resets on death but keeps every upgrade you bought with your life."
+    "description": "Three adventurers trade places mid-run inside a tower that resets on death but keeps every upgrade you bought with your life.",
+    "storeId": 10002058,
+    "storeGenres": [
+      "Adventure",
+      "Action"
+    ],
+    "storeRelease": "2021-06-03T04:00:00Z",
+    "plusIncluded": false
   },
   {
     "id": "rain-world",
@@ -3578,7 +3819,13 @@
       "asOf": "2026-09-06"
     },
     "coverage": null,
-    "description": "A reverse-horror metroidvania where you are the amorphous red monster tearing through a research facility."
+    "description": "A reverse-horror metroidvania where you are the amorphous red monster tearing through a research facility.",
+    "storeId": 10002805,
+    "storeGenres": [
+      "Action"
+    ],
+    "storeRelease": "2023-04-27T16:00:00Z",
+    "plusIncluded": false
   },
   {
     "id": "prince-of-persia-lost-crown",
@@ -3644,7 +3891,13 @@
         "videos": 2
       }
     ],
-    "description": "Sargon dashes and rewinds through Mount Qaf in a fast, combo-heavy metroidvania with a brilliant screenshot-pinning map."
+    "description": "Sargon dashes and rewinds through Mount Qaf in a fast, combo-heavy metroidvania with a brilliant screenshot-pinning map.",
+    "storeId": 10005985,
+    "storeGenres": [
+      "Action"
+    ],
+    "storeRelease": "2024-01-18T05:00:00Z",
+    "plusIncluded": true
   },
   {
     "id": "bloodstained",
@@ -3769,7 +4022,15 @@
       "asOf": "2026-09-06"
     },
     "coverage": null,
-    "description": "An automaton races a countdown that permanently kills off the friends she cannot reach in time, making every hour spent a real choice."
+    "description": "An automaton races a countdown that permanently kills off the friends she cannot reach in time, making every hour spent a real choice.",
+    "storeId": 10003562,
+    "storeGenres": [
+      "Shooter",
+      "Action",
+      "Adventure"
+    ],
+    "storeRelease": "2021-09-30T16:00:00Z",
+    "plusIncluded": false
   },
   {
     "id": "vernal-edge",
@@ -3820,7 +4081,13 @@
       "asOf": "2026-09-06"
     },
     "coverage": null,
-    "description": "Vernal hunts her father across a shattered sky-island world with an aggressive juggling combat system built for style."
+    "description": "Vernal hunts her father across a shattered sky-island world with an aggressive juggling combat system built for style.",
+    "storeId": 10005187,
+    "storeGenres": [
+      "Action"
+    ],
+    "storeRelease": "2023-03-14T22:00:00Z",
+    "plusIncluded": false
   },
   {
     "id": "ultros",
@@ -4003,7 +4270,14 @@
       "asOf": "2026-09-06"
     },
     "coverage": null,
-    "description": "A card battler played across a candlelit table that keeps breaking its own rules in ways best left unspoiled."
+    "description": "A card battler played across a candlelit table that keeps breaking its own rules in ways best left unspoiled.",
+    "storeId": 10004707,
+    "storeGenres": [
+      "Adventure",
+      "Strategy"
+    ],
+    "storeRelease": "2022-08-30T16:00:00Z",
+    "plusIncluded": false
   },
   {
     "id": "roguebook",
@@ -4050,7 +4324,13 @@
       "asOf": "2026-09-06"
     },
     "coverage": null,
-    "description": "Paint your way across a blank watercolor map with a two-hero party, merging both characters' cards into a single deck."
+    "description": "Paint your way across a blank watercolor map with a two-hero party, merging both characters' cards into a single deck.",
+    "storeId": 10001348,
+    "storeGenres": [
+      "Role Playing Games"
+    ],
+    "storeRelease": "2022-02-24T09:00:00Z",
+    "plusIncluded": true
   },
   {
     "id": "griftlands",
@@ -4101,7 +4381,13 @@
       "asOf": "2026-09-06"
     },
     "coverage": null,
-    "description": "Every character remembers how you treated them, and you carry two decks at once: one for fighting, one for arguing."
+    "description": "Every character remembers how you treated them, and you carry two decks at once: one for fighting, one for arguing.",
+    "storeId": 10002747,
+    "storeGenres": [
+      "Strategy"
+    ],
+    "storeRelease": "2021-06-04T04:00:00Z",
+    "plusIncluded": false
   },
   {
     "id": "fights-in-tight-spaces",
@@ -4139,7 +4425,14 @@
       "asOf": "2026-09-06"
     },
     "coverage": null,
-    "description": "Play cards to choreograph spy-movie fistfights in elevators and corridors, where positioning matters more than damage."
+    "description": "Play cards to choreograph spy-movie fistfights in elevators and corridors, where positioning matters more than damage.",
+    "storeId": 10004694,
+    "storeGenres": [
+      "Fighting",
+      "Strategy"
+    ],
+    "storeRelease": "2023-05-25T04:00:00Z",
+    "plusIncluded": false
   },
   {
     "id": "astrea-six-sided-oracles",
@@ -4177,7 +4470,15 @@
       "asOf": "2026-09-06"
     },
     "coverage": null,
-    "description": "A dice-building roguelike where corruption is also a resource, forcing you to poison yourself to purify everything else."
+    "description": "A dice-building roguelike where corruption is also a resource, forcing you to poison yourself to purify everything else.",
+    "storeId": 10011469,
+    "storeGenres": [
+      "Action",
+      "Strategy",
+      "Role Playing Games"
+    ],
+    "storeRelease": "2024-09-26T16:00:00Z",
+    "plusIncluded": false
   },
   {
     "id": "monster-sanctuary",
@@ -4239,7 +4540,13 @@
       "asOf": "2026-09-06"
     },
     "coverage": null,
-    "description": "A monster-taming metroidvania where your collected creatures also grant the traversal abilities that open the map."
+    "description": "A monster-taming metroidvania where your collected creatures also grant the traversal abilities that open the map.",
+    "storeId": 10000423,
+    "storeGenres": [
+      "Role Playing Games"
+    ],
+    "storeRelease": "2020-12-08T05:00:00Z",
+    "plusIncluded": false
   },
   {
     "id": "nexomon-extinction",
@@ -4279,7 +4586,14 @@
       "asOf": "2026-09-06"
     },
     "coverage": null,
-    "description": "Catch and evolve over 380 nexomon across a world where the monsters are winning, told with a self-aware sense of humor."
+    "description": "Catch and evolve over 380 nexomon across a world where the monsters are winning, told with a self-aware sense of humor.",
+    "storeId": 10000634,
+    "storeGenres": [
+      "Role Playing Games",
+      "Adventure"
+    ],
+    "storeRelease": "2020-08-28T13:00:00Z",
+    "plusIncluded": false
   },
   {
     "id": "coromon",
@@ -4646,7 +4960,15 @@
       "asOf": "2026-09-06"
     },
     "coverage": null,
-    "description": "Move to a suspicious town as its new chemist, diagnosing residents and brewing the cures that slowly win them over."
+    "description": "Move to a suspicious town as its new chemist, diagnosing residents and brewing the cures that slowly win them over.",
+    "storeId": 10002179,
+    "storeGenres": [
+      "Role Playing Games",
+      "Simulation",
+      "Puzzle"
+    ],
+    "storeRelease": "2022-09-22T04:00:00Z",
+    "plusIncluded": false
   },
   {
     "id": "cozy-grove",
@@ -4696,7 +5018,14 @@
       "asOf": "2026-09-06"
     },
     "coverage": null,
-    "description": "Camp on a haunted island that gives you a handful of gentle tasks each real day, coloring the world in as ghosts find peace."
+    "description": "Camp on a haunted island that gives you a handful of gentle tasks each real day, coloring the world in as ghosts find peace.",
+    "storeId": 10002088,
+    "storeGenres": [
+      "Adventure",
+      "Casual"
+    ],
+    "storeRelease": "2023-06-22T04:00:00Z",
+    "plusIncluded": false
   },
   {
     "id": "garden-story",
@@ -4874,7 +5203,15 @@
       "asOf": "2026-09-06"
     },
     "coverage": null,
-    "description": "Spend a summer restoring your grandparents' farm by day and dreaming yourself into the bodies of its animals by night."
+    "description": "Spend a summer restoring your grandparents' farm by day and dreaming yourself into the bodies of its animals by night.",
+    "storeId": 10007656,
+    "storeGenres": [
+      "Family",
+      "Casual",
+      "Adventure"
+    ],
+    "storeRelease": "2023-05-30T04:00:00Z",
+    "plusIncluded": false
   },
   {
     "id": "kitaria-fables",
@@ -4914,7 +5251,13 @@
       "asOf": "2026-09-06"
     },
     "coverage": null,
-    "description": "A cat knight defends a valley of animal villagers, alternating between sword-and-spell combat and running the family farm."
+    "description": "A cat knight defends a valley of animal villagers, alternating between sword-and-spell combat and running the family farm.",
+    "storeId": 10001835,
+    "storeGenres": [
+      "Role Playing Games"
+    ],
+    "storeRelease": "2021-09-02T04:00:00Z",
+    "plusIncluded": false
   },
   {
     "id": "calico",
@@ -4959,7 +5302,14 @@
       "asOf": "2026-09-06"
     },
     "coverage": null,
-    "description": "Rebuild the town's cat cafe, stuff every seat with animals, bake pastries and ride a very large capybara around town."
+    "description": "Rebuild the town's cat cafe, stuff every seat with animals, bake pastries and ride a very large capybara around town.",
+    "storeId": 10003748,
+    "storeGenres": [
+      "Adventure",
+      "Simulation"
+    ],
+    "storeRelease": "2023-11-28T15:00:00Z",
+    "plusIncluded": false
   },
   {
     "id": "graveyard-keeper",
@@ -5173,7 +5523,13 @@
         "videos": 1
       }
     ],
-    "description": "Blast years of grime off vans, playgrounds and mars rovers in the most quietly satisfying job simulator on the platform."
+    "description": "Blast years of grime off vans, playgrounds and mars rovers in the most quietly satisfying job simulator on the platform.",
+    "storeId": 10003654,
+    "storeGenres": [
+      "Simulator"
+    ],
+    "storeRelease": "2023-01-31T17:00:00Z",
+    "plusIncluded": false
   },
   {
     "id": "two-point-campus",
@@ -5224,7 +5580,13 @@
       "asOf": "2026-09-06"
     },
     "coverage": null,
-    "description": "Build an absurd university around courses like knight school and gastronomy, then keep the students fed, taught and happy."
+    "description": "Build an absurd university around courses like knight school and gastronomy, then keep the students fed, taught and happy.",
+    "storeId": 10001458,
+    "storeGenres": [
+      "Simulation"
+    ],
+    "storeRelease": "2022-08-09T14:00:00Z",
+    "plusIncluded": true
   },
   {
     "id": "islanders",
@@ -5444,7 +5806,13 @@
         "videos": 4
       }
     ],
-    "description": "A knitted, tactile 3D platformer built around musical set pieces and four-player chaos."
+    "description": "A knitted, tactile 3D platformer built around musical set pieces and four-player chaos.",
+    "storeId": 10000177,
+    "storeGenres": [
+      "Action"
+    ],
+    "storeRelease": "2020-11-12T05:00:00Z",
+    "plusIncluded": true
   },
   {
     "id": "little-nightmares-2",
@@ -5655,7 +6023,13 @@
         "videos": 1
       }
     ],
-    "description": "A girl and a small catlike companion cross painted alien vistas, solving puzzles that depend on directing each other."
+    "description": "A girl and a small catlike companion cross painted alien vistas, solving puzzles that depend on directing each other.",
+    "storeId": 10009541,
+    "storeGenres": [
+      "Action"
+    ],
+    "storeRelease": "2024-04-16T12:00:00Z",
+    "plusIncluded": false
   },
   {
     "id": "unravel-two",
@@ -5789,7 +6163,13 @@
         "videos": 1
       }
     ],
-    "description": "A punishing run-and-gun boss rush drawn and inked in the style of 1930s rubber-hose cartoons."
+    "description": "A punishing run-and-gun boss rush drawn and inked in the style of 1930s rubber-hose cartoons.",
+    "storeId": 10001369,
+    "storeGenres": [
+      "Action"
+    ],
+    "storeRelease": "2020-07-28T04:00:00Z",
+    "plusIncluded": false
   },
   {
     "id": "yooka-laylee-impossible-lair",
@@ -5876,7 +6256,15 @@
       "asOf": "2026-09-06"
     },
     "coverage": null,
-    "description": "A cheerful fox platformer that mixes 3D worlds, 2D side-scrolling stages and rolling puzzle levels."
+    "description": "A cheerful fox platformer that mixes 3D worlds, 2D side-scrolling stages and rolling puzzle levels.",
+    "storeId": 10000800,
+    "storeGenres": [
+      "Family",
+      "Adventure",
+      "Action"
+    ],
+    "storeRelease": "2026-03-26T14:00:00Z",
+    "plusIncluded": false
   },
   {
     "id": "pumpkin-jack",
@@ -5927,7 +6315,13 @@
       "asOf": "2026-09-06"
     },
     "coverage": null,
-    "description": "A pumpkin-headed devil's champion romps through Halloween-flavored levels in an unabashed love letter to sixth-gen platformers."
+    "description": "A pumpkin-headed devil's champion romps through Halloween-flavored levels in an unabashed love letter to sixth-gen platformers.",
+    "storeId": 10001111,
+    "storeGenres": [
+      "Action"
+    ],
+    "storeRelease": "2021-10-27T14:00:00Z",
+    "plusIncluded": false
   },
   {
     "id": "kaze-and-the-wild-masks",
@@ -6076,7 +6470,13 @@
       "asOf": "2026-09-06"
     },
     "coverage": null,
-    "description": "A genuinely demanding return for the marsupial, with quantum masks that rewrite the rules of each obstacle course."
+    "description": "A genuinely demanding return for the marsupial, with quantum masks that rewrite the rules of each obstacle course.",
+    "storeId": 10000264,
+    "storeGenres": [
+      "Action"
+    ],
+    "storeRelease": "2021-03-12T00:00:00Z",
+    "plusIncluded": false
   },
   {
     "id": "neon-white",
@@ -6141,7 +6541,13 @@
       "asOf": "2026-09-06"
     },
     "coverage": null,
-    "description": "A first-person speedrunning platformer where every gun is also a movement card you discard to jump, dash or blink."
+    "description": "A first-person speedrunning platformer where every gun is also a movement card you discard to jump, dash or blink.",
+    "storeId": 10006032,
+    "storeGenres": [
+      "Action"
+    ],
+    "storeRelease": "2022-12-13T17:00:00Z",
+    "plusIncluded": false
   },
   {
     "id": "the-artful-escape",
@@ -6206,7 +6612,13 @@
         "videos": 1
       }
     ],
-    "description": "A teenage guitarist invents a cosmic stage persona across neon alien worlds built entirely around a shredding solo."
+    "description": "A teenage guitarist invents a cosmic stage persona across neon alien worlds built entirely around a shredding solo.",
+    "storeId": 10003693,
+    "storeGenres": [
+      "Adventure"
+    ],
+    "storeRelease": "2022-01-25T17:00:00Z",
+    "plusIncluded": false
   },
   {
     "id": "what-remains-of-edith-finch",
@@ -6369,7 +6781,13 @@
         "videos": 1
       }
     ],
-    "description": "Max rewinds time in a Pacific Northwest town, with the original season and Before the Storm rebuilt with new lighting and animation."
+    "description": "Max rewinds time in a Pacific Northwest town, with the original season and Before the Storm rebuilt with new lighting and animation.",
+    "storeId": 10001187,
+    "storeGenres": [
+      "Adventure"
+    ],
+    "storeRelease": "2022-02-01T16:00:00Z",
+    "plusIncluded": false
   },
   {
     "id": "life-is-strange-2",
@@ -6628,7 +7046,13 @@
         "videos": 1
       }
     ],
-    "description": "Eight teenagers on a snowbound mountain, a branching butterfly-effect script, and a horror twist worth going in blind for."
+    "description": "Eight teenagers on a snowbound mountain, a branching butterfly-effect script, and a horror twist worth going in blind for.",
+    "storeId": 10007897,
+    "storeGenres": [
+      "Horror"
+    ],
+    "storeRelease": "2024-10-04T04:00:00Z",
+    "plusIncluded": true
   },
   {
     "id": "detroit-become-human",
@@ -6769,7 +7193,14 @@
         "videos": 1
       }
     ],
-    "description": "A procedural road trip north out of a collapsing country, stitched together from random encounters with a recurring cast."
+    "description": "A procedural road trip north out of a collapsing country, stitched together from random encounters with a recurring cast.",
+    "storeId": 10003593,
+    "storeGenres": [
+      "Adventure",
+      "Unique"
+    ],
+    "storeRelease": "2022-04-14T04:00:00Z",
+    "plusIncluded": false
   },
   {
     "id": "open-roads",
@@ -6813,7 +7244,13 @@
       "asOf": "2026-09-06"
     },
     "coverage": null,
-    "description": "A mother and daughter drive between abandoned family properties, uncovering a secret through the objects left behind."
+    "description": "A mother and daughter drive between abandoned family properties, uncovering a secret through the objects left behind.",
+    "storeId": 10002209,
+    "storeGenres": [
+      "Adventure"
+    ],
+    "storeRelease": "2024-03-28T16:00:00Z",
+    "plusIncluded": false
   },
   {
     "id": "lost-words",
@@ -6931,7 +7368,13 @@
       "asOf": "2026-09-06"
     },
     "coverage": null,
-    "description": "A painter finishes her portfolio in a sunlit apartment, mixing colors by hand in a short, hand-animated story."
+    "description": "A painter finishes her portfolio in a sunlit apartment, mixing colors by hand in a short, hand-animated story.",
+    "storeId": 10004835,
+    "storeGenres": [
+      "Adventure"
+    ],
+    "storeRelease": "2022-06-02T04:00:00Z",
+    "plusIncluded": false
   },
   {
     "id": "old-mans-journey",
@@ -7022,7 +7465,13 @@
       "asOf": "2026-09-06"
     },
     "coverage": null,
-    "description": "A champion swimmer sinks into memories of her mother in a wordless, hour-long piece of interactive watercolor animation."
+    "description": "A champion swimmer sinks into memories of her mother in a wordless, hour-long piece of interactive watercolor animation.",
+    "storeId": 10003796,
+    "storeGenres": [
+      "Adventure"
+    ],
+    "storeRelease": "2022-03-24T16:00:00Z",
+    "plusIncluded": false
   },
   {
     "id": "dordogne",
@@ -7068,7 +7517,13 @@
       "asOf": "2026-09-06"
     },
     "coverage": null,
-    "description": "Mimi returns to her grandmother's house in southern France, collecting words and scents into a hand-painted scrapbook."
+    "description": "Mimi returns to her grandmother's house in southern France, collecting words and scents into a hand-painted scrapbook.",
+    "storeId": 10003948,
+    "storeGenres": [
+      "Adventure"
+    ],
+    "storeRelease": "2023-06-13T16:00:00Z",
+    "plusIncluded": false
   },
   {
     "id": "mutazione",
@@ -7157,7 +7612,14 @@
       "asOf": "2026-09-06"
     },
     "coverage": null,
-    "description": "A southern gothic point-and-click through the refineries of Louisiana, searching for a missing brother."
+    "description": "A southern gothic point-and-click through the refineries of Louisiana, searching for a missing brother.",
+    "storeId": 10004418,
+    "storeGenres": [
+      "Puzzle",
+      "Adventure"
+    ],
+    "storeRelease": "2022-11-17T15:00:00Z",
+    "plusIncluded": false
   },
   {
     "id": "unpacking",
@@ -7233,7 +7695,14 @@
         "videos": 1
       }
     ],
-    "description": "Pull a life out of cardboard boxes across eight moves, telling an entire biography through where things fit and where they don't."
+    "description": "Pull a life out of cardboard boxes across eight moves, telling an entire biography through where things fit and where they don't.",
+    "storeId": 10004687,
+    "storeGenres": [
+      "Simulation",
+      "Puzzle"
+    ],
+    "storeRelease": "2022-05-10T07:00:00Z",
+    "plusIncluded": false
   },
   {
     "id": "coffee-talk",
@@ -7332,7 +7801,14 @@
       "asOf": "2026-09-06"
     },
     "coverage": null,
-    "description": "The night shift returns with new regulars, new recipes and the same warm, rain-soaked lo-fi atmosphere."
+    "description": "The night shift returns with new regulars, new recipes and the same warm, rain-soaked lo-fi atmosphere.",
+    "storeId": 10004780,
+    "storeGenres": [
+      "Casual",
+      "Adventure"
+    ],
+    "storeRelease": "2023-04-20T04:00:00Z",
+    "plusIncluded": true
   },
   {
     "id": "va-11-hall-a",
@@ -7444,7 +7920,14 @@
       "asOf": "2026-09-06"
     },
     "coverage": null,
-    "description": "A fully animated last year of high school for a band of dinosaur teenagers who know exactly how little time is left."
+    "description": "A fully animated last year of high school for a band of dinosaur teenagers who know exactly how little time is left.",
+    "storeId": 10007198,
+    "storeGenres": [
+      "Music/Rhythm",
+      "Adventure"
+    ],
+    "storeRelease": "2023-08-29T12:00:00Z",
+    "plusIncluded": false
   },
   {
     "id": "beacon-pines",
@@ -7565,7 +8048,13 @@
       "asOf": "2026-09-06"
     },
     "coverage": null,
-    "description": "Two high schoolers in 1990s rural Indonesia, one of whom can dive into other people's minds, face the end of the world."
+    "description": "Two high schoolers in 1990s rural Indonesia, one of whom can dive into other people's minds, face the end of the world.",
+    "storeId": 10005843,
+    "storeGenres": [
+      "Adventure"
+    ],
+    "storeRelease": "2023-01-19T05:00:00Z",
+    "plusIncluded": true
   },
   {
     "id": "thirsty-suitors",
@@ -7628,7 +8117,13 @@
       "asOf": "2026-09-06"
     },
     "coverage": null,
-    "description": "Jala returns home and battles her exes in turn-based combat, skates through town, and cooks with her mother between fights."
+    "description": "Jala returns home and battles her exes in turn-based combat, skates through town, and cooks with her mother between fights.",
+    "storeId": 10004698,
+    "storeGenres": [
+      "Adventure"
+    ],
+    "storeRelease": "2023-11-02T16:00:00Z",
+    "plusIncluded": false
   },
   {
     "id": "wytchwood",
@@ -7685,7 +8180,14 @@
       "asOf": "2026-09-06"
     },
     "coverage": null,
-    "description": "A hedge witch gathers ingredients from a storybook forest to brew curses for the fairy tale characters who deserve them."
+    "description": "A hedge witch gathers ingredients from a storybook forest to brew curses for the fairy tale characters who deserve them.",
+    "storeId": 10003146,
+    "storeGenres": [
+      "Adventure",
+      "Unique"
+    ],
+    "storeRelease": "2021-12-09T17:00:00Z",
+    "plusIncluded": false
   },
   {
     "id": "gone-home",
@@ -7796,7 +8298,13 @@
       "asOf": "2026-09-06"
     },
     "coverage": null,
-    "description": "A twelve-minute time loop in a small apartment, solved by carrying knowledge, not items, across each reset."
+    "description": "A twelve-minute time loop in a small apartment, solved by carrying knowledge, not items, across each reset.",
+    "storeId": 10002477,
+    "storeGenres": [
+      "Adventure"
+    ],
+    "storeRelease": "2021-12-07T17:00:00Z",
+    "plusIncluded": false
   },
   {
     "id": "sea-of-solitude",
@@ -7931,7 +8439,14 @@
       "asOf": "2026-09-06"
     },
     "coverage": null,
-    "description": "A lost ember wanders a storybook world solving small self-contained puzzles to relight others who have given up."
+    "description": "A lost ember wanders a storybook world solving small self-contained puzzles to relight others who have given up.",
+    "storeId": 10000531,
+    "storeGenres": [
+      "Adventure",
+      "Puzzle"
+    ],
+    "storeRelease": "2020-08-27T04:00:00Z",
+    "plusIncluded": false
   },
   {
     "id": "omno",
@@ -7971,7 +8486,13 @@
       "asOf": "2026-09-06"
     },
     "coverage": null,
-    "description": "Surf, dash and glide across serene ruins with a staff that grants a new traversal power in every biome."
+    "description": "Surf, dash and glide across serene ruins with a staff that grants a new traversal power in every biome.",
+    "storeId": 10002920,
+    "storeGenres": [
+      "Adventure"
+    ],
+    "storeRelease": "2021-07-29T00:00:00Z",
+    "plusIncluded": false
   },
   {
     "id": "abzu",
@@ -8589,7 +9110,13 @@
       "asOf": "2026-09-06"
     },
     "coverage": null,
-    "description": "Miles takes over a snowbound Manhattan with bio-electric venom powers and the best web-swinging in games."
+    "description": "Miles takes over a snowbound Manhattan with bio-electric venom powers and the best web-swinging in games.",
+    "storeId": 10000649,
+    "storeGenres": [
+      "Action"
+    ],
+    "storeRelease": "2020-11-12T05:00:00Z",
+    "plusIncluded": true
   },
   {
     "id": "death-stranding",
@@ -8874,7 +9401,13 @@
       "asOf": "2026-09-06"
     },
     "coverage": null,
-    "description": "Raid and settle across ninth-century England as Eivor, with a settlement that grows through everything you bring home."
+    "description": "Raid and settle across ninth-century England as Eivor, with a settlement that grows through everything you bring home.",
+    "storeId": 10000237,
+    "storeGenres": [
+      "Role Playing Games"
+    ],
+    "storeRelease": "2020-11-12T05:00:00Z",
+    "plusIncluded": true
   },
   {
     "id": "immortals-fenyx-rising",
@@ -9144,7 +9677,13 @@
       "asOf": "2026-09-06"
     },
     "coverage": null,
-    "description": "A kung fu revenge story where every death ages you a year, trading health for damage until you learn the routes cold."
+    "description": "A kung fu revenge story where every death ages you a year, trading health for damage until you learn the routes cold.",
+    "storeId": 10001973,
+    "storeGenres": [
+      "Action"
+    ],
+    "storeRelease": "2022-02-06T12:00:00Z",
+    "plusIncluded": false
   },
   {
     "id": "it-takes-two",
@@ -9298,7 +9837,13 @@
         "videos": 1
       }
     ],
-    "description": "Escape the underworld over and over, with god-granted boons that rebuild your run and a story that advances with every death."
+    "description": "Escape the underworld over and over, with god-granted boons that rebuild your run and a story that advances with every death.",
+    "storeId": 10002648,
+    "storeGenres": [
+      "Action"
+    ],
+    "storeRelease": "2021-08-13T04:00:00Z",
+    "plusIncluded": false
   },
   {
     "id": "endling",
@@ -9352,7 +9897,13 @@
       "asOf": "2026-09-06"
     },
     "coverage": null,
-    "description": "The last fox on earth leads her cubs through a poisoned landscape, and any cub you lose stays lost."
+    "description": "The last fox on earth leads her cubs through a poisoned landscape, and any cub you lose stays lost.",
+    "storeId": 10001440,
+    "storeGenres": [
+      "Adventure"
+    ],
+    "storeRelease": "2022-11-03T14:00:00Z",
+    "plusIncluded": false
   },
   {
     "id": "astro-bot",
@@ -9391,7 +9942,13 @@
         "videos": 1
       }
     ],
-    "description": "A joyful 3D platformer built around the DualSense, packed with inventive one-off mechanics and a galaxy of PlayStation history."
+    "description": "A joyful 3D platformer built around the DualSense, packed with inventive one-off mechanics and a galaxy of PlayStation history.",
+    "storeId": 10002684,
+    "storeGenres": [
+      "Action"
+    ],
+    "storeRelease": "2024-09-06T04:00:00Z",
+    "plusIncluded": false
   },
   {
     "id": "astros-playroom",
@@ -9410,7 +9967,13 @@
     "ageRating": null,
     "ratings": null,
     "coverage": null,
-    "description": "The free pack-in platformer that turns the DualSense itself into the toy, with a museum of PlayStation nostalgia."
+    "description": "The free pack-in platformer that turns the DualSense itself into the toy, with a museum of PlayStation nostalgia.",
+    "storeId": 10000229,
+    "storeGenres": [
+      "Action"
+    ],
+    "storeRelease": "2020-11-12T05:00:00Z",
+    "plusIncluded": false
   },
   {
     "id": "returnal",
@@ -9491,7 +10054,13 @@
         "videos": 1
       }
     ],
-    "description": "A roguelike bullet hell where Selene crashes on a shifting alien planet and dies her way toward the truth."
+    "description": "A roguelike bullet hell where Selene crashes on a shifting alien planet and dies her way toward the truth.",
+    "storeId": 10000176,
+    "storeGenres": [
+      "Shooter"
+    ],
+    "storeRelease": "2021-04-30T04:00:00Z",
+    "plusIncluded": true
   },
   {
     "id": "demons-souls",
@@ -9517,7 +10086,13 @@
         "videos": 1
       }
     ],
-    "description": "The soulslike that started it all, rebuilt from the ground up as a showcase of what the hardware could do."
+    "description": "The soulslike that started it all, rebuilt from the ground up as a showcase of what the hardware could do.",
+    "storeId": 10000368,
+    "storeGenres": [
+      "Action"
+    ],
+    "storeRelease": "2020-11-12T05:00:00Z",
+    "plusIncluded": true
   },
   {
     "id": "ratchet-rift-apart",
@@ -9596,7 +10171,13 @@
         "videos": 1
       }
     ],
-    "description": "Dimension-hopping platforming that swaps entire worlds mid-jump, with an arsenal of absurd weapons."
+    "description": "Dimension-hopping platforming that swaps entire worlds mid-jump, with an arsenal of absurd weapons.",
+    "storeId": 10000669,
+    "storeGenres": [
+      "Action"
+    ],
+    "storeRelease": "2021-06-11T04:00:00Z",
+    "plusIncluded": true
   },
   {
     "id": "spider-man-2",
@@ -9700,7 +10281,13 @@
         "videos": 1
       }
     ],
-    "description": "Two Spider-Men share an expanded New York, with wingsuit traversal across the full five boroughs."
+    "description": "Two Spider-Men share an expanded New York, with wingsuit traversal across the full five boroughs.",
+    "storeId": 10002456,
+    "storeGenres": [
+      "Action"
+    ],
+    "storeRelease": "2023-10-20T04:00:00Z",
+    "plusIncluded": true
   },
   {
     "id": "final-fantasy-xvi",
@@ -9811,7 +10398,14 @@
         "videos": 1
       }
     ],
-    "description": "A darker, action-driven Final Fantasy built around enormous summon battles that reshape the landscape."
+    "description": "A darker, action-driven Final Fantasy built around enormous summon battles that reshape the landscape.",
+    "storeId": 10002100,
+    "storeGenres": [
+      "Action",
+      "Role Playing Games"
+    ],
+    "storeRelease": "2023-06-22T04:00:00Z",
+    "plusIncluded": true
   },
   {
     "id": "stellar-blade",
@@ -9920,7 +10514,14 @@
         "videos": 1
       }
     ],
-    "description": "A stylish combo-driven action game across a ruined earth, built on parries and spectacle."
+    "description": "A stylish combo-driven action game across a ruined earth, built on parries and spectacle.",
+    "storeId": 10006891,
+    "storeGenres": [
+      "Adventure",
+      "Action"
+    ],
+    "storeRelease": "2024-04-26T04:00:00Z",
+    "plusIncluded": false
   },
   {
     "id": "rise-of-the-ronin",
@@ -10005,7 +10606,14 @@
         "videos": 1
       }
     ],
-    "description": "An open-world samurai RPG set during the fall of the shogunate, with shifting allegiances and a custom protagonist."
+    "description": "An open-world samurai RPG set during the fall of the shogunate, with shifting allegiances and a custom protagonist.",
+    "storeId": 10003386,
+    "storeGenres": [
+      "Action",
+      "Adventure"
+    ],
+    "storeRelease": "2024-03-22T04:00:00Z",
+    "plusIncluded": true
   },
   {
     "id": "baldurs-gate-3",
@@ -10118,7 +10726,13 @@
         "videos": 1
       }
     ],
-    "description": "A vast turn-based RPG where nearly every plan works, playable in co-op with friends who ruin all of them."
+    "description": "A vast turn-based RPG where nearly every plan works, playable in co-op with friends who ruin all of them.",
+    "storeId": 10007460,
+    "storeGenres": [
+      "Role Playing Games"
+    ],
+    "storeRelease": "2023-09-06T16:00:00Z",
+    "plusIncluded": false
   },
   {
     "id": "helldivers-2",
@@ -10199,7 +10813,13 @@
       "asOf": "2026-09-06"
     },
     "coverage": null,
-    "description": "Four-player squads drop onto hostile planets to spread managed democracy, mostly via friendly fire."
+    "description": "Four-player squads drop onto hostile planets to spread managed democracy, mostly via friendly fire.",
+    "storeId": 10000657,
+    "storeGenres": [
+      "Action"
+    ],
+    "storeRelease": "2024-02-08T09:00:00Z",
+    "plusIncluded": true
   },
   {
     "id": "gran-turismo-7",
@@ -10226,7 +10846,13 @@
         "videos": 1
       }
     ],
-    "description": "A meticulous driving simulator whose car models and lighting are the real showcase."
+    "description": "A meticulous driving simulator whose car models and lighting are the real showcase.",
+    "storeId": 10000956,
+    "storeGenres": [
+      "Driving/Racing"
+    ],
+    "storeRelease": "2022-03-04T05:00:00Z",
+    "plusIncluded": false
   },
   {
     "id": "alan-wake-2",
@@ -10252,7 +10878,13 @@
         "videos": 10
       }
     ],
-    "description": "A survival horror sequel switching between an FBI agent and a trapped writer, and one of the best-looking games on the console."
+    "description": "A survival horror sequel switching between an FBI agent and a trapped writer, and one of the best-looking games on the console.",
+    "storeId": 10002065,
+    "storeGenres": [
+      "Horror"
+    ],
+    "storeRelease": "2023-10-27T04:00:00Z",
+    "plusIncluded": false
   },
   {
     "id": "black-myth-wukong",
@@ -10334,7 +10966,15 @@
       "asOf": "2026-09-06"
     },
     "coverage": null,
-    "description": "An action RPG drawn from Journey to the West, with shapeshifting and enormous mythic bosses."
+    "description": "An action RPG drawn from Journey to the West, with shapeshifting and enormous mythic bosses.",
+    "storeId": 10007144,
+    "storeGenres": [
+      "Role Playing Games",
+      "Adventure",
+      "Action"
+    ],
+    "storeRelease": "2024-08-20T02:00:00Z",
+    "plusIncluded": false
   },
   {
     "id": "silent-hill-2",
@@ -10455,7 +11095,13 @@
         "videos": 1
       }
     ],
-    "description": "The remake of the psychological horror landmark, rebuilt over the shoulder in fog thick enough to taste."
+    "description": "The remake of the psychological horror landmark, rebuilt over the shoulder in fog thick enough to taste.",
+    "storeId": 10005529,
+    "storeGenres": [
+      "Horror"
+    ],
+    "storeRelease": "2024-10-08T04:00:00Z",
+    "plusIncluded": false
   },
   {
     "id": "dead-space-remake",
@@ -10571,7 +11217,13 @@
         "videos": 1
       }
     ],
-    "description": "The rebuild of the sci-fi horror classic, seamless from menu to credits with no visible loads."
+    "description": "The rebuild of the sci-fi horror classic, seamless from menu to credits with no visible loads.",
+    "storeId": 10002958,
+    "storeGenres": [
+      "Horror"
+    ],
+    "storeRelease": "2023-01-27T16:00:00Z",
+    "plusIncluded": false
   },
   {
     "id": "the-last-of-us-part-i",
@@ -10672,7 +11324,13 @@
         "videos": 2
       }
     ],
-    "description": "The original rebuilt on the Part II engine, with rebuilt performances and deep accessibility support."
+    "description": "The original rebuilt on the Part II engine, with rebuilt performances and deep accessibility support.",
+    "storeId": 10002694,
+    "storeGenres": [
+      "Action"
+    ],
+    "storeRelease": "2022-09-02T04:00:00Z",
+    "plusIncluded": true
   },
   {
     "id": "a-plague-tale-requiem",
@@ -10760,7 +11418,13 @@
         "videos": 3
       }
     ],
-    "description": "Amicia and Hugo flee south through France, pursued by rat swarms tens of thousands strong."
+    "description": "Amicia and Hugo flee south through France, pursued by rat swarms tens of thousands strong.",
+    "storeId": 10002255,
+    "storeGenres": [
+      "Adventure"
+    ],
+    "storeRelease": "2022-10-18T04:00:00Z",
+    "plusIncluded": false
   },
   {
     "id": "star-wars-outlaws",
@@ -10838,7 +11502,13 @@
       "asOf": "2026-09-06"
     },
     "coverage": null,
-    "description": "A scoundrel and her companion creature run jobs across an open-world Outer Rim between the films."
+    "description": "A scoundrel and her companion creature run jobs across an open-world Outer Rim between the films.",
+    "storeId": 10005323,
+    "storeGenres": [
+      "Adventure"
+    ],
+    "storeRelease": "2024-08-30T04:00:00Z",
+    "plusIncluded": true
   },
   {
     "id": "avatar-frontiers-of-pandora",
@@ -11005,7 +11675,13 @@
       "asOf": "2026-09-06"
     },
     "coverage": null,
-    "description": "Sam's deliveries continue across a new continent, with the same strange, beautiful traversal."
+    "description": "Sam's deliveries continue across a new continent, with the same strange, beautiful traversal.",
+    "storeId": 10001538,
+    "storeGenres": [
+      "Action"
+    ],
+    "storeRelease": "2025-06-26T04:00:00Z",
+    "plusIncluded": false
   },
   {
     "id": "sable",
@@ -11079,7 +11755,14 @@
         "videos": 2
       }
     ],
-    "description": "A gliding, hoverbike coming-of-age journey across a desert drawn like a Moebius comic."
+    "description": "A gliding, hoverbike coming-of-age journey across a desert drawn like a Moebius comic.",
+    "storeId": 10001007,
+    "storeGenres": [
+      "Unique",
+      "Adventure"
+    ],
+    "storeRelease": "2022-11-29T14:00:00Z",
+    "plusIncluded": false
   },
   {
     "id": "venba",
@@ -11149,7 +11832,13 @@
         "videos": 1
       }
     ],
-    "description": "A short, warm cooking game about an Indian family in Canada and the recipes that survive the move."
+    "description": "A short, warm cooking game about an Indian family in Canada and the recipes that survive the move.",
+    "storeId": 10004312,
+    "storeGenres": [
+      "Family"
+    ],
+    "storeRelease": "2023-07-31T13:00:00Z",
+    "plusIncluded": true
   },
   {
     "id": "little-kitty-big-city",
@@ -11222,7 +11911,13 @@
         "videos": 2
       }
     ],
-    "description": "A cat knocks things off ledges on the way home, and the whole city is a playground."
+    "description": "A cat knocks things off ledges on the way home, and the whole city is a playground.",
+    "storeId": 10007112,
+    "storeGenres": [
+      "Adventure"
+    ],
+    "storeRelease": "2025-05-09T16:00:00Z",
+    "plusIncluded": false
   },
   {
     "id": "jusant",
@@ -11280,7 +11975,15 @@
       "asOf": "2026-09-06"
     },
     "coverage": null,
-    "description": "A methodical climb up an enormous dried-out tower, one handhold and one stamina bar at a time."
+    "description": "A methodical climb up an enormous dried-out tower, one handhold and one stamina bar at a time.",
+    "storeId": 10006168,
+    "storeGenres": [
+      "Adventure",
+      "Puzzle",
+      "Action"
+    ],
+    "storeRelease": "2023-10-31T04:00:00Z",
+    "plusIncluded": false
   },
   {
     "id": "the-plucky-squire",
@@ -11337,7 +12040,14 @@
       "asOf": "2026-09-06"
     },
     "coverage": null,
-    "description": "A storybook hero leaps off the page into the three-dimensional desk the book is sitting on."
+    "description": "A storybook hero leaps off the page into the three-dimensional desk the book is sitting on.",
+    "storeId": 10007954,
+    "storeGenres": [
+      "Action",
+      "Adventure"
+    ],
+    "storeRelease": "2024-09-17T16:00:00Z",
+    "plusIncluded": false
   },
   {
     "id": "neva",
@@ -11394,7 +12104,14 @@
       "asOf": "2026-09-06"
     },
     "coverage": null,
-    "description": "From the makers of Gris: a woman and a growing wolf cub cross a dying, hand-painted world."
+    "description": "From the makers of Gris: a woman and a growing wolf cub cross a dying, hand-painted world.",
+    "storeId": 10008521,
+    "storeGenres": [
+      "Adventure",
+      "Action"
+    ],
+    "storeRelease": "2024-10-15T16:00:00Z",
+    "plusIncluded": true
   },
   {
     "id": "animal-well",
@@ -11465,7 +12182,14 @@
         "videos": 3
       }
     ],
-    "description": "A tiny luminous blob explores a dense, secret-packed labyrinth where almost nothing is explained."
+    "description": "A tiny luminous blob explores a dense, secret-packed labyrinth where almost nothing is explained.",
+    "storeId": 10004542,
+    "storeGenres": [
+      "Horror",
+      "Adventure"
+    ],
+    "storeRelease": "2024-05-09T13:00:00Z",
+    "plusIncluded": false
   },
   {
     "id": "lorelei-and-the-laser-eyes",
@@ -11525,7 +12249,13 @@
       "asOf": "2026-09-06"
     },
     "coverage": null,
-    "description": "A monochrome puzzle box of a hotel where every door is a riddle and the whole game is one long deduction."
+    "description": "A monochrome puzzle box of a hotel where every door is a riddle and the whole game is one long deduction.",
+    "storeId": 10011409,
+    "storeGenres": [
+      "Puzzle"
+    ],
+    "storeRelease": "2024-12-03T17:00:00Z",
+    "plusIncluded": false
   },
   {
     "id": "temtem",
@@ -11565,7 +12295,14 @@
       "asOf": "2026-09-06"
     },
     "coverage": null,
-    "description": "A massively multiplayer creature collector where other tamers roam the same islands you do."
+    "description": "A massively multiplayer creature collector where other tamers roam the same islands you do.",
+    "storeId": 10001170,
+    "storeGenres": [
+      "Role Playing Games",
+      "Adventure"
+    ],
+    "storeRelease": "2020-12-08T05:00:00Z",
+    "plusIncluded": false
   },
   {
     "id": "palworld",
@@ -11639,7 +12376,13 @@
       "asOf": "2026-09-06"
     },
     "coverage": null,
-    "description": "Catch creatures, then put them to work in your base, in a co-op survival crafting game with a very straight face."
+    "description": "Catch creatures, then put them to work in your base, in a co-op survival crafting game with a very straight face.",
+    "storeId": 10011027,
+    "storeGenres": [
+      "Action"
+    ],
+    "storeRelease": "2024-09-24T23:00:00Z",
+    "plusIncluded": false
   },
   {
     "id": "coral-island",
@@ -11711,7 +12454,13 @@
       "asOf": "2026-09-06"
     },
     "coverage": null,
-    "description": "Restore a tropical farm and the dying reef below it, with a whole town of characters to befriend."
+    "description": "Restore a tropical farm and the dying reef below it, with a whole town of characters to befriend.",
+    "storeId": 10008698,
+    "storeGenres": [
+      "Adventure"
+    ],
+    "storeRelease": "2023-11-14T15:00:00Z",
+    "plusIncluded": true
   },
   {
     "id": "fae-farm",
@@ -11772,7 +12521,14 @@
         "videos": 5
       }
     ],
-    "description": "A cozy magical farming sim built for four-player co-op from the ground up."
+    "description": "A cozy magical farming sim built for four-player co-op from the ground up.",
+    "storeId": 10010439,
+    "storeGenres": [
+      "Action",
+      "Simulation"
+    ],
+    "storeRelease": "2024-10-22T04:00:00Z",
+    "plusIncluded": false
   },
   {
     "id": "moonstone-island",
@@ -11878,7 +12634,13 @@
       "asOf": "2026-09-06"
     },
     "coverage": null,
-    "description": "Physics-driven puppy brawling that is mostly about failing to stand up."
+    "description": "Physics-driven puppy brawling that is mostly about failing to stand up.",
+    "storeId": 10010023,
+    "storeGenres": [
+      "Fighting"
+    ],
+    "storeRelease": "2025-01-23T02:00:00Z",
+    "plusIncluded": false
   },
   {
     "id": "sea-of-thieves",
@@ -11964,7 +12726,13 @@
         "videos": 1
       }
     ],
-    "description": "Crew a pirate ship with friends, where every sail on the horizon is another table of real players."
+    "description": "Crew a pirate ship with friends, where every sail on the horizon is another table of real players.",
+    "storeId": 10008884,
+    "storeGenres": [
+      "Adventure"
+    ],
+    "storeRelease": "2024-04-30T09:00:00Z",
+    "plusIncluded": false
   },
   {
     "id": "phasmophobia",
@@ -12051,7 +12819,14 @@
         "videos": 1
       }
     ],
-    "description": "Four investigators, one haunted house, and voice chat the ghost can hear."
+    "description": "Four investigators, one haunted house, and voice chat the ghost can hear.",
+    "storeId": 10005673,
+    "storeGenres": [
+      "Horror",
+      "Puzzle"
+    ],
+    "storeRelease": "2024-10-29T18:00:00Z",
+    "plusIncluded": false
   },
   {
     "id": "the-medium",
@@ -12111,7 +12886,13 @@
       "asOf": "2026-09-06"
     },
     "coverage": null,
-    "description": "A medium walks two worlds at once, both rendered side by side on screen simultaneously."
+    "description": "A medium walks two worlds at once, both rendered side by side on screen simultaneously.",
+    "storeId": 10002899,
+    "storeGenres": [
+      "Horror"
+    ],
+    "storeRelease": "2021-09-03T04:00:00Z",
+    "plusIncluded": false
   },
   {
     "id": "overcooked-all-you-can-eat",
@@ -12156,7 +12937,14 @@
       "asOf": "2026-09-06"
     },
     "coverage": null,
-    "description": "Both Overcooked games remastered, still the fastest way to test a friendship inside a burning kitchen."
+    "description": "Both Overcooked games remastered, still the fastest way to test a friendship inside a burning kitchen.",
+    "storeId": 10000899,
+    "storeGenres": [
+      "Family",
+      "Simulation"
+    ],
+    "storeRelease": "2020-11-12T05:00:00Z",
+    "plusIncluded": true
   },
   {
     "id": "fall-guys",
@@ -12200,7 +12988,13 @@
         "videos": 1
       }
     ],
-    "description": "Sixty jellybeans stumble through obstacle courses until one is left standing. Free to play."
+    "description": "Sixty jellybeans stumble through obstacle courses until one is left standing. Free to play.",
+    "storeId": 10003354,
+    "storeGenres": [
+      "Family"
+    ],
+    "storeRelease": "2022-06-21T08:00:00Z",
+    "plusIncluded": false
   },
   {
     "id": "rocket-league",
@@ -12537,7 +13331,14 @@
       "asOf": "2026-09-06"
     },
     "coverage": null,
-    "description": "A faster, more mobile hunt built around the wirebug grapple and a very good dog."
+    "description": "A faster, more mobile hunt built around the wirebug grapple and a very good dog.",
+    "storeId": 10005250,
+    "storeGenres": [
+      "Role Playing Games",
+      "Action"
+    ],
+    "storeRelease": "2023-01-20T05:00:00Z",
+    "plusIncluded": false
   },
   {
     "id": "human-fall-flat",
@@ -12756,7 +13557,13 @@
       "asOf": "2026-09-06"
     },
     "coverage": null,
-    "description": "Finish tasks on a spaceship while somebody quietly kills everyone, then argue about who."
+    "description": "Finish tasks on a spaceship while somebody quietly kills everyone, then argue about who.",
+    "storeId": 10002811,
+    "storeGenres": [
+      "Party"
+    ],
+    "storeRelease": "2021-12-14T19:00:00Z",
+    "plusIncluded": false
   },
   {
     "id": "grounded",
@@ -12817,7 +13624,13 @@
       "asOf": "2026-09-06"
     },
     "coverage": null,
-    "description": "Shrunk to ant size in a suburban backyard, building bases out of blades of grass."
+    "description": "Shrunk to ant size in a suburban backyard, building bases out of blades of grass.",
+    "storeId": 10008048,
+    "storeGenres": [
+      "Adventure"
+    ],
+    "storeRelease": "2024-04-16T15:00:00Z",
+    "plusIncluded": false
   },
   {
     "id": "diablo-iv",
@@ -13443,7 +14256,14 @@
         "videos": 1
       }
     ],
-    "description": "Escape rooms designed for two, with a running timer and a great deal of shouting."
+    "description": "Escape rooms designed for two, with a running timer and a great deal of shouting.",
+    "storeId": 10004502,
+    "storeGenres": [
+      "Puzzle",
+      "Adventure"
+    ],
+    "storeRelease": "2022-07-14T04:00:00Z",
+    "plusIncluded": false
   },
   {
     "id": "golf-with-your-friends",
@@ -13792,7 +14612,15 @@
         "videos": 1
       }
     ],
-    "description": "The remake of the action-horror benchmark, tighter and considerably darker than the original."
+    "description": "The remake of the action-horror benchmark, tighter and considerably darker than the original.",
+    "storeId": 10004473,
+    "storeGenres": [
+      "Horror",
+      "Adventure",
+      "Action"
+    ],
+    "storeRelease": "2023-03-24T04:00:00Z",
+    "plusIncluded": false
   },
   {
     "id": "metro-exodus",
@@ -14361,7 +15189,14 @@
       "asOf": "2026-09-06"
     },
     "coverage": null,
-    "description": "Rearrange the map itself like jigsaw tiles to reshape the world you are walking through."
+    "description": "Rearrange the map itself like jigsaw tiles to reshape the world you are walking through.",
+    "storeId": 10000947,
+    "storeGenres": [
+      "Puzzle",
+      "Adventure"
+    ],
+    "storeRelease": "2020-10-27T04:00:00Z",
+    "plusIncluded": false
   },
   {
     "id": "strange-horticulture",
@@ -14430,7 +15265,14 @@
         "videos": 3
       }
     ],
-    "description": "Run an occult plant shop, identifying specimens by hand from a battered field guide."
+    "description": "Run an occult plant shop, identifying specimens by hand from a battered field guide.",
+    "storeId": 10009589,
+    "storeGenres": [
+      "Unique",
+      "Puzzle"
+    ],
+    "storeRelease": "2024-02-23T14:00:00Z",
+    "plusIncluded": false
   },
   {
     "id": "the-gardens-between",
@@ -14510,7 +15352,13 @@
       "asOf": "2026-09-06"
     },
     "coverage": null,
-    "description": "Farm your own small island and sail between others in a gentle, brightly colored adventure."
+    "description": "Farm your own small island and sail between others in a gentle, brightly colored adventure.",
+    "storeId": 10000222,
+    "storeGenres": [
+      "Adventure"
+    ],
+    "storeRelease": "2020-12-09T05:00:00Z",
+    "plusIncluded": false
   },
   {
     "id": "the-first-tree",
@@ -14677,7 +15525,14 @@
       "asOf": "2026-09-06"
     },
     "coverage": null,
-    "description": "Two lovers glide across a fractured planet together, cooking and resting between fights."
+    "description": "Two lovers glide across a fractured planet together, cooking and resting between fights.",
+    "storeId": 10000983,
+    "storeGenres": [
+      "Role Playing Games",
+      "Adventure"
+    ],
+    "storeRelease": "2020-12-03T14:00:00Z",
+    "plusIncluded": false
   },
   {
     "id": "the-jackbox-party-pack-8",
@@ -14725,7 +15580,15 @@
       "asOf": "2026-09-06"
     },
     "coverage": null,
-    "description": "Five party games played on everyone's phones, so no extra controllers required."
+    "description": "Five party games played on everyone's phones, so no extra controllers required.",
+    "storeId": 10003120,
+    "storeGenres": [
+      "Party",
+      "Family",
+      "Casual"
+    ],
+    "storeRelease": "2021-10-14T18:39:00Z",
+    "plusIncluded": false
   },
   {
     "id": "nine-sols",
@@ -14787,7 +15650,15 @@
       "asOf": "2026-09-06"
     },
     "coverage": null,
-    "description": "A hand-drawn taopunk metroidvania built on a deflect-heavy parry system, where every duel is a rhythm you learn."
+    "description": "A hand-drawn taopunk metroidvania built on a deflect-heavy parry system, where every duel is a rhythm you learn.",
+    "storeId": 10007919,
+    "storeGenres": [
+      "Adventure",
+      "Action",
+      "Role Playing Games"
+    ],
+    "storeRelease": "2024-11-26T08:00:00Z",
+    "plusIncluded": false
   },
   {
     "id": "hollow-knight-silksong",
@@ -14870,7 +15741,13 @@
         "videos": 1
       }
     ],
-    "description": "Hornet climbs a hostile new kingdom in the long-awaited sequel, faster and sharper than the original."
+    "description": "Hornet climbs a hostile new kingdom in the long-awaited sequel, faster and sharper than the original.",
+    "storeId": 10005908,
+    "storeGenres": [
+      "Adventure"
+    ],
+    "storeRelease": "2025-09-04T14:00:00Z",
+    "plusIncluded": false
   },
   {
     "id": "metaphor-refantazio",
@@ -14955,7 +15832,13 @@
         "videos": 1
       }
     ],
-    "description": "The Persona team's fantasy RPG, built on a calendar, a party of outcasts and a genuinely strange political race."
+    "description": "The Persona team's fantasy RPG, built on a calendar, a party of outcasts and a genuinely strange political race.",
+    "storeId": 10001029,
+    "storeGenres": [
+      "Role Playing Games"
+    ],
+    "storeRelease": "2024-10-11T04:00:00Z",
+    "plusIncluded": false
   },
   {
     "id": "persona-5-royal",
@@ -15039,7 +15922,13 @@
       "asOf": "2026-09-06"
     },
     "coverage": null,
-    "description": "A stylish year of double life: high school by day, heists inside people's minds by night."
+    "description": "A stylish year of double life: high school by day, heists inside people's minds by night.",
+    "storeId": 10002771,
+    "storeGenres": [
+      "Role Playing Games"
+    ],
+    "storeRelease": "2022-10-21T04:00:00Z",
+    "plusIncluded": true
   },
   {
     "id": "core-keeper",
@@ -15109,7 +15998,15 @@
         "videos": 1
       }
     ],
-    "description": "Mine, farm and build in a vast underground cavern, alone or with up to seven other people."
+    "description": "Mine, farm and build in a vast underground cavern, alone or with up to seven other people.",
+    "storeId": 10009534,
+    "storeGenres": [
+      "Adventure",
+      "Role Playing Games",
+      "Casual"
+    ],
+    "storeRelease": "2024-08-27T09:00:00Z",
+    "plusIncluded": false
   },
   {
     "id": "spirittea",
@@ -15218,7 +16115,13 @@
         "videos": 7
       }
     ],
-    "description": "A well-meaning bear accidentally opens a hotel in the woods and has to keep the guests happy."
+    "description": "A well-meaning bear accidentally opens a hotel in the woods and has to keep the guests happy.",
+    "storeId": 10007449,
+    "storeGenres": [
+      "Simulation"
+    ],
+    "storeRelease": "2023-12-12T15:00:00Z",
+    "plusIncluded": false
   },
   {
     "id": "spirit-of-the-north",
@@ -15412,7 +16315,13 @@
       "asOf": "2026-09-06"
     },
     "coverage": null,
-    "description": "A turn-based RPG with real-time dodges and parries, set in a painted Belle Epoque world erasing itself a year at a time."
+    "description": "A turn-based RPG with real-time dodges and parries, set in a painted Belle Epoque world erasing itself a year at a time.",
+    "storeId": 10008503,
+    "storeGenres": [
+      "Role Playing Games"
+    ],
+    "storeRelease": "2025-04-24T07:00:00Z",
+    "plusIncluded": false
   },
   {
     "id": "blue-prince",
@@ -15491,7 +16400,14 @@
         "videos": 1
       }
     ],
-    "description": "Draft a new floorplan every day inside a mansion that rearranges itself, hunting a room that should not exist."
+    "description": "Draft a new floorplan every day inside a mansion that rearranges itself, hunting a room that should not exist.",
+    "storeId": 10012002,
+    "storeGenres": [
+      "Adventure",
+      "Puzzle"
+    ],
+    "storeRelease": "2025-04-10T14:00:00Z",
+    "plusIncluded": true
   },
   {
     "id": "split-fiction",
@@ -15578,7 +16494,13 @@
         "videos": 1
       }
     ],
-    "description": "Co-op only, from the It Takes Two team: two writers trapped between sci-fi and fantasy worlds that keep changing the rules."
+    "description": "Co-op only, from the It Takes Two team: two writers trapped between sci-fi and fantasy worlds that keep changing the rules.",
+    "storeId": 10005449,
+    "storeGenres": [
+      "Adventure"
+    ],
+    "storeRelease": "2025-03-06T16:00:00Z",
+    "plusIncluded": false
   },
   {
     "id": "wanderstop",
@@ -15635,7 +16557,13 @@
       "asOf": "2026-09-06"
     },
     "coverage": null,
-    "description": "A burnt-out fighter has to stop and run a tea shop, in a cozy game openly about being unable to rest."
+    "description": "A burnt-out fighter has to stop and run a tea shop, in a cozy game openly about being unable to rest.",
+    "storeId": 10011513,
+    "storeGenres": [
+      "Adventure"
+    ],
+    "storeRelease": "2025-03-11T13:00:00Z",
+    "plusIncluded": false
   },
   {
     "id": "bo-path-of-the-teal-lotus",
@@ -15771,7 +16699,13 @@
       "asOf": "2026-09-06"
     },
     "coverage": null,
-    "description": "Hunt enormous creatures across shifting weather systems and herd migrations, alone or with three others."
+    "description": "Hunt enormous creatures across shifting weather systems and herd migrations, alone or with three others.",
+    "storeId": 10005176,
+    "storeGenres": [
+      "Action"
+    ],
+    "storeRelease": "2025-02-28T05:00:00Z",
+    "plusIncluded": false
   },
   {
     "id": "wylde-flowers",
@@ -15830,7 +16764,13 @@
       "asOf": "2026-09-06"
     },
     "coverage": null,
-    "description": "Farm by day and join the local coven by night, with a fully voice-acted island cast."
+    "description": "Farm by day and join the local coven by night, with a fully voice-acted island cast.",
+    "storeId": 10013675,
+    "storeGenres": [
+      "Adventure"
+    ],
+    "storeRelease": "2025-12-09T20:00:00Z",
+    "plusIncluded": false
   },
   {
     "id": "little-nightmares-3",
@@ -15910,7 +16850,13 @@
       "asOf": "2026-09-07"
     },
     "coverage": null,
-    "description": "Low and Alone cross the Nowhere together, with online co-op bringing a second player into the series for the first time."
+    "description": "Low and Alone cross the Nowhere together, with online co-op bringing a second player into the series for the first time.",
+    "storeId": 10003713,
+    "storeGenres": [
+      "Action"
+    ],
+    "storeRelease": "2025-10-10T04:00:00Z",
+    "plusIncluded": false
   },
   {
     "id": "fantasy-life-i",
@@ -16029,7 +16975,13 @@
       "asOf": "2026-09-07"
     },
     "coverage": null,
-    "description": "Melinoe fights up from the underworld and down from the surface, with a broader arsenal and a far larger cast than the first."
+    "description": "Melinoe fights up from the underworld and down from the surface, with a broader arsenal and a far larger cast than the first.",
+    "storeId": 10018449,
+    "storeGenres": [
+      "Action"
+    ],
+    "storeRelease": "2026-04-14T17:00:00Z",
+    "plusIncluded": false
   },
   {
     "id": "two-point-museum",
@@ -16226,7 +17178,13 @@
         "videos": 7
       }
     ],
-    "description": "Park a book cart somewhere scenic each day, stock it by hand, and learn the town through what people ask for."
+    "description": "Park a book cart somewhere scenic each day, stock it by hand, and learn the town through what people ask for.",
+    "storeId": 10016208,
+    "storeGenres": [
+      "Simulation"
+    ],
+    "storeRelease": "2026-04-10T18:00:00Z",
+    "plusIncluded": false
   },
   {
     "id": "herdling",
@@ -16280,7 +17238,13 @@
       "asOf": "2026-09-07"
     },
     "coverage": null,
-    "description": "Guide a herd of shaggy antlered calicorns up a mountain, protecting them through weather and light environmental puzzles."
+    "description": "Guide a herd of shaggy antlered calicorns up a mountain, protecting them through weather and light environmental puzzles.",
+    "storeId": 10013966,
+    "storeGenres": [
+      "Adventure"
+    ],
+    "storeRelease": "2025-08-21T13:00:00Z",
+    "plusIncluded": false
   },
   {
     "id": "story-of-seasons-grand-bazaar",
@@ -16325,7 +17289,13 @@
       "asOf": "2026-09-07"
     },
     "coverage": null,
-    "description": "Farm all week and sell at Saturday's bazaar, where what the town buys shapes what is worth growing next."
+    "description": "Farm all week and sell at Saturday's bazaar, where what the town buys shapes what is worth growing next.",
+    "storeId": 10010859,
+    "storeGenres": [
+      "Simulation"
+    ],
+    "storeRelease": "2026-05-28T04:00:00Z",
+    "plusIncluded": false
   },
   {
     "id": "rune-factory-guardians-of-azuma",
@@ -16388,7 +17358,13 @@
       "asOf": "2026-09-07"
     },
     "coverage": null,
-    "description": "Farm and fight across four seasonal villages in a Japanese-styled Rune Factory built around restoring blighted land."
+    "description": "Farm and fight across four seasonal villages in a Japanese-styled Rune Factory built around restoring blighted land.",
+    "storeId": 10010244,
+    "storeGenres": [
+      "Role Playing Games"
+    ],
+    "storeRelease": "2026-02-13T05:00:00Z",
+    "plusIncluded": false
   },
   {
     "id": "hellblade-senuas-sacrifice",
@@ -16477,7 +17453,13 @@
         "videos": 1
       }
     ],
-    "description": "A Pict warrior crosses a Norse underworld while living with psychosis, built with neuroscientists and people who experience it."
+    "description": "A Pict warrior crosses a Norse underworld while living with psychosis, built with neuroscientists and people who experience it.",
+    "storeId": 10013503,
+    "storeGenres": [
+      "Adventure"
+    ],
+    "storeRelease": "2025-08-12T08:00:00Z",
+    "plusIncluded": false
   },
   {
     "id": "beyond-eyes",
@@ -16580,7 +17562,13 @@
         "videos": 20
       }
     ],
-    "description": "A raccoon master thief sneaks through cel-shaded levels to steal back his family's book of tricks."
+    "description": "A raccoon master thief sneaks through cel-shaded levels to steal back his family's book of tricks.",
+    "storeId": 10010296,
+    "storeGenres": [
+      "Adventure"
+    ],
+    "storeRelease": "2024-06-11T15:00:00Z",
+    "plusIncluded": false
   },
   {
     "id": "jak-and-daxter",
@@ -16606,7 +17594,13 @@
         "videos": 4
       }
     ],
-    "description": "A seamless open world with no loading screens, and a best friend who spends the whole game as an otter-weasel."
+    "description": "A seamless open world with no loading screens, and a best friend who spends the whole game as an otter-weasel.",
+    "storeId": 10010137,
+    "storeGenres": [
+      "Adventure"
+    ],
+    "storeRelease": "2024-12-10T17:00:00Z",
+    "plusIncluded": false
   },
   {
     "id": "medievil-2019",
@@ -16632,7 +17626,13 @@
         "videos": 2
       }
     ],
-    "description": "Sir Daniel Fortesque, a skeleton knight who died badly the first time, gets a rebuilt second shot at heroism."
+    "description": "Sir Daniel Fortesque, a skeleton knight who died badly the first time, gets a rebuilt second shot at heroism.",
+    "storeId": 10008138,
+    "storeGenres": [
+      "Action"
+    ],
+    "storeRelease": "2024-04-16T15:00:00Z",
+    "plusIncluded": false
   },
   {
     "id": "klonoa-phantasy-reverie",
@@ -16683,7 +17683,14 @@
       "asOf": "2026-09-07"
     },
     "coverage": null,
-    "description": "Two remastered 2.5D platformers about a big-eared dream traveller, gentle to play and quietly devastating to finish."
+    "description": "Two remastered 2.5D platformers about a big-eared dream traveller, gentle to play and quietly devastating to finish.",
+    "storeId": 10003540,
+    "storeGenres": [
+      "Action",
+      "Adventure"
+    ],
+    "storeRelease": "2022-07-08T04:00:00Z",
+    "plusIncluded": false
   },
   {
     "id": "katamari-damacy-reroll",
@@ -16732,7 +17739,13 @@
       "asOf": "2026-09-07"
     },
     "coverage": null,
-    "description": "Roll a sticky ball over everything on earth until it becomes a star, to one of the great video game soundtracks."
+    "description": "Roll a sticky ball over everything on earth until it becomes a star, to one of the great video game soundtracks.",
+    "storeId": 10001045,
+    "storeGenres": [
+      "Action"
+    ],
+    "storeRelease": "2020-11-20T05:00:00Z",
+    "plusIncluded": false
   },
   {
     "id": "ape-escape-ps4",
@@ -16758,7 +17771,14 @@
         "videos": 3
       }
     ],
-    "description": "The game that justified the dual analogue sticks, spent entirely on catching monkeys with a net."
+    "description": "The game that justified the dual analogue sticks, spent entirely on catching monkeys with a net.",
+    "storeId": 10004394,
+    "storeGenres": [
+      "Adventure",
+      "Action"
+    ],
+    "storeRelease": "2025-03-07T17:00:00Z",
+    "plusIncluded": false
   },
   {
     "id": "patapon-replay",
@@ -16802,7 +17822,15 @@
       "asOf": "2026-09-07"
     },
     "coverage": null,
-    "description": "Command an army of one-eyed tribespeople entirely by drumming, in silhouettes and flat bright colour."
+    "description": "Command an army of one-eyed tribespeople entirely by drumming, in silhouettes and flat bright colour.",
+    "storeId": 10012660,
+    "storeGenres": [
+      "Music/Rhythm",
+      "Adventure",
+      "Action"
+    ],
+    "storeRelease": "2025-07-11T04:00:00Z",
+    "plusIncluded": false
   },
   {
     "id": "oddworld-strangers-wrath",
@@ -16842,7 +17870,14 @@
       "asOf": "2026-09-07"
     },
     "coverage": null,
-    "description": "A bounty hunter loads live animals into his crossbow in a western that keeps a real secret until late."
+    "description": "A bounty hunter loads live animals into his crossbow in a western that keeps a real secret until late.",
+    "storeId": 10001422,
+    "storeGenres": [
+      "Action",
+      "Adventure"
+    ],
+    "storeRelease": "2022-02-11T05:00:00Z",
+    "plusIncluded": false
   },
   {
     "id": "tomb-raider-1-3-remastered",
@@ -16985,7 +18020,14 @@
       "asOf": "2026-09-07"
     },
     "coverage": null,
-    "description": "Dawn of Sorrow, Portrait of Ruin and Order of Ecclesia — three of the best metroidvanias ever made, in one place."
+    "description": "Dawn of Sorrow, Portrait of Ruin and Order of Ecclesia — three of the best metroidvanias ever made, in one place.",
+    "storeId": 10007943,
+    "storeGenres": [
+      "Action",
+      "Role Playing Games"
+    ],
+    "storeRelease": "2024-08-27T15:00:00Z",
+    "plusIncluded": false
   },
   {
     "id": "castlevania-advance",
@@ -17041,7 +18083,13 @@
       "asOf": "2026-09-07"
     },
     "coverage": null,
-    "description": "Circle of the Moon, Harmony of Dissonance and Aria of Sorrow, the last of which is a genre high-water mark."
+    "description": "Circle of the Moon, Harmony of Dissonance and Aria of Sorrow, the last of which is a genre high-water mark.",
+    "storeId": 10002499,
+    "storeGenres": [
+      "Action"
+    ],
+    "storeRelease": "2021-09-24T01:00:00Z",
+    "plusIncluded": false
   },
   {
     "id": "suikoden-1-2-hd",
@@ -17145,7 +18193,13 @@
         "videos": 1
       }
     ],
-    "description": "A pair of adventure-first JRPGs whose positioning-based battle system still has no real successor."
+    "description": "A pair of adventure-first JRPGs whose positioning-based battle system still has no real successor.",
+    "storeId": 10008436,
+    "storeGenres": [
+      "Role Playing Games"
+    ],
+    "storeRelease": "2024-03-26T12:00:00Z",
+    "plusIncluded": false
   },
   {
     "id": "wonder-boy-collection",
@@ -17204,7 +18258,13 @@
       "asOf": "2026-09-07"
     },
     "coverage": null,
-    "description": "Four Sega-era platformers including the one that quietly invented the metroidvania before the word existed."
+    "description": "Four Sega-era platformers including the one that quietly invented the metroidvania before the word existed.",
+    "storeId": 10003496,
+    "storeGenres": [
+      "Action"
+    ],
+    "storeRelease": "2022-06-03T13:00:00Z",
+    "plusIncluded": false
   },
   {
     "id": "legend-of-dragoon",
@@ -17223,7 +18283,13 @@
     "ageRating": null,
     "ratings": null,
     "coverage": null,
-    "description": "A cult PS1 RPG built on timed button presses mid-combo, with pre-rendered backdrops that still look painted."
+    "description": "A cult PS1 RPG built on timed button presses mid-combo, with pre-rendered backdrops that still look painted.",
+    "storeId": 10004605,
+    "storeGenres": [
+      "Role Playing Games"
+    ],
+    "storeRelease": "2025-03-07T17:00:00Z",
+    "plusIncluded": false
   },
   {
     "id": "beyond-good-and-evil-20th",
@@ -17270,7 +18336,14 @@
       "asOf": "2026-09-07"
     },
     "coverage": null,
-    "description": "Jade, a photojournalist with a camera and a staff, exposes a planetary conspiracy alongside a talking pig."
+    "description": "Jade, a photojournalist with a camera and a staff, exposes a planetary conspiracy alongside a talking pig.",
+    "storeId": 10004727,
+    "storeGenres": [
+      "Adventure",
+      "Action"
+    ],
+    "storeRelease": "2024-06-25T04:00:00Z",
+    "plusIncluded": false
   },
   {
     "id": "sonic-origins",
@@ -17337,7 +18410,13 @@
         "videos": 1
       }
     ],
-    "description": "The four Genesis Sonic games rebuilt widescreen, including the one where you can play as Knuckles."
+    "description": "The four Genesis Sonic games rebuilt widescreen, including the one where you can play as Knuckles.",
+    "storeId": 10003797,
+    "storeGenres": [
+      "Action"
+    ],
+    "storeRelease": "2022-06-23T04:00:00Z",
+    "plusIncluded": false
   },
   {
     "id": "tmnt-cowabunga",
@@ -17384,7 +18463,14 @@
       "asOf": "2026-09-07"
     },
     "coverage": null,
-    "description": "Thirteen Turtles games with online co-op, rewind and a genuinely excellent museum of scans and art."
+    "description": "Thirteen Turtles games with online co-op, rewind and a genuinely excellent museum of scans and art.",
+    "storeId": 10003357,
+    "storeGenres": [
+      "Fighting",
+      "Action"
+    ],
+    "storeRelease": "2022-08-30T17:00:00Z",
+    "plusIncluded": false
   },
   {
     "id": "dragon-quest-3-hd2d",
@@ -17442,7 +18528,13 @@
       "asOf": "2026-09-07"
     },
     "coverage": null,
-    "description": "The 1988 template for the whole genre, rebuilt in HD-2D so the sprites sit in real depth of field."
+    "description": "The 1988 template for the whole genre, rebuilt in HD-2D so the sprites sit in real depth of field.",
+    "storeId": 10010701,
+    "storeGenres": [
+      "Role Playing Games"
+    ],
+    "storeRelease": "2025-10-30T04:00:00Z",
+    "plusIncluded": false
   },
   {
     "id": "star-ocean-second-story-r",
@@ -17500,7 +18592,13 @@
       "asOf": "2026-09-07"
     },
     "coverage": null,
-    "description": "A PS1 RPG remade with 2D sprites on 3D dioramas, and a branching cast whose endings depend on who you befriend."
+    "description": "A PS1 RPG remade with 2D sprites on 3D dioramas, and a branching cast whose endings depend on who you befriend.",
+    "storeId": 10007308,
+    "storeGenres": [
+      "Role Playing Games"
+    ],
+    "storeRelease": "2023-11-02T04:00:00Z",
+    "plusIncluded": false
   },
   {
     "id": "ender-magnolia",
@@ -17560,7 +18658,13 @@
       "asOf": "2026-09-07"
     },
     "coverage": null,
-    "description": "The follow-up to Ender Lilies: a girl who tunes broken machines walks a rain-washed, watercolour ruin."
+    "description": "The follow-up to Ender Lilies: a girl who tunes broken machines walks a rain-washed, watercolour ruin.",
+    "storeId": 10010653,
+    "storeGenres": [
+      "Action"
+    ],
+    "storeRelease": "2025-01-22T15:00:00Z",
+    "plusIncluded": false
   },
   {
     "id": "crypt-custodian",
@@ -17615,7 +18719,14 @@
       "asOf": "2026-09-07"
     },
     "coverage": null,
-    "description": "A cat dies, is assigned janitorial duty in the afterlife, and sweeps its way through a very large map instead."
+    "description": "A cat dies, is assigned janitorial duty in the afterlife, and sweeps its way through a very large map instead.",
+    "storeId": 10010746,
+    "storeGenres": [
+      "Adventure",
+      "Action"
+    ],
+    "storeRelease": "2024-08-27T16:00:00Z",
+    "plusIncluded": false
   },
   {
     "id": "islets",
@@ -17666,7 +18777,14 @@
       "asOf": "2026-09-07"
     },
     "coverage": null,
-    "description": "Fly an airship between floating islands and physically drag them back together, which reshapes the map as you go."
+    "description": "Fly an airship between floating islands and physically drag them back together, which reshapes the map as you go.",
+    "storeId": 10013241,
+    "storeGenres": [
+      "Action",
+      "Role Playing Games"
+    ],
+    "storeRelease": "2025-09-23T17:00:00Z",
+    "plusIncluded": false
   },
   {
     "id": "aeterna-noctis",
@@ -17722,7 +18840,14 @@
       "asOf": "2026-09-07"
     },
     "coverage": null,
-    "description": "A hand-painted, deliberately punishing metroidvania with a teleporting arrow that turns platforming into geometry."
+    "description": "A hand-painted, deliberately punishing metroidvania with a teleporting arrow that turns platforming into geometry.",
+    "storeId": 10002786,
+    "storeGenres": [
+      "Adventure",
+      "Action"
+    ],
+    "storeRelease": "2021-12-15T05:00:00Z",
+    "plusIncluded": false
   },
   {
     "id": "biomorph",
@@ -17765,7 +18890,13 @@
       "asOf": "2026-09-07"
     },
     "coverage": null,
-    "description": "Absorb the shape of the enemies you defeat and use their bodies to reach the places yours cannot."
+    "description": "Absorb the shape of the enemies you defeat and use their bodies to reach the places yours cannot.",
+    "storeId": 10011138,
+    "storeGenres": [
+      "Action"
+    ],
+    "storeRelease": "2024-11-22T05:00:00Z",
+    "plusIncluded": false
   },
   {
     "id": "voidwrought",
@@ -17805,7 +18936,13 @@
       "asOf": "2026-09-07"
     },
     "coverage": null,
-    "description": "A small construct kills gods and builds a pantheon out of them, drawn in ink-black cosmic horror."
+    "description": "A small construct kills gods and builds a pantheon out of them, drawn in ink-black cosmic horror.",
+    "storeId": 10014658,
+    "storeGenres": [
+      "Action"
+    ],
+    "storeRelease": "2026-03-19T16:00:00Z",
+    "plusIncluded": false
   },
   {
     "id": "blasphemous-2",
@@ -17878,7 +19015,13 @@
       "asOf": "2026-09-07"
     },
     "coverage": null,
-    "description": "The Penitent One returns with three weapons that each open the map differently, and even denser pixel art."
+    "description": "The Penitent One returns with three weapons that each open the map differently, and even denser pixel art.",
+    "storeId": 10007264,
+    "storeGenres": [
+      "Action"
+    ],
+    "storeRelease": "2023-08-24T04:00:00Z",
+    "plusIncluded": true
   },
   {
     "id": "chants-of-sennaar",
@@ -17940,7 +19083,13 @@
       "asOf": "2026-09-07"
     },
     "coverage": null,
-    "description": "Climb a Babel tower deducing five invented languages from context, filling in a glossary you write yourself."
+    "description": "Climb a Babel tower deducing five invented languages from context, filling in a glossary you write yourself.",
+    "storeId": 10007905,
+    "storeGenres": [
+      "Puzzle"
+    ],
+    "storeRelease": "2023-09-05T16:00:00Z",
+    "plusIncluded": false
   },
   {
     "id": "1000xresist",
@@ -18000,7 +19149,13 @@
       "asOf": "2026-09-07"
     },
     "coverage": null,
-    "description": "A sci-fi story of clone sisters, diaspora and inherited memory that keeps reframing everything you thought it was."
+    "description": "A sci-fi story of clone sisters, diaspora and inherited memory that keeps reframing everything you thought it was.",
+    "storeId": 10014524,
+    "storeGenres": [
+      "Adventure"
+    ],
+    "storeRelease": "2025-11-04T16:00:00Z",
+    "plusIncluded": false
   },
   {
     "id": "slay-the-princess",
@@ -18066,7 +19221,14 @@
       "asOf": "2026-09-07"
     },
     "coverage": null,
-    "description": "You're told to slay a princess. Every choice rewrites who she is, in scratchy charcoal and full voice acting."
+    "description": "You're told to slay a princess. Every choice rewrites who she is, in scratchy charcoal and full voice acting.",
+    "storeId": 10011143,
+    "storeGenres": [
+      "Horror",
+      "Adventure"
+    ],
+    "storeRelease": "2024-10-24T16:00:00Z",
+    "plusIncluded": false
   },
   {
     "id": "indika",
@@ -18131,7 +19293,13 @@
       "asOf": "2026-09-07"
     },
     "coverage": null,
-    "description": "A young nun crosses an alternate-history Russia with the devil narrating, in a game that argues with itself."
+    "description": "A young nun crosses an alternate-history Russia with the devil narrating, in a game that argues with itself.",
+    "storeId": 10008296,
+    "storeGenres": [
+      "Adventure"
+    ],
+    "storeRelease": "2024-05-17T10:00:00Z",
+    "plusIncluded": true
   },
   {
     "id": "south-of-the-circle",
@@ -18176,7 +19344,13 @@
       "asOf": "2026-09-07"
     },
     "coverage": null,
-    "description": "A Cold War romance told across Antarctic ice and Cambridge lecture halls, steered by choosing an emotion."
+    "description": "A Cold War romance told across Antarctic ice and Cambridge lecture halls, steered by choosing an emotion.",
+    "storeId": 10004233,
+    "storeGenres": [
+      "Adventure"
+    ],
+    "storeRelease": "2022-08-03T12:00:00Z",
+    "plusIncluded": false
   },
   {
     "id": "the-cub",
@@ -18231,7 +19405,13 @@
       "asOf": "2026-09-07"
     },
     "coverage": null,
-    "description": "A feral child sprints through an overgrown, abandoned earth in a Jungle Book riff drawn like a Saturday cartoon."
+    "description": "A feral child sprints through an overgrown, abandoned earth in a Jungle Book riff drawn like a Saturday cartoon.",
+    "storeId": 10009294,
+    "storeGenres": [
+      "Adventure"
+    ],
+    "storeRelease": "2024-01-19T05:00:00Z",
+    "plusIncluded": false
   },
   {
     "id": "botany-manor",
@@ -18295,7 +19475,14 @@
         "videos": 2
       }
     ],
-    "description": "A retired botanist coaxes forgotten plants into bloom by reading her own notes carefully. No fail state anywhere."
+    "description": "A retired botanist coaxes forgotten plants into bloom by reading her own notes carefully. No fail state anywhere.",
+    "storeId": 10004416,
+    "storeGenres": [
+      "Unique",
+      "Adventure"
+    ],
+    "storeRelease": "2025-01-28T15:00:00Z",
+    "plusIncluded": false
   },
   {
     "id": "a-little-to-the-left",
@@ -18364,7 +19551,15 @@
         "videos": 5
       }
     ],
-    "description": "Tidy household objects into satisfying order while a cat does its best to undo your work."
+    "description": "Tidy household objects into satisfying order while a cat does its best to undo your work.",
+    "storeId": 10008945,
+    "storeGenres": [
+      "Puzzle",
+      "Family",
+      "Brain Training"
+    ],
+    "storeRelease": "2024-02-15T16:00:00Z",
+    "plusIncluded": true
   },
   {
     "id": "dorfromantik",
@@ -18421,7 +19616,14 @@
       "asOf": "2026-09-07"
     },
     "coverage": null,
-    "description": "Place hex tiles to grow a soft pastel countryside, with quiet objectives and no way to actually lose."
+    "description": "Place hex tiles to grow a soft pastel countryside, with quiet objectives and no way to actually lose.",
+    "storeId": 10014511,
+    "storeGenres": [
+      "Strategy",
+      "Puzzle"
+    ],
+    "storeRelease": "2025-08-14T15:00:00Z",
+    "plusIncluded": false
   },
   {
     "id": "lil-gator-game",
@@ -18478,7 +19680,13 @@
       "asOf": "2026-09-07"
     },
     "coverage": null,
-    "description": "A small alligator makes up a cardboard adventure to get their sister to play again. Nothing can hurt you."
+    "description": "A small alligator makes up a cardboard adventure to get their sister to play again. Nothing can hurt you.",
+    "storeId": 10008374,
+    "storeGenres": [
+      "Adventure"
+    ],
+    "storeRelease": "2023-10-10T08:00:00Z",
+    "plusIncluded": false
   },
   {
     "id": "time-on-frog-island",
@@ -18525,7 +19733,13 @@
         "videos": 1
       }
     ],
-    "description": "Shipwrecked among frogs who speak no language you know, bartering objects until your boat is whole again."
+    "description": "Shipwrecked among frogs who speak no language you know, bartering objects until your boat is whole again.",
+    "storeId": 10003789,
+    "storeGenres": [
+      "Adventure"
+    ],
+    "storeRelease": "2022-07-12T04:00:00Z",
+    "plusIncluded": false
   },
   {
     "id": "cat-quest-3",
@@ -18571,7 +19785,15 @@
       "asOf": "2026-09-07"
     },
     "coverage": null,
-    "description": "A pirate cat sails a tiny open world of appalling puns, playable in couch co-op with a second cat."
+    "description": "A pirate cat sails a tiny open world of appalling puns, playable in couch co-op with a second cat.",
+    "storeId": 10007859,
+    "storeGenres": [
+      "Role Playing Games",
+      "Family",
+      "Adventure"
+    ],
+    "storeRelease": "2024-08-08T04:00:00Z",
+    "plusIncluded": true
   },
   {
     "id": "melatonin",
@@ -18629,7 +19851,13 @@
         "videos": 1
       }
     ],
-    "description": "A pastel rhythm game about dreams and everyday anxieties, played entirely by ear before the visuals catch up."
+    "description": "A pastel rhythm game about dreams and everyday anxieties, played entirely by ear before the visuals catch up.",
+    "storeId": 10009778,
+    "storeGenres": [
+      "Music/Rhythm"
+    ],
+    "storeRelease": "2024-03-12T13:00:00Z",
+    "plusIncluded": false
   },
   {
     "id": "the-wandering-village",
@@ -18686,7 +19914,14 @@
       "asOf": "2026-09-07"
     },
     "coverage": null,
-    "description": "Build a town on the back of a vast walking creature, and decide how much you take from it to survive."
+    "description": "Build a town on the back of a vast walking creature, and decide how much you take from it to survive.",
+    "storeId": 10011185,
+    "storeGenres": [
+      "Strategy",
+      "Simulation"
+    ],
+    "storeRelease": "2025-07-17T15:00:00Z",
+    "plusIncluded": false
   },
   {
     "id": "guilty-gear-strive",
@@ -18711,7 +19946,13 @@
     "ageRating": null,
     "ratings": null,
     "coverage": [],
-    "description": "A fighting game whose cel-shaded 3D is built to read as hand-drawn animation, with a deliberately small roster and a heavy-metal score."
+    "description": "A fighting game whose cel-shaded 3D is built to read as hand-drawn animation, with a deliberately small roster and a heavy-metal score.",
+    "storeId": 10000453,
+    "storeGenres": [
+      "Fighting"
+    ],
+    "storeRelease": "2021-06-11T04:00:00Z",
+    "plusIncluded": false
   },
   {
     "id": "mass-effect-legendary-edition",
@@ -18735,7 +19976,14 @@
     "ageRating": null,
     "ratings": null,
     "coverage": [],
-    "description": "The first three Mass Effect games remastered together, carrying your choices forward across a single trilogy-long save."
+    "description": "The first three Mass Effect games remastered together, carrying your choices forward across a single trilogy-long save.",
+    "storeId": 10000606,
+    "storeGenres": [
+      "Unique",
+      "Role Playing Games"
+    ],
+    "storeRelease": "2021-05-14T04:00:00Z",
+    "plusIncluded": false
   },
   {
     "id": "god-of-war-ragnarok",
@@ -18760,7 +20008,13 @@
     "ageRating": null,
     "ratings": null,
     "coverage": [],
-    "description": "Kratos and Atreus cross the nine realms as the prophesied end of the world closes in, held in one unbroken camera shot."
+    "description": "Kratos and Atreus cross the nine realms as the prophesied end of the world closes in, held in one unbroken camera shot.",
+    "storeId": 10001850,
+    "storeGenres": [
+      "Action"
+    ],
+    "storeRelease": "2022-11-09T05:00:00Z",
+    "plusIncluded": true
   },
   {
     "id": "dragon-age-the-veilguard",
@@ -18784,7 +20038,13 @@
     "ageRating": null,
     "ratings": null,
     "coverage": [],
-    "description": "A party-based RPG against a tear in the Veil, where each companion carries a personal thread you can finish or leave undone."
+    "description": "A party-based RPG against a tear in the Veil, where each companion carries a personal thread you can finish or leave undone.",
+    "storeId": 10000586,
+    "storeGenres": [
+      "Role Playing Games"
+    ],
+    "storeRelease": "2024-10-31T16:00:00Z",
+    "plusIncluded": false
   },
   {
     "id": "psychonauts-2",
@@ -18809,7 +20069,13 @@
     "ageRating": null,
     "ratings": null,
     "coverage": [],
-    "description": "A platformer set inside people’s heads, where each mind is a world shaped by whatever its owner cannot put down."
+    "description": "A platformer set inside people’s heads, where each mind is a world shaped by whatever its owner cannot put down.",
+    "storeId": 10002422,
+    "storeGenres": [
+      "Action"
+    ],
+    "storeRelease": "2021-08-25T00:00:00Z",
+    "plusIncluded": false
   },
   {
     "id": "omori",
@@ -18833,7 +20099,14 @@
     "ageRating": null,
     "ratings": null,
     "coverage": [],
-    "description": "A turn-based RPG that moves between a colour-pencil dream world and the bedroom its hero has not left, with the two slowly explaining each other."
+    "description": "A turn-based RPG that moves between a colour-pencil dream world and the bedroom its hero has not left, with the two slowly explaining each other.",
+    "storeId": 10005141,
+    "storeGenres": [
+      "Horror",
+      "Role Playing Games"
+    ],
+    "storeRelease": "2022-06-24T04:00:00Z",
+    "plusIncluded": false
   },
   {
     "id": "rainbow-billy",
@@ -18858,7 +20131,13 @@
     "ageRating": null,
     "ratings": null,
     "coverage": [],
-    "description": "A world drained of colour, restored by listening: encounters are conversations where you work out what a creature needs rather than how to beat it."
+    "description": "A world drained of colour, restored by listening: encounters are conversations where you work out what a creature needs rather than how to beat it.",
+    "storeId": 10001189,
+    "storeGenres": [
+      "Adventure"
+    ],
+    "storeRelease": "2021-10-05T07:00:00Z",
+    "plusIncluded": false
   },
   {
     "id": "stray-gods",
@@ -18882,7 +20161,13 @@
     "ageRating": null,
     "ratings": null,
     "coverage": [],
-    "description": "A murder mystery among the last Greek gods, argued in song: your dialogue choices pick the next line and the music bends to follow."
+    "description": "A murder mystery among the last Greek gods, argued in song: your dialogue choices pick the next line and the music bends to follow.",
+    "storeId": 10007748,
+    "storeGenres": [
+      "Role Playing Games"
+    ],
+    "storeRelease": "2023-08-10T07:00:00Z",
+    "plusIncluded": false
   },
   {
     "id": "dispatch",
@@ -18923,7 +20208,15 @@
     "ratings": null,
     "steamAppId": null,
     "psnStorePath": "concept/10013259",
-    "coverage": []
+    "coverage": [],
+    "storeId": 10013259,
+    "storeGenres": [
+      "Strategy",
+      "Adventure",
+      "Action"
+    ],
+    "storeRelease": "2025-10-22T14:00:00Z",
+    "plusIncluded": false
   },
   {
     "id": "sly-3-honor-among-thieves",
@@ -18958,7 +20251,13 @@
     "ratings": null,
     "steamAppId": null,
     "psnStorePath": "concept/10010692",
-    "coverage": []
+    "coverage": [],
+    "storeId": 10010692,
+    "storeGenres": [
+      "Adventure"
+    ],
+    "storeRelease": "2024-12-10T17:00:00Z",
+    "plusIncluded": false
   },
   {
     "id": "sly-2-band-of-thieves",
@@ -18993,7 +20292,13 @@
     "ratings": null,
     "steamAppId": null,
     "psnStorePath": "concept/10010691",
-    "coverage": []
+    "coverage": [],
+    "storeId": 10010691,
+    "storeGenres": [
+      "Adventure"
+    ],
+    "storeRelease": "2024-12-10T17:00:00Z",
+    "plusIncluded": false
   },
   {
     "id": "sly-cooper-and-the-thievius-raccoonus",
@@ -19027,7 +20332,13 @@
     "ratings": null,
     "steamAppId": null,
     "psnStorePath": "concept/10010296",
-    "coverage": []
+    "coverage": [],
+    "storeId": 10010296,
+    "storeGenres": [
+      "Adventure"
+    ],
+    "storeRelease": "2024-06-11T15:00:00Z",
+    "plusIncluded": false
   },
   {
     "id": "persona-4-golden",
@@ -19068,7 +20379,13 @@
     "ratings": null,
     "steamAppId": null,
     "psnStorePath": "concept/10003382",
-    "coverage": []
+    "coverage": [],
+    "storeId": 10003382,
+    "storeGenres": [
+      "Role Playing Games"
+    ],
+    "storeRelease": "2023-01-19T05:00:00Z",
+    "plusIncluded": false
   },
   {
     "id": "until-then",
@@ -19102,7 +20419,13 @@
     "ratings": null,
     "steamAppId": null,
     "psnStorePath": "concept/10004486",
-    "coverage": []
+    "coverage": [],
+    "storeId": 10004486,
+    "storeGenres": [
+      "Adventure"
+    ],
+    "storeRelease": "2024-06-25T16:00:00Z",
+    "plusIncluded": false
   },
   {
     "id": "persona-3-reload",
@@ -19140,7 +20463,13 @@
     "ratings": null,
     "steamAppId": null,
     "psnStorePath": "concept/10001555",
-    "coverage": []
+    "coverage": [],
+    "storeId": 10001555,
+    "storeGenres": [
+      "Role Playing Games"
+    ],
+    "storeRelease": "2024-02-02T05:00:00Z",
+    "plusIncluded": false
   },
   {
     "id": "vampire-crawlers-the-turbo-wildcard-from-vampire",
@@ -19172,7 +20501,13 @@
     "ratings": null,
     "steamAppId": null,
     "psnStorePath": "concept/10015481",
-    "coverage": []
+    "coverage": [],
+    "storeId": 10015481,
+    "storeGenres": [
+      "Strategy"
+    ],
+    "storeRelease": "2026-04-21T16:00:00Z",
+    "plusIncluded": false
   },
   {
     "id": "vampire-survivors",
@@ -19206,7 +20541,14 @@
     "ratings": null,
     "steamAppId": null,
     "psnStorePath": "concept/10010458",
-    "coverage": []
+    "coverage": [],
+    "storeId": 10010458,
+    "storeGenres": [
+      "Action",
+      "Role Playing Games"
+    ],
+    "storeRelease": "2024-08-29T11:00:00Z",
+    "plusIncluded": true
   },
   {
     "id": "beamng-drive",
@@ -19235,7 +20577,14 @@
     "ratings": null,
     "steamAppId": null,
     "psnStorePath": "concept/10015321",
-    "coverage": []
+    "coverage": [],
+    "storeId": 10015321,
+    "storeGenres": [
+      "Simulation",
+      "Driving/Racing"
+    ],
+    "storeRelease": "2026-10-19T13:00:00Z",
+    "plusIncluded": false
   },
   {
     "id": "trails-in-the-sky-1st-chapter",
@@ -19270,7 +20619,13 @@
     "ratings": null,
     "steamAppId": null,
     "psnStorePath": "concept/10013078",
-    "coverage": []
+    "coverage": [],
+    "storeId": 10013078,
+    "storeGenres": [
+      "Role Playing Games"
+    ],
+    "storeRelease": "2025-09-19T07:00:00Z",
+    "plusIncluded": false
   },
   {
     "id": "final-fantasy-vi",
@@ -19306,7 +20661,13 @@
     "ratings": null,
     "steamAppId": null,
     "psnStorePath": "concept/10002344",
-    "coverage": []
+    "coverage": [],
+    "storeId": 10002344,
+    "storeGenres": [
+      "Role Playing Games"
+    ],
+    "storeRelease": "2023-04-19T15:00:00Z",
+    "plusIncluded": false
   },
   {
     "id": "final-fantasy-resonance",
@@ -19342,7 +20703,13 @@
     "ratings": null,
     "steamAppId": null,
     "psnStorePath": "concept/10015961",
-    "coverage": []
+    "coverage": [],
+    "storeId": 10015961,
+    "storeGenres": [
+      "Role Playing Games"
+    ],
+    "storeRelease": "2026-10-22T04:00:00Z",
+    "plusIncluded": false
   },
   {
     "id": "jak-and-daxter-the-precursor-legacy",
@@ -19376,7 +20743,13 @@
     "ratings": null,
     "steamAppId": null,
     "psnStorePath": "concept/10010137",
-    "coverage": []
+    "coverage": [],
+    "storeId": 10010137,
+    "storeGenres": [
+      "Adventure"
+    ],
+    "storeRelease": "2024-12-10T17:00:00Z",
+    "plusIncluded": false
   },
   {
     "id": "satisfactory",
@@ -19411,7 +20784,13 @@
     "ratings": null,
     "steamAppId": null,
     "psnStorePath": "concept/10008447",
-    "coverage": []
+    "coverage": [],
+    "storeId": 10008447,
+    "storeGenres": [
+      "Simulation"
+    ],
+    "storeRelease": "2025-11-04T13:00:00Z",
+    "plusIncluded": false
   },
   {
     "id": "stellar-blade-10006891",
@@ -19449,7 +20828,14 @@
     "ratings": null,
     "steamAppId": null,
     "psnStorePath": "concept/10006891",
-    "coverage": []
+    "coverage": [],
+    "storeId": 10006891,
+    "storeGenres": [
+      "Adventure",
+      "Action"
+    ],
+    "storeRelease": "2024-04-26T04:00:00Z",
+    "plusIncluded": false
   },
   {
     "id": "mass-effect-legendary-edition-10000606",
@@ -19490,7 +20876,14 @@
     "ratings": null,
     "steamAppId": null,
     "psnStorePath": "concept/10000606",
-    "coverage": []
+    "coverage": [],
+    "storeId": 10000606,
+    "storeGenres": [
+      "Unique",
+      "Role Playing Games"
+    ],
+    "storeRelease": "2021-05-14T04:00:00Z",
+    "plusIncluded": false
   },
   {
     "id": "poppy-playtime-chapter-5",
@@ -19522,7 +20915,15 @@
     "ratings": null,
     "steamAppId": null,
     "psnStorePath": "concept/10018882",
-    "coverage": []
+    "coverage": [],
+    "storeId": 10018882,
+    "storeGenres": [
+      "Puzzle",
+      "Horror",
+      "Adventure"
+    ],
+    "storeRelease": "2026-05-27T15:00:00Z",
+    "plusIncluded": false
   },
   {
     "id": "absolum",
@@ -19559,7 +20960,14 @@
     "ratings": null,
     "steamAppId": null,
     "psnStorePath": "concept/10014070",
-    "coverage": []
+    "coverage": [],
+    "storeId": 10014070,
+    "storeGenres": [
+      "Action",
+      "Adventure"
+    ],
+    "storeRelease": "2025-10-09T13:00:00Z",
+    "plusIncluded": false
   },
   {
     "id": "unicorn-overlord",
@@ -19595,7 +21003,13 @@
     "ratings": null,
     "steamAppId": null,
     "psnStorePath": "concept/10002780",
-    "coverage": []
+    "coverage": [],
+    "storeId": 10002780,
+    "storeGenres": [
+      "Role Playing Games"
+    ],
+    "storeRelease": "2024-03-08T05:00:00Z",
+    "plusIncluded": false
   },
   {
     "id": "grounded-2",
@@ -19631,7 +21045,13 @@
     "ratings": null,
     "steamAppId": null,
     "psnStorePath": "concept/10016651",
-    "coverage": []
+    "coverage": [],
+    "storeId": 10016651,
+    "storeGenres": [
+      "Adventure"
+    ],
+    "storeRelease": "2026-08-11T17:00:00Z",
+    "plusIncluded": false
   },
   {
     "id": "star-ocean-the-second-story-r",
@@ -19668,7 +21088,13 @@
     "ratings": null,
     "steamAppId": null,
     "psnStorePath": "concept/10007308",
-    "coverage": []
+    "coverage": [],
+    "storeId": 10007308,
+    "storeGenres": [
+      "Role Playing Games"
+    ],
+    "storeRelease": "2023-11-02T04:00:00Z",
+    "plusIncluded": false
   },
   {
     "id": "mouse-p-i-for-hire",
@@ -19703,7 +21129,14 @@
     "ratings": null,
     "steamAppId": null,
     "psnStorePath": "concept/10012945",
-    "coverage": []
+    "coverage": [],
+    "storeId": 10012945,
+    "storeGenres": [
+      "Adventure",
+      "Action"
+    ],
+    "storeRelease": "2026-04-16T15:00:00Z",
+    "plusIncluded": false
   },
   {
     "id": "digimon-story-time-stranger",
@@ -19739,7 +21172,13 @@
     "ratings": null,
     "steamAppId": null,
     "psnStorePath": "concept/10011861",
-    "coverage": []
+    "coverage": [],
+    "storeId": 10011861,
+    "storeGenres": [
+      "Role Playing Games"
+    ],
+    "storeRelease": "2025-10-03T04:00:00Z",
+    "plusIncluded": false
   },
   {
     "id": "fantasy-life-i-the-girl-who-steals-time-digital-",
@@ -19776,7 +21215,13 @@
     "ratings": null,
     "steamAppId": null,
     "psnStorePath": "concept/10013482",
-    "coverage": []
+    "coverage": [],
+    "storeId": 10013482,
+    "storeGenres": [
+      "Role Playing Games"
+    ],
+    "storeRelease": "2025-05-21T15:00:00Z",
+    "plusIncluded": false
   },
   {
     "id": "brotato",
@@ -19810,7 +21255,15 @@
     "ratings": null,
     "steamAppId": null,
     "psnStorePath": "concept/10007282",
-    "coverage": []
+    "coverage": [],
+    "storeId": 10007282,
+    "storeGenres": [
+      "Arcade",
+      "Action",
+      "Shooter"
+    ],
+    "storeRelease": "2024-01-30T05:00:00Z",
+    "plusIncluded": false
   },
   {
     "id": "resident-evil-2",
@@ -19848,7 +21301,14 @@
     "ratings": null,
     "steamAppId": null,
     "psnStorePath": "concept/10005150",
-    "coverage": []
+    "coverage": [],
+    "storeId": 10005150,
+    "storeGenres": [
+      "Horror",
+      "Action"
+    ],
+    "storeRelease": "2025-08-19T16:00:00Z",
+    "plusIncluded": false
   },
   {
     "id": "shin-megami-tensei-v-vengeance",
@@ -19888,7 +21348,13 @@
     "ratings": null,
     "steamAppId": null,
     "psnStorePath": "concept/10007941",
-    "coverage": []
+    "coverage": [],
+    "storeId": 10007941,
+    "storeGenres": [
+      "Role Playing Games"
+    ],
+    "storeRelease": "2024-06-14T04:00:00Z",
+    "plusIncluded": false
   },
   {
     "id": "resident-evil-3-nemesis",
@@ -19926,7 +21392,14 @@
     "ratings": null,
     "steamAppId": null,
     "psnStorePath": "concept/10005151",
-    "coverage": []
+    "coverage": [],
+    "storeId": 10005151,
+    "storeGenres": [
+      "Horror",
+      "Action"
+    ],
+    "storeRelease": "2025-08-19T16:00:00Z",
+    "plusIncluded": false
   },
   {
     "id": "spiritfarer-farewell-edition",
@@ -19963,7 +21436,16 @@
     "ratings": null,
     "steamAppId": null,
     "psnStorePath": "concept/10000752",
-    "coverage": []
+    "coverage": [],
+    "storeId": 10000752,
+    "storeGenres": [
+      "Action",
+      "Adventure",
+      "Simulation",
+      "Strategy"
+    ],
+    "storeRelease": "2020-08-18T04:00:00Z",
+    "plusIncluded": false
   },
   {
     "id": "final-fantasy-tactics-the-ivalice-chronicles-ps4",
@@ -20000,7 +21482,13 @@
     "ratings": null,
     "steamAppId": null,
     "psnStorePath": "concept/10008527",
-    "coverage": []
+    "coverage": [],
+    "storeId": 10008527,
+    "storeGenres": [
+      "Strategy"
+    ],
+    "storeRelease": "2025-09-30T04:00:00Z",
+    "plusIncluded": false
   },
   {
     "id": "romancing-saga-2-revenge-of-the-seven",
@@ -20036,7 +21524,13 @@
     "ratings": null,
     "steamAppId": null,
     "psnStorePath": "concept/10008428",
-    "coverage": []
+    "coverage": [],
+    "storeId": 10008428,
+    "storeGenres": [
+      "Role Playing Games"
+    ],
+    "storeRelease": "2024-10-24T04:00:00Z",
+    "plusIncluded": false
   },
   {
     "id": "the-legend-of-heroes-trails-through-daybreak",
@@ -20071,7 +21565,13 @@
     "ratings": null,
     "steamAppId": null,
     "psnStorePath": "concept/10001886",
-    "coverage": []
+    "coverage": [],
+    "storeId": 10001886,
+    "storeGenres": [
+      "Role Playing Games"
+    ],
+    "storeRelease": "2024-07-05T17:00:00Z",
+    "plusIncluded": false
   },
   {
     "id": "star-wars-republic-commando",
@@ -20107,7 +21607,15 @@
     "ratings": null,
     "steamAppId": null,
     "psnStorePath": "concept/10000469",
-    "coverage": []
+    "coverage": [],
+    "storeId": 10000469,
+    "storeGenres": [
+      "Shooter",
+      "Adventure",
+      "Action"
+    ],
+    "storeRelease": "2021-04-06T15:00:00Z",
+    "plusIncluded": false
   },
   {
     "id": "sword-of-the-sea",
@@ -20140,7 +21648,14 @@
     "ratings": null,
     "steamAppId": null,
     "psnStorePath": "concept/10011227",
-    "coverage": []
+    "coverage": [],
+    "storeId": 10011227,
+    "storeGenres": [
+      "Adventure",
+      "Action"
+    ],
+    "storeRelease": "2025-08-19T16:00:00Z",
+    "plusIncluded": true
   },
   {
     "id": "octopath-traveler-ii-ps4-ps5",
@@ -20177,7 +21692,13 @@
     "ratings": null,
     "steamAppId": null,
     "psnStorePath": "concept/10005126",
-    "coverage": []
+    "coverage": [],
+    "storeId": 10005126,
+    "storeGenres": [
+      "Role Playing Games"
+    ],
+    "storeRelease": "2023-02-24T05:00:00Z",
+    "plusIncluded": false
   },
   {
     "id": "like-a-dragon-infinite-wealth",
@@ -20216,7 +21737,13 @@
     "ratings": null,
     "steamAppId": null,
     "psnStorePath": "concept/10004462",
-    "coverage": []
+    "coverage": [],
+    "storeId": 10004462,
+    "storeGenres": [
+      "Role Playing Games"
+    ],
+    "storeRelease": "2024-01-26T05:00:00Z",
+    "plusIncluded": true
   },
   {
     "id": "tomb-raider-definitive-survivor-trilogy",
@@ -20259,7 +21786,14 @@
     "ratings": null,
     "steamAppId": null,
     "psnStorePath": "concept/10002774",
-    "coverage": []
+    "coverage": [],
+    "storeId": 10002774,
+    "storeGenres": [
+      "Adventure",
+      "Action"
+    ],
+    "storeRelease": "2021-03-18T04:00:00Z",
+    "plusIncluded": false
   },
   {
     "id": "ball-x-pit",
@@ -20291,7 +21825,14 @@
     "ratings": null,
     "steamAppId": null,
     "psnStorePath": "concept/10016190",
-    "coverage": []
+    "coverage": [],
+    "storeId": 10016190,
+    "storeGenres": [
+      "Arcade",
+      "Action"
+    ],
+    "storeRelease": "2025-10-15T16:00:00Z",
+    "plusIncluded": true
   },
   {
     "id": "cairn",
@@ -20325,7 +21866,15 @@
     "ratings": null,
     "steamAppId": null,
     "psnStorePath": "concept/10014085",
-    "coverage": []
+    "coverage": [],
+    "storeId": 10014085,
+    "storeGenres": [
+      "Sport",
+      "Simulation",
+      "Adventure"
+    ],
+    "storeRelease": "2026-01-29T17:00:00Z",
+    "plusIncluded": false
   },
   {
     "id": "crow-country",
@@ -20360,7 +21909,13 @@
     "ratings": null,
     "steamAppId": null,
     "psnStorePath": "concept/10009392",
-    "coverage": []
+    "coverage": [],
+    "storeId": 10009392,
+    "storeGenres": [
+      "Horror"
+    ],
+    "storeRelease": "2024-05-09T15:00:00Z",
+    "plusIncluded": true
   },
   {
     "id": "clive-barker-s-hellraiser-revival",
@@ -20401,7 +21956,13 @@
     "ratings": null,
     "steamAppId": null,
     "psnStorePath": "concept/10012313",
-    "coverage": []
+    "coverage": [],
+    "storeId": 10012313,
+    "storeGenres": [
+      "Horror"
+    ],
+    "storeRelease": "2026-10-08T12:00:00Z",
+    "plusIncluded": false
   },
   {
     "id": "like-a-dragon-gaiden-the-man-who-erased-his-name",
@@ -20440,7 +22001,14 @@
     "ratings": null,
     "steamAppId": null,
     "psnStorePath": "concept/10008306",
-    "coverage": []
+    "coverage": [],
+    "storeId": 10008306,
+    "storeGenres": [
+      "Adventure",
+      "Action"
+    ],
+    "storeRelease": "2023-11-09T05:00:00Z",
+    "plusIncluded": false
   },
   {
     "id": "kid-a-mnesia-exhibition",
@@ -20479,7 +22047,13 @@
     "ratings": null,
     "steamAppId": null,
     "psnStorePath": "concept/10003085",
-    "coverage": []
+    "coverage": [],
+    "storeId": 10003085,
+    "storeGenres": [
+      "Unique"
+    ],
+    "storeRelease": "2021-11-18T16:00:00Z",
+    "plusIncluded": false
   },
   {
     "id": "resonance-a-plague-tale-legacy",
@@ -20512,7 +22086,14 @@
     "ratings": null,
     "steamAppId": null,
     "psnStorePath": "concept/10015413",
-    "coverage": []
+    "coverage": [],
+    "storeId": 10015413,
+    "storeGenres": [
+      "Adventure",
+      "Action"
+    ],
+    "storeRelease": "2026-08-27T16:00:00Z",
+    "plusIncluded": false
   },
   {
     "id": "poppy-playtime-chapter-3",
@@ -20545,7 +22126,13 @@
     "ratings": null,
     "steamAppId": null,
     "psnStorePath": "concept/10010722",
-    "coverage": []
+    "coverage": [],
+    "storeId": 10010722,
+    "storeGenres": [
+      "Horror"
+    ],
+    "storeRelease": "2024-09-20T14:00:00Z",
+    "plusIncluded": false
   },
   {
     "id": "sea-of-stars-sunset-edition",
@@ -20581,7 +22168,14 @@
     "ratings": null,
     "steamAppId": null,
     "psnStorePath": "concept/10004226",
-    "coverage": []
+    "coverage": [],
+    "storeId": 10004226,
+    "storeGenres": [
+      "Role Playing Games",
+      "Adventure"
+    ],
+    "storeRelease": "2023-08-29T04:00:00Z",
+    "plusIncluded": false
   },
   {
     "id": "disco-elysium-the-final-cut",
@@ -20620,7 +22214,13 @@
     "ratings": null,
     "steamAppId": null,
     "psnStorePath": "concept/10002292",
-    "coverage": []
+    "coverage": [],
+    "storeId": 10002292,
+    "storeGenres": [
+      "Role Playing Games"
+    ],
+    "storeRelease": "2021-03-30T17:00:00Z",
+    "plusIncluded": false
   },
   {
     "id": "armored-core-vi-fires-of-rubicon",
@@ -20655,7 +22255,14 @@
     "ratings": null,
     "steamAppId": null,
     "psnStorePath": "concept/10001815",
-    "coverage": []
+    "coverage": [],
+    "storeId": 10001815,
+    "storeGenres": [
+      "Adventure",
+      "Action"
+    ],
+    "storeRelease": "2023-08-25T04:00:00Z",
+    "plusIncluded": false
   },
   {
     "id": "fatal-frame-maiden-of-black-water",
@@ -20690,7 +22297,13 @@
     "ratings": null,
     "steamAppId": null,
     "psnStorePath": "concept/10003261",
-    "coverage": []
+    "coverage": [],
+    "storeId": 10003261,
+    "storeGenres": [
+      "Horror"
+    ],
+    "storeRelease": "2021-10-28T04:00:00Z",
+    "plusIncluded": false
   },
   {
     "id": "the-alters",
@@ -20726,7 +22339,13 @@
     "ratings": null,
     "steamAppId": null,
     "psnStorePath": "concept/10008217",
-    "coverage": []
+    "coverage": [],
+    "storeId": 10008217,
+    "storeGenres": [
+      "Adventure"
+    ],
+    "storeRelease": "2025-06-13T12:00:00Z",
+    "plusIncluded": false
   },
   {
     "id": "daxter",
@@ -20762,7 +22381,13 @@
     "ratings": null,
     "steamAppId": null,
     "psnStorePath": "concept/10005947",
-    "coverage": []
+    "coverage": [],
+    "storeId": 10005947,
+    "storeGenres": [
+      "Adventure"
+    ],
+    "storeRelease": "2024-06-18T15:00:00Z",
+    "plusIncluded": false
   },
   {
     "id": "resident-evil-director-s-cut",
@@ -20798,7 +22423,14 @@
     "ratings": null,
     "steamAppId": null,
     "psnStorePath": "concept/10005142",
-    "coverage": []
+    "coverage": [],
+    "storeId": 10005142,
+    "storeGenres": [
+      "Horror",
+      "Action"
+    ],
+    "storeRelease": "2024-11-26T01:00:00Z",
+    "plusIncluded": false
   },
   {
     "id": "final-fantasy-vii-rebirth",
@@ -20833,7 +22465,13 @@
     "ratings": null,
     "steamAppId": null,
     "psnStorePath": "concept/10003999",
-    "coverage": []
+    "coverage": [],
+    "storeId": 10003999,
+    "storeGenres": [
+      "Role Playing Games"
+    ],
+    "storeRelease": "2024-02-29T05:00:00Z",
+    "plusIncluded": false
   },
   {
     "id": "the-midnight-walk",
@@ -20866,7 +22504,14 @@
     "ratings": null,
     "steamAppId": null,
     "psnStorePath": "concept/10009390",
-    "coverage": []
+    "coverage": [],
+    "storeId": 10009390,
+    "storeGenres": [
+      "Horror",
+      "Adventure"
+    ],
+    "storeRelease": "2025-05-08T04:00:00Z",
+    "plusIncluded": true
   },
   {
     "id": "ys-x-nordics",
@@ -20899,7 +22544,13 @@
     "ratings": null,
     "steamAppId": null,
     "psnStorePath": "concept/10007199",
-    "coverage": []
+    "coverage": [],
+    "storeId": 10007199,
+    "storeGenres": [
+      "Role Playing Games"
+    ],
+    "storeRelease": "2024-10-25T17:00:00Z",
+    "plusIncluded": false
   },
   {
     "id": "bendy-and-the-dark-revival",
@@ -20935,7 +22586,14 @@
     "ratings": null,
     "steamAppId": null,
     "psnStorePath": "concept/10006221",
-    "coverage": []
+    "coverage": [],
+    "storeId": 10013480,
+    "storeGenres": [
+      "Horror",
+      "Action"
+    ],
+    "storeRelease": "2025-07-11T17:00:00Z",
+    "plusIncluded": false
   },
   {
     "id": "life-is-strange-reunion",
@@ -20971,7 +22629,13 @@
     "ratings": null,
     "steamAppId": null,
     "psnStorePath": "concept/10013938",
-    "coverage": []
+    "coverage": [],
+    "storeId": 10013938,
+    "storeGenres": [
+      "Adventure"
+    ],
+    "storeRelease": "2026-03-26T16:00:00Z",
+    "plusIncluded": false
   },
   {
     "id": "crime-scene-cleaner",
@@ -21007,7 +22671,14 @@
     "ratings": null,
     "steamAppId": null,
     "psnStorePath": "concept/10014471",
-    "coverage": []
+    "coverage": [],
+    "storeId": 10014471,
+    "storeGenres": [
+      "Simulation",
+      "Action"
+    ],
+    "storeRelease": "2025-06-13T15:00:00Z",
+    "plusIncluded": false
   },
   {
     "id": "like-a-dragon-pirate-yakuza-in-hawaii",
@@ -21043,7 +22714,14 @@
     "ratings": null,
     "steamAppId": null,
     "psnStorePath": "concept/10011704",
-    "coverage": []
+    "coverage": [],
+    "storeId": 10011704,
+    "storeGenres": [
+      "Adventure",
+      "Action"
+    ],
+    "storeRelease": "2025-02-21T05:00:00Z",
+    "plusIncluded": false
   },
   {
     "id": "monster-hunter-stories-3-twisted-reflection",
@@ -21077,7 +22755,13 @@
     "ratings": null,
     "steamAppId": null,
     "psnStorePath": "concept/10013075",
-    "coverage": []
+    "coverage": [],
+    "storeId": 10013075,
+    "storeGenres": [
+      "Role Playing Games"
+    ],
+    "storeRelease": "2026-03-13T04:00:00Z",
+    "plusIncluded": false
   },
   {
     "id": "thank-goodness-you-re-here",
@@ -21111,7 +22795,15 @@
     "ratings": null,
     "steamAppId": null,
     "psnStorePath": "concept/10007988",
-    "coverage": []
+    "coverage": [],
+    "storeId": 10007988,
+    "storeGenres": [
+      "Action",
+      "Adventure",
+      "Adult"
+    ],
+    "storeRelease": "2024-08-01T16:00:00Z",
+    "plusIncluded": true
   },
   {
     "id": "killer-frequency",
@@ -21144,7 +22836,14 @@
     "ratings": null,
     "steamAppId": null,
     "psnStorePath": "concept/10005847",
-    "coverage": []
+    "coverage": [],
+    "storeId": 10005847,
+    "storeGenres": [
+      "Adventure",
+      "Horror"
+    ],
+    "storeRelease": "2023-06-01T04:00:00Z",
+    "plusIncluded": true
   },
   {
     "id": "the-forgotten-city",
@@ -21179,7 +22878,13 @@
     "ratings": null,
     "steamAppId": null,
     "psnStorePath": "concept/10002458",
-    "coverage": []
+    "coverage": [],
+    "storeId": 10002458,
+    "storeGenres": [
+      "Adventure"
+    ],
+    "storeRelease": "2021-07-28T07:30:00Z",
+    "plusIncluded": true
   },
   {
     "id": "tokyo-xtreme-racer",
@@ -21210,7 +22915,14 @@
     "ratings": null,
     "steamAppId": null,
     "psnStorePath": "concept/10016323",
-    "coverage": []
+    "coverage": [],
+    "storeId": 10016323,
+    "storeGenres": [
+      "Role Playing Games",
+      "Driving/Racing"
+    ],
+    "storeRelease": "2026-02-25T15:00:00Z",
+    "plusIncluded": false
   },
   {
     "id": "mixtape",
@@ -21247,7 +22959,13 @@
     "ratings": null,
     "steamAppId": null,
     "psnStorePath": "concept/10014780",
-    "coverage": []
+    "coverage": [],
+    "storeId": 10014780,
+    "storeGenres": [
+      "Adventure"
+    ],
+    "storeRelease": "2026-05-07T13:00:00Z",
+    "plusIncluded": false
   },
   {
     "id": "jurassic-world-evolution-3",
@@ -21283,7 +23001,14 @@
     "ratings": null,
     "steamAppId": null,
     "psnStorePath": "concept/10012067",
-    "coverage": []
+    "coverage": [],
+    "storeId": 10012067,
+    "storeGenres": [
+      "Strategy",
+      "Simulation"
+    ],
+    "storeRelease": "2025-10-21T14:00:00Z",
+    "plusIncluded": false
   },
   {
     "id": "poppy-playtime-chapter-4",
@@ -21316,7 +23041,15 @@
     "ratings": null,
     "steamAppId": null,
     "psnStorePath": "concept/10012036",
-    "coverage": []
+    "coverage": [],
+    "storeId": 10012036,
+    "storeGenres": [
+      "Puzzle",
+      "Horror",
+      "Adventure"
+    ],
+    "storeRelease": "2025-06-25T15:00:00Z",
+    "plusIncluded": false
   },
   {
     "id": "warhammer-40-000-rogue-trader",
@@ -21354,7 +23087,13 @@
     "ratings": null,
     "steamAppId": null,
     "psnStorePath": "concept/10008102",
-    "coverage": []
+    "coverage": [],
+    "storeId": 10008102,
+    "storeGenres": [
+      "Role Playing Games"
+    ],
+    "storeRelease": "2023-12-07T16:00:00Z",
+    "plusIncluded": false
   },
   {
     "id": "007-first-light",
@@ -21390,7 +23129,14 @@
     "ratings": null,
     "steamAppId": null,
     "psnStorePath": "concept/10006560",
-    "coverage": []
+    "coverage": [],
+    "storeId": 10006560,
+    "storeGenres": [
+      "Adventure",
+      "Action"
+    ],
+    "storeRelease": "2026-05-26T14:00:00Z",
+    "plusIncluded": false
   },
   {
     "id": "abiotic-factor",
@@ -21429,7 +23175,13 @@
     "ratings": null,
     "steamAppId": null,
     "psnStorePath": "concept/10012483",
-    "coverage": []
+    "coverage": [],
+    "storeId": 10012483,
+    "storeGenres": [
+      "Adventure"
+    ],
+    "storeRelease": "2025-07-22T16:00:00Z",
+    "plusIncluded": true
   },
   {
     "id": "big-walk",
@@ -21463,7 +23215,13 @@
     "ratings": null,
     "steamAppId": null,
     "psnStorePath": "concept/10017189",
-    "coverage": []
+    "coverage": [],
+    "storeId": 10017189,
+    "storeGenres": [
+      "Adventure"
+    ],
+    "storeRelease": "2026-08-04T13:00:00Z",
+    "plusIncluded": false
   },
   {
     "id": "assassin-s-creed-black-flag-resynced",
@@ -21503,7 +23261,14 @@
     "ratings": null,
     "steamAppId": null,
     "psnStorePath": "concept/10013987",
-    "coverage": []
+    "coverage": [],
+    "storeId": 10013987,
+    "storeGenres": [
+      "Adventure",
+      "Action"
+    ],
+    "storeRelease": "2026-07-09T04:00:00Z",
+    "plusIncluded": false
   },
   {
     "id": "the-blood-of-dawnwalker",
@@ -21543,7 +23308,13 @@
     "ratings": null,
     "steamAppId": null,
     "psnStorePath": "concept/10013855",
-    "coverage": []
+    "coverage": [],
+    "storeId": 10013855,
+    "storeGenres": [
+      "Adventure"
+    ],
+    "storeRelease": "2026-09-03T04:00:00Z",
+    "plusIncluded": false
   },
   {
     "id": "kingdom-come-deliverance-ii-royal-edition",
@@ -21586,7 +23357,13 @@
     "ratings": null,
     "steamAppId": null,
     "psnStorePath": "concept/10006210",
-    "coverage": []
+    "coverage": [],
+    "storeId": 10006210,
+    "storeGenres": [
+      "Role Playing Games"
+    ],
+    "storeRelease": "2025-02-04T16:00:00Z",
+    "plusIncluded": false
   },
   {
     "id": "signalis",
@@ -21621,7 +23398,14 @@
     "ratings": null,
     "steamAppId": null,
     "psnStorePath": "concept/10005369",
-    "coverage": []
+    "coverage": [],
+    "storeId": 10005369,
+    "storeGenres": [
+      "Horror",
+      "Adventure"
+    ],
+    "storeRelease": "2022-10-27T16:00:00Z",
+    "plusIncluded": false
   },
   {
     "id": "doki-doki-literature-club-plus",
@@ -21657,7 +23441,14 @@
     "ratings": null,
     "steamAppId": null,
     "psnStorePath": "concept/10002895",
-    "coverage": []
+    "coverage": [],
+    "storeId": 10002895,
+    "storeGenres": [
+      "Adventure",
+      "Horror"
+    ],
+    "storeRelease": "2021-06-30T16:00:00Z",
+    "plusIncluded": false
   },
   {
     "id": "nier-replicant-ver-1-22474487139",
@@ -21693,7 +23484,13 @@
     "ratings": null,
     "steamAppId": null,
     "psnStorePath": "concept/10000272",
-    "coverage": []
+    "coverage": [],
+    "storeId": 10000272,
+    "storeGenres": [
+      "Role Playing Games"
+    ],
+    "storeRelease": "2021-04-23T04:00:00Z",
+    "plusIncluded": false
   },
   {
     "id": "hellblade-senua-s-sacrifice",
@@ -21732,7 +23529,13 @@
     "ratings": null,
     "steamAppId": null,
     "psnStorePath": "concept/10013503",
-    "coverage": []
+    "coverage": [],
+    "storeId": 10013503,
+    "storeGenres": [
+      "Adventure"
+    ],
+    "storeRelease": "2025-08-12T08:00:00Z",
+    "plusIncluded": false
   },
   {
     "id": "five-nights-at-freddy-s-secret-of-the-mimic",
@@ -21763,7 +23566,13 @@
     "ratings": null,
     "steamAppId": null,
     "psnStorePath": "concept/10012344",
-    "coverage": []
+    "coverage": [],
+    "storeId": 10012344,
+    "storeGenres": [
+      "Horror"
+    ],
+    "storeRelease": "2025-06-13T17:00:00Z",
+    "plusIncluded": false
   },
   {
     "id": "the-lord-of-the-rings-war-in-the-north-legacy-ed",
@@ -21803,7 +23612,14 @@
     "ratings": null,
     "steamAppId": null,
     "psnStorePath": "concept/10010865",
-    "coverage": []
+    "coverage": [],
+    "storeId": 10010865,
+    "storeGenres": [
+      "Role Playing Games",
+      "Action"
+    ],
+    "storeRelease": "2026-08-11T16:00:00Z",
+    "plusIncluded": false
   },
   {
     "id": "indiana-jones-and-the-great-circle",
@@ -21841,7 +23657,13 @@
     "ratings": null,
     "steamAppId": null,
     "psnStorePath": "concept/10012238",
-    "coverage": []
+    "coverage": [],
+    "storeId": 10012238,
+    "storeGenres": [
+      "Adventure"
+    ],
+    "storeRelease": "2025-04-17T00:00:00Z",
+    "plusIncluded": false
   },
   {
     "id": "fears-to-fathom-ironbark-lookout",
@@ -21877,7 +23699,13 @@
     "ratings": null,
     "steamAppId": null,
     "psnStorePath": "concept/10011662",
-    "coverage": []
+    "coverage": [],
+    "storeId": 10011662,
+    "storeGenres": [
+      "Horror"
+    ],
+    "storeRelease": "2024-10-25T16:00:00Z",
+    "plusIncluded": false
   },
   {
     "id": "escape-the-backrooms",
@@ -21915,7 +23743,14 @@
     "ratings": null,
     "steamAppId": null,
     "psnStorePath": "concept/10010992",
-    "coverage": []
+    "coverage": [],
+    "storeId": 10010992,
+    "storeGenres": [
+      "Horror",
+      "Puzzle"
+    ],
+    "storeRelease": "2026-05-28T11:00:00Z",
+    "plusIncluded": false
   },
   {
     "id": "lies-of-p",
@@ -21947,7 +23782,14 @@
     "ratings": null,
     "steamAppId": null,
     "psnStorePath": "concept/10006052",
-    "coverage": []
+    "coverage": [],
+    "storeId": 10006052,
+    "storeGenres": [
+      "Role Playing Games",
+      "Action"
+    ],
+    "storeRelease": "2023-09-19T04:00:00Z",
+    "plusIncluded": false
   },
   {
     "id": "the-adventures-of-elliot-the-millennium-tales",
@@ -21983,7 +23825,14 @@
     "ratings": null,
     "steamAppId": null,
     "psnStorePath": "concept/10007935",
-    "coverage": []
+    "coverage": [],
+    "storeId": 10007935,
+    "storeGenres": [
+      "Action",
+      "Role Playing Games"
+    ],
+    "storeRelease": "2026-06-18T04:00:00Z",
+    "plusIncluded": false
   },
   {
     "id": "the-talos-principle-2",
@@ -22015,7 +23864,14 @@
     "ratings": null,
     "steamAppId": null,
     "psnStorePath": "concept/10004172",
-    "coverage": []
+    "coverage": [],
+    "storeId": 10004172,
+    "storeGenres": [
+      "Puzzle",
+      "Adventure"
+    ],
+    "storeRelease": "2023-11-02T16:00:00Z",
+    "plusIncluded": true
   },
   {
     "id": "superliminal",
@@ -22046,7 +23902,14 @@
     "ratings": null,
     "steamAppId": null,
     "psnStorePath": "concept/10000602",
-    "coverage": []
+    "coverage": [],
+    "storeId": 10000602,
+    "storeGenres": [
+      "Puzzle",
+      "Shooter"
+    ],
+    "storeRelease": "2022-11-21T05:00:00Z",
+    "plusIncluded": false
   },
   {
     "id": "endling-extinction-is-forever",
@@ -22078,7 +23941,13 @@
     "ratings": null,
     "steamAppId": null,
     "psnStorePath": "concept/10001440",
-    "coverage": []
+    "coverage": [],
+    "storeId": 10001440,
+    "storeGenres": [
+      "Adventure"
+    ],
+    "storeRelease": "2022-11-03T14:00:00Z",
+    "plusIncluded": false
   },
   {
     "id": "until-dawn-10007897",
@@ -22116,7 +23985,13 @@
     "ratings": null,
     "steamAppId": null,
     "psnStorePath": "concept/10007897",
-    "coverage": []
+    "coverage": [],
+    "storeId": 10007897,
+    "storeGenres": [
+      "Horror"
+    ],
+    "storeRelease": "2024-10-04T04:00:00Z",
+    "plusIncluded": true
   },
   {
     "id": "the-walking-dead-saints-sinners",
@@ -22153,7 +24028,14 @@
     "ratings": null,
     "steamAppId": null,
     "psnStorePath": "concept/10007284",
-    "coverage": []
+    "coverage": [],
+    "storeId": 10007284,
+    "storeGenres": [
+      "Horror",
+      "Action"
+    ],
+    "storeRelease": "2023-03-21T17:00:00Z",
+    "plusIncluded": false
   },
   {
     "id": "cocoon",
@@ -22186,7 +24068,13 @@
     "ratings": null,
     "steamAppId": null,
     "psnStorePath": "concept/10005446",
-    "coverage": []
+    "coverage": [],
+    "storeId": 10005446,
+    "storeGenres": [
+      "Adventure"
+    ],
+    "storeRelease": "2023-09-29T16:00:00Z",
+    "plusIncluded": false
   },
   {
     "id": "far-changing-tides",
@@ -22215,7 +24103,14 @@
     "ratings": null,
     "steamAppId": null,
     "psnStorePath": "concept/10002934",
-    "coverage": []
+    "coverage": [],
+    "storeId": 10002934,
+    "storeGenres": [
+      "Action",
+      "Adventure"
+    ],
+    "storeRelease": "2022-03-01T05:00:00Z",
+    "plusIncluded": true
   },
   {
     "id": "lost-in-random",
@@ -22250,7 +24145,13 @@
     "ratings": null,
     "steamAppId": null,
     "psnStorePath": "concept/10000653",
-    "coverage": []
+    "coverage": [],
+    "storeId": 10000653,
+    "storeGenres": [
+      "Adventure"
+    ],
+    "storeRelease": "2021-09-10T09:00:00Z",
+    "plusIncluded": false
   },
   {
     "id": "chrono-cross-the-radical-dreamers-edition",
@@ -22286,7 +24187,13 @@
     "ratings": null,
     "steamAppId": null,
     "psnStorePath": "concept/10001136",
-    "coverage": []
+    "coverage": [],
+    "storeId": 10001136,
+    "storeGenres": [
+      "Role Playing Games"
+    ],
+    "storeRelease": "2022-04-07T04:00:00Z",
+    "plusIncluded": false
   },
   {
     "id": "poppy-playtime-chapter-2",
@@ -22318,7 +24225,13 @@
     "ratings": null,
     "steamAppId": null,
     "psnStorePath": "concept/10010437",
-    "coverage": []
+    "coverage": [],
+    "storeId": 10010437,
+    "storeGenres": [
+      "Horror"
+    ],
+    "storeRelease": "2024-09-20T14:00:00Z",
+    "plusIncluded": false
   },
   {
     "id": "the-first-berserker-khazan-standard-edition",
@@ -22351,7 +24264,14 @@
     "ratings": null,
     "steamAppId": null,
     "psnStorePath": "concept/10009937",
-    "coverage": []
+    "coverage": [],
+    "storeId": 10009937,
+    "storeGenres": [
+      "Action",
+      "Role Playing Games"
+    ],
+    "storeRelease": "2025-03-27T15:00:00Z",
+    "plusIncluded": false
   },
   {
     "id": "dragon-quest-vii-reimagined",
@@ -22389,7 +24309,13 @@
     "ratings": null,
     "steamAppId": null,
     "psnStorePath": "concept/10008842",
-    "coverage": []
+    "coverage": [],
+    "storeId": 10008842,
+    "storeGenres": [
+      "Role Playing Games"
+    ],
+    "storeRelease": "2026-02-05T05:00:00Z",
+    "plusIncluded": false
   },
   {
     "id": "tormented-souls",
@@ -22427,7 +24353,13 @@
     "ratings": null,
     "steamAppId": null,
     "psnStorePath": "concept/10002062",
-    "coverage": []
+    "coverage": [],
+    "storeId": 10002062,
+    "storeGenres": [
+      "Horror"
+    ],
+    "storeRelease": "2021-08-27T11:00:00Z",
+    "plusIncluded": false
   },
   {
     "id": "broken-sword-shadow-of-the-templars-reforged",
@@ -22465,7 +24397,13 @@
     "ratings": null,
     "steamAppId": null,
     "psnStorePath": "concept/10008760",
-    "coverage": []
+    "coverage": [],
+    "storeId": 10008760,
+    "storeGenres": [
+      "Adventure"
+    ],
+    "storeRelease": "2024-09-19T04:00:00Z",
+    "plusIncluded": true
   },
   {
     "id": "cronos-the-new-dawn",
@@ -22501,7 +24439,13 @@
     "ratings": null,
     "steamAppId": null,
     "psnStorePath": "concept/10011556",
-    "coverage": []
+    "coverage": [],
+    "storeId": 10011556,
+    "storeGenres": [
+      "Horror"
+    ],
+    "storeRelease": "2025-09-05T14:00:00Z",
+    "plusIncluded": false
   },
   {
     "id": "the-outlast-trials",
@@ -22546,7 +24490,13 @@
     "ratings": null,
     "steamAppId": null,
     "psnStorePath": "concept/10001988",
-    "coverage": []
+    "coverage": [],
+    "storeId": 10001988,
+    "storeGenres": [
+      "Horror"
+    ],
+    "storeRelease": "2024-03-05T15:00:00Z",
+    "plusIncluded": false
   },
   {
     "id": "alien-rogue-incursion-vr",
@@ -22582,7 +24532,15 @@
     "ratings": null,
     "steamAppId": null,
     "psnStorePath": "concept/10004478",
-    "coverage": []
+    "coverage": [],
+    "storeId": 10004478,
+    "storeGenres": [
+      "Action",
+      "Shooter",
+      "Horror"
+    ],
+    "storeRelease": "2024-12-19T15:00:00Z",
+    "plusIncluded": false
   },
   {
     "id": "monster-hunter-stories-2-wings-of-ruin",
@@ -22620,7 +24578,13 @@
     "ratings": null,
     "steamAppId": null,
     "psnStorePath": "concept/10007583",
-    "coverage": []
+    "coverage": [],
+    "storeId": 10007583,
+    "storeGenres": [
+      "Role Playing Games"
+    ],
+    "storeRelease": "2024-06-14T04:00:00Z",
+    "plusIncluded": true
   },
   {
     "id": "the-last-faith",
@@ -22656,7 +24620,15 @@
     "ratings": null,
     "steamAppId": null,
     "psnStorePath": "concept/10005554",
-    "coverage": []
+    "coverage": [],
+    "storeId": 10005554,
+    "storeGenres": [
+      "Adventure",
+      "Action",
+      "Role Playing Games"
+    ],
+    "storeRelease": "2023-11-15T15:00:00Z",
+    "plusIncluded": false
   },
   {
     "id": "teardown",
@@ -22689,7 +24661,15 @@
     "ratings": null,
     "steamAppId": null,
     "psnStorePath": "concept/10007904",
-    "coverage": []
+    "coverage": [],
+    "storeId": 10007904,
+    "storeGenres": [
+      "Simulation",
+      "Strategy",
+      "Action"
+    ],
+    "storeRelease": "2023-11-15T13:00:00Z",
+    "plusIncluded": false
   },
   {
     "id": "bramble-the-mountain-king",
@@ -22728,7 +24708,13 @@
     "ratings": null,
     "steamAppId": null,
     "psnStorePath": "concept/10004805",
-    "coverage": []
+    "coverage": [],
+    "storeId": 10004805,
+    "storeGenres": [
+      "Adventure"
+    ],
+    "storeRelease": "2023-04-27T04:00:00Z",
+    "plusIncluded": true
   },
   {
     "id": "visage",
@@ -22765,7 +24751,13 @@
     "ratings": null,
     "steamAppId": null,
     "psnStorePath": "concept/10001581",
-    "coverage": []
+    "coverage": [],
+    "storeId": 10001581,
+    "storeGenres": [
+      "Horror"
+    ],
+    "storeRelease": "2021-11-11T05:00:00Z",
+    "plusIncluded": false
   },
   {
     "id": "south-of-midnight-weaver-s-edition",
@@ -22800,7 +24792,14 @@
     "ratings": null,
     "steamAppId": null,
     "psnStorePath": "concept/10014874",
-    "coverage": []
+    "coverage": [],
+    "storeId": 10014874,
+    "storeGenres": [
+      "Adventure",
+      "Action"
+    ],
+    "storeRelease": "2026-03-31T17:00:00Z",
+    "plusIncluded": false
   },
   {
     "id": "star-wars-zero-company",
@@ -22832,7 +24831,13 @@
     "ratings": null,
     "steamAppId": null,
     "psnStorePath": "concept/10009029",
-    "coverage": []
+    "coverage": [],
+    "storeId": 10009029,
+    "storeGenres": [
+      "Strategy"
+    ],
+    "storeRelease": "2026-08-27T15:00:00Z",
+    "plusIncluded": false
   },
   {
     "id": "7-days-to-die-console-edition",
@@ -22875,7 +24880,15 @@
     "ratings": null,
     "steamAppId": null,
     "psnStorePath": "concept/10008451",
-    "coverage": []
+    "coverage": [],
+    "storeId": 10008451,
+    "storeGenres": [
+      "Action",
+      "Simulation",
+      "Role Playing Games"
+    ],
+    "storeRelease": "2024-07-25T17:00:00Z",
+    "plusIncluded": false
   },
   {
     "id": "medieval-dynasty",
@@ -22912,7 +24925,15 @@
     "ratings": null,
     "steamAppId": null,
     "psnStorePath": "concept/10005204",
-    "coverage": []
+    "coverage": [],
+    "storeId": 10005204,
+    "storeGenres": [
+      "Simulation",
+      "Role Playing Games",
+      "Adventure"
+    ],
+    "storeRelease": "2022-10-06T10:00:00Z",
+    "plusIncluded": false
   },
   {
     "id": "still-wakes-the-deep",
@@ -22949,7 +24970,15 @@
     "ratings": null,
     "steamAppId": null,
     "psnStorePath": "concept/10005163",
-    "coverage": []
+    "coverage": [],
+    "storeId": 10005163,
+    "storeGenres": [
+      "Adventure",
+      "Action",
+      "Horror"
+    ],
+    "storeRelease": "2024-06-18T09:00:00Z",
+    "plusIncluded": true
   },
   {
     "id": "untitled-goose-game",
@@ -22981,7 +25010,15 @@
     "ratings": null,
     "steamAppId": null,
     "psnStorePath": "concept/10000039",
-    "coverage": []
+    "coverage": [],
+    "storeId": 10000039,
+    "storeGenres": [
+      "Action",
+      "Puzzle",
+      "Family"
+    ],
+    "storeRelease": "2019-12-17T05:00:00Z",
+    "plusIncluded": true
   },
   {
     "id": "contra-operation-galuga",
@@ -23016,7 +25053,15 @@
     "ratings": null,
     "steamAppId": null,
     "psnStorePath": "concept/10007962",
-    "coverage": []
+    "coverage": [],
+    "storeId": 10007962,
+    "storeGenres": [
+      "Shooter",
+      "Arcade",
+      "Action"
+    ],
+    "storeRelease": "2024-03-12T07:00:00Z",
+    "plusIncluded": false
   },
   {
     "id": "s-t-a-l-k-e-r-2-heart-of-chornobyl",
@@ -23053,7 +25098,16 @@
     "ratings": null,
     "steamAppId": null,
     "psnStorePath": "concept/10014084",
-    "coverage": []
+    "coverage": [],
+    "storeId": 10014084,
+    "storeGenres": [
+      "Adventure",
+      "Shooter",
+      "Horror",
+      "Action"
+    ],
+    "storeRelease": "2025-11-20T12:00:00Z",
+    "plusIncluded": false
   },
   {
     "id": "nioh-3",
@@ -23091,7 +25145,14 @@
     "ratings": null,
     "steamAppId": null,
     "psnStorePath": "concept/10014010",
-    "coverage": []
+    "coverage": [],
+    "storeId": 10014010,
+    "storeGenres": [
+      "Role Playing Games",
+      "Action"
+    ],
+    "storeRelease": "2026-02-06T05:00:00Z",
+    "plusIncluded": false
   },
   {
     "id": "the-elder-scrolls-iv-oblivion-remastered",
@@ -23131,7 +25192,13 @@
     "ratings": null,
     "steamAppId": null,
     "psnStorePath": "concept/10010248",
-    "coverage": []
+    "coverage": [],
+    "storeId": 10010248,
+    "storeGenres": [
+      "Role Playing Games"
+    ],
+    "storeRelease": "2025-04-22T15:00:00Z",
+    "plusIncluded": false
   },
   {
     "id": "viewfinder",
@@ -23164,7 +25231,13 @@
     "ratings": null,
     "steamAppId": null,
     "psnStorePath": "concept/10006160",
-    "coverage": []
+    "coverage": [],
+    "storeId": 10006160,
+    "storeGenres": [
+      "Adventure"
+    ],
+    "storeRelease": "2023-07-18T13:00:00Z",
+    "plusIncluded": false
   },
   {
     "id": "mandragora-whispers-of-the-witch-tree",
@@ -23200,7 +25273,14 @@
     "ratings": null,
     "steamAppId": null,
     "psnStorePath": "concept/10004736",
-    "coverage": []
+    "coverage": [],
+    "storeId": 10004736,
+    "storeGenres": [
+      "Role Playing Games",
+      "Action"
+    ],
+    "storeRelease": "2025-04-17T07:00:00Z",
+    "plusIncluded": false
   },
   {
     "id": "crisis-core-final-fantasy-vii-reunion",
@@ -23234,7 +25314,14 @@
     "ratings": null,
     "steamAppId": null,
     "psnStorePath": "concept/10004142",
-    "coverage": []
+    "coverage": [],
+    "storeId": 10004142,
+    "storeGenres": [
+      "Role Playing Games",
+      "Action"
+    ],
+    "storeRelease": "2022-12-13T05:00:00Z",
+    "plusIncluded": false
   },
   {
     "id": "nobody-saves-the-world",
@@ -23271,7 +25358,13 @@
     "ratings": null,
     "steamAppId": null,
     "psnStorePath": "concept/10000853",
-    "coverage": []
+    "coverage": [],
+    "storeId": 10000853,
+    "storeGenres": [
+      "Adventure"
+    ],
+    "storeRelease": "2022-04-14T13:00:00Z",
+    "plusIncluded": false
   },
   {
     "id": "honkai-star-rail",
@@ -23307,7 +25400,14 @@
     "ratings": null,
     "steamAppId": null,
     "psnStorePath": "concept/10005275",
-    "coverage": []
+    "coverage": [],
+    "storeId": 10005275,
+    "storeGenres": [
+      "Adventure",
+      "Role Playing Games"
+    ],
+    "storeRelease": "2023-10-10T22:00:00Z",
+    "plusIncluded": false
   },
   {
     "id": "choo-choo-charles",
@@ -23339,7 +25439,13 @@
     "ratings": null,
     "steamAppId": null,
     "psnStorePath": "concept/10008639",
-    "coverage": []
+    "coverage": [],
+    "storeId": 10008639,
+    "storeGenres": [
+      "Horror"
+    ],
+    "storeRelease": "2023-12-21T14:00:00Z",
+    "plusIncluded": false
   },
   {
     "id": "octopath-traveler-ps4-ps5",
@@ -23377,7 +25483,13 @@
     "ratings": null,
     "steamAppId": null,
     "psnStorePath": "concept/10009066",
-    "coverage": []
+    "coverage": [],
+    "storeId": 10009066,
+    "storeGenres": [
+      "Role Playing Games"
+    ],
+    "storeRelease": "2024-06-06T00:00:00Z",
+    "plusIncluded": false
   },
   {
     "id": "high-on-life",
@@ -23417,7 +25529,14 @@
     "ratings": null,
     "steamAppId": null,
     "psnStorePath": "concept/10007961",
-    "coverage": []
+    "coverage": [],
+    "storeId": 10007961,
+    "storeGenres": [
+      "Shooter",
+      "Adventure"
+    ],
+    "storeRelease": "2023-07-22T23:00:00Z",
+    "plusIncluded": false
   },
   {
     "id": "poppy-playtime-chapter-1",
@@ -23449,7 +25568,13 @@
     "ratings": null,
     "steamAppId": null,
     "psnStorePath": "concept/10009028",
-    "coverage": []
+    "coverage": [],
+    "storeId": 10009028,
+    "storeGenres": [
+      "Horror"
+    ],
+    "storeRelease": "2023-12-20T15:00:00Z",
+    "plusIncluded": true
   },
   {
     "id": "goat-simulator-3",
@@ -23484,7 +25609,14 @@
     "ratings": null,
     "steamAppId": null,
     "psnStorePath": "concept/10003123",
-    "coverage": []
+    "coverage": [],
+    "storeId": 10003123,
+    "storeGenres": [
+      "Simulation",
+      "Adventure"
+    ],
+    "storeRelease": "2022-11-17T05:00:00Z",
+    "plusIncluded": false
   },
   {
     "id": "jurassic-world-evolution-2",
@@ -23516,7 +25648,14 @@
     "ratings": null,
     "steamAppId": null,
     "psnStorePath": "concept/10002577",
-    "coverage": []
+    "coverage": [],
+    "storeId": 10002577,
+    "storeGenres": [
+      "Strategy",
+      "Simulation"
+    ],
+    "storeRelease": "2021-11-09T14:00:00Z",
+    "plusIncluded": false
   },
   {
     "id": "darwin-s-paradox",
@@ -23551,7 +25690,13 @@
     "ratings": null,
     "steamAppId": null,
     "psnStorePath": "concept/10014258",
-    "coverage": []
+    "coverage": [],
+    "storeId": 10014258,
+    "storeGenres": [
+      "Adventure"
+    ],
+    "storeRelease": "2026-04-02T07:00:00Z",
+    "plusIncluded": false
   },
   {
     "id": "lost-records-bloom-rage",
@@ -23590,7 +25735,13 @@
     "ratings": null,
     "steamAppId": null,
     "psnStorePath": "concept/10009639",
-    "coverage": []
+    "coverage": [],
+    "storeId": 10009639,
+    "storeGenres": [
+      "Adventure"
+    ],
+    "storeRelease": "2025-02-18T14:00:00Z",
+    "plusIncluded": false
   },
   {
     "id": "metro-awakening",
@@ -23625,7 +25776,15 @@
     "ratings": null,
     "steamAppId": null,
     "psnStorePath": "concept/10009509",
-    "coverage": []
+    "coverage": [],
+    "storeId": 10009509,
+    "storeGenres": [
+      "Shooter",
+      "Adventure",
+      "Action"
+    ],
+    "storeRelease": "2024-11-07T17:00:00Z",
+    "plusIncluded": false
   },
   {
     "id": "zenless-zone-zero",
@@ -23662,7 +25821,14 @@
     "ratings": null,
     "steamAppId": null,
     "psnStorePath": "concept/10009763",
-    "coverage": []
+    "coverage": [],
+    "storeId": 10009763,
+    "storeGenres": [
+      "Action",
+      "Role Playing Games"
+    ],
+    "storeRelease": "2024-07-04T02:00:00Z",
+    "plusIncluded": false
   },
   {
     "id": "horizon-call-of-the-mountain",
@@ -23694,7 +25860,14 @@
     "ratings": null,
     "steamAppId": null,
     "psnStorePath": "concept/10004029",
-    "coverage": []
+    "coverage": [],
+    "storeId": 10004029,
+    "storeGenres": [
+      "Action",
+      "Adventure"
+    ],
+    "storeRelease": "2023-02-22T05:00:00Z",
+    "plusIncluded": false
   },
   {
     "id": "nobody-wants-to-die",
@@ -23731,7 +25904,13 @@
     "ratings": null,
     "steamAppId": null,
     "psnStorePath": "concept/10003635",
-    "coverage": []
+    "coverage": [],
+    "storeId": 10003635,
+    "storeGenres": [
+      "Adventure"
+    ],
+    "storeRelease": "2024-07-17T04:00:00Z",
+    "plusIncluded": false
   },
   {
     "id": "copycat",
@@ -23762,7 +25941,14 @@
     "ratings": null,
     "steamAppId": null,
     "psnStorePath": "concept/10009136",
-    "coverage": []
+    "coverage": [],
+    "storeId": 10009136,
+    "storeGenres": [
+      "Simulator",
+      "Adventure"
+    ],
+    "storeRelease": "2025-05-29T12:00:00Z",
+    "plusIncluded": false
   },
   {
     "id": "avowed",
@@ -23797,7 +25983,13 @@
     "ratings": null,
     "steamAppId": null,
     "psnStorePath": "concept/10012632",
-    "coverage": []
+    "coverage": [],
+    "storeId": 10012632,
+    "storeGenres": [
+      "Role Playing Games"
+    ],
+    "storeRelease": "2026-02-17T18:00:00Z",
+    "plusIncluded": false
   },
   {
     "id": "atelier-yumia-the-alchemist-of-memories-the-envi",
@@ -23831,7 +26023,13 @@
     "ratings": null,
     "steamAppId": null,
     "psnStorePath": "concept/10012240",
-    "coverage": []
+    "coverage": [],
+    "storeId": 10012240,
+    "storeGenres": [
+      "Role Playing Games"
+    ],
+    "storeRelease": "2025-03-21T04:00:00Z",
+    "plusIncluded": false
   },
   {
     "id": "silent-hill-f",
@@ -23868,7 +26066,13 @@
     "ratings": null,
     "steamAppId": null,
     "psnStorePath": "concept/10010242",
-    "coverage": []
+    "coverage": [],
+    "storeId": 10010242,
+    "storeGenres": [
+      "Horror"
+    ],
+    "storeRelease": "2025-09-25T04:00:00Z",
+    "plusIncluded": false
   },
   {
     "id": "fate-samurai-remnant-ps4-ps5",
@@ -23905,7 +26109,14 @@
     "ratings": null,
     "steamAppId": null,
     "psnStorePath": "concept/10004920",
-    "coverage": []
+    "coverage": [],
+    "storeId": 10004920,
+    "storeGenres": [
+      "Action",
+      "Role Playing Games"
+    ],
+    "storeRelease": "2023-09-29T04:00:00Z",
+    "plusIncluded": true
   },
   {
     "id": "wobbly-life",
@@ -23940,7 +26151,15 @@
     "ratings": null,
     "steamAppId": null,
     "psnStorePath": "concept/10004896",
-    "coverage": []
+    "coverage": [],
+    "storeId": 10004896,
+    "storeGenres": [
+      "Casual",
+      "Family",
+      "Adventure"
+    ],
+    "storeRelease": "2025-09-18T17:00:00Z",
+    "plusIncluded": false
   },
   {
     "id": "this-war-of-mine-final-cut",
@@ -23981,7 +26200,13 @@
     "ratings": null,
     "steamAppId": null,
     "psnStorePath": "concept/10003699",
-    "coverage": []
+    "coverage": [],
+    "storeId": 10003699,
+    "storeGenres": [
+      "Adventure"
+    ],
+    "storeRelease": "2022-05-10T00:00:00Z",
+    "plusIncluded": true
   },
   {
     "id": "metal-hellsinger-ps5",
@@ -24016,7 +26241,15 @@
     "ratings": null,
     "steamAppId": null,
     "psnStorePath": "concept/10001499",
-    "coverage": []
+    "coverage": [],
+    "storeId": 10001499,
+    "storeGenres": [
+      "Horror",
+      "Shooter",
+      "Music/Rhythm"
+    ],
+    "storeRelease": "2022-09-15T08:00:00Z",
+    "plusIncluded": false
   },
   {
     "id": "five-nights-at-freddy-s-security-breach",
@@ -24047,7 +26280,13 @@
     "ratings": null,
     "steamAppId": null,
     "psnStorePath": "concept/10001137",
-    "coverage": []
+    "coverage": [],
+    "storeId": 10001137,
+    "storeGenres": [
+      "Horror"
+    ],
+    "storeRelease": "2021-12-16T08:00:00Z",
+    "plusIncluded": false
   },
   {
     "id": "genshin-impact-6th-anniversary",
@@ -24084,7 +26323,15 @@
     "ratings": null,
     "steamAppId": null,
     "psnStorePath": "concept/10000896",
-    "coverage": []
+    "coverage": [],
+    "storeId": 10000896,
+    "storeGenres": [
+      "Action",
+      "Role Playing Games",
+      "Adventure"
+    ],
+    "storeRelease": "2021-04-27T22:00:00Z",
+    "plusIncluded": false
   },
   {
     "id": "minecraft-dungeons",
@@ -24120,7 +26367,15 @@
     "ratings": null,
     "steamAppId": null,
     "psnStorePath": "concept/10000378",
-    "coverage": []
+    "coverage": [],
+    "storeId": 10000378,
+    "storeGenres": [
+      "Action",
+      "Adventure",
+      "Role Playing Games"
+    ],
+    "storeRelease": "2020-05-26T04:00:00Z",
+    "plusIncluded": false
   },
   {
     "id": "gladio-mori",
@@ -24158,7 +26413,14 @@
     "ratings": null,
     "steamAppId": null,
     "psnStorePath": "concept/10017920",
-    "coverage": []
+    "coverage": [],
+    "storeId": 10017920,
+    "storeGenres": [
+      "Fighting",
+      "Simulation"
+    ],
+    "storeRelease": "2026-09-16T11:00:00Z",
+    "plusIncluded": false
   },
   {
     "id": "bomb-rush-cyberfunk",
@@ -24194,7 +26456,14 @@
     "ratings": null,
     "steamAppId": null,
     "psnStorePath": "concept/10004602",
-    "coverage": []
+    "coverage": [],
+    "storeId": 10004602,
+    "storeGenres": [
+      "Action",
+      "Adventure"
+    ],
+    "storeRelease": "2023-09-01T10:00:00Z",
+    "plusIncluded": false
   },
   {
     "id": "runescape-dragonwilds",
@@ -24232,7 +26501,13 @@
     "ratings": null,
     "steamAppId": null,
     "psnStorePath": "concept/10017405",
-    "coverage": []
+    "coverage": [],
+    "storeId": 10017405,
+    "storeGenres": [
+      "Adventure"
+    ],
+    "storeRelease": "2026-09-15T09:00:00Z",
+    "plusIncluded": true
   },
   {
     "id": "slime-rancher-2",
@@ -24265,7 +26540,14 @@
     "ratings": null,
     "steamAppId": null,
     "psnStorePath": "concept/10009803",
-    "coverage": []
+    "coverage": [],
+    "storeId": 10009803,
+    "storeGenres": [
+      "Adventure",
+      "Action"
+    ],
+    "storeRelease": "2024-06-07T17:00:00Z",
+    "plusIncluded": false
   },
   {
     "id": "as-dusk-falls",
@@ -24303,7 +26585,15 @@
     "ratings": null,
     "steamAppId": null,
     "psnStorePath": "concept/10008922",
-    "coverage": []
+    "coverage": [],
+    "storeId": 10008922,
+    "storeGenres": [
+      "Unique",
+      "Adventure",
+      "Casual"
+    ],
+    "storeRelease": "2024-03-07T14:00:00Z",
+    "plusIncluded": true
   },
   {
     "id": "remnant-ii-standard-edition",
@@ -24344,7 +26634,15 @@
     "ratings": null,
     "steamAppId": null,
     "psnStorePath": "concept/10004544",
-    "coverage": []
+    "coverage": [],
+    "storeId": 10004544,
+    "storeGenres": [
+      "Adventure",
+      "Action",
+      "Role Playing Games"
+    ],
+    "storeRelease": "2023-07-25T16:00:00Z",
+    "plusIncluded": false
   },
   {
     "id": "the-dark-pictures-anthology-house-of-ashes",
@@ -24388,7 +26686,14 @@
     "ratings": null,
     "steamAppId": null,
     "psnStorePath": "concept/10001837",
-    "coverage": []
+    "coverage": [],
+    "storeId": 10001837,
+    "storeGenres": [
+      "Adventure",
+      "Horror"
+    ],
+    "storeRelease": "2021-10-22T04:00:00Z",
+    "plusIncluded": false
   },
   {
     "id": "the-invincible",
@@ -24422,7 +26727,13 @@
     "ratings": null,
     "steamAppId": null,
     "psnStorePath": "concept/10002666",
-    "coverage": []
+    "coverage": [],
+    "storeId": 10002666,
+    "storeGenres": [
+      "Adventure"
+    ],
+    "storeRelease": "2023-11-06T15:00:00Z",
+    "plusIncluded": true
   },
   {
     "id": "crimson-desert-enhanced",
@@ -24458,7 +26769,14 @@
     "ratings": null,
     "steamAppId": null,
     "psnStorePath": "concept/10002363",
-    "coverage": []
+    "coverage": [],
+    "storeId": 10002363,
+    "storeGenres": [
+      "Adventure",
+      "Action"
+    ],
+    "storeRelease": "2026-03-19T22:00:00Z",
+    "plusIncluded": false
   },
   {
     "id": "carx-drift-racing-online",
@@ -24490,7 +26808,15 @@
     "ratings": null,
     "steamAppId": null,
     "psnStorePath": "concept/10000161",
-    "coverage": []
+    "coverage": [],
+    "storeId": 10000161,
+    "storeGenres": [
+      "Driving/Racing",
+      "Arcade",
+      "Simulator"
+    ],
+    "storeRelease": "2020-02-07T05:00:00Z",
+    "plusIncluded": false
   },
   {
     "id": "wuthering-waves",
@@ -24526,7 +26852,15 @@
     "ratings": null,
     "steamAppId": null,
     "psnStorePath": "concept/10010764",
-    "coverage": []
+    "coverage": [],
+    "storeId": 10010764,
+    "storeGenres": [
+      "Role Playing Games",
+      "Adventure",
+      "Action"
+    ],
+    "storeRelease": "2025-01-01T22:00:00Z",
+    "plusIncluded": false
   },
   {
     "id": "fortnite-save-the-world",
@@ -24565,7 +26899,14 @@
     "ratings": null,
     "steamAppId": null,
     "psnStorePath": "concept/10018941",
-    "coverage": []
+    "coverage": [],
+    "storeId": 10018941,
+    "storeGenres": [
+      "Action",
+      "Adventure"
+    ],
+    "storeRelease": "2026-04-16T08:00:00Z",
+    "plusIncluded": false
   },
   {
     "id": "tainted-grail-the-fall-of-avalon",
@@ -24602,7 +26943,13 @@
     "ratings": null,
     "steamAppId": null,
     "psnStorePath": "concept/10009530",
-    "coverage": []
+    "coverage": [],
+    "storeId": 10009530,
+    "storeGenres": [
+      "Role Playing Games"
+    ],
+    "storeRelease": "2025-05-23T16:00:00Z",
+    "plusIncluded": false
   },
   {
     "id": "the-pedestrian",
@@ -24634,7 +26981,15 @@
     "ratings": null,
     "steamAppId": null,
     "psnStorePath": "concept/10001568",
-    "coverage": []
+    "coverage": [],
+    "storeId": 10001568,
+    "storeGenres": [
+      "Puzzle",
+      "Adventure",
+      "Unique"
+    ],
+    "storeRelease": "2021-01-29T18:00:00Z",
+    "plusIncluded": true
   },
   {
     "id": "high-on-life-2",
@@ -24675,7 +27030,14 @@
     "ratings": null,
     "steamAppId": null,
     "psnStorePath": "concept/10012995",
-    "coverage": []
+    "coverage": [],
+    "storeId": 10012995,
+    "storeGenres": [
+      "Shooter",
+      "Adventure"
+    ],
+    "storeRelease": "2026-02-13T15:00:00Z",
+    "plusIncluded": false
   },
   {
     "id": "warriors-abyss",
@@ -24711,7 +27073,14 @@
     "ratings": null,
     "steamAppId": null,
     "psnStorePath": "concept/10012449",
-    "coverage": []
+    "coverage": [],
+    "storeId": 10012449,
+    "storeGenres": [
+      "Action",
+      "Role Playing Games"
+    ],
+    "storeRelease": "2025-02-12T23:00:00Z",
+    "plusIncluded": true
   },
   {
     "id": "reanimal",
@@ -24752,7 +27121,13 @@
     "ratings": null,
     "steamAppId": null,
     "psnStorePath": "concept/10010999",
-    "coverage": []
+    "coverage": [],
+    "storeId": 10010999,
+    "storeGenres": [
+      "Horror"
+    ],
+    "storeRelease": "2026-02-13T14:00:00Z",
+    "plusIncluded": false
   },
   {
     "id": "chained-echoes",
@@ -24786,7 +27161,13 @@
     "ratings": null,
     "steamAppId": null,
     "psnStorePath": "concept/10003362",
-    "coverage": []
+    "coverage": [],
+    "storeId": 10003362,
+    "storeGenres": [
+      "Role Playing Games"
+    ],
+    "storeRelease": "2022-12-08T05:00:00Z",
+    "plusIncluded": false
   },
   {
     "id": "scott-pilgrim-vs-the-world-the-game-complete-edi",
@@ -24827,7 +27208,14 @@
     "ratings": null,
     "steamAppId": null,
     "psnStorePath": "concept/10000698",
-    "coverage": []
+    "coverage": [],
+    "storeId": 10000698,
+    "storeGenres": [
+      "Unique",
+      "Arcade"
+    ],
+    "storeRelease": "2021-01-14T05:00:00Z",
+    "plusIncluded": false
   },
   {
     "id": "house-flipper",
@@ -24858,7 +27246,13 @@
     "ratings": null,
     "steamAppId": null,
     "psnStorePath": "concept/10000044",
-    "coverage": []
+    "coverage": [],
+    "storeId": 10000044,
+    "storeGenres": [
+      "Simulation"
+    ],
+    "storeRelease": "2020-02-25T19:00:00Z",
+    "plusIncluded": false
   },
   {
     "id": "nascar-25",
@@ -24893,7 +27287,15 @@
     "ratings": null,
     "steamAppId": null,
     "psnStorePath": "concept/10014332",
-    "coverage": []
+    "coverage": [],
+    "storeId": 10014332,
+    "storeGenres": [
+      "Sport",
+      "Simulation",
+      "Driving/Racing"
+    ],
+    "storeRelease": "2025-10-14T04:00:00Z",
+    "plusIncluded": false
   },
   {
     "id": "the-thaumaturge",
@@ -24932,7 +27334,13 @@
     "ratings": null,
     "steamAppId": null,
     "psnStorePath": "concept/10007126",
-    "coverage": []
+    "coverage": [],
+    "storeId": 10007126,
+    "storeGenres": [
+      "Role Playing Games"
+    ],
+    "storeRelease": "2024-12-04T14:00:00Z",
+    "plusIncluded": true
   },
   {
     "id": "banishers-ghosts-of-new-eden",
@@ -24968,7 +27376,13 @@
     "ratings": null,
     "steamAppId": null,
     "psnStorePath": "concept/10006098",
-    "coverage": []
+    "coverage": [],
+    "storeId": 10006098,
+    "storeGenres": [
+      "Adventure"
+    ],
+    "storeRelease": "2024-02-13T05:00:00Z",
+    "plusIncluded": false
   },
   {
     "id": "under-the-waves",
@@ -25002,7 +27416,14 @@
     "ratings": null,
     "steamAppId": null,
     "psnStorePath": "concept/10005244",
-    "coverage": []
+    "coverage": [],
+    "storeId": 10005244,
+    "storeGenres": [
+      "Adventure",
+      "Action"
+    ],
+    "storeRelease": "2023-08-28T04:00:00Z",
+    "plusIncluded": true
   },
   {
     "id": "forever-skies",
@@ -25037,7 +27458,15 @@
     "ratings": null,
     "steamAppId": null,
     "psnStorePath": "concept/10004499",
-    "coverage": []
+    "coverage": [],
+    "storeId": 10004499,
+    "storeGenres": [
+      "Simulator",
+      "Adventure",
+      "Action"
+    ],
+    "storeRelease": "2025-04-14T17:00:00Z",
+    "plusIncluded": false
   },
   {
     "id": "the-quarry-for-ps5",
@@ -25079,7 +27508,13 @@
     "ratings": null,
     "steamAppId": null,
     "psnStorePath": "concept/10004123",
-    "coverage": []
+    "coverage": [],
+    "storeId": 10004123,
+    "storeGenres": [
+      "Horror"
+    ],
+    "storeRelease": "2022-06-10T04:00:00Z",
+    "plusIncluded": false
   },
   {
     "id": "love-live-school-idol-festival-after-school-acti",
@@ -25117,7 +27552,13 @@
     "ratings": null,
     "steamAppId": null,
     "psnStorePath": "concept/10000306",
-    "coverage": []
+    "coverage": [],
+    "storeId": 10000306,
+    "storeGenres": [
+      "Music/Rhythm"
+    ],
+    "storeRelease": "2021-03-24T04:00:00Z",
+    "plusIncluded": false
   },
   {
     "id": "pistol-whip",
@@ -25150,7 +27591,15 @@
     "ratings": null,
     "steamAppId": null,
     "psnStorePath": "concept/10001571",
-    "coverage": []
+    "coverage": [],
+    "storeId": 10001571,
+    "storeGenres": [
+      "Shooter",
+      "Music/Rhythm",
+      "Action"
+    ],
+    "storeRelease": "2023-02-22T05:00:00Z",
+    "plusIncluded": false
   },
   {
     "id": "age-of-empires-ii-definitive-edition-standard-ed",
@@ -25185,7 +27634,13 @@
     "ratings": null,
     "steamAppId": null,
     "psnStorePath": "concept/10009261",
-    "coverage": []
+    "coverage": [],
+    "storeId": 10009261,
+    "storeGenres": [
+      "Strategy"
+    ],
+    "storeRelease": "2025-05-06T17:00:00Z",
+    "plusIncluded": false
   },
   {
     "id": "sky-children-of-the-light",
@@ -25223,7 +27678,14 @@
     "ratings": null,
     "steamAppId": null,
     "psnStorePath": "concept/10004206",
-    "coverage": []
+    "coverage": [],
+    "storeId": 10004206,
+    "storeGenres": [
+      "Adventure",
+      "Role Playing Games"
+    ],
+    "storeRelease": "2022-12-06T20:00:00Z",
+    "plusIncluded": false
   },
   {
     "id": "five-nights-at-freddy-s-help-wanted-2",
@@ -25254,7 +27716,13 @@
     "ratings": null,
     "steamAppId": null,
     "psnStorePath": "concept/10009325",
-    "coverage": []
+    "coverage": [],
+    "storeId": 10009325,
+    "storeGenres": [
+      "Horror"
+    ],
+    "storeRelease": "2023-12-14T14:00:00Z",
+    "plusIncluded": true
   },
   {
     "id": "visions-of-mana",
@@ -25288,7 +27756,14 @@
     "ratings": null,
     "steamAppId": null,
     "psnStorePath": "concept/10008215",
-    "coverage": []
+    "coverage": [],
+    "storeId": 10008215,
+    "storeGenres": [
+      "Role Playing Games",
+      "Action"
+    ],
+    "storeRelease": "2024-08-29T04:00:00Z",
+    "plusIncluded": false
   },
   {
     "id": "the-stanley-parable-ultra-deluxe",
@@ -25325,7 +27800,13 @@
     "ratings": null,
     "steamAppId": null,
     "psnStorePath": "concept/10003841",
-    "coverage": []
+    "coverage": [],
+    "storeId": 10003841,
+    "storeGenres": [
+      "Adventure"
+    ],
+    "storeRelease": "2022-04-27T16:00:00Z",
+    "plusIncluded": false
   },
   {
     "id": "syberia-the-world-before",
@@ -25359,7 +27840,13 @@
     "ratings": null,
     "steamAppId": null,
     "psnStorePath": "concept/10001404",
-    "coverage": []
+    "coverage": [],
+    "storeId": 10001404,
+    "storeGenres": [
+      "Adventure"
+    ],
+    "storeRelease": "2022-11-15T05:00:00Z",
+    "plusIncluded": true
   },
   {
     "id": "farming-simulator-22",
@@ -25396,7 +27883,14 @@
     "ratings": null,
     "steamAppId": null,
     "psnStorePath": "concept/10001771",
-    "coverage": []
+    "coverage": [],
+    "storeId": 10001771,
+    "storeGenres": [
+      "Simulator",
+      "Simulation"
+    ],
+    "storeRelease": "2021-11-22T05:00:00Z",
+    "plusIncluded": false
   },
   {
     "id": "chorus",
@@ -25428,7 +27922,14 @@
     "ratings": null,
     "steamAppId": null,
     "psnStorePath": "concept/10000793",
-    "coverage": []
+    "coverage": [],
+    "storeId": 10000793,
+    "storeGenres": [
+      "Unique",
+      "Fighting"
+    ],
+    "storeRelease": "2021-12-03T05:00:00Z",
+    "plusIncluded": false
   },
   {
     "id": "assassin-s-creed-shadows",
@@ -25467,7 +27968,13 @@
     "ratings": null,
     "steamAppId": null,
     "psnStorePath": "concept/10009909",
-    "coverage": []
+    "coverage": [],
+    "storeId": 10009909,
+    "storeGenres": [
+      "Role Playing Games"
+    ],
+    "storeRelease": "2025-03-20T04:00:00Z",
+    "plusIncluded": false
   },
   {
     "id": "ratchet-clank-size-matters",
@@ -25501,7 +28008,13 @@
     "ratings": null,
     "steamAppId": null,
     "psnStorePath": "concept/10007644",
-    "coverage": []
+    "coverage": [],
+    "storeId": 10007644,
+    "storeGenres": [
+      "Adventure"
+    ],
+    "storeRelease": "2024-07-16T16:00:00Z",
+    "plusIncluded": false
   },
   {
     "id": "tormented-souls-2",
@@ -25539,7 +28052,13 @@
     "ratings": null,
     "steamAppId": null,
     "psnStorePath": "concept/10008744",
-    "coverage": []
+    "coverage": [],
+    "storeId": 10008744,
+    "storeGenres": [
+      "Horror"
+    ],
+    "storeRelease": "2025-10-23T04:00:00Z",
+    "plusIncluded": false
   },
   {
     "id": "nte-neverness-to-everness",
@@ -25574,7 +28093,15 @@
     "ratings": null,
     "steamAppId": null,
     "psnStorePath": "concept/10012874",
-    "coverage": []
+    "coverage": [],
+    "storeId": 10012874,
+    "storeGenres": [
+      "Role Playing Games",
+      "Action",
+      "Adventure"
+    ],
+    "storeRelease": "2026-04-29T02:00:00Z",
+    "plusIncluded": false
   },
   {
     "id": "cities-skylines-remastered",
@@ -25605,7 +28132,13 @@
     "ratings": null,
     "steamAppId": null,
     "psnStorePath": "concept/10005732",
-    "coverage": []
+    "coverage": [],
+    "storeId": 10005732,
+    "storeGenres": [
+      "Simulation"
+    ],
+    "storeRelease": "2023-02-15T09:00:00Z",
+    "plusIncluded": false
   },
   {
     "id": "the-outer-worlds-spacer-s-choice-edition",
@@ -25644,7 +28177,14 @@
     "ratings": null,
     "steamAppId": null,
     "psnStorePath": "concept/10004825",
-    "coverage": []
+    "coverage": [],
+    "storeId": 10004825,
+    "storeGenres": [
+      "Role Playing Games",
+      "Action"
+    ],
+    "storeRelease": "2023-03-07T16:00:00Z",
+    "plusIncluded": false
   },
   {
     "id": "love-is-all-around",
@@ -25680,7 +28220,13 @@
     "ratings": null,
     "steamAppId": null,
     "psnStorePath": "concept/10010944",
-    "coverage": []
+    "coverage": [],
+    "storeId": 10010944,
+    "storeGenres": [
+      "Simulation"
+    ],
+    "storeRelease": "2024-08-07T16:00:00Z",
+    "plusIncluded": false
   },
   {
     "id": "walkabout-mini-golf",
@@ -25715,7 +28261,14 @@
     "ratings": null,
     "steamAppId": null,
     "psnStorePath": "concept/10003851",
-    "coverage": []
+    "coverage": [],
+    "storeId": 10003851,
+    "storeGenres": [
+      "Casual",
+      "Sport"
+    ],
+    "storeRelease": "2023-05-11T16:00:00Z",
+    "plusIncluded": false
   },
   {
     "id": "madison",
@@ -25752,7 +28305,14 @@
     "ratings": null,
     "steamAppId": null,
     "psnStorePath": "concept/10004909",
-    "coverage": []
+    "coverage": [],
+    "storeId": 10004909,
+    "storeGenres": [
+      "Horror",
+      "Action"
+    ],
+    "storeRelease": "2022-07-08T04:00:00Z",
+    "plusIncluded": false
   },
   {
     "id": "hell-is-us",
@@ -25787,7 +28347,14 @@
     "ratings": null,
     "steamAppId": null,
     "psnStorePath": "concept/10005051",
-    "coverage": []
+    "coverage": [],
+    "storeId": 10005051,
+    "storeGenres": [
+      "Action",
+      "Adventure"
+    ],
+    "storeRelease": "2025-09-04T08:00:00Z",
+    "plusIncluded": true
   },
   {
     "id": "tabs",
@@ -25820,7 +28387,14 @@
     "ratings": null,
     "steamAppId": null,
     "psnStorePath": "concept/10003641",
-    "coverage": []
+    "coverage": [],
+    "storeId": 10003641,
+    "storeGenres": [
+      "Action",
+      "Simulation"
+    ],
+    "storeRelease": "2024-12-17T11:00:00Z",
+    "plusIncluded": false
   },
   {
     "id": "peak",
@@ -25855,7 +28429,13 @@
     "ratings": null,
     "steamAppId": null,
     "psnStorePath": "concept/10017710",
-    "coverage": []
+    "coverage": [],
+    "storeId": 10017710,
+    "storeGenres": [
+      "Adventure"
+    ],
+    "storeRelease": "2026-10-22T15:00:00Z",
+    "plusIncluded": false
   },
   {
     "id": "halloween-the-game",
@@ -25901,7 +28481,13 @@
     "ratings": null,
     "steamAppId": null,
     "psnStorePath": "concept/10014718",
-    "coverage": []
+    "coverage": [],
+    "storeId": 10014718,
+    "storeGenres": [
+      "Horror"
+    ],
+    "storeRelease": "2026-09-08T16:00:00Z",
+    "plusIncluded": false
   },
   {
     "id": "my-little-universe",
@@ -25935,7 +28521,14 @@
     "ratings": null,
     "steamAppId": null,
     "psnStorePath": "concept/10012017",
-    "coverage": []
+    "coverage": [],
+    "storeId": 10012017,
+    "storeGenres": [
+      "Adventure",
+      "Simulation"
+    ],
+    "storeRelease": "2025-04-04T04:00:00Z",
+    "plusIncluded": false
   },
   {
     "id": "v-rising",
@@ -25971,7 +28564,15 @@
     "ratings": null,
     "steamAppId": null,
     "psnStorePath": "concept/10007965",
-    "coverage": []
+    "coverage": [],
+    "storeId": 10007965,
+    "storeGenres": [
+      "Adventure",
+      "Action",
+      "Role Playing Games"
+    ],
+    "storeRelease": "2024-06-11T12:00:00Z",
+    "plusIncluded": true
   },
   {
     "id": "ai-limit",
@@ -26004,7 +28605,13 @@
     "ratings": null,
     "steamAppId": null,
     "psnStorePath": "concept/10006488",
-    "coverage": []
+    "coverage": [],
+    "storeId": 10006488,
+    "storeGenres": [
+      "Role Playing Games"
+    ],
+    "storeRelease": "2025-03-27T14:00:00Z",
+    "plusIncluded": false
   },
   {
     "id": "silent-hill-townfall",
@@ -26037,7 +28644,13 @@
     "ratings": null,
     "steamAppId": null,
     "psnStorePath": "concept/10016947",
-    "coverage": []
+    "coverage": [],
+    "storeId": 10016947,
+    "storeGenres": [
+      "Horror"
+    ],
+    "storeRelease": "2026-09-24T04:00:00Z",
+    "plusIncluded": false
   },
   {
     "id": "killer-klowns-from-outer-space-the-game",
@@ -26078,6 +28691,13 @@
     "ratings": null,
     "steamAppId": null,
     "psnStorePath": "concept/10009210",
-    "coverage": []
+    "coverage": [],
+    "storeId": 10009210,
+    "storeGenres": [
+      "Horror",
+      "Action"
+    ],
+    "storeRelease": "2024-05-28T16:00:00Z",
+    "plusIncluded": false
   }
 ]

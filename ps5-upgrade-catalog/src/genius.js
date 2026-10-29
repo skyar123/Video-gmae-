@@ -110,7 +110,15 @@ export function featuresOf(game, only = null) {
   add(PREFIX.protagonist, game.protagonist);
   for (const tag of game.tags ?? []) add(PREFIX.tag, tag);
   for (const entry of game.representation ?? []) add(PREFIX.representation, entry.kind);
-  for (const genre of game.genres ?? []) add(PREFIX.storeGenre, genre);
+  /*
+   * storeGenres is the same thing under another name, baked into the
+   * written-up catalog by scripts/bake-store-fields.mjs. A phone holds that
+   * catalog but not the 5MB mirror, so without it a liked write-up could
+   * teach nothing that applies to the 8,800 games nobody has written up, and
+   * the profile went out to be ranked against them with no store-side
+   * feature in it at all.
+   */
+  for (const genre of game.genres ?? game.storeGenres ?? []) add(PREFIX.storeGenre, genre);
 
   const rating = game.ageRating ?? null;
   add(PREFIX.family, rating?.family);
@@ -119,7 +127,7 @@ export function featuresOf(game, only = null) {
     add(PREFIX.purchases, rating.interactive.some((i) => /purchases/i.test(i)) ? 'yes' : 'no');
   }
 
-  add(PREFIX.era, eraOf(game.releaseDate ?? game.release));
+  add(PREFIX.era, eraOf(game.releaseDate ?? game.release ?? game.storeRelease));
   const included =
     game.plus?.included || game.plusIncluded || game.storeLive?.price?.plus?.included;
   if (included) add(PREFIX.plus, 'yes');
