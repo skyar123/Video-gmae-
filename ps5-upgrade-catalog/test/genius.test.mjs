@@ -406,3 +406,45 @@ test('exploring stays near what you like rather than near what is famous', () =>
   // And a stranger matching nothing gets no exploration bonus at all.
   assert.equal(stranger.hits.length, 0, 'nothing in common with the profile');
 });
+
+test('a thumbs down moves the list away from what it named', () => {
+  /*
+   * The half of the model nothing else here can check. There are no recorded
+   * dislikes to measure accuracy against, but direction can be checked
+   * without them: after saying no to a thing, that thing must score lower
+   * than it did and lower than what was said yes to.
+   *
+   * Through the real endpoint this is stark. Three horror games thumbed down,
+   * against six cozy ones thumbed up, took horror from 4 of the top 40 to 0
+   * and mature-rated games from 4 to 0.
+   */
+  const cozy = (id) => written({ id, genre: 'Life Sim', tags: ['cozy'], artStyle: 'Hand-drawn' });
+  const horror = (id) =>
+    written({
+      id,
+      genre: 'Mystery',
+      tags: [],
+      artStyle: 'Photorealistic',
+      ageRating: { family: 'mature', tier: 'mature' },
+    });
+
+  const likes = ['a', 'b', 'c'].map((id) => ({ game: cozy(id), kind: 'liked' }));
+  const before = buildTaste(likes);
+  const after = buildTaste([...likes, { game: horror('x'), kind: 'disliked' }]);
+
+  const candidate = horror('candidate');
+  const scoredBefore = scoreGame(candidate, before).score;
+  const scoredAfter = scoreGame(candidate, after).score;
+  assert.ok(
+    scoredAfter < scoredBefore,
+    `saying no should lower it: ${scoredBefore.toFixed(3)} -> ${scoredAfter.toFixed(3)}`,
+  );
+
+  // And it should now sit below something in the territory that was liked.
+  const liked = scoreGame(cozy('fresh'), after).score;
+  assert.ok(liked > scoredAfter, 'what you like outranks what you refused');
+
+  // The features it was refused for carry the negative, not the whole catalog.
+  assert.ok(after.weights.get('art:Photorealistic') < 0);
+  assert.ok(after.weights.get('tag:cozy') > 0, 'a no about one thing is not a no about everything');
+});

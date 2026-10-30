@@ -125,3 +125,81 @@ test('a distinctive reason leads even when a coarse one scored higher', () => {
   ];
   assert.match(explain(hits), /^Because you go for Metroidvania games/);
 });
+
+/**
+ * Two opposite readers must not be handed the same store.
+ *
+ * Everything else measured here asks where a hidden game lands in a ranking,
+ * which a model can do well while still giving everybody roughly the same
+ * list. This asks the other question, and it is the one that found the worst
+ * scoring bug in this model: the exploration bonus used to be scaled by a
+ * game's reputation, so it rewarded being famous and unlike anything the
+ * reader liked, and a profile built from Eastshade and A Short Hike was
+ * answered with Resident Evil 4 and 13 mature-rated games out of 25.
+ *
+ * The thresholds are loose on purpose. They are not trying to pin today's
+ * ordering, which moves whenever the mirror is rebuilt; they are trying to
+ * catch the model going back to answering every taste the same way.
+ */
+import { readFileSync } from 'node:fs';
+import { unify } from '../src/genius.js';
+
+const catalog = JSON.parse(readFileSync(new URL('../src/games.json', import.meta.url)));
+/* No store rows, which is what a phone has: the catalog must carry its own. */
+const onPhone = unify(catalog, []);
+const byTitle = new Map(onPhone.map((game) => [game.title, game]));
+
+const tasteFor = (titles) => {
+  const signals = titles
+    .map((title) => byTitle.get(title))
+    .filter(Boolean)
+    .map((game) => ({ game, kind: 'liked' }));
+  assert.ok(signals.length >= 5, `expected the catalog to still hold these: ${titles}`);
+  return packTaste(buildTaste(signals));
+};
+
+const COZY = ['Sea of Stars', 'Eastshade', 'A Short Hike', 'Lake', 'My Time at Sandrock', 'Bugsnax'];
+const MATURE = [
+  'Elden Ring',
+  'Cyberpunk 2077',
+  'The Witcher 3: Wild Hunt',
+  'NieR: Automata',
+  "Ghost of Tsushima Director's Cut",
+  'The Last of Us Part II Remastered',
+];
+
+test('opposite tastes are not handed the same twenty-five games', async () => {
+  const cozy = await pickFromMirror({ taste: tasteFor(COZY), limit: 25 });
+  const mature = await pickFromMirror({ taste: tasteFor(MATURE), limit: 25 });
+
+  const inCozy = new Set(cozy.games.map((game) => game.id));
+  const shared = mature.games.filter((game) => inCozy.has(game.id)).length;
+  assert.ok(shared <= 10, `${shared} of 25 picks were the same for both readers`);
+});
+
+test('a gentle reader is not handed a list of mature games', async () => {
+  const cozy = await pickFromMirror({ taste: tasteFor(COZY), limit: 25 });
+  const mature = cozy.games.filter((game) => game.ageRating?.tier === 'mature').length;
+
+  /*
+   * Four, not eight. Eight was the first guess and it was useless: putting
+   * the old reputation-scaled bonus back gives six here, so the test passed
+   * while the bug it was written for was in the code. The diversity pass
+   * softens that number, which is why raw scoring showed thirteen and this
+   * shows six, and why the bar has to sit where it can tell two from six.
+   */
+  assert.ok(mature <= 4, `${mature} of 25 picks for a cozy reader were mature-rated`);
+
+  // Sharper still, and the thing a reader would notice first.
+  assert.notEqual(
+    cozy.games[0]?.ageRating?.tier,
+    'mature',
+    `the first thing offered was ${cozy.games[0]?.name}`,
+  );
+});
+
+test('a reader who likes mature games is handed them', async () => {
+  const picks = await pickFromMirror({ taste: tasteFor(MATURE), limit: 25 });
+  const mature = picks.games.filter((game) => game.ageRating?.tier === 'mature').length;
+  assert.ok(mature >= 12, `only ${mature} of 25 picks were mature-rated`);
+});
