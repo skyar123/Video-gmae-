@@ -284,8 +284,23 @@ function readFiltersFromUrl() {
   };
 }
 
+/**
+ * Which drawer is open, if any.
+ *
+ * The news drawer was component state, so it closed on every reload and could
+ * not be linked to. For a surface somebody opens to read, those are the two
+ * things that matter most: come back to where you were, and send a friend the
+ * thing you were reading.
+ */
+function readDrawerFromUrl() {
+  if (typeof window === 'undefined') return { open: false, tab: 'goss' };
+  const read = new URLSearchParams(window.location.search).get('read');
+  if (read === 'goss' || read === 'upcoming') return { open: true, tab: read };
+  return { open: false, tab: 'goss' };
+}
+
 /** Only non-default values reach the URL, so a plain link stays plain. */
-function writeFiltersToUrl(filters) {
+function writeFiltersToUrl(filters, drawer) {
   const params = new URLSearchParams();
   if (filters.q) params.set('q', filters.q);
   if (filters.genre !== 'All') params.set('genre', filters.genre);
@@ -303,6 +318,7 @@ function writeFiltersToUrl(filters) {
   if (filters.newOnly) params.set('new', '1');
   if (filters.owned !== 'any') params.set('owned', filters.owned);
   if (filters.view === 'feed') params.set('mode', 'feed');
+  if (drawer?.open) params.set('read', drawer.tab);
   const query = params.toString();
   window.history.replaceState(null, '', query ? `?${query}` : window.location.pathname);
 }
@@ -5475,6 +5491,29 @@ const GOSS_TONES = [
 ];
 
 function GossPanel({ bursts, counts, status, onReload, reading, onKeep }) {
+  /*
+   * The saved shelf is built from what was stored, not from what is still in
+   * the feed.
+   *
+   * This read the live bursts at first, which meant a saved story vanished
+   * from it the moment the feed stopped carrying it, which is within a day.
+   * The whole row is kept for exactly that reason, and then it was never
+   * read: a story saved last week showed no chip at all.
+   */
+  const keptLinks = useMemo(() => new Set(reading.map((row) => row.link)), [reading]);
+  const keptRows = useMemo(
+    () =>
+      [...reading]
+        .reverse()
+        .map((row) => ({
+          ...row,
+          kind: 'buzz',
+          channel: 'press',
+          summary: '',
+          note: 'Saved',
+        })),
+    [reading],
+  );
   const [kind, setKind] = useState('all');
   const [tone, setTone] = useState('all');
   const [order, setOrder] = useState('top');
@@ -5526,19 +5565,21 @@ function GossPanel({ bursts, counts, status, onReload, reading, onKeep }) {
     kind === 'all'
       ? bursts
       : kind === 'kept'
-        ? bursts.filter((burst) => reading.has(burst.link))
+        ? keptRows
         : bursts.filter((burst) => burst.kind === kind);
 
   const picked = tone === 'all' ? byKind : byKind.filter((burst) => burst.tone === tone);
 
   const shown =
-    order === 'latest'
+    kind === 'kept'
+      ? picked
+      : order === 'latest'
       ? [...picked].sort(
           (a, b) => new Date(b.publishedAt ?? 0) - new Date(a.publishedAt ?? 0),
         )
       : rankAcrossChannels(picked);
   const freshCount = bursts.filter(isFresh).length;
-  const keptCount = bursts.filter((burst) => reading.has(burst.link)).length;
+  const keptCount = reading.length;
   const chips = [
     ['all', 'Everything', bursts.length],
     ...GOSS_ORDER.filter((key) => (counts?.[key] ?? 0) > 0).map((key) => [
@@ -5651,7 +5692,7 @@ function GossPanel({ bursts, counts, status, onReload, reading, onKeep }) {
             <GossCard
               burst={burst}
               fresh={isFresh(burst)}
-              kept={reading.has(burst.link)}
+              kept={keptLinks.has(burst.link)}
               onKeep={() => onKeep(burst)}
             />
           </li>
@@ -5940,7 +5981,6 @@ function BriefingDrawer({
    * not in scope, and the Goss tab threw on open: keptLinks is not defined.
    */
   const [reading, setReading] = useState(readReadingList);
-  const keptLinks = useMemo(() => new Set(reading.map((row) => row.link)), [reading]);
 
   /**
    * Keeping a story to read.
@@ -6047,7 +6087,7 @@ function BriefingDrawer({
               counts={goss.data?.counts ?? null}
               status={goss.status}
               onReload={goss.reload}
-              reading={keptLinks}
+              reading={reading}
               onKeep={keepStory}
             />
           ) : (
@@ -6234,7 +6274,7 @@ export default function App() {
       live = false;
     };
   }, []);
-  const [briefing, setBriefing] = useState({ open: false, tab: 'goss' });
+  const [briefing, setBriefing] = useState(readDrawerFromUrl);
 
   // The calendar is fetched when the panel opens, and also when something is
   // being followed — that is the only way the header can say a date moved
@@ -6298,13 +6338,13 @@ export default function App() {
 
   // Filters live in the URL so a filtered view can be linked or bookmarked.
   useEffect(() => {
-    writeFiltersToUrl(filters);
+    writeFiltersToUrl(filters, briefing);
     try {
       localStorage.setItem('region', filters.region);
     } catch {
       // A browser refusing storage just means the region resets next visit.
     }
-  }, [filters]);
+  }, [filters, briefing]);
 
   // The strip is wider than a phone, so a collection reached by any route
   // other than tapping its own chip would otherwise leave that chip off screen.

@@ -105,6 +105,13 @@ const SURFACES = [
   ['?view=all&wishlist=1', 'Wishlist', 1],
   ['?view=curated&sale=1', 'On sale', 1],
   ['?view=curated&wishlist=1', 'Wishlist, empty, in a collection', 0],
+  /*
+   * The news drawer, which is only here because it can be linked to now. It
+   * used to live in component state, so there was no address to point a
+   * check at and the busiest reading surface in the app went unswept.
+   */
+  ['?read=goss', 'News', 20],
+  ['?read=upcoming', 'Upcoming releases', 1],
 ];
 
 const server = spawn('node', ['scripts/serve-local.mjs', '--port', String(PORT)], {
