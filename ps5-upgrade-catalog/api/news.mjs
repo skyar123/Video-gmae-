@@ -1,0 +1,410 @@
+/**
+ * Gaming news, merged from publisher RSS feeds.
+ *
+ * Feeds need no key and no scraping: publishers offer them precisely so this
+ * can be done. Each item keeps its source so the reader always knows who wrote
+ * it, and links go to the publisher rather than being republished here.
+ */
+
+const FEEDS = [
+  { source: 'Kotaku', url: 'https://kotaku.com/rss', tone: 'general' },
+  { source: 'IGN', url: 'https://feeds.ign.com/ign/games-all', tone: 'general' },
+  { source: 'Eurogamer', url: 'https://www.eurogamer.net/feed', tone: 'general' },
+  { source: 'Rock Paper Shotgun', url: 'https://www.rockpapershotgun.com/feed', tone: 'general' },
+  { source: 'The Gamer', url: 'https://www.thegamer.com/feed/', tone: 'general' },
+  { source: 'GamesRadar', url: 'https://www.gamesradar.com/feeds/articletype/news/', tone: 'general' },
+  { source: 'VGC', url: 'https://www.videogameschronicle.com/feed/', tone: 'general' },
+  { source: 'Push Square', url: 'https://www.pushsquare.com/feeds/latest', tone: 'playstation' },
+  { source: 'PlayStation Blog', url: 'https://blog.playstation.com/feed/', tone: 'playstation' },
+
+  // Picked against the channels you watch rather than by traffic, and each
+  // one fetched before being listed. Polygon and Dicebreaker are missing from
+  // this list on purpose: both answer 403 to anything that is not a browser,
+  // so Polygon comes in through its Bluesky account instead.
+  { source: 'Game Informer', url: 'https://www.gameinformer.com/rss.xml', tone: 'general' },
+  // Retro, for the Gaming Historian and Continue? end of your list.
+  { source: 'Time Extension', url: 'https://www.timeextension.com/feeds/latest', tone: 'retro' },
+  // You watch Nintendo of America and the Pokemon channel; nothing here
+  // covered either.
+  { source: 'Nintendo Life', url: 'https://www.nintendolife.com/feeds/latest', tone: 'nintendo' },
+  // Small, essayistic, and in it for the love of the thing.
+  { source: 'Unwinnable', url: 'https://unwinnable.com/feed/', tone: 'essays' },
+  { source: 'Siliconera', url: 'https://www.siliconera.com/feed/', tone: 'general' },
+  // Trade press: where a layoff or a studio closing is reported first.
+  { source: 'Game Developer', url: 'https://www.gamedeveloper.com/rss.xml', tone: 'trade' },
+  // For the lilsimsie corner of your list, and the Cozy collection.
+  { source: 'Sims Community', url: 'https://simscommunity.info/feed/', tone: 'cozy' },
+
+  // Reading the catalog rather than the industry.
+  //
+  // The shelves above are organised by who publishes, which answers "what
+  // happened today" and not "what is worth reading about the kind of game I
+  // play". These are the two the catalog itself is weighted towards: the
+  // console it is about, and the long games people read about between
+  // sessions. Each was fetched before being listed.
+  { source: 'RPG Site', url: 'https://www.rpgsite.net/feed', tone: 'rpg' },
+  { source: 'TheSixthAxis', url: 'https://www.thesixthaxis.com/feed/', tone: 'playstation' },
+  { source: 'Indie Games Plus', url: 'https://indiegamesplus.com/feed', tone: 'indie' },
+  // Breadth, for a reader who wants the whole day rather than a corner of it.
+  { source: 'GameSpot', url: 'https://www.gamespot.com/feeds/news/', tone: 'general' },
+  { source: 'Destructoid', url: 'https://www.destructoid.com/feed/', tone: 'general' },
+
+  // The queer shelf is not one magazine. It is the LGBTQ+ gaming press, queer
+  // publications that cover games, and the worker-owned sites founded and
+  // staffed by queer writers who left the big outlets.
+  {
+    source: 'Gayming Magazine',
+    url: 'https://gaymingmag.com/feed/',
+    tone: 'queer',
+    note: 'LGBTQ+ gaming magazine',
+  },
+  {
+    // The /tag/video-games/ feed was the obvious choice and is where this
+    // started, but its newest post is 606 days old: the tag was abandoned,
+    // not the paper, whose main feed ran something yesterday. So it reads the
+    // main feed through the same games filter Them uses. That currently
+    // matches none of their last twelve posts, which is the honest state of
+    // it: this contributes when they cover games, instead of never.
+    source: 'Autostraddle',
+    url: 'https://www.autostraddle.com/feed/',
+    tone: 'queer',
+    note: 'Queer publication, culture desk',
+    filter: /\b(game|gaming|gamer|console|playstation|nintendo|xbox|steam|indie)\b/i,
+  },
+  {
+    source: 'Them',
+    url: 'https://www.them.us/feed/rss',
+    tone: 'queer',
+    note: 'Queer publication, culture desk',
+    filter: /\b(game|gaming|gamer|console|playstation|nintendo|xbox|steam|indie)\b/i,
+  },
+  {
+    source: 'Aftermath',
+    url: 'https://aftermath.site/feed',
+    tone: 'queer',
+    note: 'Worker-owned, queer staff',
+  },
+  {
+    source: 'Remap',
+    url: 'https://remapradio.com/rss/',
+    tone: 'queer',
+    note: 'Worker-owned, queer staff',
+  },
+  {
+    // Kept deliberately while quiet. Its newest piece is 98 days old against
+    // a 45 day window, so it currently contributes nothing and the feed
+    // diagnostic says so plainly ("10 items, 0 in window") rather than
+    // reporting ten and meaning none. A quiet quarter is not a dead site for
+    // a small criticism co-op, and dropping a queer outlet over one is a
+    // worse error than carrying one fetch every fifteen minutes. Revisit if
+    // the gap passes a year, which is what killed Autostraddle's tag feed.
+    source: 'Uppercut',
+    url: 'https://uppercutcrit.com/feed/',
+    tone: 'queer',
+    note: 'Worker-owned criticism co-op',
+  },
+  {
+    source: 'Rascal',
+    url: 'https://rascal.news/rss/',
+    tone: 'queer',
+    note: 'Worker-owned, queer-led',
+  },
+];
+
+const CACHE_TTL_MS = 15 * 60 * 1000;
+
+/**
+ * Every feed is already fetched in full, so these are the only thing
+ * standing between the reader and about five times as many stories. Six per
+ * publisher still stops the hourly outlets burying everyone else.
+ */
+const PER_SOURCE = 6;
+// Raised with the feed count. At 72 across 24 sources the cut landed on
+// whoever published least recently, which is most of the queer press and all
+// of the small sites that were just added.
+const MAX_ITEMS = 100;
+
+/**
+ * Nothing older than this is news.
+ *
+ * The slower outlets are kept visible by guaranteeing each feed its newest
+ * story, but a feed that has not posted in years would otherwise have that
+ * guarantee drag in whatever it last published. Raising the per-publisher cap
+ * made it worse, because six slots for a quarterly outlet reaches back a long
+ * way: one story in the list was a thousand days old.
+ */
+const MAX_AGE_MS = 45 * 24 * 60 * 60 * 1000;
+let cache = null;
+
+const decodeEntities = (value) =>
+  value
+    .replace(/<!\[CDATA\[(.*?)\]\]>/gs, '$1')
+    .replace(/&#(\d+);/g, (_, code) => String.fromCharCode(Number(code)))
+    .replace(/&#x([0-9a-f]+);/gi, (_, code) => String.fromCharCode(parseInt(code, 16)))
+    .replace(/&lt;/g, '<')
+    .replace(/&gt;/g, '>')
+    .replace(/&quot;/g, '"')
+    .replace(/&apos;/g, "'")
+    .replace(/&nbsp;/g, ' ')
+    .replace(/&amp;/g, '&')
+    .trim();
+
+const stripTags = (value) => decodeEntities(value.replace(/<[^>]*>/g, ' ')).replace(/\s+/g, ' ');
+
+/** WordPress feeds append their own footer to every excerpt. */
+const cleanSummary = (value) =>
+  stripTags(value)
+    .replace(/\s*The post .*? appeared first on .*$/i, '')
+    .replace(/\s*The post .*$/i, '')
+    .replace(/\s*(Continue reading|Read more).*$/i, '')
+    .trim();
+
+const tag = (block, name) => {
+  const match = block.match(new RegExp(`<${name}[^>]*>([\\s\\S]*?)</${name}>`, 'i'));
+  return match ? decodeEntities(match[1]) : null;
+};
+
+/** Handles both RSS <item> and Atom <entry>, which is all these feeds use. */
+function parseFeed(xml, feed) {
+  const blocks = xml.match(/<(item|entry)[\s>][\s\S]*?<\/\1>/gi) ?? [];
+  return blocks.slice(0, 12).map((block) => {
+    const link =
+      tag(block, 'link') ||
+      (block.match(/<link[^>]*href="([^"]+)"/i) || [])[1] ||
+      tag(block, 'guid');
+    const published = tag(block, 'pubDate') || tag(block, 'published') || tag(block, 'updated');
+    const summaryRaw = tag(block, 'description') || tag(block, 'summary') || '';
+    const image =
+      (block.match(/<media:(?:content|thumbnail)[^>]*url="([^"]+)"/i) || [])[1] ||
+      (block.match(/<enclosure[^>]*url="([^"]+)"[^>]*type="image/i) || [])[1] ||
+      (summaryRaw.match(/<img[^>]*src="([^"]+)"/i) || [])[1] ||
+      null;
+
+    return {
+      source: feed.source,
+      tone: feed.tone,
+      note: feed.note ?? null,
+      title: stripTags(tag(block, 'title') ?? ''),
+      link: link?.trim() ?? null,
+      publishedAt: published ? new Date(published).toISOString() : null,
+      summary: cleanSummary(summaryRaw).slice(0, 220),
+      image,
+    };
+  });
+}
+
+// Several publishers return 403 or 406 to an obviously automated agent even
+// though the feed is public, so requests look like a browser's.
+const FEED_HEADERS = {
+  'user-agent':
+    'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/124.0 Safari/537.36',
+  accept: 'application/rss+xml, application/atom+xml, application/xml;q=0.9, text/xml;q=0.8, */*;q=0.5',
+  'accept-language': 'en-US,en;q=0.9',
+};
+
+/** Records why a feed came back empty, which is otherwise invisible. */
+const feedStatus = new Map();
+
+async function fetchFeed(feed) {
+  const controller = new AbortController();
+  const timer = setTimeout(() => controller.abort(), 8000);
+  try {
+    const res = await fetch(feed.url, {
+      signal: controller.signal,
+      headers: FEED_HEADERS,
+      redirect: 'follow',
+    });
+    if (!res.ok) {
+      feedStatus.set(feed.source, `http ${res.status}`);
+      return [];
+    }
+    const items = parseFeed(await res.text(), feed);
+    // How many are in window, not just how many came back. "10 items" reads
+    // identically for a healthy feed and for one whose newest post is three
+    // months old, and that is exactly how Hard Drive sat here contributing
+    // nothing while reporting ten, and how Autostraddle's dead tag feed went
+    // unnoticed for far longer.
+    const cutoff = Date.now() - MAX_AGE_MS;
+    const fresh = items.filter((item) => {
+      const at = item.publishedAt ? Date.parse(item.publishedAt) : NaN;
+      return Number.isFinite(at) && at >= cutoff;
+    }).length;
+    feedStatus.set(feed.source, `${items.length} items, ${fresh} in window`);
+    return items;
+  } catch (error) {
+    feedStatus.set(feed.source, error?.name === 'AbortError' ? 'timeout' : 'failed');
+    return [];
+  } finally {
+    clearTimeout(timer);
+  }
+}
+
+export const feedDiagnostics = () => Object.fromEntries(feedStatus);
+
+/** Newest first, with one publisher never allowed to crowd out the rest. */
+export async function loadNews() {
+  if (cache && Date.now() - cache.storedAt < CACHE_TTL_MS) return cache.value;
+
+  const cutoff = Date.now() - MAX_AGE_MS;
+  const batches = await Promise.all(FEEDS.map(fetchFeed));
+  const items = batches
+    .flatMap((batch, index) => {
+      const { filter } = FEEDS[index];
+      // A general-culture feed only belongs here for the games it covers.
+      const relevant = filter
+        ? batch.filter((item) => filter.test(`${item.title} ${item.summary}`))
+        : batch;
+      return relevant.slice(0, 12);
+    })
+    .filter((item) => {
+      if (!item.title || !item.link) return false;
+      const at = item.publishedAt ? Date.parse(item.publishedAt) : NaN;
+      return Number.isFinite(at) && at >= cutoff;
+    })
+    .sort((a, b) => new Date(b.publishedAt ?? 0) - new Date(a.publishedAt ?? 0));
+
+  const perSource = new Map();
+  const balanced = [];
+  for (const item of items) {
+    const count = perSource.get(item.source) ?? 0;
+    if (count >= PER_SOURCE) continue;
+    perSource.set(item.source, count + 1);
+    balanced.push(item);
+  }
+
+  const kept = balanced.slice(0, MAX_ITEMS);
+  const links = new Set(kept.map((item) => item.link));
+
+  // Sorting by recency alone buries anyone who does not publish hourly, which
+  // is most of the queer press, so every feed that returned something is
+  // guaranteed its newest story.
+  const represented = new Set(kept.map((item) => item.source));
+  for (const item of items) {
+    if (represented.has(item.source) || links.has(item.link)) continue;
+    represented.add(item.source);
+    links.add(item.link);
+    kept.push(item);
+  }
+
+  const value = {
+    items: kept.sort((a, b) => new Date(b.publishedAt ?? 0) - new Date(a.publishedAt ?? 0)),
+    fetchedAt: new Date().toISOString(),
+  };
+  cache = { value, storedAt: Date.now() };
+  return value;
+}
+
+/* ------------------------------------------------------------------ *
+ * Per-game news
+ * ------------------------------------------------------------------ */
+
+/**
+ * News about one game.
+ *
+ * Publisher feeds only carry the last day or so, which is no use when you open
+ * a game that had its moment last month. Google News publishes a search feed
+ * that covers the whole press at once, so that is what a single game's news
+ * comes from. Its items read "Headline - Publisher", which is split back apart
+ * here so the result looks like the rest of the app.
+ */
+const GAME_NEWS_TTL_MS = 60 * 60 * 1000;
+const gameNewsCache = new Map();
+
+const looseMatch = (haystack, needle) => {
+  const words = needle
+    .toLowerCase()
+    .replace(/[^a-z0-9 ]/g, ' ')
+    .split(/\s+/)
+    .filter((word) => word.length > 2);
+  if (words.length === 0) return true;
+  const text = haystack.toLowerCase();
+  const hits = words.filter((word) => text.includes(word)).length;
+  return hits / words.length >= 0.6;
+};
+
+/**
+ * Whose coverage to look for.
+ *
+ * "Queer" is scoped by publication, which is the honest way to do it: every
+ * site here is either an LGBTQ+ outlet or a worker-owned one founded and
+ * staffed by queer writers, and that is a fact about the masthead rather than
+ * a guess about who wrote a given piece. There is deliberately no filter that
+ * claims to find reviews "written by a woman" from a headline: authorship is
+ * not something a news feed exposes, and inferring it from a byline would be
+ * guessing at people's identities. Women and trans critics are surfaced the
+ * one place the app actually knows the answer, which is the creator list.
+ */
+const PERSPECTIVE_SITES = {
+  queer: [
+    'gaymingmag.com',
+    'autostraddle.com',
+    'them.us',
+    'aftermath.site',
+    'remapradio.com',
+    'uppercutcrit.com',
+    'rascal.news',
+  ],
+};
+
+export const perspectiveSources = (perspective) => PERSPECTIVE_SITES[perspective] ?? null;
+
+export async function loadGameNews(title, perspective = null) {
+  const key = `${perspective ?? 'any'}:${title.trim().toLowerCase()}`;
+  if (!title.trim()) return { items: [], fetchedAt: null };
+
+  const cached = gameNewsCache.get(key);
+  if (cached && Date.now() - cached.storedAt < GAME_NEWS_TTL_MS) return cached.value;
+
+  const sites = perspectiveSources(perspective);
+  const scope = sites ? ` (${sites.map((site) => `site:${site}`).join(' OR ')})` : '';
+  // Both forms need a context term, because plenty of titles are ordinary
+  // words: unscoped, "Celeste" alone reaches an art review of a person named
+  // Celeste, and scoped, "Stray" reached a novel called Stray City and the
+  // band Stray Kids. The terms differ because the scoped outlets write about
+  // games without always naming the console, so leaning on PlayStation there
+  // would throw away most of what they published.
+  // Compared by hand against the alternatives. The bare word "game" was too
+  // weak to carry the meaning: searching Celeste returned a high-school sports
+  // page and a local TV bulletin about people named Celeste. Quoting the phrase
+  // and naming platforms returned IGN, GamesRadar and Nintendo World Report for
+  // the same title. The scoped form keeps the looser terms, because the queer
+  // outlets write about games without always naming a console.
+  const context = sites
+    ? '(game OR games OR gaming OR review)'
+    : '("video game" OR PlayStation OR PS5 OR Nintendo OR Steam)';
+  const query = encodeURIComponent(`"${title}" ${context}${scope}`);
+  const url = `https://news.google.com/rss/search?q=${query}&hl=en-US&gl=US&ceid=US:en`;
+
+  const controller = new AbortController();
+  const timer = setTimeout(() => controller.abort(), 8000);
+  let items = [];
+  try {
+    const response = await fetch(url, {
+      signal: controller.signal,
+      headers: { 'user-agent': 'Mozilla/5.0 (compatible; ps5-upgrade-catalog/1.0)' },
+    });
+    if (response.ok) {
+      const parsed = parseFeed(await response.text(), { source: 'Google News', tone: 'general' });
+      items = parsed
+        .filter((item) => item.title && item.link)
+        .map((item) => {
+          // "Headline - Publisher" is the shape Google News uses.
+          const split = item.title.lastIndexOf(' - ');
+          const headline = split > 20 ? item.title.slice(0, split) : item.title;
+          const source = split > 20 ? item.title.slice(split + 3) : 'Google News';
+          return { ...item, title: headline, source, summary: '' };
+        })
+        .filter((item) => looseMatch(item.title, title))
+        .slice(0, 8);
+    }
+  } catch {
+    // No news is a normal outcome; the panel says so.
+  } finally {
+    clearTimeout(timer);
+  }
+
+  const value = { items, fetchedAt: new Date().toISOString(), perspective: perspective ?? null };
+  gameNewsCache.set(key, { value, storedAt: Date.now() });
+  if (gameNewsCache.size > 300) gameNewsCache.delete(gameNewsCache.keys().next().value);
+  return value;
+}
