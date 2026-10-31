@@ -10,6 +10,7 @@ import {
 import {
   ArrowUpRight,
   Baby,
+  Bookmark,
   BadgePercent,
   Bell,
   BellRing,
@@ -386,6 +387,25 @@ function readWishlistPrices() {
  * None of them is a reader saying what they thought of a game, which is the
  * one thing picks need most.
  */
+/**
+ * Stories put aside to read.
+ *
+ * Kept by link, because a story has no id of its own and the link is the one
+ * thing every source agrees on. Trimmed from the front so a list left alone
+ * for a year cannot grow without end.
+ */
+const READING_MAX = 200;
+
+function readReadingList() {
+  try {
+    const raw = JSON.parse(localStorage.getItem(READING_KEY) ?? '[]');
+    if (!Array.isArray(raw)) return [];
+    return raw.filter((row) => row && typeof row.link === 'string').slice(-READING_MAX);
+  } catch {
+    return [];
+  }
+}
+
 function readRatings() {
   try {
     const raw = JSON.parse(localStorage.getItem(RATINGS_KEY) ?? '{}');
@@ -5095,6 +5115,7 @@ function relativeTime(iso) {
  * The Goss
  * ------------------------------------------------------------------ */
 
+const READING_KEY = 'readingList';
 const GOSS_SEEN_KEY = 'gossSeenAt';
 
 /**
@@ -5243,7 +5264,7 @@ function GossMedia({ burst, videoId, playing, onPlay }) {
   );
 }
 
-function GossCard({ burst, fresh }) {
+function GossCard({ burst, fresh, kept, onKeep }) {
   const kind = GOSS_KINDS[burst.kind] ?? GOSS_KINDS.buzz;
   const post = burst.source === 'Bluesky';
   const external = burst.externalLink ? hostOf(burst.externalLink) : null;
@@ -5364,6 +5385,30 @@ function GossCard({ burst, fresh }) {
           </div>
         </div>
       </div>
+
+      {/* Put it aside rather than lose it.
+          
+          The feed turns over fast: three hundred things a day, sorted by heat
+          or by hour, and the long read somebody wanted is gone by the evening
+          under a pile of trailers. One tap keeps it, and the Saved chip
+          gathers them. It sits outside the card's own link for the reason the
+          card's other controls do: a button inside a link is neither. */}
+      {onKeep && (
+        <button
+          type="button"
+          onClick={onKeep}
+          aria-pressed={Boolean(kept)}
+          aria-label={kept ? `Remove ${burst.title} from saved` : `Save ${burst.title} to read later`}
+          title={kept ? 'Saved to read' : 'Save to read later'}
+          className={`absolute bottom-2 right-2 z-10 inline-flex h-9 w-9 items-center justify-center rounded-full backdrop-blur transition-all duration-200 ease-spring active:scale-90 ${
+            kept
+              ? 'bg-indigo-600 text-white'
+              : 'bg-white/80 dark:bg-slate-800/80 text-slate-400 dark:text-slate-500 hover:text-indigo-500'
+          }`}
+        >
+          <Bookmark className={`h-4 w-4 ${kept ? 'fill-current' : ''}`} />
+        </button>
+      )}
     </article>
   );
 }
@@ -5409,8 +5454,29 @@ function rankAcrossChannels(rows) {
  * then a trailer, then a review, rather than eighteen layoff stories in a row.
  * The chips are there for when you want only one of those.
  */
-function GossPanel({ bursts, counts, status, onReload }) {
+/**
+ * The shelves, in the order a reader is likely to want them.
+ *
+ * These come from the press feeds, which each declare what they are. Only
+ * "Queer press" was ever offered, as a one-off beside the kind chips, while
+ * the other seven tones sat in the data unused: somebody who wanted the
+ * PlayStation sites, or the people who write about RPGs, had no way to ask.
+ */
+const GOSS_TONES = [
+  ['playstation', 'PlayStation'],
+  ['rpg', 'RPGs'],
+  ['queer', 'Queer press'],
+  ['essays', 'Essays'],
+  ['indie', 'Indie'],
+  ['retro', 'Retro'],
+  ['trade', 'The trade'],
+  ['cozy', 'Cozy'],
+  ['nintendo', 'Nintendo'],
+];
+
+function GossPanel({ bursts, counts, status, onReload, reading, onKeep }) {
   const [kind, setKind] = useState('all');
+  const [tone, setTone] = useState('all');
   const [order, setOrder] = useState('top');
 
   // Read once per mount, then immediately record this visit: the dots have to
@@ -5456,12 +5522,14 @@ function GossPanel({ bursts, counts, status, onReload }) {
   // of thing it is, which is a different axis to the rest. It is here
   // because folding the news column into this feed would otherwise have
   // quietly removed the one filter that column existed to offer.
-  const picked =
+  const byKind =
     kind === 'all'
       ? bursts
-      : kind === 'queer-press'
-        ? bursts.filter((burst) => burst.tone === 'queer')
+      : kind === 'kept'
+        ? bursts.filter((burst) => reading.has(burst.link))
         : bursts.filter((burst) => burst.kind === kind);
+
+  const picked = tone === 'all' ? byKind : byKind.filter((burst) => burst.tone === tone);
 
   const shown =
     order === 'latest'
@@ -5470,7 +5538,7 @@ function GossPanel({ bursts, counts, status, onReload }) {
         )
       : rankAcrossChannels(picked);
   const freshCount = bursts.filter(isFresh).length;
-  const queerPress = bursts.filter((burst) => burst.tone === 'queer').length;
+  const keptCount = bursts.filter((burst) => reading.has(burst.link)).length;
   const chips = [
     ['all', 'Everything', bursts.length],
     ...GOSS_ORDER.filter((key) => (counts?.[key] ?? 0) > 0).map((key) => [
@@ -5478,8 +5546,15 @@ function GossPanel({ bursts, counts, status, onReload }) {
       GOSS_KINDS[key].label,
       counts[key],
     ]),
-    ...(queerPress > 0 ? [['queer-press', 'Queer press', queerPress]] : []),
+    ...(keptCount > 0 ? [['kept', 'Saved', keptCount]] : []),
   ];
+
+  // Only the shelves that have something on them today.
+  const toneChips = GOSS_TONES.map(([value, label]) => [
+    value,
+    label,
+    byKind.filter((burst) => burst.tone === value).length,
+  ]).filter(([, , count]) => count > 0);
 
   return (
     <>
@@ -5531,6 +5606,41 @@ function GossPanel({ bursts, counts, status, onReload }) {
         ))}
       </div>
 
+      {/* The shelves. Only shown when there is more than one to choose
+          between, so a narrow kind filter does not leave a row of one. */}
+      {toneChips.length > 1 && (
+        <div className="no-scrollbar mb-2 flex gap-1.5 overflow-x-auto">
+          <button
+            type="button"
+            onClick={() => setTone('all')}
+            aria-pressed={tone === 'all'}
+            className={`shrink-0 rounded-full px-2.5 py-1 text-xs font-medium transition-all duration-200 ease-spring active:scale-95 ${
+              tone === 'all'
+                ? 'bg-indigo-600 text-white'
+                : 'bg-white dark:bg-slate-900 text-slate-500 dark:text-slate-400 ring-1 ring-inset ring-slate-200 dark:ring-slate-700 hover:bg-slate-100'
+            }`}
+          >
+            Every shelf
+          </button>
+          {toneChips.map(([value, label, count]) => (
+            <button
+              key={value}
+              type="button"
+              onClick={() => setTone(tone === value ? 'all' : value)}
+              aria-pressed={tone === value}
+              className={`shrink-0 rounded-full px-2.5 py-1 text-xs font-medium transition-all duration-200 ease-spring active:scale-95 ${
+                tone === value
+                  ? 'bg-indigo-600 text-white'
+                  : 'bg-white dark:bg-slate-900 text-slate-500 dark:text-slate-400 ring-1 ring-inset ring-slate-200 dark:ring-slate-700 hover:bg-slate-100'
+              }`}
+            >
+              {label}
+              <span className="ml-1 opacity-60">{count}</span>
+            </button>
+          ))}
+        </div>
+      )}
+
       {shown.length === 0 && (
         <PanelMessage icon={Flame} label="Nothing of that sort right now." />
       )}
@@ -5538,7 +5648,12 @@ function GossPanel({ bursts, counts, status, onReload }) {
       <ul className="space-y-2">
         {shown.map((burst) => (
           <li key={burst.link}>
-            <GossCard burst={burst} fresh={isFresh(burst)} />
+            <GossCard
+              burst={burst}
+              fresh={isFresh(burst)}
+              kept={reading.has(burst.link)}
+              onKeep={() => onKeep(burst)}
+            />
           </li>
         ))}
       </ul>
@@ -5819,6 +5934,48 @@ function BriefingDrawer({
   onToggleSaved,
   updates,
 }) {
+  /*
+   * The reading list lives here rather than in the app above, because this
+   * is where the panel that uses it is rendered. Put higher up it was simply
+   * not in scope, and the Goss tab threw on open: keptLinks is not defined.
+   */
+  const [reading, setReading] = useState(readReadingList);
+  const keptLinks = useMemo(() => new Set(reading.map((row) => row.link)), [reading]);
+
+  /**
+   * Keeping a story to read.
+   *
+   * The whole row is kept, not just its link, because the feed is rebuilt
+   * every fifteen minutes and a story drops out of it within a day: holding
+   * only the link would leave a list that knows what you saved but not what
+   * it was called.
+   */
+  const keepStory = useCallback((burst) => {
+    setReading((previous) => {
+      const without = previous.filter((row) => row.link !== burst.link);
+      const next =
+        without.length === previous.length
+          ? [
+              ...without,
+              {
+                link: burst.link,
+                title: burst.title,
+                source: burst.source,
+                image: burst.image ?? null,
+                publishedAt: burst.publishedAt ?? null,
+                keptAt: new Date().toISOString(),
+              },
+            ].slice(-READING_MAX)
+          : without;
+      try {
+        localStorage.setItem(READING_KEY, JSON.stringify(next));
+      } catch {
+        // Without storage the list lasts for this visit only.
+      }
+      return next;
+    });
+  }, []);
+
   const goss = useDeferredEndpoint('/api/goss', open);
 
   useEffect(() => {
@@ -5890,6 +6047,8 @@ function BriefingDrawer({
               counts={goss.data?.counts ?? null}
               status={goss.status}
               onReload={goss.reload}
+              reading={keptLinks}
+              onKeep={keepStory}
             />
           ) : (
             <UpcomingPanel
@@ -6224,6 +6383,7 @@ export default function App() {
       return next;
     });
   }, []);
+
 
   /** "Not for me": the game drops out of every list until you unhide it. */
   const hideGame = useCallback((id) => {

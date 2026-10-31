@@ -35,6 +35,20 @@ const FEEDS = [
   // For the lilsimsie corner of your list, and the Cozy collection.
   { source: 'Sims Community', url: 'https://simscommunity.info/feed/', tone: 'cozy' },
 
+  // Reading the catalog rather than the industry.
+  //
+  // The shelves above are organised by who publishes, which answers "what
+  // happened today" and not "what is worth reading about the kind of game I
+  // play". These are the two the catalog itself is weighted towards: the
+  // console it is about, and the long games people read about between
+  // sessions. Each was fetched before being listed.
+  { source: 'RPG Site', url: 'https://www.rpgsite.net/feed', tone: 'rpg' },
+  { source: 'TheSixthAxis', url: 'https://www.thesixthaxis.com/feed/', tone: 'playstation' },
+  { source: 'Indie Games Plus', url: 'https://indiegamesplus.com/feed', tone: 'indie' },
+  // Breadth, for a reader who wants the whole day rather than a corner of it.
+  { source: 'GameSpot', url: 'https://www.gamespot.com/feeds/news/', tone: 'general' },
+  { source: 'Destructoid', url: 'https://www.destructoid.com/feed/', tone: 'general' },
+
   // The queer shelf is not one magazine. It is the LGBTQ+ gaming press, queer
   // publications that cover games, and the worker-owned sites founded and
   // staffed by queer writers who left the big outlets.
