@@ -20,6 +20,9 @@
  * this", never as "it is true that".
  */
 
+import { storeRows } from './store.mjs';
+import catalog from '../src/games.json' with { type: 'json' };
+import { buildTitleIndex, findGameInStory } from './story-games.mjs';
 import { loadBlob, saveBlob } from './history.mjs';
 import { loadNews } from './news.mjs';
 
@@ -974,6 +977,42 @@ export function spreadBySource(sorted, total) {
   return out;
 }
 
+/**
+ * Hangs the game a story is about on the story.
+ *
+ * The catalog and the feed were two apps sharing a window: a headline about
+ * Silent Hill said nothing about whether you owned it or what it cost, and a
+ * game's page never mentioned anybody had written about it this week. The
+ * matching, and every guard that keeps it honest, is in story-games.mjs.
+ *
+ * Whatever the store knows comes with it, so the card can say the thing worth
+ * knowing: that it is on PS Plus, or twelve pounds, or already yours.
+ */
+async function withGames(bursts) {
+  let index;
+  try {
+    const rows = await storeRows();
+    index = buildTitleIndex([
+      ...rows.map((row) => ({
+        name: row.name,
+        storeId: row.id,
+        price: row.price ?? null,
+        plus: row.plus?.included === true,
+        art: row.art ?? null,
+      })),
+      ...catalog.map((game) => ({ name: game.title, id: game.id, curated: true })),
+    ]);
+  } catch {
+    // The mirror is a nice-to-have here: without it the feed is just a feed.
+    return bursts;
+  }
+
+  return bursts.map((burst) => {
+    const game = findGameInStory(burst.title, index);
+    return game ? { ...burst, game } : burst;
+  });
+}
+
 export async function loadGoss() {
   if (cache && Date.now() - cache.storedAt < CACHE_TTL_MS) return cache.value;
 
@@ -1056,7 +1095,7 @@ export async function loadGoss() {
   }
 
   const value = {
-    bursts: interleave(byKind).slice(0, MAX_BURSTS),
+    bursts: await withGames(interleave(byKind).slice(0, MAX_BURSTS)),
     counts: Object.fromEntries([...byKind].map(([kind, bucket]) => [kind, bucket.length])),
     fetchedAt: new Date(now).toISOString(),
   };

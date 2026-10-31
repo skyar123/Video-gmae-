@@ -24,6 +24,7 @@ import {
   Clock,
   ExternalLink,
   Flame,
+  Gamepad2,
   Heart,
   Image as ImageIcon,
   Info,
@@ -5280,7 +5281,7 @@ function GossMedia({ burst, videoId, playing, onPlay }) {
   );
 }
 
-function GossCard({ burst, fresh, kept, onKeep }) {
+function GossCard({ burst, fresh, kept, onKeep, onOpenGame }) {
   const kind = GOSS_KINDS[burst.kind] ?? GOSS_KINDS.buzz;
   const post = burst.source === 'Bluesky';
   const external = burst.externalLink ? hostOf(burst.externalLink) : null;
@@ -5397,6 +5398,37 @@ function GossCard({ burst, fresh, kept, onKeep }) {
                   {external}
                 </p>
               )}
+
+              {/* The game the story is about, and what the store knows about
+                  it. This is the whole point of the catalog sitting behind
+                  the feed: reading that something is out is one thing, being
+                  told it is already covered by your PS Plus is another. */}
+              {burst.game && onOpenGame && (
+                <button
+                  type="button"
+                  onClick={(event) => {
+                    event.stopPropagation();
+                    onOpenGame(burst.game);
+                  }}
+                  /* relative z-10, because the headline above stretches an
+                     invisible layer across the whole card to make all of it
+                     clickable. Without lifting out of that, this button is
+                     under it and cannot be pressed at all. */
+                  className="relative z-10 mt-2 inline-flex max-w-full items-center gap-1.5 rounded-full bg-slate-100 dark:bg-slate-800 py-1 pl-2.5 pr-3 text-[11px] font-semibold text-slate-700 dark:text-slate-200 transition-colors hover:bg-slate-200 dark:hover:bg-slate-700"
+                >
+                  <Gamepad2 className="h-3 w-3 shrink-0 text-indigo-500" />
+                  <span className="truncate">{burst.game.name}</span>
+                  {burst.game.plus ? (
+                    <span className="shrink-0 rounded bg-indigo-600 px-1.5 py-px text-[10px] font-black uppercase text-white">
+                      PS Plus
+                    </span>
+                  ) : burst.game.price ? (
+                    <span className="shrink-0 tabular-nums text-slate-500 dark:text-slate-400">
+                      {burst.game.price}
+                    </span>
+                  ) : null}
+                </button>
+              )}
             </div>
           </div>
         </div>
@@ -5490,7 +5522,7 @@ const GOSS_TONES = [
   ['nintendo', 'Nintendo'],
 ];
 
-function GossPanel({ bursts, counts, status, onReload, reading, onKeep }) {
+function GossPanel({ bursts, counts, status, onReload, reading, onKeep, onOpenGame }) {
   /*
    * The saved shelf is built from what was stored, not from what is still in
    * the feed.
@@ -5694,6 +5726,7 @@ function GossPanel({ bursts, counts, status, onReload, reading, onKeep }) {
               fresh={isFresh(burst)}
               kept={keptLinks.has(burst.link)}
               onKeep={() => onKeep(burst)}
+              onOpenGame={onOpenGame}
             />
           </li>
         ))}
@@ -5965,6 +5998,7 @@ function PanelMessage({ icon: Icon, label, spin = false, action }) {
  * dip into and dismiss, and the catalog stays exactly where you left it.
  */
 function BriefingDrawer({
+  onOpenGame,
   open,
   tab,
   onTab,
@@ -6089,6 +6123,7 @@ function BriefingDrawer({
               onReload={goss.reload}
               reading={reading}
               onKeep={keepStory}
+              onOpenGame={onOpenGame}
             />
           ) : (
             <UpcomingPanel
@@ -8058,6 +8093,16 @@ export default function App() {
         open={briefing.open}
         tab={briefing.tab}
         onTab={(tab) => setBriefing((previous) => ({ ...previous, tab }))}
+        onOpenGame={(game) => {
+          // Out of the drawer and onto the game: a write-up where there is
+          // one, the store view otherwise.
+          setBriefing((previous) => ({ ...previous, open: false }));
+          if (game.id) setActiveGameId(game.id);
+          else if (game.storeId) {
+            const row = storeRowCache.find((entry) => entry.id === game.storeId);
+            setActiveStoreGame(row ?? { id: game.storeId, name: game.name, art: game.art ?? null });
+          }
+        }}
         onClose={() => {
           // Closing the panel is the acknowledgement: you have seen the change.
           if (briefing.tab === 'upcoming') clearReleaseChanges();
