@@ -319,12 +319,96 @@ async function shelvesKeepEverything() {
   return problems.length > 0 ? 1 : 0;
 }
 
+/**
+ * Unread must hide exactly what you read, and nothing else.
+ *
+ * It is the only filter in the app whose whole job is to take things off the
+ * screen on purpose, which makes it the one place a mistake is invisible: a
+ * reader cannot tell the difference between a story they already read and a
+ * story that quietly stopped being offered.
+ *
+ * So this marks five real stories read, narrows to Unread, and checks both
+ * halves: those five gone, and every other story in the payload still
+ * reachable. Checking only the first half would pass with the filter
+ * returning nothing at all.
+ */
+async function unreadHidesOnlyWhatYouRead() {
+  const page = await browser.newPage({ viewport: { width: 430, height: 1200 } });
+  const problems = [];
+  page.on('pageerror', (error) => problems.push(String(error).slice(0, 110)));
+  try {
+    await page.goto(`${BASE}/?read=goss`, { waitUntil: 'domcontentloaded' });
+    await page.waitForSelector('article', { timeout: 60000 });
+    await page.waitForTimeout(3200);
+
+    const links = await page.evaluate(async () => {
+      const { bursts } = await (await fetch('/api/goss')).json();
+      return bursts.map((burst) => burst.link);
+    });
+    const read = links.slice(0, 5);
+    await page.evaluate((rows) => localStorage.setItem('gossRead', JSON.stringify(rows)), read);
+
+    await page.goto(`${BASE}/?read=goss`, { waitUntil: 'domcontentloaded' });
+    await page.waitForSelector('article', { timeout: 60000 });
+    await page.waitForTimeout(3200);
+
+    const drawer = page.getByRole('dialog', { name: 'News and releases' });
+    const chip = drawer.getByRole('button', { name: /^Unread/ });
+    if ((await chip.count()) === 0) {
+      problems.push('no Unread chip after marking five stories read');
+    } else {
+      await chip.first().click();
+      await page.waitForTimeout(500);
+      // Narrowing remounts the cards, so every fold is shut again.
+      for (let guard = 0; guard < 15; guard += 1) {
+        const folds = drawer.getByRole('button', { name: /Also on this/ });
+        if ((await folds.count()) === 0) break;
+        await folds.first().click();
+        await page.waitForTimeout(120);
+      }
+      const seen = new Set(await page.$$eval('article a[href]', (all) => all.map((a) => a.href)));
+      const kept = read.filter((link) => seen.has(link));
+      const lost = links.slice(5).filter((link) => !seen.has(link));
+      if (kept.length > 0) problems.push(`${kept.length} read stories still listed`);
+      if (lost.length > 0) problems.push(`${lost.length} unread stories missing: ${lost[0]}`);
+
+      /*
+       * And the list holds still while you read it. Opening a story is what
+       * marks it read, so a live filter takes the card out from under the
+       * finger that tapped it and moves everything below up. The picks list
+       * had exactly this bug, so it gets a check rather than a promise.
+       */
+      page.context().on('page', (popup) => popup.close().catch(() => {}));
+      const before = await page.locator('article').count();
+      const headline = page.locator('article').nth(1).locator('a[href^="http"]').first();
+      if ((await headline.count()) > 0) {
+        await headline.click();
+        await page.waitForTimeout(700);
+        const after = await page.locator('article').count();
+        if (after !== before) {
+          problems.push(`reading one story moved the list: ${before} cards became ${after}`);
+        }
+      }
+    }
+    console.log(
+      `${problems.length ? 'FAIL' : ' ok '} ${'Unread hides only what you read'.padEnd(32)} ${links.length} stories, 5 marked read` +
+        (problems.length ? `  ${problems[0]}` : ''),
+    );
+  } catch (error) {
+    problems.push(`threw: ${String(error.message).slice(0, 80)}`);
+    console.log(`FAIL ${'Unread hides only what you read'.padEnd(32)} ${problems[0]}`);
+  }
+  await page.close();
+  return problems.length > 0 ? 1 : 0;
+}
+
 failures += await shelvesKeepEverything();
+failures += await unreadHidesOnlyWhatYouRead();
 
 await browser.close();
 stop();
 
-const total = SURFACES.length + 1;
+const total = SURFACES.length + 2;
 if (failures > 0) {
   console.error(`\n${failures} of ${total} checks have problems.`);
   process.exit(1);

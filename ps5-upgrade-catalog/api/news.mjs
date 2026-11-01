@@ -43,8 +43,27 @@ const FEEDS = [
   // console it is about, and the long games people read about between
   // sessions. Each was fetched before being listed.
   { source: 'RPG Site', url: 'https://www.rpgsite.net/feed', tone: 'rpg' },
+  // Where a Japanese announcement lands first, hours before the English
+  // outlets write it up. Most of what the RPG shelf cares about starts here.
+  { source: 'Gematsu', url: 'https://www.gematsu.com/feed', tone: 'rpg' },
+  // Reviews and features rather than announcements, for the half of the
+  // shelf that is reading about long games between sessions.
+  { source: 'RPGFan', url: 'https://www.rpgfan.com/feed/', tone: 'rpg' },
   { source: 'TheSixthAxis', url: 'https://www.thesixthaxis.com/feed/', tone: 'playstation' },
   { source: 'Indie Games Plus', url: 'https://indiegamesplus.com/feed', tone: 'indie' },
+  /*
+   * Tried and not listed, so the next person does not spend the afternoon
+   * on them: Critical Distance, which would be the best fit here of
+   * anything, answers 403 to a request that says what it is. Noisy Pixel
+   * and Hey Poor Player answer 202 with a bot challenge. Second Wind's feed
+   * serves but carries no items. Polygon and Dicebreaker 403 the same way,
+   * which is why Polygon comes in through Bluesky above.
+   *
+   * None of them are fetched with a user agent pretending to be a browser.
+   * A 403 to an honest request is a publisher saying no, and the answer to
+   * that is to not take it.
+   */
+
   // Breadth, for a reader who wants the whole day rather than a corner of it.
   { source: 'GameSpot', url: 'https://www.gamespot.com/feeds/news/', tone: 'general' },
   { source: 'Destructoid', url: 'https://www.destructoid.com/feed/', tone: 'general' },

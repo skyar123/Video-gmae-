@@ -55,6 +55,7 @@ import {
 } from 'lucide-react';
 import { starterPicks } from './recommend.js';
 import { foldStories } from './story-fold.js';
+import { markRead, parseRead } from './read-state.js';
 import {
   geniusPicks as geniusPicksFor,
   unify,
@@ -5135,6 +5136,17 @@ function relativeTime(iso) {
 
 const READING_KEY = 'readingList';
 const GOSS_SEEN_KEY = 'gossSeenAt';
+const GOSS_READ_KEY = 'gossRead';
+
+function readOpenedStories() {
+  try {
+    return parseRead(localStorage.getItem(GOSS_READ_KEY));
+  } catch {
+    // No storage means every story reads as unread, which is the safe way
+    // round: nothing is hidden that has not been seen.
+    return [];
+  }
+}
 
 /**
  * Each kind gets its own colour and its own word, because the whole point of
@@ -5282,7 +5294,7 @@ function GossMedia({ burst, videoId, playing, onPlay }) {
   );
 }
 
-function GossCard({ burst, fresh, kept, onKeep, onOpenGame }) {
+function GossCard({ burst, fresh, kept, onKeep, read, readLinks, onRead, onOpenGame }) {
   const kind = GOSS_KINDS[burst.kind] ?? GOSS_KINDS.buzz;
   const post = burst.source === 'Bluesky';
   const external = burst.externalLink ? hostOf(burst.externalLink) : null;
@@ -5385,12 +5397,27 @@ function GossCard({ burst, fresh, kept, onKeep, onOpenGame }) {
               </p>
               {/* The link stretches over the text block only, so the picture
                   above can carry its own play control without nesting a
-                  button inside an anchor. */}
+                  button inside an anchor.
+
+                  Opening it is also what marks it read. Nothing else counts:
+                  scrolling past a headline is not reading it, and playing a
+                  trailer in the card is not either. */}
               <a
                 href={burst.link}
                 target="_blank"
                 rel="noopener noreferrer"
-                className="line-clamp-3 text-sm font-semibold leading-snug text-slate-800 dark:text-slate-100 after:absolute after:inset-0 after:content-[''] hover:underline"
+                onClick={() => onRead?.(burst.link)}
+                onAuxClick={(event) => {
+                  // Opening in a background tab with the middle button is
+                  // how a lot of reading actually gets done, and it fires no
+                  // click at all.
+                  if (event.button === 1) onRead?.(burst.link);
+                }}
+                className={`line-clamp-3 text-sm leading-snug after:absolute after:inset-0 after:content-[''] hover:underline ${
+                  read
+                    ? 'font-medium text-slate-400 dark:text-slate-500'
+                    : 'font-semibold text-slate-800 dark:text-slate-100'
+                }`}
               >
                 {burst.title}
               </a>
@@ -5438,12 +5465,22 @@ function GossCard({ burst, fresh, kept, onKeep, onOpenGame }) {
                             href={row.link}
                             target="_blank"
                             rel="noopener noreferrer"
+                            onClick={() => onRead?.(row.link)}
+                            onAuxClick={(event) => {
+                              if (event.button === 1) onRead?.(row.link);
+                            }}
                             className="block hover:underline"
                           >
                             <span className="text-[11px] font-semibold text-slate-500 dark:text-slate-400">
                               {row.source}
                             </span>
-                            <span className="block text-xs leading-snug text-slate-700 dark:text-slate-200">
+                            <span
+                              className={`block text-xs leading-snug ${
+                                readLinks?.has(row.link)
+                                  ? 'text-slate-400 dark:text-slate-500'
+                                  : 'text-slate-700 dark:text-slate-200'
+                              }`}
+                            >
                               {row.title}
                             </span>
                           </a>
@@ -5594,7 +5631,17 @@ const GOSS_TONES = [
   ['nintendo', 'Nintendo'],
 ];
 
-function GossPanel({ bursts, counts, status, onReload, reading, onKeep, onOpenGame }) {
+function GossPanel({
+  bursts,
+  counts,
+  status,
+  onReload,
+  reading,
+  onKeep,
+  opened,
+  onRead,
+  onOpenGame,
+}) {
   /*
    * The saved shelf is built from what was stored, not from what is still in
    * the feed.
@@ -5605,6 +5652,7 @@ function GossPanel({ bursts, counts, status, onReload, reading, onKeep, onOpenGa
    * read: a story saved last week showed no chip at all.
    */
   const keptLinks = useMemo(() => new Set(reading.map((row) => row.link)), [reading]);
+  const readLinks = useMemo(() => new Set(opened), [opened]);
   const keptRows = useMemo(
     () =>
       [...reading]
@@ -5621,6 +5669,38 @@ function GossPanel({ bursts, counts, status, onReload, reading, onKeep, onOpenGa
   const [kind, setKind] = useState('all');
   const [tone, setTone] = useState('all');
   const [order, setOrder] = useState('top');
+
+  /*
+   * The Unread list holds still while you are reading it.
+   *
+   * Opening a story is what marks it read, so a live filter would take the
+   * card out from under the finger that just tapped it: you come back from
+   * the article to a list that has closed over the gap and moved everything
+   * below it up. The picks list had exactly this bug and it was the worst
+   * thing in the app, because the action you take is the thing that
+   * rearranges what you were about to take it on.
+   *
+   * So the list is the stories that were unread when you opened it, and the
+   * ones you read go grey where they stand. Leaving the filter and coming
+   * back rebuilds it, and so does the feed refreshing, which is the whole of
+   * the refresh it needs.
+   */
+  const [heldUnread, setHeldUnread] = useState(null);
+  useEffect(() => {
+    if (kind !== 'unread') {
+      // eslint-disable-next-line react/set-state-in-effect
+      if (heldUnread) setHeldUnread(null);
+      return;
+    }
+    if (heldUnread?.bursts === bursts) return;
+    // eslint-disable-next-line react/set-state-in-effect
+    setHeldUnread({
+      bursts,
+      links: new Set(
+        bursts.filter((burst) => !readLinks.has(burst.link)).map((burst) => burst.link),
+      ),
+    });
+  }, [kind, heldUnread, bursts, readLinks]);
 
   // Read once per mount, then immediately record this visit: the dots have to
   // keep pointing at the same things while you scroll, but a reopen tomorrow
@@ -5670,7 +5750,13 @@ function GossPanel({ bursts, counts, status, onReload, reading, onKeep, onOpenGa
       ? bursts
       : kind === 'kept'
         ? keptRows
-        : bursts.filter((burst) => burst.kind === kind);
+        : kind === 'unread'
+          ? bursts.filter((burst) =>
+              heldUnread?.bursts === bursts
+                ? heldUnread.links.has(burst.link)
+                : !readLinks.has(burst.link),
+            )
+          : bursts.filter((burst) => burst.kind === kind);
 
   const picked = tone === 'all' ? byKind : byKind.filter((burst) => burst.tone === tone);
 
@@ -5693,6 +5779,7 @@ function GossPanel({ bursts, counts, status, onReload, reading, onKeep, onOpenGa
   const shown = foldStories(ordered);
   const freshCount = bursts.filter(isFresh).length;
   const keptCount = reading.length;
+  const unreadCount = bursts.filter((burst) => !readLinks.has(burst.link)).length;
   const chips = [
     ['all', 'Everything', bursts.length],
     ...GOSS_ORDER.filter((key) => (counts?.[key] ?? 0) > 0).map((key) => [
@@ -5700,6 +5787,11 @@ function GossPanel({ bursts, counts, status, onReload, reading, onKeep, onOpenGa
       GOSS_KINDS[key].label,
       counts[key],
     ]),
+    /*
+     * Only once something has been read, because until then Unread is a
+     * second button for Everything wearing a different number.
+     */
+    ...(unreadCount < bursts.length ? [['unread', 'Unread', unreadCount]] : []),
     ...(keptCount > 0 ? [['kept', 'Saved', keptCount]] : []),
   ];
 
@@ -5807,6 +5899,9 @@ function GossPanel({ bursts, counts, status, onReload, reading, onKeep, onOpenGa
               fresh={isFresh(burst)}
               kept={keptLinks.has(burst.link)}
               onKeep={() => onKeep(burst)}
+              read={readLinks.has(burst.link)}
+              readLinks={readLinks}
+              onRead={onRead}
               onOpenGame={onOpenGame}
             />
           </li>
@@ -6097,6 +6192,26 @@ function BriefingDrawer({
    */
   const [reading, setReading] = useState(readReadingList);
 
+  /*
+   * What has been opened, which lives here for the same reason the reading
+   * list does: this is the component that renders the panel using it.
+   */
+  const [opened, setOpened] = useState(readOpenedStories);
+
+  const markStoryRead = useCallback((link) => {
+    setOpened((previous) => {
+      const next = markRead(previous, link);
+      if (next === previous) return previous;
+      try {
+        localStorage.setItem(GOSS_READ_KEY, JSON.stringify(next));
+      } catch {
+        // Without storage it lasts for this visit, which is still most of
+        // the value: the second scroll of one sitting is the worst one.
+      }
+      return next;
+    });
+  }, []);
+
   /**
    * Keeping a story to read.
    *
@@ -6204,6 +6319,8 @@ function BriefingDrawer({
               onReload={goss.reload}
               reading={reading}
               onKeep={keepStory}
+              opened={opened}
+              onRead={markStoryRead}
               onOpenGame={onOpenGame}
             />
           ) : (
