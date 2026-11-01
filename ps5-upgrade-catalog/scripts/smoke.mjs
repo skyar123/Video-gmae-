@@ -277,7 +277,11 @@ async function openEveryFold(drawer) {
 }
 
 /**
- * The one thing folding the news can break: a shelf losing a story.
+ * Nothing is hidden from the reader.
+ *
+ * Two features here take things off the screen or move them down it, and
+ * both are only defensible if nothing actually goes missing: folding four
+ * reports into one card, and filing walkthroughs under yesterday.
  *
  * Four outlets on one report arrive as one card, which means three stories
  * are on the screen without a card of their own. If that fold ran before the
@@ -311,6 +315,7 @@ async function shelvesKeepEverything() {
       return {
         total: bursts.length,
         folded: grouped.length,
+        guides: bursts.filter((burst) => burst.guide).map((burst) => burst.link),
         /*
          * A tagged story has to carry both the name of its pile and how many
          * outlets ran it: the view folds on the first and the Top order
@@ -327,6 +332,23 @@ async function shelvesKeepEverything() {
 
     if (feed.uncounted > 0) {
       problems.push(`${feed.uncounted} grouped stories arrive without a coverage count`);
+    }
+
+    /*
+     * Guides are moved down the Top order, not taken out of the feed, and
+     * the difference is the whole of the claim. So before narrowing to
+     * anything, every guide the payload carries has to be on the screen.
+     * A demotion that quietly became a deletion would look exactly like a
+     * tidier feed.
+     */
+    {
+      const stuckHere = await openEveryFold(page.getByRole('dialog', { name: 'News and releases' }));
+      if (stuckHere) problems.push(`Everything: ${stuckHere}`);
+      const here = new Set(await page.$$eval('article a[href]', (all) => all.map((a) => a.href)));
+      const hidden = feed.guides.filter((link) => !here.has(link));
+      if (hidden.length > 0) {
+        problems.push(`${hidden.length} guides are missing from Everything: ${hidden[0]}`);
+      }
     }
 
     const drawer = page.getByRole('dialog', { name: 'News and releases' });
@@ -372,19 +394,19 @@ async function shelvesKeepEverything() {
       problems.push(`walked no shelves, though the feed has ${shelvesToday}`);
     }
 
-    const note = `${feed.total} stories, ${feed.folded} of them repeats, ${checked} shelves`;
+    const note = `${feed.total} stories, ${feed.folded} repeats, ${feed.guides.length} guides, ${checked} shelves`;
     if (feed.folded === 0 && problems.length === 0) {
-      console.log(` ok  ${'No shelf loses a story'.padEnd(32)} nothing repeated today, so nothing proved`);
+      console.log(` ok  ${'Nothing is hidden from a reader'.padEnd(32)} nothing repeated today, so nothing proved`);
     } else {
-      console.log(`${problems.length ? 'FAIL' : ' ok '} ${'No shelf loses a story'.padEnd(32)} ${note}` +
+      console.log(`${problems.length ? 'FAIL' : ' ok '} ${'Nothing is hidden from a reader'.padEnd(32)} ${note}` +
         (problems.length ? `  ${problems[0]}` : ''));
     }
   } catch (error) {
     problems.push(`threw: ${String(error.message).slice(0, 80)}`);
-    console.log(`FAIL ${'No shelf loses a story'.padEnd(32)} ${problems[0]}`);
+    console.log(`FAIL ${'Nothing is hidden from a reader'.padEnd(32)} ${problems[0]}`);
   }
   await page.close();
-  if (problems.length > 0) fail('No shelf loses a story', problems.join('; '));
+  if (problems.length > 0) fail('Nothing is hidden from a reader', problems.join('; '));
   return problems.length > 0 ? 1 : 0;
 }
 

@@ -9,7 +9,7 @@
  */
 import { test } from 'node:test';
 import assert from 'node:assert/strict';
-import { OUTLET_HOURS, rankAcrossChannels, rankedAt } from '../src/feed-rank.js';
+import { GUIDE_HOURS, OUTLET_HOURS, rankAcrossChannels, rankedAt } from '../src/feed-rank.js';
 
 const HOUR = 3600000;
 const now = Date.parse('2026-11-01T12:00:00.000Z');
@@ -117,4 +117,39 @@ test('nothing is dropped or duplicated by ranking', () => {
   const ranked = rankAcrossChannels(rows);
   assert.equal(ranked.length, rows.length);
   assert.equal(new Set(ranked.map((r) => r.link)).size, rows.length);
+});
+
+test('a walkthrough counts as yesterday, and only in Top', () => {
+  /*
+   * Guides are filed hourly, so by the clock they are always the newest
+   * thing in the feed: on a real day the Top column opened with two Fortnite
+   * item lists and a Witcher 3 choice walkthrough. A day back puts them
+   * under today's news and over the week's, which is where a walkthrough
+   * belongs in a column that means "important".
+   */
+  const guide = story({ publishedAt: agoHours(1), guide: true, link: 'guide' });
+  const news = story({ publishedAt: agoHours(8), link: 'news' });
+  assert.deepEqual(order([guide, news]), ['news', 'guide']);
+  assert.equal((Date.parse(guide.publishedAt) - rankedAt(guide)) / HOUR, GUIDE_HOURS);
+
+  // But it is still ahead of last week, so it is placed, not buried.
+  const old = story({ publishedAt: agoHours(24 * 6), link: 'old' });
+  assert.deepEqual(order([old, guide]), ['guide', 'old']);
+});
+
+test('the two adjustments are one sum, not two rules fighting', () => {
+  // A guide that several outlets ran gets both: up for the coverage, down
+  // for being a guide, and the net is what decides where it sits.
+  const both = story({ publishedAt: agoHours(2), coverage: 3, guide: true });
+  const hours = (Date.parse(both.publishedAt) - rankedAt(both)) / HOUR;
+  assert.equal(hours, GUIDE_HOURS - 2 * OUTLET_HOURS);
+});
+
+test('only the press is demoted either', () => {
+  // A video called "All weapons in X" is somebody's upload, not a page an
+  // outlet files for search traffic, and is not flagged in the first place.
+  for (const channel of ['bluesky', 'pod', 'youtube']) {
+    const row = story({ channel, publishedAt: agoHours(2), guide: true });
+    assert.equal(rankedAt(row), Date.parse(row.publishedAt), `${channel} was demoted`);
+  }
 });

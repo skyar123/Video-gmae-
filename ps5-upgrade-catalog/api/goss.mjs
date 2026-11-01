@@ -24,6 +24,7 @@ import { storeRows } from './store.mjs';
 import catalog from '../src/games.json' with { type: 'json' };
 import { buildTitleIndex, findGameInStory } from './story-games.mjs';
 import { tagStories } from './story-clusters.mjs';
+import { isGuide } from './guides.mjs';
 import { loadBlob, saveBlob } from './history.mjs';
 import { loadNews } from './news.mjs';
 
@@ -872,6 +873,9 @@ async function pressGoss() {
         image: item.image ?? null,
         publishedAt: item.publishedAt,
         heat: 0,
+        // A walkthrough is not the day's news, and it is published every
+        // hour. Flagged here, placed by the view: see src/feed-rank.js.
+        guide: isGuide(item.title),
       }));
   } catch (error) {
     diagnostics.set('press', `failed: ${error?.message ?? error}`);

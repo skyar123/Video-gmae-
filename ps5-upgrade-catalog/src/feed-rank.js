@@ -32,19 +32,36 @@
  */
 export const OUTLET_HOURS = 3;
 
+/**
+ * How far back a walkthrough sits.
+ *
+ * Guides are published constantly, so they are always among the freshest
+ * things in the feed, and on a real day the Top column opened with two
+ * Fortnite item lists and a Witcher 3 choice walkthrough. A day is the
+ * number because it says the right thing: a guide counts as yesterday's, so
+ * it falls below today's news and stays above the week's. Nothing is hidden
+ * by it. Latest, Everything and every shelf are untouched, and guides have a
+ * chip of their own for the evening you are actually playing the game.
+ */
+export const GUIDE_HOURS = 24;
+
 const at = (burst) => new Date(burst.publishedAt ?? 0).getTime();
 
 /**
  * When a story counts as having happened, for ranking.
  *
- * Only the press is boosted. A pile is a fact about outlets publishing the
- * same report, and the other channels are not outlets: a podcast episode and
- * a person's post are not a second newspaper running the story.
+ * Only the press is moved either way. A pile is a fact about outlets
+ * publishing the same report, and the other channels are not outlets: a
+ * podcast episode and a person's post are not a second newspaper running the
+ * story. Nor is a video or a post a walkthrough in the sense that matters
+ * here, which is a page an outlet files hourly for search traffic.
  */
-export const rankedAt = (burst) =>
-  burst.channel === 'press' && burst.coverage > 1
-    ? at(burst) + (burst.coverage - 1) * OUTLET_HOURS * 3600000
-    : at(burst);
+export const rankedAt = (burst) => {
+  if (burst.channel !== 'press') return at(burst);
+  const lift = burst.coverage > 1 ? (burst.coverage - 1) * OUTLET_HOURS : 0;
+  const drop = burst.guide ? GUIDE_HOURS : 0;
+  return at(burst) + (lift - drop) * 3600000;
+};
 
 /**
  * Each channel is ranked within itself on whatever it actually has, and the

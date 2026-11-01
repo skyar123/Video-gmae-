@@ -5718,7 +5718,9 @@ function GossPanel({
       ? bursts
       : kind === 'kept'
         ? keptRows
-        : kind === 'unread'
+        : kind === 'guide'
+          ? bursts.filter((burst) => burst.guide)
+          : kind === 'unread'
           ? bursts.filter((burst) =>
               heldUnread?.bursts === bursts
                 ? heldUnread.links.has(burst.link)
@@ -5748,6 +5750,7 @@ function GossPanel({
   const freshCount = bursts.filter(isFresh).length;
   const keptCount = reading.length;
   const unreadCount = bursts.filter((burst) => !readLinks.has(burst.link)).length;
+  const guideCount = bursts.filter((burst) => burst.guide).length;
   const chips = [
     ['all', 'Everything', bursts.length],
     ...GOSS_ORDER.filter((key) => (counts?.[key] ?? 0) > 0).map((key) => [
@@ -5755,6 +5758,13 @@ function GossPanel({
       GOSS_KINDS[key].label,
       counts[key],
     ]),
+    /*
+     * Walkthroughs and item lists, which Top files under yesterday because
+     * they are published hourly. The chip is how you get at them on the
+     * evening you are actually playing the game: nothing is hidden, it is
+     * only placed.
+     */
+    ...(guideCount > 0 ? [['guide', 'Guides', guideCount]] : []),
     /*
      * Only once something has been read, because until then Unread is a
      * second button for Everything wearing a different number.
