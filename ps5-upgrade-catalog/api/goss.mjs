@@ -1054,12 +1054,18 @@ export async function loadGoss() {
    * line as though it were.
    */
   const grouped = tagStories(haul.filter((burst) => burst.channel === 'press'));
-  const story = new Map(
-    grouped.filter((burst) => burst.story).map((burst) => [burst.link, burst.story]),
+  const tagged = new Map(
+    grouped
+      .filter((burst) => burst.story)
+      .map((burst) => [burst.link, { story: burst.story, coverage: burst.coverage }]),
   );
 
   for (const plain of haul) {
-    const burst = story.has(plain.link) ? { ...plain, story: story.get(plain.link) } : plain;
+    // Both fields, not just the name of the pile: the view folds on `story`
+    // and the Top order weighs `coverage`, and carrying only the first is a
+    // bug that looks like nothing, because the ranking silently falls back
+    // to the clock and the feed goes on working.
+    const burst = tagged.has(plain.link) ? { ...plain, ...tagged.get(plain.link) } : plain;
     const bucket = byKind.get(burst.kind);
     if (bucket) bucket.push(burst);
   }

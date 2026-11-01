@@ -56,6 +56,7 @@ import {
 import { starterPicks } from './recommend.js';
 import { foldStories } from './story-fold.js';
 import { markRead, parseRead } from './read-state.js';
+import { rankAcrossChannels } from './feed-rank.js';
 import {
   geniusPicks as geniusPicksFor,
   unify,
@@ -5570,39 +5571,6 @@ function GossCard({ burst, fresh, kept, onKeep, read, readLinks, onRead, onOpenG
   );
 }
 
-/**
- * Top, ranked so that one channel cannot bury the rest.
- *
- * Only a Bluesky post carries an engagement number. Press headlines, podcast
- * episodes and videos all sit at zero, so ranking the merged feed on that
- * number alone put all forty-nine posts above the first headline: sixteen
- * screens of scrolling to reach the news, in a feed whose whole point was
- * that the news is in it.
- *
- * So each channel is ranked within itself first, on whatever it actually
- * has, and the merged order takes the top of each, then the second of each,
- * and so on. The loudest post and the freshest headline arrive together
- * instead of one sitting on top of the other. Recency breaks ties, which is
- * also what sorts the channels that have no other measure.
- */
-function rankAcrossChannels(rows) {
-  const newest = (a, b) => new Date(b.publishedAt ?? 0) - new Date(a.publishedAt ?? 0);
-  const lanes = new Map();
-  for (const burst of rows) {
-    const lane = burst.channel ?? 'other';
-    if (!lanes.has(lane)) lanes.set(lane, []);
-    lanes.get(lane).push(burst);
-  }
-  const ranked = [];
-  for (const lane of lanes.values()) {
-    lane
-      .sort((a, b) => (b.heat ?? 0) - (a.heat ?? 0) || newest(a, b))
-      .forEach((burst, place) => ranked.push({ burst, place }));
-  }
-  return ranked
-    .sort((a, b) => a.place - b.place || newest(a.burst, b.burst))
-    .map(({ burst }) => burst);
-}
 
 /**
  * The gossip column.

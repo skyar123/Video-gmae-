@@ -342,6 +342,12 @@ export function groupStories(bursts, rules = CLUSTER_RULES) {
  * you are looking at folds within itself: the whole feed shows one card for
  * the four EA reports, and the trade shelf on its own still shows Game
  * Developer's.
+ *
+ * Each tagged story also carries `coverage`, how many outlets ran it across
+ * the whole feed. That is a different number from the one a card shows,
+ * which counts only the versions in front of you, and it is deliberately the
+ * whole-feed one: it is what the Top order weighs, and how many outlets ran
+ * a story does not depend on which shelf you happen to be standing on.
  */
 export function tagStories(bursts, rules = CLUSTER_RULES) {
   const { piles } = groupStories(bursts, rules);
@@ -355,7 +361,12 @@ export function tagStories(bursts, rules = CLUSTER_RULES) {
     )[0];
     for (const index of pile) named.set(index, bursts[first].link);
   }
+  const size = new Map();
+  for (const key of named.values()) size.set(key, (size.get(key) ?? 0) + 1);
+
   return bursts.map((burst, index) =>
-    named.has(index) ? { ...burst, story: named.get(index) } : burst,
+    named.has(index)
+      ? { ...burst, story: named.get(index), coverage: size.get(named.get(index)) }
+      : burst,
   );
 }

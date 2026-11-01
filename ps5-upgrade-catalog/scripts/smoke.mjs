@@ -163,6 +163,17 @@ if (!(await ready())) {
 }
 
 const browser = await chromium.launch();
+/*
+ * What failed, and why, kept until the end.
+ *
+ * Each failure already prints a FAIL line as it happens, and that was the
+ * whole record: a run whose output was read through `tail` reported "1 of 22
+ * checks have problems" with the line naming the check scrolled away, and
+ * the failure never came back in five further runs. A tally that does not
+ * say what failed is a tally that can cost you the only occurrence.
+ */
+const failed = [];
+const fail = (label, why) => failed.push(`${label}: ${why}`);
 let failures = 0;
 
 for (const [query, label, least] of SURFACES) {
@@ -211,16 +222,58 @@ for (const [query, label, least] of SURFACES) {
     if ((await page.locator('header').count()) === 0) problems.push('nothing rendered');
     const cards = await page.locator('main h2, section h2, section h3').count();
     if (cards < least) problems.push(`only ${cards} cards, expected at least ${least}`);
-    if (problems.length > 0) failures += 1;
+    if (problems.length > 0) {
+      failures += 1;
+      fail(label, problems.join('; '));
+    }
     console.log(
       `${problems.length ? 'FAIL' : ' ok '} ${label.padEnd(32)} ${String(cards).padStart(4)} cards` +
         (problems.length ? `  ${problems[0]}` : ''),
     );
   } catch (error) {
     failures += 1;
+    fail(label, `threw: ${String(error.message).slice(0, 120)}`);
     console.log(`FAIL ${label.padEnd(32)} threw: ${String(error.message).slice(0, 70)}`);
   }
   await page.close();
+}
+
+/**
+ * Opens every folded card, and says so if it could not.
+ *
+ * Both checks below count a story as reachable if it is on a card or inside
+ * an opened fold, so a fold that failed to open looks exactly like a story
+ * that was dropped. Clicking a list that React is re-rendering can lose a
+ * click or detach the element mid-flight, so each one is retried, and a fold
+ * that will not open is reported as itself rather than as a missing story.
+ */
+async function openEveryFold(drawer) {
+  for (let guard = 0; guard < 20; guard += 1) {
+    const folds = drawer.getByRole('button', { name: /Also on this/ });
+    const left = await folds.count();
+    if (left === 0) return null;
+    try {
+      await folds.first().click({ timeout: 5000 });
+    } catch {
+      // Re-resolved on the next turn of the loop; only a fold that keeps
+      // failing gets reported.
+    }
+    await new Promise((resolve) => {
+      setTimeout(resolve, 150);
+    });
+    if ((await folds.count()) >= left) {
+      try {
+        await folds.first().click({ timeout: 5000, force: true });
+      } catch {
+        return `a fold would not open (${left} left)`;
+      }
+      await new Promise((resolve) => {
+        setTimeout(resolve, 200);
+      });
+      if ((await folds.count()) >= left) return `a fold would not open (${left} left)`;
+    }
+  }
+  return 'more folds than this check expects to open';
 }
 
 /**
@@ -254,8 +307,27 @@ async function shelvesKeepEverything() {
         const tone = burst.tone ?? 'none';
         (shelves[tone] = shelves[tone] ?? []).push(burst.link);
       }
-      return { total: bursts.length, folded: bursts.filter((b) => b.story).length, shelves };
+      const grouped = bursts.filter((burst) => burst.story);
+      return {
+        total: bursts.length,
+        folded: grouped.length,
+        /*
+         * A tagged story has to carry both the name of its pile and how many
+         * outlets ran it: the view folds on the first and the Top order
+         * weighs the second. Carrying only the first is a bug that looks
+         * like nothing, because the ranking quietly falls back to the clock
+         * and the feed goes on working. It shipped that way for an hour,
+         * and the unit tests could not see it because they hand the ranking
+         * a coverage count directly.
+         */
+        uncounted: grouped.filter((burst) => !(burst.coverage > 1)).length,
+        shelves,
+      };
     });
+
+    if (feed.uncounted > 0) {
+      problems.push(`${feed.uncounted} grouped stories arrive without a coverage count`);
+    }
 
     const drawer = page.getByRole('dialog', { name: 'News and releases' });
     const chips = await drawer
@@ -278,12 +350,8 @@ async function shelvesKeepEverything() {
         continue;
       }
       // Open every fold, so a folded story counts as reachable.
-      for (let guard = 0; guard < 15; guard += 1) {
-        const folds = drawer.getByRole('button', { name: /Also on this/ });
-        if ((await folds.count()) === 0) break;
-        await folds.first().click();
-        await page.waitForTimeout(120);
-      }
+      const stuck = await openEveryFold(drawer);
+      if (stuck) problems.push(`${label}: ${stuck}`);
       const seen = new Set(await page.$$eval('article a[href]', (all) => all.map((a) => a.href)));
       const lost = (feed.shelves[tone] ?? []).filter((link) => !seen.has(link));
       if (lost.length > 0) problems.push(`${label} lost ${lost.length}: ${lost[0]}`);
@@ -316,6 +384,7 @@ async function shelvesKeepEverything() {
     console.log(`FAIL ${'No shelf loses a story'.padEnd(32)} ${problems[0]}`);
   }
   await page.close();
+  if (problems.length > 0) fail('No shelf loses a story', problems.join('; '));
   return problems.length > 0 ? 1 : 0;
 }
 
@@ -360,12 +429,8 @@ async function unreadHidesOnlyWhatYouRead() {
       await chip.first().click();
       await page.waitForTimeout(500);
       // Narrowing remounts the cards, so every fold is shut again.
-      for (let guard = 0; guard < 15; guard += 1) {
-        const folds = drawer.getByRole('button', { name: /Also on this/ });
-        if ((await folds.count()) === 0) break;
-        await folds.first().click();
-        await page.waitForTimeout(120);
-      }
+      const stuck = await openEveryFold(drawer);
+      if (stuck) problems.push(stuck);
       const seen = new Set(await page.$$eval('article a[href]', (all) => all.map((a) => a.href)));
       const kept = read.filter((link) => seen.has(link));
       const lost = links.slice(5).filter((link) => !seen.has(link));
@@ -399,6 +464,7 @@ async function unreadHidesOnlyWhatYouRead() {
     console.log(`FAIL ${'Unread hides only what you read'.padEnd(32)} ${problems[0]}`);
   }
   await page.close();
+  if (problems.length > 0) fail('Unread hides only what you read', problems.join('; '));
   return problems.length > 0 ? 1 : 0;
 }
 
@@ -410,7 +476,10 @@ stop();
 
 const total = SURFACES.length + 2;
 if (failures > 0) {
-  console.error(`\n${failures} of ${total} checks have problems.`);
+  // Named, not just counted, so the last line of a truncated log still says
+  // what to go and look at.
+  console.error(`\n${failures} of ${total} checks have problems:`);
+  for (const line of failed) console.error(`  ${line}`);
   process.exit(1);
 }
 console.log(`\nall ${total} checks pass: every surface renders, with nothing thrown`);
