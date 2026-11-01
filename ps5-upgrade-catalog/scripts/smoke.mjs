@@ -52,6 +52,14 @@ async function loadPlaywright() {
 
 const { chromium } = await loadPlaywright();
 
+/*
+ * `npm run smoke` builds first, and has to.
+ *
+ * The suite serves dist, not the sources, so without the build it sweeps
+ * whatever was last built. That was found the only way it could be: by
+ * breaking the fold on purpose, watching all twenty-one checks pass, and
+ * realising the bundle under test did not contain the bug.
+ */
 const PORT = Number(process.env.PORT) || 4219;
 const BASE = `http://localhost:${PORT}`;
 
@@ -113,6 +121,19 @@ const SURFACES = [
   ['?read=goss', 'News', 20],
   ['?read=upcoming', 'Upcoming releases', 1],
 ];
+
+/** The shelf chips, by the label they wear, so the sweep can name them. */
+const SHELF_TONE = {
+  PlayStation: 'playstation',
+  RPGs: 'rpg',
+  'Queer press': 'queer',
+  Essays: 'essays',
+  Indie: 'indie',
+  Retro: 'retro',
+  'The trade': 'trade',
+  Cozy: 'cozy',
+  Nintendo: 'nintendo',
+};
 
 const server = spawn('node', ['scripts/serve-local.mjs', '--port', String(PORT)], {
   cwd: new URL('..', import.meta.url).pathname,
@@ -202,11 +223,110 @@ for (const [query, label, least] of SURFACES) {
   await page.close();
 }
 
+/**
+ * The one thing folding the news can break: a shelf losing a story.
+ *
+ * Four outlets on one report arrive as one card, which means three stories
+ * are on the screen without a card of their own. If that fold ran before the
+ * feed's filters, narrowing to the trade press or the queer press would
+ * silently drop whichever of them did not win its pile, and a reader cannot
+ * notice a story they were not shown. So this walks every shelf and checks
+ * that every story the payload puts on it is reachable: as a card, or inside
+ * an opened fold.
+ *
+ * It compares the screen against the live payload rather than a fixed number,
+ * so it holds whatever the day's news happens to be. On a day with no
+ * repeated story it proves nothing, and says so instead of passing quietly.
+ */
+async function shelvesKeepEverything() {
+  const page = await browser.newPage({ viewport: { width: 430, height: 1200 } });
+  const problems = [];
+  page.on('pageerror', (error) => problems.push(String(error).slice(0, 110)));
+  try {
+    await page.goto(`${BASE}/?read=goss`, { waitUntil: 'domcontentloaded' });
+    await page.waitForSelector('article', { timeout: 60000 });
+    await page.waitForTimeout(3200);
+
+    const feed = await page.evaluate(async () => {
+      const { bursts } = await (await fetch('/api/goss')).json();
+      const shelves = {};
+      for (const burst of bursts) {
+        const tone = burst.tone ?? 'none';
+        (shelves[tone] = shelves[tone] ?? []).push(burst.link);
+      }
+      return { total: bursts.length, folded: bursts.filter((b) => b.story).length, shelves };
+    });
+
+    const drawer = page.getByRole('dialog', { name: 'News and releases' });
+    const chips = await drawer
+      .locator('button[aria-pressed]')
+      .filter({ hasNotText: /^(Top|Latest)$/ })
+      .all();
+
+    let checked = 0;
+    for (const chip of chips) {
+      // The chip wears its story count, so "PlayStation 14" has to come back
+      // to "PlayStation". Without this the sweep matched no shelf at all and
+      // reported a pass for checking nothing.
+      const label = (await chip.innerText()).replace(/\s*\d+\s*$/, '').trim();
+      const tone = SHELF_TONE[label];
+      if (!tone) continue;
+      await chip.click();
+      await page.waitForTimeout(350);
+      if ((await chip.getAttribute('aria-pressed')) !== 'true') {
+        problems.push(`the ${label} chip does not take`);
+        continue;
+      }
+      // Open every fold, so a folded story counts as reachable.
+      for (let guard = 0; guard < 15; guard += 1) {
+        const folds = drawer.getByRole('button', { name: /Also on this/ });
+        if ((await folds.count()) === 0) break;
+        await folds.first().click();
+        await page.waitForTimeout(120);
+      }
+      const seen = new Set(await page.$$eval('article a[href]', (all) => all.map((a) => a.href)));
+      const lost = (feed.shelves[tone] ?? []).filter((link) => !seen.has(link));
+      if (lost.length > 0) problems.push(`${label} lost ${lost.length}: ${lost[0]}`);
+      checked += 1;
+      await chip.click();
+      await page.waitForTimeout(200);
+    }
+
+    /*
+     * A sweep that found no shelf to walk has proved nothing, and the first
+     * version of this said " ok " for exactly that. Checking nothing is a
+     * failure, not a pass.
+     */
+    const shelvesToday = Object.keys(feed.shelves).filter((tone) =>
+      Object.values(SHELF_TONE).includes(tone),
+    ).length;
+    if (checked === 0 && shelvesToday > 0) {
+      problems.push(`walked no shelves, though the feed has ${shelvesToday}`);
+    }
+
+    const note = `${feed.total} stories, ${feed.folded} of them repeats, ${checked} shelves`;
+    if (feed.folded === 0 && problems.length === 0) {
+      console.log(` ok  ${'No shelf loses a story'.padEnd(32)} nothing repeated today, so nothing proved`);
+    } else {
+      console.log(`${problems.length ? 'FAIL' : ' ok '} ${'No shelf loses a story'.padEnd(32)} ${note}` +
+        (problems.length ? `  ${problems[0]}` : ''));
+    }
+  } catch (error) {
+    problems.push(`threw: ${String(error.message).slice(0, 80)}`);
+    console.log(`FAIL ${'No shelf loses a story'.padEnd(32)} ${problems[0]}`);
+  }
+  await page.close();
+  return problems.length > 0 ? 1 : 0;
+}
+
+failures += await shelvesKeepEverything();
+
 await browser.close();
 stop();
 
+const total = SURFACES.length + 1;
 if (failures > 0) {
-  console.error(`\n${failures} of ${SURFACES.length} surfaces have problems.`);
+  console.error(`\n${failures} of ${total} checks have problems.`);
   process.exit(1);
 }
-console.log(`\nall ${SURFACES.length} surfaces render, with nothing thrown`);
+console.log(`\nall ${total} checks pass: every surface renders, with nothing thrown`);

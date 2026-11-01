@@ -23,6 +23,7 @@
 import { storeRows } from './store.mjs';
 import catalog from '../src/games.json' with { type: 'json' };
 import { buildTitleIndex, findGameInStory } from './story-games.mjs';
+import { tagStories } from './story-clusters.mjs';
 import { loadBlob, saveBlob } from './history.mjs';
 import { loadNews } from './news.mjs';
 
@@ -1035,7 +1036,30 @@ export async function loadGoss() {
 
   // Bluesky first so that when the same story exists as both a post and a
   // headline, the version with the engagement number on it survives dedupe.
-  for (const burst of dedupe([...searched, ...voices, ...pods, ...videos, ...press])) {
+  const haul = dedupe([...searched, ...voices, ...pods, ...videos, ...press]);
+
+  /*
+   * Which stories are the same event, worked out across the press only, and
+   * before anything is bucketed or capped so an event is grouped over the
+   * whole day rather than within whichever slice of it one kind holds. The
+   * folding itself is the view's job: see tagStories.
+   *
+   * The press only, for two reasons that both showed up as wrong groupings
+   * when this ran over everything. A Bluesky post is prose rather than a
+   * headline, so it shares ordinary words with everything and the first run
+   * put a thread about games journalists being laid off in the same pile as
+   * an Aftermath piece about working for Hasan Piker. And four outlets
+   * running the same report is a fact about the press; a person posting about
+   * it is not another outlet, and does not belong behind an "also on this"
+   * line as though it were.
+   */
+  const grouped = tagStories(haul.filter((burst) => burst.channel === 'press'));
+  const story = new Map(
+    grouped.filter((burst) => burst.story).map((burst) => [burst.link, burst.story]),
+  );
+
+  for (const plain of haul) {
+    const burst = story.has(plain.link) ? { ...plain, story: story.get(plain.link) } : plain;
     const bucket = byKind.get(burst.kind);
     if (bucket) bucket.push(burst);
   }

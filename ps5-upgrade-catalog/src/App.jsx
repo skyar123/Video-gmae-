@@ -54,6 +54,7 @@ import {
   X,
 } from 'lucide-react';
 import { starterPicks } from './recommend.js';
+import { foldStories } from './story-fold.js';
 import {
   geniusPicks as geniusPicksFor,
   unify,
@@ -5287,6 +5288,8 @@ function GossCard({ burst, fresh, kept, onKeep, onOpenGame }) {
   const external = burst.externalLink ? hostOf(burst.externalLink) : null;
   const videoId = youTubeId(burst.link);
   const [playing, setPlaying] = useState(false);
+  const also = burst.also ?? [];
+  const [showAlso, setShowAlso] = useState(false);
   // A post's picture stays inline under its text, where it reads as something
   // the person attached. A headline's or a video's picture is the thing
   // itself, so it leads.
@@ -5331,6 +5334,17 @@ function GossCard({ burst, fresh, kept, onKeep, onOpenGame }) {
                 {heatLabel(burst.heat)}
               </span>
             )}
+            {/* How many outlets ran it, which for a headline is what the
+                engagement count is for a post: the one number on the card
+                that says this is today's big story rather than today's
+                hundredth. A flat river of headlines can never tell you
+                that. */}
+            {also.length > 0 && (
+              <span className="inline-flex shrink-0 items-center gap-1 rounded-full bg-amber-50 dark:bg-amber-950/60 px-1.5 py-0.5 text-[11px] font-bold text-amber-700 dark:text-amber-300">
+                <Newspaper className="h-3 w-3" />
+                {also.length + 1} outlets
+              </span>
+            )}
             <span className="ml-auto shrink-0 text-[11px] text-slate-400 dark:text-slate-500">
               {relativeTime(burst.publishedAt)}
             </span>
@@ -5349,7 +5363,11 @@ function GossCard({ burst, fresh, kept, onKeep, onOpenGame }) {
               />
             )}
 
-            <div className="min-w-0 flex-1">
+            {/* pb-6 keeps the card's own content clear of the save button in
+                the bottom right corner. Without it a third line of headline
+                runs underneath it and is half readable, which on a feed of
+                three-line Bluesky posts is most of them. */}
+            <div className="min-w-0 flex-1 pb-6">
               <p className="mb-0.5 truncate text-[11px] font-semibold text-slate-500 dark:text-slate-400">
                 {post ? (burst.authorName ?? burst.author) : burst.source}
                 {burst.note && (
@@ -5380,6 +5398,60 @@ function GossCard({ burst, fresh, kept, onKeep, onOpenGame }) {
                 <p className="mt-1 line-clamp-2 text-xs leading-relaxed text-slate-500 dark:text-slate-400">
                   {burst.summary}
                 </p>
+              )}
+
+              {/* Everyone else who ran it, on request.
+                  
+                  Folded rather than dropped, because which outlet you want to
+                  read it from is a real preference and not one this app gets
+                  to make: four versions of the EA report is noise, but being
+                  shown only GameSpot's when Game Developer also covered it is
+                  a worse answer than showing all four.
+                  
+                  relative z-10 for the same reason as the game chip below:
+                  the headline stretches an invisible layer over the whole
+                  card, and anything that does not lift out of it cannot be
+                  pressed at all. */}
+              {also.length > 0 && (
+                <div className="relative z-10 mt-2">
+                  <button
+                    type="button"
+                    onClick={() => setShowAlso((open) => !open)}
+                    aria-expanded={showAlso}
+                    className="inline-flex items-center gap-1 rounded-full bg-amber-50 dark:bg-amber-950/60 py-1 pl-2.5 pr-2 text-[11px] font-semibold text-amber-700 dark:text-amber-300 transition-colors hover:bg-amber-100 dark:hover:bg-amber-900/60"
+                  >
+                    {showAlso
+                      ? 'Hide the rest'
+                      : `Also on this: ${also
+                          .slice(0, 2)
+                          .map((row) => row.source)
+                          .join(', ')}${also.length > 2 ? ` +${also.length - 2}` : ''}`}
+                    <ChevronDown
+                      className={`h-3 w-3 transition-transform duration-200 ${showAlso ? 'rotate-180' : ''}`}
+                    />
+                  </button>
+                  {showAlso && (
+                    <ul className="mt-1.5 space-y-1.5 border-l-2 border-amber-200 dark:border-amber-900 pl-2.5">
+                      {also.map((row) => (
+                        <li key={row.link}>
+                          <a
+                            href={row.link}
+                            target="_blank"
+                            rel="noopener noreferrer"
+                            className="block hover:underline"
+                          >
+                            <span className="text-[11px] font-semibold text-slate-500 dark:text-slate-400">
+                              {row.source}
+                            </span>
+                            <span className="block text-xs leading-snug text-slate-700 dark:text-slate-200">
+                              {row.title}
+                            </span>
+                          </a>
+                        </li>
+                      ))}
+                    </ul>
+                  )}
+                </div>
               )}
               {post && burst.image && (
                 <img
@@ -5602,7 +5674,7 @@ function GossPanel({ bursts, counts, status, onReload, reading, onKeep, onOpenGa
 
   const picked = tone === 'all' ? byKind : byKind.filter((burst) => burst.tone === tone);
 
-  const shown =
+  const ordered =
     kind === 'kept'
       ? picked
       : order === 'latest'
@@ -5610,6 +5682,15 @@ function GossPanel({ bursts, counts, status, onReload, reading, onKeep, onOpenGa
           (a, b) => new Date(b.publishedAt ?? 0) - new Date(a.publishedAt ?? 0),
         )
       : rankAcrossChannels(picked);
+
+  /*
+   * Four outlets on one report arrive as one card, and this is the last
+   * possible moment to do it: the filters above have already run, so the
+   * Reviews shelf and the queer press shelf still hold every story they held
+   * before, and each view folds only within itself. The counts on the chips
+   * stay counts of stories rather than cards, which is what they claim to be.
+   */
+  const shown = foldStories(ordered);
   const freshCount = bursts.filter(isFresh).length;
   const keptCount = reading.length;
   const chips = [
