@@ -2168,6 +2168,126 @@ function GameCard({
   );
 }
 
+/**
+ * What the catalog could not answer, answered from somewhere else.
+ *
+ * A search that ends in nothing is a bad answer to a real question. This is
+ * a PlayStation catalog, and plenty of games arrive on PC first and come to
+ * PlayStation a year later; in the meantime the person asking still wants to
+ * know what it is, what it costs and whether it is even out.
+ *
+ * Deliberately not styled as a catalog card. These are not games you can buy
+ * on a PlayStation, and the section has to read that way at a glance rather
+ * than in the small print: its own heading, its own colour, every price
+ * marked PC, and a link that goes to Steam.
+ *
+ * Nothing here is generated. It is Valve's storefront record read at the
+ * moment of asking, because a made-up release date for a game somebody is
+ * waiting for is worse than no answer at all.
+ */
+/** What to print where a release date goes. */
+function releaseLine(item) {
+  const date = String(item.released ?? '').trim();
+  const vague = !date || /^(to be announced|tba|coming soon)$/i.test(date);
+  if (item.announced) return vague ? 'Announced, no date yet' : `Out ${date}`;
+  return vague ? 'No release date listed' : date;
+}
+
+function Elsewhere({ query }) {
+  const [state, setState] = useState({ status: 'loading', items: [] });
+
+  useEffect(() => {
+    const term = query.trim();
+    if (term.length < 2) return undefined;
+    let live = true;
+    // eslint-disable-next-line react/set-state-in-effect
+    setState({ status: 'loading', items: [] });
+    fetch(`/api/elsewhere?q=${encodeURIComponent(term)}`)
+      .then((response) => response.json())
+      .then((payload) => {
+        if (live) setState({ status: 'ready', items: payload.items ?? [] });
+      })
+      .catch(() => {
+        if (live) setState({ status: 'error', items: [] });
+      });
+    return () => {
+      live = false;
+    };
+  }, [query]);
+
+  if (state.status === 'loading') {
+    return (
+      <p className="mt-8 flex items-center justify-center gap-2 text-sm text-slate-400 dark:text-slate-500">
+        <Loader2 className="h-4 w-4 animate-spin" />
+        Looking outside PlayStation...
+      </p>
+    );
+  }
+  if (state.items.length === 0) return null;
+
+  return (
+    <div className="mx-auto mt-10 max-w-xl text-left">
+      <h3 className="mb-1 text-sm font-bold uppercase tracking-wider text-amber-600 dark:text-amber-400">
+        Not on PlayStation that we can see
+      </h3>
+      <p className="mb-3 text-xs leading-relaxed text-slate-500 dark:text-slate-400">
+        Found on PC instead, read from Steam just now. Games do come across later; if this one
+        does, it will turn up in the catalog on its own.
+      </p>
+      <ul className="space-y-2">
+        {state.items.map((item) => (
+          <li key={item.id}>
+            <a
+              href={item.link}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="flex gap-3 rounded-2xl border border-amber-200 dark:border-amber-900/70 bg-amber-50/60 dark:bg-amber-950/30 p-3 transition-colors hover:bg-amber-50 dark:hover:bg-amber-950/50"
+            >
+              {item.art && (
+                <img
+                  src={item.art}
+                  alt=""
+                  loading="lazy"
+                  onError={(event) => {
+                    event.currentTarget.hidden = true;
+                  }}
+                  className="h-16 w-28 shrink-0 rounded-lg bg-slate-100 dark:bg-slate-800 object-cover"
+                />
+              )}
+              <div className="min-w-0 flex-1">
+                <p className="truncate text-sm font-semibold text-slate-800 dark:text-slate-100">
+                  {item.name}
+                </p>
+                <p className="mt-0.5 flex flex-wrap items-baseline gap-x-2 text-xs text-slate-500 dark:text-slate-400">
+                  <span className="font-semibold text-slate-700 dark:text-slate-200">
+                    {item.price ?? 'Price not listed'}
+                  </span>
+                  {item.wasPrice && (
+                    <span className="line-through">{item.wasPrice}</span>
+                  )}
+                  <span className="rounded bg-slate-200 dark:bg-slate-700 px-1.5 py-px text-[10px] font-bold uppercase tracking-wide text-slate-600 dark:text-slate-300">
+                    PC
+                  </span>
+                  {/* Steam writes an undated game's date as the words "To be
+                      announced", so saying "Announced, To be announced" is
+                      what you get for pasting two fields together. */}
+                  <span>{releaseLine(item)}</span>
+                </p>
+                {item.summary && (
+                  <p className="mt-1 line-clamp-2 text-xs leading-relaxed text-slate-500 dark:text-slate-400">
+                    {item.summary}
+                  </p>
+                )}
+              </div>
+              <ExternalLink className="h-4 w-4 shrink-0 text-amber-600 dark:text-amber-400" />
+            </a>
+          </li>
+        ))}
+      </ul>
+    </div>
+  );
+}
+
 function EmptyState({ filters, personalized, wishlistEmpty, status, onClear, onSearchStore }) {
   // Asked of the picks themselves rather than of the library and wishlist.
   // Counting only those two meant somebody who had thumbed twenty games and
@@ -2244,6 +2364,8 @@ function EmptyState({ filters, personalized, wishlistEmpty, status, onClear, onS
           {searching ? 'Clear search and filters' : 'Clear all filters'}
         </button>
       </div>
+
+      {searching && <Elsewhere query={query} />}
     </div>
   );
 }
@@ -5043,7 +5165,11 @@ function StorePanel({ query, curatedFirst = [], curatedReason, curatedByName, sa
                 }
               : undefined
           }
-        />
+        >
+          {/* The mirror is a PlayStation index, so the honest next answer to
+              a game it has never heard of is where the game actually is. */}
+          {query && results.status !== 'error' && <Elsewhere query={query} />}
+        </PanelMessage>
       ) : (
         <>
           <div className="grid grid-cols-2 gap-3 sm:grid-cols-3 sm:gap-4 lg:grid-cols-4 xl:grid-cols-5">
@@ -6140,7 +6266,7 @@ function UpcomingPanel({
   );
 }
 
-function PanelMessage({ icon: Icon, label, spin = false, action }) {
+function PanelMessage({ icon: Icon, label, spin = false, action, children = null }) {
   return (
     <div className="py-16 text-center text-slate-500 dark:text-slate-400">
       <Icon className={`mx-auto mb-3 h-7 w-7 text-slate-300 dark:text-slate-600 ${spin ? 'animate-spin' : ''}`} />
@@ -6154,6 +6280,7 @@ function PanelMessage({ icon: Icon, label, spin = false, action }) {
           {action.label}
         </button>
       )}
+      {children}
     </div>
   );
 }

@@ -4,6 +4,7 @@ import react from '@vitejs/plugin-react';
 import { CACHE_HEADER, handleGamesRequest } from './api/steam.mjs';
 import { loadGameNews, loadNews } from './api/news.mjs';
 import { loadGoss } from './api/goss.mjs';
+import { searchElsewhere } from './api/elsewhere.mjs';
 import { loadUpcoming } from './api/upcoming.mjs';
 import { searchStore, storeGenres, storeSize } from './api/store.mjs';
 import { loadConceptDetail } from './api/concept.mjs';
@@ -78,6 +79,21 @@ function gamesApiPlugin() {
 
   const mountAll = (server) => {
     mount(server);
+    /* The PC fallback for a search the catalog cannot answer. */
+    server.middlewares.use('/api/elsewhere', async (request, response) => {
+      const params = new URL(request.url, 'http://localhost').searchParams;
+      try {
+        const payload = await searchElsewhere(params.get('q') ?? '', {
+          country: params.get('cc') ?? 'US',
+        });
+        response.setHeader('content-type', 'application/json; charset=utf-8');
+        response.end(JSON.stringify(payload));
+      } catch (error) {
+        response.statusCode = 500;
+        response.end(JSON.stringify({ error: String(error?.message ?? error) }));
+      }
+    });
+
     server.middlewares.use('/api/news', async (request, response) => {
       try {
         const url = new URL(request.url, 'http://localhost');

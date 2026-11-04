@@ -526,13 +526,74 @@ async function unreadHidesOnlyWhatYouRead() {
   return problems.length > 0 ? 1 : 0;
 }
 
+/**
+ * A search the catalog cannot answer still answers.
+ *
+ * This is a PlayStation catalog, so a PC-only game ends in an empty screen,
+ * and the fallback exists to make that a real answer instead of a dead end.
+ * The check reads the endpoint first and requires whatever it found to be on
+ * the page: a fallback that silently stops rendering looks exactly like a
+ * game nobody has heard of.
+ *
+ * Factorio because it is genuinely absent from the mirror, and has been for
+ * as long as there has been a mirror. If it ever comes to PlayStation this
+ * check will start saying so, which is the right kind of failure.
+ */
+async function aSearchWithNoAnswerStillAnswers() {
+  const page = await browser.newPage({ viewport: { width: 430, height: 1200 } });
+  const problems = [];
+  page.on('pageerror', (error) => problems.push(String(error).slice(0, 110)));
+  let note = '';
+  try {
+    await page.goto(`${BASE}/?q=factorio`, { waitUntil: 'domcontentloaded' });
+    await page.waitForTimeout(3000);
+
+    const [onPlayStation, elsewhere] = await page.evaluate(async () => {
+      const store = await (await fetch('/api/store?q=factorio')).json();
+      const pc = await (await fetch('/api/elsewhere?q=factorio')).json();
+      return [store.total ?? 0, (pc.items ?? []).map((item) => item.name)];
+    });
+
+    if (onPlayStation > 0) {
+      note = `factorio is in the mirror now (${onPlayStation}), so there is nothing to fall back to`;
+    } else if (elsewhere.length === 0) {
+      note = 'the PC source answered with nothing, so nothing is proved';
+    } else {
+      // Give the fallback time to land, then require every row it found.
+      await page.waitForSelector('a[href^="https://store.steampowered.com/app/"]', {
+        timeout: 20000,
+      }).catch(() => {});
+      const shown = await page.$$eval('a[href^="https://store.steampowered.com/app/"]', (all) =>
+        all.map((a) => a.innerText),
+      );
+      const missing = elsewhere.filter(
+        (name) => !shown.some((text) => text.includes(name)),
+      );
+      if (shown.length === 0) problems.push('the PC fallback rendered nothing at all');
+      else if (missing.length > 0) problems.push(`${missing.length} PC results not shown: ${missing[0]}`);
+      note = `${elsewhere.length} found, ${shown.length} on screen`;
+    }
+    console.log(
+      `${problems.length ? 'FAIL' : ' ok '} ${'A dead-end search still answers'.padEnd(32)} ${note}` +
+        (problems.length ? `  ${problems[0]}` : ''),
+    );
+  } catch (error) {
+    problems.push(`threw: ${String(error.message).slice(0, 80)}`);
+    console.log(`FAIL ${'A dead-end search still answers'.padEnd(32)} ${problems[0]}`);
+  }
+  await page.close();
+  if (problems.length > 0) fail('A dead-end search still answers', problems.join('; '));
+  return problems.length > 0 ? 1 : 0;
+}
+
+failures += await aSearchWithNoAnswerStillAnswers();
 failures += await shelvesKeepEverything();
 failures += await unreadHidesOnlyWhatYouRead();
 
 await browser.close();
 stop();
 
-const total = SURFACES.length + 2;
+const total = SURFACES.length + 3;
 if (failures > 0) {
   // Named, not just counted, so the last line of a truncated log still says
   // what to go and look at.
