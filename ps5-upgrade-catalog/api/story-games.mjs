@@ -57,6 +57,57 @@ const tooOrdinary = (words) => {
 };
 
 /**
+ * Is this one story about this one game?
+ *
+ * The feed asks "which of 9,728 games is this about"; a game's own page asks
+ * the narrower question, and gets the same guards plus, for a title that is
+ * an ordinary word, the requirement that the game lead the headline.
+ */
+/**
+ * Is this title too ordinary, or too short, to match on its own?
+ *
+ * The same question the index asks before it will hold a title at all, which
+ * is why it is answered in one place. Somewhere else has to ask it too: when
+ * a reader opens a game's page the catalog knows exactly which game is
+ * meant, so the title cannot simply be dropped, but a search for it still
+ * needs the stricter reading that an ordinary word deserves.
+ */
+export function storyIsAbout(text, name, { strict } = {}) {
+  const raw = String(text ?? '');
+  if (!raw || !name) return false;
+  const foldings = readings(raw);
+  const keys = [...new Set([foldTitle(name), foldTitle(stripPossessives(name))])].filter(Boolean);
+  const tight = strict ?? titleIsOrdinary(name);
+  return keys.some((key) => namesTitle(raw, foldings, key, { strict: tight }));
+}
+
+export function isSlipperyTitle(name) {
+  const key = foldTitle(name);
+  if (!key) return true;
+  return key.length < MIN_TITLE || tooOrdinary(key.split(' '));
+}
+
+/**
+ * Is the title made of words that are also just words?
+ *
+ * A narrower question than isSlipperyTitle, and the right one when the game
+ * is already known. Shortness is what makes a title dangerous to *scan a
+ * feed for*, because a short string turns up inside prose by accident; it is
+ * not what makes a search for it noisy. Searching the press for Stray gets
+ * articles about the game, because that is what people write about when they
+ * write "Stray". Searching for Lake gets Lake Michigan.
+ *
+ * Measured on real searches. Judged by length, Stray is slippery and loses
+ * two genuine pieces to the stricter reading while shedding only one wrong
+ * one, which is a bad trade. Judged by vocabulary it is an ordinary-looking
+ * name that nobody else uses, and keeps them.
+ */
+export function titleIsOrdinary(name) {
+  const key = foldTitle(name);
+  return key ? tooOrdinary(key.split(' ')) : true;
+}
+
+/**
  * Builds the lookup once. Written-up games win over mirror rows of the same
  * name, because a write-up is the better page to send a reader to.
  */
@@ -134,8 +185,24 @@ export function findGameInStory(text, index) {
   }
 
   for (const key of [...candidates].sort((a, b) => b.length - a.length)) {
+    if (!namesTitle(raw, foldings, key)) continue;
+    return index.byTitle.get(key);
+  }
+  return null;
+}
+
+/**
+ * Does this headline name this exact title, and can that be trusted?
+ *
+ * Every guard the feed matcher uses, in one place, so the two callers cannot
+ * drift apart. `strict` adds the one rule that only makes sense when the
+ * title is already known to be a slippery one: that it has to lead the
+ * headline. See the note on it below.
+ */
+export function namesTitle(raw, foldings, key, { strict = false } = {}) {
+  {
     const folded = foldings.find((reading) => reading.includes(` ${key} `));
-    if (!folded) continue;
+    if (!folded) return false;
     const at = folded.indexOf(` ${key} `);
 
     /*
@@ -164,20 +231,68 @@ export function findGameInStory(text, index) {
     // A name is capitalised. Without this, every game named after an ordinary
     // word is matched by that word: "voting is a true superpower" was being
     // filed under the game SuperPower.
-    if (rawAt < 0 || !/^[A-Z0-9]/.test(raw.slice(rawAt, rawAt + 1))) continue;
+    if (rawAt < 0 || !/^[A-Z0-9]/.test(raw.slice(rawAt, rawAt + 1))) return false;
 
-    // A capitalised word immediately before means this is the tail of a
-    // longer name: The Wolf Among Us is not Among Us, and Ghosts 'n Goblins
-    // is not Goblins.
-    const lead = raw.slice(Math.max(0, rawAt - 40), rawAt).replace(/[:|–—-]\s*$/, '');
-    if (/([A-Z][\w'’-]+)[\s'’n]*$/.test(lead)) continue;
+    /*
+     * A capitalised word immediately before means this is the tail of a
+     * longer name: The Wolf Among Us is not Among Us, and Ghosts 'n Goblins
+     * is not Goblins.
+     *
+     * Unless the only thing in front is a label. Games coverage is full of
+     * "Review: Gone Home", "Rumour: Days Gone Dev to Announce", "Guide:",
+     * "Preview:", and the capitalised word the guard objects to is the word
+     * "Review". Searching the press for Gone Home lost two of its eight
+     * results to this, both of them reviews of Gone Home.
+     *
+     * A label is the whole of what precedes the match and ends in a colon,
+     * which is what keeps the guard: "The Wolf " is not a label, and neither
+     * is "Rumour: Alleged ", where the colon has prose after it.
+     */
+    const before = raw.slice(0, rawAt);
+    // A dash is a label too: "Review – Gone Home (Switch)" is the same
+    // sentence as "Review: Gone Home", and outlets use both.
+    const label = /^[^:–—]{0,30}[:–—][\s"'“‘]*$/.test(before);
+    /*
+     * The strict rule needs a shorter idea of a label than the guard above
+     * does. A masthead's section word is a label: "Review:", "Rumour:",
+     * "Preview:", "Guide:". A quoted sentence with a colon after it is not,
+     * and treating it as one let "'Very resilient people': Lake Delhi
+     * picking up steam 15 years after dam failure" back through as coverage
+     * of the game Lake.
+     */
+    const sectionLabel = label && before.length <= 14;
+    const lead = label ? '' : raw.slice(Math.max(0, rawAt - 40), rawAt).replace(/[:|–—-]\s*$/, '');
+    if (/([A-Z][\w'’-]+)[\s'’n]*$/.test(lead)) return false;
 
     // A number straight after is a different entry in the same series:
     // Final Fantasy 14 is not the game called FINAL FANTASY.
     const after = folded.slice(at + key.length + 2).trim().split(' ')[0] ?? '';
-    if (/^(\d{1,3}|[ivxl]{1,6})$/.test(after)) continue;
+    if (/^(\d{1,3}|[ivxl]{1,6})$/.test(after)) return false;
 
-    return index.byTitle.get(key);
+    /*
+     * For a title that is an ordinary word, the game has to be what the
+     * headline is about, not a word inside it.
+     *
+     * Measured against a real search for the game Lake, which returned
+     * school-district STEAM bulletins, a shipwreck beneath Lake Superior,
+     * and plans for a boat's return to Lake Minnetonka: eight results, none
+     * about the game. The guards above take three of them and no more,
+     * because "Lake" in "in Lake public schools" is capitalised, follows a
+     * lowercase word, and is followed by one.
+     *
+     * Coverage of a game leads with its name: "Lake review", "Dispatch is
+     * getting a physical edition", "Stray, To a T, Wanderstop announced".
+     * Prose that happens to contain the word almost never does. A label in
+     * front of it is still leading, because "Review: Lake" is the same
+     * sentence wearing a hat.
+     *
+     * It costs recall, and only where recall was worth little: for Stray it
+     * drops a genuine piece whose headline buries the name mid-sentence. For
+     * Lake it takes eight wrong answers to none, and nothing is a better
+     * answer than wrong.
+     */
+    if (strict && !sectionLabel && !/^[\s"'“‘([]*$/.test(before)) return false;
+
+    return true;
   }
-  return null;
 }

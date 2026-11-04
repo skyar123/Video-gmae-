@@ -8,7 +8,13 @@
  */
 import { test } from 'node:test';
 import assert from 'node:assert/strict';
-import { buildTitleIndex, findGameInStory, foldTitle } from '../api/story-games.mjs';
+import {
+  buildTitleIndex,
+  findGameInStory,
+  foldTitle,
+  storyIsAbout,
+  titleIsOrdinary,
+} from '../api/story-games.mjs';
 
 const index = buildTitleIndex([
   { name: 'Among Us' },
@@ -174,4 +180,80 @@ test('a title whose own first word holds an apostrophe is findable at all', () =
    * should not.
    */
   assert.equal(seen("Manny's is out now on PS5"), null);
+});
+
+/* ------------------------------------------------------------------ *
+ * Asking about one game, which is a different question
+ * ------------------------------------------------------------------ */
+
+test('a title made of ordinary words is read strictly, and only those are', () => {
+  // Thirteen of the catalog's 9,364 titles, measured.
+  for (const name of ['Lake', 'PEAK', 'Dispatch', 'Preserve', 'Gone Home', 'Days Gone', 'The Rise']) {
+    assert.ok(titleIsOrdinary(name), `${name} should be read strictly`);
+  }
+  // Short is not the same as ordinary, and this is the distinction that
+  // matters: judged by length, Stray lost two genuine pieces to the strict
+  // reading while shedding one wrong one, which is a bad trade.
+  for (const name of ['Stray', 'Celeste', 'Hades', 'Phantom Blade Zero', 'Silent Hill: Townfall']) {
+    assert.equal(titleIsOrdinary(name), false, `${name} should be read loosely`);
+  }
+});
+
+test('the game Lake is not Lake Michigan', () => {
+  /*
+   * Every one of these came back from the live press search for the game
+   * Lake, in one fetch, alongside no coverage of the game at all.
+   */
+  for (const headline of [
+    'For a last summer escape, take the overnight ferry across Lake Michigan',
+    "Plans for Minnehaha's return to Lake Minnetonka gain steam",
+    'STEAM Minute | Decatur Watershed specialists help keep Lake Decatur safe',
+    'How spectacular rock pinnacles got lost behind the scenes at Crater Lake National Park',
+    "WATCH: 'Steamnado' pops up over Lake Lewisville during winter storm",
+    'STEAM starts early in Lake public schools',
+    'Mom and son stumble upon century-old shipwreck beneath Lake Superior',
+    // A quoted sentence ending in a colon is not a section label, and
+    // treating it as one let this back through as coverage of the game.
+    "'Very resilient people': Lake Delhi picking up steam 15 years after dam failure",
+  ]) {
+    assert.equal(storyIsAbout(headline, 'Lake'), false, `let through: ${headline}`);
+  }
+
+  // And the coverage of the game, which leads with its name.
+  assert.ok(storyIsAbout('Lake: Season’s Greetings DLC incoming for Nintendo Switch', 'Lake'));
+  assert.ok(storyIsAbout('Lake review – a small-town drama about delivering post', 'Lake'));
+});
+
+test('a masthead label in front still counts as leading', () => {
+  /*
+   * Games coverage is full of "Review:", "Rumour:", "Guide:", and the
+   * capitalised word the tail-of-a-longer-name guard objects to is the word
+   * "Review". The press search for Gone Home lost two of its eight results
+   * to that, both of them reviews of Gone Home.
+   */
+  assert.ok(storyIsAbout('Review: Gone Home (Switch) - A Peerless Masterclass', 'Gone Home'));
+  assert.ok(storyIsAbout('Review – Gone Home (Switch)', 'Gone Home'));
+  assert.ok(storyIsAbout('Rumour: Days Gone Dev to Announce New PS5 Game in 2027', 'Days Gone'));
+
+  // The guard itself is untouched, because "The Wolf " is not a label.
+  assert.equal(storyIsAbout('The Wolf Among Us Remastered announced', 'Among Us'), false);
+});
+
+test('the idiom is not the game', () => {
+  assert.equal(
+    storyIsAbout(
+      'The River: Still ‘living in the past,’ dreaming of the steam-driven boats of days gone by',
+      'Days Gone',
+    ),
+    false,
+  );
+});
+
+test('a distinctive title keeps the loose reading it needs', () => {
+  // Not every headline leads with the game, and for a name nobody else uses
+  // there is no reason to insist that it does.
+  assert.ok(storyIsAbout('Nintendo Switch 2 Physical Edition of Stray Releasing November 12', 'Stray'));
+  assert.ok(storyIsAbout('Wooshy wuxia actioner Phantom Blade Zero is sharp enough', 'Phantom Blade Zero'));
+  // The same headline about an ordinary-word game would not pass.
+  assert.equal(storyIsAbout('Bend’s 2027 Game Is Not Days Gone, Report Says', 'Days Gone'), false);
 });

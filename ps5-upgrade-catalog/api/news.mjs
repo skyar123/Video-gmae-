@@ -130,6 +130,8 @@ const FEEDS = [
   },
 ];
 
+import { storyIsAbout, titleIsOrdinary } from './story-games.mjs';
+
 const CACHE_TTL_MS = 15 * 60 * 1000;
 
 /**
@@ -367,6 +369,30 @@ const PERSPECTIVE_SITES = {
 
 export const perspectiveSources = (perspective) => PERSPECTIVE_SITES[perspective] ?? null;
 
+/**
+ * Keeping only the results that are about the game.
+ *
+ * Google is asked for the quoted title and a gaming context, and answers
+ * loosely. For a distinctive name that is fine: searching Phantom Blade Zero
+ * returns Phantom Blade Zero. For a title that is also an ordinary English
+ * word it is useless. Measured on the live search, the game Lake came back
+ * as a shipwreck beneath Lake Superior, a ferry across Lake Michigan, a
+ * boat returning to Lake Minnetonka, and three school-district bulletins:
+ * eight results, none about the game.
+ *
+ * So those titles, and only those, get the matcher the feed uses, plus its
+ * strict reading: the game has to lead the headline, because coverage of a
+ * game leads with its name and prose that merely contains the word does not.
+ * Thirteen of the catalog's 9,364 titles qualify. Everything else keeps the
+ * loose word test it always had, because the phrase rule is destructive for
+ * long names: applied to The Legend of Zelda: Ocarina of Time it threw away
+ * seven of eight results, including four plainly about the remake.
+ */
+const aboutTheGame = (title) =>
+  titleIsOrdinary(title)
+    ? (item) => storyIsAbout(item.title, title)
+    : (item) => looseMatch(item.title, title);
+
 export async function loadGameNews(title, perspective = null) {
   const key = `${perspective ?? 'any'}:${title.trim().toLowerCase()}`;
   if (!title.trim()) return { items: [], fetchedAt: null };
@@ -413,7 +439,7 @@ export async function loadGameNews(title, perspective = null) {
           const source = split > 20 ? item.title.slice(split + 3) : 'Google News';
           return { ...item, title: headline, source, summary: '' };
         })
-        .filter((item) => looseMatch(item.title, title))
+        .filter(aboutTheGame(title))
         .slice(0, 8);
     }
   } catch {
