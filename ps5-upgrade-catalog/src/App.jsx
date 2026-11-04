@@ -5373,20 +5373,49 @@ function youTubeId(link) {
  * rather than forty embeds, and means nothing is handed to YouTube for
  * someone who only scrolled past.
  */
-function GossMedia({ burst, videoId, playing, onPlay }) {
+function GossMedia({ burst, videoId, playing, onPlay, onStop }) {
   // maxres is the only still that is natively 16:9; the hqdefault the feed
   // supplies is 4:3 with bars, so it is the fallback rather than the source.
   const [src, setSrc] = useState(
     videoId ? `https://i.ytimg.com/vi/${videoId}/maxresdefault.jpg` : burst.image,
   );
   const [dead, setDead] = useState(false);
+  const frame = useRef(null);
+
+  /*
+   * A video stops when you scroll past it.
+   *
+   * An embed keeps playing wherever it is, so a feed you scroll through
+   * leaves its sound behind: the thing you started is still talking three
+   * screens up, still streaming, and there is nothing on the page to stop it
+   * because the card that owns it is no longer on the page. Leaving the
+   * viewport puts the card back to its still, which also releases the player
+   * and whatever it was downloading.
+   *
+   * A quarter visible, so a glance at the top or bottom of the screen does
+   * not kill a video you are still watching.
+   */
+  useEffect(() => {
+    if (!playing || !onStop) return undefined;
+    const node = frame.current;
+    if (!node || typeof IntersectionObserver === 'undefined') return undefined;
+    const watcher = new IntersectionObserver(
+      ([entry]) => {
+        if (!entry.isIntersecting) onStop();
+      },
+      { threshold: 0.25 },
+    );
+    watcher.observe(node);
+    return () => watcher.disconnect();
+  }, [playing, onStop]);
+
   if (dead) return null;
 
   if (playing && videoId) {
     return (
-      <div className="relative aspect-video w-full bg-black">
+      <div ref={frame} className="relative aspect-video w-full bg-black">
         <iframe
-          src={`https://www.youtube-nocookie.com/embed/${videoId}?autoplay=1&rel=0`}
+          src={`https://www.youtube-nocookie.com/embed/${videoId}?autoplay=1&rel=0&playsinline=1`}
           title={burst.title}
           allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
           allowFullScreen
@@ -5432,12 +5461,23 @@ function GossMedia({ burst, videoId, playing, onPlay }) {
   );
 }
 
-function GossCard({ burst, fresh, kept, onKeep, read, readLinks, onRead, onOpenGame }) {
+function GossCard({
+  burst,
+  fresh,
+  kept,
+  onKeep,
+  read,
+  readLinks,
+  onRead,
+  playing,
+  onPlay,
+  onStop,
+  onOpenGame,
+}) {
   const kind = GOSS_KINDS[burst.kind] ?? GOSS_KINDS.buzz;
   const post = burst.source === 'Bluesky';
   const external = burst.externalLink ? hostOf(burst.externalLink) : null;
   const videoId = youTubeId(burst.link);
-  const [playing, setPlaying] = useState(false);
   const also = burst.also ?? [];
   const [showAlso, setShowAlso] = useState(false);
   // A post's picture stays inline under its text, where it reads as something
@@ -5452,7 +5492,8 @@ function GossCard({ burst, fresh, kept, onKeep, read, readLinks, onRead, onOpenG
           burst={burst}
           videoId={videoId}
           playing={playing}
-          onPlay={() => setPlaying(true)}
+          onPlay={onPlay}
+          onStop={onStop}
         />
       )}
 
@@ -5790,6 +5831,17 @@ function GossPanel({
    * back rebuilds it, and so does the feed refreshing, which is the whole of
    * the refresh it needs.
    */
+  /*
+   * One video at a time.
+   *
+   * Each card used to own whether its own video was playing, so tapping
+   * three while scrolling left three players alive and three soundtracks
+   * going at once. Which one is playing is a fact about the feed, not about
+   * a card, so the feed holds it: starting one stops the last.
+   */
+  const [playingLink, setPlayingLink] = useState(null);
+  const stopPlaying = useCallback(() => setPlayingLink(null), []);
+
   const [heldUnread, setHeldUnread] = useState(null);
   useEffect(() => {
     if (kind !== 'unread') {
@@ -6017,6 +6069,9 @@ function GossPanel({
               read={readLinks.has(burst.link)}
               readLinks={readLinks}
               onRead={onRead}
+              playing={playingLink === burst.link}
+              onPlay={() => setPlayingLink(burst.link)}
+              onStop={stopPlaying}
               onOpenGame={onOpenGame}
             />
           </li>

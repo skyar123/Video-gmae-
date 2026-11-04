@@ -586,6 +586,141 @@ async function aSearchWithNoAnswerStillAnswers() {
   return problems.length > 0 ? 1 : 0;
 }
 
+/**
+ * One video plays at a time, and stops when you scroll past it.
+ *
+ * An embed keeps playing wherever it is, so without this a feed you scroll
+ * through leaves its sound behind: tap three videos and three soundtracks
+ * run at once, two of them on cards no longer anywhere near the screen.
+ *
+ * This one serves its own feed rather than using the day's, because YouTube
+ * refuses this server's requests and some days there is only one video in
+ * the whole feed, which is not enough to show a rule about two. Stubbing it
+ * also means the check tests the view and nothing else.
+ */
+async function oneVideoAtATime() {
+  /*
+   * Its own context, with the service worker blocked.
+   *
+   * The built app registers one, and a service worker answers /api/goss
+   * itself, so a route stub set on the page never sees the request: the
+   * check served two videos and the page rendered the day's real feed. In
+   * dev there is no service worker, which is why this passed by hand and
+   * failed in the sweep.
+   */
+  const context = await browser.newContext({
+    viewport: { width: 430, height: 1500 },
+    serviceWorkers: 'block',
+  });
+  const page = await context.newPage();
+  const problems = [];
+  page.on('pageerror', (error) => problems.push(String(error).slice(0, 110)));
+  try {
+    const video = (id, title) => ({
+      kind: 'trailer',
+      channel: 'youtube',
+      source: 'Smoke Channel',
+      origin: 'Smoke',
+      note: 'Video',
+      author: 'Smoke',
+      authorName: 'Smoke Channel',
+      avatar: null,
+      title,
+      summary: null,
+      link: `https://www.youtube.com/watch?v=${id}`,
+      externalLink: null,
+      image: `https://i.ytimg.com/vi/${id}/hqdefault.jpg`,
+      publishedAt: new Date(Date.now() - 3600000).toISOString(),
+      heat: 0,
+    });
+    await page.route('**/api/goss*', (route) =>
+      route.fulfill({
+        status: 200,
+        contentType: 'application/json',
+        body: JSON.stringify({
+          // Two videos and enough after them to scroll past, because the
+          // last assertion is about leaving a video behind and a two-card
+          // feed cannot be scrolled at all. That is how this check first
+          // failed: not the app, the fixture.
+          bursts: [
+            video('aaaaaaaaaaa', 'First smoke video'),
+            video('bbbbbbbbbbb', 'Second smoke video'),
+            ...Array.from({ length: 30 }, (_, at) => ({
+              kind: 'buzz',
+              channel: 'press',
+              source: 'Smoke Press',
+              origin: 'Smoke Press',
+              author: 'Smoke Press',
+              authorName: 'Smoke Press',
+              avatar: null,
+              title: `Filler story number ${at} to scroll past`,
+              summary: null,
+              link: `https://example.test/filler-${at}`,
+              externalLink: null,
+              image: null,
+              publishedAt: new Date(Date.now() - (at + 2) * 3600000).toISOString(),
+              heat: 0,
+            })),
+          ],
+          counts: { trailer: 2, buzz: 30 },
+          fetchedAt: new Date().toISOString(),
+        }),
+      }),
+    );
+    // A card whose still fails to load removes its whole media block, Play
+    // button included, and stills do not load from here.
+    const pixel = Buffer.from(
+      'iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAQAAAC1HAwCAAAAC0lEQVR42mP8z8BQDwAEhQGAhKmMIQAAAABJRU5ErkJggg==',
+      'base64',
+    );
+    await page.route('**i.ytimg.com/**', (route) =>
+      route.fulfill({ status: 200, contentType: 'image/png', body: pixel }),
+    );
+
+    await page.goto(`${BASE}/?read=goss`, { waitUntil: 'domcontentloaded' });
+    await page.waitForSelector('article', { timeout: 60000 });
+    await page.waitForTimeout(2500);
+
+    const frames = () => page.locator('article iframe').count();
+    if ((await frames()) !== 0) problems.push('a player loaded before anything was tapped');
+
+    await page.getByRole('button', { name: 'Play First smoke video' }).click();
+    await page.waitForTimeout(800);
+    if ((await frames()) !== 1) problems.push(`tapping one gave ${await frames()} players`);
+
+    await page.getByRole('button', { name: 'Play Second smoke video' }).click();
+    await page.waitForTimeout(900);
+    const total = await frames();
+    const stale = await page
+      .locator('article')
+      .filter({ hasText: 'First smoke video' })
+      .locator('iframe')
+      .count();
+    if (total !== 1 || stale !== 0) {
+      problems.push(`starting a second left ${total} players running`);
+    }
+
+    // And scrolling past it gives the player back. The feed lives in the
+    // drawer's own scroller, so the wheel has to be over it.
+    await page.locator('article').first().hover();
+    await page.mouse.wheel(0, 6000);
+    await page.waitForTimeout(1600);
+    if ((await frames()) !== 0) problems.push('a player kept running after it scrolled away');
+
+    console.log(
+      `${problems.length ? 'FAIL' : ' ok '} ${'One video at a time'.padEnd(32)} lazy, single, released on scroll` +
+        (problems.length ? `  ${problems[0]}` : ''),
+    );
+  } catch (error) {
+    problems.push(`threw: ${String(error.message).slice(0, 80)}`);
+    console.log(`FAIL ${'One video at a time'.padEnd(32)} ${problems[0]}`);
+  }
+  await context.close();
+  if (problems.length > 0) fail('One video at a time', problems.join('; '));
+  return problems.length > 0 ? 1 : 0;
+}
+
+failures += await oneVideoAtATime();
 failures += await aSearchWithNoAnswerStillAnswers();
 failures += await shelvesKeepEverything();
 failures += await unreadHidesOnlyWhatYouRead();
@@ -593,7 +728,7 @@ failures += await unreadHidesOnlyWhatYouRead();
 await browser.close();
 stop();
 
-const total = SURFACES.length + 3;
+const total = SURFACES.length + 4;
 if (failures > 0) {
   // Named, not just counted, so the last line of a truncated log still says
   // what to go and look at.
