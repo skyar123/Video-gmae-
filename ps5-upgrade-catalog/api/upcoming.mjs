@@ -12,6 +12,7 @@ import snapshot from './upcoming-snapshot.json' with { type: 'json' };
 import { loadBlob, saveBlob } from './history.mjs';
 import { DISCOVERED_KEY, STEAM_MATCH_KEY, SWEEP_LOG_KEY } from './keys.mjs';
 import { ratingFromConcept } from './rating.mjs';
+import { storeRows } from './store.mjs';
 
 const UA = 'Mozilla/5.0 (compatible; ps5-upgrade-catalog/1.0)';
 const READ_CAP = 190_000; // Release date, art, price and genres all land inside this.
@@ -202,15 +203,77 @@ async function currentSeeds() {
 }
 
 /** Exported so the snapshot shipped with a deploy can be baked from it. */
+/**
+ * The calendar the mirror can supply on its own.
+ *
+ * Every row in the store mirror carries a release date, so the mirror
+ * already knows what is coming without a single store fetch. It is the
+ * thinner record of the two: no trailer, no portrait, no live price. But it
+ * cannot be refused, and that turns out to matter more than the extra
+ * fields.
+ *
+ * The calendar had been frozen at a deploy-time snapshot for 58 days. The
+ * nightly sweep was running and reporting ok, having scanned its 1,500
+ * pages; what it could not do was the 139-page rebuild in front of them,
+ * because the store answers a single concept request happily and throttles a
+ * burst. So the rebuild came back with nothing, refused to overwrite a good
+ * calendar with an empty one, and the reader saw ten upcoming games while the
+ * mirror on the same server knew about thirty-one.
+ */
+function fromMirror(rows, now) {
+  const floor = now - RECENT_DAYS * 86_400_000;
+  return rows
+    .filter((row) => {
+      const at = Date.parse(row.release ?? '');
+      return Number.isFinite(at) && at > floor;
+    })
+    .map((row) => ({
+      id: row.id,
+      title: row.name,
+      releaseDate: row.release,
+      publisher: row.publisher ?? null,
+      platforms: row.platforms ?? [],
+      genres: row.genres ?? [],
+      price: row.price ?? null,
+      basePrice: row.price ?? null,
+      stars: row.stars ?? null,
+      votes: row.votes ?? null,
+      trailer: null,
+      art: row.art ?? null,
+      portrait: row.portrait ?? null,
+      storeUrl: `https://store.playstation.com/en-us/concept/${row.id}`,
+      steamAppId: null,
+    }));
+}
+
 export async function build() {
   const seeds = await currentSeeds();
-  const pages = await mapWithConcurrency(seeds, 16, async (seed) => {
+  /*
+   * Four at a time, not sixteen.
+   *
+   * The store serves one concept request without complaint and refuses a
+   * burst, and this rebuild is 139 of them. At sixteen-way concurrency it
+   * came back empty from the platform every night while returning eleven
+   * games from a laptop, which is the hardest kind of failure to see: the
+   * code is right and the only thing wrong is the shape of the traffic.
+   */
+  const pages = await mapWithConcurrency(seeds, 4, async (seed) => {
     const html = await fetchConcept(seed.id);
     return html ? parseConcept(seed.id, html) : null;
   });
 
   const now = Date.now();
-  const dated = pages.filter(Boolean);
+  // The concept page is the richer record, so it wins where both have one.
+  const byId = new Map();
+  let mirrored = [];
+  try {
+    mirrored = fromMirror(await storeRows(), now);
+  } catch {
+    // The mirror is a bonus here; a sweep that cannot read it still works.
+  }
+  for (const game of mirrored) byId.set(game.id, game);
+  for (const game of pages.filter(Boolean)) byId.set(game.id, game);
+  const dated = [...byId.values()];
   const games = dated
     .filter((game) => new Date(game.releaseDate).getTime() > now)
     .sort((a, b) => new Date(a.releaseDate) - new Date(b.releaseDate));
@@ -324,9 +387,44 @@ export async function sweepForReleases(options = {}) {
   }
 }
 
+/**
+ * Where tonight's scan should start looking.
+ *
+ * Concept ids are handed out in order, so a game announced this week has one
+ * near the top of whatever the store has issued. The scan was walking up
+ * from the bottom of the range at 1,500 ids a night, and had reached
+ * 10,007,500 while every upcoming game in the calendar sat between
+ * 10,011,107 and 10,019,084. It was months of nights behind the thing it was
+ * looking for, and by the time it arrived the frontier would have moved
+ * again.
+ *
+ * So the cycle begins at the frontier instead: the highest id anything here
+ * knows about, less a window to catch what was issued just below it. The
+ * dead ground underneath is where released games live, and the mirror
+ * already has those.
+ */
+async function frontierFrom(rows) {
+  let highest = SCAN_FROM;
+  for (const row of rows) {
+    const id = Number(row.id);
+    if (Number.isFinite(id) && id > highest) highest = id;
+  }
+  const start = highest - SCAN_WINDOW;
+  return Math.min(Math.max(start, SCAN_FROM), SCAN_TO - SCAN_WINDOW);
+}
+
 async function runSweep({ budgetMs = SCAN_BUDGET_MS } = {}) {
   const cursorState = await loadBlob(CURSOR_KEY);
-  const from = cursorState?.next && cursorState.next < SCAN_TO ? cursorState.next : SCAN_FROM;
+  let known = [];
+  try {
+    known = await storeRows();
+  } catch {
+    // Without the mirror the frontier is simply the bottom of the range.
+  }
+  const frontier = await frontierFrom(known);
+  const resuming =
+    cursorState?.next && cursorState.next >= frontier && cursorState.next < SCAN_TO;
+  const from = resuming ? cursorState.next : frontier;
   const to = Math.min(from + SCAN_WINDOW, SCAN_TO);
 
   /*
@@ -415,8 +513,10 @@ async function runSweep({ budgetMs = SCAN_BUDGET_MS } = {}) {
     games: [...mirror.values()].slice(-MAX_MIRROR_ROWS),
     sweptAt: new Date().toISOString(),
   });
+  // Past the top of the range it starts again at the frontier, which by then
+  // will have moved up with whatever the store has issued since.
   const nextCursor = from + ids.length;
-  await saveBlob(CURSOR_KEY, { next: nextCursor >= SCAN_TO ? SCAN_FROM : nextCursor });
+  await saveBlob(CURSOR_KEY, { next: nextCursor >= SCAN_TO ? frontier : nextCursor });
 
   memory = null;
 
