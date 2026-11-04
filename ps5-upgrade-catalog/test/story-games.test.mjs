@@ -81,3 +81,97 @@ test('nothing in the story means nothing is claimed', () => {
   assert.equal(found(''), null);
   assert.equal(found(null), null);
 });
+
+test('the apostrophe cuts both ways', () => {
+  /*
+   * Two things that look alike and pull in opposite directions: a game whose
+   * own name holds a possessive, and a headline that puts a game into the
+   * possessive. One folding cannot serve both, so the story is read twice.
+   *
+   * Measured on a live day before this existed: two of the dozen-odd
+   * headlines that name a game at all were lost to it, which is most of a
+   * sixth of the join.
+   */
+  const both = buildTitleIndex([
+    { name: 'Dispatch' },
+    { name: 'Silent Hill: Townfall' },
+    { name: 'CONTROL Resonant' },
+    { name: 'Helldivers 2' },
+    { name: 'Baldur’s Gate 3' },
+    { name: 'No Man’s Sky' },
+  ]);
+  const seen = (text) => findGameInStory(text, both)?.name ?? null;
+
+  // A headline writing the game possessively.
+  assert.equal(
+    seen("Silent Hill: Townfall's new patch adds a Hard difficulty"),
+    'Silent Hill: Townfall',
+  );
+  assert.equal(seen("Half of Control Resonant's players were 'new' to the franchise"), 'CONTROL Resonant');
+  assert.equal(seen("Helldivers 2's Ever-Changing Universe Evolves Again"), 'Helldivers 2');
+
+  // And a game whose name is a possessive, which the other folding would eat.
+  assert.equal(seen('Baldur’s Gate 3 patch 9 arrives next week'), 'Baldur’s Gate 3');
+  assert.equal(seen('No Man’s Sky adds another free update'), 'No Man’s Sky');
+  assert.equal(seen("Baldur’s Gate 3's next patch arrives"), 'Baldur’s Gate 3');
+
+  /*
+   * And reading the story twice does not reach past the other rules. The
+   * catalog really does contain a game called Dispatch, and the word is
+   * ordinary, so it is never indexed at all: a second folding gives the
+   * matcher another way to read a headline, not another title to match.
+   */
+  assert.equal(seen("Dispatch's Free 'HR Violations Pack' DLC Removes Censorship"), null);
+});
+
+test('a title whose own first word holds an apostrophe is findable at all', () => {
+  /*
+   * The guards read the untouched headline to check capitalisation, and they
+   * used to find their place in it by searching for the *folded* first word.
+   * Folding removes the punctuation the headline still has, so "baldurs"
+   * was looked for in "Baldur's" and never found. Of the catalog's 9,728
+   * titles, 200 begin with a word carrying an apostrophe, and 199 of them
+   * could not be matched even by a sentence that named them outright.
+   */
+  const index = buildTitleIndex([
+    { name: "Croc's World 5" },
+    { name: 'Tyrant’s Realm' },
+    { name: "Bluey's Quest for the Gold Pen" },
+    { name: "Manny's" },
+  ]);
+  const seen = (text) => findGameInStory(text, index)?.name ?? null;
+
+  assert.equal(seen("Croc's World 5 is out now on PS5"), "Croc's World 5");
+  assert.equal(seen('Tyrant’s Realm gets a new patch'), 'Tyrant’s Realm');
+  assert.equal(seen("Bluey's Quest for the Gold Pen tops the chart"), "Bluey's Quest for the Gold Pen");
+  // Written without its apostrophe, which the second key now also catches.
+  assert.equal(seen('Crocs World 5 is out now on PS5'), "Croc's World 5");
+
+  /*
+   * And the apostrophes that are not possessives, which the second key
+   * cannot help with at all: nothing to strip, so the only thing standing
+   * between "blastn" and "Blast'N" is a lookup that tolerates the
+   * punctuation. Twenty-four of the two hundred are this shape, and the
+   * first version of this test missed every one of them: reverting the
+   * lookup on its own broke nothing here until these were added.
+   */
+  const odd = buildTitleIndex([
+    { name: "Blast'N Bounty" },
+    { name: "I'm Having A Bad Day" },
+    { name: "Don't Mess With Bober" },
+    { name: 'Mate’Morphosis' },
+  ]);
+  const odds = (text) => findGameInStory(text, odd)?.name ?? null;
+  assert.equal(odds("Blast'N Bounty is out now on PS5"), "Blast'N Bounty");
+  assert.equal(odds("I'm Having A Bad Day gets a demo"), "I'm Having A Bad Day");
+  assert.equal(odds("Don't Mess With Bober hits PS5 next month"), "Don't Mess With Bober");
+  assert.equal(odds('Mate’Morphosis is out now on PS5'), 'Mate’Morphosis');
+
+  /*
+   * And the 200th, which stays unmatched on purpose: "Manny's" folds to six
+   * characters, under the length below which a title is a coincidence
+   * waiting to happen. Fixing the lookup was never going to reach it, and it
+   * should not.
+   */
+  assert.equal(seen("Manny's is out now on PS5"), null);
+});

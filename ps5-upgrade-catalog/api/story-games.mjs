@@ -43,6 +43,9 @@ const PLAIN = new Set(
     .filter(Boolean),
 );
 
+/** "Dispatch's" without the possessive, leaving "Dispatch" to be matched. */
+const stripPossessives = (value) => String(value ?? '').replace(/([\w])[’'‘]s\b/g, '$1');
+
 /** Shorter than this and a "title" is a coincidence waiting to happen. */
 const MIN_TITLE = 7;
 
@@ -61,11 +64,21 @@ export function buildTitleIndex(games) {
   const byTitle = new Map();
   for (const game of games) {
     const name = game.name ?? game.title;
-    const key = foldTitle(name);
-    if (!key || key.length < MIN_TITLE) continue;
-    if (tooOrdinary(key.split(' '))) continue;
-    const held = byTitle.get(key);
-    if (!held || (!held.curated && game.curated)) byTitle.set(key, { ...game, name });
+    /*
+     * Under both foldings of its own name, for the same reason the story is
+     * read both ways: a headline may put an already-possessive title into
+     * the possessive again ("Baldur's Gate 3's next patch"), and the reading
+     * that recovers the second apostrophe strips the first one too. Only
+     * titles carrying an apostrophe get a second key, which is 200 of the
+     * catalog's 9,728, and the spare key also catches the headlines that
+     * write the name without its apostrophe at all.
+     */
+    for (const key of new Set([foldTitle(name), foldTitle(stripPossessives(name))])) {
+      if (!key || key.length < MIN_TITLE) continue;
+      if (tooOrdinary(key.split(' '))) continue;
+      const held = byTitle.get(key);
+      if (!held || (!held.curated && game.curated)) byTitle.set(key, { ...game, name });
+    }
   }
   /*
    * Grouped by first word, which is what makes this affordable. Walking all
@@ -84,24 +97,69 @@ export function buildTitleIndex(games) {
   return { byTitle, byFirstWord };
 }
 
+/**
+ * A story read two ways, because the apostrophe cuts both ways.
+ *
+ * Game names contain possessives of their own (Baldur's Gate, No Man's Sky,
+ * Marvel's Spider-Man), and headlines put games in the possessive
+ * ("Dispatch's free DLC", "Half of Control Resonant's players"). One folding
+ * cannot serve both: dropping the apostrophe alone turns "Dispatch's" into
+ * "dispatchs" and loses the second, and stripping the whole "'s" turns
+ * "Baldur's" into "baldur" while an index built the other way holds
+ * "baldurs", and loses the first.
+ *
+ * On a live day this cost two of the dozen-odd headlines that name a game at
+ * all, which is most of a sixth of the join. So the story is folded both
+ * ways and matched against both, and the index keeps the one folding it
+ * always had.
+ */
+const readings = (raw) => {
+  const plain = ` ${foldTitle(raw)} `;
+  const possessive = ` ${foldTitle(stripPossessives(raw))} `;
+  return possessive === plain ? [plain] : [plain, possessive];
+};
+
 export function findGameInStory(text, index) {
   const raw = String(text ?? '');
   if (!raw) return null;
-  const folded = ` ${foldTitle(raw)} `;
+  const foldings = readings(raw);
 
   // Only titles beginning with a word the story contains, longest first, so
   // the best candidate is tried before any shorter one it contains.
   const candidates = new Set();
-  for (const word of folded.trim().split(' ')) {
-    for (const key of index.byFirstWord.get(word) ?? []) candidates.add(key);
+  for (const reading of foldings) {
+    for (const word of reading.trim().split(' ')) {
+      for (const key of index.byFirstWord.get(word) ?? []) candidates.add(key);
+    }
   }
 
   for (const key of [...candidates].sort((a, b) => b.length - a.length)) {
+    const folded = foldings.find((reading) => reading.includes(` ${key} `));
+    if (!folded) continue;
     const at = folded.indexOf(` ${key} `);
-    if (at < 0) continue;
 
+    /*
+     * Where the match sits in the untouched headline, which is what the
+     * capitalisation guards below read.
+     *
+     * Found with a pattern rather than by searching for the folded word,
+     * because folding removes the punctuation the raw text still has:
+     * "Baldur's" folds to "baldurs", and "baldurs" does not occur in
+     * "Baldur's Gate 3". Of the 9,728 titles in the catalog, 200 begin with
+     * a word carrying an apostrophe, and 199 of them could not be found even
+     * in a sentence that named them outright.
+     *
+     * It takes the first occurrence of the head word, which can differ from
+     * the one the folded match found when a headline says it twice. That was
+     * true of the indexOf this replaces too, and a headline naming a game
+     * twice is one where either occurrence answers the question.
+     */
     const head = key.split(' ')[0];
-    const rawAt = raw.toLowerCase().indexOf(head);
+    const loose = new RegExp(
+      head.split('').map((ch) => ch.replace(/[.*+?^${}()|[\]\\]/g, '\\$&')).join('[^A-Za-z0-9]*'),
+      'i',
+    );
+    const rawAt = loose.exec(raw)?.index ?? -1;
 
     // A name is capitalised. Without this, every game named after an ordinary
     // word is matched by that word: "voting is a true superpower" was being

@@ -220,7 +220,27 @@ for (const [query, label, least] of SURFACES) {
     await page.goto(`${BASE}/${query}`, { waitUntil: 'domcontentloaded' });
     await page.waitForTimeout(3200);
     if ((await page.locator('header').count()) === 0) problems.push('nothing rendered');
-    const cards = await page.locator('main h2, section h2, section h3').count();
+
+    /*
+     * Wait for the cards, not for the clock.
+     *
+     * This used to count whatever had rendered after a flat 3.2 seconds,
+     * which is fine for nineteen surfaces and unfair to the first one: it is
+     * swept immediately after the server starts, with the store index cold,
+     * and a run failed with "All: only 0 cards" on a build whose only change
+     * was to a news matcher the catalog page never calls. An earlier
+     * unexplained failure, which never came back in five further runs, was
+     * most likely the same thing.
+     *
+     * A surface that is meant to come back empty says least: 0 and is not
+     * waited on, so nothing here hangs for twenty seconds to prove a zero.
+     */
+    const cardCount = () => page.locator('main h2, section h2, section h3').count();
+    let cards = await cardCount();
+    for (const deadline = Date.now() + 20000; cards < least && Date.now() < deadline; ) {
+      await page.waitForTimeout(500);
+      cards = await cardCount();
+    }
     if (cards < least) problems.push(`only ${cards} cards, expected at least ${least}`);
     if (problems.length > 0) {
       failures += 1;
