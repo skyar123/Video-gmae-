@@ -64,6 +64,22 @@ export const rankedAt = (burst) => {
 };
 
 /**
+ * How many days old costs a channel one place in the round-robin.
+ *
+ * The merge below gives every channel's best item the same shot at the top,
+ * which is what stops the one channel that counts engagement from burying
+ * the rest. It also assumes each channel's best is worth about the same, and
+ * that is not true when a channel is having a quiet fortnight: the podcast
+ * lane's freshest episode was eleven days old while the press lane's was
+ * twenty minutes old, and the round-robin sat them four cards apart. The
+ * feed read as stale because, in that lane, it was.
+ *
+ * So age costs places. A channel that has posted today keeps its turn; one
+ * that last posted a week ago waits three rounds for it.
+ */
+export const STALE_DAYS = 2;
+
+/**
  * Each channel is ranked within itself on whatever it actually has, and the
  * merged order takes the top of each, then the second of each, and so on.
  * The loudest post and the biggest story of the day arrive together instead
@@ -78,11 +94,17 @@ export function rankAcrossChannels(rows) {
     if (!lanes.has(lane)) lanes.set(lane, []);
     lanes.get(lane).push(burst);
   }
+  const now = Date.now();
+  const staleness = (burst) => {
+    const age = (now - rankedAt(burst)) / 86400000;
+    return age > 0 ? Math.floor(age / STALE_DAYS) : 0;
+  };
+
   const ranked = [];
   for (const lane of lanes.values()) {
     lane
       .sort((a, b) => (b.heat ?? 0) - (a.heat ?? 0) || newest(a, b))
-      .forEach((burst, place) => ranked.push({ burst, place }));
+      .forEach((burst, place) => ranked.push({ burst, place: place + staleness(burst) }));
   }
   return ranked
     .sort((a, b) => a.place - b.place || newest(a.burst, b.burst))

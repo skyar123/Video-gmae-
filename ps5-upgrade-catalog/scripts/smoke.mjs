@@ -297,6 +297,22 @@ async function openEveryFold(drawer) {
 }
 
 /**
+ * Comparing a payload link with one the browser gives back.
+ *
+ * `a.href` is the resolved, normalised form, so a feed carrying
+ * "https://spookedpodcast.org" comes back as "https://spookedpodcast.org/"
+ * and a straight comparison calls a story missing that is on the screen. A
+ * run failed exactly that way, and the app was fine.
+ */
+const sameLink = (url) => {
+  try {
+    return new URL(url).href;
+  } catch {
+    return String(url);
+  }
+};
+
+/**
  * Nothing is hidden from the reader.
  *
  * Two features here take things off the screen or move them down it, and
@@ -365,7 +381,7 @@ async function shelvesKeepEverything() {
       const stuckHere = await openEveryFold(page.getByRole('dialog', { name: 'News and releases' }));
       if (stuckHere) problems.push(`Everything: ${stuckHere}`);
       const here = new Set(await page.$$eval('article a[href]', (all) => all.map((a) => a.href)));
-      const hidden = feed.guides.filter((link) => !here.has(link));
+      const hidden = feed.guides.filter((link) => !here.has(sameLink(link)));
       if (hidden.length > 0) {
         problems.push(`${hidden.length} guides are missing from Everything: ${hidden[0]}`);
       }
@@ -395,7 +411,7 @@ async function shelvesKeepEverything() {
       const stuck = await openEveryFold(drawer);
       if (stuck) problems.push(`${label}: ${stuck}`);
       const seen = new Set(await page.$$eval('article a[href]', (all) => all.map((a) => a.href)));
-      const lost = (feed.shelves[tone] ?? []).filter((link) => !seen.has(link));
+      const lost = (feed.shelves[tone] ?? []).filter((link) => !seen.has(sameLink(link)));
       if (lost.length > 0) problems.push(`${label} lost ${lost.length}: ${lost[0]}`);
       checked += 1;
       await chip.click();
@@ -474,8 +490,8 @@ async function unreadHidesOnlyWhatYouRead() {
       const stuck = await openEveryFold(drawer);
       if (stuck) problems.push(stuck);
       const seen = new Set(await page.$$eval('article a[href]', (all) => all.map((a) => a.href)));
-      const kept = read.filter((link) => seen.has(link));
-      const lost = links.slice(5).filter((link) => !seen.has(link));
+      const kept = read.filter((link) => seen.has(sameLink(link)));
+      const lost = links.slice(5).filter((link) => !seen.has(sameLink(link)));
       if (kept.length > 0) problems.push(`${kept.length} read stories still listed`);
       if (lost.length > 0) problems.push(`${lost.length} unread stories missing: ${lost[0]}`);
 

@@ -153,3 +153,32 @@ test('only the press is demoted either', () => {
     assert.equal(rankedAt(row), Date.parse(row.publishedAt), `${channel} was demoted`);
   }
 });
+
+test('a channel having a quiet fortnight waits its turn', () => {
+  /*
+   * The complaint this came from, in one case: an eleven-day-old podcast
+   * episode sitting four cards from the top of a feed whose press half had a
+   * median age of seven hours. The round-robin gives every channel's best
+   * item the same shot at the top, which is right when every channel has
+   * posted today and wrong when one last posted a week ago.
+   */
+  const pod = story({ channel: 'pod', publishedAt: agoHours(11 * 24), link: 'old-pod' });
+  const press = [0, 1, 2, 3].map((i) =>
+    story({ channel: 'press', publishedAt: agoHours(i + 1), link: `press-${i}` }),
+  );
+  const ranked = order([pod, ...press]);
+  assert.ok(ranked.indexOf('old-pod') >= 4, `landed at ${ranked.indexOf('old-pod')}`);
+
+  // A channel that posted today keeps its turn, which is the whole point of
+  // the round-robin and must survive this.
+  const fresh = story({ channel: 'pod', publishedAt: agoHours(3), link: 'new-pod' });
+  assert.ok(order([fresh, ...press]).indexOf('new-pod') <= 1);
+});
+
+test('staleness is counted after the coverage boost, not before', () => {
+  // Otherwise a story several outlets ran would be pushed down for an age it
+  // no longer has: the two adjustments are one sum.
+  const covered = story({ channel: 'press', publishedAt: agoHours(30), coverage: 5, link: 'big' });
+  const plain = story({ channel: 'press', publishedAt: agoHours(26), link: 'small' });
+  assert.deepEqual(order([plain, covered]), ['big', 'small']);
+});

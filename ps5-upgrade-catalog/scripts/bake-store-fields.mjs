@@ -15,7 +15,8 @@
  * case all along: what it reported was not what shipped.
  *
  * So the join is done here, once, and its result is written into the catalog
- * the phone already carries. The fields are named apart from the mirror's own
+ * the phone already carries. It also carries the store's key art across,
+ * which is what a PlayStation exclusive needs most: see storeArt below. The fields are named apart from the mirror's own
  * so nothing that renders a store row picks them up by accident.
  *
  *   node scripts/bake-store-fields.mjs
@@ -40,7 +41,7 @@ const next = catalog.map((entry) => {
   if (!row) {
     // Nothing to add, and anything baked before must go if the match is gone.
     const rest = { ...entry };
-    for (const key of ['storeId', 'storeGenres', 'storeRelease', 'plusIncluded']) {
+    for (const key of ['storeId', 'storeGenres', 'storeRelease', 'plusIncluded', 'storeArt']) {
       if (key in rest) {
         delete rest[key];
         changed += 1;
@@ -55,6 +56,20 @@ const next = catalog.map((entry) => {
     storeGenres: row.genres ?? [],
     storeRelease: row.release ?? null,
     plusIncluded: row.plus?.included === true,
+    /*
+     * The key art, which until now a PlayStation exclusive simply did not
+     * have. A card's art came from Valve, so anything Valve has never heard
+     * of fell through to a coloured gradient with the title printed on it:
+     * 211 of the 506 write-ups, and not a random 211. They are the ones this
+     * app is most about, because a game that is only on PlayStation is
+     * exactly the game Steam cannot answer for. Astro Bot, Demon's Souls,
+     * Gran Turismo 7, Alan Wake 2, the whole Sly Cooper and Jak and Daxter
+     * shelf, all blank.
+     *
+     * The mirror had the art the whole time. It is baked in so a card can
+     * draw it on first paint, with no request at all.
+     */
+    storeArt: row.art ?? null,
   };
   if (JSON.stringify(baked) !== JSON.stringify(entry)) changed += 1;
   return baked;

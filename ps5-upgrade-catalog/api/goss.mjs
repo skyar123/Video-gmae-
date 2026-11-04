@@ -299,11 +299,35 @@ const YOUTUBE_PINNED = YOUTUBE.filter((channel) => channel.pinned);
 const YOUTUBE_ROTATING = YOUTUBE.filter((channel) => !channel.pinned);
 
 /** Resolved through the iTunes search API, which needs no key either. */
+/*
+ * Three shows publishing weekly is three episodes a week, and the feed was
+ * reaching back three weeks to find enough of them: an episode eleven days
+ * old was sitting four cards from the top, next to a headline twenty minutes
+ * old. More shows is the fix for that, not a longer reach.
+ *
+ * Each was fetched before being listed. Axe of the Blood God, Nextlander,
+ * Eggplant, MinnMax and Get Played all 404, The Besties 503s and 8-4 Play
+ * 403s, so none of them are here. What's Good Games serves, but its newest
+ * episode is its series finale from two years ago.
+ */
 const PODCASTS = [
   { source: 'Girl Mode', url: 'https://feeds.acast.com/public/shows/6393ec46b89a2a0010dee819' },
   { source: 'Remap Radio', url: 'https://rss.art19.com/remap-radio' },
   { source: 'Triple Click', url: 'https://feeds.simplecast.com/6WD3bDj7' },
+  { source: 'Into the Aether', url: 'https://feeds.simplecast.com/wgl4xEgL' },
+  { source: 'Insert Credit', url: 'https://insertcredit.com/show/feed/' },
+  { source: 'Retronauts', url: 'https://retronauts.libsyn.com/rss' },
+  { source: 'Friends Per Second', url: 'https://feeds.simplecast.com/TBotaapn' },
 ];
+
+/**
+ * How far back the podcast lane reaches.
+ *
+ * Was three weeks, which is how an eleven-day-old episode ended up near the
+ * top of a feed whose press half has a median age of seven hours. With seven
+ * shows instead of three there is no need to reach that far.
+ */
+const PODCAST_WINDOW_DAYS = 12;
 
 /**
  * Enough to scroll for a while; the panel sorts and filters what it gets.
@@ -1028,7 +1052,7 @@ export async function loadGoss() {
   const [searched, voices, pods, press, videos] = await Promise.all([
     searchGoss(since),
     voiceGoss(cutoff),
-    Promise.all(PODCASTS.map((pod) => loadPodcast(pod, now - 21 * DAY_MS))).then((all) =>
+    Promise.all(PODCASTS.map((pod) => loadPodcast(pod, now - PODCAST_WINDOW_DAYS * DAY_MS))).then((all) =>
       all.flat(),
     ),
     pressGoss(),

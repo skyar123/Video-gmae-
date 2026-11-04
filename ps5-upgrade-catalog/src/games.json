@@ -148,7 +148,8 @@
       "Role Playing Games"
     ],
     "storeRelease": "2021-03-30T17:00:00Z",
-    "plusIncluded": false
+    "plusIncluded": false,
+    "storeArt": "https://image.api.playstation.com/vulcan/ap/rnd/202102/1213/TMZhAr0V1h3TfOMYmvTqhMbd.png"
   },
   {
     "id": "no-mans-sky",
@@ -372,7 +373,8 @@
       "Adventure"
     ],
     "storeRelease": "2021-11-23T14:00:00Z",
-    "plusIncluded": false
+    "plusIncluded": false,
+    "storeArt": "https://image.api.playstation.com/vulcan/ap/rnd/202109/2601/02b4fshjEdKP7XBssxl4TLcx.jpg"
   },
   {
     "id": "tunic",
@@ -457,7 +459,8 @@
       "Action"
     ],
     "storeRelease": "2022-09-27T17:00:00Z",
-    "plusIncluded": false
+    "plusIncluded": false,
+    "storeArt": "https://image.api.playstation.com/vulcan/ap/rnd/202209/1417/QedUO44dsAv8mc5TCOpFfYzk.jpg"
   },
   {
     "id": "stray",
@@ -528,7 +531,8 @@
       "Adventure"
     ],
     "storeRelease": "2022-07-19T15:00:00Z",
-    "plusIncluded": false
+    "plusIncluded": false,
+    "storeArt": "https://image.api.playstation.com/vulcan/ap/rnd/202206/0300/UogbMjgPOJrYBn5QvUmuR7G9.jpg"
   },
   {
     "id": "sea-of-stars",
@@ -709,7 +713,8 @@
       "Action"
     ],
     "storeRelease": "2021-12-02T17:00:00Z",
-    "plusIncluded": false
+    "plusIncluded": false,
+    "storeArt": "https://image.api.playstation.com/vulcan/img/rnd/202111/2922/djFDk2z8hxly6ZVb5q0AdYc2.png"
   },
   {
     "id": "horizon-forbidden-west",
@@ -801,7 +806,8 @@
       "Action"
     ],
     "storeRelease": "2022-02-18T05:00:00Z",
-    "plusIncluded": true
+    "plusIncluded": true,
+    "storeArt": "https://image.api.playstation.com/vulcan/ap/rnd/202010/2915/SqRcyLjZbpK26ej6TnWf43xp.jpg"
   },
   {
     "id": "elden-ring",
@@ -918,7 +924,8 @@
       "Role Playing Games"
     ],
     "storeRelease": "2022-02-25T05:00:00Z",
-    "plusIncluded": false
+    "plusIncluded": false,
+    "storeArt": "https://image.api.playstation.com/vulcan/ap/rnd/202110/2000/M2IBVSWR2ao2oHizClzsUaYL.png"
   },
   {
     "id": "deliver-us-mars",
@@ -973,7 +980,8 @@
       "Action"
     ],
     "storeRelease": "2023-02-02T15:00:00Z",
-    "plusIncluded": false
+    "plusIncluded": false,
+    "storeArt": "https://image.api.playstation.com/vulcan/ap/rnd/202203/2414/BKRUrWduDBXVm5W8N6J8Oanl.jpg"
   },
   {
     "id": "season-letter",
@@ -1031,7 +1039,8 @@
       "Unique"
     ],
     "storeRelease": "2023-01-31T17:00:00Z",
-    "plusIncluded": true
+    "plusIncluded": true,
+    "storeArt": "https://image.api.playstation.com/vulcan/ap/rnd/202204/2213/64EpW8wDFYgLBTFYQwKrUYx7.jpg"
   },
   {
     "id": "eastshade",
@@ -1232,7 +1241,8 @@
       "Casual"
     ],
     "storeRelease": "2021-06-09T14:00:00Z",
-    "plusIncluded": false
+    "plusIncluded": false,
+    "storeArt": "https://image.api.playstation.com/vulcan/img/rnd/202106/0709/Y1uS4NcQqwkPKVE93OBQMCGf.jpg"
   },
   {
     "id": "life-is-strange-true-colors",
@@ -1383,7 +1393,8 @@
       "Adventure"
     ],
     "storeRelease": "2021-11-16T14:00:00Z",
-    "plusIncluded": false
+    "plusIncluded": false,
+    "storeArt": "https://image.api.playstation.com/vulcan/ap/rnd/202107/0919/9ewQXoMuOBkXXWXIoHyGGkXk.png"
   },
   {
     "id": "lake",
@@ -1453,7 +1464,8 @@
       "Simulation"
     ],
     "storeRelease": "2022-04-08T16:00:00Z",
-    "plusIncluded": false
+    "plusIncluded": false,
+    "storeArt": "https://image.api.playstation.com/vulcan/ap/rnd/202203/2522/e4tmD804MkhRpo95fTebU9dY.png"
   },
   {
     "id": "sandrock",
@@ -1530,7 +1542,8 @@
       "Adventure"
     ],
     "storeRelease": "2023-11-02T10:00:00Z",
-    "plusIncluded": false
+    "plusIncluded": false,
+    "storeArt": "https://image.api.playstation.com/vulcan/ap/rnd/202312/1323/43a194d41b8d4d00339d4fde31bdd2225540a34c03fff863.jpg"
   },
   {
     "id": "paleo-pines",
@@ -1589,7 +1602,8 @@
       "Simulation"
     ],
     "storeRelease": "2023-09-26T04:00:00Z",
-    "plusIncluded": false
+    "plusIncluded": false,
+    "storeArt": "https://image.api.playstation.com/vulcan/ap/rnd/202308/1017/db6a96ce615b7cda397ca0586c301a8edfdcb44255212c0d.jpg"
   },
   {
     "id": "bugsnax",
@@ -1646,7 +1660,8 @@
       "Adventure"
     ],
     "storeRelease": "2020-11-12T05:00:00Z",
-    "plusIncluded": false
+    "plusIncluded": false,
+    "storeArt": "https://image.api.playstation.com/vulcan/ap/rnd/202006/1917/hGSdG2l6eGt4KyyUozhceMW6.png"
   },
   {
     "id": "dreamlight-valley",
@@ -1724,7 +1739,8 @@
       "Simulation"
     ],
     "storeRelease": "2022-09-06T13:00:00Z",
-    "plusIncluded": false
+    "plusIncluded": false,
+    "storeArt": "https://image.api.playstation.com/vulcan/ap/rnd/202610/2215/dde2fd55118740c9fac5c84c7071f6e3a301bf88df0ceb7c.jpg"
   },
   {
     "id": "cult-of-the-lamb",
@@ -1816,7 +1832,8 @@
       "Simulation"
     ],
     "storeRelease": "2022-08-11T16:00:00Z",
-    "plusIncluded": false
+    "plusIncluded": false,
+    "storeArt": "https://image.api.playstation.com/vulcan/ap/rnd/202512/1518/186cd9352595fab352f61db979de40f171d61e075e1d5dd5.png"
   },
   {
     "id": "roots-of-pacha",
@@ -1870,7 +1887,8 @@
       "Adventure"
     ],
     "storeRelease": "2023-11-28T16:00:00Z",
-    "plusIncluded": false
+    "plusIncluded": false,
+    "storeArt": "https://image.api.playstation.com/vulcan/ap/rnd/202310/2519/7770a1062fc44bcf93485ccef9a7a10a26ba7012d9384c1c.png"
   },
   {
     "id": "spiritfarer",
@@ -1955,7 +1973,8 @@
       "Strategy"
     ],
     "storeRelease": "2020-08-18T04:00:00Z",
-    "plusIncluded": false
+    "plusIncluded": false,
+    "storeArt": "https://image.api.playstation.com/vulcan/img/rnd/202112/1100/9Pd9zuk7ZZ1IIoynue3AQj30.png"
   },
   {
     "id": "gris",
@@ -2076,7 +2095,8 @@
       "Adventure"
     ],
     "storeRelease": "2021-09-17T04:00:00Z",
-    "plusIncluded": false
+    "plusIncluded": false,
+    "storeArt": "https://image.api.playstation.com/vulcan/ap/rnd/202108/1213/xAGTMkeWyIgst8RHjKZxToB5.jpeg"
   },
   {
     "id": "dredge",
@@ -2149,7 +2169,8 @@
       "Adventure"
     ],
     "storeRelease": "2023-03-30T04:00:00Z",
-    "plusIncluded": true
+    "plusIncluded": true,
+    "storeArt": "https://image.api.playstation.com/vulcan/ap/rnd/202302/0216/e72e95dcc7a7b15c22544e581f7cefcaaab02b93e9faf982.jpg"
   },
   {
     "id": "oxenfree-2",
@@ -2202,7 +2223,8 @@
       "Adventure"
     ],
     "storeRelease": "2023-07-12T00:00:00Z",
-    "plusIncluded": false
+    "plusIncluded": false,
+    "storeArt": "https://image.api.playstation.com/vulcan/ap/rnd/202303/2816/f16498f5abf66c7b0486c5c3376c7dcd0a642bdebdc8adb1.jpg"
   },
   {
     "id": "night-in-the-woods",
@@ -2340,7 +2362,8 @@
       "Adventure"
     ],
     "storeRelease": "2021-10-28T04:00:00Z",
-    "plusIncluded": false
+    "plusIncluded": false,
+    "storeArt": "https://image.api.playstation.com/vulcan/img/rnd/202110/2215/jzsrLZ3vsIkoTuKWnvVoqUqq.jpg"
   },
   {
     "id": "kena",
@@ -2415,7 +2438,8 @@
       "Adventure"
     ],
     "storeRelease": "2021-09-21T04:00:00Z",
-    "plusIncluded": false
+    "plusIncluded": false,
+    "storeArt": "https://image.api.playstation.com/vulcan/ap/rnd/202008/2619/aEqpsWKWYe1dxn9zKs7HgLai.jpg"
   },
   {
     "id": "chicory",
@@ -2464,7 +2488,8 @@
       "Adventure"
     ],
     "storeRelease": "2021-06-10T18:30:00Z",
-    "plusIncluded": false
+    "plusIncluded": false,
+    "storeArt": "https://image.api.playstation.com/vulcan/ap/rnd/202105/1018/sRsHZ0G6ZwN9UUUmHVyHxe0B.png"
   },
   {
     "id": "cassette-beasts",
@@ -2607,7 +2632,8 @@
       "Adventure"
     ],
     "storeRelease": "2024-04-16T15:00:00Z",
-    "plusIncluded": false
+    "plusIncluded": false,
+    "storeArt": "https://image.api.playstation.com/vulcan/ap/rnd/202401/2508/cef621908426dde90821d6f6e960e9272a696f7f973466de.png"
   },
   {
     "id": "tinykin",
@@ -2672,7 +2698,8 @@
       "Arcade"
     ],
     "storeRelease": "2022-08-30T16:00:00Z",
-    "plusIncluded": false
+    "plusIncluded": false,
+    "storeArt": "https://image.api.playstation.com/vulcan/ap/rnd/202208/0813/9RDnuGRcVw1F7W3p3AfZh7yh.png"
   },
   {
     "id": "balatro",
@@ -2743,7 +2770,8 @@
       "Simulation"
     ],
     "storeRelease": "2024-02-20T16:00:00Z",
-    "plusIncluded": false
+    "plusIncluded": false,
+    "storeArt": "https://image.api.playstation.com/vulcan/ap/rnd/202402/1416/081d7231762c748a7c25becc18d90ec8fa18360311e1f453.png"
   },
   {
     "id": "teenage-exocolonist",
@@ -2814,7 +2842,8 @@
       "Role Playing Games"
     ],
     "storeRelease": "2022-08-25T17:00:00Z",
-    "plusIncluded": false
+    "plusIncluded": false,
+    "storeArt": "https://image.api.playstation.com/vulcan/ap/rnd/202207/2517/oNx2SjxTevFfzeZ6CZG8uaBa.jpg"
   },
   {
     "id": "tchia",
@@ -2993,7 +3022,8 @@
       "Action"
     ],
     "storeRelease": "2021-07-20T15:00:00Z",
-    "plusIncluded": false
+    "plusIncluded": false,
+    "storeArt": "https://image.api.playstation.com/vulcan/img/rnd/202107/2108/629HUtTbfX4L2JFvF8LDKeKB.jpg"
   },
   {
     "id": "blasphemous",
@@ -3342,7 +3372,8 @@
       "Action"
     ],
     "storeRelease": "2021-12-16T05:00:00Z",
-    "plusIncluded": false
+    "plusIncluded": false,
+    "storeArt": "https://image.api.playstation.com/vulcan/ap/rnd/202111/2908/akeJVZku3HsabfzPYPlRGx3K.png"
   },
   {
     "id": "afterimage",
@@ -3405,7 +3436,8 @@
       "Adventure"
     ],
     "storeRelease": "2023-04-25T07:00:00Z",
-    "plusIncluded": false
+    "plusIncluded": false,
+    "storeArt": "https://image.api.playstation.com/vulcan/ap/rnd/202304/1007/86bd21ee432ae585073e19a459666f11e53c58c0049b0a67.jpg"
   },
   {
     "id": "grime",
@@ -3463,7 +3495,8 @@
       "Role Playing Games"
     ],
     "storeRelease": "2022-12-15T17:00:00Z",
-    "plusIncluded": false
+    "plusIncluded": false,
+    "storeArt": "https://image.api.playstation.com/vulcan/ap/rnd/202401/1919/b1682aefbce0f445e724b3cbe0bdd8f00a995bac5ab256b0.jpg"
   },
   {
     "id": "ghost-song",
@@ -3510,7 +3543,8 @@
       "Adventure"
     ],
     "storeRelease": "2022-11-03T16:00:00Z",
-    "plusIncluded": false
+    "plusIncluded": false,
+    "storeArt": "https://image.api.playstation.com/vulcan/ap/rnd/202208/1818/aWbw79ZDNe2aBrmwFIS7NCQn.png"
   },
   {
     "id": "haiku-the-robot",
@@ -3621,7 +3655,8 @@
       "Action"
     ],
     "storeRelease": "2022-02-14T14:00:00Z",
-    "plusIncluded": false
+    "plusIncluded": false,
+    "storeArt": "https://image.api.playstation.com/vulcan/ap/rnd/202304/1714/53ccfe8a62f24344984a3904656f84229450529aa58ac3ef.png"
   },
   {
     "id": "astalon",
@@ -3682,7 +3717,8 @@
       "Action"
     ],
     "storeRelease": "2021-06-03T04:00:00Z",
-    "plusIncluded": false
+    "plusIncluded": false,
+    "storeArt": "https://image.api.playstation.com/vulcan/img/rnd/202105/2807/A44Wu1NfHqT2s2LQMhwYb583.jpg"
   },
   {
     "id": "rain-world",
@@ -3825,7 +3861,8 @@
       "Action"
     ],
     "storeRelease": "2023-04-27T16:00:00Z",
-    "plusIncluded": false
+    "plusIncluded": false,
+    "storeArt": "https://image.api.playstation.com/vulcan/ap/rnd/202107/0800/lR8UzQ2eXje53GL0jK6GeHqT.jpg"
   },
   {
     "id": "prince-of-persia-lost-crown",
@@ -3897,7 +3934,8 @@
       "Action"
     ],
     "storeRelease": "2024-01-18T05:00:00Z",
-    "plusIncluded": true
+    "plusIncluded": true,
+    "storeArt": "https://image.api.playstation.com/vulcan/ap/rnd/202312/0701/e0df18c55b01b7ccac6423e53e0a752e99ff665de760ecc5.jpg"
   },
   {
     "id": "bloodstained",
@@ -4030,7 +4068,8 @@
       "Adventure"
     ],
     "storeRelease": "2021-09-30T16:00:00Z",
-    "plusIncluded": false
+    "plusIncluded": false,
+    "storeArt": "https://image.api.playstation.com/vulcan/ap/rnd/202109/0922/mtIdcPuNnDYeX39ky0S4KQti.png"
   },
   {
     "id": "vernal-edge",
@@ -4087,7 +4126,8 @@
       "Action"
     ],
     "storeRelease": "2023-03-14T22:00:00Z",
-    "plusIncluded": false
+    "plusIncluded": false,
+    "storeArt": "https://image.api.playstation.com/vulcan/ap/rnd/202302/0714/0af6b60aee474f68ccd1343c991840d8f1bfc1e86fcf13e8.png"
   },
   {
     "id": "ultros",
@@ -4277,7 +4317,8 @@
       "Strategy"
     ],
     "storeRelease": "2022-08-30T16:00:00Z",
-    "plusIncluded": false
+    "plusIncluded": false,
+    "storeArt": "https://image.api.playstation.com/vulcan/ap/rnd/202206/1700/bzvlJHBWDaECvVGKOT5ziBsU.jpg"
   },
   {
     "id": "roguebook",
@@ -4330,7 +4371,8 @@
       "Role Playing Games"
     ],
     "storeRelease": "2022-02-24T09:00:00Z",
-    "plusIncluded": true
+    "plusIncluded": true,
+    "storeArt": "https://image.api.playstation.com/vulcan/img/rnd/202112/0310/7XcCxfRWnMoJdRrhqjNSezoF.jpg"
   },
   {
     "id": "griftlands",
@@ -4387,7 +4429,8 @@
       "Strategy"
     ],
     "storeRelease": "2021-06-04T04:00:00Z",
-    "plusIncluded": false
+    "plusIncluded": false,
+    "storeArt": "https://image.api.playstation.com/vulcan/ap/rnd/202105/1423/XCLlBDjdxLQJkfCqqFCMKh2K.png"
   },
   {
     "id": "fights-in-tight-spaces",
@@ -4432,7 +4475,8 @@
       "Strategy"
     ],
     "storeRelease": "2023-05-25T04:00:00Z",
-    "plusIncluded": false
+    "plusIncluded": false,
+    "storeArt": "https://image.api.playstation.com/vulcan/ap/rnd/202305/2211/4ac5af6cb6603815ddbd756b59ea1bbffc27ed1a366cb034.png"
   },
   {
     "id": "astrea-six-sided-oracles",
@@ -4478,7 +4522,8 @@
       "Role Playing Games"
     ],
     "storeRelease": "2024-09-26T16:00:00Z",
-    "plusIncluded": false
+    "plusIncluded": false,
+    "storeArt": "https://image.api.playstation.com/vulcan/ap/rnd/202408/3023/4f8d1bcc64d5534f658b3904d5d62139fa3da9b2f2b89371.png"
   },
   {
     "id": "monster-sanctuary",
@@ -4546,7 +4591,8 @@
       "Role Playing Games"
     ],
     "storeRelease": "2020-12-08T05:00:00Z",
-    "plusIncluded": false
+    "plusIncluded": false,
+    "storeArt": "https://image.api.playstation.com/vulcan/ap/rnd/202212/1510/tSV6beYO8jFRbqlMXRw8Wwts.jpg"
   },
   {
     "id": "nexomon-extinction",
@@ -4593,7 +4639,8 @@
       "Adventure"
     ],
     "storeRelease": "2020-08-28T13:00:00Z",
-    "plusIncluded": false
+    "plusIncluded": false,
+    "storeArt": "https://image.api.playstation.com/vulcan/img/rnd/202012/1111/JDsCSJwSy9c94e8HLS9K7RRe.png"
   },
   {
     "id": "coromon",
@@ -4968,7 +5015,8 @@
       "Puzzle"
     ],
     "storeRelease": "2022-09-22T04:00:00Z",
-    "plusIncluded": false
+    "plusIncluded": false,
+    "storeArt": "https://image.api.playstation.com/vulcan/ap/rnd/202208/1514/ohhGN3lBsBmPAOTsd9NUka9X.jpg"
   },
   {
     "id": "cozy-grove",
@@ -5025,7 +5073,8 @@
       "Casual"
     ],
     "storeRelease": "2023-06-22T04:00:00Z",
-    "plusIncluded": false
+    "plusIncluded": false,
+    "storeArt": "https://image.api.playstation.com/vulcan/img/rnd/202104/0300/cbR3zRropNCkTNS0SL9sKtaR.jpg"
   },
   {
     "id": "garden-story",
@@ -5211,7 +5260,8 @@
       "Adventure"
     ],
     "storeRelease": "2023-05-30T04:00:00Z",
-    "plusIncluded": false
+    "plusIncluded": false,
+    "storeArt": "https://image.api.playstation.com/vulcan/ap/rnd/202305/2610/b614fa818ddea58a237986ea1a3321a15d617a1ab07f8583.jpg"
   },
   {
     "id": "kitaria-fables",
@@ -5257,7 +5307,8 @@
       "Role Playing Games"
     ],
     "storeRelease": "2021-09-02T04:00:00Z",
-    "plusIncluded": false
+    "plusIncluded": false,
+    "storeArt": "https://image.api.playstation.com/vulcan/img/rnd/202108/1912/2PiYO7D18lYvl3jZbI2CQdby.jpg"
   },
   {
     "id": "calico",
@@ -5309,7 +5360,8 @@
       "Simulation"
     ],
     "storeRelease": "2023-11-28T15:00:00Z",
-    "plusIncluded": false
+    "plusIncluded": false,
+    "storeArt": "https://image.api.playstation.com/vulcan/ap/rnd/202309/2820/2bf4374046e4773e9c7e0e690a15889c9e4741d98c088530.png"
   },
   {
     "id": "graveyard-keeper",
@@ -5529,7 +5581,8 @@
       "Simulator"
     ],
     "storeRelease": "2023-01-31T17:00:00Z",
-    "plusIncluded": false
+    "plusIncluded": false,
+    "storeArt": "https://image.api.playstation.com/vulcan/ap/rnd/202212/0817/mpg63ASn1HZMe7igI065R7gq.jpg"
   },
   {
     "id": "two-point-campus",
@@ -5586,7 +5639,8 @@
       "Simulation"
     ],
     "storeRelease": "2022-08-09T14:00:00Z",
-    "plusIncluded": true
+    "plusIncluded": true,
+    "storeArt": "https://image.api.playstation.com/vulcan/ap/rnd/202203/3011/3E5WfUjWlynhASE8O0ilPigG.jpg"
   },
   {
     "id": "islanders",
@@ -5812,7 +5866,8 @@
       "Action"
     ],
     "storeRelease": "2020-11-12T05:00:00Z",
-    "plusIncluded": true
+    "plusIncluded": true,
+    "storeArt": "https://image.api.playstation.com/vulcan/img/rnd/202010/1614/e3XoU7P20Mvu3RJy7LGv5Q2p.png"
   },
   {
     "id": "little-nightmares-2",
@@ -6029,7 +6084,8 @@
       "Action"
     ],
     "storeRelease": "2024-04-16T12:00:00Z",
-    "plusIncluded": false
+    "plusIncluded": false,
+    "storeArt": "https://image.api.playstation.com/vulcan/ap/rnd/202311/0815/3f1e52d54794e09d5534b46b2b311ea7b6ca5e390b3d0be7.jpg"
   },
   {
     "id": "unravel-two",
@@ -6169,7 +6225,8 @@
       "Action"
     ],
     "storeRelease": "2020-07-28T04:00:00Z",
-    "plusIncluded": false
+    "plusIncluded": false,
+    "storeArt": "https://image.api.playstation.com/vulcan/img/rnd/202011/0204/d9v6OP0KpPZJBaJbNJbPB8wZ.png"
   },
   {
     "id": "yooka-laylee-impossible-lair",
@@ -6264,7 +6321,8 @@
       "Action"
     ],
     "storeRelease": "2026-03-26T14:00:00Z",
-    "plusIncluded": false
+    "plusIncluded": false,
+    "storeArt": "https://image.api.playstation.com/vulcan/ap/rnd/202601/1916/f65bd9a1cb7d2c642b6f1db8b099ff2afce7dc02fbcd26c5.jpg"
   },
   {
     "id": "pumpkin-jack",
@@ -6321,7 +6379,8 @@
       "Action"
     ],
     "storeRelease": "2021-10-27T14:00:00Z",
-    "plusIncluded": false
+    "plusIncluded": false,
+    "storeArt": "https://image.api.playstation.com/vulcan/ap/rnd/202102/0413/t9xRbF9BPF3F9s7dGzzfRYex.jpg"
   },
   {
     "id": "kaze-and-the-wild-masks",
@@ -6476,7 +6535,8 @@
       "Action"
     ],
     "storeRelease": "2021-03-12T00:00:00Z",
-    "plusIncluded": false
+    "plusIncluded": false,
+    "storeArt": "https://image.api.playstation.com/vulcan/ap/rnd/202102/2418/KCAVdtaQZGg2niu8lz5vmB1D.jpg"
   },
   {
     "id": "neon-white",
@@ -6547,7 +6607,8 @@
       "Action"
     ],
     "storeRelease": "2022-12-13T17:00:00Z",
-    "plusIncluded": false
+    "plusIncluded": false,
+    "storeArt": "https://image.api.playstation.com/vulcan/ap/rnd/202212/0919/Goqvez1ZsOeM4dcHrWxxbHca.jpg"
   },
   {
     "id": "the-artful-escape",
@@ -6618,7 +6679,8 @@
       "Adventure"
     ],
     "storeRelease": "2022-01-25T17:00:00Z",
-    "plusIncluded": false
+    "plusIncluded": false,
+    "storeArt": "https://image.api.playstation.com/vulcan/ap/rnd/202309/0519/a8c8f2c445339c4b98c9e5cfbf766857759dea0ff663b270.png"
   },
   {
     "id": "what-remains-of-edith-finch",
@@ -6787,7 +6849,8 @@
       "Adventure"
     ],
     "storeRelease": "2022-02-01T16:00:00Z",
-    "plusIncluded": false
+    "plusIncluded": false,
+    "storeArt": "https://image.api.playstation.com/vulcan/img/rnd/202106/1514/Nz4Wyunro1obQMfhHlIQesJw.jpg"
   },
   {
     "id": "life-is-strange-2",
@@ -7052,7 +7115,8 @@
       "Horror"
     ],
     "storeRelease": "2024-10-04T04:00:00Z",
-    "plusIncluded": true
+    "plusIncluded": true,
+    "storeArt": "https://image.api.playstation.com/vulcan/ap/rnd/202401/2910/3cb17e8780924be93de73d4b6b81e3309f69d24137c02d54.jpg"
   },
   {
     "id": "detroit-become-human",
@@ -7200,7 +7264,8 @@
       "Unique"
     ],
     "storeRelease": "2022-04-14T04:00:00Z",
-    "plusIncluded": false
+    "plusIncluded": false,
+    "storeArt": "https://image.api.playstation.com/vulcan/ap/rnd/202202/2409/Xtkidw899ZspjYvI7WNdhHVQ.jpg"
   },
   {
     "id": "open-roads",
@@ -7250,7 +7315,8 @@
       "Adventure"
     ],
     "storeRelease": "2024-03-28T16:00:00Z",
-    "plusIncluded": false
+    "plusIncluded": false,
+    "storeArt": "https://image.api.playstation.com/vulcan/ap/rnd/202012/1000/xA91F74b3ilqC3gFjK3MpCv5.png"
   },
   {
     "id": "lost-words",
@@ -7374,7 +7440,8 @@
       "Adventure"
     ],
     "storeRelease": "2022-06-02T04:00:00Z",
-    "plusIncluded": false
+    "plusIncluded": false,
+    "storeArt": "https://image.api.playstation.com/vulcan/ap/rnd/202206/0212/8f58vaDkJwLCCSqgNSC1yVGS.jpg"
   },
   {
     "id": "old-mans-journey",
@@ -7471,7 +7538,8 @@
       "Adventure"
     ],
     "storeRelease": "2022-03-24T16:00:00Z",
-    "plusIncluded": false
+    "plusIncluded": false,
+    "storeArt": "https://image.api.playstation.com/vulcan/ap/rnd/202112/1521/SCxV4ysE2V2wLATPmDJxDsqg.png"
   },
   {
     "id": "dordogne",
@@ -7523,7 +7591,8 @@
       "Adventure"
     ],
     "storeRelease": "2023-06-13T16:00:00Z",
-    "plusIncluded": false
+    "plusIncluded": false,
+    "storeArt": "https://image.api.playstation.com/vulcan/ap/rnd/202304/1109/d3d41b7b8e15ec1a6947f80a94f511cf1b00fe77da4051c6.jpg"
   },
   {
     "id": "mutazione",
@@ -7619,7 +7688,8 @@
       "Adventure"
     ],
     "storeRelease": "2022-11-17T15:00:00Z",
-    "plusIncluded": false
+    "plusIncluded": false,
+    "storeArt": "https://image.api.playstation.com/vulcan/ap/rnd/202211/1510/xEpV41eaeQsFS64BEsXgFeAd.png"
   },
   {
     "id": "unpacking",
@@ -7702,7 +7772,8 @@
       "Puzzle"
     ],
     "storeRelease": "2022-05-10T07:00:00Z",
-    "plusIncluded": false
+    "plusIncluded": false,
+    "storeArt": "https://image.api.playstation.com/vulcan/ap/rnd/202204/1921/eyTQUK6eFiZ60eNgDvhBzDFA.png"
   },
   {
     "id": "coffee-talk",
@@ -7808,7 +7879,8 @@
       "Adventure"
     ],
     "storeRelease": "2023-04-20T04:00:00Z",
-    "plusIncluded": true
+    "plusIncluded": true,
+    "storeArt": "https://image.api.playstation.com/vulcan/ap/rnd/202303/0323/3c38cf213eac50553d35148502c1a9cb9384acb0964732ca.png"
   },
   {
     "id": "va-11-hall-a",
@@ -7927,7 +7999,8 @@
       "Adventure"
     ],
     "storeRelease": "2023-08-29T12:00:00Z",
-    "plusIncluded": false
+    "plusIncluded": false,
+    "storeArt": "https://image.api.playstation.com/vulcan/ap/rnd/202403/1215/c7b90c7c1220a77172afeb4c3b59c37436089ea2d8cc3d93.jpg"
   },
   {
     "id": "beacon-pines",
@@ -8054,7 +8127,8 @@
       "Adventure"
     ],
     "storeRelease": "2023-01-19T05:00:00Z",
-    "plusIncluded": true
+    "plusIncluded": true,
+    "storeArt": "https://image.api.playstation.com/vulcan/ap/rnd/202211/1606/c9coBuSj1tLpKmG3Beh2pDze.png"
   },
   {
     "id": "thirsty-suitors",
@@ -8123,7 +8197,8 @@
       "Adventure"
     ],
     "storeRelease": "2023-11-02T16:00:00Z",
-    "plusIncluded": false
+    "plusIncluded": false,
+    "storeArt": "https://image.api.playstation.com/vulcan/ap/rnd/202212/0100/0fz81NJ9OJUuWSMq4LQvTtcP.png"
   },
   {
     "id": "wytchwood",
@@ -8187,7 +8262,8 @@
       "Unique"
     ],
     "storeRelease": "2021-12-09T17:00:00Z",
-    "plusIncluded": false
+    "plusIncluded": false,
+    "storeArt": "https://image.api.playstation.com/vulcan/ap/rnd/202109/2418/lPxp65j5xCmpworUvPI7RiRC.png"
   },
   {
     "id": "gone-home",
@@ -8304,7 +8380,8 @@
       "Adventure"
     ],
     "storeRelease": "2021-12-07T17:00:00Z",
-    "plusIncluded": false
+    "plusIncluded": false,
+    "storeArt": "https://image.api.playstation.com/vulcan/ap/rnd/202111/1919/GRRB9OuNaY6Wdvt4v1PtRrsv.png"
   },
   {
     "id": "sea-of-solitude",
@@ -8446,7 +8523,8 @@
       "Puzzle"
     ],
     "storeRelease": "2020-08-27T04:00:00Z",
-    "plusIncluded": false
+    "plusIncluded": false,
+    "storeArt": "https://image.api.playstation.com/gs2-sec/appkgo/prod/CUSA19507_00/3/i_36a7ebb58125259d905cb7979aca18f8939a4eb458289e44130d9e647af03e3e/i/pic0.png"
   },
   {
     "id": "omno",
@@ -8492,7 +8570,8 @@
       "Adventure"
     ],
     "storeRelease": "2021-07-29T00:00:00Z",
-    "plusIncluded": false
+    "plusIncluded": false,
+    "storeArt": "https://image.api.playstation.com/vulcan/ap/rnd/202106/1009/R5nYGx7Uc4IBcWylnmrK2HKE.png"
   },
   {
     "id": "abzu",
@@ -9116,7 +9195,8 @@
       "Action"
     ],
     "storeRelease": "2020-11-12T05:00:00Z",
-    "plusIncluded": true
+    "plusIncluded": true,
+    "storeArt": "https://image.api.playstation.com/vulcan/img/rnd/202010/2417/tnCutdREPv6Pa7atqb8MTxGW.png"
   },
   {
     "id": "death-stranding",
@@ -9407,7 +9487,8 @@
       "Role Playing Games"
     ],
     "storeRelease": "2020-11-12T05:00:00Z",
-    "plusIncluded": true
+    "plusIncluded": true,
+    "storeArt": "https://image.api.playstation.com/vulcan/img/rnd/202010/3023/PnqfxnHGmf9E826ECuEM9niQ.jpg"
   },
   {
     "id": "immortals-fenyx-rising",
@@ -9683,7 +9764,8 @@
       "Action"
     ],
     "storeRelease": "2022-02-06T12:00:00Z",
-    "plusIncluded": false
+    "plusIncluded": false,
+    "storeArt": "https://image.api.playstation.com/vulcan/ap/rnd/202202/1010/7kMfw9oRuKC4fYFOXUbRh5ry.png"
   },
   {
     "id": "it-takes-two",
@@ -9843,7 +9925,8 @@
       "Action"
     ],
     "storeRelease": "2021-08-13T04:00:00Z",
-    "plusIncluded": false
+    "plusIncluded": false,
+    "storeArt": "https://image.api.playstation.com/vulcan/ap/rnd/202106/0714/pYyqTYA34U1a7hv6BCrqgc24.png"
   },
   {
     "id": "endling",
@@ -9903,7 +9986,8 @@
       "Adventure"
     ],
     "storeRelease": "2022-11-03T14:00:00Z",
-    "plusIncluded": false
+    "plusIncluded": false,
+    "storeArt": "https://image.api.playstation.com/vulcan/ap/rnd/202205/1310/5dGCU1DsO9gtahGsJGRUuUeT.png"
   },
   {
     "id": "astro-bot",
@@ -9948,7 +10032,8 @@
       "Action"
     ],
     "storeRelease": "2024-09-06T04:00:00Z",
-    "plusIncluded": false
+    "plusIncluded": false,
+    "storeArt": "https://image.api.playstation.com/vulcan/ap/rnd/202406/0500/80ecf657918558eeef8da3ee4cef326e4517d34e6c69d950.jpg"
   },
   {
     "id": "astros-playroom",
@@ -9973,7 +10058,8 @@
       "Action"
     ],
     "storeRelease": "2020-11-12T05:00:00Z",
-    "plusIncluded": false
+    "plusIncluded": false,
+    "storeArt": "https://image.api.playstation.com/vulcan/ap/rnd/202502/1908/2aaf69d013904134c1ad9eeba2680e8421ebb411b00da2a3.png"
   },
   {
     "id": "returnal",
@@ -10060,7 +10146,8 @@
       "Shooter"
     ],
     "storeRelease": "2021-04-30T04:00:00Z",
-    "plusIncluded": true
+    "plusIncluded": true,
+    "storeArt": "https://image.api.playstation.com/vulcan/ap/rnd/202011/1621/oE5NHcrITZnKa1kYSCQtsoRE.png"
   },
   {
     "id": "demons-souls",
@@ -10092,7 +10179,8 @@
       "Action"
     ],
     "storeRelease": "2020-11-12T05:00:00Z",
-    "plusIncluded": true
+    "plusIncluded": true,
+    "storeArt": "https://image.api.playstation.com/vulcan/img/rnd/202011/1717/brIXKBE5BqYgBSrsDn6Wo18O.png"
   },
   {
     "id": "ratchet-rift-apart",
@@ -10177,7 +10265,8 @@
       "Action"
     ],
     "storeRelease": "2021-06-11T04:00:00Z",
-    "plusIncluded": true
+    "plusIncluded": true,
+    "storeArt": "https://image.api.playstation.com/vulcan/ap/rnd/202101/2921/x64hEmgvhgxpXc9z9hpyLAyQ.jpg"
   },
   {
     "id": "spider-man-2",
@@ -10287,7 +10376,8 @@
       "Action"
     ],
     "storeRelease": "2023-10-20T04:00:00Z",
-    "plusIncluded": true
+    "plusIncluded": true,
+    "storeArt": "https://image.api.playstation.com/vulcan/ap/rnd/202306/1219/97e9f5fa6e50c185d249956c6f198a2652a9217e69a59ecd.jpg"
   },
   {
     "id": "final-fantasy-xvi",
@@ -10405,7 +10495,8 @@
       "Role Playing Games"
     ],
     "storeRelease": "2023-06-22T04:00:00Z",
-    "plusIncluded": true
+    "plusIncluded": true,
+    "storeArt": "https://image.api.playstation.com/vulcan/ap/rnd/202211/1007/M1j1kwGXMhbfA8OQo3r7wrMw.jpg"
   },
   {
     "id": "stellar-blade",
@@ -10521,7 +10612,8 @@
       "Action"
     ],
     "storeRelease": "2024-04-26T04:00:00Z",
-    "plusIncluded": false
+    "plusIncluded": false,
+    "storeArt": "https://image.api.playstation.com/vulcan/ap/rnd/202401/2211/2937cd4563d2dc50f0632a1bcfbac1f1f7dee3d2984ea02c.jpg"
   },
   {
     "id": "rise-of-the-ronin",
@@ -10613,7 +10705,8 @@
       "Adventure"
     ],
     "storeRelease": "2024-03-22T04:00:00Z",
-    "plusIncluded": true
+    "plusIncluded": true,
+    "storeArt": "https://image.api.playstation.com/vulcan/ap/rnd/202212/2201/Lh6Tm4AQu5yqLYt6aSPIkrOk.jpg"
   },
   {
     "id": "baldurs-gate-3",
@@ -10732,7 +10825,8 @@
       "Role Playing Games"
     ],
     "storeRelease": "2023-09-06T16:00:00Z",
-    "plusIncluded": false
+    "plusIncluded": false,
+    "storeArt": "https://image.api.playstation.com/vulcan/ap/rnd/202308/1519/95cce955dc59d04e2ea5ab624a823ace14e9c5f7e24dfb8f.png"
   },
   {
     "id": "helldivers-2",
@@ -10819,7 +10913,8 @@
       "Action"
     ],
     "storeRelease": "2024-02-08T09:00:00Z",
-    "plusIncluded": true
+    "plusIncluded": true,
+    "storeArt": "https://image.api.playstation.com/vulcan/ap/rnd/202608/0517/c329c36d036dde60ce93e3277338924339b8e58eaf1aabcc.png"
   },
   {
     "id": "gran-turismo-7",
@@ -10852,7 +10947,8 @@
       "Driving/Racing"
     ],
     "storeRelease": "2022-03-04T05:00:00Z",
-    "plusIncluded": false
+    "plusIncluded": false,
+    "storeArt": "https://image.api.playstation.com/vulcan/ap/rnd/202109/1321/y7iyxoBE8VKotN89QCFhLgLM.png"
   },
   {
     "id": "alan-wake-2",
@@ -10884,7 +10980,8 @@
       "Horror"
     ],
     "storeRelease": "2023-10-27T04:00:00Z",
-    "plusIncluded": false
+    "plusIncluded": false,
+    "storeArt": "https://image.api.playstation.com/vulcan/ap/rnd/202305/2420/2b117db6108244a85769f8009df39f8006b226d8a2831b3a.jpg"
   },
   {
     "id": "black-myth-wukong",
@@ -10974,7 +11071,8 @@
       "Action"
     ],
     "storeRelease": "2024-08-20T02:00:00Z",
-    "plusIncluded": false
+    "plusIncluded": false,
+    "storeArt": "https://image.api.playstation.com/vulcan/ap/rnd/202405/2117/98954d14c0d9c88ef33f74d4734ab5da03fab034ae37fcd1.png"
   },
   {
     "id": "silent-hill-2",
@@ -11101,7 +11199,8 @@
       "Horror"
     ],
     "storeRelease": "2024-10-08T04:00:00Z",
-    "plusIncluded": false
+    "plusIncluded": false,
+    "storeArt": "https://image.api.playstation.com/vulcan/ap/rnd/202210/2000/7cb6eP7FKb4PMq6ZnDDBAlzw.png"
   },
   {
     "id": "dead-space-remake",
@@ -11223,7 +11322,8 @@
       "Horror"
     ],
     "storeRelease": "2023-01-27T16:00:00Z",
-    "plusIncluded": false
+    "plusIncluded": false,
+    "storeArt": "https://image.api.playstation.com/vulcan/ap/rnd/202209/1918/2uQ9krCrTymIECLlXII1rJYQ.png"
   },
   {
     "id": "the-last-of-us-part-i",
@@ -11330,7 +11430,8 @@
       "Action"
     ],
     "storeRelease": "2022-09-02T04:00:00Z",
-    "plusIncluded": true
+    "plusIncluded": true,
+    "storeArt": "https://image.api.playstation.com/vulcan/ap/rnd/202206/0720/JKqkaz5Sy6AvH2fZAVdjTxR8.png"
   },
   {
     "id": "a-plague-tale-requiem",
@@ -11424,7 +11525,8 @@
       "Adventure"
     ],
     "storeRelease": "2022-10-18T04:00:00Z",
-    "plusIncluded": false
+    "plusIncluded": false,
+    "storeArt": "https://image.api.playstation.com/vulcan/ap/rnd/202106/1717/KJvdh38WMEDQQJFEUnmqwSt0.jpg"
   },
   {
     "id": "star-wars-outlaws",
@@ -11508,7 +11610,8 @@
       "Adventure"
     ],
     "storeRelease": "2024-08-30T04:00:00Z",
-    "plusIncluded": true
+    "plusIncluded": true,
+    "storeArt": "https://image.api.playstation.com/vulcan/ap/rnd/202306/3020/ab1137d5953ba3fd0b61d267b6db51b78abed974b6ceb64c.jpg"
   },
   {
     "id": "avatar-frontiers-of-pandora",
@@ -11681,7 +11784,8 @@
       "Action"
     ],
     "storeRelease": "2025-06-26T04:00:00Z",
-    "plusIncluded": false
+    "plusIncluded": false,
+    "storeArt": "https://image.api.playstation.com/vulcan/ap/rnd/202511/2115/de9f11555daa455139d109c07b854880740167e531c376ab.png"
   },
   {
     "id": "sable",
@@ -11762,7 +11866,8 @@
       "Adventure"
     ],
     "storeRelease": "2022-11-29T14:00:00Z",
-    "plusIncluded": false
+    "plusIncluded": false,
+    "storeArt": "https://image.api.playstation.com/vulcan/ap/rnd/202209/1315/sGnHyytZj4UgckhaVMwNd4hv.png"
   },
   {
     "id": "venba",
@@ -11838,7 +11943,8 @@
       "Family"
     ],
     "storeRelease": "2023-07-31T13:00:00Z",
-    "plusIncluded": true
+    "plusIncluded": true,
+    "storeArt": "https://image.api.playstation.com/vulcan/ap/rnd/202304/1220/2e452685bb56b448c35a4f19c38e38537a6bee8957849493.jpg"
   },
   {
     "id": "little-kitty-big-city",
@@ -11917,7 +12023,8 @@
       "Adventure"
     ],
     "storeRelease": "2025-05-09T16:00:00Z",
-    "plusIncluded": false
+    "plusIncluded": false,
+    "storeArt": "https://image.api.playstation.com/vulcan/ap/rnd/202502/2613/f955dce8f1abf7099b80418390ca6e038dd259f2457e451f.jpg"
   },
   {
     "id": "jusant",
@@ -11983,7 +12090,8 @@
       "Action"
     ],
     "storeRelease": "2023-10-31T04:00:00Z",
-    "plusIncluded": false
+    "plusIncluded": false,
+    "storeArt": "https://image.api.playstation.com/vulcan/ap/rnd/202306/0109/c780d45fe308020ea741873f73ff8ed882cf92254447dd6c.jpg"
   },
   {
     "id": "the-plucky-squire",
@@ -12047,7 +12155,8 @@
       "Adventure"
     ],
     "storeRelease": "2024-09-17T16:00:00Z",
-    "plusIncluded": false
+    "plusIncluded": false,
+    "storeArt": "https://image.api.playstation.com/vulcan/ap/rnd/202305/2420/1175c5a67d28f3171067da5f33b5b01bd4655ac489240c9a.jpg"
   },
   {
     "id": "neva",
@@ -12111,7 +12220,8 @@
       "Action"
     ],
     "storeRelease": "2024-10-15T16:00:00Z",
-    "plusIncluded": true
+    "plusIncluded": true,
+    "storeArt": "https://image.api.playstation.com/vulcan/ap/rnd/202410/1522/83bd1369a8a5af216ab334169e9d8cb323dbeb747c7962e8.jpg"
   },
   {
     "id": "animal-well",
@@ -12189,7 +12299,8 @@
       "Adventure"
     ],
     "storeRelease": "2024-05-09T13:00:00Z",
-    "plusIncluded": false
+    "plusIncluded": false,
+    "storeArt": "https://image.api.playstation.com/vulcan/ap/rnd/202403/2716/7ade0cea0b1da6368e20afda0223c92af2f5cbfeba440c6b.png"
   },
   {
     "id": "lorelei-and-the-laser-eyes",
@@ -12255,7 +12366,8 @@
       "Puzzle"
     ],
     "storeRelease": "2024-12-03T17:00:00Z",
-    "plusIncluded": false
+    "plusIncluded": false,
+    "storeArt": "https://image.api.playstation.com/vulcan/ap/rnd/202411/1119/20874db51e17611a7db82dc335c391070e50bf7892b12d1b.png"
   },
   {
     "id": "temtem",
@@ -12302,7 +12414,8 @@
       "Adventure"
     ],
     "storeRelease": "2020-12-08T05:00:00Z",
-    "plusIncluded": false
+    "plusIncluded": false,
+    "storeArt": "https://image.api.playstation.com/vulcan/img/rnd/202112/1617/hDSVEZcsEcyXiZrkkpMG3X3N.png"
   },
   {
     "id": "palworld",
@@ -12382,7 +12495,8 @@
       "Action"
     ],
     "storeRelease": "2024-09-24T23:00:00Z",
-    "plusIncluded": false
+    "plusIncluded": false,
+    "storeArt": "https://image.api.playstation.com/vulcan/ap/rnd/202607/1002/d6620964f0012a470a696fa226a8bb086cf9480e3d6b6fa5.png"
   },
   {
     "id": "coral-island",
@@ -12460,7 +12574,8 @@
       "Adventure"
     ],
     "storeRelease": "2023-11-14T15:00:00Z",
-    "plusIncluded": true
+    "plusIncluded": true,
+    "storeArt": "https://image.api.playstation.com/vulcan/ap/rnd/202310/3019/f16271f72440972a1276834dfc20524a569c19911d1f2a28.png"
   },
   {
     "id": "fae-farm",
@@ -12528,7 +12643,8 @@
       "Simulation"
     ],
     "storeRelease": "2024-10-22T04:00:00Z",
-    "plusIncluded": false
+    "plusIncluded": false,
+    "storeArt": "https://image.api.playstation.com/vulcan/ap/rnd/202407/1023/9b7a5ce7bcdb066499829e205e225faa77b244a3012bc5e2.png"
   },
   {
     "id": "moonstone-island",
@@ -12640,7 +12756,8 @@
       "Fighting"
     ],
     "storeRelease": "2025-01-23T02:00:00Z",
-    "plusIncluded": false
+    "plusIncluded": false,
+    "storeArt": "https://image.api.playstation.com/vulcan/ap/rnd/202609/1403/a4c15d71310604964d04a0be95d0df72f46edad543bd8f20.png"
   },
   {
     "id": "sea-of-thieves",
@@ -12732,7 +12849,8 @@
       "Adventure"
     ],
     "storeRelease": "2024-04-30T09:00:00Z",
-    "plusIncluded": false
+    "plusIncluded": false,
+    "storeArt": "https://image.api.playstation.com/vulcan/ap/rnd/202402/1215/b8a3172c1fbc6a0e3627ce204c8faeb020ab0cd5f1705872.png"
   },
   {
     "id": "phasmophobia",
@@ -12826,7 +12944,8 @@
       "Puzzle"
     ],
     "storeRelease": "2024-10-29T18:00:00Z",
-    "plusIncluded": false
+    "plusIncluded": false,
+    "storeArt": "https://image.api.playstation.com/vulcan/ap/rnd/202409/2312/ea83bd285ccc2655d4775a254c0ddbcdcd3937c9fb00270d.jpg"
   },
   {
     "id": "the-medium",
@@ -12892,7 +13011,8 @@
       "Horror"
     ],
     "storeRelease": "2021-09-03T04:00:00Z",
-    "plusIncluded": false
+    "plusIncluded": false,
+    "storeArt": "https://image.api.playstation.com/vulcan/ap/rnd/202603/1814/078d90da8167fac06a072cf74c05496936befae74409e98f.jpg"
   },
   {
     "id": "overcooked-all-you-can-eat",
@@ -12944,7 +13064,8 @@
       "Simulation"
     ],
     "storeRelease": "2020-11-12T05:00:00Z",
-    "plusIncluded": true
+    "plusIncluded": true,
+    "storeArt": "https://image.api.playstation.com/vulcan/img/rnd/202109/2814/KBjM7tWNPQIy2nca7OhRRwlf.jpg"
   },
   {
     "id": "fall-guys",
@@ -12994,7 +13115,8 @@
       "Family"
     ],
     "storeRelease": "2022-06-21T08:00:00Z",
-    "plusIncluded": false
+    "plusIncluded": false,
+    "storeArt": "https://image.api.playstation.com/vulcan/ap/rnd/202408/0721/223313d501df552d905da27fd4e03ac75d372517668daad0.png"
   },
   {
     "id": "rocket-league",
@@ -13338,7 +13460,8 @@
       "Action"
     ],
     "storeRelease": "2023-01-20T05:00:00Z",
-    "plusIncluded": false
+    "plusIncluded": false,
+    "storeArt": "https://image.api.playstation.com/vulcan/ap/rnd/202302/1604/4a9eb65fab7fe53754fffeff3165f1e09ee3bc0bf1072edc.png"
   },
   {
     "id": "human-fall-flat",
@@ -13563,7 +13686,8 @@
       "Party"
     ],
     "storeRelease": "2021-12-14T19:00:00Z",
-    "plusIncluded": false
+    "plusIncluded": false,
+    "storeArt": "https://image.api.playstation.com/vulcan/img/rnd/202107/0115/5iLw9lBy189EBYfNTPSjOFC9.jpg"
   },
   {
     "id": "grounded",
@@ -13630,7 +13754,8 @@
       "Adventure"
     ],
     "storeRelease": "2024-04-16T15:00:00Z",
-    "plusIncluded": false
+    "plusIncluded": false,
+    "storeArt": "https://image.api.playstation.com/vulcan/ap/rnd/202403/2217/6b3b5b78a07f9adceed94929c1a862b0e2fe69bc5161002e.png"
   },
   {
     "id": "diablo-iv",
@@ -14263,7 +14388,8 @@
       "Adventure"
     ],
     "storeRelease": "2022-07-14T04:00:00Z",
-    "plusIncluded": false
+    "plusIncluded": false,
+    "storeArt": "https://image.api.playstation.com/vulcan/ap/rnd/202203/0518/WZCoTmyDDQGreN2I4gExtJI0.png"
   },
   {
     "id": "golf-with-your-friends",
@@ -14620,7 +14746,8 @@
       "Action"
     ],
     "storeRelease": "2023-03-24T04:00:00Z",
-    "plusIncluded": false
+    "plusIncluded": false,
+    "storeArt": "https://image.api.playstation.com/vulcan/ap/rnd/202210/0712/PjIoeaMt833otj5HukAWGfui.png"
   },
   {
     "id": "metro-exodus",
@@ -15196,7 +15323,8 @@
       "Adventure"
     ],
     "storeRelease": "2020-10-27T04:00:00Z",
-    "plusIncluded": false
+    "plusIncluded": false,
+    "storeArt": "https://image.api.playstation.com/vulcan/img/rnd/202104/0217/dPZTLGdFef2RUT6rsm8IkxqZ.jpg"
   },
   {
     "id": "strange-horticulture",
@@ -15272,7 +15400,8 @@
       "Puzzle"
     ],
     "storeRelease": "2024-02-23T14:00:00Z",
-    "plusIncluded": false
+    "plusIncluded": false,
+    "storeArt": "https://image.api.playstation.com/vulcan/ap/rnd/202312/1409/31d53e7c3ac4ff090a2d3f14ea8e5c7543909a00245899e5.png"
   },
   {
     "id": "the-gardens-between",
@@ -15358,7 +15487,8 @@
       "Adventure"
     ],
     "storeRelease": "2020-12-09T05:00:00Z",
-    "plusIncluded": false
+    "plusIncluded": false,
+    "storeArt": "https://image.api.playstation.com/vulcan/ap/rnd/202011/0517/LlixCBdDWsdzkIyMxs3Bstrt.jpg"
   },
   {
     "id": "the-first-tree",
@@ -15532,7 +15662,8 @@
       "Adventure"
     ],
     "storeRelease": "2020-12-03T14:00:00Z",
-    "plusIncluded": false
+    "plusIncluded": false,
+    "storeArt": "https://image.api.playstation.com/vulcan/ap/rnd/202010/2317/wiHzvPHPadmEdRm6wYzMKvPO.png"
   },
   {
     "id": "the-jackbox-party-pack-8",
@@ -15588,7 +15719,8 @@
       "Casual"
     ],
     "storeRelease": "2021-10-14T18:39:00Z",
-    "plusIncluded": false
+    "plusIncluded": false,
+    "storeArt": "https://image.api.playstation.com/vulcan/img/rnd/202109/2922/tuzrMFXhb5RS1e1ZSXI3jcKb.jpg"
   },
   {
     "id": "nine-sols",
@@ -15658,7 +15790,8 @@
       "Role Playing Games"
     ],
     "storeRelease": "2024-11-26T08:00:00Z",
-    "plusIncluded": false
+    "plusIncluded": false,
+    "storeArt": "https://image.api.playstation.com/vulcan/ap/rnd/202410/1604/0eb2b17b49201c6cc2368e0d141dac58918ed1365f26f0b1.jpg"
   },
   {
     "id": "hollow-knight-silksong",
@@ -15747,7 +15880,8 @@
       "Adventure"
     ],
     "storeRelease": "2025-09-04T14:00:00Z",
-    "plusIncluded": false
+    "plusIncluded": false,
+    "storeArt": "https://image.api.playstation.com/vulcan/ap/rnd/202508/2503/9396dc04cc0161e5a17f8775402f2c3afdcb5d8043a7ebf8.png"
   },
   {
     "id": "metaphor-refantazio",
@@ -15838,7 +15972,8 @@
       "Role Playing Games"
     ],
     "storeRelease": "2024-10-11T04:00:00Z",
-    "plusIncluded": false
+    "plusIncluded": false,
+    "storeArt": "https://image.api.playstation.com/vulcan/ap/rnd/202410/1109/649928118198ca08607e8178ddd87df2e07928b528771e95.png"
   },
   {
     "id": "persona-5-royal",
@@ -15928,7 +16063,8 @@
       "Role Playing Games"
     ],
     "storeRelease": "2022-10-21T04:00:00Z",
-    "plusIncluded": true
+    "plusIncluded": true,
+    "storeArt": "https://image.api.playstation.com/vulcan/ap/rnd/202209/0202/ksJmxHAF3c4PV9N7MRvLCeWb.png"
   },
   {
     "id": "core-keeper",
@@ -16006,7 +16142,8 @@
       "Casual"
     ],
     "storeRelease": "2024-08-27T09:00:00Z",
-    "plusIncluded": false
+    "plusIncluded": false,
+    "storeArt": "https://image.api.playstation.com/vulcan/ap/rnd/202407/3016/45068945b0e854f8ce239358e9ceb1c6553e260a0a5b689b.jpg"
   },
   {
     "id": "spirittea",
@@ -16121,7 +16258,8 @@
       "Simulation"
     ],
     "storeRelease": "2023-12-12T15:00:00Z",
-    "plusIncluded": false
+    "plusIncluded": false,
+    "storeArt": "https://image.api.playstation.com/vulcan/ap/rnd/202307/0619/72f8e51957774f0522a7401df1c23f88d0954a2a1d7488f8.png"
   },
   {
     "id": "spirit-of-the-north",
@@ -16321,7 +16459,8 @@
       "Role Playing Games"
     ],
     "storeRelease": "2025-04-24T07:00:00Z",
-    "plusIncluded": false
+    "plusIncluded": false,
+    "storeArt": "https://image.api.playstation.com/vulcan/ap/rnd/202406/0917/96d5b955f3833beb4e0be99c8699fa0abe83b81e2eb2a59e.jpg"
   },
   {
     "id": "blue-prince",
@@ -16407,7 +16546,8 @@
       "Puzzle"
     ],
     "storeRelease": "2025-04-10T14:00:00Z",
-    "plusIncluded": true
+    "plusIncluded": true,
+    "storeArt": "https://image.api.playstation.com/vulcan/ap/rnd/202502/1222/1268cdf388afbccb7acd8435e0b2787447b74a1e9125acec.jpg"
   },
   {
     "id": "split-fiction",
@@ -16500,7 +16640,8 @@
       "Adventure"
     ],
     "storeRelease": "2025-03-06T16:00:00Z",
-    "plusIncluded": false
+    "plusIncluded": false,
+    "storeArt": "https://image.api.playstation.com/vulcan/ap/rnd/202502/2109/e91a606a8a96309d2349f48aac49c75bb8769b6610321f6b.png"
   },
   {
     "id": "wanderstop",
@@ -16563,7 +16704,8 @@
       "Adventure"
     ],
     "storeRelease": "2025-03-11T13:00:00Z",
-    "plusIncluded": false
+    "plusIncluded": false,
+    "storeArt": "https://image.api.playstation.com/vulcan/ap/rnd/202412/0222/bb22dcbb4205e9ec219db7477d234bd9b8c8e3347c210ef4.jpg"
   },
   {
     "id": "bo-path-of-the-teal-lotus",
@@ -16705,7 +16847,8 @@
       "Action"
     ],
     "storeRelease": "2025-02-28T05:00:00Z",
-    "plusIncluded": false
+    "plusIncluded": false,
+    "storeArt": "https://image.api.playstation.com/vulcan/ap/rnd/202409/0506/22b81c7c1b280be4d2586529fc086646fd5d3912c95f74f8.png"
   },
   {
     "id": "wylde-flowers",
@@ -16770,7 +16913,8 @@
       "Adventure"
     ],
     "storeRelease": "2025-12-09T20:00:00Z",
-    "plusIncluded": false
+    "plusIncluded": false,
+    "storeArt": "https://image.api.playstation.com/vulcan/ap/rnd/202511/0404/0cbd9fe3b193ef4a53366c0caea3144e17ebe21aabfe4a7c.png"
   },
   {
     "id": "little-nightmares-3",
@@ -16856,7 +17000,8 @@
       "Action"
     ],
     "storeRelease": "2025-10-10T04:00:00Z",
-    "plusIncluded": false
+    "plusIncluded": false,
+    "storeArt": "https://image.api.playstation.com/vulcan/ap/rnd/202502/2619/f656aee6b59edbeed2ab00045585a5fac5ec5d4d4d8f691d.png"
   },
   {
     "id": "fantasy-life-i",
@@ -16981,7 +17126,8 @@
       "Action"
     ],
     "storeRelease": "2026-04-14T17:00:00Z",
-    "plusIncluded": false
+    "plusIncluded": false,
+    "storeArt": "https://image.api.playstation.com/vulcan/ap/rnd/202603/2506/93f66b17d66159f2a06f2f001b0e28cb485b524c9204797b.png"
   },
   {
     "id": "two-point-museum",
@@ -17184,7 +17330,8 @@
       "Simulation"
     ],
     "storeRelease": "2026-04-10T18:00:00Z",
-    "plusIncluded": false
+    "plusIncluded": false,
+    "storeArt": "https://image.api.playstation.com/vulcan/ap/rnd/202511/1807/06e2cd80c3a6b423f612e989801a0785524b0ee1c5c33fdb.png"
   },
   {
     "id": "herdling",
@@ -17244,7 +17391,8 @@
       "Adventure"
     ],
     "storeRelease": "2025-08-21T13:00:00Z",
-    "plusIncluded": false
+    "plusIncluded": false,
+    "storeArt": "https://image.api.playstation.com/vulcan/ap/rnd/202506/0617/e4c283f7ba3070cebc164e3d5f6082e0b0c6feb2bfea23f7.jpg"
   },
   {
     "id": "story-of-seasons-grand-bazaar",
@@ -17295,7 +17443,8 @@
       "Simulation"
     ],
     "storeRelease": "2026-05-28T04:00:00Z",
-    "plusIncluded": false
+    "plusIncluded": false,
+    "storeArt": "https://image.api.playstation.com/vulcan/ap/rnd/202602/1919/2d836902272ced90eda957532967c562dadcef867f1fe38e.png"
   },
   {
     "id": "rune-factory-guardians-of-azuma",
@@ -17364,7 +17513,8 @@
       "Role Playing Games"
     ],
     "storeRelease": "2026-02-13T05:00:00Z",
-    "plusIncluded": false
+    "plusIncluded": false,
+    "storeArt": "https://image.api.playstation.com/vulcan/ap/rnd/202511/2809/30e3535818d71ca955e73a7cf87de5235771e4f026b2058c.png"
   },
   {
     "id": "hellblade-senuas-sacrifice",
@@ -17459,7 +17609,8 @@
       "Adventure"
     ],
     "storeRelease": "2025-08-12T08:00:00Z",
-    "plusIncluded": false
+    "plusIncluded": false,
+    "storeArt": "https://image.api.playstation.com/vulcan/ap/rnd/202508/0511/9f3aa958e24667b975d7da39007a72c8e074f1f128dabe6e.png"
   },
   {
     "id": "beyond-eyes",
@@ -17568,7 +17719,8 @@
       "Adventure"
     ],
     "storeRelease": "2024-06-11T15:00:00Z",
-    "plusIncluded": false
+    "plusIncluded": false,
+    "storeArt": "https://image.api.playstation.com/vulcan/ap/rnd/202405/2121/d02e77e260c74286f4044f51ac267588c195709427e3883b.jpg"
   },
   {
     "id": "jak-and-daxter",
@@ -17600,7 +17752,8 @@
       "Adventure"
     ],
     "storeRelease": "2024-12-10T17:00:00Z",
-    "plusIncluded": false
+    "plusIncluded": false,
+    "storeArt": "https://image.api.playstation.com/vulcan/ap/rnd/202411/2222/0ea38e4211caa23ddb98e748e52bccb6699d1542d55122e3.png"
   },
   {
     "id": "medievil-2019",
@@ -17632,7 +17785,8 @@
       "Action"
     ],
     "storeRelease": "2024-04-16T15:00:00Z",
-    "plusIncluded": false
+    "plusIncluded": false,
+    "storeArt": "https://image.api.playstation.com/vulcan/ap/rnd/202403/2119/eb49c200a75d3cf86651d24b1f7eaa85a79165bef05f3029.jpg"
   },
   {
     "id": "klonoa-phantasy-reverie",
@@ -17690,7 +17844,8 @@
       "Adventure"
     ],
     "storeRelease": "2022-07-08T04:00:00Z",
-    "plusIncluded": false
+    "plusIncluded": false,
+    "storeArt": "https://image.api.playstation.com/vulcan/ap/rnd/202206/2401/eejm6LE0AwkNdVViiZVA4p6X.png"
   },
   {
     "id": "katamari-damacy-reroll",
@@ -17745,7 +17900,8 @@
       "Action"
     ],
     "storeRelease": "2020-11-20T05:00:00Z",
-    "plusIncluded": false
+    "plusIncluded": false,
+    "storeArt": "https://image.api.playstation.com/vulcan/ap/rnd/202010/0611/tdDvcRF3X3MLbnZGzh9DZmUv.jpg"
   },
   {
     "id": "ape-escape-ps4",
@@ -17778,7 +17934,8 @@
       "Action"
     ],
     "storeRelease": "2025-03-07T17:00:00Z",
-    "plusIncluded": false
+    "plusIncluded": false,
+    "storeArt": "https://image.api.playstation.com/vulcan/ap/rnd/202205/1818/86ojh9CtFTOdJQG2P2xKCs8l.jpg"
   },
   {
     "id": "patapon-replay",
@@ -17830,7 +17987,8 @@
       "Action"
     ],
     "storeRelease": "2025-07-11T04:00:00Z",
-    "plusIncluded": false
+    "plusIncluded": false,
+    "storeArt": "https://image.api.playstation.com/vulcan/ap/rnd/202507/0820/f8ad439b995dc1e82f2a1024ea18faa50780c95ee18c1838.png"
   },
   {
     "id": "oddworld-strangers-wrath",
@@ -17877,7 +18035,8 @@
       "Adventure"
     ],
     "storeRelease": "2022-02-11T05:00:00Z",
-    "plusIncluded": false
+    "plusIncluded": false,
+    "storeArt": "https://image.api.playstation.com/vulcan/ap/rnd/202201/2610/6qpVNnhEB4NcGlokX36aJuUJ.jpg"
   },
   {
     "id": "tomb-raider-1-3-remastered",
@@ -18027,7 +18186,8 @@
       "Role Playing Games"
     ],
     "storeRelease": "2024-08-27T15:00:00Z",
-    "plusIncluded": false
+    "plusIncluded": false,
+    "storeArt": "https://image.api.playstation.com/vulcan/ap/rnd/202408/0910/f0ae09db0e5154476ca544861f668f5601885b0a639d388e.png"
   },
   {
     "id": "castlevania-advance",
@@ -18089,7 +18249,8 @@
       "Action"
     ],
     "storeRelease": "2021-09-24T01:00:00Z",
-    "plusIncluded": false
+    "plusIncluded": false,
+    "storeArt": "https://image.api.playstation.com/vulcan/ap/rnd/202108/1910/IzaVZ7PUk40TUH1ear2r0k1Y.png"
   },
   {
     "id": "suikoden-1-2-hd",
@@ -18199,7 +18360,8 @@
       "Role Playing Games"
     ],
     "storeRelease": "2024-03-26T12:00:00Z",
-    "plusIncluded": false
+    "plusIncluded": false,
+    "storeArt": "https://image.api.playstation.com/vulcan/ap/rnd/202403/0601/fb43285bb9625e21379509080b89b1b68ed5d5d175b6efb3.png"
   },
   {
     "id": "wonder-boy-collection",
@@ -18264,7 +18426,8 @@
       "Action"
     ],
     "storeRelease": "2022-06-03T13:00:00Z",
-    "plusIncluded": false
+    "plusIncluded": false,
+    "storeArt": "https://image.api.playstation.com/vulcan/ap/rnd/202204/2511/XsHOu4tudPUklCoc9oeMukcz.jpg"
   },
   {
     "id": "legend-of-dragoon",
@@ -18289,7 +18452,8 @@
       "Role Playing Games"
     ],
     "storeRelease": "2025-03-07T17:00:00Z",
-    "plusIncluded": false
+    "plusIncluded": false,
+    "storeArt": "https://image.api.playstation.com/vulcan/ap/rnd/202301/1219/pLVrNAtkYrFl2ruO5rjncLKC.jpg"
   },
   {
     "id": "beyond-good-and-evil-20th",
@@ -18343,7 +18507,8 @@
       "Action"
     ],
     "storeRelease": "2024-06-25T04:00:00Z",
-    "plusIncluded": false
+    "plusIncluded": false,
+    "storeArt": "https://image.api.playstation.com/vulcan/ap/rnd/202310/2319/d5322dd7125bc6e05cc30ea31f06e51839518c0d190077b5.jpg"
   },
   {
     "id": "sonic-origins",
@@ -18416,7 +18581,8 @@
       "Action"
     ],
     "storeRelease": "2022-06-23T04:00:00Z",
-    "plusIncluded": false
+    "plusIncluded": false,
+    "storeArt": "https://image.api.playstation.com/vulcan/ap/rnd/202203/1102/JnqTseQrg7gnHYzx0f3kl93Z.jpg"
   },
   {
     "id": "tmnt-cowabunga",
@@ -18470,7 +18636,8 @@
       "Action"
     ],
     "storeRelease": "2022-08-30T17:00:00Z",
-    "plusIncluded": false
+    "plusIncluded": false,
+    "storeArt": "https://image.api.playstation.com/vulcan/ap/rnd/202211/0323/W36VtAj8kJN1m49nhVbw0Ahi.jpg"
   },
   {
     "id": "dragon-quest-3-hd2d",
@@ -18534,7 +18701,8 @@
       "Role Playing Games"
     ],
     "storeRelease": "2025-10-30T04:00:00Z",
-    "plusIncluded": false
+    "plusIncluded": false,
+    "storeArt": "https://image.api.playstation.com/vulcan/ap/rnd/202505/0810/0ba33e8224b3a268f9db59d7f981d807f5d16da57c8a3bb9.png"
   },
   {
     "id": "star-ocean-second-story-r",
@@ -18598,7 +18766,8 @@
       "Role Playing Games"
     ],
     "storeRelease": "2023-11-02T04:00:00Z",
-    "plusIncluded": false
+    "plusIncluded": false,
+    "storeArt": "https://image.api.playstation.com/vulcan/ap/rnd/202309/1311/fbe4dcb172073bdab8512e5d762497c33bbbf56ffa8fb7e5.jpg"
   },
   {
     "id": "ender-magnolia",
@@ -18664,7 +18833,8 @@
       "Action"
     ],
     "storeRelease": "2025-01-22T15:00:00Z",
-    "plusIncluded": false
+    "plusIncluded": false,
+    "storeArt": "https://image.api.playstation.com/vulcan/ap/rnd/202403/2203/20bd8e9c0ffed886920544c6eae32cbcdec3829a16f8cde2.png"
   },
   {
     "id": "crypt-custodian",
@@ -18726,7 +18896,8 @@
       "Action"
     ],
     "storeRelease": "2024-08-27T16:00:00Z",
-    "plusIncluded": false
+    "plusIncluded": false,
+    "storeArt": "https://image.api.playstation.com/vulcan/ap/rnd/202406/0522/ec70023987aa878a7a0f858926bdec52c19ad591344048d4.jpg"
   },
   {
     "id": "islets",
@@ -18784,7 +18955,8 @@
       "Role Playing Games"
     ],
     "storeRelease": "2025-09-23T17:00:00Z",
-    "plusIncluded": false
+    "plusIncluded": false,
+    "storeArt": "https://image.api.playstation.com/vulcan/ap/rnd/202508/2718/84983e87831dc118774883f5fc8be81a0f7bf01475323a2d.png"
   },
   {
     "id": "aeterna-noctis",
@@ -18847,7 +19019,8 @@
       "Action"
     ],
     "storeRelease": "2021-12-15T05:00:00Z",
-    "plusIncluded": false
+    "plusIncluded": false,
+    "storeArt": "https://image.api.playstation.com/vulcan/ap/rnd/202304/2711/87b7d57abe32fb9dae6a7403e5b15b5fa9091c61c4365cb5.jpg"
   },
   {
     "id": "biomorph",
@@ -18896,7 +19069,8 @@
       "Action"
     ],
     "storeRelease": "2024-11-22T05:00:00Z",
-    "plusIncluded": false
+    "plusIncluded": false,
+    "storeArt": "https://image.api.playstation.com/vulcan/ap/rnd/202408/2918/e6052c358f0ca2d05cf7b851418912556f3c73534429f8f1.png"
   },
   {
     "id": "voidwrought",
@@ -18942,7 +19116,8 @@
       "Action"
     ],
     "storeRelease": "2026-03-19T16:00:00Z",
-    "plusIncluded": false
+    "plusIncluded": false,
+    "storeArt": "https://image.api.playstation.com/vulcan/ap/rnd/202508/2814/5e878d5a40f08e6f3c2daf8ce28880dc57cc0f9e7c7d9503.jpg"
   },
   {
     "id": "blasphemous-2",
@@ -19021,7 +19196,8 @@
       "Action"
     ],
     "storeRelease": "2023-08-24T04:00:00Z",
-    "plusIncluded": true
+    "plusIncluded": true,
+    "storeArt": "https://image.api.playstation.com/vulcan/ap/rnd/202606/0318/af99de8bd7ad1c6df84b30b1cf47092210b58fc6de2c0f3e.jpg"
   },
   {
     "id": "chants-of-sennaar",
@@ -19089,7 +19265,8 @@
       "Puzzle"
     ],
     "storeRelease": "2023-09-05T16:00:00Z",
-    "plusIncluded": false
+    "plusIncluded": false,
+    "storeArt": "https://image.api.playstation.com/vulcan/ap/rnd/202304/0416/8a54143f77721f042889cb200050402044e7f0998edd0674.jpg"
   },
   {
     "id": "1000xresist",
@@ -19155,7 +19332,8 @@
       "Adventure"
     ],
     "storeRelease": "2025-11-04T16:00:00Z",
-    "plusIncluded": false
+    "plusIncluded": false,
+    "storeArt": "https://image.api.playstation.com/vulcan/ap/rnd/202510/1519/3c27d15bfc299c43bd567e69130ab0cfe94118eede3f2fa2.png"
   },
   {
     "id": "slay-the-princess",
@@ -19228,7 +19406,8 @@
       "Adventure"
     ],
     "storeRelease": "2024-10-24T16:00:00Z",
-    "plusIncluded": false
+    "plusIncluded": false,
+    "storeArt": "https://image.api.playstation.com/vulcan/ap/rnd/202412/1700/d93e63806442b4d65115c90c290233087695770d524c0287.jpg"
   },
   {
     "id": "indika",
@@ -19299,7 +19478,8 @@
       "Adventure"
     ],
     "storeRelease": "2024-05-17T10:00:00Z",
-    "plusIncluded": true
+    "plusIncluded": true,
+    "storeArt": "https://image.api.playstation.com/vulcan/ap/rnd/202310/1114/8acfabc724b6d80853127de7bf61acef853767e8d0347638.jpg"
   },
   {
     "id": "south-of-the-circle",
@@ -19350,7 +19530,8 @@
       "Adventure"
     ],
     "storeRelease": "2022-08-03T12:00:00Z",
-    "plusIncluded": false
+    "plusIncluded": false,
+    "storeArt": "https://image.api.playstation.com/vulcan/ap/rnd/202205/3112/uTeCFzecVI1p1XVVYgRkpCFF.jpg"
   },
   {
     "id": "the-cub",
@@ -19411,7 +19592,8 @@
       "Adventure"
     ],
     "storeRelease": "2024-01-19T05:00:00Z",
-    "plusIncluded": false
+    "plusIncluded": false,
+    "storeArt": "https://image.api.playstation.com/vulcan/ap/rnd/202401/1512/be6e1cb1817c9935cbe73778fd3cb4af6689a0f320ba77e2.jpg"
   },
   {
     "id": "botany-manor",
@@ -19482,7 +19664,8 @@
       "Adventure"
     ],
     "storeRelease": "2025-01-28T15:00:00Z",
-    "plusIncluded": false
+    "plusIncluded": false,
+    "storeArt": "https://image.api.playstation.com/vulcan/ap/rnd/202501/1316/b9a1f890925d2cad90ecdb209095a20f07bc5a7c4429d99f.png"
   },
   {
     "id": "a-little-to-the-left",
@@ -19559,7 +19742,8 @@
       "Brain Training"
     ],
     "storeRelease": "2024-02-15T16:00:00Z",
-    "plusIncluded": true
+    "plusIncluded": true,
+    "storeArt": "https://image.api.playstation.com/vulcan/ap/rnd/202508/2214/0014571d5c36d299890deb283ca632abac28f5a559d7fc73.jpg"
   },
   {
     "id": "dorfromantik",
@@ -19623,7 +19807,8 @@
       "Puzzle"
     ],
     "storeRelease": "2025-08-14T15:00:00Z",
-    "plusIncluded": false
+    "plusIncluded": false,
+    "storeArt": "https://image.api.playstation.com/vulcan/ap/rnd/202507/2315/20756635efa9c89b0b2f061c63b7b759f1ad20457b3aa4df.jpg"
   },
   {
     "id": "lil-gator-game",
@@ -19686,7 +19871,8 @@
       "Adventure"
     ],
     "storeRelease": "2023-10-10T08:00:00Z",
-    "plusIncluded": false
+    "plusIncluded": false,
+    "storeArt": "https://image.api.playstation.com/vulcan/ap/rnd/202309/1509/62d73594c3946cb8e64993ec27e90d21bf2357cf6c61ccfc.jpg"
   },
   {
     "id": "time-on-frog-island",
@@ -19739,7 +19925,8 @@
       "Adventure"
     ],
     "storeRelease": "2022-07-12T04:00:00Z",
-    "plusIncluded": false
+    "plusIncluded": false,
+    "storeArt": "https://image.api.playstation.com/vulcan/ap/rnd/202203/1014/DxLLDAfDAxTYJR5Egc3zsvEN.jpg"
   },
   {
     "id": "cat-quest-3",
@@ -19793,7 +19980,8 @@
       "Adventure"
     ],
     "storeRelease": "2024-08-08T04:00:00Z",
-    "plusIncluded": true
+    "plusIncluded": true,
+    "storeArt": "https://image.api.playstation.com/vulcan/ap/rnd/202405/2209/7cff8cf53258df14eabbfd393062e88bf3638327ea1ff447.jpg"
   },
   {
     "id": "melatonin",
@@ -19857,7 +20045,8 @@
       "Music/Rhythm"
     ],
     "storeRelease": "2024-03-12T13:00:00Z",
-    "plusIncluded": false
+    "plusIncluded": false,
+    "storeArt": "https://image.api.playstation.com/vulcan/ap/rnd/202402/0118/86749c154c42934d5e8fa2318742d4838d70da1c1e13f7d1.jpg"
   },
   {
     "id": "the-wandering-village",
@@ -19921,7 +20110,8 @@
       "Simulation"
     ],
     "storeRelease": "2025-07-17T15:00:00Z",
-    "plusIncluded": false
+    "plusIncluded": false,
+    "storeArt": "https://image.api.playstation.com/vulcan/ap/rnd/202504/0909/c08f743b5f8f7c5465a35eeeb1d4c50d9482c57bfaf9b5ee.jpg"
   },
   {
     "id": "guilty-gear-strive",
@@ -19952,7 +20142,8 @@
       "Fighting"
     ],
     "storeRelease": "2021-06-11T04:00:00Z",
-    "plusIncluded": false
+    "plusIncluded": false,
+    "storeArt": "https://image.api.playstation.com/vulcan/img/rnd/202101/2010/EXPcZW0FZ1sk95ETaLPpJeSw.png"
   },
   {
     "id": "mass-effect-legendary-edition",
@@ -19983,7 +20174,8 @@
       "Role Playing Games"
     ],
     "storeRelease": "2021-05-14T04:00:00Z",
-    "plusIncluded": false
+    "plusIncluded": false,
+    "storeArt": "https://image.api.playstation.com/vulcan/img/rnd/202102/0118/Ls1Bvpx6CbOayoFte2GGiu4m.png"
   },
   {
     "id": "god-of-war-ragnarok",
@@ -20014,7 +20206,8 @@
       "Action"
     ],
     "storeRelease": "2022-11-09T05:00:00Z",
-    "plusIncluded": true
+    "plusIncluded": true,
+    "storeArt": "https://image.api.playstation.com/vulcan/ap/rnd/202503/2016/1f4bf1ee42276b3841e71ebb812510493ce78bfc307d3296.jpg"
   },
   {
     "id": "dragon-age-the-veilguard",
@@ -20044,7 +20237,8 @@
       "Role Playing Games"
     ],
     "storeRelease": "2024-10-31T16:00:00Z",
-    "plusIncluded": false
+    "plusIncluded": false,
+    "storeArt": "https://image.api.playstation.com/vulcan/ap/rnd/202407/2418/c85c86687c5d5921cc5a487e85abe6cdc6d27621018679be.png"
   },
   {
     "id": "psychonauts-2",
@@ -20075,7 +20269,8 @@
       "Action"
     ],
     "storeRelease": "2021-08-25T00:00:00Z",
-    "plusIncluded": false
+    "plusIncluded": false,
+    "storeArt": "https://image.api.playstation.com/vulcan/ap/rnd/202105/1417/HM9fBpwxGcon3lbajBIpHcWk.png"
   },
   {
     "id": "omori",
@@ -20106,7 +20301,8 @@
       "Role Playing Games"
     ],
     "storeRelease": "2022-06-24T04:00:00Z",
-    "plusIncluded": false
+    "plusIncluded": false,
+    "storeArt": "https://image.api.playstation.com/vulcan/ap/rnd/202206/2300/X4OGT8FBjvLJxgydPryQCISi.png"
   },
   {
     "id": "rainbow-billy",
@@ -20137,7 +20333,8 @@
       "Adventure"
     ],
     "storeRelease": "2021-10-05T07:00:00Z",
-    "plusIncluded": false
+    "plusIncluded": false,
+    "storeArt": "https://image.api.playstation.com/vulcan/img/rnd/202110/0101/goGcFNknPomDyWCUvhKJGhmg.png"
   },
   {
     "id": "stray-gods",
@@ -20167,7 +20364,8 @@
       "Role Playing Games"
     ],
     "storeRelease": "2023-08-10T07:00:00Z",
-    "plusIncluded": false
+    "plusIncluded": false,
+    "storeArt": "https://image.api.playstation.com/vulcan/ap/rnd/202304/1919/e82f72b7fda96a2a4c741c16c6f259c4bd2ae94df4925ba0.png"
   },
   {
     "id": "dispatch",
@@ -20216,7 +20414,8 @@
       "Action"
     ],
     "storeRelease": "2025-10-22T14:00:00Z",
-    "plusIncluded": false
+    "plusIncluded": false,
+    "storeArt": "https://image.api.playstation.com/vulcan/ap/rnd/202508/0621/ec31656b48fcfb5a7e3bab986250cd82bafdb8ac401a1183.png"
   },
   {
     "id": "sly-3-honor-among-thieves",
@@ -20257,7 +20456,8 @@
       "Adventure"
     ],
     "storeRelease": "2024-12-10T17:00:00Z",
-    "plusIncluded": false
+    "plusIncluded": false,
+    "storeArt": "https://image.api.playstation.com/vulcan/ap/rnd/202411/2223/1e2580592489687087c12bf8c6578acfb46c5626acb23e75.jpg"
   },
   {
     "id": "sly-2-band-of-thieves",
@@ -20298,7 +20498,8 @@
       "Adventure"
     ],
     "storeRelease": "2024-12-10T17:00:00Z",
-    "plusIncluded": false
+    "plusIncluded": false,
+    "storeArt": "https://image.api.playstation.com/vulcan/ap/rnd/202412/1123/a2c87f0f9c6a22964162b2b3ef2b1814849b6e7c4a11b832.png"
   },
   {
     "id": "sly-cooper-and-the-thievius-raccoonus",
@@ -20338,7 +20539,8 @@
       "Adventure"
     ],
     "storeRelease": "2024-06-11T15:00:00Z",
-    "plusIncluded": false
+    "plusIncluded": false,
+    "storeArt": "https://image.api.playstation.com/vulcan/ap/rnd/202405/2121/d02e77e260c74286f4044f51ac267588c195709427e3883b.jpg"
   },
   {
     "id": "persona-4-golden",
@@ -20385,7 +20587,8 @@
       "Role Playing Games"
     ],
     "storeRelease": "2023-01-19T05:00:00Z",
-    "plusIncluded": false
+    "plusIncluded": false,
+    "storeArt": "https://image.api.playstation.com/vulcan/ap/rnd/202211/2913/iYXEEo99uaoy2AtQGmMm7Yqy.jpg"
   },
   {
     "id": "until-then",
@@ -20425,7 +20628,8 @@
       "Adventure"
     ],
     "storeRelease": "2024-06-25T16:00:00Z",
-    "plusIncluded": false
+    "plusIncluded": false,
+    "storeArt": "https://image.api.playstation.com/vulcan/ap/rnd/202401/1121/95eee7f976f816d8556cf188571e5a496fc31e43b27db4f7.jpg"
   },
   {
     "id": "persona-3-reload",
@@ -20469,7 +20673,8 @@
       "Role Playing Games"
     ],
     "storeRelease": "2024-02-02T05:00:00Z",
-    "plusIncluded": false
+    "plusIncluded": false,
+    "storeArt": "https://image.api.playstation.com/vulcan/ap/rnd/202307/2605/19353f11f85964dd2be8eae4564a0e78b011a81824d9b4a9.png"
   },
   {
     "id": "vampire-crawlers-the-turbo-wildcard-from-vampire",
@@ -20507,7 +20712,8 @@
       "Strategy"
     ],
     "storeRelease": "2026-04-21T16:00:00Z",
-    "plusIncluded": false
+    "plusIncluded": false,
+    "storeArt": "https://image.api.playstation.com/vulcan/ap/rnd/202511/1214/42d2ce4355855a30b055dded1a8cb7f061e5b93f81c067e8.png"
   },
   {
     "id": "vampire-survivors",
@@ -20548,7 +20754,8 @@
       "Role Playing Games"
     ],
     "storeRelease": "2024-08-29T11:00:00Z",
-    "plusIncluded": true
+    "plusIncluded": true,
+    "storeArt": "https://image.api.playstation.com/vulcan/ap/rnd/202404/1109/8ae8d8b08324a5a0a2ea5aca07ece84319df965330b94afa.png"
   },
   {
     "id": "beamng-drive",
@@ -20584,7 +20791,8 @@
       "Driving/Racing"
     ],
     "storeRelease": "2026-10-19T13:00:00Z",
-    "plusIncluded": false
+    "plusIncluded": false,
+    "storeArt": "https://image.api.playstation.com/vulcan/ap/rnd/202609/2516/f7ac096d5b5ca9b66ad57dcbbdb37bea623b2c32fff62697.jpg"
   },
   {
     "id": "trails-in-the-sky-1st-chapter",
@@ -20625,7 +20833,8 @@
       "Role Playing Games"
     ],
     "storeRelease": "2025-09-19T07:00:00Z",
-    "plusIncluded": false
+    "plusIncluded": false,
+    "storeArt": "https://image.api.playstation.com/vulcan/ap/rnd/202502/0822/1f2bf1e6cf83f58cfd890858810dd8b5c49a66b7794fe04e.png"
   },
   {
     "id": "final-fantasy-vi",
@@ -20667,7 +20876,8 @@
       "Role Playing Games"
     ],
     "storeRelease": "2023-04-19T15:00:00Z",
-    "plusIncluded": false
+    "plusIncluded": false,
+    "storeArt": "https://image.api.playstation.com/vulcan/ap/rnd/202304/0309/8370842c3ae053daf3d1845c22f0181c8481d0bc0af0c87e.jpg"
   },
   {
     "id": "final-fantasy-resonance",
@@ -20709,7 +20919,8 @@
       "Role Playing Games"
     ],
     "storeRelease": "2026-10-22T04:00:00Z",
-    "plusIncluded": false
+    "plusIncluded": false,
+    "storeArt": "https://image.api.playstation.com/vulcan/ap/rnd/202604/2403/e13825714849a55ce1b1cd190d96b710d1bc96d78ca71597.png"
   },
   {
     "id": "jak-and-daxter-the-precursor-legacy",
@@ -20749,7 +20960,8 @@
       "Adventure"
     ],
     "storeRelease": "2024-12-10T17:00:00Z",
-    "plusIncluded": false
+    "plusIncluded": false,
+    "storeArt": "https://image.api.playstation.com/vulcan/ap/rnd/202411/2222/0ea38e4211caa23ddb98e748e52bccb6699d1542d55122e3.png"
   },
   {
     "id": "satisfactory",
@@ -20790,7 +21002,8 @@
       "Simulation"
     ],
     "storeRelease": "2025-11-04T13:00:00Z",
-    "plusIncluded": false
+    "plusIncluded": false,
+    "storeArt": "https://image.api.playstation.com/vulcan/ap/rnd/202506/0507/3fb168eb1279b8fcde4849e84566b03a358d5ee1e4ea2b41.jpg"
   },
   {
     "id": "stellar-blade-10006891",
@@ -20835,7 +21048,8 @@
       "Action"
     ],
     "storeRelease": "2024-04-26T04:00:00Z",
-    "plusIncluded": false
+    "plusIncluded": false,
+    "storeArt": "https://image.api.playstation.com/vulcan/ap/rnd/202401/2211/2937cd4563d2dc50f0632a1bcfbac1f1f7dee3d2984ea02c.jpg"
   },
   {
     "id": "mass-effect-legendary-edition-10000606",
@@ -20883,7 +21097,8 @@
       "Role Playing Games"
     ],
     "storeRelease": "2021-05-14T04:00:00Z",
-    "plusIncluded": false
+    "plusIncluded": false,
+    "storeArt": "https://image.api.playstation.com/vulcan/img/rnd/202102/0118/Ls1Bvpx6CbOayoFte2GGiu4m.png"
   },
   {
     "id": "poppy-playtime-chapter-5",
@@ -20923,7 +21138,8 @@
       "Adventure"
     ],
     "storeRelease": "2026-05-27T15:00:00Z",
-    "plusIncluded": false
+    "plusIncluded": false,
+    "storeArt": "https://image.api.playstation.com/vulcan/ap/rnd/202605/1114/1742f93202e2e90814d57702ef4472b5435123140233afd9.png"
   },
   {
     "id": "absolum",
@@ -20967,7 +21183,8 @@
       "Adventure"
     ],
     "storeRelease": "2025-10-09T13:00:00Z",
-    "plusIncluded": false
+    "plusIncluded": false,
+    "storeArt": "https://image.api.playstation.com/vulcan/ap/rnd/202510/1316/48668dba23fab3d2e38b75f61fe9744253e6d4b2c3dd025f.png"
   },
   {
     "id": "unicorn-overlord",
@@ -21009,7 +21226,8 @@
       "Role Playing Games"
     ],
     "storeRelease": "2024-03-08T05:00:00Z",
-    "plusIncluded": false
+    "plusIncluded": false,
+    "storeArt": "https://image.api.playstation.com/vulcan/ap/rnd/202310/2611/59e504e75396ae1637965c011fc1931d6108b288947cdd6b.jpg"
   },
   {
     "id": "grounded-2",
@@ -21051,7 +21269,8 @@
       "Adventure"
     ],
     "storeRelease": "2026-08-11T17:00:00Z",
-    "plusIncluded": false
+    "plusIncluded": false,
+    "storeArt": "https://image.api.playstation.com/vulcan/ap/rnd/202606/0316/8740699fe6f24b7245ed25b3c2421c62be446e6c3bea3e7a.png"
   },
   {
     "id": "star-ocean-the-second-story-r",
@@ -21094,7 +21313,8 @@
       "Role Playing Games"
     ],
     "storeRelease": "2023-11-02T04:00:00Z",
-    "plusIncluded": false
+    "plusIncluded": false,
+    "storeArt": "https://image.api.playstation.com/vulcan/ap/rnd/202309/1311/fbe4dcb172073bdab8512e5d762497c33bbbf56ffa8fb7e5.jpg"
   },
   {
     "id": "mouse-p-i-for-hire",
@@ -21136,7 +21356,8 @@
       "Action"
     ],
     "storeRelease": "2026-04-16T15:00:00Z",
-    "plusIncluded": false
+    "plusIncluded": false,
+    "storeArt": "https://image.api.playstation.com/vulcan/ap/rnd/202506/0206/32616f34754da2041a8c2ef6902f65e2c94e963f2a3f7e5b.png"
   },
   {
     "id": "digimon-story-time-stranger",
@@ -21178,7 +21399,8 @@
       "Role Playing Games"
     ],
     "storeRelease": "2025-10-03T04:00:00Z",
-    "plusIncluded": false
+    "plusIncluded": false,
+    "storeArt": "https://image.api.playstation.com/vulcan/ap/rnd/202505/1320/9fd413f930d6b2f5032c31b72980deca5b0ccc42ffd86edc.png"
   },
   {
     "id": "fantasy-life-i-the-girl-who-steals-time-digital-",
@@ -21221,7 +21443,8 @@
       "Role Playing Games"
     ],
     "storeRelease": "2025-05-21T15:00:00Z",
-    "plusIncluded": false
+    "plusIncluded": false,
+    "storeArt": "https://image.api.playstation.com/vulcan/ap/rnd/202501/1607/5c571415280559c54fc6d4029c588bfc3f6976c207edbf0c.png"
   },
   {
     "id": "brotato",
@@ -21263,7 +21486,8 @@
       "Shooter"
     ],
     "storeRelease": "2024-01-30T05:00:00Z",
-    "plusIncluded": false
+    "plusIncluded": false,
+    "storeArt": "https://image.api.playstation.com/vulcan/ap/rnd/202312/0811/d200f0081ecf8a5af99320831dbbf2eca6036694a7430e60.jpg"
   },
   {
     "id": "resident-evil-2",
@@ -21308,7 +21532,8 @@
       "Action"
     ],
     "storeRelease": "2025-08-19T16:00:00Z",
-    "plusIncluded": false
+    "plusIncluded": false,
+    "storeArt": "https://image.api.playstation.com/vulcan/ap/rnd/202205/1307/4IIl5M5goSyPWNcLZyRsP6ei.png"
   },
   {
     "id": "shin-megami-tensei-v-vengeance",
@@ -21354,7 +21579,8 @@
       "Role Playing Games"
     ],
     "storeRelease": "2024-06-14T04:00:00Z",
-    "plusIncluded": false
+    "plusIncluded": false,
+    "storeArt": "https://image.api.playstation.com/vulcan/ap/rnd/202402/0600/27f5ad360040bd3eee7134711cd6649cca4e8ac696b86e15.jpg"
   },
   {
     "id": "resident-evil-3-nemesis",
@@ -21399,7 +21625,8 @@
       "Action"
     ],
     "storeRelease": "2025-08-19T16:00:00Z",
-    "plusIncluded": false
+    "plusIncluded": false,
+    "storeArt": "https://image.api.playstation.com/vulcan/ap/rnd/202205/1307/iMaesQhNhMiarVs7dbR4A3jM.png"
   },
   {
     "id": "spiritfarer-farewell-edition",
@@ -21445,7 +21672,8 @@
       "Strategy"
     ],
     "storeRelease": "2020-08-18T04:00:00Z",
-    "plusIncluded": false
+    "plusIncluded": false,
+    "storeArt": "https://image.api.playstation.com/vulcan/img/rnd/202112/1100/9Pd9zuk7ZZ1IIoynue3AQj30.png"
   },
   {
     "id": "final-fantasy-tactics-the-ivalice-chronicles-ps4",
@@ -21488,7 +21716,8 @@
       "Strategy"
     ],
     "storeRelease": "2025-09-30T04:00:00Z",
-    "plusIncluded": false
+    "plusIncluded": false,
+    "storeArt": "https://image.api.playstation.com/vulcan/ap/rnd/202505/0808/eded07ee4188e86b221e3367f245f18d522ef7094a36d4c3.jpg"
   },
   {
     "id": "romancing-saga-2-revenge-of-the-seven",
@@ -21530,7 +21759,8 @@
       "Role Playing Games"
     ],
     "storeRelease": "2024-10-24T04:00:00Z",
-    "plusIncluded": false
+    "plusIncluded": false,
+    "storeArt": "https://image.api.playstation.com/vulcan/ap/rnd/202405/2911/029776f5b58aac548406f6bc049089674bebda44dd86e953.png"
   },
   {
     "id": "the-legend-of-heroes-trails-through-daybreak",
@@ -21571,7 +21801,8 @@
       "Role Playing Games"
     ],
     "storeRelease": "2024-07-05T17:00:00Z",
-    "plusIncluded": false
+    "plusIncluded": false,
+    "storeArt": "https://image.api.playstation.com/vulcan/ap/rnd/202404/1121/b871b0c6290f95ddcabe02c64d8339346f4e7e970ed42457.png"
   },
   {
     "id": "star-wars-republic-commando",
@@ -21615,7 +21846,8 @@
       "Action"
     ],
     "storeRelease": "2021-04-06T15:00:00Z",
-    "plusIncluded": false
+    "plusIncluded": false,
+    "storeArt": "https://image.api.playstation.com/vulcan/img/rnd/202102/2518/TAPcwtXsfWLOkZyI77mYrcl1.jpg"
   },
   {
     "id": "sword-of-the-sea",
@@ -21655,7 +21887,8 @@
       "Action"
     ],
     "storeRelease": "2025-08-19T16:00:00Z",
-    "plusIncluded": true
+    "plusIncluded": true,
+    "storeArt": "https://image.api.playstation.com/vulcan/ap/rnd/202506/0521/fc36b6df4841c3d5ee2a87c06c2b645d281810d35eadf803.png"
   },
   {
     "id": "octopath-traveler-ii-ps4-ps5",
@@ -21698,7 +21931,8 @@
       "Role Playing Games"
     ],
     "storeRelease": "2023-02-24T05:00:00Z",
-    "plusIncluded": false
+    "plusIncluded": false,
+    "storeArt": "https://image.api.playstation.com/vulcan/ap/rnd/202208/3005/71h0GsGzaJteaHHuyCEQY1pK.png"
   },
   {
     "id": "like-a-dragon-infinite-wealth",
@@ -21743,7 +21977,8 @@
       "Role Playing Games"
     ],
     "storeRelease": "2024-01-26T05:00:00Z",
-    "plusIncluded": true
+    "plusIncluded": true,
+    "storeArt": "https://image.api.playstation.com/vulcan/ap/rnd/202308/2906/47def08ae64cdb07b3ba7512f690ea5fa24ea47e060b8efe.png"
   },
   {
     "id": "tomb-raider-definitive-survivor-trilogy",
@@ -21793,7 +22028,8 @@
       "Action"
     ],
     "storeRelease": "2021-03-18T04:00:00Z",
-    "plusIncluded": false
+    "plusIncluded": false,
+    "storeArt": "https://image.api.playstation.com/vulcan/img/rnd/202103/1217/1MK4BAC12fTO0k5PpFxRZob4.png"
   },
   {
     "id": "ball-x-pit",
@@ -21832,7 +22068,8 @@
       "Action"
     ],
     "storeRelease": "2025-10-15T16:00:00Z",
-    "plusIncluded": true
+    "plusIncluded": true,
+    "storeArt": "https://image.api.playstation.com/vulcan/ap/rnd/202608/0616/c283128268b763c103a8b282d83fb23f71168c17c9f8cec6.png"
   },
   {
     "id": "cairn",
@@ -21874,7 +22111,8 @@
       "Adventure"
     ],
     "storeRelease": "2026-01-29T17:00:00Z",
-    "plusIncluded": false
+    "plusIncluded": false,
+    "storeArt": "https://image.api.playstation.com/vulcan/ap/rnd/202502/2009/b64041185f4166ce6e2263f02414202f54acf604f0fda93a.png"
   },
   {
     "id": "crow-country",
@@ -21915,7 +22153,8 @@
       "Horror"
     ],
     "storeRelease": "2024-05-09T15:00:00Z",
-    "plusIncluded": true
+    "plusIncluded": true,
+    "storeArt": "https://image.api.playstation.com/vulcan/ap/rnd/202310/1119/47ba6b69c8aa0ee0aafb31a6b39bfb208a449388afc28312.png"
   },
   {
     "id": "clive-barker-s-hellraiser-revival",
@@ -21962,7 +22201,8 @@
       "Horror"
     ],
     "storeRelease": "2026-10-08T12:00:00Z",
-    "plusIncluded": false
+    "plusIncluded": false,
+    "storeArt": "https://image.api.playstation.com/vulcan/ap/rnd/202507/1809/0e674208eb71f10df39ad1f9deab22425521ed6ff72bab9a.png"
   },
   {
     "id": "like-a-dragon-gaiden-the-man-who-erased-his-name",
@@ -22008,7 +22248,8 @@
       "Action"
     ],
     "storeRelease": "2023-11-09T05:00:00Z",
-    "plusIncluded": false
+    "plusIncluded": false,
+    "storeArt": "https://image.api.playstation.com/vulcan/ap/rnd/202305/2313/c936412ee0a6246c09cb3068377fdc7f8fdaac5d15ba4c01.png"
   },
   {
     "id": "kid-a-mnesia-exhibition",
@@ -22053,7 +22294,8 @@
       "Unique"
     ],
     "storeRelease": "2021-11-18T16:00:00Z",
-    "plusIncluded": false
+    "plusIncluded": false,
+    "storeArt": "https://image.api.playstation.com/vulcan/ap/rnd/202110/2109/J5k1VnofAEievUGlcDUu7Tl1.jpg"
   },
   {
     "id": "resonance-a-plague-tale-legacy",
@@ -22093,7 +22335,8 @@
       "Action"
     ],
     "storeRelease": "2026-08-27T16:00:00Z",
-    "plusIncluded": false
+    "plusIncluded": false,
+    "storeArt": "https://image.api.playstation.com/vulcan/ap/rnd/202605/1510/fe316f221c3326450f8bd6c68ec8a589198462d33ee3030c.jpg"
   },
   {
     "id": "poppy-playtime-chapter-3",
@@ -22132,7 +22375,8 @@
       "Horror"
     ],
     "storeRelease": "2024-09-20T14:00:00Z",
-    "plusIncluded": false
+    "plusIncluded": false,
+    "storeArt": "https://image.api.playstation.com/vulcan/ap/rnd/202409/1323/7a328b456dabbb5d287ceb306b2c44f29316ab50c9a0f5ce.png"
   },
   {
     "id": "sea-of-stars-sunset-edition",
@@ -22175,7 +22419,8 @@
       "Adventure"
     ],
     "storeRelease": "2023-08-29T04:00:00Z",
-    "plusIncluded": false
+    "plusIncluded": false,
+    "storeArt": "https://image.api.playstation.com/vulcan/ap/rnd/202604/2317/4d5942ad849ae529d1e92d4bb9087442840b0b60b87ffd77.png"
   },
   {
     "id": "disco-elysium-the-final-cut",
@@ -22220,7 +22465,8 @@
       "Role Playing Games"
     ],
     "storeRelease": "2021-03-30T17:00:00Z",
-    "plusIncluded": false
+    "plusIncluded": false,
+    "storeArt": "https://image.api.playstation.com/vulcan/ap/rnd/202102/1213/TMZhAr0V1h3TfOMYmvTqhMbd.png"
   },
   {
     "id": "armored-core-vi-fires-of-rubicon",
@@ -22262,7 +22508,8 @@
       "Action"
     ],
     "storeRelease": "2023-08-25T04:00:00Z",
-    "plusIncluded": false
+    "plusIncluded": false,
+    "storeArt": "https://image.api.playstation.com/vulcan/ap/rnd/202304/2800/9f7e3dedc8af1103293b8625d850b5e95f8ab8a6f7a029f3.png"
   },
   {
     "id": "fatal-frame-maiden-of-black-water",
@@ -22303,7 +22550,8 @@
       "Horror"
     ],
     "storeRelease": "2021-10-28T04:00:00Z",
-    "plusIncluded": false
+    "plusIncluded": false,
+    "storeArt": "https://image.api.playstation.com/vulcan/ap/rnd/202109/0808/hZsCFAObZxKuZCAMD0664Dbo.png"
   },
   {
     "id": "the-alters",
@@ -22345,7 +22593,8 @@
       "Adventure"
     ],
     "storeRelease": "2025-06-13T12:00:00Z",
-    "plusIncluded": false
+    "plusIncluded": false,
+    "storeArt": "https://image.api.playstation.com/vulcan/ap/rnd/202406/0515/a8a9a68f3b1f383a767403022346143ae9c15a2429bfad23.jpg"
   },
   {
     "id": "daxter",
@@ -22387,7 +22636,8 @@
       "Adventure"
     ],
     "storeRelease": "2024-06-18T15:00:00Z",
-    "plusIncluded": false
+    "plusIncluded": false,
+    "storeArt": "https://image.api.playstation.com/vulcan/ap/rnd/202406/0521/47156ff2ae682fe64fb05550cd4e5bafcf9d9c3ecec3046d.jpg"
   },
   {
     "id": "resident-evil-director-s-cut",
@@ -22430,7 +22680,8 @@
       "Action"
     ],
     "storeRelease": "2024-11-26T01:00:00Z",
-    "plusIncluded": false
+    "plusIncluded": false,
+    "storeArt": "https://image.api.playstation.com/vulcan/ap/rnd/202205/1307/LZvLMJ0XCsYPpYE3cfByUNJx.png"
   },
   {
     "id": "final-fantasy-vii-rebirth",
@@ -22471,7 +22722,8 @@
       "Role Playing Games"
     ],
     "storeRelease": "2024-02-29T05:00:00Z",
-    "plusIncluded": false
+    "plusIncluded": false,
+    "storeArt": "https://image.api.playstation.com/vulcan/ap/rnd/202308/3005/4a13ce96b9aee645c5e513658e93d7a19da511e7ef3501d9.png"
   },
   {
     "id": "the-midnight-walk",
@@ -22511,7 +22763,8 @@
       "Adventure"
     ],
     "storeRelease": "2025-05-08T04:00:00Z",
-    "plusIncluded": true
+    "plusIncluded": true,
+    "storeArt": "https://image.api.playstation.com/vulcan/ap/rnd/202409/1110/2c3d585db6df70dda3c1b852ece659783aea274d1837259b.jpg"
   },
   {
     "id": "ys-x-nordics",
@@ -22550,7 +22803,8 @@
       "Role Playing Games"
     ],
     "storeRelease": "2024-10-25T17:00:00Z",
-    "plusIncluded": false
+    "plusIncluded": false,
+    "storeArt": "https://image.api.playstation.com/vulcan/ap/rnd/202405/2322/ae2b48b528c071364efffb0b88909154bf2316757404cf12.jpg"
   },
   {
     "id": "bendy-and-the-dark-revival",
@@ -22593,7 +22847,8 @@
       "Action"
     ],
     "storeRelease": "2025-07-11T17:00:00Z",
-    "plusIncluded": false
+    "plusIncluded": false,
+    "storeArt": "https://image.api.playstation.com/vulcan/ap/rnd/202505/2121/7350c3ec6306f8431719ede4050c6ed353b49440c903d1fc.png"
   },
   {
     "id": "life-is-strange-reunion",
@@ -22635,7 +22890,8 @@
       "Adventure"
     ],
     "storeRelease": "2026-03-26T16:00:00Z",
-    "plusIncluded": false
+    "plusIncluded": false,
+    "storeArt": "https://image.api.playstation.com/vulcan/ap/rnd/202512/0917/68ff551088d57e342168992fabc11a1aed5e4da1d6151c9f.png"
   },
   {
     "id": "crime-scene-cleaner",
@@ -22678,7 +22934,8 @@
       "Action"
     ],
     "storeRelease": "2025-06-13T15:00:00Z",
-    "plusIncluded": false
+    "plusIncluded": false,
+    "storeArt": "https://image.api.playstation.com/vulcan/ap/rnd/202503/0710/99f109a52917d0aace2eb45f83ff0f03e826dd63f3ad6a60.png"
   },
   {
     "id": "like-a-dragon-pirate-yakuza-in-hawaii",
@@ -22721,7 +22978,8 @@
       "Action"
     ],
     "storeRelease": "2025-02-21T05:00:00Z",
-    "plusIncluded": false
+    "plusIncluded": false,
+    "storeArt": "https://image.api.playstation.com/vulcan/ap/rnd/202409/1801/ae6245b25fd3adffb9c4fd9e59d2284baf13029beea44763.png"
   },
   {
     "id": "monster-hunter-stories-3-twisted-reflection",
@@ -22761,7 +23019,8 @@
       "Role Playing Games"
     ],
     "storeRelease": "2026-03-13T04:00:00Z",
-    "plusIncluded": false
+    "plusIncluded": false,
+    "storeArt": "https://image.api.playstation.com/vulcan/ap/rnd/202510/1005/16297e83b692b5d96f8a85d8900e33db655324632ab1d3f8.png"
   },
   {
     "id": "thank-goodness-you-re-here",
@@ -22803,7 +23062,8 @@
       "Adult"
     ],
     "storeRelease": "2024-08-01T16:00:00Z",
-    "plusIncluded": true
+    "plusIncluded": true,
+    "storeArt": "https://image.api.playstation.com/vulcan/ap/rnd/202308/1718/77d73bd38fb6b34f0203fb47add77e5c968812ed78643aa5.jpg"
   },
   {
     "id": "killer-frequency",
@@ -22843,7 +23103,8 @@
       "Horror"
     ],
     "storeRelease": "2023-06-01T04:00:00Z",
-    "plusIncluded": true
+    "plusIncluded": true,
+    "storeArt": "https://image.api.playstation.com/vulcan/ap/rnd/202304/0514/9d2123495845b02540a2600c7502938b3bda5fa16052fc34.jpg"
   },
   {
     "id": "the-forgotten-city",
@@ -22884,7 +23145,8 @@
       "Adventure"
     ],
     "storeRelease": "2021-07-28T07:30:00Z",
-    "plusIncluded": true
+    "plusIncluded": true,
+    "storeArt": "https://image.api.playstation.com/vulcan/ap/rnd/202106/3010/GrOdceTY7iphyvLMSxnwqAma.jpg"
   },
   {
     "id": "tokyo-xtreme-racer",
@@ -22922,7 +23184,8 @@
       "Driving/Racing"
     ],
     "storeRelease": "2026-02-25T15:00:00Z",
-    "plusIncluded": false
+    "plusIncluded": false,
+    "storeArt": "https://image.api.playstation.com/vulcan/ap/rnd/202510/2405/d32f942574451c368c9332b9635b01edfd56e65320c7dca2.png"
   },
   {
     "id": "mixtape",
@@ -22965,7 +23228,8 @@
       "Adventure"
     ],
     "storeRelease": "2026-05-07T13:00:00Z",
-    "plusIncluded": false
+    "plusIncluded": false,
+    "storeArt": "https://image.api.playstation.com/vulcan/ap/rnd/202506/0416/07a70b55dc61392ae41fac6d3f1769e022460821c170f068.jpg"
   },
   {
     "id": "jurassic-world-evolution-3",
@@ -23008,7 +23272,8 @@
       "Simulation"
     ],
     "storeRelease": "2025-10-21T14:00:00Z",
-    "plusIncluded": false
+    "plusIncluded": false,
+    "storeArt": "https://image.api.playstation.com/vulcan/ap/rnd/202511/0612/d7bf04660e05807c8c2dad6d1197e8e2bd78746391db4836.png"
   },
   {
     "id": "poppy-playtime-chapter-4",
@@ -23049,7 +23314,8 @@
       "Adventure"
     ],
     "storeRelease": "2025-06-25T15:00:00Z",
-    "plusIncluded": false
+    "plusIncluded": false,
+    "storeArt": "https://image.api.playstation.com/vulcan/ap/rnd/202505/2714/7a71fd797a535e5f61e60084017cdd53c0ad8971ee0823c8.png"
   },
   {
     "id": "warhammer-40-000-rogue-trader",
@@ -23093,7 +23359,8 @@
       "Role Playing Games"
     ],
     "storeRelease": "2023-12-07T16:00:00Z",
-    "plusIncluded": false
+    "plusIncluded": false,
+    "storeArt": "https://image.api.playstation.com/vulcan/ap/rnd/202308/1413/2f06f3367a8874a107c52de6817c4de6d24c157fd466e3f4.jpg"
   },
   {
     "id": "007-first-light",
@@ -23136,7 +23403,8 @@
       "Action"
     ],
     "storeRelease": "2026-05-26T14:00:00Z",
-    "plusIncluded": false
+    "plusIncluded": false,
+    "storeArt": "https://image.api.playstation.com/vulcan/ap/rnd/202506/0421/3f7672a695a9487071b261cc7c0d55ad7c25ebb39c8dc3ec.png"
   },
   {
     "id": "abiotic-factor",
@@ -23181,7 +23449,8 @@
       "Adventure"
     ],
     "storeRelease": "2025-07-22T16:00:00Z",
-    "plusIncluded": true
+    "plusIncluded": true,
+    "storeArt": "https://image.api.playstation.com/vulcan/ap/rnd/202502/1023/691e62e04a58e2161801da65638ccca42316386fda71069a.jpg"
   },
   {
     "id": "big-walk",
@@ -23221,7 +23490,8 @@
       "Adventure"
     ],
     "storeRelease": "2026-08-04T13:00:00Z",
-    "plusIncluded": false
+    "plusIncluded": false,
+    "storeArt": "https://image.api.playstation.com/vulcan/ap/rnd/202602/0421/b21f41a71c44e327da98bb19ffc227691afc1519cf25b2ca.jpg"
   },
   {
     "id": "assassin-s-creed-black-flag-resynced",
@@ -23268,7 +23538,8 @@
       "Action"
     ],
     "storeRelease": "2026-07-09T04:00:00Z",
-    "plusIncluded": false
+    "plusIncluded": false,
+    "storeArt": "https://image.api.playstation.com/vulcan/ap/rnd/202603/1215/f1fe921628640e04e0019a7c874a0215dbe26bec1f4b6df2.jpg"
   },
   {
     "id": "the-blood-of-dawnwalker",
@@ -23314,7 +23585,8 @@
       "Adventure"
     ],
     "storeRelease": "2026-09-03T04:00:00Z",
-    "plusIncluded": false
+    "plusIncluded": false,
+    "storeArt": "https://image.api.playstation.com/vulcan/ap/rnd/202603/2518/9809db989baf4a50dfa7f3d4f0ff9086554cc55954014367.png"
   },
   {
     "id": "kingdom-come-deliverance-ii-royal-edition",
@@ -23363,7 +23635,8 @@
       "Role Playing Games"
     ],
     "storeRelease": "2025-02-04T16:00:00Z",
-    "plusIncluded": false
+    "plusIncluded": false,
+    "storeArt": "https://image.api.playstation.com/vulcan/ap/rnd/202510/3014/399a30443395cb7fbde47d41732fe2b8ffb0b40dab8733c9.jpg"
   },
   {
     "id": "signalis",
@@ -23405,7 +23678,8 @@
       "Adventure"
     ],
     "storeRelease": "2022-10-27T16:00:00Z",
-    "plusIncluded": false
+    "plusIncluded": false,
+    "storeArt": "https://image.api.playstation.com/vulcan/ap/rnd/202209/1922/F2NLbMp1w1z1btcObWEyihPS.png"
   },
   {
     "id": "doki-doki-literature-club-plus",
@@ -23448,7 +23722,8 @@
       "Horror"
     ],
     "storeRelease": "2021-06-30T16:00:00Z",
-    "plusIncluded": false
+    "plusIncluded": false,
+    "storeArt": "https://image.api.playstation.com/vulcan/img/rnd/202107/1418/3xIQlFWEBEUNrbSOpbUxu7Pd.png"
   },
   {
     "id": "nier-replicant-ver-1-22474487139",
@@ -23490,7 +23765,8 @@
       "Role Playing Games"
     ],
     "storeRelease": "2021-04-23T04:00:00Z",
-    "plusIncluded": false
+    "plusIncluded": false,
+    "storeArt": "https://image.api.playstation.com/vulcan/ap/rnd/202009/0404/gfdpPvrjebxxZ9a1dzJKsexR.png"
   },
   {
     "id": "hellblade-senua-s-sacrifice",
@@ -23535,7 +23811,8 @@
       "Adventure"
     ],
     "storeRelease": "2025-08-12T08:00:00Z",
-    "plusIncluded": false
+    "plusIncluded": false,
+    "storeArt": "https://image.api.playstation.com/vulcan/ap/rnd/202508/0511/9f3aa958e24667b975d7da39007a72c8e074f1f128dabe6e.png"
   },
   {
     "id": "five-nights-at-freddy-s-secret-of-the-mimic",
@@ -23572,7 +23849,8 @@
       "Horror"
     ],
     "storeRelease": "2025-06-13T17:00:00Z",
-    "plusIncluded": false
+    "plusIncluded": false,
+    "storeArt": "https://image.api.playstation.com/vulcan/ap/rnd/202502/1221/6e5c92721c1c749f3a3f414a81cb81be3a36834426a30090.png"
   },
   {
     "id": "the-lord-of-the-rings-war-in-the-north-legacy-ed",
@@ -23619,7 +23897,8 @@
       "Action"
     ],
     "storeRelease": "2026-08-11T16:00:00Z",
-    "plusIncluded": false
+    "plusIncluded": false,
+    "storeArt": "https://image.api.playstation.com/vulcan/ap/rnd/202603/1202/bf958c5133b688b7309070eccf673d76cc9338111f4079af.jpg"
   },
   {
     "id": "indiana-jones-and-the-great-circle",
@@ -23663,7 +23942,8 @@
       "Adventure"
     ],
     "storeRelease": "2025-04-17T00:00:00Z",
-    "plusIncluded": false
+    "plusIncluded": false,
+    "storeArt": "https://image.api.playstation.com/vulcan/ap/rnd/202408/1520/d002c270771bec89f396906f47f18d46d2c66b7da1b21cf0.jpg"
   },
   {
     "id": "fears-to-fathom-ironbark-lookout",
@@ -23705,7 +23985,8 @@
       "Horror"
     ],
     "storeRelease": "2024-10-25T16:00:00Z",
-    "plusIncluded": false
+    "plusIncluded": false,
+    "storeArt": "https://image.api.playstation.com/vulcan/ap/rnd/202409/2009/b66655dabea2ee137e3e56e334a4878a364f2218d0e05fd4.png"
   },
   {
     "id": "escape-the-backrooms",
@@ -23750,7 +24031,8 @@
       "Puzzle"
     ],
     "storeRelease": "2026-05-28T11:00:00Z",
-    "plusIncluded": false
+    "plusIncluded": false,
+    "storeArt": "https://image.api.playstation.com/vulcan/ap/rnd/202605/1210/d9e44a54d4a511e77cd5e23b611b19c938658458c420a81f.png"
   },
   {
     "id": "lies-of-p",
@@ -23789,7 +24071,8 @@
       "Action"
     ],
     "storeRelease": "2023-09-19T04:00:00Z",
-    "plusIncluded": false
+    "plusIncluded": false,
+    "storeArt": "https://image.api.playstation.com/vulcan/ap/rnd/202305/2308/d946b9bae05aad7d8b289a9bcee0fb9fd215090b85d34540.png"
   },
   {
     "id": "the-adventures-of-elliot-the-millennium-tales",
@@ -23832,7 +24115,8 @@
       "Role Playing Games"
     ],
     "storeRelease": "2026-06-18T04:00:00Z",
-    "plusIncluded": false
+    "plusIncluded": false,
+    "storeArt": "https://image.api.playstation.com/vulcan/ap/rnd/202601/1912/297790c49e88f85662ea635eca6984f877f203914dfce4cd.png"
   },
   {
     "id": "the-talos-principle-2",
@@ -23871,7 +24155,8 @@
       "Adventure"
     ],
     "storeRelease": "2023-11-02T16:00:00Z",
-    "plusIncluded": true
+    "plusIncluded": true,
+    "storeArt": "https://image.api.playstation.com/vulcan/ap/rnd/202305/2421/e0e506cf6b49130e38a33d148183ffc99d1b0d594397b9d0.jpg"
   },
   {
     "id": "superliminal",
@@ -23909,7 +24194,8 @@
       "Shooter"
     ],
     "storeRelease": "2022-11-21T05:00:00Z",
-    "plusIncluded": false
+    "plusIncluded": false,
+    "storeArt": "https://image.api.playstation.com/vulcan/ap/rnd/202211/1617/Y44Rmv9vqbkBu9rRCKyNQHqF.jpg"
   },
   {
     "id": "endling-extinction-is-forever",
@@ -23947,7 +24233,8 @@
       "Adventure"
     ],
     "storeRelease": "2022-11-03T14:00:00Z",
-    "plusIncluded": false
+    "plusIncluded": false,
+    "storeArt": "https://image.api.playstation.com/vulcan/ap/rnd/202205/1310/5dGCU1DsO9gtahGsJGRUuUeT.png"
   },
   {
     "id": "until-dawn-10007897",
@@ -23991,7 +24278,8 @@
       "Horror"
     ],
     "storeRelease": "2024-10-04T04:00:00Z",
-    "plusIncluded": true
+    "plusIncluded": true,
+    "storeArt": "https://image.api.playstation.com/vulcan/ap/rnd/202401/2910/3cb17e8780924be93de73d4b6b81e3309f69d24137c02d54.jpg"
   },
   {
     "id": "the-walking-dead-saints-sinners",
@@ -24035,7 +24323,8 @@
       "Action"
     ],
     "storeRelease": "2023-03-21T17:00:00Z",
-    "plusIncluded": false
+    "plusIncluded": false,
+    "storeArt": "https://image.api.playstation.com/vulcan/ap/rnd/202302/1000/be62fa995b9a74265b80c606a7564cf426b75b8fdbd854d5.jpg"
   },
   {
     "id": "cocoon",
@@ -24074,7 +24363,8 @@
       "Adventure"
     ],
     "storeRelease": "2023-09-29T16:00:00Z",
-    "plusIncluded": false
+    "plusIncluded": false,
+    "storeArt": "https://image.api.playstation.com/vulcan/ap/rnd/202308/0320/cbfca01d60096c201fa98b544c26d3f2a522ec4a6c1fa6c5.png"
   },
   {
     "id": "far-changing-tides",
@@ -24110,7 +24400,8 @@
       "Adventure"
     ],
     "storeRelease": "2022-03-01T05:00:00Z",
-    "plusIncluded": true
+    "plusIncluded": true,
+    "storeArt": "https://image.api.playstation.com/vulcan/ap/rnd/202108/2011/MZKGzZ5F8NLtQ4XZtfzuuZ6L.jpg"
   },
   {
     "id": "lost-in-random",
@@ -24151,7 +24442,8 @@
       "Adventure"
     ],
     "storeRelease": "2021-09-10T09:00:00Z",
-    "plusIncluded": false
+    "plusIncluded": false,
+    "storeArt": "https://image.api.playstation.com/vulcan/img/rnd/202108/2712/4TEw5Oqv1bTWUyllA8M2lCnE.png"
   },
   {
     "id": "chrono-cross-the-radical-dreamers-edition",
@@ -24193,7 +24485,8 @@
       "Role Playing Games"
     ],
     "storeRelease": "2022-04-07T04:00:00Z",
-    "plusIncluded": false
+    "plusIncluded": false,
+    "storeArt": "https://image.api.playstation.com/vulcan/ap/rnd/202202/1001/hI8UiZtJ6UVrIGTnK0P9vN0u.png"
   },
   {
     "id": "poppy-playtime-chapter-2",
@@ -24231,7 +24524,8 @@
       "Horror"
     ],
     "storeRelease": "2024-09-20T14:00:00Z",
-    "plusIncluded": false
+    "plusIncluded": false,
+    "storeArt": "https://image.api.playstation.com/vulcan/ap/rnd/202408/2820/e7f0613cb56aee4ab462a2066f4771653fd1c7f18e7e1a24.png"
   },
   {
     "id": "the-first-berserker-khazan-standard-edition",
@@ -24271,7 +24565,8 @@
       "Role Playing Games"
     ],
     "storeRelease": "2025-03-27T15:00:00Z",
-    "plusIncluded": false
+    "plusIncluded": false,
+    "storeArt": "https://image.api.playstation.com/vulcan/ap/rnd/202502/2609/ed16bfc3fb58af66017339cce3c90a4999364db6278928b0.png"
   },
   {
     "id": "dragon-quest-vii-reimagined",
@@ -24315,7 +24610,8 @@
       "Role Playing Games"
     ],
     "storeRelease": "2026-02-05T05:00:00Z",
-    "plusIncluded": false
+    "plusIncluded": false,
+    "storeArt": "https://image.api.playstation.com/vulcan/ap/rnd/202508/2805/4714767d402d7d9562d18b90284aae3b833509b264331b5e.png"
   },
   {
     "id": "tormented-souls",
@@ -24359,7 +24655,8 @@
       "Horror"
     ],
     "storeRelease": "2021-08-27T11:00:00Z",
-    "plusIncluded": false
+    "plusIncluded": false,
+    "storeArt": "https://image.api.playstation.com/vulcan/ap/rnd/202107/0915/g1yX3SjpYZ97a34FvzulhQkX.jpg"
   },
   {
     "id": "broken-sword-shadow-of-the-templars-reforged",
@@ -24403,7 +24700,8 @@
       "Adventure"
     ],
     "storeRelease": "2024-09-19T04:00:00Z",
-    "plusIncluded": true
+    "plusIncluded": true,
+    "storeArt": "https://image.api.playstation.com/vulcan/ap/rnd/202408/0508/02a7acb8f7a8595ab5852f03945397b2bff0d3c897b8304c.jpg"
   },
   {
     "id": "cronos-the-new-dawn",
@@ -24445,7 +24743,8 @@
       "Horror"
     ],
     "storeRelease": "2025-09-05T14:00:00Z",
-    "plusIncluded": false
+    "plusIncluded": false,
+    "storeArt": "https://image.api.playstation.com/vulcan/ap/rnd/202410/1511/5daa402a8728c97b699d961eb06b77b8c759d1afdf585b0c.jpg"
   },
   {
     "id": "the-outlast-trials",
@@ -24496,7 +24795,8 @@
       "Horror"
     ],
     "storeRelease": "2024-03-05T15:00:00Z",
-    "plusIncluded": false
+    "plusIncluded": false,
+    "storeArt": "https://image.api.playstation.com/vulcan/ap/rnd/202607/0718/05e49179d755a43fd332d13d086f24a4b752ef804059952b.png"
   },
   {
     "id": "alien-rogue-incursion-vr",
@@ -24540,7 +24840,8 @@
       "Horror"
     ],
     "storeRelease": "2024-12-19T15:00:00Z",
-    "plusIncluded": false
+    "plusIncluded": false,
+    "storeArt": "https://image.api.playstation.com/vulcan/ap/rnd/202411/2618/d3b7078a753353778ac115ee16cb3c5d564f71ec22051a5e.png"
   },
   {
     "id": "monster-hunter-stories-2-wings-of-ruin",
@@ -24584,7 +24885,8 @@
       "Role Playing Games"
     ],
     "storeRelease": "2024-06-14T04:00:00Z",
-    "plusIncluded": true
+    "plusIncluded": true,
+    "storeArt": "https://image.api.playstation.com/vulcan/ap/rnd/202402/1401/2c25ff7e6f963d9b636288bb090a06628782f8ce2e4dab1c.png"
   },
   {
     "id": "the-last-faith",
@@ -24628,7 +24930,8 @@
       "Role Playing Games"
     ],
     "storeRelease": "2023-11-15T15:00:00Z",
-    "plusIncluded": false
+    "plusIncluded": false,
+    "storeArt": "https://image.api.playstation.com/vulcan/ap/rnd/202311/1102/6d0d8997494a67475f9d6b0594429ae46b104eb41c7ff77c.jpg"
   },
   {
     "id": "teardown",
@@ -24669,7 +24972,8 @@
       "Action"
     ],
     "storeRelease": "2023-11-15T13:00:00Z",
-    "plusIncluded": false
+    "plusIncluded": false,
+    "storeArt": "https://image.api.playstation.com/vulcan/ap/rnd/202609/0415/d729074b0245b0d0c6de27772d34c938e8fd4164e1b657e9.jpg"
   },
   {
     "id": "bramble-the-mountain-king",
@@ -24714,7 +25018,8 @@
       "Adventure"
     ],
     "storeRelease": "2023-04-27T04:00:00Z",
-    "plusIncluded": true
+    "plusIncluded": true,
+    "storeArt": "https://image.api.playstation.com/vulcan/ap/rnd/202211/2209/BUBG7r0wlvI9k0uZmQslUTkL.jpg"
   },
   {
     "id": "visage",
@@ -24757,7 +25062,8 @@
       "Horror"
     ],
     "storeRelease": "2021-11-11T05:00:00Z",
-    "plusIncluded": false
+    "plusIncluded": false,
+    "storeArt": "https://image.api.playstation.com/vulcan/img/rnd/202012/1422/2Kk08O9bur5IJOCiQL5oxB3I.png"
   },
   {
     "id": "south-of-midnight-weaver-s-edition",
@@ -24799,7 +25105,8 @@
       "Action"
     ],
     "storeRelease": "2026-03-31T17:00:00Z",
-    "plusIncluded": false
+    "plusIncluded": false,
+    "storeArt": "https://image.api.playstation.com/vulcan/ap/rnd/202601/2916/766f58780e0787064a06e86046063f7da5507b39b533fa59.png"
   },
   {
     "id": "star-wars-zero-company",
@@ -24837,7 +25144,8 @@
       "Strategy"
     ],
     "storeRelease": "2026-08-27T15:00:00Z",
-    "plusIncluded": false
+    "plusIncluded": false,
+    "storeArt": "https://image.api.playstation.com/vulcan/ap/rnd/202608/2110/c2e9febcce23946964e1f591a140c8ba8bfec32d67e12562.png"
   },
   {
     "id": "7-days-to-die-console-edition",
@@ -24888,7 +25196,8 @@
       "Role Playing Games"
     ],
     "storeRelease": "2024-07-25T17:00:00Z",
-    "plusIncluded": false
+    "plusIncluded": false,
+    "storeArt": "https://image.api.playstation.com/vulcan/ap/rnd/202406/1216/7e79f30db258dd290427bea288a1a79acb2ed79e1e105ccf.png"
   },
   {
     "id": "medieval-dynasty",
@@ -24933,7 +25242,8 @@
       "Adventure"
     ],
     "storeRelease": "2022-10-06T10:00:00Z",
-    "plusIncluded": false
+    "plusIncluded": false,
+    "storeArt": "https://image.api.playstation.com/vulcan/ap/rnd/202507/0410/7a920fc812224ed1664c55e94b974c43ea41dc349c0d2d7f.jpg"
   },
   {
     "id": "still-wakes-the-deep",
@@ -24978,7 +25288,8 @@
       "Horror"
     ],
     "storeRelease": "2024-06-18T09:00:00Z",
-    "plusIncluded": true
+    "plusIncluded": true,
+    "storeArt": "https://image.api.playstation.com/vulcan/ap/rnd/202405/3016/bf1df3d942cf8443bcdae953546384048fb966097c55df32.jpg"
   },
   {
     "id": "untitled-goose-game",
@@ -25018,7 +25329,8 @@
       "Family"
     ],
     "storeRelease": "2019-12-17T05:00:00Z",
-    "plusIncluded": true
+    "plusIncluded": true,
+    "storeArt": "https://image.api.playstation.com/vulcan/img/rnd/202009/0405/0oYRlpVMm7C7UqpStDnt8eSs.png"
   },
   {
     "id": "contra-operation-galuga",
@@ -25061,7 +25373,8 @@
       "Action"
     ],
     "storeRelease": "2024-03-12T07:00:00Z",
-    "plusIncluded": false
+    "plusIncluded": false,
+    "storeArt": "https://image.api.playstation.com/vulcan/ap/rnd/202405/1601/490cc9a68f3805930c9120de52cd6ff85fa6db4086e637b2.png"
   },
   {
     "id": "s-t-a-l-k-e-r-2-heart-of-chornobyl",
@@ -25107,7 +25420,8 @@
       "Action"
     ],
     "storeRelease": "2025-11-20T12:00:00Z",
-    "plusIncluded": false
+    "plusIncluded": false,
+    "storeArt": "https://image.api.playstation.com/vulcan/ap/rnd/202608/0507/93c4f54159c8f0570d7c84cd038965c6dc19ce970f012810.png"
   },
   {
     "id": "nioh-3",
@@ -25152,7 +25466,8 @@
       "Action"
     ],
     "storeRelease": "2026-02-06T05:00:00Z",
-    "plusIncluded": false
+    "plusIncluded": false,
+    "storeArt": "https://image.api.playstation.com/vulcan/ap/rnd/202509/0401/f6ae6e20e2339d53eb87c0902c62297fd9661e28abd6a776.png"
   },
   {
     "id": "the-elder-scrolls-iv-oblivion-remastered",
@@ -25198,7 +25513,8 @@
       "Role Playing Games"
     ],
     "storeRelease": "2025-04-22T15:00:00Z",
-    "plusIncluded": false
+    "plusIncluded": false,
+    "storeArt": "https://image.api.playstation.com/vulcan/ap/rnd/202504/0320/68c80108fbd904cf27aeee9988153a34eaa5c1962547fcd7.jpg"
   },
   {
     "id": "viewfinder",
@@ -25237,7 +25553,8 @@
       "Adventure"
     ],
     "storeRelease": "2023-07-18T13:00:00Z",
-    "plusIncluded": false
+    "plusIncluded": false,
+    "storeArt": "https://image.api.playstation.com/vulcan/ap/rnd/202507/1712/a111d405ce33332db2ef2bd3fac33a46e31654d89d7fad7d.png"
   },
   {
     "id": "mandragora-whispers-of-the-witch-tree",
@@ -25280,7 +25597,8 @@
       "Action"
     ],
     "storeRelease": "2025-04-17T07:00:00Z",
-    "plusIncluded": false
+    "plusIncluded": false,
+    "storeArt": "https://image.api.playstation.com/vulcan/ap/rnd/202506/0411/3e87f7558ddfd8aa796d323342f36d5b670f14900dd42e31.png"
   },
   {
     "id": "crisis-core-final-fantasy-vii-reunion",
@@ -25321,7 +25639,8 @@
       "Action"
     ],
     "storeRelease": "2022-12-13T05:00:00Z",
-    "plusIncluded": false
+    "plusIncluded": false,
+    "storeArt": "https://image.api.playstation.com/vulcan/ap/rnd/202208/2505/Cv2pVnIqJwmosTYRmjsxgQbV.jpg"
   },
   {
     "id": "nobody-saves-the-world",
@@ -25364,7 +25683,8 @@
       "Adventure"
     ],
     "storeRelease": "2022-04-14T13:00:00Z",
-    "plusIncluded": false
+    "plusIncluded": false,
+    "storeArt": "https://image.api.playstation.com/vulcan/ap/rnd/202402/0916/ecee1f0f05dd3a788598c4b565dbfd94e92b589fa8bd9d26.png"
   },
   {
     "id": "honkai-star-rail",
@@ -25407,7 +25727,8 @@
       "Role Playing Games"
     ],
     "storeRelease": "2023-10-10T22:00:00Z",
-    "plusIncluded": false
+    "plusIncluded": false,
+    "storeArt": "https://image.api.playstation.com/vulcan/ap/rnd/202308/1103/c0e39d9d9e72c031a38fadaffe0f9abb80ac3d658aa74bd8.jpg"
   },
   {
     "id": "choo-choo-charles",
@@ -25445,7 +25766,8 @@
       "Horror"
     ],
     "storeRelease": "2023-12-21T14:00:00Z",
-    "plusIncluded": false
+    "plusIncluded": false,
+    "storeArt": "https://image.api.playstation.com/vulcan/ap/rnd/202309/0516/b72557c9c8aeb20d2d047ae7ddae688bd9de8f742d6e1035.jpg"
   },
   {
     "id": "octopath-traveler-ps4-ps5",
@@ -25489,7 +25811,8 @@
       "Role Playing Games"
     ],
     "storeRelease": "2024-06-06T00:00:00Z",
-    "plusIncluded": false
+    "plusIncluded": false,
+    "storeArt": "https://image.api.playstation.com/vulcan/ap/rnd/202405/0205/fc4a63a0f6cf08c95c08dbf08a6c9fb007bc81dc3d57b04c.png"
   },
   {
     "id": "high-on-life",
@@ -25536,7 +25859,8 @@
       "Adventure"
     ],
     "storeRelease": "2023-07-22T23:00:00Z",
-    "plusIncluded": false
+    "plusIncluded": false,
+    "storeArt": "https://image.api.playstation.com/vulcan/ap/rnd/202307/1223/ec2eb1c6fc39a68b8287e889ec5a058a0a4ad7e952444338.jpg"
   },
   {
     "id": "poppy-playtime-chapter-1",
@@ -25574,7 +25898,8 @@
       "Horror"
     ],
     "storeRelease": "2023-12-20T15:00:00Z",
-    "plusIncluded": true
+    "plusIncluded": true,
+    "storeArt": "https://image.api.playstation.com/vulcan/ap/rnd/202310/2416/67f5b83f1c7e842f9e27953181ec7bc4f50a81324fbf5147.jpg"
   },
   {
     "id": "goat-simulator-3",
@@ -25616,7 +25941,8 @@
       "Adventure"
     ],
     "storeRelease": "2022-11-17T05:00:00Z",
-    "plusIncluded": false
+    "plusIncluded": false,
+    "storeArt": "https://image.api.playstation.com/vulcan/ap/rnd/202211/1410/dqPwqJEqMpdRjSEgMpWSHTMX.jpg"
   },
   {
     "id": "jurassic-world-evolution-2",
@@ -25655,7 +25981,8 @@
       "Simulation"
     ],
     "storeRelease": "2021-11-09T14:00:00Z",
-    "plusIncluded": false
+    "plusIncluded": false,
+    "storeArt": "https://image.api.playstation.com/vulcan/ap/rnd/202107/2717/6kocG7zxW91SotaqXs1bgQ1E.jpg"
   },
   {
     "id": "darwin-s-paradox",
@@ -25696,7 +26023,8 @@
       "Adventure"
     ],
     "storeRelease": "2026-04-02T07:00:00Z",
-    "plusIncluded": false
+    "plusIncluded": false,
+    "storeArt": "https://image.api.playstation.com/vulcan/ap/rnd/202502/1323/38538b48aaa9a611c3d4e330394b111bf0d77a92543a6962.png"
   },
   {
     "id": "lost-records-bloom-rage",
@@ -25741,7 +26069,8 @@
       "Adventure"
     ],
     "storeRelease": "2025-02-18T14:00:00Z",
-    "plusIncluded": false
+    "plusIncluded": false,
+    "storeArt": "https://image.api.playstation.com/vulcan/ap/rnd/202410/2208/8effb315f4c787dc3eeb32a7a2e9e5280a840c9421e44ee8.jpg"
   },
   {
     "id": "metro-awakening",
@@ -25784,7 +26113,8 @@
       "Action"
     ],
     "storeRelease": "2024-11-07T17:00:00Z",
-    "plusIncluded": false
+    "plusIncluded": false,
+    "storeArt": "https://image.api.playstation.com/vulcan/ap/rnd/202509/1611/0039d6e5faa919783674446d2191e8a3f8406e9232be79c7.png"
   },
   {
     "id": "zenless-zone-zero",
@@ -25828,7 +26158,8 @@
       "Role Playing Games"
     ],
     "storeRelease": "2024-07-04T02:00:00Z",
-    "plusIncluded": false
+    "plusIncluded": false,
+    "storeArt": "https://image.api.playstation.com/vulcan/ap/rnd/202610/1406/4dcd27006c9fad559372fac710854fa7e213a5d7965953d7.png"
   },
   {
     "id": "horizon-call-of-the-mountain",
@@ -25867,7 +26198,8 @@
       "Adventure"
     ],
     "storeRelease": "2023-02-22T05:00:00Z",
-    "plusIncluded": false
+    "plusIncluded": false,
+    "storeArt": "https://image.api.playstation.com/vulcan/ap/rnd/202207/0615/v9fflldZy5JxduiUuju47f4I.jpg"
   },
   {
     "id": "nobody-wants-to-die",
@@ -25910,7 +26242,8 @@
       "Adventure"
     ],
     "storeRelease": "2024-07-17T04:00:00Z",
-    "plusIncluded": false
+    "plusIncluded": false,
+    "storeArt": "https://image.api.playstation.com/vulcan/ap/rnd/202403/0116/ce49cd6773295439f889f479d4300b11454ba7f7d3f0062b.jpg"
   },
   {
     "id": "copycat",
@@ -25948,7 +26281,8 @@
       "Adventure"
     ],
     "storeRelease": "2025-05-29T12:00:00Z",
-    "plusIncluded": false
+    "plusIncluded": false,
+    "storeArt": "https://image.api.playstation.com/vulcan/ap/rnd/202307/3107/dc6ad23188819eee85d4d488e829f2fa3795935f334ed945.jpg"
   },
   {
     "id": "avowed",
@@ -25989,7 +26323,8 @@
       "Role Playing Games"
     ],
     "storeRelease": "2026-02-17T18:00:00Z",
-    "plusIncluded": false
+    "plusIncluded": false,
+    "storeArt": "https://image.api.playstation.com/vulcan/ap/rnd/202512/0816/d5832780ab51e6fbc302f6f058312bc398c38979df2d7be2.png"
   },
   {
     "id": "atelier-yumia-the-alchemist-of-memories-the-envi",
@@ -26029,7 +26364,8 @@
       "Role Playing Games"
     ],
     "storeRelease": "2025-03-21T04:00:00Z",
-    "plusIncluded": false
+    "plusIncluded": false,
+    "storeArt": "https://image.api.playstation.com/vulcan/ap/rnd/202409/0302/821b758bfec7846c4b922667a4d2f647efe0f3fadb3bff0a.png"
   },
   {
     "id": "silent-hill-f",
@@ -26072,7 +26408,8 @@
       "Horror"
     ],
     "storeRelease": "2025-09-25T04:00:00Z",
-    "plusIncluded": false
+    "plusIncluded": false,
+    "storeArt": "https://image.api.playstation.com/vulcan/ap/rnd/202505/0704/0ac946cfb6a43dee36df577f682cac09f8e2364c516a3a2d.png"
   },
   {
     "id": "fate-samurai-remnant-ps4-ps5",
@@ -26116,7 +26453,8 @@
       "Role Playing Games"
     ],
     "storeRelease": "2023-09-29T04:00:00Z",
-    "plusIncluded": true
+    "plusIncluded": true,
+    "storeArt": "https://image.api.playstation.com/vulcan/ap/rnd/202307/1001/302907087fcb64c32b77539de17630e7855945184b94a0be.png"
   },
   {
     "id": "wobbly-life",
@@ -26159,7 +26497,8 @@
       "Adventure"
     ],
     "storeRelease": "2025-09-18T17:00:00Z",
-    "plusIncluded": false
+    "plusIncluded": false,
+    "storeArt": "https://image.api.playstation.com/vulcan/ap/rnd/202212/0810/l2VMZjLR9en9orx3nHGCaj8U.png"
   },
   {
     "id": "this-war-of-mine-final-cut",
@@ -26206,7 +26545,8 @@
       "Adventure"
     ],
     "storeRelease": "2022-05-10T00:00:00Z",
-    "plusIncluded": true
+    "plusIncluded": true,
+    "storeArt": "https://image.api.playstation.com/vulcan/ap/rnd/202203/2914/sIXp6soo7cRn3zrHI4UYXOd7.jpg"
   },
   {
     "id": "metal-hellsinger-ps5",
@@ -26249,7 +26589,8 @@
       "Music/Rhythm"
     ],
     "storeRelease": "2022-09-15T08:00:00Z",
-    "plusIncluded": false
+    "plusIncluded": false,
+    "storeArt": "https://image.api.playstation.com/vulcan/ap/rnd/202312/0710/15445d56f1f545b6de4a25e551f51067529757126ff774b4.jpg"
   },
   {
     "id": "five-nights-at-freddy-s-security-breach",
@@ -26286,7 +26627,8 @@
       "Horror"
     ],
     "storeRelease": "2021-12-16T08:00:00Z",
-    "plusIncluded": false
+    "plusIncluded": false,
+    "storeArt": "https://image.api.playstation.com/vulcan/img/rnd/202112/0804/PAw2w50vib1r42swjSZrxaCd.png"
   },
   {
     "id": "genshin-impact-6th-anniversary",
@@ -26331,7 +26673,8 @@
       "Adventure"
     ],
     "storeRelease": "2021-04-27T22:00:00Z",
-    "plusIncluded": false
+    "plusIncluded": false,
+    "storeArt": "https://image.api.playstation.com/vulcan/ap/rnd/202607/2403/e7e7bde9969f39001da772da8085fb99d9301e53525e4370.png"
   },
   {
     "id": "minecraft-dungeons",
@@ -26375,7 +26718,8 @@
       "Role Playing Games"
     ],
     "storeRelease": "2020-05-26T04:00:00Z",
-    "plusIncluded": false
+    "plusIncluded": false,
+    "storeArt": "https://image.api.playstation.com/vulcan/img/rnd/202107/2408/6HeUViJ2CSvlmhGtYsZvrDs7.png"
   },
   {
     "id": "gladio-mori",
@@ -26420,7 +26764,8 @@
       "Simulation"
     ],
     "storeRelease": "2026-09-16T11:00:00Z",
-    "plusIncluded": false
+    "plusIncluded": false,
+    "storeArt": "https://image.api.playstation.com/vulcan/ap/rnd/202609/0410/1530ee9cb462f8ef3e35bad016e6bfd1dd2f4ec6790ba355.png"
   },
   {
     "id": "bomb-rush-cyberfunk",
@@ -26463,7 +26808,8 @@
       "Adventure"
     ],
     "storeRelease": "2023-09-01T10:00:00Z",
-    "plusIncluded": false
+    "plusIncluded": false,
+    "storeArt": "https://image.api.playstation.com/vulcan/ap/rnd/202308/1015/5ba1fbd0255b6c71c9b7e42bd2352898ecdae957e733dd44.png"
   },
   {
     "id": "runescape-dragonwilds",
@@ -26507,7 +26853,8 @@
       "Adventure"
     ],
     "storeRelease": "2026-09-15T09:00:00Z",
-    "plusIncluded": true
+    "plusIncluded": true,
+    "storeArt": "https://image.api.playstation.com/vulcan/ap/rnd/202608/2806/284ee232d4ddbc3b1a84e6502d9b22c6985b6a0aa8b92398.png"
   },
   {
     "id": "slime-rancher-2",
@@ -26547,7 +26894,8 @@
       "Action"
     ],
     "storeRelease": "2024-06-07T17:00:00Z",
-    "plusIncluded": false
+    "plusIncluded": false,
+    "storeArt": "https://image.api.playstation.com/vulcan/ap/rnd/202404/0820/bef1ddb38255f88b12add7336303d52fbe86bddc789c0637.jpg"
   },
   {
     "id": "as-dusk-falls",
@@ -26593,7 +26941,8 @@
       "Casual"
     ],
     "storeRelease": "2024-03-07T14:00:00Z",
-    "plusIncluded": true
+    "plusIncluded": true,
+    "storeArt": "https://image.api.playstation.com/vulcan/ap/rnd/202311/3019/1a880851f40569c0e5b3377d142eff7a230d6d2e5f1df3f5.png"
   },
   {
     "id": "remnant-ii-standard-edition",
@@ -26642,7 +26991,8 @@
       "Role Playing Games"
     ],
     "storeRelease": "2023-07-25T16:00:00Z",
-    "plusIncluded": false
+    "plusIncluded": false,
+    "storeArt": "https://image.api.playstation.com/vulcan/ap/rnd/202306/1000/14a89a16a687e61efc7a2557f9ce6b000fc9a373cc930703.jpg"
   },
   {
     "id": "the-dark-pictures-anthology-house-of-ashes",
@@ -26693,7 +27043,8 @@
       "Horror"
     ],
     "storeRelease": "2021-10-22T04:00:00Z",
-    "plusIncluded": false
+    "plusIncluded": false,
+    "storeArt": "https://image.api.playstation.com/vulcan/img/rnd/202108/2508/2aMrC9f7P8LoD16qd2ny6l0F.jpg"
   },
   {
     "id": "the-invincible",
@@ -26733,7 +27084,8 @@
       "Adventure"
     ],
     "storeRelease": "2023-11-06T15:00:00Z",
-    "plusIncluded": true
+    "plusIncluded": true,
+    "storeArt": "https://image.api.playstation.com/vulcan/ap/rnd/202202/2115/KcBTaldXxv1hTLEGZDNuC5dw.jpg"
   },
   {
     "id": "crimson-desert-enhanced",
@@ -26776,7 +27128,8 @@
       "Action"
     ],
     "storeRelease": "2026-03-19T22:00:00Z",
-    "plusIncluded": false
+    "plusIncluded": false,
+    "storeArt": "https://image.api.playstation.com/vulcan/ap/rnd/202603/1311/7f6eac305ef26d5fd7c6fd34800d38df8975177d0333fc13.jpg"
   },
   {
     "id": "carx-drift-racing-online",
@@ -26816,7 +27169,8 @@
       "Simulator"
     ],
     "storeRelease": "2020-02-07T05:00:00Z",
-    "plusIncluded": false
+    "plusIncluded": false,
+    "storeArt": "https://image.api.playstation.com/vulcan/ap/rnd/202504/1816/abfbaaf93b5a922c0be5e15ae4128addab8393737a2a39c9.jpg"
   },
   {
     "id": "wuthering-waves",
@@ -26860,7 +27214,8 @@
       "Action"
     ],
     "storeRelease": "2025-01-01T22:00:00Z",
-    "plusIncluded": false
+    "plusIncluded": false,
+    "storeArt": "https://image.api.playstation.com/vulcan/ap/rnd/202609/2010/93717b33933984e54696a8fb2e9426d485dcb59a354bbb85.png"
   },
   {
     "id": "fortnite-save-the-world",
@@ -26906,7 +27261,8 @@
       "Adventure"
     ],
     "storeRelease": "2026-04-16T08:00:00Z",
-    "plusIncluded": false
+    "plusIncluded": false,
+    "storeArt": "https://image.api.playstation.com/vulcan/ap/rnd/202603/0623/69fd2e2b205fe6919d2953b6c64f82d1eaeb5ccc8286abc6.jpg"
   },
   {
     "id": "tainted-grail-the-fall-of-avalon",
@@ -26949,7 +27305,8 @@
       "Role Playing Games"
     ],
     "storeRelease": "2025-05-23T16:00:00Z",
-    "plusIncluded": false
+    "plusIncluded": false,
+    "storeArt": "https://image.api.playstation.com/vulcan/ap/rnd/202505/1213/7a83d7b6c3ebdbf37a5dd99649b05e7868938df3b9f88c70.jpg"
   },
   {
     "id": "the-pedestrian",
@@ -26989,7 +27346,8 @@
       "Unique"
     ],
     "storeRelease": "2021-01-29T18:00:00Z",
-    "plusIncluded": true
+    "plusIncluded": true,
+    "storeArt": "https://image.api.playstation.com/vulcan/ap/rnd/202011/0922/ak4zMWDeKU7GGsGweFrc26oN.jpg"
   },
   {
     "id": "high-on-life-2",
@@ -27037,7 +27395,8 @@
       "Adventure"
     ],
     "storeRelease": "2026-02-13T15:00:00Z",
-    "plusIncluded": false
+    "plusIncluded": false,
+    "storeArt": "https://image.api.playstation.com/vulcan/ap/rnd/202505/2223/16772ad2396607bf8b63636fa67ef73acf68c93ef28ab4f1.png"
   },
   {
     "id": "warriors-abyss",
@@ -27080,7 +27439,8 @@
       "Role Playing Games"
     ],
     "storeRelease": "2025-02-12T23:00:00Z",
-    "plusIncluded": true
+    "plusIncluded": true,
+    "storeArt": "https://image.api.playstation.com/vulcan/ap/rnd/202502/0406/2c77ea72c7d3f8a39c9cc2b0b91f1dddda5bfaf56e0a03ef.jpg"
   },
   {
     "id": "reanimal",
@@ -27127,7 +27487,8 @@
       "Horror"
     ],
     "storeRelease": "2026-02-13T14:00:00Z",
-    "plusIncluded": false
+    "plusIncluded": false,
+    "storeArt": "https://image.api.playstation.com/vulcan/ap/rnd/202408/2010/ad79733a4addc34d9122c077b7782a55de4ede59ade470da.jpg"
   },
   {
     "id": "chained-echoes",
@@ -27167,7 +27528,8 @@
       "Role Playing Games"
     ],
     "storeRelease": "2022-12-08T05:00:00Z",
-    "plusIncluded": false
+    "plusIncluded": false,
+    "storeArt": "https://image.api.playstation.com/vulcan/ap/rnd/202211/1611/2dmcrpRqwwcV89IGO9TqQsNd.jpg"
   },
   {
     "id": "scott-pilgrim-vs-the-world-the-game-complete-edi",
@@ -27215,7 +27577,8 @@
       "Arcade"
     ],
     "storeRelease": "2021-01-14T05:00:00Z",
-    "plusIncluded": false
+    "plusIncluded": false,
+    "storeArt": "https://image.api.playstation.com/vulcan/ap/rnd/202011/0920/K32l2QZ0SI1dLxdMJ6AJlgoq.jpg"
   },
   {
     "id": "house-flipper",
@@ -27252,7 +27615,8 @@
       "Simulation"
     ],
     "storeRelease": "2020-02-25T19:00:00Z",
-    "plusIncluded": false
+    "plusIncluded": false,
+    "storeArt": "https://image.api.playstation.com/vulcan/ap/rnd/202404/1512/a6d1204cad29d3163048f3e6f97e033daccc277b34d6611d.jpg"
   },
   {
     "id": "nascar-25",
@@ -27295,7 +27659,8 @@
       "Driving/Racing"
     ],
     "storeRelease": "2025-10-14T04:00:00Z",
-    "plusIncluded": false
+    "plusIncluded": false,
+    "storeArt": "https://image.api.playstation.com/vulcan/ap/rnd/202508/0820/27c557a15e2e310044a42577321b60de55d55125c9c2e5ca.jpg"
   },
   {
     "id": "the-thaumaturge",
@@ -27340,7 +27705,8 @@
       "Role Playing Games"
     ],
     "storeRelease": "2024-12-04T14:00:00Z",
-    "plusIncluded": true
+    "plusIncluded": true,
+    "storeArt": "https://image.api.playstation.com/vulcan/ap/rnd/202411/2811/f8df4b96ca4cad7cc1d67ebefebc8a58b3af232bb0e1385a.jpg"
   },
   {
     "id": "banishers-ghosts-of-new-eden",
@@ -27382,7 +27748,8 @@
       "Adventure"
     ],
     "storeRelease": "2024-02-13T05:00:00Z",
-    "plusIncluded": false
+    "plusIncluded": false,
+    "storeArt": "https://image.api.playstation.com/vulcan/ap/rnd/202308/3008/4e03a795e3565f9ca3e27ff7ec3a0c942960f8f77b524b7a.jpg"
   },
   {
     "id": "under-the-waves",
@@ -27423,7 +27790,8 @@
       "Action"
     ],
     "storeRelease": "2023-08-28T04:00:00Z",
-    "plusIncluded": true
+    "plusIncluded": true,
+    "storeArt": "https://image.api.playstation.com/vulcan/ap/rnd/202308/2412/700a24e364f79c0f0d571736789495c0a6060f2bbe94cbe1.png"
   },
   {
     "id": "forever-skies",
@@ -27466,7 +27834,8 @@
       "Action"
     ],
     "storeRelease": "2025-04-14T17:00:00Z",
-    "plusIncluded": false
+    "plusIncluded": false,
+    "storeArt": "https://image.api.playstation.com/vulcan/ap/rnd/202403/1915/ad2e2bb61dba90f62de9db19410b4db347e3ddefc23e9857.jpg"
   },
   {
     "id": "the-quarry-for-ps5",
@@ -27514,7 +27883,8 @@
       "Horror"
     ],
     "storeRelease": "2022-06-10T04:00:00Z",
-    "plusIncluded": false
+    "plusIncluded": false,
+    "storeArt": "https://image.api.playstation.com/vulcan/ap/rnd/202203/0501/NTT9SfB3wDOxYDrbNuxlADVU.jpg"
   },
   {
     "id": "love-live-school-idol-festival-after-school-acti",
@@ -27558,7 +27928,8 @@
       "Music/Rhythm"
     ],
     "storeRelease": "2021-03-24T04:00:00Z",
-    "plusIncluded": false
+    "plusIncluded": false,
+    "storeArt": "https://image.api.playstation.com/vulcan/ap/rnd/202102/1504/cKnOVfsVNmN8GNkiWXwICebM.jpg"
   },
   {
     "id": "pistol-whip",
@@ -27599,7 +27970,8 @@
       "Action"
     ],
     "storeRelease": "2023-02-22T05:00:00Z",
-    "plusIncluded": false
+    "plusIncluded": false,
+    "storeArt": "https://image.api.playstation.com/vulcan/ap/rnd/202312/1121/4a0243f100dab75c00484a1599f620bb05d332e423c071c1.jpg"
   },
   {
     "id": "age-of-empires-ii-definitive-edition-standard-ed",
@@ -27640,7 +28012,8 @@
       "Strategy"
     ],
     "storeRelease": "2025-05-06T17:00:00Z",
-    "plusIncluded": false
+    "plusIncluded": false,
+    "storeArt": "https://image.api.playstation.com/vulcan/ap/rnd/202503/2520/0ad265bef3a326dee364bacb8c844a27db368aac306ffe7a.png"
   },
   {
     "id": "sky-children-of-the-light",
@@ -27685,7 +28058,8 @@
       "Role Playing Games"
     ],
     "storeRelease": "2022-12-06T20:00:00Z",
-    "plusIncluded": false
+    "plusIncluded": false,
+    "storeArt": "https://image.api.playstation.com/vulcan/ap/rnd/202211/1601/VvCUfXHOnC5OTSqLcCq5ZkLB.png"
   },
   {
     "id": "five-nights-at-freddy-s-help-wanted-2",
@@ -27722,7 +28096,8 @@
       "Horror"
     ],
     "storeRelease": "2023-12-14T14:00:00Z",
-    "plusIncluded": true
+    "plusIncluded": true,
+    "storeArt": "https://image.api.playstation.com/vulcan/ap/rnd/202312/0117/a9eeddea2c9a02a8b7d0fbb7c485cd3dde0547539dbafea2.png"
   },
   {
     "id": "visions-of-mana",
@@ -27763,7 +28138,8 @@
       "Action"
     ],
     "storeRelease": "2024-08-29T04:00:00Z",
-    "plusIncluded": false
+    "plusIncluded": false,
+    "storeArt": "https://image.api.playstation.com/vulcan/ap/rnd/202401/1107/c95a0586945e3410b0d5ca496b0ad9e426991d91ad3d604b.png"
   },
   {
     "id": "the-stanley-parable-ultra-deluxe",
@@ -27806,7 +28182,8 @@
       "Adventure"
     ],
     "storeRelease": "2022-04-27T16:00:00Z",
-    "plusIncluded": false
+    "plusIncluded": false,
+    "storeArt": "https://image.api.playstation.com/vulcan/ap/rnd/202203/2023/KENLDOFbmPUBPsNlW5UfhRlZ.png"
   },
   {
     "id": "syberia-the-world-before",
@@ -27846,7 +28223,8 @@
       "Adventure"
     ],
     "storeRelease": "2022-11-15T05:00:00Z",
-    "plusIncluded": true
+    "plusIncluded": true,
+    "storeArt": "https://image.api.playstation.com/vulcan/ap/rnd/202206/2115/k2jB2SBDat6Tf9eqhkdPj4Lk.png"
   },
   {
     "id": "farming-simulator-22",
@@ -27890,7 +28268,8 @@
       "Simulation"
     ],
     "storeRelease": "2021-11-22T05:00:00Z",
-    "plusIncluded": false
+    "plusIncluded": false,
+    "storeArt": "https://image.api.playstation.com/vulcan/img/rnd/202107/0508/ZFCbwcMpxmEP2WeIKaRWzNdt.png"
   },
   {
     "id": "chorus",
@@ -27929,7 +28308,8 @@
       "Fighting"
     ],
     "storeRelease": "2021-12-03T05:00:00Z",
-    "plusIncluded": false
+    "plusIncluded": false,
+    "storeArt": "https://image.api.playstation.com/vulcan/ap/rnd/202109/2007/JrO5HP4LHK0kXnVgdDfgkUS2.jpg"
   },
   {
     "id": "assassin-s-creed-shadows",
@@ -27974,7 +28354,8 @@
       "Role Playing Games"
     ],
     "storeRelease": "2025-03-20T04:00:00Z",
-    "plusIncluded": false
+    "plusIncluded": false,
+    "storeArt": "https://image.api.playstation.com/vulcan/ap/rnd/202412/2018/c3f37c65679507d8652ae33321b0597a6366491065e1f60b.jpg"
   },
   {
     "id": "ratchet-clank-size-matters",
@@ -28014,7 +28395,8 @@
       "Adventure"
     ],
     "storeRelease": "2024-07-16T16:00:00Z",
-    "plusIncluded": false
+    "plusIncluded": false,
+    "storeArt": "https://image.api.playstation.com/vulcan/ap/rnd/202406/2123/250c7a7f04a21d10fb8676fc4c99d8af7fc3849bb9144ef9.jpg"
   },
   {
     "id": "tormented-souls-2",
@@ -28058,7 +28440,8 @@
       "Horror"
     ],
     "storeRelease": "2025-10-23T04:00:00Z",
-    "plusIncluded": false
+    "plusIncluded": false,
+    "storeArt": "https://image.api.playstation.com/vulcan/ap/rnd/202506/0309/ce0e1a261dca7242e0b2ae4ca6b81ebe72ea682a1a1a7783.jpg"
   },
   {
     "id": "nte-neverness-to-everness",
@@ -28101,7 +28484,8 @@
       "Adventure"
     ],
     "storeRelease": "2026-04-29T02:00:00Z",
-    "plusIncluded": false
+    "plusIncluded": false,
+    "storeArt": "https://image.api.playstation.com/vulcan/ap/rnd/202610/0908/e665ed6098027ca74647e281e73d28a2aa293cf047e58058.jpg"
   },
   {
     "id": "cities-skylines-remastered",
@@ -28138,7 +28522,8 @@
       "Simulation"
     ],
     "storeRelease": "2023-02-15T09:00:00Z",
-    "plusIncluded": false
+    "plusIncluded": false,
+    "storeArt": "https://image.api.playstation.com/vulcan/ap/rnd/202212/2115/wgggsSGQU934Xqd41AH6S8Fk.jpg"
   },
   {
     "id": "the-outer-worlds-spacer-s-choice-edition",
@@ -28184,7 +28569,8 @@
       "Action"
     ],
     "storeRelease": "2023-03-07T16:00:00Z",
-    "plusIncluded": false
+    "plusIncluded": false,
+    "storeArt": "https://image.api.playstation.com/vulcan/ap/rnd/202208/3117/DlXVNQlhFyuWbQnA9zBHrc8r.jpg"
   },
   {
     "id": "love-is-all-around",
@@ -28226,7 +28612,8 @@
       "Simulation"
     ],
     "storeRelease": "2024-08-07T16:00:00Z",
-    "plusIncluded": false
+    "plusIncluded": false,
+    "storeArt": "https://image.api.playstation.com/vulcan/ap/rnd/202407/1104/267a8881e26ca74d94e2cdb418df8b0f5aa467a6b48ea372.png"
   },
   {
     "id": "walkabout-mini-golf",
@@ -28268,7 +28655,8 @@
       "Sport"
     ],
     "storeRelease": "2023-05-11T16:00:00Z",
-    "plusIncluded": false
+    "plusIncluded": false,
+    "storeArt": "https://image.api.playstation.com/vulcan/ap/rnd/202507/0820/ee818f4a4b41694ee66e3ffe2c4dd75d3f86ccda74ae6a1e.png"
   },
   {
     "id": "madison",
@@ -28312,7 +28700,8 @@
       "Action"
     ],
     "storeRelease": "2022-07-08T04:00:00Z",
-    "plusIncluded": false
+    "plusIncluded": false,
+    "storeArt": "https://image.api.playstation.com/vulcan/ap/rnd/202205/2414/DcEsR3e2fQNNET5qti9h2J9i.jpg"
   },
   {
     "id": "hell-is-us",
@@ -28354,7 +28743,8 @@
       "Adventure"
     ],
     "storeRelease": "2025-09-04T08:00:00Z",
-    "plusIncluded": true
+    "plusIncluded": true,
+    "storeArt": "https://image.api.playstation.com/vulcan/ap/rnd/202505/1909/52572774943ea3ca312959d17abf127eef87ec6548cde92f.jpg"
   },
   {
     "id": "tabs",
@@ -28394,7 +28784,8 @@
       "Simulation"
     ],
     "storeRelease": "2024-12-17T11:00:00Z",
-    "plusIncluded": false
+    "plusIncluded": false,
+    "storeArt": "https://image.api.playstation.com/vulcan/ap/rnd/202308/2914/ea2d28dfc2efee1f30572751961693394b28a558bb7de09a.jpg"
   },
   {
     "id": "peak",
@@ -28435,7 +28826,8 @@
       "Adventure"
     ],
     "storeRelease": "2026-10-22T15:00:00Z",
-    "plusIncluded": false
+    "plusIncluded": false,
+    "storeArt": "https://image.api.playstation.com/vulcan/ap/rnd/202610/0816/44ba80599449158432d4af5acf8291719fcfd331b4002bed.jpg"
   },
   {
     "id": "halloween-the-game",
@@ -28487,7 +28879,8 @@
       "Horror"
     ],
     "storeRelease": "2026-09-08T16:00:00Z",
-    "plusIncluded": false
+    "plusIncluded": false,
+    "storeArt": "https://image.api.playstation.com/vulcan/ap/rnd/202606/0218/3ef51b368b55ff03aa64adc964154bf6c0bf11ac6eeb9272.png"
   },
   {
     "id": "my-little-universe",
@@ -28528,7 +28921,8 @@
       "Simulation"
     ],
     "storeRelease": "2025-04-04T04:00:00Z",
-    "plusIncluded": false
+    "plusIncluded": false,
+    "storeArt": "https://image.api.playstation.com/vulcan/ap/rnd/202409/0510/efbe962970511553efec2246327a400fbf6181fa4f14cc34.png"
   },
   {
     "id": "v-rising",
@@ -28572,7 +28966,8 @@
       "Role Playing Games"
     ],
     "storeRelease": "2024-06-11T12:00:00Z",
-    "plusIncluded": true
+    "plusIncluded": true,
+    "storeArt": "https://image.api.playstation.com/vulcan/ap/rnd/202404/2914/c5866a7da9fe464c34a0b48936babaeef73f13a6ff393aa7.jpg"
   },
   {
     "id": "ai-limit",
@@ -28611,7 +29006,8 @@
       "Role Playing Games"
     ],
     "storeRelease": "2025-03-27T14:00:00Z",
-    "plusIncluded": false
+    "plusIncluded": false,
+    "storeArt": "https://image.api.playstation.com/vulcan/ap/rnd/202406/1806/f3a7bbf296d308a1a2120201fec1dc549a2285758c16ff5f.jpg"
   },
   {
     "id": "silent-hill-townfall",
@@ -28650,7 +29046,8 @@
       "Horror"
     ],
     "storeRelease": "2026-09-24T04:00:00Z",
-    "plusIncluded": false
+    "plusIncluded": false,
+    "storeArt": "https://image.api.playstation.com/vulcan/ap/rnd/202605/1407/67d844162a51e604411157ac6eb3faf771212462b7b79577.png"
   },
   {
     "id": "killer-klowns-from-outer-space-the-game",
@@ -28698,6 +29095,7 @@
       "Action"
     ],
     "storeRelease": "2024-05-28T16:00:00Z",
-    "plusIncluded": false
+    "plusIncluded": false,
+    "storeArt": "https://image.api.playstation.com/vulcan/ap/rnd/202308/1415/717cf79aeebaee93caf2ed0f95ed0a96b90477b719b1634e.png"
   }
 ]

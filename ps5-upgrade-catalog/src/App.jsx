@@ -1074,10 +1074,21 @@ function useDataSaver() {
 /** Cover art, or a lettered gradient when the game has no storefront match. */
 function CoverArt({ game, live, className = '', width = 440 }) {
   const [failed, setFailed] = useState(false);
-  // The catalog carries the storefront id, so art can render before the live
-  // request lands.
+  /*
+   * The catalog carries both storefronts' art, so a card can draw before any
+   * live request lands.
+   *
+   * PlayStation's comes first, and it is the one that was missing. The live
+   * request behind `heroImage` reads Valve's storefront, so a game Valve has
+   * never heard of had nothing to fall back to but a coloured gradient with
+   * its title printed on it: 211 of the 506 write-ups, and not a random 211.
+   * They are the PlayStation exclusives, which is to say the games this app
+   * is most about. Astro Bot, Demon's Souls, Gran Turismo 7, Alan Wake 2 and
+   * the whole Sly Cooper shelf all showed as blank purple rectangles.
+   */
   const image =
     atWidth(live?.heroImage, width) ??
+    atWidth(game.storeArt, width) ??
     (game.steamAppId
       ? `https://shared.akamai.steamstatic.com/store_item_assets/steam/apps/${game.steamAppId}/header.jpg`
       : null);
