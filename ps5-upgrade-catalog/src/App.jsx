@@ -1387,6 +1387,21 @@ function GameModal({
   onOpen,
   onClose,
 }) {
+  /*
+   * The live PlayStation page for a written-up game that has one.
+   *
+   * A write-up's price comes from the mirror baked into the deploy, so it
+   * knows the list price and nothing about today. Reported from a phone: a
+   * card reading $59.99 while the store sold the Digital Deluxe at $24.49,
+   * 65% off, with the game inside it. 398 of the 506 write-ups are joined to
+   * a store row and can simply be asked.
+   *
+   * Through the same cache the feed's slides use, so opening a game twice is
+   * one request, and a game with no store row asks for nothing at all.
+   */
+  const conceptPrice = useConceptMedia(game.storeId ?? null, Boolean(game.storeId))?.price ?? null;
+  const storeOffer = conceptPrice?.betterOffer ?? null;
+
   const [selected, setSelected] = useState(null);
 
   // Ratings ship with the catalog; the nightly refresh overrides them.
@@ -1500,7 +1515,7 @@ function GameModal({
               bell at y=1777 on an 844px screen: two screens of scrolling to
               reach the one control this app exists for. What a game costs is
               the thing you came to find out. */}
-          <PricePanel game={game} live={live} />
+          <PricePanel game={game} live={live} offer={storeOffer} />
           <DealAlertRow
             watching={dealWatched}
             live={live}
@@ -1581,6 +1596,41 @@ function GameModal({
  * Everything here is measured, and the window is always stated, because a
  * month of observation is a month of observation and not "the lowest ever".
  */
+/**
+ * A dearer edition that costs less than this one today.
+ *
+ * Reported from a phone: a card reading $59.99 while the same store page
+ * sold the Digital Deluxe for $24.49, 65% off, with the whole game inside
+ * it. The $59.99 was right. It was the standard edition, and the catalog
+ * takes the cheapest *base* price because the standard edition is the game.
+ * It just meant the page knew something the card would not say.
+ *
+ * Named, always. "Another edition is cheaper" without saying which is how
+ * somebody ends up buying a soundtrack.
+ */
+function BetterEdition({ offer, title }) {
+  if (!offer) return null;
+  // The game's own name is already at the top of the modal; what is worth
+  // reading here is which edition, so the repeated part comes off.
+  const label = title
+    ? offer.name.replace(title, '').replace(/^[\s:–—-]+/, '').trim() || offer.name
+    : offer.name;
+  const ends = offer.endsAt ? new Date(offer.endsAt) : null;
+
+  return (
+    <p className="w-full text-xs leading-relaxed text-slate-600 dark:text-slate-300">
+      <span className="font-semibold text-emerald-700 dark:text-emerald-300">
+        {offer.price} for the {label}
+      </span>
+      {offer.wasPrice ? `, down from ${offer.wasPrice}` : ''}
+      {ends && Number.isFinite(ends.getTime())
+        ? ` until ${ends.toLocaleDateString([], { month: 'short', day: 'numeric' })}`
+        : ''}
+      . Cheaper than this edition, and the game is in it.
+    </p>
+  );
+}
+
 function PriceHistoryNote({ price, history }) {
   const standing = priceStanding(price, history);
   if (!standing) return null;
@@ -1620,7 +1670,7 @@ function PriceHistoryNote({ price, history }) {
   );
 }
 
-function PricePanel({ game, live }) {
+function PricePanel({ game, live, offer = null }) {
   if (!live) {
     return (
       <p className="mt-6 flex items-center gap-2 text-sm text-slate-400 dark:text-slate-500">
@@ -1664,6 +1714,7 @@ function PricePanel({ game, live }) {
           Sale ends {saleEnds.toLocaleDateString([], { month: 'short', day: 'numeric' })}
         </p>
       )}
+      <BetterEdition offer={offer ?? price.betterOffer} title={game.title ?? game.name} />
       <PriceHistoryNote price={price} history={live.history} />
     </div>
   );
@@ -2816,8 +2867,12 @@ function useConceptMedia(storeId, enabled) {
         .then((payload) => ({
           shots: (payload?.screenshots ?? []).filter(Boolean),
           trailer: payload?.trailer ?? null,
+          // The live PlayStation price, which is the only place the other
+          // editions are known: a written-up game's price comes from the
+          // baked mirror and has no idea the Digital Deluxe is 65% off.
+          price: payload?.price ?? null,
         }))
-        .catch(() => ({ shots: [], trailer: null }))
+        .catch(() => ({ shots: [], trailer: null, price: null }))
         .then((value) => {
           // Remembered either way: a slide with no screenshot still has its
           // key art, so a failed read costs a flourish rather than the card,

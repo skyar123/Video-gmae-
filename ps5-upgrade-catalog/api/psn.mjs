@@ -135,6 +135,92 @@ function parsePlus(html) {
   return { included: true, tier: `PlayStation Plus ${tier}` };
 }
 
+/**
+ * The other editions, and what they cost today.
+ *
+ * parsePrices above answers "what does this game cost", and picks the
+ * cheapest *base* price to do it, which is right: the standard edition is
+ * the game. It is also why a card could say $59.99 while the same store page
+ * was selling the Digital Deluxe for $24.49, 65% off, with the game inside
+ * it. Reported from a phone, and the number was not wrong; it was just not
+ * the whole page.
+ *
+ * So the editions are read as well. The page is an Apollo cache: a Product
+ * carries a name and the id of the CTA that is live for it, and that CTA
+ * carries the price being charged, the price before, and when the offer
+ * stops. The two are joined by that id rather than by guessing from how
+ * close they sit in the markup.
+ */
+const unescapeJson = (value) =>
+  String(value ?? '').replace(/\\u([0-9a-fA-F]{4})/g, (_, code) =>
+    String.fromCharCode(Number.parseInt(code, 16)),
+  );
+
+/** "$24.49" as 2449, so editions can be compared rather than sorted as text. */
+const asCents = (formatted) => {
+  const digits = String(formatted ?? '').replace(/[^0-9.]/g, '');
+  if (!digits) return null;
+  const value = Number.parseFloat(digits);
+  return Number.isFinite(value) ? Math.round(value * 100) : null;
+};
+
+export function parseEditions(html) {
+  const text = String(html ?? '').replace(/\\"/g, '"');
+
+  const ctas = new Map();
+  for (const match of text.matchAll(/"GameCTA:([^"]{6,200})":\{(.{0,1600}?)\}/g)) {
+    const body = match[2];
+    const price = body.match(/"priceOrText":"([^"]*)"/)?.[1];
+    if (!price) continue;
+    ctas.set(match[1], {
+      price: unescapeJson(price),
+      was: unescapeJson(body.match(/"originalPrice":"([^"]*)"/)?.[1] ?? '') || null,
+      ends: body.match(/"offerAvailability":"([^"]*)"/)?.[1] ?? null,
+    });
+  }
+
+  const byName = new Map();
+  for (const match of text.matchAll(
+    /"invariantName":"([^"]{4,160})"(.{0,1200}?)"activeCtaId":"([^"]{6,200})"/g,
+  )) {
+    const cta = ctas.get(match[3]);
+    if (!cta) continue;
+    const name = unescapeJson(match[1]).trim();
+    const value = asCents(cta.price);
+    if (!name || value === null) continue;
+    // The same edition appears more than once in the cache; one copy is enough.
+    if (!byName.has(name)) {
+      byName.set(name, {
+        name,
+        price: cta.price,
+        wasPrice: cta.was && cta.was !== cta.price ? cta.was : null,
+        value,
+        wasValue: asCents(cta.was),
+        endsAt: cta.ends ?? null,
+      });
+    }
+  }
+
+  return [...byName.values()].sort((a, b) => a.value - b.value);
+}
+
+/**
+ * The cheapest way to own the game today, when it is not the headline price.
+ *
+ * A dearer edition on sale for less than the standard one is a real answer to
+ * "what should I pay", and the thing the catalog was hiding. It is named,
+ * because "another edition is cheaper" without saying which is how somebody
+ * ends up buying a soundtrack.
+ */
+export function betterOffer(editions, price) {
+  const headline = price?.final;
+  if (!Array.isArray(editions) || editions.length === 0) return null;
+  if (typeof headline !== 'number') return null;
+  const best = editions[0];
+  if (!best || best.value >= headline) return null;
+  return best;
+}
+
 function toPrice(entry) {
   const final = entry.discountedValue;
   const initial = entry.basePriceValue;
@@ -184,6 +270,14 @@ export async function loadPsnPrice(storePath, countryCode = 'US') {
   const pending = fetchPricePayload(storePath, countryCode)
     .then((html) => {
       const entry = parsePrices(html);
+      /*
+       * No editions here. This read drops the connection as soon as it has
+       * one price it can trust, which is the whole point of it, and the
+       * editions live further down the page than that: parsing what has
+       * been read returns the standard edition alone and looks like an
+       * answer. Whoever has the full page does it instead, which is
+       * concept.mjs, on the one request where somebody opened the game.
+       */
       const value = entry ? { ...toPrice(entry), plus: parsePlus(html) } : null;
       cache.set(key, { value, storedAt: Date.now() });
       return value;

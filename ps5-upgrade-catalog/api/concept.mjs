@@ -11,7 +11,7 @@
  * Read on demand, one game at a time, cached for an hour.
  */
 
-import { loadPsnPrice, localeFor } from './psn.mjs';
+import { betterOffer, loadPsnPrice, localeFor, parseEditions } from './psn.mjs';
 import { predictPriceDrop } from './predict.mjs';
 
 import { ratingFromConcept } from './rating.mjs';
@@ -19,8 +19,15 @@ import { loadReviewSignal } from './reviews.mjs';
 
 const STORE_ORIGIN = 'https://store.playstation.com';
 const CACHE_TTL_MS = 60 * 60 * 1000;
-/** Description, screenshots, rating and date all land well inside this. */
-const READ_CAP = 140_000;
+/*
+ * Description, screenshots, rating and date all land well inside 140KB,
+ * which is what this was. The editions do not: on a real page the cheaper
+ * ones sit between 140 and 200KB, so at the old cap a game could be selling
+ * at 65% off in an edition this never saw. Measured by re-parsing one page
+ * truncated at 100, 140, 200, 300, 400, 500, 700 and 900KB: one edition up
+ * to 140, all three from 200 on, and nothing further gained above that.
+ */
+const READ_CAP = 200_000;
 
 const cache = new Map();
 const inFlight = new Map();
@@ -164,11 +171,22 @@ export async function loadConceptDetail(id, countryCode = 'US', genres = [], ste
       loadPsnPrice(`concept/${id}`, countryCode),
     ]);
 
+    /*
+     * The editions come from this page rather than from the price client,
+     * which stops reading as soon as it has one price it can trust and so
+     * never sees them. Attached to the price because that is where a reader
+     * meets them: what this game costs, and the cheaper way to own it.
+     */
+    const editions = html ? parseEditions(html) : [];
+    const priced = price
+      ? { ...price, editions, betterOffer: betterOffer(editions, price) }
+      : price;
+
     const detail = html ? parse(id, html) : null;
     if (!detail) {
       // A page we could not read is still worth a price, if the price client
       // managed one — better a partial card than an error.
-      const partial = price ? { id, price, prediction: null, partial: true } : null;
+      const partial = priced ? { id, price: priced, prediction: null, partial: true } : null;
       cache.set(key, { value: partial, storedAt: Date.now() });
       return partial;
     }
@@ -192,7 +210,7 @@ export async function loadConceptDetail(id, countryCode = 'US', genres = [], ste
 
     const value = {
       ...detail,
-      price: price ?? null,
+      price: priced ?? null,
       prediction,
       ratings: ratings
         ? { critic: null, user: ratings.userScore, pros: ratings.pros, cons: ratings.cons }
