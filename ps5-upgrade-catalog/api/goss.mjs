@@ -625,6 +625,162 @@ async function loadPodcast({ source, url }, cutoff) {
  * ------------------------------------------------------------------ */
 
 /** The uploads feed is Atom, so entries rather than items. */
+/* ------------------------------------------------------------------ *
+ * YouTube, the documented way
+ * ------------------------------------------------------------------ */
+
+/**
+ * The key, if there is one.
+ *
+ * Read at call time rather than at import, so setting it on the platform
+ * takes effect on the next request instead of the next deploy.
+ */
+const youtubeKey = () => process.env.YOUTUBE_API_KEY?.trim() || null;
+
+const UPLOADS_KEY = 'goss/youtube/_uploads.json';
+
+/**
+ * Each channel's uploads playlist, looked up once and remembered.
+ *
+ * There is a well-known shortcut here: swap a channel id's UC prefix for UU
+ * and you have its uploads playlist. It is not in Google's documentation,
+ * which says to read contentDetails.relatedPlaylists.uploads from
+ * channels.list, so that is what this does. An undocumented convention that
+ * holds today is a thing that breaks quietly later.
+ *
+ * channels.list takes fifty ids at a time and costs one unit per call, so
+ * the whole roster resolves for two units, once, and never again: a
+ * channel's uploads playlist does not change.
+ */
+async function uploadsPlaylists(key) {
+  let problem = null;
+  let known = {};
+  try {
+    known = (await loadBlob(UPLOADS_KEY))?.byChannel ?? {};
+  } catch {
+    known = {};
+  }
+  const missing = YOUTUBE.map((channel) => channel.id).filter((id) => !known[id]);
+  if (missing.length === 0) return { known, problem };
+
+  for (let at = 0; at < missing.length; at += 50) {
+    const batch = missing.slice(at, at + 50);
+    const url =
+      `https://www.googleapis.com/youtube/v3/channels` +
+      `?part=contentDetails&maxResults=50&id=${batch.join(',')}&key=${encodeURIComponent(key)}`;
+    const controller = new AbortController();
+    const timer = setTimeout(() => controller.abort(), 8000);
+    try {
+      const res = await fetch(url, { signal: controller.signal, headers: HEADERS });
+      if (!res.ok) {
+        /*
+         * Google says why in the body, and the reason is the whole
+         * difference between a key that is wrong and a key that is simply
+         * spent: "API key not valid" needs a new key, "quota exceeded"
+         * needs tomorrow, and "has not been used in project" needs the API
+         * switching on. Reporting "http 403" for all three sends whoever
+         * set it up looking in the wrong place.
+         */
+        const said = await res.text().catch(() => '');
+        const reason = said.match(/"message":\s*"([^"]{0,110})"/)?.[1];
+        problem = `channels.list http ${res.status}${reason ? `: ${reason}` : ''}`;
+        break;
+      }
+      const body = await res.json();
+      for (const item of body.items ?? []) {
+        const uploads = item?.contentDetails?.relatedPlaylists?.uploads;
+        if (item?.id && uploads) known[item.id] = uploads;
+      }
+    } catch (error) {
+      problem = `channels.list ${error?.name ?? 'failed'}`;
+      break;
+    } finally {
+      clearTimeout(timer);
+    }
+  }
+
+  try {
+    await saveBlob(UPLOADS_KEY, { byChannel: known, storedAt: new Date().toISOString() });
+  } catch {
+    // Without storage it is two units again next time, which is nothing.
+  }
+  return { known, problem };
+}
+
+/**
+ * One channel's recent uploads, through the Data API.
+ *
+ * The RSS feed below is the same information and needs no key, and for a
+ * long time it was the only thing here. It stopped working: YouTube answers
+ * this server 404 or 500 for every channel and every URL form of that feed,
+ * including channels whose videos were already in the pool, so the video
+ * half of the feed has been running on a cache that only ages. A key is the
+ * documented way to ask, and the only one that works.
+ *
+ * playlistItems.list costs one unit against a default of ten thousand a day,
+ * so the whole roster of seventy costs seventy units to warm. The rotation
+ * that exists for politeness to the RSS endpoint is left alone: it is no
+ * longer needed for quota, but it still spreads the work.
+ */
+async function loadYouTubeApi({ source, id }, cutoff, key, uploads) {
+  const playlist = uploads[id];
+  if (!playlist) {
+    diagnostics.set(`youtube:${source}`, 'no uploads playlist');
+    return null;
+  }
+  const url =
+    `https://www.googleapis.com/youtube/v3/playlistItems` +
+    `?part=snippet&maxResults=10&playlistId=${encodeURIComponent(playlist)}` +
+    `&key=${encodeURIComponent(key)}`;
+
+  const controller = new AbortController();
+  const timer = setTimeout(() => controller.abort(), 8000);
+  try {
+    const res = await fetch(url, { signal: controller.signal, headers: HEADERS });
+    if (!res.ok) {
+      // 403 here is almost always quota or a key restriction, and it is worth
+      // saying which rather than "failed": one is fixed by waiting, the other
+      // by the person who made the key.
+      diagnostics.set(`youtube:${source}`, `api http ${res.status}`);
+      return null;
+    }
+    const body = await res.json();
+    const kept = (body.items ?? [])
+      .map((item) => {
+        const snippet = item?.snippet ?? {};
+        const videoId = snippet.resourceId?.videoId;
+        const at = snippet.publishedAt ? Date.parse(snippet.publishedAt) : NaN;
+        const thumbs = snippet.thumbnails ?? {};
+        return {
+          kind: classify(snippet.title ?? ''),
+          channel: 'youtube',
+          source,
+          origin: `${source} on YouTube`,
+          note: 'Video',
+          author: source,
+          authorName: source,
+          avatar: null,
+          title: snippet.title ?? '',
+          summary: null,
+          link: videoId ? `https://www.youtube.com/watch?v=${videoId}` : null,
+          externalLink: null,
+          image: (thumbs.maxres ?? thumbs.high ?? thumbs.medium ?? thumbs.default)?.url ?? null,
+          publishedAt: Number.isFinite(at) ? new Date(at).toISOString() : null,
+          heat: 0,
+          at,
+        };
+      })
+      .filter((row) => row.title && row.link && Number.isFinite(row.at) && row.at >= cutoff);
+    diagnostics.set(`youtube:${source}`, `${kept.length}/${(body.items ?? []).length} recent (api)`);
+    return kept.map(({ at: _at, ...rest }) => rest);
+  } catch (error) {
+    diagnostics.set(`youtube:${source}`, `api ${error?.name === 'AbortError' ? 'timeout' : 'failed'}`);
+    return null;
+  } finally {
+    clearTimeout(timer);
+  }
+}
+
 async function loadYouTube({ source, id }, cutoff, budgetMs = 8000) {
   const controller = new AbortController();
   const timer = setTimeout(() => controller.abort(), Math.max(500, budgetMs));
@@ -714,6 +870,41 @@ const videoKey = (burst) => {
  */
 const WARM_MARKER_KEY = 'goss/youtube/_last-warm.json';
 
+/**
+ * One channel's videos, by whichever route is available.
+ *
+ * The key first when there is one, and the keyless RSS feed when there is
+ * not, or when the API itself declines. Falling back rather than failing
+ * matters because the two can be wrong in different ways: a quota ceiling
+ * at six in the evening should not empty the feed when the old route might
+ * still answer.
+ */
+async function channelVideos(channel, cutoff, ctx, budgetMs = 8000) {
+  if (ctx?.key) {
+    const rows = await loadYouTubeApi(channel, cutoff, ctx.key, ctx.uploads);
+    if (rows) return rows;
+  }
+  return loadYouTube(channel, cutoff, budgetMs);
+}
+
+/** The key and the playlist ids both callers need, resolved once. */
+async function youtubeContext() {
+  const key = youtubeKey();
+  if (!key) {
+    diagnostics.set('youtube:key', 'none set, using the public feed');
+    return null;
+  }
+  const { known: uploads, problem } = await uploadsPlaylists(key);
+  const resolved = YOUTUBE.filter((channel) => uploads[channel.id]).length;
+  diagnostics.set(
+    'youtube:key',
+    problem
+      ? `set but not working: ${problem}`
+      : `set, ${resolved}/${YOUTUBE.length} uploads playlists known`,
+  );
+  return { key, uploads };
+}
+
 export async function warmYouTubePool({ gapMs = 1000, now = Date.now(), minIntervalMs = 0 } = {}) {
   // A caller that can be triggered from outside says how recently a warm is
   // allowed to have happened, so hitting it repeatedly cannot turn into 70
@@ -736,9 +927,10 @@ export async function warmYouTubePool({ gapMs = 1000, now = Date.now(), minInter
   const answered = [];
   const silent = [];
   let written = 0;
+  const ctx = await youtubeContext();
 
   for (const channel of YOUTUBE) {
-    const rows = await loadYouTube(channel, cutoff);
+    const rows = await channelVideos(channel, cutoff, ctx);
     if (rows.length > 0) {
       await saveBlob(poolKeyFor(channel.source), {
         videos: rows,
@@ -771,6 +963,7 @@ async function loadYouTubeAll(cutoff) {
   // burst is the thing being refused: the fourteen requests before this one
   // all go out at once too, so the lanes were adding to a spike rather than
   // forming one. Serial, five of them, this phase costs about three seconds.
+  const ctx = await youtubeContext();
   const deadline = Date.now() + YOUTUBE_DEADLINE_MS;
   const fetched = [];
   for (const channel of queue) {
@@ -779,7 +972,7 @@ async function loadYouTubeAll(cutoff) {
       diagnostics.set(`youtube:${channel.source}`, 'out of time');
       continue;
     }
-    fetched.push(...(await loadYouTube(channel, cutoff, Math.min(3000, left))));
+    fetched.push(...(await channelVideos(channel, cutoff, ctx, Math.min(3000, left))));
     await new Promise((resolve) => setTimeout(resolve, YOUTUBE_GAP_MS));
   }
 
