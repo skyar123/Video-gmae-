@@ -95,7 +95,7 @@ const seed = () => {
  * missing does. A surface that is meant to come back empty says 0.
  */
 const SURFACES = [
-  ['', 'All', 20],
+  ['?read=off', 'All', 20],
   ['?view=deals', 'Deals', 1],
   ['?view=plus', 'PS Plus', 20],
   ['?view=genius', 'For you', 70],
@@ -720,15 +720,134 @@ async function oneVideoAtATime() {
   return problems.length > 0 ? 1 : 0;
 }
 
+/**
+ * Does a plain launch land on the news?
+ *
+ * Reported as "the opening page is always the same, same game, it's a little
+ * boring", which is what a nine-thousand-game shelf in a fixed order is. The
+ * news is the half of the app that changes every few hours, so that is what
+ * a launch opens on now. Only a plain launch: this also checks that a link
+ * carrying any parameter at all still goes where it was pointed, because a
+ * drawer that opened over every link would be a worse bug than the one it
+ * fixed.
+ */
+async function aPlainLaunchOpensTheNews() {
+  const page = await browser.newPage({ viewport: { width: 430, height: 1200 } });
+  const problems = [];
+  page.on('pageerror', (error) => problems.push(String(error).slice(0, 110)));
+  try {
+    await page.goto(`${BASE}/`, { waitUntil: 'domcontentloaded' });
+    await page.evaluate(seed);
+
+    await page.goto(`${BASE}/`, { waitUntil: 'domcontentloaded' });
+    await page.waitForTimeout(3500);
+    // By the drawer's own label, not just "a dialog": the game modal is one
+    // too, and a check that any dialog is open would pass on the wrong one.
+    const openedOnNews =
+      (await page.locator('[aria-label="News and releases"]').count()) > 0;
+    if (!openedOnNews) problems.push('a plain launch did not open the news');
+    if (!/read=goss/.test(page.url())) problems.push(`url says ${page.url().slice(-40)}`);
+
+    // A link that asks for something specific still gets it.
+    await page.goto(`${BASE}/?view=soon`, { waitUntil: 'domcontentloaded' });
+    await page.waitForTimeout(3000);
+    if (/read=goss/.test(page.url())) problems.push('the news opened over ?view=soon');
+
+    // And closing it has to stick, or a refresh brings it straight back.
+    await page.goto(`${BASE}/?read=off`, { waitUntil: 'domcontentloaded' });
+    await page.waitForTimeout(3000);
+    if (/read=goss/.test(page.url())) problems.push('?read=off reopened the news');
+
+    console.log(
+      `${problems.length ? 'FAIL' : ' ok '} ${'A plain launch opens the news'.padEnd(32)} ` +
+        `${openedOnNews ? 'news first, links unchanged' : 'catalog first'}` +
+        (problems.length ? `  ${problems[0]}` : ''),
+    );
+  } catch (error) {
+    problems.push(`threw: ${String(error.message).slice(0, 80)}`);
+    console.log(`FAIL ${'A plain launch opens the news'.padEnd(32)} ${problems[0]}`);
+  }
+  await page.close();
+  if (problems.length > 0) fail('A plain launch opens the news', problems.join('; '));
+  return problems.length > 0 ? 1 : 0;
+}
+
+/**
+ * Does the wishlist shelf show the wishlist, and nothing else?
+ *
+ * There has been a "Wishlist" surface in the sweep above since the start and
+ * it never caught this, because it only ever asked for at least one card. On
+ * the All shelf the filter was not applied at all, so it was handed the whole
+ * mirror and counted thirty-six, which is comfortably at least one.
+ *
+ * Reported from a phone as not being able to wishlist an upcoming game: the
+ * heart worked, the game was saved, and the shelf then showed nine thousand
+ * games with no sign of it. So this one counts, and it hearts a game that is
+ * not in the catalog at all, which is the case that broke.
+ */
+async function theWishlistShowsTheWishlist() {
+  const page = await browser.newPage({ viewport: { width: 430, height: 1200 } });
+  const problems = [];
+  page.on('pageerror', (error) => problems.push(String(error).slice(0, 110)));
+  let note = '';
+  try {
+    await page.goto(`${BASE}/`, { waitUntil: 'domcontentloaded' });
+    await page.evaluate(() => localStorage.clear());
+
+    // Heart an upcoming game: not curated, not in the mirror the shelf pages.
+    await page.goto(`${BASE}/?view=soon`, { waitUntil: 'domcontentloaded' });
+    const heart = page.locator('button[aria-label^="Add "][aria-label*="wishlist"]').first();
+    await heart.waitFor({ timeout: 20000 });
+    const hearted = (await heart.getAttribute('aria-label'))
+      .replace(/^Add | to wishlist$/g, '');
+    await heart.click();
+    await page.waitForTimeout(800);
+
+    const saved = await page.evaluate(() =>
+      JSON.parse(localStorage.getItem('wishlist') || '[]').length,
+    );
+    if (saved !== 1) problems.push(`hearting stored ${saved} games, expected 1`);
+
+    // Now the default shelf, filtered. One game is wishlisted, so one shows.
+    await page.goto(`${BASE}/?view=all&wishlist=1`, { waitUntil: 'domcontentloaded' });
+    await page.waitForTimeout(3500);
+    const cards = () => page.locator('main h2, section h2, section h3').count();
+    let shown = await cards();
+    for (const deadline = Date.now() + 15000; shown === 0 && Date.now() < deadline; ) {
+      await page.waitForTimeout(500);
+      shown = await cards();
+    }
+    if (shown !== 1) problems.push(`the wishlist shelf showed ${shown} games, expected 1`);
+    const text = await page.locator('main').innerText();
+    if (!text.includes(hearted.slice(0, 18))) {
+      problems.push(`${hearted} is wishlisted and not on the shelf`);
+    }
+    note = `${hearted.slice(0, 22)}, ${shown} on the shelf`;
+
+    console.log(
+      `${problems.length ? 'FAIL' : ' ok '} ${'The wishlist shows the wishlist'.padEnd(32)} ${note}` +
+        (problems.length ? `  ${problems[0]}` : ''),
+    );
+  } catch (error) {
+    problems.push(`threw: ${String(error.message).slice(0, 80)}`);
+    console.log(`FAIL ${'The wishlist shows the wishlist'.padEnd(32)} ${problems[0]}`);
+  }
+  await page.close();
+  if (problems.length > 0) fail('The wishlist shows the wishlist', problems.join('; '));
+  return problems.length > 0 ? 1 : 0;
+}
+
 failures += await oneVideoAtATime();
 failures += await aSearchWithNoAnswerStillAnswers();
 failures += await shelvesKeepEverything();
 failures += await unreadHidesOnlyWhatYouRead();
+failures += await aPlainLaunchOpensTheNews();
+failures += await theWishlistShowsTheWishlist();
 
 await browser.close();
 stop();
 
-const total = SURFACES.length + 4;
+const total = SURFACES.length + 6;
 if (failures > 0) {
   // Named, not just counted, so the last line of a truncated log still says
   // what to go and look at.

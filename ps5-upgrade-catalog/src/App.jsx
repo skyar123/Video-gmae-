@@ -300,6 +300,24 @@ function readDrawerFromUrl() {
   if (typeof window === 'undefined') return { open: false, tab: 'goss' };
   const read = new URLSearchParams(window.location.search).get('read');
   if (read === 'goss' || read === 'upcoming') return { open: true, tab: read };
+  // `?read=off` is how a bare visit says "not this time", so the default
+  // below can be a default without also being inescapable on reload.
+  if (read === 'off') return { open: false, tab: 'goss' };
+
+  /*
+   * A plain launch opens on the news.
+   *
+   * The catalog is nine thousand games in a fixed order, so opening on it
+   * means opening on the same screen and the same top row every single time.
+   * Reported as "the opening page is always the same, same game, it's a
+   * little boring", which is what a shelf sorted once and never again is.
+   *
+   * The news is the half of this app that is different every few hours, so
+   * that is what a launch lands on. Only a plain launch: any link carrying
+   * any parameter at all is somebody asking for a specific thing, including
+   * the catalog itself, and gets exactly what it asked for.
+   */
+  if (!window.location.search) return { open: true, tab: 'goss' };
   return { open: false, tab: 'goss' };
 }
 
@@ -323,6 +341,10 @@ function writeFiltersToUrl(filters, drawer) {
   if (filters.owned !== 'any') params.set('owned', filters.owned);
   if (filters.view === 'feed') params.set('mode', 'feed');
   if (drawer?.open) params.set('read', drawer.tab);
+  // Closing the news on an otherwise plain page has to stick. Without this
+  // the URL goes back to bare, and bare is what reopens it, so a reader who
+  // shut the drawer and pulled to refresh got it straight back.
+  else if ([...params].length === 0) params.set('read', 'off');
   const query = params.toString();
   window.history.replaceState(null, '', query ? `?${query}` : window.location.pathname);
 }
@@ -7505,6 +7527,29 @@ export default function App() {
     return storeMatches.length > 0 ? [...catalog, ...storeMatches] : catalog;
   }, [filters.collection, upcomingGames, catalog, storeMatches]);
 
+  /**
+   * Whether this shelf is drawn by paging the store, or filtered here.
+   *
+   * All and PS Plus are the whole mirror, which is far too big to hold, so
+   * they hand rendering to a component that pages the server. That component
+   * is told about the filters the server can apply and knows nothing of the
+   * rest, which was fine until two of the rest stopped being browse filters.
+   *
+   * Wishlist and Owned are not questions about the store. They are questions
+   * about a few dozen rows this app already holds, and the store cannot
+   * answer either one. Sending them through the pager meant the toggle
+   * silently did nothing: hearting an upcoming game and tapping Wishlist on
+   * the default shelf returned all 9,222 games, which reads exactly like the
+   * game was never saved.
+   *
+   * So when either is on, the shelf stops being the store. The ordinary grid
+   * already filters both correctly, and `catalog` already carries every
+   * saved store row, upcoming ones included, so there is nothing to page.
+   */
+  const storePaged =
+    (filters.collection === 'all' || filters.collection === 'plus') &&
+    !filters.wishlist &&
+    filters.owned === 'any';
 
   const searchScores = useMemo(() => {
     const query = parseQuery(deferredQuery);
@@ -7580,8 +7625,6 @@ export default function App() {
 
     const matches = pool.filter((game) => {
       if (hidden.has(game.id)) return false;
-      // Hiding PS5 only titles is a browse default, and saving something is
-      // not browsing. Without this last clause, hearting an upcoming game
       if (isGenius && !geniusRank.has(game.id)) return false;
       if (collection?.tag && !game.tags.includes(collection.tag)) return false;
       if (filters.collection === 'plus' && !byTitle.get(game.title)?.price?.plus?.included)
@@ -8195,7 +8238,7 @@ export default function App() {
         >
           {/* The collection chip has to mean the same thing in both views.
               Whole store used to fall through to the curated list here. */}
-          {filters.collection === 'all' || filters.collection === 'plus' ? (
+          {storePaged ? (
             <StoreFeed
               query={deferredQuery.trim()}
               curatedFirst={filters.collection === 'plus' ? curatedPlusGames : curatedOnlyMatches}
@@ -8230,10 +8273,10 @@ export default function App() {
             />
           ))
           )}
-          {filters.collection !== 'all' && filters.collection !== 'plus' && hasMore && (
+          {!storePaged && hasMore && (
             <div ref={attachEnd} aria-hidden="true" className="h-px" />
           )}
-          {filters.collection !== 'all' && filters.collection !== 'plus' && filteredGames.length === 0 && (
+          {!storePaged && filteredGames.length === 0 && (
             <EmptyState
               filters={filters}
               personalized={geniusIsPersonalized}
@@ -8265,7 +8308,7 @@ export default function App() {
               onOpenCurated={setActiveGameId}
               onOpenStore={setActiveStoreGame}
             />
-          ) : filters.collection === 'all' || filters.collection === 'plus' ? (
+          ) : storePaged ? (
             <StorePanel
               query={deferredQuery.trim()}
               curatedFirst={filters.collection === 'plus' ? curatedPlusGames : curatedOnlyMatches}
