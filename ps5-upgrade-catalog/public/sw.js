@@ -28,9 +28,14 @@
  * is where it has to live.
  */
 
+// v5: the app icon is a drawn controller now, under the same filenames as
+// the old one, so an installed copy would keep serving the cached bytes.
+// (The home-screen tile itself is the launcher's copy, taken at install:
+// iOS in particular only picks up a new one when the app is re-added.)
+//
 // v4: cached API answers are stamped and expire, so the old unstamped
 // entries have to go rather than being treated as fresh forever.
-const VERSION = 'v4';
+const VERSION = 'v5';
 const SHELL = `shell-${VERSION}`;
 const ASSETS = `assets-${VERSION}`;
 const DATA = `data-${VERSION}`;
