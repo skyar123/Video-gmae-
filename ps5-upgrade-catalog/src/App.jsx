@@ -262,9 +262,85 @@ const DEFAULT_FILTERS = {
   // catalog first, and they need different hardware.
 };
 
+/**
+ * What a plain launch opens on.
+ *
+ * Not the catalog. All is nine thousand games in a fixed order, so opening
+ * on it is opening on the same screen and the same top row every time,
+ * reported as "always the same, same game, it's a little boring".
+ *
+ * Not the news either. That was the first answer to the same complaint and
+ * it was the wrong one: the ask is to be shown a game, full bleed, that is
+ * both new and worth this reader's time, and to flick to the next one.
+ *
+ * So: For you, narrowed to the last ninety days, in the swipeable view.
+ * Every part of that already existed and none of it is new behaviour, which
+ * is the point. It changes as the store does, and it changes as the reader
+ * thumbs things up and down, so it is different on two separate clocks.
+ *
+ * Only a plain launch. Any link carrying any parameter is somebody asking
+ * for a specific thing and gets exactly that, the catalog included.
+ */
+const OPENING_FILTERS = {
+  ...DEFAULT_FILTERS,
+  collection: 'genius',
+  newOnly: true,
+  view: 'feed',
+};
+
+/** The same screen for a reader the picker knows nothing about yet. */
+const COLD_OPENING_FILTERS = {
+  ...DEFAULT_FILTERS,
+  collection: 'soon',
+  view: 'feed',
+};
+
+const savedRegion = () => {
+  try {
+    return (localStorage.getItem('region') || 'US').toUpperCase();
+  } catch {
+    return 'US';
+  }
+};
+
+/**
+ * Has this reader given the picker anything to work from?
+ *
+ * For you needs a signal, and with none it says so instead of listing
+ * games, which is the right thing on a shelf somebody chose and the wrong
+ * thing on the screen the app opens with: a first launch would land on
+ * "nothing to work from yet", which is a worse opening than the dull one
+ * this is replacing.
+ *
+ * So a reader with no history opens on the release calendar instead, still
+ * swipeable, still newest first, just not yet sorted to a taste nobody has
+ * described. One thumb is enough to switch it over.
+ *
+ * Read straight out of storage because this runs before anything else does,
+ * and it only has to be right about empty against not empty.
+ */
+const hasSomethingToGoOn = () => {
+  try {
+    for (const key of ['ratings', 'library', 'wishlist']) {
+      const raw = localStorage.getItem(key);
+      if (!raw) continue;
+      const held = JSON.parse(raw);
+      const size = Array.isArray(held) ? held.length : Object.keys(held ?? {}).length;
+      if (size > 0) return true;
+    }
+  } catch {
+    // Unreadable storage is the same as an empty one for this purpose.
+  }
+  return false;
+};
+
 function readFiltersFromUrl() {
   if (typeof window === 'undefined') return DEFAULT_FILTERS;
   const params = new URLSearchParams(window.location.search);
+  if ([...params].length === 0) {
+    const opening = hasSomethingToGoOn() ? OPENING_FILTERS : COLD_OPENING_FILTERS;
+    return { ...opening, region: savedRegion() };
+  }
   const value = (key, fallback) => params.get(key) ?? fallback;
   return {
     q: value('q', ''),
@@ -300,24 +376,9 @@ function readDrawerFromUrl() {
   if (typeof window === 'undefined') return { open: false, tab: 'goss' };
   const read = new URLSearchParams(window.location.search).get('read');
   if (read === 'goss' || read === 'upcoming') return { open: true, tab: read };
-  // `?read=off` is how a bare visit says "not this time", so the default
-  // below can be a default without also being inescapable on reload.
-  if (read === 'off') return { open: false, tab: 'goss' };
-
-  /*
-   * A plain launch opens on the news.
-   *
-   * The catalog is nine thousand games in a fixed order, so opening on it
-   * means opening on the same screen and the same top row every single time.
-   * Reported as "the opening page is always the same, same game, it's a
-   * little boring", which is what a shelf sorted once and never again is.
-   *
-   * The news is the half of this app that is different every few hours, so
-   * that is what a launch lands on. Only a plain launch: any link carrying
-   * any parameter at all is somebody asking for a specific thing, including
-   * the catalog itself, and gets exactly what it asked for.
-   */
-  if (!window.location.search) return { open: true, tab: 'goss' };
+  // A plain launch used to open the news here. It opens the swipeable feed
+  // of new picks instead now: see OPENING_FILTERS, which is a better answer
+  // to the same complaint. The news stays one tap away on the header button.
   return { open: false, tab: 'goss' };
 }
 
@@ -341,10 +402,6 @@ function writeFiltersToUrl(filters, drawer) {
   if (filters.owned !== 'any') params.set('owned', filters.owned);
   if (filters.view === 'feed') params.set('mode', 'feed');
   if (drawer?.open) params.set('read', drawer.tab);
-  // Closing the news on an otherwise plain page has to stick. Without this
-  // the URL goes back to bare, and bare is what reopens it, so a reader who
-  // shut the drawer and pulled to refresh got it straight back.
-  else if ([...params].length === 0) params.set('read', 'off');
   const query = params.toString();
   window.history.replaceState(null, '', query ? `?${query}` : window.location.pathname);
 }
@@ -2264,6 +2321,31 @@ function releaseLine(item) {
   const vague = !date || /^(to be announced|tba|coming soon)$/i.test(date);
   if (item.announced) return vague ? 'Announced, no date yet' : `Out ${date}`;
   return vague ? 'No release date listed' : date;
+}
+
+/**
+ * What to say about a game off the release calendar, in one line.
+ *
+ * Separate from releaseLine above, which reads a Steam row: that one has
+ * `released` as free text and an `announced` flag, and a calendar game has
+ * an ISO date and nothing else. Passing one to the other returns "no
+ * release date listed" for every game that has a perfectly good date.
+ *
+ * The calendar holds the last two months as well as the next few, so this
+ * has to read sensibly in both directions.
+ */
+function calendarLine(game) {
+  const iso = game.releaseDate;
+  const when = iso ? new Date(iso) : null;
+  if (!when || Number.isNaN(when.getTime())) return 'On the release calendar';
+
+  const day = () => when.toLocaleDateString([], { month: 'short', day: 'numeric' });
+  const away = daysUntil(iso);
+  if (away < 0) return `Out ${day()}`;
+  if (away === 0) return 'Out today';
+  if (away === 1) return 'Out tomorrow';
+  if (away <= 30) return `Out in ${away} days, ${day()}`;
+  return `Out ${day()}`;
 }
 
 function Elsewhere({ query }) {
@@ -4308,6 +4390,56 @@ function GeniusSheet({
  * stacking them would say it was; the scores are produced by the same
  * function with the same constants at both ends, so they can be compared.
  */
+/**
+ * For you, as one ranked list, from the two places its picks come from.
+ *
+ * The written-up games are ranked here from the reader's own signals, and
+ * the store mirror is ranked on the server, so a complete For you is the
+ * two merged on score. Pulled out of GeniusPanel because the swipeable
+ * view needs exactly the same list: when the feed built its own, it had
+ * only the written half, which is empty under the new-releases filter, and
+ * showed "No games match these filters" next to a chip reading 48.
+ */
+function mergeGeniusPicks({ picks, mirror, newOnly, openedAt, storeRowCache }) {
+  /*
+   * A game from the store can reach the written half too, because the row
+   * cache keeps rows after the heart that saved them is taken back. It is
+   * then in the catalog, in no signal, and excluded by nothing, so it can
+   * be picked. Opened as a write-up it gets looked up by slug in
+   * games.json, which holds no store:NNN, so the card did nothing at all
+   * when tapped. Its row comes back with it here.
+   */
+  const rowsById = new Map((storeRowCache ?? []).map((row) => [`store:${row.id}`, row]));
+  const written = (picks ?? [])
+    .filter((pick) => !newOnly || isNewRelease(pick.game, openedAt))
+    .map((pick) => ({
+      key: `c-${pick.game.id}`,
+      score: pick.score,
+      game: pick.game,
+      reason: pick.reason ?? explain(pick.hits ?? []),
+      row: pick.game.fromStore ? (rowsById.get(pick.game.id) ?? null) : null,
+    }));
+  /*
+   * The same normalising the join and the server use, not toLowerCase.
+   * Trademark signs and curly apostrophes survive a lowercase, so 22 of the
+   * 398 joined titles slipped past it and listed twice: Horizon Forbidden
+   * West and Marvel's Spider-Man 2 among them.
+   */
+  const seen = new Set((picks ?? []).map((pick) => normalizeTitle(pick.game.title)));
+  const fromStore = (mirror?.games ?? [])
+    // A game with a write-up is already above under its own entry, which
+    // says more about it than the mirror's row ever could.
+    .filter((row) => !seen.has(normalizeTitle(row.name)))
+    .map((row) => ({
+      key: `s-${row.id}`,
+      score: row.pickScore ?? 0,
+      game: storeRowAsGame(row),
+      reason: row.reason,
+      row,
+    }));
+  return [...written, ...fromStore].sort((a, b) => b.score - a.score);
+}
+
 function GeniusPanel({
   picks,
   mirror,
@@ -4324,45 +4456,10 @@ function GeniusPanel({
   onOpenCurated,
   onOpenStore,
 }) {
-  const merged = useMemo(() => {
-    /*
-     * A game from the store can reach the written half too, because the row
-     * cache keeps rows after the heart that saved them is taken back. It is
-     * then in the catalog, in no signal, and excluded by nothing, so it can
-     * be picked. Opened as a write-up it gets looked up by slug in
-     * games.json, which holds no store:NNN, so the card did nothing at all
-     * when tapped. Its row comes back with it here.
-     */
-    const rowsById = new Map((storeRowCache ?? []).map((row) => [`store:${row.id}`, row]));
-    const written = picks
-      .filter((pick) => !newOnly || isNewRelease(pick.game, openedAt))
-      .map((pick) => ({
-        key: `c-${pick.game.id}`,
-        score: pick.score,
-        game: pick.game,
-        reason: pick.reason ?? explain(pick.hits ?? []),
-        row: pick.game.fromStore ? (rowsById.get(pick.game.id) ?? null) : null,
-      }));
-    /*
-     * The same normalising the join and the server use, not toLowerCase.
-     * Trademark signs and curly apostrophes survive a lowercase, so 22 of the
-     * 398 joined titles slipped past it and listed twice: Horizon Forbidden
-     * West and Marvel's Spider-Man 2 among them.
-     */
-    const seen = new Set(picks.map((pick) => normalizeTitle(pick.game.title)));
-    const fromStore = (mirror.games ?? [])
-      // A game with a write-up is already above under its own entry, which
-      // says more about it than the mirror's row ever could.
-      .filter((row) => !seen.has(normalizeTitle(row.name)))
-      .map((row) => ({
-        key: `s-${row.id}`,
-        score: row.pickScore ?? 0,
-        game: storeRowAsGame(row),
-        reason: row.reason,
-        row,
-      }));
-    return [...written, ...fromStore].sort((a, b) => b.score - a.score);
-  }, [picks, mirror, newOnly, openedAt, storeRowCache]);
+  const merged = useMemo(
+    () => mergeGeniusPicks({ picks, mirror, newOnly, openedAt, storeRowCache }),
+    [picks, mirror, newOnly, openedAt, storeRowCache],
+  );
 
   return (
     <>
@@ -5127,6 +5224,10 @@ function StorePanel({ query, curatedFirst = [], curatedReason, curatedByName, sa
 
   const results = useStoreSearch({ active: true, q: query, genre, sort, plusOnly, familyOnly, noPurchases, newOnly });
 
+  /** Settled on nothing, as opposed to not having answered yet. */
+  const nothingFound =
+    results.status !== 'loading' && results.games.length === 0 && curatedFirst.length === 0;
+
   // Ask for the next page a screen and a half early, so the end of the list is
   // never actually reached. A callback ref because the sentinel only exists
   // while there is more to load.
@@ -5162,6 +5263,17 @@ function StorePanel({ query, curatedFirst = [], curatedReason, curatedByName, sa
         )}
       </p>
 
+      {/*
+        * Sorting and genre chips are for picking through a list. With no
+        * list they are two dozen buttons between the search box and the
+        * only thing on the page that answers the question.
+        *
+        * Searching "hozy" did find it, on PC, and said so, under "Best
+        * rated, Newest, Any genre, Action 2924, Adventure 2500" and twenty
+        * more. Reported as the game not being there at all, which is what
+        * an answer below the fold is.
+        */}
+      {!(nothingFound && query) && (
       <div className="no-scrollbar mb-3 flex gap-1.5 overflow-x-auto pb-0.5">
         {[
           ['rating', 'Best rated'],
@@ -5211,6 +5323,7 @@ function StorePanel({ query, curatedFirst = [], curatedReason, curatedByName, sa
           </button>
         ))}
       </div>
+      )}
 
       {results.status === 'loading' && results.games.length === 0 && curatedFirst.length === 0 ? (
         <PanelMessage icon={Loader2} spin label="Searching the store index..." />
@@ -7489,6 +7602,15 @@ export default function App() {
   }, [upcoming.data]);
 
   /**
+   * Is a search running that the release calendar should answer too?
+   *
+   * Not on the Soon shelf, where the calendar is already the whole pool and
+   * adding it again would list everything twice.
+   */
+  const searchingAhead =
+    deferredQuery.trim().length > 1 && filters.collection !== 'soon';
+
+  /**
    * Searching looks in the whole store as well as the catalog.
    *
    * Typing a game's name and being told it is "not here, try the wider
@@ -7524,8 +7646,24 @@ export default function App() {
 
   const pool = useMemo(() => {
     if (filters.collection === 'soon') return upcomingGames;
-    return storeMatches.length > 0 ? [...catalog, ...storeMatches] : catalog;
-  }, [filters.collection, upcomingGames, catalog, storeMatches]);
+    const base = storeMatches.length > 0 ? [...catalog, ...storeMatches] : catalog;
+
+    /*
+     * A search looks ahead of the release calendar as well as behind it.
+     *
+     * The calendar was its own pool, reachable only by picking the Soon
+     * shelf first, so typing the name of a game that is not out yet found
+     * nothing from anywhere else in the app. Reported as not being able to
+     * find upcoming games at all, which was exactly right: the one surface
+     * that knows about them is the one you had to already be on.
+     *
+     * Only while searching. Browsing a shelf is asking what is on it, and
+     * salting every shelf with unreleased games answers a question nobody
+     * asked; typing a name is asking whether this app knows that game, and
+     * "yes, in March" is a real answer to it.
+     */
+    return searchingAhead ? [...base, ...upcomingGames] : base;
+  }, [filters.collection, upcomingGames, catalog, storeMatches, searchingAhead]);
 
   /**
    * Whether this shelf is drawn by paging the store, or filtered here.
@@ -7590,7 +7728,28 @@ export default function App() {
     if (filters.collection !== 'all') return [];
     const query = deferredQuery.trim();
     if (query.length < 2 || !searchScores) return [];
-    return catalog
+
+    /*
+     * The calendar's matches come first too, for the same reason.
+     *
+     * All is drawn by paging the store mirror, and the mirror is a walk of
+     * concept pages that exist, so a game announced for March is not in it.
+     * This slot is already how a written-up game the mirror lacks gets in
+     * front of the store results, and an unreleased game needs exactly the
+     * same door.
+     *
+     * By id, so a game that is both on the calendar and in the mirror is
+     * listed once. The calendar's copy wins: it carries the release date,
+     * which is the thing somebody searching for an unreleased game wants.
+     */
+    const seen = new Set();
+    const both = [...upcomingGames, ...catalog].filter((game) => {
+      if (seen.has(game.id)) return false;
+      seen.add(game.id);
+      return true;
+    });
+
+    return both
       .filter((game) => searchScores.has(game.id) && !hidden.has(game.id))
       .sort((a, b) => (searchScores.get(b.id) ?? 0) - (searchScores.get(a.id) ?? 0))
       .slice(0, 24)
@@ -7611,9 +7770,20 @@ export default function App() {
          * the written-up games, so it answers yes for all of them. Rather
          * than guess, this says the part that is true either way.
          */
-        curatedReason: 'Written up here, so this one comes first',
+        curatedReason:
+          game.coverage === 'upcoming'
+            ? calendarLine(game)
+            : 'Written up here, so this one comes first',
       }));
-  }, [filters.collection, deferredQuery, searchScores, catalog, hidden, byTitle]);
+  }, [
+    filters.collection,
+    deferredQuery,
+    searchScores,
+    catalog,
+    upcomingGames,
+    hidden,
+    byTitle,
+  ]);
 
   const filteredGames = useMemo(() => {
     const collection = COLLECTIONS.find((entry) => entry.value === filters.collection);
@@ -7712,6 +7882,43 @@ export default function App() {
     () => filteredGames.slice(0, shownLimit),
     [filteredGames, shownLimit],
   );
+
+  /**
+   * What the swipeable view shows, which is not always what the grid shows.
+   *
+   * For you is ranked by the picker, not filtered out of a pool, and a good
+   * half of its picks are store games that were never in `catalog`: the
+   * picker is handed the mirror, the grid pipeline is not. In the grid that
+   * is handled by GeniusPanel, which takes the picks directly. The feed had
+   * no such branch, so it fell through to the ordinary pipeline, which
+   * could not find the picks and rendered "No games match these filters"
+   * over a shelf whose own chip said 48.
+   *
+   * It had been that way unnoticed because nothing opened on it: the sweep
+   * checks For you in the grid and the feed on All, never the two together.
+   * Now that a plain launch lands exactly there, it is the first screen.
+   */
+  const feedSlides = useMemo(() => {
+    if (filters.collection !== 'genius') {
+      return shownGames.map((game) => ({ key: game.id, game, reason: undefined }));
+    }
+    return mergeGeniusPicks({
+      picks: geniusPicks,
+      mirror: mirrorPicks,
+      newOnly: filters.newOnly,
+      openedAt,
+      storeRowCache,
+    }).filter((entry) => !hidden.has(entry.game.id));
+  }, [
+    filters.collection,
+    filters.newOnly,
+    shownGames,
+    geniusPicks,
+    mirrorPicks,
+    storeRowCache,
+    hidden,
+    openedAt,
+  ]);
 
   // Scanning a list of discounts, the useful number is not how many are
   // discounted but how many are as cheap as this record has ever seen them.
@@ -8259,13 +8466,17 @@ export default function App() {
               onOpenStore={setActiveStoreGame}
             />
           ) : (
-            shownGames.map((game) => (
+            feedSlides.map(({ key, game, reason }) => (
             <FeedSlide
-              key={game.id}
+              key={key}
               game={game}
               live={byTitle.get(game.title) ?? game.storeLive}
               wishlisted={wishlist.has(game.id)}
-              reason={filters.collection === 'genius' ? geniusReasons.get(game.id) : undefined}
+              reason={
+                filters.collection === 'genius'
+                  ? (reason ?? geniusReasons.get(game.id))
+                  : undefined
+              }
               muted={feedMuted}
               onToggleMuted={toggleFeedMuted}
               onToggleWishlist={() => saveGame(game, 'wishlist')}
@@ -8276,7 +8487,7 @@ export default function App() {
           {!storePaged && hasMore && (
             <div ref={attachEnd} aria-hidden="true" className="h-px" />
           )}
-          {!storePaged && filteredGames.length === 0 && (
+          {!storePaged && feedSlides.length === 0 && (
             <EmptyState
               filters={filters}
               personalized={geniusIsPersonalized}

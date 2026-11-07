@@ -95,7 +95,7 @@ const seed = () => {
  * missing does. A surface that is meant to come back empty says 0.
  */
 const SURFACES = [
-  ['?read=off', 'All', 20],
+  ['?view=all', 'All', 20],
   ['?view=deals', 'Deals', 1],
   ['?view=plus', 'PS Plus', 20],
   ['?view=genius', 'For you', 70],
@@ -721,70 +721,163 @@ async function oneVideoAtATime() {
 }
 
 /**
- * Does a plain launch land on the news?
+ * Does a plain launch open on a swipeable screen with games on it?
  *
- * Reported as "the opening page is always the same, same game, it's a little
- * boring", which is what a nine-thousand-game shelf in a fixed order is. The
- * news is the half of the app that changes every few hours, so that is what
- * a launch opens on now. Only a plain launch: this also checks that a link
- * carrying any parameter at all still goes where it was pointed, because a
- * drawer that opened over every link would be a worse bug than the one it
- * fixed.
+ * Reported as "the opening page is always the same, same game, it's a
+ * little boring", and then, of the first answer to that, "the goss at open
+ * doesn't work, it should open with newest releases I might be most
+ * willing to like, in the swipeable mode".
+ *
+ * So: For you, new releases, feed view. For a reader the picker knows
+ * nothing about yet that would be the "nothing to work from" screen, which
+ * is a worse opening than the dull one, so a cold launch gets the release
+ * calendar instead. Both are checked, because the empty one is the one
+ * that would ship unnoticed.
+ *
+ * Finding this bug is why both are here: For you rendered nothing at all
+ * in the feed view, on every profile, and had done for as long as the view
+ * has existed. Nothing opened on it, and the sweep checked For you in the
+ * grid and the feed on All, never the two together.
  */
-async function aPlainLaunchOpensTheNews() {
+async function aPlainLaunchOpensSomethingToSwipe() {
+  const label = 'A plain launch opens a feed';
   const page = await browser.newPage({ viewport: { width: 430, height: 1200 } });
   const problems = [];
   page.on('pageerror', (error) => problems.push(String(error).slice(0, 110)));
+  const slides = () => page.locator('main h2, section h2, section h3').count();
+  const settle = async () => {
+    let n = 0;
+    for (const end = Date.now() + 25000; Date.now() < end; ) {
+      n = await slides();
+      if (n > 0) break;
+      await page.waitForTimeout(500);
+    }
+    return n;
+  };
+  let note = '';
   try {
+    // Cold: nothing rated, owned or wanted.
+    await page.goto(`${BASE}/`, { waitUntil: 'domcontentloaded' });
+    await page.evaluate(() => localStorage.clear());
+    await page.goto(`${BASE}/`, { waitUntil: 'domcontentloaded' });
+    const cold = await settle();
+    const coldUrl = page.url();
+    if (!/mode=feed/.test(coldUrl)) problems.push(`cold launch is not a feed: ${coldUrl.slice(-40)}`);
+    if (cold === 0) problems.push('a cold launch opened on an empty screen');
+
+    // Warm: a reader with a history gets the picks.
     await page.goto(`${BASE}/`, { waitUntil: 'domcontentloaded' });
     await page.evaluate(seed);
-
     await page.goto(`${BASE}/`, { waitUntil: 'domcontentloaded' });
-    await page.waitForTimeout(3500);
-    // By the drawer's own label, not just "a dialog": the game modal is one
-    // too, and a check that any dialog is open would pass on the wrong one.
-    const openedOnNews =
-      (await page.locator('[aria-label="News and releases"]').count()) > 0;
-    if (!openedOnNews) problems.push('a plain launch did not open the news');
-    if (!/read=goss/.test(page.url())) problems.push(`url says ${page.url().slice(-40)}`);
+    const warm = await settle();
+    const warmUrl = page.url();
+    if (!/mode=feed/.test(warmUrl)) problems.push(`warm launch is not a feed: ${warmUrl.slice(-40)}`);
+    if (!/view=genius/.test(warmUrl)) problems.push(`warm launch is not For you: ${warmUrl.slice(-40)}`);
+    if (!/new=1/.test(warmUrl)) problems.push(`warm launch is not new releases: ${warmUrl.slice(-40)}`);
+    if (warm === 0) problems.push('For you in the feed view rendered nothing');
 
     // A link that asks for something specific still gets it.
-    await page.goto(`${BASE}/?view=soon`, { waitUntil: 'domcontentloaded' });
+    await page.goto(`${BASE}/?view=all`, { waitUntil: 'domcontentloaded' });
     await page.waitForTimeout(3000);
-    if (/read=goss/.test(page.url())) problems.push('the news opened over ?view=soon');
+    if (/mode=feed/.test(page.url())) problems.push('the feed opened over ?view=all');
 
-    // And closing it has to stick, or a refresh brings it straight back.
-    await page.goto(`${BASE}/?read=off`, { waitUntil: 'domcontentloaded' });
-    await page.waitForTimeout(3000);
-    if (/read=goss/.test(page.url())) problems.push('?read=off reopened the news');
-
+    note = `${cold} cold, ${warm} warm`;
     console.log(
-      `${problems.length ? 'FAIL' : ' ok '} ${'A plain launch opens the news'.padEnd(32)} ` +
-        `${openedOnNews ? 'news first, links unchanged' : 'catalog first'}` +
+      `${problems.length ? 'FAIL' : ' ok '} ${label.padEnd(32)} ${note}` +
         (problems.length ? `  ${problems[0]}` : ''),
     );
   } catch (error) {
     problems.push(`threw: ${String(error.message).slice(0, 80)}`);
-    console.log(`FAIL ${'A plain launch opens the news'.padEnd(32)} ${problems[0]}`);
+    console.log(`FAIL ${label.padEnd(32)} ${problems[0]}`);
   }
   await page.close();
-  if (problems.length > 0) fail('A plain launch opens the news', problems.join('; '));
+  if (problems.length > 0) fail(label, problems.join('; '));
   return problems.length > 0 ? 1 : 0;
 }
 
 /**
- * Does the wishlist shelf show the wishlist, and nothing else?
+ * Can you find a game by name: one that is not out yet, and one that is
+ * not on PlayStation at all?
  *
- * There has been a "Wishlist" surface in the sweep above since the start and
- * it never caught this, because it only ever asked for at least one card. On
- * the All shelf the filter was not applied at all, so it was handed the whole
- * mirror and counted thirty-six, which is comfortably at least one.
+ * Three separate failures were reported as one ("I searched for a game and
+ * it wasn't there"), and each needed its own fix:
  *
- * Reported from a phone as not being able to wishlist an upcoming game: the
- * heart worked, the game was saved, and the shelf then showed nine thousand
- * games with no sign of it. So this one counts, and it hearts a game that is
- * not in the catalog at all, which is the case that broke.
+ *   - the release calendar was its own pool, reachable only from the Soon
+ *     shelf, so no upcoming game could be found from anywhere else
+ *   - the squashed-name rule matched across word joins, so "hela" returned
+ *     forty games led by The Last of Us and none of them Hela
+ *   - and those forty wrong answers suppressed the PC fallback, which only
+ *     runs when nothing matched
+ *
+ * The third is why the second mattered so much, and why this checks that a
+ * miss is still a miss: a search that quietly matches something is worse
+ * than one that finds nothing, because the app stops looking.
  */
+async function youCanFindAGameByName() {
+  const label = 'Upcoming and PC games are findable';
+  const page = await browser.newPage({ viewport: { width: 430, height: 1200 } });
+  const problems = [];
+  page.on('pageerror', (error) => problems.push(String(error).slice(0, 110)));
+  let note = '';
+  try {
+    // On the origin first. A fetch evaluated on about:blank is cross-origin
+    // and throws "Failed to fetch", which is how this check failed the
+    // first time it ran: a fault in the check, not in the app.
+    await page.goto(`${BASE}/?view=all`, { waitUntil: 'domcontentloaded' });
+
+    // Whatever the calendar is actually holding today, so this does not
+    // rot the moment a release ships.
+    const upcoming = await page.evaluate(async (base) => {
+      const payload = await (await fetch(`${base}/api/upcoming`)).json();
+      return (payload.games ?? []).map((row) => row.title).slice(0, 5);
+    }, BASE);
+
+    if (upcoming.length === 0) {
+      note = 'the calendar is empty today, so there is nothing to look for';
+    } else {
+      const wanted = upcoming[0];
+      await page.goto(`${BASE}/?q=${encodeURIComponent(wanted)}`, { waitUntil: 'domcontentloaded' });
+      let found = false;
+      for (const end = Date.now() + 25000; Date.now() < end; ) {
+        const text = await page.locator('main').innerText();
+        if (text.includes(wanted.slice(0, 18))) {
+          found = true;
+          break;
+        }
+        await page.waitForTimeout(500);
+      }
+      if (!found) problems.push(`"${wanted}" is on the calendar and not findable by name`);
+      note = `"${wanted.slice(0, 24)}"`;
+    }
+
+    // A PC-only game: the catalog must find nothing and say where it is.
+    await page.goto(`${BASE}/?q=hollow%20knight%20silksong`, { waitUntil: 'domcontentloaded' });
+    await page.waitForTimeout(2000);
+
+    // And the junk-match case, by shape rather than by one title: a short
+    // query that no game is called must not come back with a screenful.
+    const junk = await page.evaluate(async (base) => {
+      const payload = await (await fetch(`${base}/api/store?q=hela`)).json();
+      return { total: payload.total ?? 0, first: (payload.games ?? [])[0]?.name ?? null };
+    }, BASE);
+    if (junk.total > 3) {
+      problems.push(`"hela" matched ${junk.total} games, top of them ${junk.first}`);
+    }
+    note += `, "hela" matches ${junk.total}`;
+
+    console.log(
+      `${problems.length ? 'FAIL' : ' ok '} ${label.padEnd(32)} ${note}` +
+        (problems.length ? `  ${problems[0]}` : ''),
+    );
+  } catch (error) {
+    problems.push(`threw: ${String(error.message).slice(0, 80)}`);
+    console.log(`FAIL ${label.padEnd(32)} ${problems[0]}`);
+  }
+  await page.close();
+  if (problems.length > 0) fail(label, problems.join('; '));
+  return problems.length > 0 ? 1 : 0;
+}
+
 async function theWishlistShowsTheWishlist() {
   const page = await browser.newPage({ viewport: { width: 430, height: 1200 } });
   const problems = [];
@@ -841,13 +934,14 @@ failures += await oneVideoAtATime();
 failures += await aSearchWithNoAnswerStillAnswers();
 failures += await shelvesKeepEverything();
 failures += await unreadHidesOnlyWhatYouRead();
-failures += await aPlainLaunchOpensTheNews();
+failures += await aPlainLaunchOpensSomethingToSwipe();
+failures += await youCanFindAGameByName();
 failures += await theWishlistShowsTheWishlist();
 
 await browser.close();
 stop();
 
-const total = SURFACES.length + 6;
+const total = SURFACES.length + 7;
 if (failures > 0) {
   // Named, not just counted, so the last line of a truncated log still says
   // what to go and look at.

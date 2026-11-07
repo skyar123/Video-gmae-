@@ -82,6 +82,49 @@ export function parseQuery(value) {
   return { folded, words: words(folded), digits: withDigits(folded), squashed: words(folded).join('') };
 }
 
+/**
+ * Where each word begins once the spaces are taken out.
+ *
+ * Needed because the squashed form glues words together, and a run of
+ * letters that spans a join was never a word anybody typed.
+ */
+function wordStarts(parts) {
+  const starts = [];
+  let at = 0;
+  for (const part of parts) {
+    starts.push(at);
+    at += part.length;
+  }
+  return starts;
+}
+
+/**
+ * Does the squashed query start where one of the row's words starts?
+ *
+ * The squashed rule exists for the way people close up a name: "spiderman"
+ * should find Spider-Man, "godofwar" should find God of War. Matching it
+ * anywhere in the squashed row went much further than that, because taking
+ * the spaces out creates letter runs that cross from one word into the next
+ * and were never a word at all.
+ *
+ * Searching "hela" returned forty games, top of them The Last of Us Part I,
+ * which squashes to "thelastofuspart1" and contains "hela" across the join
+ * of "the" and "last". Lorelei, Cult of the Lamb and The Last Campfire came
+ * along the same way. None of them has anything to do with what was typed,
+ * and worse, their presence meant the app believed it had answered: the
+ * fallback that looks for the game on PC only runs when nothing matched, so
+ * forty wrong answers hid the right one.
+ *
+ * Anchoring to a word start keeps every case the rule was written for and
+ * drops the ones that only existed because the spaces were gone.
+ */
+function squashedAtWordStart(row, squashed) {
+  for (const start of wordStarts(row.words)) {
+    if (row.squashed.startsWith(squashed, start)) return true;
+  }
+  return false;
+}
+
 /** Every query word must open some word in the row, in any order. */
 function wordsCover(rowWords, queryWords) {
   const taken = new Array(rowWords.length).fill(false);
@@ -120,7 +163,7 @@ export function scoreMatch(row, query) {
       score = 380 - Math.min(row.words.length - query.words.length, 40) * 2;
     } else if (row.digits && wordsCover(words(row.digits), words(query.digits ?? query.folded))) {
       score = 360;
-    } else if (query.squashed.length >= 4 && row.squashed.includes(query.squashed)) {
+    } else if (query.squashed.length >= 4 && squashedAtWordStart(row, query.squashed)) {
       score = 220;
     } else if (
       query.squashed.length >= 2 &&
