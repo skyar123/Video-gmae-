@@ -189,3 +189,28 @@ test('an edition is taken off a title, but a different game is not', () => {
   assert.equal(baseTitle('Final Fantasy VII Remake'), fold('Final Fantasy VII Remake'));
   assert.notEqual(baseTitle('God of War II'), baseTitle('God of War'));
 });
+
+test('a licensor brand comes off the front, but a possessive title does not', () => {
+  /*
+   * The store sells "Marvel's Spider-Man Remastered" and Wikidata
+   * credits Insomniac with "Spider-Man Remastered", so the most played
+   * game on the shelf had no studio for the want of one brand.
+   *
+   * Spelled out as a list rather than "any leading possessive", because
+   * that rule turns Assassin's Creed into Creed, which is a different
+   * thing entirely and would match whatever else happened to be called
+   * that.
+   */
+  assert.equal(baseTitle("Marvel's Spider-Man Remastered"), 'spider man remastered');
+  assert.equal(baseTitle('Marvel’s Spider-Man 2'), 'spider man 2');
+  assert.equal(baseTitle("Tom Clancy's Rainbow Six Siege"), 'rainbow six siege');
+
+  // Both apostrophes, because the store uses the curly one and nobody
+  // types it. The straight-only version of this rule missed Spider-Man 2.
+  assert.equal(baseTitle("Marvel's Spider-Man 2"), baseTitle('Marvel’s Spider-Man 2'));
+
+  // Not a licensor, just a word that ends in an apostrophe s.
+  assert.equal(baseTitle("Assassin's Creed Valhalla"), fold("Assassin's Creed Valhalla"));
+  assert.equal(baseTitle('Assassin’s Creed Mirage'), fold("Assassin's Creed Mirage"));
+  assert.equal(baseTitle("Baldur's Gate 3"), fold("Baldur's Gate 3"));
+});

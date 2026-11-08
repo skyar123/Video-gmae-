@@ -102,6 +102,7 @@ const mirror = new Map(rows.map((row) => [fold(row.name ?? ''), row.name]));
 console.error('Asking Wikidata which studio made what...');
 const pairs = await everything();
 
+const AMBIGUOUS = Symbol('more than one studio claims this name');
 const byTitle = new Map();
 const byBase = new Map();
 for (const [title, developer] of pairs) {
@@ -110,8 +111,26 @@ for (const [title, developer] of pairs) {
   // First answer wins. A game with two developers listed gets the one
   // Wikidata sorts first rather than a guess at which mattered more.
   if (!byTitle.has(key)) byTitle.set(key, developer);
+  /*
+   * A looser key is only usable while exactly one studio claims it.
+   *
+   * Stripping an edition or a licensor brand makes two titles collide,
+   * and some collisions are real: Wikidata credits two different games
+   * called "Spider-Man" to two different studios, and there have been
+   * two Tomb Raiders, by Core Design and by Crystal Dynamics. Taking the
+   * first would be a coin toss presented as a fact.
+   *
+   * So the second, disagreeing claim poisons the key for good, and the
+   * game keeps no studio at all. A gap is recoverable; the store page
+   * fills it the first time somebody opens the game. A wrong credit just
+   * sits there looking right.
+   */
   const base = baseTitle(title);
-  if (base && base !== key && !byBase.has(base)) byBase.set(base, developer);
+  if (base && base !== key) {
+    const held = byBase.get(base);
+    if (held === undefined) byBase.set(base, developer);
+    else if (held !== developer) byBase.set(base, AMBIGUOUS);
+  }
 }
 
 /*
@@ -133,9 +152,10 @@ for (const [key, name] of mirror) {
     exact += 1;
     continue;
   }
-  const base = byBase.get(baseTitle(name)) ?? byTitle.get(baseTitle(name));
-  if (base) {
-    out[key] = base;
+  const stripped = baseTitle(name);
+  const candidate = byBase.get(stripped) ?? byTitle.get(stripped);
+  if (candidate && candidate !== AMBIGUOUS) {
+    out[key] = candidate;
     loose += 1;
   }
 }

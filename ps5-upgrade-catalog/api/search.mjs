@@ -215,10 +215,25 @@ const EDITION =
   /\s*(?:[-–—:([]\s*)?\b(?:digital\s+)?(?:deluxe|definitive|complete|standard|ultimate|premium|gold|legacy|anniversary|collector'?s?|game\s+of\s+the\s+year|goty|director'?s\s+cut|enhanced|special|royal|intergrade|intermission)\b[^|]*$/i;
 const PLATFORM_TAG = /\s*[([{]\s*ps[45][^)\]}]*[)\]}]\s*$/i;
 
+export /**
+ * Licensor prefixes, which are branding rather than the game's name.
+ *
+ * The store sells "Marvel's Spider-Man Remastered"; Wikidata credits
+ * Insomniac with "Spider-Man Remastered". One brand apart, and the most
+ * played game on the shelf had no studio.
+ *
+ * Spelled out rather than matched as "any leading possessive", because
+ * that rule would turn Assassin's Creed into Creed. These are the handful
+ * that are genuinely a rights-holder's name bolted to the front.
+ */
+const LICENSOR =
+  /^\s*(?:marvel['\u2019]?s|disney(?:['\u2019]?s)?|tom clancy['\u2019]?s|sid meier['\u2019]?s|ea sports|2k|lego)\s+/i;
+
 export const baseTitle = (name) =>
   fold(
     String(name ?? '')
       .replace(PLATFORM_TAG, '')
       .replace(EDITION, '')
+      .replace(LICENSOR, '')
       .replace(/\s*[-–—:]\s*$/, ''),
   );
