@@ -982,6 +982,29 @@ async function aStudioNameFindsItsGames() {
       if (!found.allTheirs) problems.push(`"${studio}" returned somebody else's games`);
       note = `${studio} -> ${found.total}`;
 
+      /*
+       * And a developer, which is the half PlayStation does not publish.
+       * Taken from whatever the index actually holds rather than named
+       * here, so rebuilding the baked set cannot fail this.
+       */
+      const dev = await page.evaluate(async (base) => {
+        const payload = await (await fetch(`${base}/api/store?q=`)).json();
+        const row = (payload.games ?? []).find((game) => game.developer);
+        if (!row) return null;
+        const back = await (
+          await fetch(`${base}/api/store?q=${encodeURIComponent(row.developer)}`)
+        ).json();
+        return {
+          studio: row.developer,
+          name: row.name,
+          found: (back.games ?? []).some((game) => game.id === row.id),
+        };
+      }, BASE);
+      if (dev && !dev.found) {
+        problems.push(`"${dev.studio}" did not find ${dev.name}, which it made`);
+      }
+      if (dev) note += `, dev ${dev.studio.slice(0, 18)}`;
+
       // And the button: the studio on a game's page is a way in.
       await page.goto(`${BASE}/?q=${encodeURIComponent(studio)}`, { waitUntil: 'domcontentloaded' });
       let heading = '';

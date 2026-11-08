@@ -121,6 +121,57 @@ const mediaByRole = (html, role) => [
   ),
 ];
 
+/**
+ * Who made it, when the page happens to say so.
+ *
+ * PlayStation publishes a publisher and no developer field at all, which
+ * is why searching "Naughty Dog" found nothing while every Sony game sat
+ * there under Sony Interactive Entertainment. The studio is on the page
+ * all the same, written into the copyright line or the marketing copy:
+ * Returnal says "Developed by Housemarque Oy", Horizon Forbidden West
+ * says "Developed by Guerrilla", The Last of Us Part I says "Created and
+ * developed by Naughty Dog LLC".
+ *
+ * Only that one phrasing is read. God of War Ragnarök says "From Santa
+ * Monica Studio comes the sequel", and a pattern loose enough to catch
+ * that is loose enough to catch half a sentence of marketing and file it
+ * as a studio name. A missing developer costs a search; a wrong one is a
+ * fact this app made up, and the whole point of reading the store rather
+ * than guessing is not to do that.
+ *
+ * The legal suffix goes: a reader searching "Naughty Dog" should not have
+ * to know whether the page said LLC.
+ */
+const LEGAL_SUFFIX =
+  /[,\s]+(llc|ltd|limited|inc|incorporated|co|corp|corporation|gmbh|oy|ab|a\/s|as|srl|sl|s\.l\.|bv|b\.v\.|pty|plc|kk|k\.k\.|sa|s\.a\.|aps|ug|pte)\.?$/i;
+
+export function developerFrom(html) {
+  const found = String(html ?? '').match(
+    /\b(?:created and developed|developed|development)\s+by\s+([A-Z][^.<"\u2019]{2,44})/i,
+  );
+  if (!found) return null;
+
+  let name = found[1]
+    .replace(/&amp;/g, '&')
+    .replace(/<[^>]*>/g, ' ')
+    .replace(/\s+/g, ' ')
+    .trim()
+    // "Developed by Housemarque Oy in association with ..." stops at the
+    // studio; everything after it is a sentence, not a name.
+    .replace(/\s+(?:in association|in collaboration|and published|under licen[cs]e|for )\b.*$/i, '')
+    .replace(/[,;:]$/, '')
+    .trim();
+
+  // Twice, because "Naughty Dog LLC." leaves "Naughty Dog" and
+  // "Something Games Co. Ltd." needs both taken off.
+  name = name.replace(LEGAL_SUFFIX, '').replace(LEGAL_SUFFIX, '').trim();
+
+  // A one-word fragment or a half-sentence is not a studio.
+  if (name.length < 3 || name.length > 40) return null;
+  if (/\s(the|a|an|this|their|our|its)\s/i.test(` ${name} `)) return null;
+  return name;
+}
+
 function parse(id, html) {
   // Through the same decoder as everything else: the store escapes titles,
   // so a raw match hands back "Belmont&#x27;s Curse".
@@ -141,6 +192,7 @@ function parse(id, html) {
     // Quoted from the store's own rating block, descriptors and all.
     ageRating: ratingFromConcept(html),
     publisher: (html.match(/"publisherName":"([^"]*)"/) || [])[1] ?? null,
+    developer: developerFrom(html),
     stars: stars ? Number(stars[1]) : null,
     votes: stars ? Number(stars[2]) : null,
     screenshots: mediaByRole(html, 'SCREENSHOT').slice(0, 8),

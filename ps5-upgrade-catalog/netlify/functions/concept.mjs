@@ -1,4 +1,26 @@
 import { loadConceptDetail } from '../../api/concept.mjs';
+import { loadBlob, saveBlob } from '../../api/history.mjs';
+import { DEVELOPERS_KEY } from '../../api/keys.mjs';
+
+/**
+ * Keep a studio the page just told us, so the search can use it later.
+ *
+ * PlayStation has no developer field, so the only place the studio is
+ * written down is the page's own copy, and this read has already happened
+ * by the time we get here. Throwing that away and asking again later
+ * would be the expensive way to know the same thing.
+ *
+ * Written only when it changes, because a blob write on every game anyone
+ * opens is a lot of writes to say what was already there.
+ */
+async function remember(id, developer) {
+  if (!id || !developer) return;
+  const held = (await loadBlob(DEVELOPERS_KEY)) ?? {};
+  const byId = held.byId ?? {};
+  if (byId[id] === developer) return;
+  byId[id] = developer;
+  await saveBlob(DEVELOPERS_KEY, { byId, storedAt: new Date().toISOString() });
+}
 
 /** GET /api/concept?id=<conceptId> — full detail for one store game. */
 export default async function handler(request) {
@@ -19,6 +41,10 @@ export default async function handler(request) {
     genres,
     Number.isFinite(steamAppId) && steamAppId > 0 ? steamAppId : null,
   );
+  // Never at the cost of the answer: a blob that will not write is a
+  // search that stays as good as it was, not a game page that fails.
+  if (detail?.developer) await remember(id, detail.developer).catch(() => {});
+
   return new Response(JSON.stringify(detail ?? { error: 'not found' }), {
     status: detail ? 200 : 404,
     headers: {

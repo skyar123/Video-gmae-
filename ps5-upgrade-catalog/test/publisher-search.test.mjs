@@ -115,3 +115,34 @@ test('an empty query still lists the catalogue', async () => {
   const everything = await search('');
   assert.ok(everything.total > 1000, `an empty search returned ${everything.total}`);
 });
+
+test('a developer is searchable the same way a publisher is', async () => {
+  /*
+   * The gap this closes: PlayStation names a publisher and never a
+   * developer, so every Sony first-party game answered to Sony Interactive
+   * Entertainment and "Naughty Dog" found nothing at all.
+   *
+   * Asserted against whatever the baked set actually holds rather than
+   * against a studio by name, so rebuilding it from Wikidata cannot fail
+   * the suite. What must hold is the rule: if a row has a developer, that
+   * developer's name finds it.
+   */
+  const withDeveloper = await searchStore({ q: '', page: 0 });
+  const sample = (withDeveloper.games ?? []).find((game) => game.developer);
+  if (!sample) return; // Nothing baked yet; nothing to prove.
+
+  const found = await search(sample.developer);
+  assert.ok(
+    found.games.some((game) => game.id === sample.id),
+    `"${sample.developer}" did not find ${sample.name}, which it made`,
+  );
+});
+
+test('the developer index does not go over the wire either', async () => {
+  // Three folded indexes a row is most of the response. The plain
+  // `developer` string does go out: the studio button is built from it.
+  const found = await searchStore({ q: '', page: 0 });
+  for (const game of found.games) {
+    assert.equal(game.dev, undefined, `${game.name} shipped its developer index`);
+  }
+});

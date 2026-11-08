@@ -15,7 +15,8 @@
 import baked from './store-index.json' with { type: 'json' };
 import { loadPlusIndex } from './plus.mjs';
 import { loadBlob } from './history.mjs';
-import { DISCOVERED_KEY, STEAM_MATCH_KEY } from './keys.mjs';
+import { DEVELOPERS_KEY, DISCOVERED_KEY, STEAM_MATCH_KEY } from './keys.mjs';
+import bakedDevelopers from './developers.json' with { type: 'json' };
 import { fold, indexText, parseQuery, scoreMatch } from './search.mjs';
 
 const PAGE_SIZE = 36;
@@ -129,17 +130,43 @@ async function index() {
   // releases that are not on Steam at all.
   const matches = (await loadBlob(STEAM_MATCH_KEY))?.byId ?? {};
 
-  const rows = [...byId.values()].map((row) => ({
-    ...row,
-    steamAppId: row.steamAppId ?? matches[row.id] ?? null,
-    search: indexText(row.name ?? ''),
-    // The studio, indexed separately so "Bethesda" can answer with eleven
-    // games rather than nothing. Kept apart from the name rather than
-    // mixed into one blob: a publisher match has to rank below every
-    // title match, and two fields is the only way to tell them apart
-    // after the fact.
-    by: indexText(row.publisher ?? ''),
-  }));
+  /*
+   * Who made each game, from the two places that know.
+   *
+   * PlayStation publishes a publisher and no developer at all, so
+   * searching "Naughty Dog" found nothing while every one of their games
+   * sat there under Sony Interactive Entertainment. Two sources fill it:
+   *
+   *   - a baked set from Wikidata, matched on title, which ships with the
+   *     repo and costs nothing at runtime
+   *   - whatever has been read off a concept page since, which is the
+   *     authoritative answer for that exact PlayStation release
+   *
+   * The learned one wins. It came from the store's own page for this
+   * specific id, where the baked one was matched by name and could in
+   * principle have matched the wrong edition of the right game.
+   */
+  const learned = (await loadBlob(DEVELOPERS_KEY))?.byId ?? {};
+
+  const rows = [...byId.values()].map((row) => {
+    const developer = learned[row.id] ?? bakedDevelopers[fold(row.name ?? '')] ?? null;
+    return {
+      ...row,
+      steamAppId: row.steamAppId ?? matches[row.id] ?? null,
+      developer,
+      search: indexText(row.name ?? ''),
+      // The studio, indexed separately so "Bethesda" can answer with
+      // eleven games rather than nothing. Kept apart from the name rather
+      // than mixed into one blob: a publisher match has to rank below
+      // every title match, and separate fields are the only way to tell
+      // them apart after the fact.
+      by: indexText(row.publisher ?? ''),
+      // And the developer apart from the publisher, because they are
+      // different questions with different answers: Sony publishes
+      // Naughty Dog, Guerrilla and Insomniac alike.
+      dev: developer ? indexText(developer) : null,
+    };
+  });
   merged = { rows, at: Date.now() };
   return rows;
 }
@@ -237,13 +264,26 @@ export async function searchStore({
      * (220) and initials (160) out.
      */
     const TITLE_BAND = 1000;
-    const PUBLISHER_FLOOR = 300;
+    const STUDIO_FLOOR = 300;
     hits = hits
       .map((row) => {
         const byTitle = scoreMatch(row.search, query);
         if (byTitle > 0) return { row, score: byTitle + TITLE_BAND };
+        /*
+         * The developer counts the same as the publisher, and the better
+         * of the two wins. They are different questions: "Bethesda" is a
+         * publisher, "Naughty Dog" is a developer, and a reader typing
+         * either has asked the same thing in the same words.
+         *
+         * The developer is tried first only so that a studio that is also
+         * its own publisher scores once rather than twice; the floor is
+         * shared, because a loose match on a company name is noise
+         * whichever column it came from.
+         */
+        const byDeveloper = row.dev ? scoreMatch(row.dev, query) : -1;
         const byPublisher = row.by ? scoreMatch(row.by, query) : -1;
-        return { row, score: byPublisher >= PUBLISHER_FLOOR ? byPublisher : -1 };
+        const byStudio = Math.max(byDeveloper, byPublisher);
+        return { row, score: byStudio >= STUDIO_FLOOR ? byStudio : -1 };
       })
       .filter((entry) => entry.score > 0)
       .sort((a, b) => b.score - a.score || ratingScore(b.row) - ratingScore(a.row))
@@ -262,10 +302,12 @@ export async function searchStore({
     // The normalised name is a search artefact; it does not go over the wire.
     games: hits
       .slice(start, start + PAGE_SIZE)
-      // `search` and `by` are search artefacts and `plus` is reported by
-      // name below, so none of them goes over the wire. Leaving `by` in
-      // would ship a second folded index for every row on every page.
-      .map(({ search: _search, by: _by, plus: _plus, ...row }) => {
+      // `search`, `by` and `dev` are search artefacts and `plus` is
+      // reported by name below, so none of them goes over the wire.
+      // Leaving them in would ship three folded indexes for every row on
+      // every page. The plain `developer` string does go out: a card shows
+      // it, and it is the thing the studio button is built from.
+      .map(({ search: _search, by: _by, dev: _dev, plus: _plus, ...row }) => {
       const seen = plus[row.id];
       if (!seen) return row;
       return {

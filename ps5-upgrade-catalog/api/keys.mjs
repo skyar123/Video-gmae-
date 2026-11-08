@@ -17,3 +17,13 @@ export const plusShardFor = (id) => Number(id) % PLUS_SHARDS;
 
 export const SWEEP_LOG_KEY = 'upcoming/last-sweep.json';
 export const PLUS_LOG_KEY = 'store/last-plus-scan.json';
+
+/**
+ * Studios learned from store pages, over and above the baked set.
+ *
+ * PlayStation gives a publisher and no developer, so the studio is read
+ * out of a concept page's own copy when it happens to say. That read
+ * already happens whenever somebody opens a game, so what is learned is
+ * kept rather than thrown away and asked for again.
+ */
+export const DEVELOPERS_KEY = 'store/developers.json';

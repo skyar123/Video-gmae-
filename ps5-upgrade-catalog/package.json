@@ -13,7 +13,8 @@
     "check:functions": "node scripts/check-functions.mjs",
     "bake:upcoming": "node scripts/bake-upcoming.mjs",
     "smoke": "vite build && node scripts/smoke.mjs",
-    "icon": "node scripts/icon/render.mjs"
+    "icon": "node scripts/icon/render.mjs",
+    "bake:developers": "node scripts/bake-developers.mjs"
   },
   "dependencies": {
     "@netlify/blobs": "^11.0.3",

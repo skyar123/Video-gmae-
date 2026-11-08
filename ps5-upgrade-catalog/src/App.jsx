@@ -1483,6 +1483,7 @@ function GameModal({
   const conceptPrice = concept?.price ?? null;
   const storeOffer = conceptPrice?.betterOffer ?? null;
   const publisher = concept?.publisher ?? null;
+  const developer = concept?.developer ?? null;
 
   const [selected, setSelected] = useState(null);
 
@@ -1622,21 +1623,32 @@ function GameModal({
             ))}
           </div>
 
-          {/* Read from the store page, because games.json has no publisher
+          {/* Read from the store page, because games.json has neither
               field. Shown as a way through to the rest of their catalogue
-              rather than as another label. */}
-          {publisher && onSearchPublisher && (
-            <div className="mt-4">
-              <span className="mb-1 block text-xs font-semibold uppercase tracking-wider text-slate-400 dark:text-slate-500">
-                Publisher
-              </span>
-              <button
-                type="button"
-                onClick={() => onSearchPublisher(publisher)}
-                className="text-left font-medium text-indigo-700 dark:text-indigo-300 underline decoration-dotted underline-offset-4 hover:decoration-solid"
-              >
-                {publisher}
-              </button>
+              rather than as another label. The developer is often absent,
+              because PlayStation only names one when the page's own copy
+              happens to, and a guess would be worse than a gap. */}
+          {onSearchPublisher && (publisher || developer) && (
+            <div className="mt-4 flex flex-wrap gap-6">
+              {[
+                ['Developer', developer],
+                ['Publisher', publisher],
+              ]
+                .filter(([, value]) => value)
+                .map(([label, value]) => (
+                  <div key={label}>
+                    <span className="mb-1 block text-xs font-semibold uppercase tracking-wider text-slate-400 dark:text-slate-500">
+                      {label}
+                    </span>
+                    <button
+                      type="button"
+                      onClick={() => onSearchPublisher(value)}
+                      className="text-left font-medium text-indigo-700 dark:text-indigo-300 underline decoration-dotted underline-offset-4 hover:decoration-solid"
+                    >
+                      {value}
+                    </button>
+                  </div>
+                ))}
             </div>
           )}
 
@@ -3059,13 +3071,20 @@ function useConceptMedia(storeId, enabled) {
           // editions are known: a written-up game's price comes from the
           // baked mirror and has no idea the Digital Deluxe is 65% off.
           price: payload?.price ?? null,
-          // games.json has no publisher field, so for a written-up game
-          // this read is the only place the studio is known at all. Without
-          // it the tap-through to everything else they made would work on
-          // the store's 8,700 games and not on the 506 best ones.
+          // games.json has no publisher or developer field, so for a
+          // written-up game this read is the only place either is known.
+          // Without it the tap-through to everything else they made would
+          // work on the store's 8,700 games and not on the 506 best ones.
           publisher: payload?.publisher ?? null,
+          developer: payload?.developer ?? null,
         }))
-        .catch(() => ({ shots: [], trailer: null, price: null, publisher: null }))
+        .catch(() => ({
+          shots: [],
+          trailer: null,
+          price: null,
+          publisher: null,
+          developer: null,
+        }))
         .then((value) => {
           // Remembered either way: a slide with no screenshot still has its
           // key art, so a failed read costs a flourish rather than the card,
@@ -4831,6 +4850,11 @@ function StoreGameModal({
 
         <div className="mt-5 grid grid-cols-2 gap-3 sm:grid-cols-3 sm:gap-4">
           {[
+            // The studio first: it is the one people name. PlayStation
+            // publishes a developer nowhere, so this is read from the
+            // page's own copy or from the baked set, and is simply absent
+            // when neither knows rather than guessed at.
+            ['Developer', detail?.developer ?? game.developer],
             ['Publisher', detail?.publisher ?? game.publisher],
             ['Released', release ? new Date(release).toLocaleDateString([], { year: 'numeric', month: 'short', day: 'numeric' }) : null],
           ]
@@ -4840,10 +4864,10 @@ function StoreGameModal({
                 <span className="mb-1 block text-xs font-semibold uppercase tracking-wider text-slate-400 dark:text-slate-500">
                   {label}
                 </span>
-                {/* The publisher is the one fact on this card that is also
-                    a question: having found one Bethesda game, the next
-                    thing somebody wants is the other ten. */}
-                {label === 'Publisher' && onSearchPublisher ? (
+                {/* Both studios are facts that are also questions: having
+                    found one Bethesda game, or one Naughty Dog game, the
+                    next thing somebody wants is the rest of them. */}
+                {label !== 'Released' && onSearchPublisher ? (
                   <button
                     type="button"
                     onClick={() => onSearchPublisher(value)}
