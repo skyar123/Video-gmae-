@@ -133,6 +133,12 @@ async function index() {
     ...row,
     steamAppId: row.steamAppId ?? matches[row.id] ?? null,
     search: indexText(row.name ?? ''),
+    // The studio, indexed separately so "Bethesda" can answer with eleven
+    // games rather than nothing. Kept apart from the name rather than
+    // mixed into one blob: a publisher match has to rank below every
+    // title match, and two fields is the only way to tell them apart
+    // after the fact.
+    by: indexText(row.publisher ?? ''),
   }));
   merged = { rows, at: Date.now() };
   return rows;
@@ -209,8 +215,36 @@ export async function searchStore({
   });
 
   if (query.folded) {
+    /*
+     * A name, or the studio behind it.
+     *
+     * Typing "Bethesda" used to return nothing at all: only the game's own
+     * name was indexed, so the one thing every row carries about who made
+     * it was unsearchable. Now the publisher answers too.
+     *
+     * Titles are lifted clear of publishers rather than interleaved with
+     * them. Searching "Capcom" should lead with Capcom Arcade Stadium, the
+     * game actually called that, and then everything else Capcom put out;
+     * mixing the two bands would sort a five-star unrelated game above the
+     * exact title somebody typed.
+     *
+     * And only a confident publisher match counts. The squashed and
+     * initials rules exist for game names people abbreviate, and against
+     * 1,773 company names they are pure noise: every three-letter query
+     * would drag in a studio whose initials happened to line up. TITLE_BAND
+     * is above the highest score scoreMatch returns, and PUBLISHER_FLOOR is
+     * the lowest a word-by-word match can score, which leaves squashed
+     * (220) and initials (160) out.
+     */
+    const TITLE_BAND = 1000;
+    const PUBLISHER_FLOOR = 300;
     hits = hits
-      .map((row) => ({ row, score: scoreMatch(row.search, query) }))
+      .map((row) => {
+        const byTitle = scoreMatch(row.search, query);
+        if (byTitle > 0) return { row, score: byTitle + TITLE_BAND };
+        const byPublisher = row.by ? scoreMatch(row.by, query) : -1;
+        return { row, score: byPublisher >= PUBLISHER_FLOOR ? byPublisher : -1 };
+      })
       .filter((entry) => entry.score > 0)
       .sort((a, b) => b.score - a.score || ratingScore(b.row) - ratingScore(a.row))
       .map((entry) => entry.row);
@@ -228,9 +262,10 @@ export async function searchStore({
     // The normalised name is a search artefact; it does not go over the wire.
     games: hits
       .slice(start, start + PAGE_SIZE)
-      // `search` is a search artefact and `plus` is reported by name below,
-      // so neither goes over the wire.
-      .map(({ search: _search, plus: _plus, ...row }) => {
+      // `search` and `by` are search artefacts and `plus` is reported by
+      // name below, so none of them goes over the wire. Leaving `by` in
+      // would ship a second folded index for every row on every page.
+      .map(({ search: _search, by: _by, plus: _plus, ...row }) => {
       const seen = plus[row.id];
       if (!seen) return row;
       return {

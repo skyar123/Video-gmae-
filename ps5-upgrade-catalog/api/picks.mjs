@@ -139,8 +139,10 @@ export async function pickFromMirror(body) {
     games: picks.map(({ game, score, hits }) => ({
       ...game,
       // The search text is an index-building detail and is several hundred
-      // bytes a row, which is most of the response if it goes out.
+      // bytes a row, which is most of the response if it goes out. `by` is
+      // the same thing for the publisher name.
       search: undefined,
+      by: undefined,
       pickScore: Math.round(score * 1000) / 1000,
       reason: explain(hits),
       distinctive: hasDistinctiveReason(hits),

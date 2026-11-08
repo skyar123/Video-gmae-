@@ -107,6 +107,32 @@ test('roman numerals answer to digits', () => {
   assert.ok(matches('Final Fantasy VII Remake', 'ff7'));
 });
 
+test('and digits answer to roman numerals, which is the same question', () => {
+  /*
+   * This only worked one way round. A title written in roman numerals had
+   * a digit spelling to be compared against, and a title already written
+   * with a digit had none, so the conversion silently did nothing.
+   *
+   * Reported with a screenshot: "The Outer Worlds II" returned nothing and
+   * the app said the game was not on PlayStation, with the PlayStation
+   * Store open on it in another tab. The mirror holds it as "The Outer
+   * Worlds 2".
+   */
+  assert.ok(matches('The Outer Worlds 2', 'the outer worlds II'));
+  assert.ok(matches('Devil May Cry 5', 'devil may cry V'));
+  assert.ok(matches('The Last of Us Part II', 'the last of us part 2'));
+
+  // Both spellings of the same game score as the same game.
+  assert.equal(
+    score('The Outer Worlds 2', 'the outer worlds II'),
+    score('The Outer Worlds 2', 'the outer worlds 2'),
+  );
+
+  // And a numeral is still a numeral: a different one is a different game.
+  assert.ok(!matches('The Outer Worlds 2', 'the outer worlds III'));
+  assert.ok(!matches('Devil May Cry 5', 'devil may cry IV'));
+});
+
 test('initials are the weakest signal and stay that way', () => {
   const byInitials = score('The Last of Us™ Part I', 'tlou');
   const byName = score('The Last of Us™ Part I', 'the last of us');

@@ -1447,6 +1447,7 @@ const uncapitalize = (text) =>
 function GameModal({
   game,
   onHide,
+  onSearchPublisher,
   verdict,
   onRate,
   live,
@@ -1478,8 +1479,10 @@ function GameModal({
    * Through the same cache the feed's slides use, so opening a game twice is
    * one request, and a game with no store row asks for nothing at all.
    */
-  const conceptPrice = useConceptMedia(game.storeId ?? null, Boolean(game.storeId))?.price ?? null;
+  const concept = useConceptMedia(game.storeId ?? null, Boolean(game.storeId));
+  const conceptPrice = concept?.price ?? null;
   const storeOffer = conceptPrice?.betterOffer ?? null;
+  const publisher = concept?.publisher ?? null;
 
   const [selected, setSelected] = useState(null);
 
@@ -1618,6 +1621,24 @@ function GameModal({
               </div>
             ))}
           </div>
+
+          {/* Read from the store page, because games.json has no publisher
+              field. Shown as a way through to the rest of their catalogue
+              rather than as another label. */}
+          {publisher && onSearchPublisher && (
+            <div className="mt-4">
+              <span className="mb-1 block text-xs font-semibold uppercase tracking-wider text-slate-400 dark:text-slate-500">
+                Publisher
+              </span>
+              <button
+                type="button"
+                onClick={() => onSearchPublisher(publisher)}
+                className="text-left font-medium text-indigo-700 dark:text-indigo-300 underline decoration-dotted underline-offset-4 hover:decoration-solid"
+              >
+                {publisher}
+              </button>
+            </div>
+          )}
 
           <div className="mt-4 flex flex-wrap items-center gap-2">
             <UpgradeBadge value={game.ps5Upgrade} className="whitespace-nowrap" />
@@ -2348,7 +2369,7 @@ function calendarLine(game) {
   return `Out ${day()}`;
 }
 
-function Elsewhere({ query }) {
+function Elsewhere({ query, onOpenStore }) {
   const [state, setState] = useState({ status: 'loading', items: [] });
 
   useEffect(() => {
@@ -2380,8 +2401,69 @@ function Elsewhere({ query }) {
   }
   if (state.items.length === 0) return null;
 
+  /*
+   * Games we turn out to have, told apart from games we do not.
+   *
+   * Searching "The Outer Worlds II" said "not on PlayStation that we can
+   * see" while the mirror held it as "The Outer Worlds 2". The heading was
+   * a claim, and it was wrong. Anything the server matched back to our own
+   * index is lifted out of that section entirely and shown as what it is.
+   */
+  const here = state.items.filter((item) => item.onPlayStation);
+  const away = state.items.filter((item) => !item.onPlayStation);
+
   return (
     <div className="mx-auto mt-10 max-w-xl text-left">
+      {here.length > 0 && (
+        <div className="mb-8">
+          <h3 className="mb-1 text-sm font-bold uppercase tracking-wider text-emerald-700 dark:text-emerald-300">
+            On PlayStation after all
+          </h3>
+          <p className="mb-3 text-xs leading-relaxed text-slate-500 dark:text-slate-400">
+            Spelled a little differently here, so the search missed it. This is the catalog
+            entry.
+          </p>
+          <ul className="space-y-2">
+            {here.map((item) => (
+              <li key={`here-${item.id}`}>
+                <button
+                  type="button"
+                  onClick={() => onOpenStore?.(item.onPlayStation)}
+                  className="flex w-full gap-3 rounded-2xl border border-emerald-200 dark:border-emerald-900/70 bg-emerald-50/60 dark:bg-emerald-950/30 p-3 text-left transition-colors hover:bg-emerald-50 dark:hover:bg-emerald-950/50"
+                >
+                  {item.onPlayStation.art && (
+                    <img
+                      src={item.onPlayStation.art}
+                      alt=""
+                      loading="lazy"
+                      onError={(event) => {
+                        event.currentTarget.hidden = true;
+                      }}
+                      className="h-16 w-28 shrink-0 rounded-lg bg-slate-100 dark:bg-slate-800 object-cover"
+                    />
+                  )}
+                  <div className="min-w-0 flex-1">
+                    <p className="truncate text-sm font-semibold text-slate-800 dark:text-slate-100">
+                      {item.onPlayStation.name}
+                    </p>
+                    <p className="mt-0.5 flex flex-wrap items-baseline gap-x-2 text-xs text-slate-500 dark:text-slate-400">
+                      <span className="font-semibold text-slate-700 dark:text-slate-200">
+                        {item.onPlayStation.price ?? 'Price not listed'}
+                      </span>
+                      <span className="rounded bg-emerald-200/70 dark:bg-emerald-900/70 px-1.5 py-px text-[10px] font-bold uppercase tracking-wide text-emerald-800 dark:text-emerald-200">
+                        {item.onPlayStation.platforms?.join(' / ') || 'PlayStation'}
+                      </span>
+                    </p>
+                  </div>
+                </button>
+              </li>
+            ))}
+          </ul>
+        </div>
+      )}
+
+      {away.length === 0 ? null : (
+        <>
       <h3 className="mb-1 text-sm font-bold uppercase tracking-wider text-amber-600 dark:text-amber-400">
         Not on PlayStation that we can see
       </h3>
@@ -2390,7 +2472,7 @@ function Elsewhere({ query }) {
         does, it will turn up in the catalog on its own.
       </p>
       <ul className="space-y-2">
-        {state.items.map((item) => (
+        {away.map((item) => (
           <li key={item.id}>
             <a
               href={item.link}
@@ -2439,6 +2521,8 @@ function Elsewhere({ query }) {
           </li>
         ))}
       </ul>
+        </>
+      )}
     </div>
   );
 }
@@ -2975,8 +3059,13 @@ function useConceptMedia(storeId, enabled) {
           // editions are known: a written-up game's price comes from the
           // baked mirror and has no idea the Digital Deluxe is 65% off.
           price: payload?.price ?? null,
+          // games.json has no publisher field, so for a written-up game
+          // this read is the only place the studio is known at all. Without
+          // it the tap-through to everything else they made would work on
+          // the store's 8,700 games and not on the 506 best ones.
+          publisher: payload?.publisher ?? null,
         }))
-        .catch(() => ({ shots: [], trailer: null, price: null }))
+        .catch(() => ({ shots: [], trailer: null, price: null, publisher: null }))
         .then((value) => {
           // Remembered either way: a slide with no screenshot still has its
           // key art, so a failed read costs a flourish rather than the card,
@@ -4573,6 +4662,7 @@ function StoreGameModal({
   onOpenAlerts,
   onToggleWishlist,
   onToggleOwned,
+  onSearchPublisher,
   onClose,
 }) {
   const [detail, setDetail] = useState(null);
@@ -4750,7 +4840,20 @@ function StoreGameModal({
                 <span className="mb-1 block text-xs font-semibold uppercase tracking-wider text-slate-400 dark:text-slate-500">
                   {label}
                 </span>
-                <span className="font-medium text-slate-800 dark:text-slate-100">{value}</span>
+                {/* The publisher is the one fact on this card that is also
+                    a question: having found one Bethesda game, the next
+                    thing somebody wants is the other ten. */}
+                {label === 'Publisher' && onSearchPublisher ? (
+                  <button
+                    type="button"
+                    onClick={() => onSearchPublisher(value)}
+                    className="text-left font-medium text-indigo-700 dark:text-indigo-300 underline decoration-dotted underline-offset-4 hover:decoration-solid"
+                  >
+                    {value}
+                  </button>
+                ) : (
+                  <span className="font-medium text-slate-800 dark:text-slate-100">{value}</span>
+                )}
               </div>
             ))}
         </div>
@@ -5228,6 +5331,27 @@ function StorePanel({ query, curatedFirst = [], curatedReason, curatedByName, sa
   const nothingFound =
     results.status !== 'loading' && results.games.length === 0 && curatedFirst.length === 0;
 
+  /**
+   * The studio this search turned out to be about, if it was about one.
+   *
+   * Worked out from the answer rather than asked for separately: when
+   * every game that came back has the same publisher and that publisher
+   * is what was typed, saying so is the difference between a list of
+   * eleven games and an answer to the question.
+   *
+   * Deliberately silent when the results are mixed. "Capcom" returns
+   * Capcom Arcade Stadium alongside everything else Capcom published, and
+   * a header is only worth it when it is true of the whole list.
+   */
+  const publisherSearched = useMemo(() => {
+    const typed = query.trim();
+    if (typed.length < 3 || results.games.length === 0) return null;
+    const first = results.games[0]?.publisher;
+    if (!first) return null;
+    if (!results.games.every((game) => game.publisher === first)) return null;
+    return fold(first).includes(fold(typed)) ? first : null;
+  }, [query, results.games]);
+
   // Ask for the next page a screen and a half early, so the end of the list is
   // never actually reached. A callback ref because the sentinel only exists
   // while there is more to load.
@@ -5254,6 +5378,14 @@ function StorePanel({ query, curatedFirst = [], curatedReason, curatedByName, sa
           <>
             {(results.total + curatedFirst.length).toLocaleString()} covered so far ·{' '}
             {COLLECTION_BLURBS.plus}
+          </>
+        ) : publisherSearched ? (
+          <>
+            {results.total.toLocaleString()}{' '}
+            {results.total === 1 ? 'game' : 'games'} published by{' '}
+            <span className="font-semibold text-slate-600 dark:text-slate-300">
+              {publisherSearched}
+            </span>
           </>
         ) : (
           <>
@@ -5358,7 +5490,9 @@ function StorePanel({ query, curatedFirst = [], curatedReason, curatedByName, sa
         >
           {/* The mirror is a PlayStation index, so the honest next answer to
               a game it has never heard of is where the game actually is. */}
-          {query && results.status !== 'error' && <Elsewhere query={query} />}
+          {query && results.status !== 'error' && (
+            <Elsewhere query={query} onOpenStore={onOpenStore} />
+          )}
         </PanelMessage>
       ) : (
         <>
@@ -7169,6 +7303,22 @@ export default function App() {
    * did nothing when tapped, because the write-up is looked up in games.json
    * and a store id is not in there.
    */
+  /**
+   * Show everything this studio put out.
+   *
+   * Lands on All, because that is the shelf backed by the whole mirror and
+   * the only one that can answer for a publisher's whole output; a
+   * publisher search inside Cozy would be a handful of games and look like
+   * the rest were missing. Closes whatever was open, since the answer is
+   * behind it.
+   */
+  const searchPublisher = useCallback((name) => {
+    if (!name) return;
+    setActiveStoreGame(null);
+    setActiveGameId(null);
+    setFilters((previous) => ({ ...previous, q: name, collection: 'all' }));
+  }, []);
+
   const openGame = useCallback((game) => {
     if (game.raw) setActiveStoreGame(game.raw);
     else setActiveGameId(game.id);
@@ -8685,6 +8835,7 @@ export default function App() {
         <GameModal
           key={activeGame.id}
           game={activeGame}
+          onSearchPublisher={searchPublisher}
           live={byTitle.get(activeGame.title)}
           pool={visiblePool}
           byTitle={byTitle}
@@ -8749,6 +8900,7 @@ export default function App() {
           onToggleOwned={() => saveStoreRow(activeStoreGame, 'owned')}
           verdict={ratings.get(storeKey(activeStoreGame))}
           onRate={(value) => rateStoreRow(activeStoreGame, value)}
+          onSearchPublisher={searchPublisher}
           onClose={() => setActiveStoreGame(null)}
         />
       )}

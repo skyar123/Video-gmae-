@@ -934,14 +934,108 @@ failures += await oneVideoAtATime();
 failures += await aSearchWithNoAnswerStillAnswers();
 failures += await shelvesKeepEverything();
 failures += await unreadHidesOnlyWhatYouRead();
+/**
+ * Does a studio name find that studio's games, and can you tap through to
+ * them? And is a game we hold ever announced as missing?
+ *
+ * Two reports, one screen. Asked for: "I wanna search Dev names like
+ * Bethesda and all their games pop up and buttons". Then, of the result:
+ * "I checked PlayStation store and this game is in fact on there", with a
+ * screenshot of the app saying NOT ON PLAYSTATION THAT WE CAN SEE above a
+ * PC listing for The Outer Worlds 2, which the mirror holds.
+ *
+ * The second is the one worth a check in the sweep. Finding nothing is a
+ * poor answer; announcing that a game is not on the platform while holding
+ * it is a wrong one, and wrong in a way a reader can catch and the suite
+ * could not.
+ */
+async function aStudioNameFindsItsGames() {
+  const label = 'A studio name finds its games';
+  const page = await browser.newPage({ viewport: { width: 430, height: 1200 } });
+  const problems = [];
+  page.on('pageerror', (error) => problems.push(String(error).slice(0, 110)));
+  let note = '';
+  try {
+    await page.goto(`${BASE}/?view=all`, { waitUntil: 'domcontentloaded' });
+
+    // Whichever publisher the index actually has most of, so this does not
+    // depend on Bethesda still being in it next month.
+    const studio = await page.evaluate(async (base) => {
+      const payload = await (await fetch(`${base}/api/store?q=bethesda`)).json();
+      return (payload.games ?? [])[0]?.publisher ?? null;
+    }, BASE);
+
+    if (!studio) {
+      note = 'no Bethesda games in the index today';
+    } else {
+      const found = await page.evaluate(
+        async ([base, name]) => {
+          const payload = await (await fetch(`${base}/api/store?q=${encodeURIComponent(name)}`)).json();
+          return {
+            total: payload.total ?? 0,
+            allTheirs: (payload.games ?? []).every((game) => game.publisher === name),
+          };
+        },
+        [BASE, studio],
+      );
+      if (found.total < 2) problems.push(`"${studio}" returned ${found.total} games`);
+      if (!found.allTheirs) problems.push(`"${studio}" returned somebody else's games`);
+      note = `${studio} -> ${found.total}`;
+
+      // And the button: the studio on a game's page is a way in.
+      await page.goto(`${BASE}/?q=${encodeURIComponent(studio)}`, { waitUntil: 'domcontentloaded' });
+      let heading = '';
+      for (const end = Date.now() + 20000; Date.now() < end; ) {
+        heading = await page.locator('main').innerText();
+        if (/published by/i.test(heading)) break;
+        await page.waitForTimeout(500);
+      }
+      if (!/published by/i.test(heading)) {
+        problems.push('a publisher search did not say whose games these are');
+      }
+    }
+
+    /*
+     * A game the mirror holds, asked for the way somebody would get it
+     * slightly wrong. It must never land under "not on PlayStation".
+     */
+    const variants = ['outer worlds two', 'the outer worlds II'];
+    for (const variant of variants) {
+      await page.goto(`${BASE}/?q=${encodeURIComponent(variant)}`, { waitUntil: 'domcontentloaded' });
+      let text = '';
+      for (const end = Date.now() + 25000; Date.now() < end; ) {
+        text = (await page.locator('main').innerText()).replace(/\s+/g, ' ');
+        // Settled once it has either found it or given its verdict.
+        if (/Outer Worlds/i.test(text) || /Not on PlayStation/i.test(text)) break;
+        await page.waitForTimeout(500);
+      }
+      if (/Not on PlayStation/i.test(text)) {
+        problems.push(`"${variant}" was called missing, and the mirror has it`);
+      }
+    }
+
+    console.log(
+      `${problems.length ? 'FAIL' : ' ok '} ${label.padEnd(32)} ${note}` +
+        (problems.length ? `  ${problems[0]}` : ''),
+    );
+  } catch (error) {
+    problems.push(`threw: ${String(error.message).slice(0, 80)}`);
+    console.log(`FAIL ${label.padEnd(32)} ${problems[0]}`);
+  }
+  await page.close();
+  if (problems.length > 0) fail(label, problems.join('; '));
+  return problems.length > 0 ? 1 : 0;
+}
+
 failures += await aPlainLaunchOpensSomethingToSwipe();
 failures += await youCanFindAGameByName();
+failures += await aStudioNameFindsItsGames();
 failures += await theWishlistShowsTheWishlist();
 
 await browser.close();
 stop();
 
-const total = SURFACES.length + 7;
+const total = SURFACES.length + 8;
 if (failures > 0) {
   // Named, not just counted, so the last line of a truncated log still says
   // what to go and look at.

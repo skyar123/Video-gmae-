@@ -149,7 +149,24 @@ export function scoreMatch(row, query) {
 
   let score = -1;
 
-  if (row.folded === query.folded || (row.digits && row.digits === query.digits)) {
+  /*
+   * Numerals, compared in one direction rather than two.
+   *
+   * `digits` is null when there was nothing to convert, so a row already
+   * written with a digit had no digit spelling to compare against, and the
+   * roman half of this only ever worked one way round: "final fantasy 7"
+   * found Final Fantasy VII, and "the outer worlds II" found nothing at
+   * all, though the game is right there as The Outer Worlds 2.
+   *
+   * Falling back to the folded text gives both sides something to compare
+   * whichever way the title happens to be written. When neither has a
+   * numeral these are just the folded strings, which the first test above
+   * already covers, so nothing new matches by accident.
+   */
+  const rowDigits = row.digits ?? row.folded;
+  const queryDigits = query.digits ?? query.folded;
+
+  if (row.folded === query.folded || rowDigits === queryDigits) {
     score = 1000;
   } else if (row.folded.startsWith(query.folded)) {
     score = 700 - Math.min(row.folded.length - query.folded.length, 60);
@@ -161,7 +178,10 @@ export function scoreMatch(row, query) {
       score = 500 - Math.min(at, 60);
     } else if (wordsCover(row.words, query.words)) {
       score = 380 - Math.min(row.words.length - query.words.length, 40) * 2;
-    } else if (row.digits && wordsCover(words(row.digits), words(query.digits ?? query.folded))) {
+    } else if (
+      (row.digits || query.digits) &&
+      wordsCover(words(rowDigits), words(queryDigits))
+    ) {
       score = 360;
     } else if (query.squashed.length >= 4 && squashedAtWordStart(row, query.squashed)) {
       score = 220;
