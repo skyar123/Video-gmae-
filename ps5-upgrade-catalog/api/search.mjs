@@ -196,3 +196,29 @@ export function scoreMatch(row, query) {
 
   return score;
 }
+
+/**
+ * The same game, with whatever edition it was sold as taken off.
+ *
+ * Exact titles alone matched 2,428 games and still found no Santa Monica
+ * and no Sucker Punch, which was not Wikidata missing them: it lists
+ * their PS5 games as "God of War Ragnarök: Digital Deluxe Edition" and
+ * "Ghost of Tsushima Director's Cut", while the store sells "God of War
+ * Ragnarök". One edition apart, and the studio went unknown.
+ *
+ * Safe to strip here precisely because this file answers one question.
+ * A Director's Cut is arguably a different product and is certainly a
+ * different store page, but it is not made by a different studio, and
+ * the studio is all this is for.
+ */
+const EDITION =
+  /\s*(?:[-–—:([]\s*)?\b(?:digital\s+)?(?:deluxe|definitive|complete|standard|ultimate|premium|gold|legacy|anniversary|collector'?s?|game\s+of\s+the\s+year|goty|director'?s\s+cut|enhanced|special|royal|intergrade|intermission)\b[^|]*$/i;
+const PLATFORM_TAG = /\s*[([{]\s*ps[45][^)\]}]*[)\]}]\s*$/i;
+
+export const baseTitle = (name) =>
+  fold(
+    String(name ?? '')
+      .replace(PLATFORM_TAG, '')
+      .replace(EDITION, '')
+      .replace(/\s*[-–—:]\s*$/, ''),
+  );

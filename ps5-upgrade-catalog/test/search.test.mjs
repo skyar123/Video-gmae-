@@ -15,7 +15,7 @@
  */
 import { test } from 'node:test';
 import assert from 'node:assert/strict';
-import { fold, indexText, parseQuery, scoreMatch } from '../api/search.mjs';
+import { baseTitle, fold, indexText, parseQuery, scoreMatch } from '../api/search.mjs';
 
 const score = (title, query) => scoreMatch(indexText(title), parseQuery(query));
 const matches = (title, query) => score(title, query) > 0;
@@ -161,4 +161,31 @@ test('folding is letters and digits, and keeps words apart', () => {
   assert.equal(fold('God of War Ragnarök'), 'god of war ragnarok');
   assert.equal(fold("Marvel's Spider-Man"), 'marvels spider man');
   assert.equal(fold('The Last of Us™ Part I'), 'the last of us part i');
+});
+
+test('an edition is taken off a title, but a different game is not', () => {
+  /*
+   * Only used to attribute a studio. Wikidata lists Santa Monica's PS5
+   * game as "God of War Ragnarök: Digital Deluxe Edition" and Sucker
+   * Punch's as "Ghost of Tsushima Director's Cut", while the store sells
+   * the plain names, so exact matching found neither studio at all.
+   *
+   * A Director's Cut is a different store page and arguably a different
+   * product. It is not made by a different studio, which is the only
+   * question this answers.
+   */
+  assert.equal(baseTitle('God of War Ragnarök: Digital Deluxe Edition'), 'god of war ragnarok');
+  assert.equal(baseTitle("Ghost of Tsushima Director's Cut"), 'ghost of tsushima');
+  assert.equal(baseTitle('Hades Collector’s Edition'), 'hades');
+  assert.equal(baseTitle('Red Dead Redemption (PS4 & PS5)'), 'red dead redemption');
+
+  // A plain title is left exactly as folding leaves it.
+  assert.equal(baseTitle('God of War Ragnarök'), fold('God of War Ragnarök'));
+  assert.equal(baseTitle('The Last of Us Part I'), fold('The Last of Us Part I'));
+
+  // And a numbered sequel is not an edition of the first one. Stripping
+  // this would file every studio's sequel under the wrong game.
+  assert.equal(baseTitle('The Outer Worlds 2'), fold('The Outer Worlds 2'));
+  assert.equal(baseTitle('Final Fantasy VII Remake'), fold('Final Fantasy VII Remake'));
+  assert.notEqual(baseTitle('God of War II'), baseTitle('God of War'));
 });

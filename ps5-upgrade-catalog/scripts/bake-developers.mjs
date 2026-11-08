@@ -30,7 +30,7 @@
 import { writeFileSync } from 'node:fs';
 import { fileURLToPath } from 'node:url';
 import baked from '../api/store-index.json' with { type: 'json' };
-import { fold } from '../api/search.mjs';
+import { baseTitle, fold } from '../api/search.mjs';
 
 const ENDPOINT = 'https://query.wikidata.org/sparql';
 const UA = 'ps5-upgrade-catalog/1.0 (personal game catalog project)';
@@ -103,18 +103,41 @@ console.error('Asking Wikidata which studio made what...');
 const pairs = await everything();
 
 const byTitle = new Map();
+const byBase = new Map();
 for (const [title, developer] of pairs) {
   if (!title || !developer || isQid(title) || isQid(developer)) continue;
   const key = fold(title);
   // First answer wins. A game with two developers listed gets the one
   // Wikidata sorts first rather than a guess at which mattered more.
   if (!byTitle.has(key)) byTitle.set(key, developer);
+  const base = baseTitle(title);
+  if (base && base !== key && !byBase.has(base)) byBase.set(base, developer);
 }
 
+/*
+ * Exact first, edition-stripped only as a fallback.
+ *
+ * Stripping widens the net and widening a net is how a wrong answer gets
+ * in: two unrelated games can share a base name, and Tomb Raider was
+ * made by Core Design once and Crystal Dynamics later. An exact title is
+ * never overruled by a looser one, so the fallback can only fill a gap,
+ * never change an answer that was already right.
+ */
 const out = {};
-for (const [key] of mirror) {
-  const developer = byTitle.get(key);
-  if (developer) out[key] = developer;
+let exact = 0;
+let loose = 0;
+for (const [key, name] of mirror) {
+  const direct = byTitle.get(key);
+  if (direct) {
+    out[key] = direct;
+    exact += 1;
+    continue;
+  }
+  const base = byBase.get(baseTitle(name)) ?? byTitle.get(baseTitle(name));
+  if (base) {
+    out[key] = base;
+    loose += 1;
+  }
 }
 
 const target = fileURLToPath(new URL('../api/developers.json', import.meta.url));
@@ -128,7 +151,9 @@ if (Object.keys(out).length === 0) {
 
 writeFileSync(target, `${JSON.stringify(out, null, 0)}\n`);
 console.error(
-  `\n${Object.keys(out).length} of ${mirror.size} games matched, across ${studios.size} studios.`,
+  `\n${Object.keys(out).length} of ${mirror.size} games matched ` +
+    `(${exact} by exact title, ${loose} once the edition was taken off), ` +
+    `across ${studios.size} studios.`,
 );
 for (const want of ['naughty dog', 'insomniac', 'guerrilla', 'sucker punch', 'santa monica']) {
   const n = Object.values(out).filter((studio) => fold(studio).includes(fold(want))).length;
