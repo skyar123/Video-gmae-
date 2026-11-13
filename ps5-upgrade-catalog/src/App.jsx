@@ -7858,10 +7858,32 @@ export default function App() {
    * already filters both correctly, and `catalog` already carries every
    * saved store row, upcoming ones included, so there is nothing to page.
    */
+  /**
+   * A search is a question about everything, not about this shelf.
+   *
+   * Reported as the search getting stuck to the filters, and it was
+   * worse than that. Typing a name while on For you returned the picks
+   * unchanged, because that shelf is ranked rather than filtered and
+   * never consulted the query at all: searching "hollow knight" on the
+   * screen the app opens with answered with BeamNG.drive. On Cozy or a
+   * wishlist the query did apply and the shelf then removed everything,
+   * which reads the same way to a reader: nothing works.
+   *
+   * So a query takes the view over. The shelf steps aside, every
+   * narrowing filter stops applying, and the whole catalogue answers.
+   *
+   * Bypassed rather than cleared, which is the point. The filters keep
+   * their state while the search runs, so clearing the box puts the
+   * reader back on the shelf they were on with the chips they had set,
+   * and nothing they chose was thrown away to answer one question.
+   */
+  const searching = deferredQuery.trim().length >= 2;
+
   const storePaged =
-    (filters.collection === 'all' || filters.collection === 'plus') &&
-    !filters.wishlist &&
-    filters.owned === 'any';
+    searching ||
+    ((filters.collection === 'all' || filters.collection === 'plus') &&
+      !filters.wishlist &&
+      filters.owned === 'any');
 
   const searchScores = useMemo(() => {
     const query = parseQuery(deferredQuery);
@@ -7899,7 +7921,8 @@ export default function App() {
    * with a full write-up is a better answer than a store row.
    */
   const curatedOnlyMatches = useMemo(() => {
-    if (filters.collection !== 'all') return [];
+    // From any shelf now, because a search is answered from everywhere.
+    if (filters.collection !== 'all' && !searching) return [];
     const query = deferredQuery.trim();
     if (query.length < 2 || !searchScores) return [];
 
@@ -7951,6 +7974,7 @@ export default function App() {
       }));
   }, [
     filters.collection,
+    searching,
     deferredQuery,
     searchScores,
     catalog,
@@ -7969,6 +7993,17 @@ export default function App() {
 
     const matches = pool.filter((game) => {
       if (hidden.has(game.id)) return false;
+
+      /*
+       * While a search runs, only the search decides.
+       *
+       * Hiding still applies, because a game somebody hid is a game they
+       * asked never to see again and a search is not a way around that.
+       * Everything below this line is a way of narrowing a shelf, and a
+       * search is not a shelf.
+       */
+      if (searching) return searchScores ? searchScores.has(game.id) : true;
+
       if (isGenius && !geniusRank.has(game.id)) return false;
       if (collection?.tag && !game.tags.includes(collection.tag)) return false;
       if (filters.collection === 'plus' && !byTitle.get(game.title)?.price?.plus?.included)
@@ -8044,7 +8079,7 @@ export default function App() {
       if (filters.sort === 'buy') return buyScoreOf(a) - buyScoreOf(b);
       return discountOf(b) - discountOf(a);
     });
-  }, [pool, searchScores, filters, wishlist, library, hidden, byTitle, geniusPicks, openedAt]);
+  }, [pool, searchScores, searching, filters, wishlist, library, hidden, byTitle, geniusPicks, openedAt]);
 
   // Cards are added as you reach them rather than all at once; a different
   // filter, sort or collection is a different list, so it starts over.
@@ -8073,7 +8108,10 @@ export default function App() {
    * Now that a plain launch lands exactly there, it is the first screen.
    */
   const feedSlides = useMemo(() => {
-    if (filters.collection !== 'genius') {
+    // A search is answered by the search, not by the picker: For you is
+    // ranked rather than filtered, so it would hand back its picks
+    // whatever was typed.
+    if (filters.collection !== 'genius' || searching) {
       return shownGames.map((game) => ({ key: game.id, game, reason: undefined }));
     }
     return mergeGeniusPicks({
@@ -8086,6 +8124,7 @@ export default function App() {
   }, [
     filters.collection,
     filters.newOnly,
+    searching,
     shownGames,
     geniusPicks,
     mirrorPicks,
@@ -8243,6 +8282,33 @@ export default function App() {
   }, [filters, set]);
 
   const activeFilterCount = activeChips.length;
+
+  /** The ones a search has set aside, which is everything but the query. */
+  const pausedChips = activeChips.filter((chip) => chip.key !== 'q');
+
+  /**
+   * What a search stepped over, in a sentence, or nothing to say.
+   *
+   * The greyed chips only appear in the compact header, which means
+   * they are not there in the state most searches start from. This line
+   * sits with the results, where it is always read, and it exists
+   * because a search that quietly ignores a shelf is as confusing as
+   * one that quietly obeys it: the reader should be told either way.
+   */
+  const setAside = useMemo(() => {
+    if (!searching) return null;
+    const shelf =
+      filters.collection !== 'all'
+        ? (COLLECTIONS.find((entry) => entry.value === filters.collection)?.label ?? null)
+        : null;
+    const parts = [...(shelf ? [shelf] : []), ...pausedChips.map((chip) => chip.label)];
+    if (parts.length === 0) return null;
+    const listed =
+      parts.length === 1
+        ? parts[0]
+        : `${parts.slice(0, -1).join(', ')} and ${parts[parts.length - 1]}`;
+    return `${listed} ${parts.length === 1 ? 'is' : 'are'} waiting until you clear the search.`;
+  }, [searching, filters.collection, pausedChips]);
 
   // The feed scrolls inside its own container, so the window listener never
   // fires there. Keeping the bar compact also keeps the slide height stable.
@@ -8592,15 +8658,31 @@ export default function App() {
             </div>
           )}
 
-          {/* Active filters stay visible as removable chips once collapsed. */}
+          {/* Active filters stay visible as removable chips once collapsed.
+
+              While a search runs they are shown greyed and labelled as
+              waiting, because they are not applying and a chip that looks
+              active while doing nothing is how the search came to feel
+              stuck to them. Still removable: a reader who decides they
+              are done with one should not have to clear the search to
+              say so. */}
           {compact && !sheetOpen && filtersActive && (
-            <div className="no-scrollbar mt-2 flex gap-1.5 overflow-x-auto">
+            <div className="no-scrollbar mt-2 flex items-center gap-1.5 overflow-x-auto">
+              {searching && pausedChips.length > 0 && (
+                <span className="shrink-0 text-xs font-medium text-slate-400 dark:text-slate-500">
+                  Waiting:
+                </span>
+              )}
               {activeChips.map((chip) => (
                 <button
                   key={chip.key}
                   type="button"
                   onClick={chip.clear}
-                  className="inline-flex shrink-0 items-center gap-1 rounded-full bg-indigo-50 dark:bg-indigo-950/40 px-2.5 py-1 text-xs font-medium text-indigo-700 dark:text-indigo-300 transition-transform duration-200 ease-spring active:scale-95"
+                  className={`inline-flex shrink-0 items-center gap-1 rounded-full px-2.5 py-1 text-xs font-medium transition-transform duration-200 ease-spring active:scale-95 ${
+                    searching && chip.key !== 'q'
+                      ? 'bg-slate-100 dark:bg-slate-800 text-slate-500 dark:text-slate-400 line-through decoration-slate-400/60'
+                      : 'bg-indigo-50 dark:bg-indigo-950/40 text-indigo-700 dark:text-indigo-300'
+                  }`}
                 >
                   {chip.label}
                   <X className="h-3 w-3" />
@@ -8618,15 +8700,21 @@ export default function App() {
           aria-label="Game feed"
         >
           {/* The collection chip has to mean the same thing in both views.
-              Whole store used to fall through to the curated list here. */}
+              Whole store used to fall through to the curated list here.
+
+              A fresh search carries none of the shelf's narrowing with it
+              either, or "kid friendly" left on an hour ago quietly decides
+              that a game somebody typed by name does not exist. */}
           {storePaged ? (
             <StoreFeed
               query={deferredQuery.trim()}
-              curatedFirst={filters.collection === 'plus' ? curatedPlusGames : curatedOnlyMatches}
-              plusOnly={filters.collection === 'plus'}
-              familyOnly={filters.kidFriendly}
-              noPurchases={filters.noPurchases}
-              newOnly={filters.newOnly}
+              curatedFirst={
+                filters.collection === 'plus' && !searching ? curatedPlusGames : curatedOnlyMatches
+              }
+              plusOnly={filters.collection === 'plus' && !searching}
+              familyOnly={filters.kidFriendly && !searching}
+              noPurchases={filters.noPurchases && !searching}
+              newOnly={filters.newOnly && !searching}
               curatedReason={
                 filters.collection === 'plus'
                   ? 'In your catalog, covered by Plus'
@@ -8674,7 +8762,15 @@ export default function App() {
         </main>
       ) : (
         <main className="gutter pb-nav mx-auto max-w-7xl pt-3">
-          {filters.collection === 'genius' && geniusIsPersonalized ? (
+          {setAside && (
+            <p className="mb-3 flex items-start gap-2 rounded-xl bg-slate-100 dark:bg-slate-800/60 px-3 py-2 text-xs leading-relaxed text-slate-600 dark:text-slate-300">
+              <Search className="mt-px h-3.5 w-3.5 shrink-0" />
+              <span>
+                <span className="font-semibold">Searching everything.</span> {setAside}
+              </span>
+            </p>
+          )}
+          {filters.collection === 'genius' && geniusIsPersonalized && !searching ? (
             <GeniusPanel
               picks={geniusPicks}
               mirror={mirrorPicks}
@@ -8696,11 +8792,13 @@ export default function App() {
           ) : storePaged ? (
             <StorePanel
               query={deferredQuery.trim()}
-              curatedFirst={filters.collection === 'plus' ? curatedPlusGames : curatedOnlyMatches}
-              plusOnly={filters.collection === 'plus'}
-              familyOnly={filters.kidFriendly}
-              noPurchases={filters.noPurchases}
-              newOnly={filters.newOnly}
+              curatedFirst={
+                filters.collection === 'plus' && !searching ? curatedPlusGames : curatedOnlyMatches
+              }
+              plusOnly={filters.collection === 'plus' && !searching}
+              familyOnly={filters.kidFriendly && !searching}
+              noPurchases={filters.noPurchases && !searching}
+              newOnly={filters.newOnly && !searching}
               curatedReason={
                 filters.collection === 'plus'
                   ? 'In your catalog, covered by Plus'

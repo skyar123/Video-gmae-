@@ -1052,13 +1052,105 @@ async function aStudioNameFindsItsGames() {
 
 failures += await aPlainLaunchOpensSomethingToSwipe();
 failures += await youCanFindAGameByName();
+/**
+ * Does a search answer from everywhere, whatever shelf you were on?
+ *
+ * Reported as the search getting stuck to the filters, and it was worse
+ * than that. On For you the query was ignored outright, because that
+ * shelf is ranked rather than filtered and never consulted it: typing
+ * "hollow knight" on the screen the app opens with answered with
+ * BeamNG.drive. On Cozy or a wishlist the query applied and the shelf
+ * then removed every result, which reads the same way to a reader.
+ *
+ * Both halves are checked. A search has to find the game from every
+ * starting state, and clearing it has to put the reader back where they
+ * were, because the filters are bypassed rather than thrown away.
+ */
+async function aSearchAnswersFromAnywhere() {
+  const label = 'A search answers from anywhere';
+  const page = await browser.newPage({ viewport: { width: 430, height: 1200 } });
+  const problems = [];
+  page.on('pageerror', (error) => problems.push(String(error).slice(0, 110)));
+  let note = '';
+  try {
+    await page.goto(`${BASE}/`, { waitUntil: 'domcontentloaded' });
+    await page.evaluate(seed);
+
+    // Every shelf somebody might be on when they decide to search.
+    const wanted = 'hollow knight';
+    const starts = [
+      ['?view=genius&new=1&mode=feed', 'the launch screen'],
+      ['?view=cozy', 'Cozy'],
+      ['?view=genius', 'For you'],
+      ['?view=all&wishlist=1', 'a wishlist'],
+      ['?view=all&kids=1', 'kid friendly'],
+    ];
+    let found = 0;
+    for (const [where, name] of starts) {
+      await page.goto(`${BASE}/${where}&q=${encodeURIComponent(wanted)}`, {
+        waitUntil: 'domcontentloaded',
+      });
+      let text = '';
+      for (const end = Date.now() + 25000; Date.now() < end; ) {
+        text = await page.locator('main').innerText();
+        if (new RegExp(wanted, 'i').test(text)) break;
+        await page.waitForTimeout(500);
+      }
+      if (new RegExp(wanted, 'i').test(text)) found += 1;
+      else problems.push(`searching from ${name} did not find it`);
+    }
+    note = `${found}/${starts.length} shelves`;
+
+    /*
+     * And the filters come back. Bypassing them is only defensible if
+     * they survive: a search that cleared the shelf would answer the
+     * question and lose the reader's place doing it.
+     */
+    await page.goto(`${BASE}/?view=cozy&kids=1`, { waitUntil: 'domcontentloaded' });
+    let shelf = '';
+    for (const end = Date.now() + 20000; Date.now() < end; ) {
+      shelf = await page.locator('main').innerText();
+      if (/of 506 games/.test(shelf)) break;
+      await page.waitForTimeout(500);
+    }
+    const box = page.locator('input[type="search"], input[placeholder*="earch" i]').first();
+    await box.waitFor({ timeout: 15000 });
+    await box.fill(wanted);
+    await page.waitForTimeout(6000);
+    const during = await page.locator('main').innerText();
+    if (!/waiting until you clear/i.test(during)) {
+      problems.push('a search did not say which filters it had set aside');
+    }
+    await box.fill('');
+    let back = '';
+    for (const end = Date.now() + 20000; Date.now() < end; ) {
+      back = await page.locator('main').innerText();
+      if (/of 506 games/.test(back)) break;
+      await page.waitForTimeout(500);
+    }
+    if (!/of 506 games/.test(back)) problems.push('clearing the search did not restore the shelf');
+
+    console.log(
+      `${problems.length ? 'FAIL' : ' ok '} ${label.padEnd(32)} ${note}` +
+        (problems.length ? `  ${problems[0]}` : ''),
+    );
+  } catch (error) {
+    problems.push(`threw: ${String(error.message).slice(0, 80)}`);
+    console.log(`FAIL ${label.padEnd(32)} ${problems[0]}`);
+  }
+  await page.close();
+  if (problems.length > 0) fail(label, problems.join('; '));
+  return problems.length > 0 ? 1 : 0;
+}
+
 failures += await aStudioNameFindsItsGames();
+failures += await aSearchAnswersFromAnywhere();
 failures += await theWishlistShowsTheWishlist();
 
 await browser.close();
 stop();
 
-const total = SURFACES.length + 8;
+const total = SURFACES.length + 9;
 if (failures > 0) {
   // Named, not just counted, so the last line of a truncated log still says
   // what to go and look at.
