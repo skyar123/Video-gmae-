@@ -128,3 +128,28 @@ test('a studio is named the way somebody would type it', async () => {
   assert.equal(studioName(''), '');
   assert.equal(studioName(null), '');
 });
+
+test('a fragment left by an older stripper is cleaned up', async () => {
+  const { studioName } = await import('../api/search.mjs');
+
+  /*
+   * Names taken apart token by token before the normaliser existed are
+   * stored damaged: "Byte Barrel Sp. z o.o." went in as "BYTE BARREL
+   * SP". Normalising the registered form cannot recover that, because
+   * the registered form is already gone, so the orphan comes off.
+   */
+  assert.equal(studioName('BYTE BARREL SP'), 'BYTE BARREL');
+  assert.equal(studioName('Byte Barrel Sp'), 'Byte Barrel');
+  assert.equal(studioName('SIMTERACT Sp'), 'SIMTERACT');
+
+  /*
+   * Narrow on purpose. A wider set of trailing single letters turned
+   * "Studio A" into "Studio", which is the same damage this undoes.
+   */
+  assert.equal(studioName('Studio A'), 'Studio A');
+  assert.equal(studioName('Team A'), 'Team A');
+
+  // And a company whose whole name is the fragment keeps it, because
+  // the rule needs a space in front of it.
+  assert.equal(studioName('Sp'), 'Sp');
+});

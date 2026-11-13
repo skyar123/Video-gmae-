@@ -90,8 +90,13 @@ const rows = baked.rows ?? baked;
  * that were stored before the two sources agreed on a format rather
  * than leaving them for a re-fetch that would learn nothing new.
  */
+let repaired = 0;
 const found = Object.fromEntries(
-  Object.entries(known).map(([key, name]) => [key, studioName(name)]),
+  Object.entries(known).map(([key, name]) => {
+    const tidy = studioName(name);
+    if (tidy !== name) repaired += 1;
+    return [key, tidy];
+  }),
 );
 const gaps = rows
   .filter((row) => !found[fold(row.name ?? '')])
@@ -122,14 +127,28 @@ for (const [index, row] of gaps.entries()) {
   await new Promise((resolve) => setTimeout(resolve, GAP_MS));
 }
 
-if (learned === 0) {
-  console.error('\nNothing learned. Leaving the file alone.');
+/*
+ * A run that learns nothing can still have work to show.
+ *
+ * This guard was "learned === 0, write nothing", which is right for the
+ * case it was built for: a run where every request failed should not
+ * replace a good file with an empty one. It was wrong for the run that
+ * found it, which was sweeping far enough down the tail to learn zero
+ * and was also carrying nineteen repaired names. The guard threw them
+ * away and reported success, so the repair looked done and was not.
+ *
+ * What it is actually guarding against is writing nothing of value, so
+ * that is what it now asks.
+ */
+if (learned === 0 && repaired === 0) {
+  console.error('\nNothing learned and nothing to repair. Leaving the file alone.');
   process.exit(1);
 }
 
 const target = fileURLToPath(new URL('../api/developers.json', import.meta.url));
 writeFileSync(target, `${JSON.stringify(found, null, 0)}\n`);
 console.error(
-  `\n+${learned} studios (${silent} pages did not say, ${failed} would not load).` +
+  `\n+${learned} studios (${silent} pages did not say, ${failed} would not load)` +
+    `${repaired > 0 ? `, ${repaired} names tidied` : ''}.` +
     `\n${Object.keys(found).length} games now have one.`,
 );

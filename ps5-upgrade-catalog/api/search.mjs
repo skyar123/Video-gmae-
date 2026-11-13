@@ -278,5 +278,24 @@ export function studioName(value) {
       if (shorter.length >= 3) name = shorter;
     }
   }
+  /*
+   * An orphan left by an older, worse stripper.
+   *
+   * Names taken apart token by token before this function existed are
+   * already stored damaged: "Byte Barrel Sp. z o.o." went in as "BYTE
+   * BARREL SP", and no amount of normalising the registered form can
+   * recover that, because the registered form is already gone.
+   *
+   * Only "Sp", which is the fragment that actually occurs here. A wider
+   * set of single letters turned "Studio A" into "Studio", which is the
+   * same class of damage this is meant to undo. What is
+   * left is the name the company actually goes by. The pattern needs
+   * whitespace before the fragment, so a studio genuinely called "Sp"
+   * keeps its name; what is left only has to be a name, not two words,
+   * because Simteract is one word and is still a company.
+   */
+  const orphan = name.replace(/\s+(?:sp|s\.p\.?z?)\.?$/i, '').trim();
+  if (orphan.length >= 3) name = orphan;
+
   return name.replace(/[,;:\s]+$/, '').trim();
 }
