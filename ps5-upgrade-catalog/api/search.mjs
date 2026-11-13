@@ -237,3 +237,46 @@ export const baseTitle = (name) =>
       .replace(LICENSOR, '')
       .replace(/\s*[-–—:]\s*$/, ''),
   );
+
+/**
+ * A studio's name as somebody would type it, not as it is registered.
+ *
+ * Nobody searches "Naughty Dog LLC" or "SIMS Co., Ltd.", and a button
+ * that reads "Bit Planet Games, LLC" is a button that looks like a
+ * database leaked into the page.
+ *
+ * Shared by both sources deliberately. The store extractor stripped
+ * suffixes and the Wikidata bake did not, so the same company arrived
+ * tidy from one and registered from the other, and nineteen names
+ * carried a suffix for no reason other than which source found them.
+ *
+ * Multi-word forms go first and as a unit. Taking tokens off one at a
+ * time turned "Byte Barrel Sp. z o.o." into "BYTE BARREL SP", which is
+ * not a tidier name, it is a broken one.
+ */
+const REGISTERED = [
+  /[,\s]+sp\.?\s*z\s*o\.?\s*o\.?$/i,
+  /[,\s]+s\.?\s*r\.?\s*o\.?$/i,
+  /[,\s]+d\.?\s*o\.?\s*o\.?$/i,
+  /[,\s]+(?:co|company)[,\s]+(?:ltd|limited|inc)\.?$/i,
+  /[,\s]+(?:llc|l\.l\.c|ltd|limited|inc|incorporated|corp|corporation|gmbh|oy|oyj|ab|a\/s|aps|bv|b\.v|nv|pty|plc|kk|k\.k|kft|sa|s\.a|srl|s\.r\.l|sl|s\.l|pte|ug|as|co)\.?$/i,
+];
+
+export function studioName(value) {
+  let name = String(value ?? '')
+    .replace(/&amp;/g, '&')
+    .replace(/\s+/g, ' ')
+    .replace(/[,;:\s]+$/, '')
+    .trim();
+  // Twice: "Something Games Co. Ltd." needs both halves taken off, and
+  // the two-word rules above only match one at a time.
+  for (let pass = 0; pass < 2; pass += 1) {
+    for (const pattern of REGISTERED) {
+      const shorter = name.replace(pattern, '').trim();
+      // Never strip a name down to nothing: a company called "Oy" keeps
+      // its name rather than becoming an empty string.
+      if (shorter.length >= 3) name = shorter;
+    }
+  }
+  return name.replace(/[,;:\s]+$/, '').trim();
+}

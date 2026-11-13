@@ -30,7 +30,7 @@
 import { writeFileSync } from 'node:fs';
 import { fileURLToPath } from 'node:url';
 import baked from '../api/store-index.json' with { type: 'json' };
-import { baseTitle, fold } from '../api/search.mjs';
+import { baseTitle, fold, studioName } from '../api/search.mjs';
 
 const ENDPOINT = 'https://query.wikidata.org/sparql';
 const UA = 'ps5-upgrade-catalog/1.0 (personal game catalog project)';
@@ -105,8 +105,13 @@ const pairs = await everything();
 const AMBIGUOUS = Symbol('more than one studio claims this name');
 const byTitle = new Map();
 const byBase = new Map();
-for (const [title, developer] of pairs) {
-  if (!title || !developer || isQid(title) || isQid(developer)) continue;
+for (const [title, raw] of pairs) {
+  if (!title || !raw || isQid(title) || isQid(raw)) continue;
+  // Wikidata gives the registered name. The store extractor already
+  // trims one; without this the same company arrives tidy from one
+  // source and as "Bit Planet Games, LLC" from the other.
+  const developer = studioName(raw);
+  if (!developer) continue;
   const key = fold(title);
   // First answer wins. A game with two developers listed gets the one
   // Wikidata sorts first rather than a guess at which mattered more.

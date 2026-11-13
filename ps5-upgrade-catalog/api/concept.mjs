@@ -15,6 +15,7 @@ import { betterOffer, loadPsnPrice, localeFor, parseEditions } from './psn.mjs';
 import { predictPriceDrop } from './predict.mjs';
 
 import { ratingFromConcept } from './rating.mjs';
+import { studioName } from './search.mjs';
 import { loadReviewSignal } from './reviews.mjs';
 
 const STORE_ORIGIN = 'https://store.playstation.com';
@@ -142,9 +143,6 @@ const mediaByRole = (html, role) => [
  * The legal suffix goes: a reader searching "Naughty Dog" should not have
  * to know whether the page said LLC.
  */
-const LEGAL_SUFFIX =
-  /[,\s]+(llc|ltd|limited|inc|incorporated|co|corp|corporation|gmbh|oy|ab|a\/s|as|srl|sl|s\.l\.|bv|b\.v\.|pty|plc|kk|k\.k\.|sa|s\.a\.|aps|ug|pte)\.?$/i;
-
 export function developerFrom(html) {
   const found = String(html ?? '').match(
     /\b(?:created and developed|developed|development)\s+by\s+([A-Z][^.<"\u2019]{2,44})/i,
@@ -162,9 +160,9 @@ export function developerFrom(html) {
     .replace(/[,;:]$/, '')
     .trim();
 
-  // Twice, because "Naughty Dog LLC." leaves "Naughty Dog" and
-  // "Something Games Co. Ltd." needs both taken off.
-  name = name.replace(LEGAL_SUFFIX, '').replace(LEGAL_SUFFIX, '').trim();
+  // The registered form goes, so the button reads the way somebody
+  // would type it. Shared with the bake so both sources agree.
+  name = studioName(name);
 
   // A one-word fragment or a half-sentence is not a studio.
   if (name.length < 3 || name.length > 40) return null;

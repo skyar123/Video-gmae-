@@ -43,7 +43,7 @@ import { fileURLToPath } from 'node:url';
 import baked from '../api/store-index.json' with { type: 'json' };
 import known from '../api/developers.json' with { type: 'json' };
 import { developerFrom } from '../api/concept.mjs';
-import { fold } from '../api/search.mjs';
+import { fold, studioName } from '../api/search.mjs';
 
 const STORE = 'https://store.playstation.com/en-us/concept';
 const UA = 'Mozilla/5.0 (compatible; ps5-upgrade-catalog/1.0)';
@@ -82,7 +82,17 @@ async function head(id) {
 }
 
 const rows = baked.rows ?? baked;
-const found = { ...known };
+
+/*
+ * Everything already known, tidied on the way through.
+ *
+ * The whole file is rewritten at the end anyway, so a run repairs names
+ * that were stored before the two sources agreed on a format rather
+ * than leaving them for a re-fetch that would learn nothing new.
+ */
+const found = Object.fromEntries(
+  Object.entries(known).map(([key, name]) => [key, studioName(name)]),
+);
 const gaps = rows
   .filter((row) => !found[fold(row.name ?? '')])
   .sort((a, b) => (b.votes ?? 0) - (a.votes ?? 0))

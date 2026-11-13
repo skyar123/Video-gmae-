@@ -95,3 +95,36 @@ test('the first credit wins, and reading it twice gives the same answer', () => 
   assert.equal(developerFrom(page), 'Guerrilla');
   assert.equal(developerFrom(page), developerFrom(page));
 });
+
+test('a studio is named the way somebody would type it', async () => {
+  const { studioName } = await import('../api/search.mjs');
+
+  // Nobody searches the registered form, and a button reading
+  // "Bit Planet Games, LLC" looks like a database leaked into the page.
+  assert.equal(studioName('Naughty Dog LLC'), 'Naughty Dog');
+  assert.equal(studioName('Bit Planet Games, LLC'), 'Bit Planet Games');
+  assert.equal(studioName('Housemarque Oy'), 'Housemarque');
+  assert.equal(studioName('Atari, Inc.'), 'Atari');
+  assert.equal(studioName('Rare Ltd.'), 'Rare');
+
+  // Two halves, which needs more than one pass.
+  assert.equal(studioName('Gust Co. Ltd.'), 'Gust');
+  assert.equal(studioName('SIMS Co., Ltd.'), 'SIMS');
+
+  // Multi-word forms come off whole. Taking tokens one at a time turned
+  // "Byte Barrel Sp. z o.o." into "BYTE BARREL SP", which is not a
+  // tidier name, it is a broken one.
+  assert.equal(studioName('Byte Barrel Sp. z o.o.'), 'Byte Barrel');
+  assert.equal(studioName('SIMTERACT Sp. z o.o.'), 'SIMTERACT');
+
+  // And names that only look like suffixes are left alone. A studio
+  // stripped to nothing, or to two letters, is worse than one that kept
+  // a word it did not need.
+  assert.equal(studioName('The Chinese Room'), 'The Chinese Room');
+  assert.equal(studioName('Team Asobi'), 'Team Asobi');
+  assert.equal(studioName('SNK'), 'SNK');
+  assert.equal(studioName('M2'), 'M2');
+  assert.equal(studioName('Oy'), 'Oy');
+  assert.equal(studioName(''), '');
+  assert.equal(studioName(null), '');
+});
