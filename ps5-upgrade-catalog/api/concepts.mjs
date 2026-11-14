@@ -172,6 +172,81 @@ export const CONCEPTS = [
   },
   {
     /*
+     * Narrower than "kids", and the store knows the difference.
+     *
+     * Asked for by name: "I wish when I searched Toddler Games something
+     * showed up". Family and Educational on their own are 520 games
+     * including plenty a three-year-old cannot play, so this adds the
+     * floor the rating already carries.
+     */
+    id: 'toddler',
+    label: 'For very young children',
+    ask: [
+      'toddler',
+      'toddlers',
+      'toddler games',
+      'preschool',
+      'preschooler',
+      'for toddlers',
+      'baby games',
+      'under 5',
+      'three year old',
+      'four year old',
+    ],
+    genres: ['Family', 'Educational'],
+    everyone: true,
+  },
+  {
+    id: 'coop',
+    label: 'Play together',
+    ask: ['coop', 'cooperative', 'two player', 'multiplayer', 'play together', 'with friends'],
+    genres: ['Party'],
+    tags: ['social'],
+  },
+  {
+    id: 'pixel',
+    label: 'Pixel art',
+    ask: ['pixel art', 'pixel', 'retro art', '8 bit', '16 bit'],
+    art: ['Pixel Art'],
+  },
+  {
+    id: 'handdrawn',
+    label: 'Hand-drawn',
+    ask: ['hand drawn', 'watercolour', 'watercolor', 'painted'],
+    art: ['Hand-drawn', 'Watercolor'],
+  },
+  {
+    id: 'realistic',
+    label: 'Photorealistic',
+    ask: ['photorealistic', 'realistic', 'real life', 'lifelike'],
+    art: ['Photorealistic'],
+  },
+  {
+    id: 'educational',
+    label: 'Learning games',
+    ask: ['educational', 'learning', 'teaching', 'school', 'maths', 'math'],
+    genres: ['Educational', 'Brain Training'],
+  },
+  {
+    id: 'exploration',
+    label: 'Exploration',
+    ask: ['exploration', 'exploring', 'open world', 'adventure games', 'walking'],
+    curated: ['Exploration'],
+  },
+  {
+    id: 'disability',
+    label: 'Disability representation',
+    ask: ['disability', 'disabled', 'accessible', 'accessibility', 'neurodivergent'],
+    tags: ['disability'],
+  },
+  {
+    id: 'graphics',
+    label: 'Showpieces',
+    ask: ['graphics', 'best looking', 'showcase', 'beautiful', 'gorgeous'],
+    tags: ['graphics'],
+  },
+  {
+    /*
      * The one with no label behind it.
      *
      * PlayStation has no Board genre, and matching the word against
@@ -254,8 +329,25 @@ export function conceptFor(query) {
 export function matchesConcept(game, concept) {
   if (!concept || !game) return false;
 
+  /*
+   * A floor the whole concept has to clear, not another way in.
+   *
+   * "Toddler games" is Family and Educational narrowed to what a very
+   * young child can actually be handed, and the store says which those
+   * are: the rating carries a tier. Without this, asking for toddler
+   * games returns the same 520 games as asking for kids' games, and the
+   * narrower question would have been answered with the broader one.
+   */
+  if (concept.everyone) {
+    const rating = game.ageRating ?? null;
+    const safe = rating?.tier === 'everyone' || rating?.family === 'safe';
+    if (!safe) return false;
+  }
+
   const genres = Array.isArray(game.genres) ? game.genres : [];
   if (concept.genres?.some((wanted) => genres.includes(wanted))) return true;
+
+  if (concept.art?.length && concept.art.includes(game.artStyle)) return true;
 
   // A write-up's own genre is a single string, not a list.
   if (concept.curated?.length) {

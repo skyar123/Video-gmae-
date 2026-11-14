@@ -100,11 +100,15 @@ test('nothing in the vocabulary is empty or duplicated', () => {
   // silently.
   const seen = new Map();
   for (const concept of CONCEPTS) {
+    // Every field a concept can reach a game through. Adding a new one
+    // and forgetting it here is how this test starts reporting that a
+    // working concept points at nothing, which it did for pixel art.
     const reach =
       (concept.genres?.length ?? 0) +
       (concept.curated?.length ?? 0) +
       (concept.tags?.length ?? 0) +
-      (concept.names?.length ?? 0);
+      (concept.names?.length ?? 0) +
+      (concept.art?.length ?? 0);
     assert.ok(reach > 0, `${concept.id} points at nothing`);
     assert.ok(concept.ask.length > 0, `${concept.id} cannot be asked for`);
     for (const phrase of concept.ask) {
