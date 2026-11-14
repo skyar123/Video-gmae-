@@ -200,7 +200,28 @@ const SMOOTHING = 2.5;
  */
 const NEGATIVE_CAP = 1;
 
-export function buildTaste(signals, only = null, { negativeCap = NEGATIVE_CAP } = {}) {
+/**
+ * What a straight answer about a feature is worth, next to a rated game.
+ *
+ * Set equal to a thumbs up on purpose. Someone answering "do you go for
+ * Metroidvania games" is saying the thing the model otherwise has to infer
+ * from a liked game that happens to be one, so it is the more direct
+ * evidence of the two, not the weaker. What keeps it from becoming a law is
+ * the same smoothing every other feature gets: one answer lands at
+ * 1/(1+2.5), a little over a quarter, and a second answer the other way
+ * cancels it.
+ *
+ * It does not escape the negative cap either, because it is not exempt from
+ * being wrong: a reader who answers no to everything should narrow the list,
+ * not empty it.
+ */
+export const ANSWER_WEIGHT = 1;
+
+export function buildTaste(
+  signals,
+  only = null,
+  { negativeCap = NEGATIVE_CAP, answers = [] } = {},
+) {
   const score = new Map();
   const seen = new Map();
   let positives = 0;
@@ -229,11 +250,36 @@ export function buildTaste(signals, only = null, { negativeCap = NEGATIVE_CAP } 
     }
   }
 
+  /*
+   * Answers about a feature, folded in as evidence on that feature alone.
+   *
+   * Deliberately after the damping above and not part of it. Damping exists
+   * because a pile of thumbs-down with nothing liked would make every weight
+   * negative, and it is computed from the signal mass; an answer is not a
+   * signal about a game, so it has no game mass to scale against. What keeps
+   * a wall of noes in proportion here is that each one only touches the one
+   * feature it was about, rather than every feature of some game.
+   */
+  let said = { yes: 0, no: 0 };
+  for (const { feature, verdict } of answers ?? []) {
+    if (verdict !== 'yes' && verdict !== 'no') continue;
+    if (typeof feature !== 'string' || !feature.includes(':')) continue;
+    // The same namespace filter the features themselves go through, so a
+    // profile built for the store half cannot be taught a curated-only
+    // feature it will never be asked to score on.
+    if (only && !only.has(feature.slice(0, feature.indexOf(':')))) continue;
+    if (verdict === 'yes') said.yes += 1;
+    else said.no += 1;
+    const weight = verdict === 'yes' ? ANSWER_WEIGHT : -ANSWER_WEIGHT;
+    score.set(feature, (score.get(feature) ?? 0) + weight);
+    seen.set(feature, (seen.get(feature) ?? 0) + ANSWER_WEIGHT);
+  }
+
   const weights = new Map();
   for (const [feature, total] of score) {
     weights.set(feature, total / (seen.get(feature) + SMOOTHING));
   }
-  return { weights, seen, only, signals: signals.length, positives };
+  return { weights, seen, only, signals: signals.length, positives, said };
 }
 
 /* ------------------------------------------------------------------ *
@@ -430,10 +476,17 @@ export function diversify(ranked, limit, lambda = 0.72, only = null) {
 export function geniusPicks(
   pool,
   signals,
-  { limit = 48, exclude = new Set(), only = null, tuning = TUNING } = {},
+  { limit = 48, exclude = new Set(), only = null, tuning = TUNING, answers = [] } = {},
 ) {
-  const taste = buildTaste(signals, only);
-  if (taste.positives === 0) return { picks: [], taste };
+  const taste = buildTaste(signals, only, { answers });
+  /*
+   * Something positive has to exist before this is a profile rather than a
+   * list of complaints, but a yes answer counts as that something. It used
+   * to test rated games alone, which meant a reader who answered the guided
+   * questions and had thumbed nothing got an empty list back and no way to
+   * tell that their answers had been taken.
+   */
+  if (taste.positives === 0 && taste.said.yes === 0) return { picks: [], taste };
 
   /*
    * A game you have already said something about is never suggested back.
@@ -578,7 +631,17 @@ export function unpackTaste(packed) {
  * ------------------------------------------------------------------ */
 
 const TAG_PHRASES = {
-  graphics: 'how it looks',
+  /*
+   * "how it looks" worked as the tail of a sentence and nowhere else. Put as
+   * a question it became the card "How it looks", with More of this and Less
+   * of this under it, which asks nothing: more of how it looks than what?
+   *
+   * The shelf this tag backs is described as technical showcases and
+   * standout art direction, and a phrase that says that reads correctly in
+   * both places: "Because you go for showpiece visuals", and a card headed
+   * "Showpiece visuals".
+   */
+  graphics: 'showpiece visuals',
   social: 'playing with people',
   cozy: 'cozy games',
   queer: 'queer stories',
@@ -621,9 +684,19 @@ export function describeFeature(feature) {
   switch (kind) {
     case 'genre':
     case 'sgenre':
-      return `${value} games`;
+      /*
+       * The store's vocabulary already says it in some of its names. Adding
+       * the word regardless produced "Role Playing Games games", under a
+       * pick, as the reason it was chosen.
+       */
+      return /\bgames?$/i.test(value) ? value : `${value} games`;
     case 'art':
-      return `the ${value.toLowerCase()} look`;
+      /*
+       * Lowercased, except where the name is not a word. "3D" became "the 3d
+       * look" and "3D/2D Mix" became "the 3d/2d mix look"; a digit in the
+       * name is the tell that it is a label rather than an adjective.
+       */
+      return `the ${/\d/.test(value) ? value : value.toLowerCase()} look`;
     case 'lead':
       return LEAD_PHRASES[value] ?? null;
     case 'tag':
@@ -725,4 +798,132 @@ export function explain(hits, { limit = 2 } = {}) {
   if (phrases.length === 0) return 'Well reviewed, and nothing you have ruled out.';
   if (phrases.length === 1) return `Because you go for ${phrases[0]}.`;
   return `Because you go for ${phrases[0]} and ${phrases[1]}.`;
+}
+
+/* ------------------------------------------------------------------ *
+ * 9. Asking, when waiting to be told is too slow
+ * ------------------------------------------------------------------ */
+
+/**
+ * The questions worth putting to the reader, hardest-to-guess first.
+ *
+ * Asked for directly: a way to "improve the algorithm with guided
+ * questions". The model only ever learned by watching, which is the right
+ * default and a slow start: a reader who has rated nothing gets the
+ * best-reviewed games, and the only way out of that is to rate a dozen games
+ * one at a time.
+ *
+ * Two constraints decide what can be asked, and both come from code that
+ * already exists rather than from a new list to keep in step.
+ *
+ * It has to be sayable. `describeFeature` is the one place a feature becomes
+ * English, and it returns null for everything with no good phrasing, so a
+ * feature it cannot phrase cannot be asked about. That is the same test the
+ * reason under a pick passes, which is why the question and the later
+ * explanation use the same words: you are asked whether you go for cozy
+ * games, and picks then say they were chosen because you go for cozy games.
+ *
+ * And it has to be worth saying. `SAYING_IT` already ranks features by how
+ * much they tell a person about themselves, and an age tier scores low there
+ * for a good reason: nearly every game has one, so the answer separates
+ * almost nothing. The same floor applies here.
+ *
+ * Ordering is the actual design. Least evidence first, so the questions go
+ * where the profile is blank rather than confirming what it already knows,
+ * and the catalog count breaks ties, so of two things nobody has said
+ * anything about, the one that decides more games is asked first.
+ */
+export function questionsFor(
+  catalog,
+  taste = null,
+  { limit = 8, minGames = 8, asked = new Set() } = {},
+) {
+  const counts = new Map();
+  for (const game of catalog ?? []) {
+    for (const feature of featuresOf(game)) {
+      counts.set(feature, (counts.get(feature) ?? 0) + 1);
+    }
+  }
+
+  const seen = taste?.seen ?? new Map();
+
+  /*
+   * Grouped by the words, not by the feature.
+   *
+   * The two halves of the catalog keep separate vocabularies on purpose, and
+   * three of their genres collide: Action, Adventure and Strategy exist in
+   * both. Asked feature by feature, that put "Action games" to the reader
+   * twice in one run, which reads as the questions not being thought about.
+   *
+   * So one question covers every feature that says the same thing, and the
+   * answer applies to all of them. That is the honest reading of it: someone
+   * saying yes to Action games has not said anything about which half of the
+   * catalog wrote the label down.
+   */
+  const byPhrase = new Map();
+  for (const [feature, games] of counts) {
+    // Too rare to be worth a question. Answering it either way leaves the
+    // list almost exactly as it was, which makes the asking feel pointless.
+    if (games < minGames) continue;
+    const kind = feature.slice(0, feature.indexOf(':'));
+    if ((SAYING_IT[kind] ?? 1) < WORTH_SAYING) continue;
+    /*
+     * Never put back a question that has been answered.
+     *
+     * Evidence alone cannot carry this. The ordering below prefers whatever
+     * the profile is blank on, which is enough while there is plenty left to
+     * ask, and in a narrow catalog there may be only three things worth
+     * asking at all: then the one just answered comes straight back up,
+     * which reads as the answer having been thrown away.
+     */
+    if (asked.has(feature)) continue;
+    const phrase = describeFeature(feature);
+    if (!phrase) continue;
+    const group = byPhrase.get(phrase);
+    const evidence = seen.get(feature) ?? 0;
+    if (group) {
+      group.features.push(feature);
+      // The larger of the two, both times. A phrase the model already knows
+      // something about should not come back up because the other half of
+      // the catalog happens to have no evidence for it yet.
+      group.games = Math.max(group.games, games);
+      group.evidence = Math.max(group.evidence, evidence);
+      group.saying = Math.max(group.saying, SAYING_IT[kind] ?? 1);
+    } else {
+      byPhrase.set(phrase, {
+        features: [feature],
+        phrase,
+        games,
+        evidence,
+        saying: SAYING_IT[kind] ?? 1,
+      });
+    }
+  }
+
+  const questions = [...byPhrase.values()];
+  for (const question of questions) question.features.sort();
+  /*
+   * Three keys, in this order, and the middle one is the one worth
+   * explaining.
+   *
+   * Blank first, always: the questions are for the part the model cannot
+   * already guess. But at a cold start nothing has evidence, so that key
+   * ties for everything and the order fell through to sheer coverage, which
+   * opened with "The 3D look" because 210 games are 3D. A true thing to ask
+   * and a poor first question: 3D is what a game is unless it is something
+   * else, so it reads as the app rummaging rather than asking.
+   *
+   * SAYING_IT already ranks features by how much they tell a person about
+   * themselves, which is the same judgement a question needs, so a genre or
+   * a mood is asked before an art style and an art style before a lead.
+   * Coverage only breaks ties inside a kind.
+   */
+  questions.sort(
+    (a, b) =>
+      a.evidence - b.evidence ||
+      b.saying - a.saying ||
+      b.games - a.games ||
+      (a.phrase < b.phrase ? -1 : 1),
+  );
+  return questions.slice(0, limit);
 }

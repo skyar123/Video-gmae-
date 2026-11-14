@@ -63,6 +63,8 @@ import {
   explain,
   packTaste,
   normalizeTitle,
+  describeFeature,
+  questionsFor,
   SIGNAL_WEIGHTS,
 } from './genius.js';
 import { fold, indexText, parseQuery, scoreMatch } from '../api/search.mjs';
@@ -382,6 +384,15 @@ const WISHLIST_KEY = 'wishlist';
 const LIBRARY_KEY = 'library';
 const HIDDEN_KEY = 'hidden';
 const RATINGS_KEY = 'ratings';
+/*
+ * Straight answers about kinds of game, as opposed to verdicts on games.
+ *
+ * Kept apart from `ratings` because they are a different claim. A rating
+ * says something about one game and the model infers the rest; an answer
+ * says the thing itself. Mixing them would also mean a feature answer
+ * showing up as a thumb on some game the reader never saw.
+ */
+const ANSWERS_KEY = 'featureAnswers';
 
 /** Store-mirror ids are numeric; prefixing keeps them out of the catalog's namespace. */
 const storeKey = (game) => `store:${game.id}`;
@@ -486,6 +497,23 @@ function readRatings() {
     );
   } catch {
     return new Map();
+  }
+}
+
+function readAnswers() {
+  try {
+    const raw = JSON.parse(localStorage.getItem(ANSWERS_KEY) ?? '{}');
+    if (!raw || typeof raw !== 'object' || Array.isArray(raw)) return {};
+    return Object.fromEntries(
+      Object.entries(raw).filter(
+        ([feature, verdict]) =>
+          typeof feature === 'string' &&
+          feature.includes(':') &&
+          (verdict === 'yes' || verdict === 'no'),
+      ),
+    );
+  } catch {
+    return {};
   }
 }
 
@@ -3525,12 +3553,27 @@ const UPDATE_TEXT = {
  * across the bottom is where a hand actually rests. Pointer layouts keep the
  * single header row and never see this.
  */
-function BottomBar({ view, onView, onBriefing, onSurprise, canSurprise, updates }) {
+function BottomBar({ view, collection, onView, onBriefing, onForYou, canSurprise, updates }) {
   const items = [
     { key: 'grid', label: 'Browse', icon: LayoutGrid, active: view === 'grid' },
     { key: 'feed', label: 'Feed', icon: Rows3, active: view === 'feed' },
     { key: 'goss', label: 'Goss', icon: Flame, badge: updates },
-    { key: 'surprise', label: 'For you', icon: Sparkles, disabled: !canSurprise },
+    /*
+     * The For you section, not a drawer over the top of it.
+     *
+     * This used to open a sheet holding twelve picks in a single column,
+     * which on a phone was the only For you there was: the section itself
+     * is behind a chip in a row that collapses as soon as the page scrolls.
+     * Reported as wanting it scrollable and a grid, and it was neither,
+     * because it was not the section at all.
+     */
+    {
+      key: 'surprise',
+      label: 'For you',
+      icon: Sparkles,
+      disabled: !canSurprise,
+      active: collection === 'genius' && view === 'grid',
+    },
   ];
 
   return (
@@ -3547,7 +3590,7 @@ function BottomBar({ view, onView, onBriefing, onSurprise, canSurprise, updates 
             aria-current={item.active ? 'page' : undefined}
             onClick={() => {
               if (item.key === 'goss') onBriefing();
-              else if (item.key === 'surprise') onSurprise();
+              else if (item.key === 'surprise') onForYou();
               else onView(item.key);
             }}
             className={`relative flex h-14 flex-1 flex-col items-center justify-center gap-0.5 transition-colors active:bg-slate-100 disabled:opacity-40 ${
@@ -4251,6 +4294,179 @@ function Verdict({ verdict, onRate, size = 'md' }) {
 }
 
 /**
+ * Being asked, instead of only being watched.
+ *
+ * Asked for directly: the For you section should "give you an option to
+ * improve the algorithm with guided questions". Everything the model knew
+ * came from games the reader had already said something about, which is
+ * right as a default and slow as a start. A reader who has rated nothing
+ * gets the best-reviewed games, and the only way out of that was a dozen
+ * thumbs, one game at a time.
+ *
+ * The questions are not a different model. Each one is a feature the ranking
+ * already scores on, worded by the same function that writes the sentence
+ * under a pick, so answering "cozy games" is answered back as "because you
+ * go for cozy games". Nothing here can teach the model a thing the ranking
+ * cannot use.
+ *
+ * One at a time, and skippable. A page of twenty toggles is a form, and a
+ * form is the thing the old mood sheet got wrong: it asked the reader to do
+ * the work before it would do any.
+ */
+function GuidedQuestions({ questions, answers, answered, onAnswer, onClose }) {
+  /*
+   * The run is fixed when the sheet opens, and stepped through.
+   *
+   * Which questions are worth asking depends on what the profile already
+   * knows, so every answer changes the list: the one just answered drops
+   * out and everything behind it shifts up a place. Walking that by index
+   * skips a question per answer, and it did. Answering "the 3D look" moved
+   * "Adventure games" into the slot that had just been read past, so it was
+   * never asked at all; three answers in, three questions had gone by
+   * unseen.
+   *
+   * Same bargain as the picks themselves, which hold still while they are
+   * being read. Anything newly worth asking is there the next time this is
+   * opened.
+   */
+  const [run] = useState(() => questions);
+  const [at, setAt] = useState(0);
+  const question = run[at] ?? null;
+  const done = question === null;
+
+  const answer = (verdict) => {
+    onAnswer(question.features, verdict);
+    setAt((previous) => previous + 1);
+  };
+
+  return (
+    <ModalSheet labelledBy="questions-title" onClose={onClose}>
+      <div className="p-6 sm:p-8">
+        {/* Clear of the close button, which sits over the top right corner
+            and had the second line of this running under it. */}
+        <h2 id="questions-title" className="pr-10 text-2xl font-bold text-slate-900 dark:text-slate-50">
+          Tune your picks
+        </h2>
+        <p className="mt-1.5 pr-10 text-sm leading-relaxed text-slate-500 dark:text-slate-400">
+          {answered === 0
+            ? 'A few questions about what you go for. Each answer changes the For you list straight away, and you can change your mind by answering again.'
+            : `${answered} ${answered === 1 ? 'answer' : 'answers'} in so far. These are the ones still worth asking.`}
+        </p>
+
+        {done ? (
+          <div className="mt-6 rounded-2xl bg-indigo-50 dark:bg-indigo-950/40 px-4 py-5 text-center">
+            <Sparkles className="mx-auto h-6 w-6 text-indigo-500" />
+            <p className="mt-2 text-sm font-semibold text-indigo-900 dark:text-indigo-100">
+              {answered === 0
+                ? 'Nothing left to ask just yet.'
+                : `Taken. Your picks have been worked out again from ${answered} ${answered === 1 ? 'answer' : 'answers'}.`}
+            </p>
+            <p className="mt-1 text-xs leading-relaxed text-indigo-700 dark:text-indigo-300">
+              {answered === 0
+                ? 'Rate a few games and more questions open up, because the ones worth asking are the ones the list cannot already guess.'
+                : 'Rating games sharpens it further, and new questions appear as the obvious ones get answered.'}
+            </p>
+            <button
+              type="button"
+              onClick={onClose}
+              className="mt-4 inline-flex items-center gap-2 rounded-full bg-indigo-600 px-4 py-2 text-sm font-semibold text-white transition-transform duration-200 ease-spring active:scale-95 hover:bg-indigo-500"
+            >
+              See the picks
+            </button>
+          </div>
+        ) : (
+          <>
+            <p className="mt-6 text-xs font-semibold uppercase tracking-wider text-slate-400 dark:text-slate-500">
+              {at + 1} of {run.length}
+            </p>
+            {/* Keyed so the card animates in on each answer rather than the
+                words changing under the reader's finger. */}
+            <div
+              key={question.features.join()}
+              className="animate-rise-in mt-2 rounded-2xl border border-slate-200 dark:border-slate-700 bg-slate-50 dark:bg-slate-800/60 px-4 py-6 text-center"
+            >
+              <p className="text-lg font-bold leading-snug text-slate-900 dark:text-slate-50">
+                {question.phrase.charAt(0).toUpperCase() + question.phrase.slice(1)}
+              </p>
+              {/* The count is the honest answer to "does this matter". A
+                  question that moves eleven games should look smaller than
+                  one that moves two hundred. */}
+              <p className="mt-1 text-xs text-slate-500 dark:text-slate-400">
+                {question.games} written-up {question.games === 1 ? 'game' : 'games'}, and more in the store
+              </p>
+            </div>
+
+            <div className="mt-4 grid grid-cols-2 gap-3">
+              <button
+                type="button"
+                onClick={() => answer('yes')}
+                className="inline-flex items-center justify-center gap-2 rounded-xl bg-emerald-600 px-4 py-3 text-sm font-semibold text-white transition-transform duration-200 ease-spring active:scale-95 hover:bg-emerald-500"
+              >
+                <ThumbsUp className="h-4 w-4" />
+                More of this
+              </button>
+              <button
+                type="button"
+                onClick={() => answer('no')}
+                className="inline-flex items-center justify-center gap-2 rounded-xl bg-slate-200 dark:bg-slate-700 px-4 py-3 text-sm font-semibold text-slate-700 dark:text-slate-100 transition-transform duration-200 ease-spring active:scale-95 hover:bg-slate-300 dark:hover:bg-slate-600"
+              >
+                <ThumbsDown className="h-4 w-4" />
+                Less of this
+              </button>
+            </div>
+
+            {/* Skipping is not the same as saying no, and conflating the two
+                is how a questionnaire ends up with answers nobody gave. */}
+            <button
+              type="button"
+              onClick={() => setAt((previous) => previous + 1)}
+              className="mt-3 w-full rounded-xl px-4 py-2 text-sm font-medium text-slate-500 dark:text-slate-400 transition-colors hover:bg-slate-100 dark:hover:bg-slate-800"
+            >
+              No strong feeling, skip it
+            </button>
+          </>
+        )}
+
+        {answered > 0 && (
+          <>
+            <h3 className="mt-8 text-sm font-semibold uppercase tracking-wider text-slate-500 dark:text-slate-400">
+              What you have said
+            </h3>
+            <ul className="mt-3 flex flex-wrap gap-2">
+              {answers.map(({ key, features, verdict, phrase }) => (
+                <li key={key}>
+                  {/* Tapping it again clears it, and clears every feature the
+                      phrase covers. Answers a reader cannot see or undo are
+                      answers they have to live with. */}
+                  <button
+                    type="button"
+                    onClick={() => onAnswer(features, verdict)}
+                    className={`inline-flex items-center gap-1.5 rounded-full px-3 py-1.5 text-xs font-medium transition-colors ${
+                      verdict === 'yes'
+                        ? 'bg-emerald-100 text-emerald-800 dark:bg-emerald-950/60 dark:text-emerald-200 hover:bg-emerald-200'
+                        : 'bg-slate-100 text-slate-600 dark:bg-slate-800 dark:text-slate-300 hover:bg-slate-200'
+                    }`}
+                  >
+                    {verdict === 'yes' ? (
+                      <ThumbsUp className="h-3 w-3" />
+                    ) : (
+                      <ThumbsDown className="h-3 w-3" />
+                    )}
+                    {phrase}
+                    <X className="h-3 w-3 opacity-50" />
+                  </button>
+                </li>
+              ))}
+            </ul>
+          </>
+        )}
+      </div>
+    </ModalSheet>
+  );
+}
+
+
+/**
  * The picks, and the reason for each.
  *
  * This replaced a sheet that asked what you were in the mood for and drew a
@@ -4271,6 +4487,8 @@ function GeniusSheet({
   mirror,
   ruledOut,
   unseenAnswers,
+  answered,
+  onTune,
   onRefresh,
   onRate,
   onOpenGame,
@@ -4317,6 +4535,17 @@ function GeniusSheet({
               ? `${ruledOut} ruled out so far and none of them are here. Thumb something up and these stop being just the best reviewed.`
               : 'Nothing rated yet, so these are simply the best reviewed. Thumb a few and this becomes yours.'}
         </p>
+
+        <button
+          type="button"
+          onClick={onTune}
+          className="mt-4 inline-flex items-center gap-2 rounded-full bg-indigo-50 dark:bg-indigo-950/50 px-3.5 py-1.5 text-xs font-semibold text-indigo-700 dark:text-indigo-300 transition-transform duration-200 ease-spring active:scale-95 hover:bg-indigo-100 dark:hover:bg-indigo-900/60"
+        >
+          <Sparkles className="h-3.5 w-3.5" />
+          {answered > 0
+            ? `Tune these · ${answered} ${answered === 1 ? 'answer' : 'answers'}`
+            : 'Tune these with a few questions'}
+        </button>
 
         {/* Same bargain as the tab: the list stays put while it is being
             read, and anything answered since waits here. */}
@@ -4526,6 +4755,8 @@ function GeniusPanel({
   newOnly,
   openedAt,
   unseenAnswers,
+  answered,
+  onTune,
   onRefresh,
   ratings,
   saved,
@@ -4558,6 +4789,19 @@ function GeniusPanel({
             : `Work the list out again with your ${unseenAnswers} answers`}
         </button>
       )}
+
+      {/* Beside the count, because this is where a reader decides the list
+          is not quite right about them. */}
+      <button
+        type="button"
+        onClick={onTune}
+        className="mb-3 inline-flex items-center gap-2 rounded-full bg-indigo-50 dark:bg-indigo-950/50 px-3.5 py-1.5 text-xs font-semibold text-indigo-700 dark:text-indigo-300 transition-transform duration-200 ease-spring active:scale-95 hover:bg-indigo-100 dark:hover:bg-indigo-900/60"
+      >
+        <Sparkles className="h-3.5 w-3.5" />
+        {answered > 0
+          ? `Tune your picks · ${answered} ${answered === 1 ? 'answer' : 'answers'}`
+          : 'Tune your picks with a few questions'}
+      </button>
 
       <p className="mb-3 text-xs font-medium text-slate-400 dark:text-slate-500">
         {mirror.status === 'loading'
@@ -5351,6 +5595,30 @@ function StorePanel({ query, curatedFirst = [], curatedReason, curatedByName, sa
   // Ask for the next page a screen and a half early, so the end of the list is
   // never actually reached. A callback ref because the sentinel only exists
   // while there is more to load.
+  /*
+   * The store rows that actually reach the grid, as one list.
+   *
+   * Two filters used to sit inline on the map: hidden games, and rows the
+   * written-up results above already cover. Both took games off the screen
+   * and neither took them off the count, so searching "hollow knight" said
+   * three matches over two cards. Counting from the same list that is
+   * rendered is the only way those two stay in step.
+   */
+  const shownStore = useMemo(
+    () =>
+      results.games
+        .filter((row) => !saved.hidden.has(storeKey(row)))
+        .filter((row) => !curatedFirst.some((game) => game.title === row.name)),
+    [results.games, saved.hidden, curatedFirst],
+  );
+  /*
+   * Only the duplicates on the pages fetched so far can be known about, so
+   * the total is corrected by those rather than guessed at for the pages
+   * nobody has scrolled to.
+   */
+  const matchCount =
+    Math.max(0, results.total - (results.games.length - shownStore.length)) + curatedFirst.length;
+
   const [moreSentinel, setMoreSentinel] = useState(null);
   const loadMore = results.more;
   const hasMore = results.games.length < results.total;
@@ -5382,6 +5650,22 @@ function StorePanel({ query, curatedFirst = [], curatedReason, curatedByName, sa
             <span className="font-semibold text-slate-600 dark:text-slate-300">
               {publisherSearched}
             </span>
+          </>
+        ) : query ? (
+          /*
+           * While searching, what is on screen rather than what the mirror
+           * holds.
+           *
+           * "N of 9,222 games indexed" is the right line for browsing the
+           * store and the wrong one for a search, because the written-up
+           * games listed above these results are not in that index and were
+           * not in that N. Searching "pixel art" put twenty-four games on
+           * screen under a line reading "0 of 9,222", which reads as the app
+           * contradicting itself.
+           */
+          <>
+            {matchCount.toLocaleString()} {matchCount === 1 ? 'match' : 'matches'}, catalog and
+            store
           </>
         ) : (
           <>
@@ -5506,9 +5790,7 @@ function StorePanel({ query, curatedFirst = [], curatedReason, curatedByName, sa
                 onOpen={() => onOpenCurated(game.id)}
               />
             ))}
-            {results.games
-              .filter((row) => !saved.hidden.has(storeKey(row)))
-              .filter((row) => !curatedFirst.some((game) => game.title === row.name))
+            {shownStore
               .map((row) => {
                 const twin = curatedByName.get(row.name?.toLowerCase());
                 const game = storeRowAsGame(row);
@@ -6937,6 +7219,7 @@ export default function App() {
   const [dealAlerts, setDealAlerts] = useState(readDealAlerts);
   const [hidden, setHidden] = useState(readHidden);
   const [ratings, setRatings] = useState(readRatings);
+  const [featureAnswers, setFeatureAnswers] = useState(readAnswers);
   const [savedReleases, setSavedReleases] = useState(readSavedReleases);
   const [favouriteCreators, setFavouriteCreators] = useState(readFavouriteCreators);
   const [library, setLibrary] = useState(readLibrary);
@@ -6946,6 +7229,7 @@ export default function App() {
   // wishlist and one library without ever colliding.
   const [activeStoreGame, setActiveStoreGame] = useState(null);
   const [geniusOpen, setGeniusOpen] = useState(false);
+  const [questionsOpen, setQuestionsOpen] = useState(false);
   /*
    * One clock for the session.
    *
@@ -7063,7 +7347,27 @@ export default function App() {
   const catalogTitles = useMemo(() => new Set(curatedByName.keys()), [curatedByName]);
 
   const set = useCallback(
-    (key, value) => setFilters((previous) => ({ ...previous, [key]: value })),
+    (key, value) =>
+      setFilters((previous) => {
+        /*
+         * For you is a grid, by whichever route you reach it.
+         *
+         * The app opens in the feed so the first thing on screen is a game
+         * rather than a wall of boxes, and every other shelf inherits that
+         * happily: a feed of deals is a fine way to look at deals. A feed of
+         * recommendations is not, because the point of a list of picks is
+         * seeing them next to each other, and forty-eight of them one per
+         * screen is a worse version of the same list.
+         *
+         * Done here rather than at each button because there are three ways
+         * in, the chip, the phone's bottom bar and a bookmarked URL, and the
+         * first two both used to land in the feed.
+         */
+        if (key === 'collection' && value === 'genius') {
+          return { ...previous, collection: 'genius', view: 'grid' };
+        }
+        return { ...previous, [key]: value };
+      }),
     [],
   );
 
@@ -7155,6 +7459,36 @@ export default function App() {
     });
   }, []);
 
+
+  /**
+   * One answer, applied to every feature that says the same thing.
+   *
+   * A question covers a phrase rather than a feature, because the two halves
+   * of the catalog both have an Action genre and asking twice reads as the
+   * questions not being thought about. Answering it has to go the same way
+   * round: the reader said yes to Action games, not to one vocabulary's
+   * spelling of it.
+   *
+   * Answering the same way twice clears it, which is how the thumbs already
+   * work, so a mistake is undone by repeating it rather than by hunting for
+   * a reset.
+   */
+  const answerFeature = useCallback((features, verdict) => {
+    setFeatureAnswers((previous) => {
+      const next = { ...previous };
+      const clearing = features.every((feature) => previous[feature] === verdict);
+      for (const feature of features) {
+        if (clearing) delete next[feature];
+        else next[feature] = verdict;
+      }
+      try {
+        localStorage.setItem(ANSWERS_KEY, JSON.stringify(next));
+      } catch {
+        // Storage is a convenience; the in-memory answers still rank.
+      }
+      return next;
+    });
+  }, []);
 
   /** "Not for me": the game drops out of every list until you unhide it. */
   const hideGame = useCallback((id) => {
@@ -7514,8 +7848,27 @@ export default function App() {
     [filters, passesRatingChips],
   );
 
+  /*
+   * The answers in the shape the model takes, and stable across renders so
+   * the memos below do not re-rank on every keystroke elsewhere.
+   */
+  const answerList = useMemo(
+    () => Object.entries(featureAnswers).map(([feature, verdict]) => ({ feature, verdict })),
+    [featureAnswers],
+  );
+
   // Never touches live data, so picks stay instant while prices load.
-  const geniusIsPersonalized = rankingSignals.some((row) => SIGNAL_WEIGHTS[row.kind] > 0);
+  /*
+   * A yes answer personalizes the list as much as a thumbs up does.
+   *
+   * This decides whether the For you section shows picks with reasons or
+   * falls back to the best reviewed, and testing rated games alone meant
+   * somebody could answer every question and still be told nothing was
+   * rated yet.
+   */
+  const geniusIsPersonalized =
+    rankingSignals.some((row) => SIGNAL_WEIGHTS[row.kind] > 0) ||
+    answerList.some((answer) => answer.verdict === 'yes');
   const geniusResult = useMemo(() => {
     /*
      * Owned and wanted games belong here too.
@@ -7543,8 +7896,18 @@ export default function App() {
      * qualified and were never considered.
      */
     const pool = rateable.filter((game) => passesChips(game));
-    return geniusPicksFor(pool, rankingSignals, { exclude, limit: 48 });
-  }, [rateable, rankingSignals, geniusIsPersonalized, frozen, library, wishlist, hidden, passesChips]);
+    return geniusPicksFor(pool, rankingSignals, { exclude, limit: 48, answers: answerList });
+  }, [
+    rateable,
+    rankingSignals,
+    answerList,
+    geniusIsPersonalized,
+    frozen,
+    library,
+    wishlist,
+    hidden,
+    passesChips,
+  ]);
 
   /**
    * The written-up half of the picks, narrowed by the chips.
@@ -7561,6 +7924,48 @@ export default function App() {
   const geniusPicks = geniusResult.picks;
 
   /**
+   * What is worth asking next.
+   *
+   * Built from the written-up catalog rather than the mirror, for the same
+   * reason the profile is: the mirror is 5MB and lives on a server, while
+   * these have to be ready the moment the sheet opens. The features are
+   * shared across both halves anyway, so an answer about Adventure games
+   * reaches the 9,000 games nobody has written up.
+   */
+  /*
+   * The answers to show back, one per phrase rather than one per feature.
+   *
+   * A single answer writes both halves' spelling of the same thing, so
+   * listing the features directly showed "Action games" twice as two chips
+   * that could not be cleared independently, because clearing either clears
+   * both.
+   */
+  const answeredChips = useMemo(() => {
+    const byPhrase = new Map();
+    for (const { feature, verdict } of answerList) {
+      const phrase = describeFeature(feature);
+      if (!phrase) continue;
+      const chip = byPhrase.get(phrase);
+      // Every feature the phrase covers, so clearing the chip clears the
+      // answer rather than half of it: one tap wrote both halves' spelling
+      // of Action games, and passing back a single feature left the other
+      // one set with nothing on screen to say so.
+      if (chip) chip.features.push(feature);
+      else byPhrase.set(phrase, { key: feature, features: [feature], verdict, phrase });
+    }
+    return [...byPhrase.values()];
+  }, [answerList]);
+
+  const questions = useMemo(
+    () =>
+      questionsFor(gamesData, geniusResult.taste, {
+        limit: 10,
+        asked: new Set(Object.keys(featureAnswers)),
+      }),
+    [geniusResult.taste, featureAnswers],
+  );
+
+  /**
    * The profile and what to leave out, as one string.
    *
    * A string rather than the objects themselves because the fetch below keys
@@ -7569,7 +7974,13 @@ export default function App() {
    */
   const mirrorRequest = useMemo(() => {
     const taste = geniusResult.taste;
-    if (!taste || taste.positives === 0) return null;
+    /*
+     * Answers count here as well. Gating on rated games alone meant a reader
+     * who had only answered questions got picks from the written-up few
+     * hundred and nothing from the 9,000 in the mirror, which is the half
+     * the answers were most useful for.
+     */
+    if (!taste || (taste.positives === 0 && (taste.said?.yes ?? 0) === 0)) return null;
     const ruledOut = [
       ...(frozen?.ruledOut ?? [...library, ...wishlist, ...hidden]),
       ...rankingSignals.map((row) => row.game.id),
@@ -7818,10 +8229,29 @@ export default function App() {
       .map((row) => storeRowAsGame(row));
   }, [searchingWidely, storeSearch.games, savedStoreGames]);
 
+  const searching = deferredQuery.trim().length >= 2;
+
   const pool = useMemo(() => {
-    if (filters.collection === 'trending') return trendingGames;
-    if (filters.collection === 'soon') return upcomingGames;
     const base = storeMatches.length > 0 ? [...catalog, ...storeMatches] : catalog;
+    /*
+     * The shelf decides the pool only while nobody is searching.
+     *
+     * These two returns were unconditional, and the app opens on Trending,
+     * so the pool a search scored against was the handful of trending rows.
+     * Anything the store's own search could not answer therefore returned
+     * nothing at all: "pixel art" matches 57 written-up games on their art
+     * style, the mirror has no art style to match on, and the one half that
+     * could answer was not in the pool to be asked.
+     *
+     * Which is the rule stated a few lines down, that a search is a question
+     * about everything rather than about this shelf. It was enforced for
+     * every shelf except the two that replace the pool outright, and one of
+     * those is the shelf the app opens on.
+     */
+    if (!searching) {
+      if (filters.collection === 'trending') return trendingGames;
+      if (filters.collection === 'soon') return upcomingGames;
+    }
 
     /*
      * A search looks ahead of the release calendar as well as behind it.
@@ -7838,7 +8268,15 @@ export default function App() {
      * "yes, in March" is a real answer to it.
      */
     return searchingAhead ? [...base, ...upcomingGames] : base;
-  }, [filters.collection, upcomingGames, trendingGames, catalog, storeMatches, searchingAhead]);
+  }, [
+    filters.collection,
+    searching,
+    upcomingGames,
+    trendingGames,
+    catalog,
+    storeMatches,
+    searchingAhead,
+  ]);
 
   /**
    * Whether this shelf is drawn by paging the store, or filtered here.
@@ -7878,8 +8316,6 @@ export default function App() {
    * reader back on the shelf they were on with the chips they had set,
    * and nothing they chose was thrown away to answer one question.
    */
-  const searching = deferredQuery.trim().length >= 2;
-
   const storePaged =
     searching ||
     ((filters.collection === 'all' || filters.collection === 'plus') &&
@@ -8799,6 +9235,8 @@ export default function App() {
               newOnly={filters.newOnly}
               openedAt={openedAt}
               unseenAnswers={unseenAnswers}
+              answered={answeredChips.length}
+              onTune={() => setQuestionsOpen(true)}
               onRefresh={refreshPicks}
               ratings={ratings}
               saved={storeSaved}
@@ -8904,14 +9342,27 @@ export default function App() {
           )}
 
           {filters.collection === 'genius' && !geniusIsPersonalized && (
-            <p className="mb-3 inline-flex items-start gap-2 rounded-lg bg-indigo-50 dark:bg-indigo-950/40 px-3 py-2 text-sm leading-relaxed text-indigo-700 dark:text-indigo-300">
-              <Sparkles className="mt-0.5 h-4 w-4 shrink-0" />
-              <span>
-                <strong className="font-semibold">Starter picks</strong>, highly rated across the
-                catalog. Thumb one up or down and these turn into picks worked out from your
-                own taste, each with the reason it was chosen.
-              </span>
-            </p>
+            <div className="mb-3 rounded-lg bg-indigo-50 dark:bg-indigo-950/40 px-3 py-2.5">
+              <p className="flex items-start gap-2 text-sm leading-relaxed text-indigo-700 dark:text-indigo-300">
+                <Sparkles className="mt-0.5 h-4 w-4 shrink-0" />
+                <span>
+                  <strong className="font-semibold">Starter picks</strong>, highly rated across the
+                  catalog. Thumb one up or down and these turn into picks worked out from your
+                  own taste, each with the reason it was chosen.
+                </span>
+              </p>
+              {/* The faster way out of a cold start, and the place a reader
+                  is actually looking at it. Rating a dozen games one at a
+                  time works and takes a dozen games. */}
+              <button
+                type="button"
+                onClick={() => setQuestionsOpen(true)}
+                className="mt-2.5 inline-flex items-center gap-2 rounded-full bg-indigo-600 px-3.5 py-1.5 text-xs font-semibold text-white transition-transform duration-200 ease-spring active:scale-95 hover:bg-indigo-500"
+              >
+                <Sparkles className="h-3.5 w-3.5" />
+                Answer a few questions instead
+              </button>
+            </div>
           )}
 
           <div className="grid grid-cols-2 gap-3 sm:grid-cols-3 sm:gap-4 lg:grid-cols-4 xl:grid-cols-5">
@@ -9007,6 +9458,16 @@ export default function App() {
 
       {alertsOpen && <AlertsSheet alerts={alerts} onClose={() => setAlertsOpen(false)} />}
 
+      {questionsOpen && (
+        <GuidedQuestions
+          questions={questions}
+          answers={answeredChips}
+          answered={answeredChips.length}
+          onAnswer={answerFeature}
+          onClose={() => setQuestionsOpen(false)}
+        />
+      )}
+
       {geniusOpen && (
         <GeniusSheet
           picks={geniusPicks.slice(0, 12)}
@@ -9015,6 +9476,11 @@ export default function App() {
           mirror={mirrorPicks}
           ruledOut={ruledOutCount}
           unseenAnswers={unseenAnswers}
+          answered={answeredChips.length}
+          onTune={() => {
+            setGeniusOpen(false);
+            setQuestionsOpen(true);
+          }}
           onRefresh={refreshPicks}
           onRate={rateGame}
           onOpenStore={(row) => {
@@ -9058,7 +9524,17 @@ export default function App() {
             tab: tab ?? (releaseChanges.length > 0 ? 'upcoming' : briefing.tab),
           })
         }
-        onSurprise={() => setGeniusOpen(true)}
+        collection={filters.collection}
+        /*
+         * Grid as well as the section. The app opens in the feed so the
+         * first thing on screen is a game rather than a wall of boxes, and
+         * tapping through to For you inherited that: forty-eight picks, one
+         * per screen, swiped. The grid is what a list of picks is for.
+         */
+        onForYou={() => {
+          set('collection', 'genius');
+          window.scrollTo({ top: 0 });
+        }}
         canSurprise
         updates={releaseChanges.length}
       />
