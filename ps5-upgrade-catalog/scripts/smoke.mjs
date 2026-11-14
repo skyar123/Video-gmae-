@@ -101,6 +101,7 @@ const SURFACES = [
   ['?view=genius', 'For you', 70],
   ['?view=curated', 'Curated', 30],
   ['?view=soon', 'Soon', 10],
+  ['?view=trending', 'Trending', 20],
   ['?view=cozy', 'Cozy', 10],
   ['?mode=feed', 'Feed', 10],
   ['?view=genius&new=1', 'For you + new', 10],
@@ -756,25 +757,42 @@ async function aPlainLaunchOpensSomethingToSwipe() {
   };
   let note = '';
   try {
-    // Cold: nothing rated, owned or wanted.
+    /*
+     * One opening for everybody, because Trending asks nothing of the
+     * reader. Checked on a profile with no history and on one with
+     * some, since the previous opener needed a profile and showed
+     * "nothing to work from" without one.
+     */
     await page.goto(`${BASE}/`, { waitUntil: 'domcontentloaded' });
     await page.evaluate(() => localStorage.clear());
     await page.goto(`${BASE}/`, { waitUntil: 'domcontentloaded' });
     const cold = await settle();
     const coldUrl = page.url();
     if (!/mode=feed/.test(coldUrl)) problems.push(`cold launch is not a feed: ${coldUrl.slice(-40)}`);
+    if (!/view=trending/.test(coldUrl)) problems.push(`cold launch is not Trending: ${coldUrl.slice(-40)}`);
     if (cold === 0) problems.push('a cold launch opened on an empty screen');
 
-    // Warm: a reader with a history gets the picks.
     await page.goto(`${BASE}/`, { waitUntil: 'domcontentloaded' });
     await page.evaluate(seed);
     await page.goto(`${BASE}/`, { waitUntil: 'domcontentloaded' });
     const warm = await settle();
     const warmUrl = page.url();
     if (!/mode=feed/.test(warmUrl)) problems.push(`warm launch is not a feed: ${warmUrl.slice(-40)}`);
-    if (!/view=genius/.test(warmUrl)) problems.push(`warm launch is not For you: ${warmUrl.slice(-40)}`);
-    if (!/new=1/.test(warmUrl)) problems.push(`warm launch is not new releases: ${warmUrl.slice(-40)}`);
-    if (warm === 0) problems.push('For you in the feed view rendered nothing');
+    if (!/view=trending/.test(warmUrl)) problems.push(`warm launch is not Trending: ${warmUrl.slice(-40)}`);
+    if (warm === 0) problems.push('Trending rendered nothing');
+
+    /*
+     * And nothing to undo before searching. The opener used to arrive
+     * with "new releases" switched on, so the first screen wore an
+     * active filter chip and the obvious way to search was to clear it
+     * and go to All. Reported exactly that way.
+     */
+    const chips = await page
+      .locator('header button')
+      .evaluateAll((nodes) => nodes.map((node) => (node.innerText || '').trim()));
+    if (chips.some((text) => /^(New releases|Kid friendly|Wishlist)$/i.test(text))) {
+      problems.push('the opening screen arrived with a filter already on');
+    }
 
     // A link that asks for something specific still gets it.
     await page.goto(`${BASE}/?view=all`, { waitUntil: 'domcontentloaded' });
@@ -1144,13 +1162,91 @@ async function aSearchAnswersFromAnywhere() {
 }
 
 failures += await aStudioNameFindsItsGames();
+/**
+ * Does searching a kind of game return that kind?
+ *
+ * Asked for directly: "if I search boardgames it shows me board game
+ * games, instead of showing me just game titles that [match]". Typing
+ * "board" used to return Longboard Skate Downhill Simulator and Cool
+ * Boarders, which is a string match doing what it was told.
+ *
+ * Checked through the API rather than the page, so it fails on the rule
+ * rather than on a card not having rendered yet, and asserted on what
+ * came back being the right kind rather than on how many.
+ */
+async function aKindOfGameIsSearchable() {
+  const label = 'Searching a kind of game works';
+  const page = await browser.newPage({ viewport: { width: 430, height: 1200 } });
+  const problems = [];
+  page.on('pageerror', (error) => problems.push(String(error).slice(0, 110)));
+  let note = '';
+  try {
+    await page.goto(`${BASE}/?view=all`, { waitUntil: 'domcontentloaded' });
+
+    const asked = await page.evaluate(async (base) => {
+      const ask = async (q) => (await (await fetch(`${base}/api/store?q=${encodeURIComponent(q)}`)).json());
+      const horror = await ask('horror');
+      const board = await ask('board games');
+      const racing = await ask('racing');
+      return {
+        horror: {
+          total: horror.total ?? 0,
+          genreShare: (horror.games ?? []).filter((g) => (g.genres ?? []).includes('Horror')).length,
+          shown: (horror.games ?? []).length,
+        },
+        board: { total: board.total ?? 0, names: (board.games ?? []).map((g) => g.name) },
+        racing: {
+          total: racing.total ?? 0,
+          genreShare: (racing.games ?? []).filter((g) =>
+            (g.genres ?? []).includes('Driving/Racing'),
+          ).length,
+          shown: (racing.games ?? []).length,
+        },
+      };
+    }, BASE);
+
+    // A kind returns a lot of that kind, not a handful of lookalike names.
+    if (asked.horror.total < 50) problems.push(`"horror" returned ${asked.horror.total} games`);
+    if (asked.racing.total < 50) problems.push(`"racing" returned ${asked.racing.total} games`);
+
+    // And most of what comes back really is that kind. Not all: a game
+    // actually named "Horror something" is a title match and belongs
+    // above them.
+    const mostly = (slice) => slice.shown === 0 || slice.genreShare / slice.shown >= 0.5;
+    if (!mostly(asked.horror)) {
+      problems.push(`only ${asked.horror.genreShare}/${asked.horror.shown} horror hits are horror`);
+    }
+    if (!mostly(asked.racing)) {
+      problems.push(`only ${asked.racing.genreShare}/${asked.racing.shown} racing hits race`);
+    }
+
+    // The reported case, and the games it used to return instead.
+    if (asked.board.total < 5) problems.push(`"board games" returned ${asked.board.total}`);
+    const skating = asked.board.names.filter((name) => /longboard|cool boarders|snowboard/i.test(name));
+    if (skating.length > 0) problems.push(`"board games" still returns ${skating[0]}`);
+
+    note = `horror ${asked.horror.total}, racing ${asked.racing.total}, board ${asked.board.total}`;
+    console.log(
+      `${problems.length ? 'FAIL' : ' ok '} ${label.padEnd(32)} ${note}` +
+        (problems.length ? `  ${problems[0]}` : ''),
+    );
+  } catch (error) {
+    problems.push(`threw: ${String(error.message).slice(0, 80)}`);
+    console.log(`FAIL ${label.padEnd(32)} ${problems[0]}`);
+  }
+  await page.close();
+  if (problems.length > 0) fail(label, problems.join('; '));
+  return problems.length > 0 ? 1 : 0;
+}
+
 failures += await aSearchAnswersFromAnywhere();
+failures += await aKindOfGameIsSearchable();
 failures += await theWishlistShowsTheWishlist();
 
 await browser.close();
 stop();
 
-const total = SURFACES.length + 9;
+const total = SURFACES.length + 10;
 if (failures > 0) {
   // Named, not just counted, so the last line of a truncated log still says
   // what to go and look at.

@@ -18,6 +18,7 @@ import { loadBlob } from './history.mjs';
 import { DEVELOPERS_KEY, DISCOVERED_KEY, STEAM_MATCH_KEY } from './keys.mjs';
 import bakedDevelopers from './developers.json' with { type: 'json' };
 import { fold, indexText, parseQuery, scoreMatch } from './search.mjs';
+import { conceptFor, matchesConcept } from './concepts.mjs';
 
 const PAGE_SIZE = 36;
 const MERGE_TTL_MS = 30 * 60 * 1000;
@@ -265,6 +266,17 @@ export async function searchStore({
      */
     const TITLE_BAND = 1000;
     const STUDIO_FLOOR = 300;
+    /*
+     * Below both, because a kind is a weaker claim than a name.
+     *
+     * Searching "racing" should lead with a game called Racing
+     * something, then the studio if one is called that, then the 431
+     * driving games. All three are right answers; only the order
+     * between them is a judgement, and the one somebody typed wins.
+     */
+    const CONCEPT_SCORE = 200;
+    const asked = conceptFor(q);
+
     hits = hits
       .map((row) => {
         const byTitle = scoreMatch(row.search, query);
@@ -283,7 +295,10 @@ export async function searchStore({
         const byDeveloper = row.dev ? scoreMatch(row.dev, query) : -1;
         const byPublisher = row.by ? scoreMatch(row.by, query) : -1;
         const byStudio = Math.max(byDeveloper, byPublisher);
-        return { row, score: byStudio >= STUDIO_FLOOR ? byStudio : -1 };
+        if (byStudio >= STUDIO_FLOOR) return { row, score: byStudio };
+        // A kind of game, when that is what was asked for.
+        if (asked && matchesConcept(row, asked)) return { row, score: CONCEPT_SCORE };
+        return { row, score: -1 };
       })
       .filter((entry) => entry.score > 0)
       .sort((a, b) => b.score - a.score || ratingScore(b.row) - ratingScore(a.row))

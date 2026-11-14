@@ -66,6 +66,7 @@ import {
   SIGNAL_WEIGHTS,
 } from './genius.js';
 import { fold, indexText, parseQuery, scoreMatch } from '../api/search.mjs';
+import { conceptFor, matchesConcept } from '../api/concepts.mjs';
 import { priceStanding } from '../api/standing.mjs';
 import gamesData from './games.json';
 import { evictStoreRows } from './store-cache.js';
@@ -143,6 +144,9 @@ const COLLECTIONS = [
   // and Firewatch and Stardew Valley among them. Searching All falls back to
   // the written-up catalog for exactly that reason.
   { value: 'all', label: 'All', tag: null },
+  // What people are playing now, which is a different question from what
+  // is new and from what this reader is likely to want.
+  { value: 'trending', label: 'Trending', tag: null },
   // Deals come second because they are a main reason to open this at all.
   { value: 'deals', label: 'Deals', tag: null },
   // You pay for PS Plus already, so the games it covers cost nothing more.
@@ -179,6 +183,11 @@ const COLLECTION_BLURBS = {
   curated:
     'The hand-written ones, with upgrade paths, representation notes, kid-friendly verdicts and recorded price history behind each.',
   soon: 'Out in the next few weeks, and everything from the last sixty days. Heart one and it stays on your wishlist through release.',
+  // Said plainly, because "trending" usually means an algorithm nobody
+  // can see. This one is just a count: how many people have rated a
+  // recent release, which is the closest thing the store publishes to
+  // how many are playing it.
+  trending: 'Out recently and being rated the most right now, counted from the store\'s own ratings.',
 };
 
 const SORTS = [
@@ -269,29 +278,24 @@ const DEFAULT_FILTERS = {
  * on it is opening on the same screen and the same top row every time,
  * reported as "always the same, same game, it's a little boring".
  *
- * Not the news either. That was the first answer to the same complaint and
- * it was the wrong one: the ask is to be shown a game, full bleed, that is
- * both new and worth this reader's time, and to flick to the next one.
+ * Not the news, and not For you either. Both were tried. The news was
+ * the wrong shape, and For you opened on a filter: it needed "new
+ * releases" switched on to be about now, so the first screen arrived
+ * wearing an active chip, and the obvious way to search from there was
+ * to take the chip off and go and find the whole catalogue. Reported
+ * exactly that way: having to click the x, then All, before searching.
  *
- * So: For you, narrowed to the last ninety days, in the swipeable view.
- * Every part of that already existed and none of it is new behaviour, which
- * is the point. It changes as the store does, and it changes as the reader
- * thumbs things up and down, so it is different on two separate clocks.
+ * So: Trending, in the swipeable view, and no filter at all. What people
+ * are playing right now needs nothing from the reader, works on a first
+ * launch, and changes on its own as the store does, which is what the
+ * original complaint about a fixed opening screen was asking for.
  *
  * Only a plain launch. Any link carrying any parameter is somebody asking
  * for a specific thing and gets exactly that, the catalog included.
  */
 const OPENING_FILTERS = {
   ...DEFAULT_FILTERS,
-  collection: 'genius',
-  newOnly: true,
-  view: 'feed',
-};
-
-/** The same screen for a reader the picker knows nothing about yet. */
-const COLD_OPENING_FILTERS = {
-  ...DEFAULT_FILTERS,
-  collection: 'soon',
+  collection: 'trending',
   view: 'feed',
 };
 
@@ -303,44 +307,12 @@ const savedRegion = () => {
   }
 };
 
-/**
- * Has this reader given the picker anything to work from?
- *
- * For you needs a signal, and with none it says so instead of listing
- * games, which is the right thing on a shelf somebody chose and the wrong
- * thing on the screen the app opens with: a first launch would land on
- * "nothing to work from yet", which is a worse opening than the dull one
- * this is replacing.
- *
- * So a reader with no history opens on the release calendar instead, still
- * swipeable, still newest first, just not yet sorted to a taste nobody has
- * described. One thumb is enough to switch it over.
- *
- * Read straight out of storage because this runs before anything else does,
- * and it only has to be right about empty against not empty.
- */
-const hasSomethingToGoOn = () => {
-  try {
-    for (const key of ['ratings', 'library', 'wishlist']) {
-      const raw = localStorage.getItem(key);
-      if (!raw) continue;
-      const held = JSON.parse(raw);
-      const size = Array.isArray(held) ? held.length : Object.keys(held ?? {}).length;
-      if (size > 0) return true;
-    }
-  } catch {
-    // Unreadable storage is the same as an empty one for this purpose.
-  }
-  return false;
-};
-
 function readFiltersFromUrl() {
   if (typeof window === 'undefined') return DEFAULT_FILTERS;
   const params = new URLSearchParams(window.location.search);
-  if ([...params].length === 0) {
-    const opening = hasSomethingToGoOn() ? OPENING_FILTERS : COLD_OPENING_FILTERS;
-    return { ...opening, region: savedRegion() };
-  }
+  // One opening for everybody. Trending asks nothing of the reader, so
+  // the cold and warm split the previous opener needed is gone with it.
+  if ([...params].length === 0) return { ...OPENING_FILTERS, region: savedRegion() };
   const value = (key, fallback) => params.get(key) ?? fallback;
   return {
     q: value('q', ''),
@@ -7031,11 +7003,18 @@ export default function App() {
   // The calendar is fetched when the panel opens, and also when something is
   // being followed — that is the only way the header can say a date moved
   // before you go looking.
+  //
+  // And for Trending, which is built out of the same recent releases. It
+  // is the shelf a plain launch opens on, so this is now the first thing
+  // the app asks for rather than something it fetches when you go
+  // looking: without it the opening screen read "no games match these
+  // filters" over an empty feed.
   const upcoming = useDeferredEndpoint(
     '/api/upcoming',
     (briefing.open && briefing.tab === 'upcoming') ||
       savedReleases.size > 0 ||
-      filters.collection === 'soon',
+      filters.collection === 'soon' ||
+      filters.collection === 'trending',
   );
 
   const releaseChanges = useMemo(
@@ -7776,6 +7755,27 @@ export default function App() {
   }, [upcoming.data]);
 
   /**
+   * What people are playing now.
+   *
+   * There is no play-count anywhere in this app's reach, so this does
+   * not pretend to have one. It takes the games that came out recently
+   * and orders them by how many people have rated them, which is the
+   * nearest thing the store publishes to a crowd, and says so in the
+   * blurb rather than calling it an algorithm.
+   *
+   * Recent releases only. Ranking the whole catalogue this way returns
+   * the same handful of enormous games for ever, which is the fixed
+   * shelf this is meant to replace.
+   */
+  const trendingGames = useMemo(() => {
+    const rows = upcoming.data?.recent ?? [];
+    return rows
+      .filter((row) => row?.id && row?.title && (row.votes ?? 0) > 0)
+      .sort((a, b) => (b.votes ?? 0) - (a.votes ?? 0))
+      .map((row) => storeRowAsGame(upcomingAsStoreRow(row), 'upcoming'));
+  }, [upcoming.data]);
+
+  /**
    * Is a search running that the release calendar should answer too?
    *
    * Not on the Soon shelf, where the calendar is already the whole pool and
@@ -7819,6 +7819,7 @@ export default function App() {
   }, [searchingWidely, storeSearch.games, savedStoreGames]);
 
   const pool = useMemo(() => {
+    if (filters.collection === 'trending') return trendingGames;
     if (filters.collection === 'soon') return upcomingGames;
     const base = storeMatches.length > 0 ? [...catalog, ...storeMatches] : catalog;
 
@@ -7837,7 +7838,7 @@ export default function App() {
      * "yes, in March" is a real answer to it.
      */
     return searchingAhead ? [...base, ...upcomingGames] : base;
-  }, [filters.collection, upcomingGames, catalog, storeMatches, searchingAhead]);
+  }, [filters.collection, upcomingGames, trendingGames, catalog, storeMatches, searchingAhead]);
 
   /**
    * Whether this shelf is drawn by paging the store, or filtered here.
@@ -7889,11 +7890,27 @@ export default function App() {
     const query = parseQuery(deferredQuery);
     if (!query.folded) return null;
 
+    /*
+     * A kind of game, asked for by name.
+     *
+     * The write-ups carry sharper genres than the store does, and six
+     * mood tags, and none of it was searchable: "metroidvania" found
+     * nothing although thirty-six games are labelled exactly that.
+     *
+     * Added to the title pass rather than kept as a fallback. The
+     * fallback only ran when nothing matched by name, so one game
+     * happening to have "puzzle" in its title was enough to hide every
+     * puzzle game from somebody who asked for puzzles.
+     */
+    const asked = conceptFor(deferredQuery);
+    const CONCEPT = 200;
+
     const titles = new Map();
     for (const game of pool) {
       const row = SEARCH_ROWS.get(game.id) ?? game.searchRow;
       const score = scoreMatch(row.title, query);
-      if (score > 0) titles.set(game.id, score);
+      if (score > 0) titles.set(game.id, score + 1000);
+      else if (asked && matchesConcept(game, asked)) titles.set(game.id, CONCEPT);
     }
     if (titles.size > 0) return titles;
 
@@ -8228,6 +8245,7 @@ export default function App() {
       all: storeSize,
       curated: catalogPool.length,
       soon: upcomingGames.length,
+      trending: trendingGames.length,
       deals: saleCount,
       // Both ends of the same question. The overlap is small while the scan
       // is early, and a chip that undercounts is worse than one that is a
@@ -8245,7 +8263,7 @@ export default function App() {
             : catalogPool.length;
     }
     return counts;
-  }, [catalogPool, saleCount, plusCount, storePlus, geniusPicks, storeSize, upcomingGames]);
+  }, [catalogPool, saleCount, plusCount, storePlus, geniusPicks, storeSize, upcomingGames, trendingGames]);
 
   const activeGame = activeGameId ? gamesData.find((game) => game.id === activeGameId) : null;
 
@@ -8355,8 +8373,12 @@ export default function App() {
               />
               <input
                 type="search"
-                aria-label="Search titles"
-                placeholder="Search games"
+                aria-label="Search games, studios or a kind of game"
+                /* Names what it can do, because none of it is visible
+                   otherwise: a box labelled "Search games" is a box you
+                   type a title into, and the studio and kind searches
+                   would go unused by anyone not told they exist. */
+                placeholder="Search games, studios, horror…"
                 enterKeyHint="search"
                 className="w-full rounded-full border border-slate-300 dark:border-slate-600 bg-white dark:bg-slate-900 py-2 pl-8 pr-3 text-base outline-none transition-all duration-200 focus:border-indigo-500 focus:ring-2 focus:ring-indigo-500 sm:py-1.5 sm:text-sm"
                 value={filters.q}
