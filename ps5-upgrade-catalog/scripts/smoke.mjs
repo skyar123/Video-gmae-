@@ -1401,14 +1401,34 @@ async function forYouIsAGridYouCanTune() {
  */
 async function aFailedSearchDoesNotClaimZero() {
   const label = 'A failed search admits it failed';
-  const page = await browser.newPage({ viewport: { width: 430, height: 1200 } });
+  /*
+   * Its own context, with the service worker blocked.
+   *
+   * Not a detail. `page.route` does not intercept requests a service worker
+   * makes, and this app installs one that handles /api/ itself, so the first
+   * version of this check aborted nothing: the store answered normally, the
+   * page showed real results, and the check was reporting on a search that
+   * had never failed. It only got noticed because it failed for the wrong
+   * reason rather than passing for one.
+   */
+  const context = await browser.newContext({
+    viewport: { width: 430, height: 1200 },
+    serviceWorkers: 'block',
+  });
+  const page = await context.newPage();
   const problems = [];
   page.on('pageerror', (error) => problems.push(String(error).slice(0, 110)));
   let note = '';
   try {
-    await page.route('**/api/store**', (route) => route.abort('failed'));
+    let aborted = 0;
+    await page.route('**/api/store**', (route) => {
+      aborted += 1;
+      return route.abort('failed');
+    });
     await page.goto(`${BASE}/?q=toddler`, { waitUntil: 'domcontentloaded' });
     await page.waitForTimeout(4000);
+    // The check is worthless unless the request really was stopped.
+    if (aborted === 0) problems.push('the store request was never actually blocked');
 
     const said = await page.evaluate(() => document.querySelector('main')?.innerText ?? '');
     // The lie, in the two shapes it can take.
@@ -1429,7 +1449,7 @@ async function aFailedSearchDoesNotClaimZero() {
     problems.push(`threw: ${String(error.message).slice(0, 80)}`);
     console.log(`FAIL ${label.padEnd(32)} ${problems[0]}`);
   }
-  await page.close();
+  await context.close();
   if (problems.length > 0) fail(label, problems.join('; '));
   return problems.length > 0 ? 1 : 0;
 }
