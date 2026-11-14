@@ -4331,11 +4331,18 @@ function GuidedQuestions({ questions, answers, answered, onAnswer, onClose }) {
    */
   const [run] = useState(() => questions);
   const [at, setAt] = useState(0);
+  /*
+   * Answers given in this sitting, which is not the same number as answers
+   * held. Skipping every question and being told "Taken" is the app claiming
+   * to have heard something nobody said.
+   */
+  const [taken, setTaken] = useState(0);
   const question = run[at] ?? null;
   const done = question === null;
 
   const answer = (verdict) => {
     onAnswer(question.features, verdict);
+    setTaken((previous) => previous + 1);
     setAt((previous) => previous + 1);
   };
 
@@ -4357,21 +4364,25 @@ function GuidedQuestions({ questions, answers, answered, onAnswer, onClose }) {
           <div className="mt-6 rounded-2xl bg-indigo-50 dark:bg-indigo-950/40 px-4 py-5 text-center">
             <Sparkles className="mx-auto h-6 w-6 text-indigo-500" />
             <p className="mt-2 text-sm font-semibold text-indigo-900 dark:text-indigo-100">
-              {answered === 0
+              {run.length === 0
                 ? 'Nothing left to ask just yet.'
-                : `Taken. Your picks have been worked out again from ${answered} ${answered === 1 ? 'answer' : 'answers'}.`}
+                : taken === 0
+                  ? 'Nothing taken, since none of those landed.'
+                  : `Taken. Your picks have been worked out again from ${answered} ${answered === 1 ? 'answer' : 'answers'}.`}
             </p>
             <p className="mt-1 text-xs leading-relaxed text-indigo-700 dark:text-indigo-300">
-              {answered === 0
+              {run.length === 0
                 ? 'Rate a few games and more questions open up, because the ones worth asking are the ones the list cannot already guess.'
-                : 'Rating games sharpens it further, and new questions appear as the obvious ones get answered.'}
+                : taken === 0
+                  ? 'No harm done: skipping is an answer in itself, and these will be waiting next time.'
+                  : 'Rating games sharpens it further, and new questions appear as the obvious ones get answered.'}
             </p>
             <button
               type="button"
               onClick={onClose}
               className="mt-4 inline-flex items-center gap-2 rounded-full bg-indigo-600 px-4 py-2 text-sm font-semibold text-white transition-transform duration-200 ease-spring active:scale-95 hover:bg-indigo-500"
             >
-              See the picks
+              {taken > 0 ? 'See the picks' : 'Back to the picks'}
             </button>
           </div>
         ) : (

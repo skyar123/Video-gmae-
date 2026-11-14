@@ -1239,14 +1239,163 @@ async function aKindOfGameIsSearchable() {
   return problems.length > 0 ? 1 : 0;
 }
 
+/**
+ * The half of the catalogue the store cannot answer for.
+ *
+ * A concept backed by a label only the write-ups carry, searched from the
+ * shelf the app opens on, which is where both halves of this went wrong at
+ * once. The search pool was the opening shelf's own rows rather than the
+ * catalogue, so a kind of game only the write-ups know about had nothing to
+ * match against: "pixel art" returned nothing although 57 games are labelled
+ * exactly that. And the count above the grid was the store's alone, so when
+ * the written-up games did come back they sat under a line reading zero.
+ */
+async function aCuratedOnlyKindIsSearchable() {
+  const label = 'A kind only the write-ups know';
+  const page = await browser.newPage({ viewport: { width: 430, height: 1200 } });
+  const problems = [];
+  page.on('pageerror', (error) => problems.push(String(error).slice(0, 110)));
+  let note = '';
+  try {
+    // No shelf in the URL: whatever the app opens on is what this tests.
+    await page.goto(BASE, { waitUntil: 'domcontentloaded' });
+    await page.waitForTimeout(2500);
+    await page.evaluate(() => {
+      const browse = [...document.querySelectorAll('button')].find(
+        (n) => /^Browse$/i.test(n.textContent || ''),
+      );
+      browse?.click();
+    });
+    await page.waitForTimeout(800);
+
+    const box = page.locator('input[type="search"]').first();
+    await box.fill('pixel art');
+    await page.waitForTimeout(2600);
+
+    const seen = await page.evaluate(() => {
+      const main = document.querySelector('main');
+      const text = main?.innerText ?? '';
+      return {
+        cards: main?.querySelectorAll('.grid > *').length ?? 0,
+        counted: Number((text.match(/([\d,]+)\s+match/i)?.[1] ?? '-1').replace(/,/g, '')),
+        empty: /Nothing in the index matches that/i.test(text),
+      };
+    });
+
+    if (seen.empty || seen.cards === 0) {
+      problems.push(`"pixel art" returned nothing from the opening shelf`);
+    }
+    // The line over the grid has to agree with the grid under it.
+    if (seen.counted === 0 && seen.cards > 0) {
+      problems.push(`${seen.cards} games on screen under a count of 0`);
+    }
+    note = `${seen.cards} shown, counted ${seen.counted}`;
+    console.log(
+      `${problems.length ? 'FAIL' : ' ok '} ${label.padEnd(32)} ${note}` +
+        (problems.length ? `  ${problems[0]}` : ''),
+    );
+  } catch (error) {
+    problems.push(`threw: ${String(error.message).slice(0, 80)}`);
+    console.log(`FAIL ${label.padEnd(32)} ${problems[0]}`);
+  }
+  await page.close();
+  if (problems.length > 0) fail(label, problems.join('; '));
+  return problems.length > 0 ? 1 : 0;
+}
+
+/**
+ * For you is a grid, and it can be asked about.
+ *
+ * On a phone the For you tab opened a sheet of twelve picks in one column
+ * rather than the section, and reaching the section by its chip inherited
+ * the feed the app opens in. Both were reported as the section being
+ * neither scrollable nor a grid, which it was not, because it was not the
+ * section at all.
+ */
+async function forYouIsAGridYouCanTune() {
+  const label = 'For you is a grid you can tune';
+  const page = await browser.newPage({ viewport: { width: 390, height: 844 } });
+  const problems = [];
+  page.on('pageerror', (error) => problems.push(String(error).slice(0, 110)));
+  let note = '';
+  try {
+    await page.goto(BASE, { waitUntil: 'domcontentloaded' });
+    await page.waitForTimeout(2500);
+
+    const tap = (source) =>
+      page.evaluate((pattern) => {
+        const rx = new RegExp(pattern, 'i');
+        const hit = [...document.querySelectorAll('button')].find(
+          (n) => rx.test(n.textContent || '') || rx.test(n.getAttribute('aria-label') || ''),
+        );
+        if (!hit) return false;
+        hit.click();
+        return true;
+      }, source);
+
+    if (!(await tap('^For you$'))) problems.push('no For you button');
+    await page.waitForTimeout(2200);
+
+    const shown = await page.evaluate(() => {
+      const main = document.querySelector('main');
+      return {
+        grids: main?.querySelectorAll('.grid').length ?? 0,
+        cards: main?.querySelectorAll('.grid > *').length ?? 0,
+        scrolls: document.documentElement.scrollHeight > window.innerHeight * 2,
+      };
+    });
+    if (shown.grids === 0) problems.push('For you is not a grid');
+    if (shown.cards < 12) problems.push(`only ${shown.cards} picks`);
+    if (!shown.scrolls) problems.push('the picks do not scroll');
+
+    // And the questions open, ask something readable, and are answerable.
+    if (!(await tap('questions'))) problems.push('no way to tune the picks');
+    await page.waitForTimeout(1200);
+    const asked = await page.evaluate(() => {
+      const dialog = document.querySelector('[role="dialog"]');
+      const text = dialog?.innerText ?? '';
+      return {
+        open: Boolean(dialog),
+        heading: /\d+ OF \d+/i.test(text),
+        answerable: [...(dialog?.querySelectorAll('button') ?? [])].some((n) =>
+          /More of this/i.test(n.textContent || ''),
+        ),
+      };
+    });
+    if (!asked.open) problems.push('the questions did not open');
+    else if (!asked.heading || !asked.answerable) problems.push('the questions have nothing to ask');
+
+    if (asked.answerable) {
+      await tap('More of this');
+      await page.waitForTimeout(900);
+      const stored = await page.evaluate(() => localStorage.getItem('featureAnswers'));
+      if (!stored || stored === '{}') problems.push('an answer was not kept');
+    }
+
+    note = `${shown.cards} picks in a grid, questions ${asked.open ? 'open' : 'shut'}`;
+    console.log(
+      `${problems.length ? 'FAIL' : ' ok '} ${label.padEnd(32)} ${note}` +
+        (problems.length ? `  ${problems[0]}` : ''),
+    );
+  } catch (error) {
+    problems.push(`threw: ${String(error.message).slice(0, 80)}`);
+    console.log(`FAIL ${label.padEnd(32)} ${problems[0]}`);
+  }
+  await page.close();
+  if (problems.length > 0) fail(label, problems.join('; '));
+  return problems.length > 0 ? 1 : 0;
+}
+
 failures += await aSearchAnswersFromAnywhere();
 failures += await aKindOfGameIsSearchable();
+failures += await aCuratedOnlyKindIsSearchable();
+failures += await forYouIsAGridYouCanTune();
 failures += await theWishlistShowsTheWishlist();
 
 await browser.close();
 stop();
 
-const total = SURFACES.length + 10;
+const total = SURFACES.length + 12;
 if (failures > 0) {
   // Named, not just counted, so the last line of a truncated log still says
   // what to go and look at.
