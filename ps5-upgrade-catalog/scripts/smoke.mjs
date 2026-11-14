@@ -1386,16 +1386,65 @@ async function forYouIsAGridYouCanTune() {
   return problems.length > 0 ? 1 : 0;
 }
 
+/**
+ * A search that could not run must not report that nothing exists.
+ *
+ * The count over the results is the one line a reader takes as the answer,
+ * and it was written to show matches across both halves. It did that
+ * whatever the store had actually said, so a request that failed or timed
+ * out produced "0 matches, catalog and store": a confident statement that
+ * the thing is not there, made at the one moment the app does not know. On a
+ * dropped connection, searching for a game that is certainly in the
+ * catalogue read as the game not being in it.
+ *
+ * Reported as a search returning zero, which is exactly what it looks like.
+ */
+async function aFailedSearchDoesNotClaimZero() {
+  const label = 'A failed search admits it failed';
+  const page = await browser.newPage({ viewport: { width: 430, height: 1200 } });
+  const problems = [];
+  page.on('pageerror', (error) => problems.push(String(error).slice(0, 110)));
+  let note = '';
+  try {
+    await page.route('**/api/store**', (route) => route.abort('failed'));
+    await page.goto(`${BASE}/?q=toddler`, { waitUntil: 'domcontentloaded' });
+    await page.waitForTimeout(4000);
+
+    const said = await page.evaluate(() => document.querySelector('main')?.innerText ?? '');
+    // The lie, in the two shapes it can take.
+    if (/\b0 matches\b/i.test(said)) problems.push('said "0 matches" when the store never answered');
+    if (/Nothing in the index matches that/i.test(said) && !/could not be reached|not answering/i.test(said)) {
+      problems.push('reported no matches without saying the store was unreachable');
+    }
+    // And it has to say what did happen.
+    if (!/could not be reached|not answering/i.test(said)) {
+      problems.push('never told the reader the store was unreachable');
+    }
+    note = /could not be reached/i.test(said) ? 'says the store is unreachable' : 'says nothing useful';
+    console.log(
+      `${problems.length ? 'FAIL' : ' ok '} ${label.padEnd(32)} ${note}` +
+        (problems.length ? `  ${problems[0]}` : ''),
+    );
+  } catch (error) {
+    problems.push(`threw: ${String(error.message).slice(0, 80)}`);
+    console.log(`FAIL ${label.padEnd(32)} ${problems[0]}`);
+  }
+  await page.close();
+  if (problems.length > 0) fail(label, problems.join('; '));
+  return problems.length > 0 ? 1 : 0;
+}
+
 failures += await aSearchAnswersFromAnywhere();
 failures += await aKindOfGameIsSearchable();
 failures += await aCuratedOnlyKindIsSearchable();
+failures += await aFailedSearchDoesNotClaimZero();
 failures += await forYouIsAGridYouCanTune();
 failures += await theWishlistShowsTheWishlist();
 
 await browser.close();
 stop();
 
-const total = SURFACES.length + 12;
+const total = SURFACES.length + 13;
 if (failures > 0) {
   // Named, not just counted, so the last line of a truncated log still says
   // what to go and look at.

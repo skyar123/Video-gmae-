@@ -5673,11 +5673,26 @@ function StorePanel({ query, curatedFirst = [], curatedReason, curatedByName, sa
            * not in that N. Searching "pixel art" put twenty-four games on
            * screen under a line reading "0 of 9,222", which reads as the app
            * contradicting itself.
+           *
+           * A count is only honest once the store has answered, though, and
+           * the first version of this line was not careful about that: a
+           * request that failed or timed out reported "0 matches, catalog
+           * and store", which is a confident statement that the thing does
+           * not exist, made at exactly the moment the app does not know. On
+           * a dropped connection a search for a game that is certainly there
+           * read as the game not being there. Saying nothing about a number
+           * the app has not got is the whole fix.
            */
-          <>
-            {matchCount.toLocaleString()} {matchCount === 1 ? 'match' : 'matches'}, catalog and
-            store
-          </>
+          results.status === 'error' ? (
+            'The store could not be reached, so these are the written-up games only.'
+          ) : results.status !== 'ready' ? (
+            `Searching for ${query}…`
+          ) : (
+            <>
+              {matchCount.toLocaleString()} {matchCount === 1 ? 'match' : 'matches'}, catalog and
+              store
+            </>
+          )
         ) : (
           <>
             {results.total.toLocaleString()} of {facets.size.toLocaleString()} games indexed ·{' '}
