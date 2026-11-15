@@ -69,6 +69,7 @@ import {
 } from './genius.js';
 import { fold, indexText, parseQuery, scoreMatch } from '../api/search.mjs';
 import { conceptFor, matchesConcept } from '../api/concepts.mjs';
+import { AUDIENCES, audienceFor, parentFlags, plainDescriptors, suitsAudience, whyNot } from '../api/family.mjs';
 import { priceStanding } from '../api/standing.mjs';
 import gamesData from './games.json';
 import { evictStoreRows } from './store-cache.js';
@@ -269,6 +270,9 @@ const DEFAULT_FILTERS = {
   region: 'US',
   collection: 'all',
   kidFriendly: false,
+  // Who is playing. 'all' is nobody in particular, which is the default and
+  // filters nothing.
+  audience: 'all',
   noPurchases: false,
   newOnly: false,
   owned: 'any',
@@ -313,12 +317,29 @@ const savedRegion = () => {
   }
 };
 
+/*
+ * Who is playing, remembered.
+ *
+ * Kept across visits for the same reason the region is: a household where a
+ * five-year-old uses this does not want to set that again every time, and
+ * the alternative is the app silently reverting to showing everything.
+ */
+const savedAudience = () => {
+  try {
+    const saved = localStorage.getItem(AUDIENCE_KEY);
+    return audienceFor(saved) ? saved : 'all';
+  } catch {
+    return 'all';
+  }
+};
+
 function readFiltersFromUrl() {
   if (typeof window === 'undefined') return DEFAULT_FILTERS;
   const params = new URLSearchParams(window.location.search);
   // One opening for everybody. Trending asks nothing of the reader, so
   // the cold and warm split the previous opener needed is gone with it.
-  if ([...params].length === 0) return { ...OPENING_FILTERS, region: savedRegion() };
+  if ([...params].length === 0)
+    return { ...OPENING_FILTERS, region: savedRegion(), audience: savedAudience() };
   const value = (key, fallback) => params.get(key) ?? fallback;
   return {
     q: value('q', ''),
@@ -335,6 +356,15 @@ function readFiltersFromUrl() {
     // meant the curated list. Both still land somewhere sensible.
     collection: value('view', 'all') === 'store' ? 'all' : value('view', 'all'),
     kidFriendly: params.get('kids') === '1',
+    /*
+     * Falls back to the saved choice rather than to "show everything".
+     *
+     * Any other default would mean a link, a bookmark or a reload quietly
+     * lifting the limit somebody set for a child, which is the one failure
+     * in this file that matters. An explicit ?audience= still wins, and an
+     * unrecognised value is ignored rather than trusted.
+     */
+    audience: audienceFor(params.get('audience')) ? params.get('audience') : savedAudience(),
     noPurchases: params.get('nomtx') === '1',
     newOnly: params.get('new') === '1',
     owned: value('owned', 'any'),
@@ -375,6 +405,7 @@ function writeFiltersToUrl(filters, drawer) {
   if (filters.region !== 'US') params.set('cc', filters.region);
   if (filters.collection !== 'all') params.set('view', filters.collection);
   if (filters.kidFriendly) params.set('kids', '1');
+  if (filters.audience && filters.audience !== 'all') params.set('audience', filters.audience);
   if (filters.noPurchases) params.set('nomtx', '1');
   if (filters.newOnly) params.set('new', '1');
   if (filters.owned !== 'any') params.set('owned', filters.owned);
@@ -405,6 +436,7 @@ const ANSWERS_KEY = 'featureAnswers';
  * claims, and the whole point of this is that the app was treating a
  * purchase as though it were an opinion.
  */
+const AUDIENCE_KEY = 'audience';
 const BACKLOG_KEY = 'backlog';
 const PLAY_STATES = ['playing', 'finished', 'bounced'];
 
@@ -1487,6 +1519,7 @@ function GameModal({
   onToggleOwned,
   playState,
   onSetPlayState,
+  audience = 'all',
   favouriteCreators,
   onToggleFavouriteCreator,
   onToggleWishlist,
@@ -1618,6 +1651,8 @@ function GameModal({
               <span>Picked for you: {uncapitalize(reason)}</span>
             </p>
           )}
+
+          <FamilyNotes game={game} audience={audience} />
 
           {onSetPlayState && <PlayState state={playState} onSet={onSetPlayState} />}
 
@@ -2181,6 +2216,138 @@ function PlayState({ state, onSet }) {
         <p className="mt-2 text-xs leading-relaxed text-slate-400 dark:text-slate-500">
           Counted against games like it, more gently than a thumbs down. Plenty of good games
           get put down.
+        </p>
+      )}
+    </div>
+  );
+}
+
+/**
+ * Who is playing.
+ *
+ * Above the toggles rather than among them, because it is a different kind
+ * of question. The others narrow a list; this one says who the list is for,
+ * and it is the only filter in the app that stays on while somebody
+ * searches.
+ *
+ * It does not replace the kid-friendly toggle, which is a quick yes or no
+ * over both rating tiers at once. This is the version that says which tier,
+ * and that can explain itself on each game.
+ */
+/**
+ * What a parent would want flagged, said plainly.
+ *
+ * The board writes these in two different fields and only one of them
+ * changes the age on the box. Violence and swearing are content
+ * descriptors; talking to strangers and spending money are "interactive
+ * elements", and an Everyone rating says nothing about either. 163 games
+ * rated for the youngest audience put a child in contact with people
+ * nobody has vetted, and 222 of them sell things.
+ */
+function FamilyNotes({ game, audience }) {
+  const flags = parentFlags(game);
+  const said = plainDescriptors(game);
+  /*
+   * A game can be open while sitting outside the chosen audience: from a
+   * link, from the library, or from a shelf of things already played. The
+   * list filters, a single game does not disappear, so it says where it
+   * stands instead.
+   */
+  const outside = whyNot(game, audienceFor(audience));
+  if (!outside && !flags.strangers && !flags.purchases && said.length === 0 && !flags.unrated)
+    return null;
+
+  return (
+    <div className="mt-4 rounded-xl bg-slate-50 dark:bg-slate-800/60 px-3.5 py-3">
+      <p className="text-xs font-semibold uppercase tracking-wider text-slate-400 dark:text-slate-500">
+        Worth knowing
+      </p>
+      <ul className="mt-2 space-y-1.5 text-sm leading-relaxed text-slate-600 dark:text-slate-300">
+        {outside && (
+          <li className="flex items-start gap-2">
+            <Info className="mt-0.5 h-4 w-4 shrink-0 text-amber-500" />
+            <span>
+              <strong className="font-semibold">
+                Outside what you have set for {audienceFor(audience)?.label ?? 'this age'}.
+              </strong>{' '}
+              {outside}
+            </span>
+          </li>
+        )}
+        {flags.strangers && (
+          <li className="flex items-start gap-2">
+            <Users className="mt-0.5 h-4 w-4 shrink-0 text-amber-500" />
+            <span>
+              <strong className="font-semibold">Talks to other players.</strong> The board flags
+              this one for unmoderated contact with people it has not seen.
+            </span>
+          </li>
+        )}
+        {flags.purchases && (
+          <li className="flex items-start gap-2">
+            <Wallet className="mt-0.5 h-4 w-4 shrink-0 text-amber-500" />
+            <span>
+              <strong className="font-semibold">Sells things inside the game.</strong>
+            </span>
+          </li>
+        )}
+        {flags.unrated ? (
+          <li className="flex items-start gap-2">
+            <Info className="mt-0.5 h-4 w-4 shrink-0 text-slate-400" />
+            <span>No board rating found, so nobody has checked what is in it.</span>
+          </li>
+        ) : (
+          said.length > 0 && (
+            <li className="flex items-start gap-2">
+              <Baby className="mt-0.5 h-4 w-4 shrink-0 text-slate-400" />
+              <span>Contains {said.join(', ')}.</span>
+            </li>
+          )
+        )}
+      </ul>
+    </div>
+  );
+}
+
+function AudiencePicker({ value, onChange }) {
+  const chosen = audienceFor(value) ?? audienceFor('all');
+  return (
+    <div className="w-full">
+      <p className="mb-1.5 text-xs font-semibold uppercase tracking-wider text-slate-400 dark:text-slate-500">
+        Who is playing
+      </p>
+      <div className="flex flex-wrap gap-2">
+        {AUDIENCES.map((audience) => {
+          const on = audience.id === chosen.id;
+          return (
+            <button
+              key={audience.id}
+              type="button"
+              onClick={() => onChange(audience.id)}
+              aria-pressed={on}
+              title={audience.hint}
+              className={`inline-flex items-center gap-1.5 rounded-full px-3 py-1.5 text-xs font-semibold transition-transform duration-200 ease-spring active:scale-95 ${
+                on
+                  ? 'bg-emerald-600 text-white'
+                  : 'bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-300 hover:bg-slate-200'
+              }`}
+            >
+              {audience.id !== 'all' && <Baby className="h-3.5 w-3.5" />}
+              {audience.label}
+            </button>
+          );
+        })}
+      </div>
+      {chosen.tiers && (
+        <p className="mt-1.5 text-xs leading-relaxed text-slate-500 dark:text-slate-400">
+          {/*
+            * Says what a rating is and is not. Everyone covers Tetris and it
+            * covers long text-heavy strategy games a five-year-old cannot
+            * play, so promising suitability here would be promising
+            * something no rating board certifies.
+            */}
+          Showing games whose content is rated for this age. A rating says what is in a game,
+          not whether it will suit a particular child. Anything unrated is left out.
         </p>
       )}
     </div>
@@ -5431,12 +5598,12 @@ function storeRowAsLive(row) {
 }
 
 /** Query state for the mirror, kept out of the component that renders it. */
-function useStoreSearch({ active, q, genre, sort, plusOnly = false, familyOnly = false, noPurchases = false, newOnly = false }) {
+function useStoreSearch({ active, q, genre, sort, plusOnly = false, familyOnly = false, audience = 'all', noPurchases = false, newOnly = false }) {
   const [state, setState] = useState({ status: 'idle', games: [], total: 0, page: 0 });
   const request = useRef(0);
   // Everything that decides which games belong in the list, as against which
   // of them match what has been typed.
-  const shape = `${genre}|${sort}|${plusOnly}|${familyOnly}|${noPurchases}|${newOnly}`;
+  const shape = `${genre}|${sort}|${plusOnly}|${familyOnly}|${audience}|${noPurchases}|${newOnly}`;
   const lastShape = useRef(shape);
 
   useEffect(() => {
@@ -5448,6 +5615,7 @@ function useStoreSearch({ active, q, genre, sort, plusOnly = false, familyOnly =
     if (sort) params.set('sort', sort);
     if (plusOnly) params.set('plus', '1');
     if (familyOnly) params.set('family', '1');
+    if (audience && audience !== 'all') params.set('audience', audience);
     if (noPurchases) params.set('nopurchases', '1');
     if (newOnly) params.set('new', '1');
 
@@ -5479,7 +5647,7 @@ function useStoreSearch({ active, q, genre, sort, plusOnly = false, familyOnly =
     }, q ? 220 : 0);
 
     return () => clearTimeout(timer);
-  }, [active, q, genre, sort, plusOnly, familyOnly, noPurchases, newOnly, shape]);
+  }, [active, q, genre, sort, plusOnly, familyOnly, audience, noPurchases, newOnly, shape]);
 
   const more = useCallback(async () => {
     const params = new URLSearchParams();
@@ -5488,6 +5656,7 @@ function useStoreSearch({ active, q, genre, sort, plusOnly = false, familyOnly =
     if (sort) params.set('sort', sort);
     if (plusOnly) params.set('plus', '1');
     if (familyOnly) params.set('family', '1');
+    if (audience && audience !== 'all') params.set('audience', audience);
     if (noPurchases) params.set('nopurchases', '1');
     if (newOnly) params.set('new', '1');
     params.set('page', String(state.page + 1));
@@ -5502,7 +5671,7 @@ function useStoreSearch({ active, q, genre, sort, plusOnly = false, familyOnly =
     } catch {
       // A failed "load more" leaves what is already on screen alone.
     }
-  }, [q, genre, sort, plusOnly, familyOnly, noPurchases, newOnly, state.page]);
+  }, [q, genre, sort, plusOnly, familyOnly, audience, noPurchases, newOnly, state.page]);
 
   return { ...state, more };
 }
@@ -5587,8 +5756,8 @@ function PlusThisMonth({ now, onSearch }) {
   );
 }
 
-function StoreFeed({ query, curatedFirst = [], curatedReason, curatedByName, saved, plusOnly = false, familyOnly = false, noPurchases = false, newOnly = false, muted, onToggleMuted, onOpenCurated, onOpenStore }) {
-  const results = useStoreSearch({ active: true, q: query, genre: '', sort: 'rating', plusOnly, familyOnly, noPurchases, newOnly });
+function StoreFeed({ query, curatedFirst = [], curatedReason, curatedByName, saved, plusOnly = false, familyOnly = false, audience = 'all', noPurchases = false, newOnly = false, muted, onToggleMuted, onOpenCurated, onOpenStore }) {
+  const results = useStoreSearch({ active: true, q: query, genre: '', sort: 'rating', plusOnly, familyOnly, audience, noPurchases, newOnly });
   const [sentinel, setSentinel] = useState(null);
   const loadMore = results.more;
   const hasMore = results.games.length < results.total;
@@ -5655,7 +5824,7 @@ function StoreFeed({ query, curatedFirst = [], curatedReason, curatedByName, sav
   );
 }
 
-function StorePanel({ query, curatedFirst = [], curatedReason, curatedByName, saved, plusOnly = false, familyOnly = false, noPurchases = false, newOnly = false, onOpenCurated, onOpenStore, onSearch }) {
+function StorePanel({ query, curatedFirst = [], curatedReason, curatedByName, saved, plusOnly = false, familyOnly = false, audience = 'all', noPurchases = false, newOnly = false, onOpenCurated, onOpenStore, onSearch }) {
   const [genre, setGenre] = useState('');
   const [sort, setSort] = useState('rating');
   const [facets, setFacets] = useState({ genres: [], size: 0 });
@@ -5673,7 +5842,7 @@ function StorePanel({ query, curatedFirst = [], curatedReason, curatedByName, sa
     };
   }, []);
 
-  const results = useStoreSearch({ active: true, q: query, genre, sort, plusOnly, familyOnly, noPurchases, newOnly });
+  const results = useStoreSearch({ active: true, q: query, genre, sort, plusOnly, familyOnly, audience, noPurchases, newOnly });
 
   /** Settled on nothing, as opposed to not having answered yet. */
   const nothingFound =
@@ -7500,6 +7669,7 @@ export default function App() {
     writeFiltersToUrl(filters, briefing);
     try {
       localStorage.setItem('region', filters.region);
+      localStorage.setItem(AUDIENCE_KEY, filters.audience);
     } catch {
       // A browser refusing storage just means the region resets next visit.
     }
@@ -8632,6 +8802,16 @@ export default function App() {
       if (filters.artStyle !== 'All' && game.artStyle !== filters.artStyle) return false;
       if (filters.upgrade !== 'All' && game.ps5Upgrade !== filters.upgrade) return false;
       if (filters.kidFriendly && !isKidFriendly(game.ageRating)) return false;
+      /*
+       * Who is playing outranks a search.
+       *
+       * Every other narrowing filter steps aside while somebody is typing,
+       * because a search is a question about the whole catalogue. This one
+       * does not. If a five-year-old is holding the pad, they are still
+       * holding it when a search runs, and a filter that quietly lifts
+       * itself at the moment somebody goes looking is worse than no filter.
+       */
+      if (!suitsAudience(game, audienceFor(filters.audience))) return false;
       if (filters.newOnly && !isNewRelease(game, openedAt)) return false;
       // Unrated is unknown, not innocent: the same rule the kid filter uses.
       if (filters.noPurchases && (!game.ageRating || hasInGamePurchases(game.ageRating)))
@@ -9168,6 +9348,10 @@ export default function App() {
 
               <SheetGroup label="Show only">
               <div className="flex flex-wrap items-center gap-1.5">
+                <AudiencePicker
+                  value={filters.audience}
+                  onChange={(id) => set('audience', id)}
+                />
                 <TogglePill
                   active={filters.sale}
                   onClick={() => set('sale', !filters.sale)}
@@ -9335,6 +9519,7 @@ export default function App() {
               }
               plusOnly={filters.collection === 'plus' && !searching}
               familyOnly={filters.kidFriendly && !searching}
+              audience={filters.audience}
               noPurchases={filters.noPurchases && !searching}
               newOnly={filters.newOnly && !searching}
               curatedReason={
@@ -9384,6 +9569,31 @@ export default function App() {
         </main>
       ) : (
         <main className="gutter pb-nav mx-auto max-w-7xl pt-3">
+          {/*
+            * Said out loud, because this filter breaks the rule the others
+            * follow. A search sets every narrowing filter aside and says so;
+            * this one stays on, so it has to say that too, or a short list
+            * reads as the catalogue being short rather than as a limit the
+            * reader set earlier and forgot.
+            */}
+          {audienceFor(filters.audience)?.tiers && (
+            <p className="mb-3 flex items-start gap-2 rounded-xl bg-emerald-50 dark:bg-emerald-950/40 px-3 py-2 text-xs leading-relaxed text-emerald-800 dark:text-emerald-200">
+              <Baby className="mt-px h-3.5 w-3.5 shrink-0" />
+              <span>
+                <span className="font-semibold">
+                  Showing games rated for {audienceFor(filters.audience).label}.
+                </span>{' '}
+                This stays on while you search.{' '}
+                <button
+                  type="button"
+                  onClick={() => set('audience', 'all')}
+                  className="font-semibold underline underline-offset-2"
+                >
+                  Show everything
+                </button>
+              </span>
+            </p>
+          )}
           {setAside && (
             <p className="mb-3 flex items-start gap-2 rounded-xl bg-slate-100 dark:bg-slate-800/60 px-3 py-2 text-xs leading-relaxed text-slate-600 dark:text-slate-300">
               <Search className="mt-px h-3.5 w-3.5 shrink-0" />
@@ -9421,6 +9631,7 @@ export default function App() {
               }
               plusOnly={filters.collection === 'plus' && !searching}
               familyOnly={filters.kidFriendly && !searching}
+              audience={filters.audience}
               noPurchases={filters.noPurchases && !searching}
               newOnly={filters.newOnly && !searching}
               curatedReason={
@@ -9618,6 +9829,7 @@ export default function App() {
           onToggleOwned={() => toggleOwned(activeGame.id)}
           playState={backlog.get(activeGame.id) ?? null}
           onSetPlayState={(state) => setPlayState(activeGame.id, state)}
+          audience={filters.audience}
           onClose={() => setActiveGameId(null)}
         />
       )}

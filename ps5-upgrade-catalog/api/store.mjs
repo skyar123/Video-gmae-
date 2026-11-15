@@ -19,6 +19,7 @@ import { DEVELOPERS_KEY, DISCOVERED_KEY, STEAM_MATCH_KEY } from './keys.mjs';
 import bakedDevelopers from './developers.json' with { type: 'json' };
 import { fold, indexText, parseQuery, scoreMatch } from './search.mjs';
 import { conceptFor, matchesConcept } from './concepts.mjs';
+import { audienceFor, suitsAudience } from './family.mjs';
 
 const PAGE_SIZE = 36;
 const MERGE_TTL_MS = 30 * 60 * 1000;
@@ -199,6 +200,7 @@ export async function searchStore({
   exclude = [],
   plusOnly = false,
   familyOnly = false,
+  audience = 'all',
   noPurchases = false,
   newOnly = false,
 } = {}) {
@@ -217,6 +219,17 @@ export async function searchStore({
     // Same rule the curated list follows: a game whose rating has not been
     // read is unknown, and unknown is not "fine for children".
     if (familyOnly && !isKidFriendly(plus[row.id]?.ageRating)) return false;
+    /*
+     * Who is playing, applied here as well as in the app.
+     *
+     * The mirror is paged by the server, so filtering it on the device would
+     * mean a page of twenty-four Mature games arriving and being thinned to
+     * four. Worse, every shelf drawn this way, which includes All, PS Plus
+     * and every search, would have been showing a child whatever the server
+     * happened to send. The one filter that must not have a hole in it is
+     * this one.
+     */
+    if (!suitsAudience({ ageRating: plus[row.id]?.ageRating }, audienceFor(audience))) return false;
     // A game nobody has rated is unknown, not innocent, the same rule the
     // kid filter follows: absence is never read as a clean bill of health.
     if (noPurchases) {

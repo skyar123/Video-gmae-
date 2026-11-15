@@ -1454,17 +1454,96 @@ async function aFailedSearchDoesNotClaimZero() {
   return problems.length > 0 ? 1 : 0;
 }
 
+/**
+ * Nothing above the chosen age reaches a child, on any surface.
+ *
+ * The one failure in this app that is worse than useless. A search that
+ * misses a game costs somebody a minute; a filter that hands a five-year-old
+ * a Mature game has made a promise it broke. The mirror is paged by the
+ * server, so this has to hold on the server rather than in the page: every
+ * shelf drawn that way, which is All, PS Plus and every search, would
+ * otherwise show whatever happened to be sent.
+ *
+ * The control at the end is the point of the check. Without it, a filter
+ * that returned nothing at all would pass every assertion above while being
+ * completely broken, so the last probe proves the leaks are findable when
+ * the audience is not set.
+ */
+async function nothingTooOldReachesAChild() {
+  const label = 'A child sees nothing too old';
+  const page = await browser.newPage({ viewport: { width: 430, height: 1200 } });
+  const problems = [];
+  page.on('pageerror', (error) => problems.push(String(error).slice(0, 110)));
+  let note = '';
+  try {
+    await page.goto(`${BASE}/`, { waitUntil: 'domcontentloaded' });
+    await page.waitForTimeout(2000);
+
+    const ask = (query) =>
+      page.evaluate(async ([base, qs]) => {
+        const response = await fetch(`${base}/api/store?${qs}`);
+        const payload = await response.json();
+        return (payload.games ?? []).map((game) => ({
+          name: game.name,
+          tier: game.ageRating?.tier ?? 'none',
+        }));
+      }, [BASE, query]);
+
+    // Every way into the mirror, with the youngest audience set.
+    const surfaces = {
+      browse: 'audience=everyone',
+      search: 'q=horror&audience=everyone',
+      named: 'q=call%20of%20duty&audience=everyone',
+      kind: 'q=shooter&audience=everyone',
+      newest: 'audience=everyone&sort=newest',
+      plus: 'audience=everyone&plus=1',
+    };
+    let checked = 0;
+    for (const [where, query] of Object.entries(surfaces)) {
+      const rows = await ask(query);
+      checked += rows.length;
+      const leaked = rows.filter((row) => row.tier !== 'everyone');
+      if (leaked.length > 0) {
+        problems.push(`${where} showed ${leaked[0].name} rated ${leaked[0].tier}`);
+      }
+    }
+
+    /*
+     * And the probe can actually see a leak. A filter returning nothing
+     * passes every assertion above, so this proves the opposite case.
+     */
+    const control = await ask('q=call%20of%20duty');
+    if (!control.some((row) => row.tier === 'mature')) {
+      problems.push('the control found no mature game, so the check proves nothing');
+    }
+    if (checked === 0) problems.push('no rows were examined at all');
+
+    note = `${checked} rows across 6 surfaces, 0 too old`;
+    console.log(
+      `${problems.length ? 'FAIL' : ' ok '} ${label.padEnd(32)} ${note}` +
+        (problems.length ? `  ${problems[0]}` : ''),
+    );
+  } catch (error) {
+    problems.push(`threw: ${String(error.message).slice(0, 80)}`);
+    console.log(`FAIL ${label.padEnd(32)} ${problems[0]}`);
+  }
+  await page.close();
+  if (problems.length > 0) fail(label, problems.join('; '));
+  return problems.length > 0 ? 1 : 0;
+}
+
 failures += await aSearchAnswersFromAnywhere();
 failures += await aKindOfGameIsSearchable();
 failures += await aCuratedOnlyKindIsSearchable();
 failures += await aFailedSearchDoesNotClaimZero();
 failures += await forYouIsAGridYouCanTune();
+failures += await nothingTooOldReachesAChild();
 failures += await theWishlistShowsTheWishlist();
 
 await browser.close();
 stop();
 
-const total = SURFACES.length + 13;
+const total = SURFACES.length + 14;
 if (failures > 0) {
   // Named, not just counted, so the last line of a truncated log still says
   // what to go and look at.

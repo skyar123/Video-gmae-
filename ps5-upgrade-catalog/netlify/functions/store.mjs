@@ -37,6 +37,7 @@ export default async function handler(request) {
     exclude: (url.searchParams.get('exclude') ?? '').split('\n').filter(Boolean),
     plusOnly: url.searchParams.get('plus') === '1',
     familyOnly: url.searchParams.get('family') === '1',
+    audience: url.searchParams.get('audience') ?? 'all',
     noPurchases: url.searchParams.get('nopurchases') === '1',
     newOnly: url.searchParams.get('new') === '1',
   });
