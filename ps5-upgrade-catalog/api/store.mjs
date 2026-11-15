@@ -17,6 +17,7 @@ import { loadPlusIndex } from './plus.mjs';
 import { loadBlob } from './history.mjs';
 import { DEVELOPERS_KEY, DISCOVERED_KEY, STEAM_MATCH_KEY } from './keys.mjs';
 import bakedDevelopers from './developers.json' with { type: 'json' };
+import bakedLabels from './igdb-labels.json' with { type: 'json' };
 import { fold, indexText, parseQuery, scoreMatch } from './search.mjs';
 import { conceptFor, matchesConcept } from './concepts.mjs';
 import { audienceFor, suitsAudience } from './family.mjs';
@@ -152,8 +153,28 @@ async function index() {
 
   const rows = [...byId.values()].map((row) => {
     const developer = learned[row.id] ?? bakedDevelopers[fold(row.name ?? '')] ?? null;
+    /*
+     * Words somebody else wrote about this game.
+     *
+     * The store publishes 23 coarse genres and nothing else, so eleven of
+     * the kinds of game this app can be asked for reach the mirror not at
+     * all: cozy, metroidvania, pixel art, hand drawn and the rest search
+     * the 506 hand-written entries and stop there. These are IGDB's genres,
+     * themes and keywords, joined by title and baked in by
+     * scripts/bake-igdb.mjs.
+     *
+     * Flattened and folded once here rather than at every comparison. An
+     * absent file is an empty object, which is the ordinary state until the
+     * bake has run, and leaves every row exactly as it was.
+     */
+    const labels = bakedLabels[String(row.id)] ?? null;
     return {
       ...row,
+      igdbLabels: labels
+        ? [...(labels.genres ?? []), ...(labels.themes ?? []), ...(labels.keywords ?? [])].map(
+            (label) => String(label).toLowerCase(),
+          )
+        : null,
       steamAppId: row.steamAppId ?? matches[row.id] ?? null,
       developer,
       search: indexText(row.name ?? ''),

@@ -108,7 +108,8 @@ test('nothing in the vocabulary is empty or duplicated', () => {
       (concept.curated?.length ?? 0) +
       (concept.tags?.length ?? 0) +
       (concept.names?.length ?? 0) +
-      (concept.art?.length ?? 0);
+      (concept.art?.length ?? 0) +
+      (concept.igdb?.length ?? 0);
     assert.ok(reach > 0, `${concept.id} points at nothing`);
     assert.ok(concept.ask.length > 0, `${concept.id} cannot be asked for`);
     for (const phrase of concept.ask) {

@@ -43,6 +43,7 @@
 export const CONCEPTS = [
   {
     id: 'horror',
+    igdb: ['horror', 'survival horror', 'psychological horror'],
     label: 'Horror',
     ask: ['horror', 'scary', 'spooky', 'frightening', 'creepy', 'survival horror'],
     genres: ['Horror'],
@@ -82,6 +83,7 @@ export const CONCEPTS = [
   },
   {
     id: 'metroidvania',
+    igdb: ['metroidvania'],
     label: 'Metroidvania',
     ask: ['metroidvania', 'metroidvanias', 'search action'],
     curated: ['Metroidvania'],
@@ -135,18 +137,21 @@ export const CONCEPTS = [
   },
   {
     id: 'narrative',
+    igdb: ['story rich', 'narrative', 'visual novel', 'interactive fiction'],
     label: 'Story games',
     ask: ['story', 'story games', 'narrative', 'story driven', 'visual novel', 'walking sim'],
     curated: ['Narrative', 'Mystery'],
   },
   {
     id: 'cozy',
+    igdb: ['cozy', 'relaxing', 'wholesome', 'cute'],
     label: 'Cozy',
     ask: ['cozy', 'cosy', 'relaxing', 'chill', 'wholesome', 'calm', 'comfy'],
     tags: ['cozy'],
   },
   {
     id: 'queer',
+    igdb: ['lgbt', 'lgbtq+', 'queer'],
     label: 'Queer',
     ask: ['queer', 'lgbt', 'lgbtq', 'gay', 'trans', 'lesbian'],
     tags: ['queer'],
@@ -160,6 +165,7 @@ export const CONCEPTS = [
   },
   {
     id: 'deckbuilder',
+    igdb: ['deck-building', 'deckbuilding', 'card game', 'card battle'],
     label: 'Deckbuilders',
     ask: ['deckbuilder', 'deckbuilding', 'card game', 'card games', 'cards'],
     curated: ['Deckbuilder'],
@@ -180,6 +186,7 @@ export const CONCEPTS = [
      * floor the rating already carries.
      */
     id: 'toddler',
+    igdb: ['kids'],
     label: 'For very young children',
     ask: [
       'toddler',
@@ -198,6 +205,7 @@ export const CONCEPTS = [
   },
   {
     id: 'coop',
+    igdb: ['co-op', 'cooperative', 'local co-op', 'online co-op', 'split screen'],
     label: 'Play together',
     ask: ['coop', 'cooperative', 'two player', 'multiplayer', 'play together', 'with friends'],
     genres: ['Party'],
@@ -205,30 +213,35 @@ export const CONCEPTS = [
   },
   {
     id: 'pixel',
+    igdb: ['pixel art', '8-bit', '16-bit', 'retro'],
     label: 'Pixel art',
     ask: ['pixel art', 'pixel', 'retro art', '8 bit', '16 bit'],
     art: ['Pixel Art'],
   },
   {
     id: 'handdrawn',
+    igdb: ['hand-drawn', 'hand drawn', 'cel shading', 'watercolor', 'anime'],
     label: 'Hand-drawn',
     ask: ['hand drawn', 'watercolour', 'watercolor', 'painted'],
     art: ['Hand-drawn', 'Watercolor'],
   },
   {
     id: 'realistic',
+    igdb: ['photorealistic', 'realistic'],
     label: 'Photorealistic',
     ask: ['photorealistic', 'realistic', 'real life', 'lifelike'],
     art: ['Photorealistic'],
   },
   {
     id: 'educational',
+    igdb: ['educational', 'kids'],
     label: 'Learning games',
     ask: ['educational', 'learning', 'teaching', 'school', 'maths', 'math'],
     genres: ['Educational', 'Brain Training'],
   },
   {
     id: 'exploration',
+    igdb: ['exploration', 'open world', 'walking simulator'],
     label: 'Exploration',
     ask: ['exploration', 'exploring', 'open world', 'adventure games', 'walking'],
     curated: ['Exploration'],
@@ -241,6 +254,7 @@ export const CONCEPTS = [
   },
   {
     id: 'graphics',
+    igdb: ['great soundtrack', 'atmospheric', 'beautiful'],
     label: 'Showpieces',
     ask: ['graphics', 'best looking', 'showcase', 'beautiful', 'gorgeous'],
     tags: ['graphics'],
@@ -346,6 +360,25 @@ export function matchesConcept(game, concept) {
 
   const genres = Array.isArray(game.genres) ? game.genres : [];
   if (concept.genres?.some((wanted) => genres.includes(wanted))) return true;
+
+  /*
+   * What somebody else called this game, where the store said nothing.
+   *
+   * The store publishes 23 genres and no art style, no mood and no sharper
+   * kind, so eleven of the concepts below reach the mirror not at all:
+   * cozy, metroidvania, pixel art, hand drawn, deckbuilder and the rest
+   * search the 506 hand-written entries and stop. These are IGDB's own
+   * labels, attached by api/store.mjs.
+   *
+   * Matched as whole labels against a fixed list, never as substrings and
+   * never inferred. "metroidvania" is a keyword IGDB actually carries; it
+   * is not derived from a game being an Action Platformer, because that
+   * guess would be wrong far more often than right and would be made
+   * confidently across thousands of games at once.
+   */
+  if (concept.igdb?.length && Array.isArray(game.igdbLabels)) {
+    if (concept.igdb.some((wanted) => game.igdbLabels.includes(wanted))) return true;
+  }
 
   if (concept.art?.length && concept.art.includes(game.artStyle)) return true;
 
