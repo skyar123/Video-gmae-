@@ -46,10 +46,28 @@ const yearOf = (value) => {
   return Number.isFinite(year) ? year : null;
 };
 
-const onPlayStation = (candidate) =>
-  (candidate.platforms ?? []).some((platform) =>
-    PLAYSTATION_IDS.has(typeof platform === 'number' ? platform : platform?.id),
-  );
+/*
+ * Two shapes reach this, and both are legitimate.
+ *
+ * `ask` hands back IGDB's raw rows, where a platform is an object with a
+ * numeric id and the date is epoch seconds. `normaliseGame` has already
+ * turned those into abbreviations and an ISO string, and dropped the ids on
+ * the way. Rather than force one shape on every caller, which would mean the
+ * enrichment path and the search path diverging, both are read here.
+ *
+ * The alternative was a matcher that silently believed every candidate was
+ * off-console and every date unknown, because the fields it wanted were
+ * named something else. That fails open, which in this file means guessing.
+ */
+const onPlayStation = (candidate) => {
+  if (Array.isArray(candidate?.playstation) && candidate.playstation.length > 0) return true;
+  const platforms = candidate?.platforms ?? [];
+  return platforms.some((platform) => {
+    if (typeof platform === 'number') return PLAYSTATION_IDS.has(platform);
+    if (typeof platform === 'string') return /^ps[1-5p]?$|playstation|vita|psp/i.test(platform);
+    return PLAYSTATION_IDS.has(platform?.id);
+  });
+};
 
 /**
  * Every spelling of a store row worth comparing.
@@ -104,10 +122,10 @@ export function pickMatch(row, candidates = []) {
     return { game: pool[0], why: 'exact title, settled by platform' };
   }
 
-  const storeYear = yearOf(row?.release);
+  const storeYear = yearOf(row?.release ?? row?.releaseDate);
   if (storeYear != null) {
     const close = pool.filter((candidate) => {
-      const year = yearOf(candidate?.first_release_date);
+      const year = yearOf(candidate?.first_release_date ?? candidate?.releasedAt);
       return year != null && Math.abs(year - storeYear) <= YEAR_SLACK;
     });
     if (close.length === 1) return { game: close[0], why: 'exact title, settled by year' };

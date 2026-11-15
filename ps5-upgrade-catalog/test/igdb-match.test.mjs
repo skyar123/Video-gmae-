@@ -129,3 +129,32 @@ test('the long tail of keywords is capped', () => {
   const out = enrichmentOf({ id: 9, genres: [{ name: 'Puzzle' }], keywords: many });
   assert.ok(out.keywords.length <= 24, `kept ${out.keywords.length} keywords`);
 });
+
+test('it reads a normalised row as well as a raw one', async () => {
+  /*
+   * Two shapes legitimately reach this. IGDB's raw rows carry numeric
+   * platform ids and epoch seconds; normaliseGame has already turned those
+   * into abbreviations and an ISO string and dropped the ids.
+   *
+   * Reading only the raw shape would not have thrown. It would have quietly
+   * believed every normalised candidate was off-console with an unknown
+   * date, which in this file means falling back to a guess.
+   */
+  const { normaliseGame } = await import('../api/igdb.mjs');
+  const normalised = normaliseGame({
+    id: 2,
+    name: 'Resident Evil 4',
+    first_release_date: at('2023-03-24'),
+    platforms: [{ id: 167, abbreviation: 'PS5' }],
+  });
+  const old = normaliseGame({
+    id: 1,
+    name: 'Resident Evil 4',
+    first_release_date: at('2005-01-11'),
+    platforms: [{ id: 8, abbreviation: 'PS2' }],
+  });
+
+  assert.equal(normalised.playstation?.length, 1, 'fixture is not a PlayStation game');
+  const hit = pickMatch({ name: 'Resident Evil 4 (PS5)', release: '2023-03-24' }, [old, normalised]);
+  assert.equal(hit?.game.id, 2, 'picked the wrong one from normalised rows');
+});
