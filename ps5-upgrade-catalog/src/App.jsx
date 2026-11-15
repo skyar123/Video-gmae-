@@ -155,6 +155,8 @@ const COLLECTIONS = [
   // The store marks them "Included" and names the tier that covers them.
   { value: 'plus', label: 'PS Plus', tag: null },
   { value: 'genius', label: 'For you', tag: null },
+  // What you have actually played, which until now the app never asked.
+  { value: 'backlog', label: 'Played', tag: null },
   // What used to be "All": the hand-written ones, with upgrade paths, tags,
   // representation notes and recorded price history behind them.
   { value: 'curated', label: 'Curated', tag: null },
@@ -172,6 +174,8 @@ const COLLECTION_BLURBS = {
     'Worked out from what you have thumbed up and down, what you own and what you want, with the reason for each pick.',
   deals: 'Everything discounted right now, deepest cut first. Updates with the storefront.',
   plus: 'Already covered by your PlayStation Plus subscription, so there is nothing more to pay. Read from the store, which names the tier each one needs.',
+  backlog:
+    'Games you are playing, finished, or gave up on. Finishing one counts nearly as much as a thumbs up; giving up counts against games like it, more gently than a thumbs down.',
   graphics: 'Technical showcases and standout art direction.',
   social: 'Online play, co-op and couch multiplayer.',
   cozy: 'Low-stress games with gentle pacing and no fail state to speak of.',
@@ -393,6 +397,16 @@ const RATINGS_KEY = 'ratings';
  * showing up as a thumb on some game the reader never saw.
  */
 const ANSWERS_KEY = 'featureAnswers';
+/*
+ * What you actually played, as opposed to what you bought.
+ *
+ * Three states, one per game: playing it now, finished it, or gave up on it.
+ * Kept apart from the library because owning and playing are different
+ * claims, and the whole point of this is that the app was treating a
+ * purchase as though it were an opinion.
+ */
+const BACKLOG_KEY = 'backlog';
+const PLAY_STATES = ['playing', 'finished', 'bounced'];
 
 /** Store-mirror ids are numeric; prefixing keeps them out of the catalog's namespace. */
 const storeKey = (game) => `store:${game.id}`;
@@ -495,6 +509,16 @@ function readRatings() {
     return new Map(
       Object.entries(raw).filter(([, verdict]) => verdict === 'like' || verdict === 'dislike'),
     );
+  } catch {
+    return new Map();
+  }
+}
+
+function readBacklog() {
+  try {
+    const raw = JSON.parse(localStorage.getItem(BACKLOG_KEY) ?? '{}');
+    if (!raw || typeof raw !== 'object' || Array.isArray(raw)) return new Map();
+    return new Map(Object.entries(raw).filter(([, state]) => PLAY_STATES.includes(state)));
   } catch {
     return new Map();
   }
@@ -1461,6 +1485,8 @@ function GameModal({
   onToggleDealAlert,
   onOpenAlerts,
   onToggleOwned,
+  playState,
+  onSetPlayState,
   favouriteCreators,
   onToggleFavouriteCreator,
   onToggleWishlist,
@@ -1592,6 +1618,8 @@ function GameModal({
               <span>Picked for you: {uncapitalize(reason)}</span>
             </p>
           )}
+
+          {onSetPlayState && <PlayState state={playState} onSet={onSetPlayState} />}
 
           {/* Price first, with the alert attached to it. Both used to sit
               under the metadata chips and the upgrade notes, which put the
@@ -2087,6 +2115,75 @@ function OwnedButton({ owned, onToggle, withLabel = false }) {
       <CircleCheck className="h-4 w-4" />
       {withLabel && (owned ? 'In library' : 'I own it')}
     </button>
+  );
+}
+
+/**
+ * Playing it, finished it, gave up on it.
+ *
+ * A row rather than a menu, because all three are one tap from any state and
+ * the common move is playing to finished. Tapping the state a game is
+ * already in clears it, the way the thumbs do.
+ *
+ * "Gave up" is worded as a thing that happened rather than a verdict. People
+ * stop playing good games, and a control that made quitting sound like an
+ * accusation would get used less, which costs the model the signal it is
+ * here for.
+ */
+const PLAY_LABELS = {
+  playing: { label: 'Playing', done: 'Playing it', icon: CirclePlay, tone: 'sky' },
+  finished: { label: 'Finished', done: 'Finished it', icon: Check, tone: 'emerald' },
+  bounced: { label: 'Gave up', done: 'Gave up on it', icon: X, tone: 'slate' },
+};
+
+const PLAY_TONES = {
+  sky: 'bg-sky-50 dark:bg-sky-950/40 text-sky-700 dark:text-sky-300 ring-sky-200 dark:ring-sky-800',
+  emerald:
+    'bg-emerald-50 dark:bg-emerald-950/40 text-emerald-700 dark:text-emerald-300 ring-emerald-200 dark:ring-emerald-800',
+  slate:
+    'bg-slate-100 dark:bg-slate-800 text-slate-700 dark:text-slate-200 ring-slate-300 dark:ring-slate-600',
+};
+
+function PlayState({ state, onSet }) {
+  return (
+    <div className="mt-4">
+      <p className="text-xs font-semibold uppercase tracking-wider text-slate-400 dark:text-slate-500">
+        Have you played it?
+      </p>
+      <div className="mt-2 flex flex-wrap gap-2">
+        {PLAY_STATES.map((key) => {
+          const { label, done, icon: Icon, tone } = PLAY_LABELS[key];
+          const on = state === key;
+          return (
+            <button
+              key={key}
+              type="button"
+              onClick={() => onSet(key)}
+              aria-pressed={on}
+              className={`inline-flex items-center gap-1.5 rounded-full px-3.5 py-2 text-sm font-medium transition-transform duration-200 ease-spring active:scale-95 ${
+                on
+                  ? `ring-1 ring-inset ${PLAY_TONES[tone]}`
+                  : 'text-slate-500 dark:text-slate-400 ring-1 ring-inset ring-slate-200 dark:ring-slate-700 hover:bg-slate-50 dark:hover:bg-slate-800'
+              }`}
+            >
+              <Icon className="h-4 w-4" />
+              {on ? done : label}
+            </button>
+          );
+        })}
+      </div>
+      {state === 'finished' && (
+        <p className="mt-2 text-xs leading-relaxed text-slate-400 dark:text-slate-500">
+          Counted as strongly as a thumbs up, and it will not be suggested to you again.
+        </p>
+      )}
+      {state === 'bounced' && (
+        <p className="mt-2 text-xs leading-relaxed text-slate-400 dark:text-slate-500">
+          Counted against games like it, more gently than a thumbs down. Plenty of good games
+          get put down.
+        </p>
+      )}
+    </div>
   );
 }
 
@@ -7246,6 +7343,7 @@ export default function App() {
   const [hidden, setHidden] = useState(readHidden);
   const [ratings, setRatings] = useState(readRatings);
   const [featureAnswers, setFeatureAnswers] = useState(readAnswers);
+  const [backlog, setBacklog] = useState(readBacklog);
   const [savedReleases, setSavedReleases] = useState(readSavedReleases);
   const [favouriteCreators, setFavouriteCreators] = useState(readFavouriteCreators);
   const [library, setLibrary] = useState(readLibrary);
@@ -7485,6 +7583,28 @@ export default function App() {
     });
   }, []);
 
+
+  /**
+   * Playing, finished, or gave up. Saying it again takes it back.
+   *
+   * The same shape as the thumbs, because it is the same kind of act: a
+   * statement about one game that you can withdraw by repeating it. Moving
+   * from playing to finished is the ordinary path and needs no separate
+   * control.
+   */
+  const setPlayState = useCallback((id, state) => {
+    setBacklog((previous) => {
+      const next = new Map(previous);
+      if (next.get(id) === state) next.delete(id);
+      else next.set(id, state);
+      try {
+        localStorage.setItem(BACKLOG_KEY, JSON.stringify(Object.fromEntries(next)));
+      } catch {
+        // Storage is a convenience; the in-memory map still ranks.
+      }
+      return next;
+    });
+  }, []);
 
   /**
    * One answer, applied to every feature that says the same thing.
@@ -7779,14 +7899,22 @@ export default function App() {
       seen.add(id);
       rows.push({ game, kind });
     };
-    // Strongest first, and each game counts once: a game both owned and
-    // thumbed up is one opinion, not two.
+    /*
+     * Strongest first, and each game counts once: a game both owned and
+     * thumbed up is one opinion, not two.
+     *
+     * The thumbs stay ahead of everything, because they are the only signal
+     * that means exactly what it says. The play states come next, ahead of
+     * owning, since what you did with a game outranks having bought it: a
+     * game finished and also owned should count as finished.
+     */
     for (const [id, verdict] of ratings) push(id, verdict === 'like' ? 'liked' : 'disliked');
+    for (const [id, state] of backlog) push(id, state);
     for (const id of library) push(id, 'owned');
     for (const id of wishlist) push(id, 'wishlisted');
     for (const id of hidden) push(id, 'hidden');
     return rows;
-  }, [rateable, ratings, library, wishlist, hidden]);
+  }, [rateable, ratings, backlog, library, wishlist, hidden]);
 
   /**
    * The picks hold still while you are looking at them.
@@ -7805,6 +7933,19 @@ export default function App() {
   const geniusSurfaceOpen = geniusOpen || filters.collection === 'genius';
   const [frozen, setFrozen] = useState(null);
 
+  /*
+   * Everything already spoken for, as one list.
+   *
+   * Written out three times before, and a fourth kind of signal is exactly
+   * how three copies of a list drift apart. A game you finished belongs here
+   * for the obvious reason: being recommended a game you have played to the
+   * end is the clearest possible sign the app is not paying attention.
+   */
+  const ruledOutIds = useMemo(
+    () => [...library, ...wishlist, ...hidden, ...backlog.keys()],
+    [library, wishlist, hidden, backlog],
+  );
+
   useEffect(() => {
     if (!geniusSurfaceOpen) {
       // eslint-disable-next-line react/set-state-in-effect
@@ -7812,8 +7953,8 @@ export default function App() {
       return;
     }
     // eslint-disable-next-line react/set-state-in-effect
-    if (!frozen) setFrozen({ signals, ruledOut: [...library, ...wishlist, ...hidden] });
-  }, [geniusSurfaceOpen, frozen, signals, library, wishlist, hidden]);
+    if (!frozen) setFrozen({ signals, ruledOut: ruledOutIds });
+  }, [geniusSurfaceOpen, frozen, signals, ruledOutIds]);
 
   const rankingSignals = frozen?.signals ?? signals;
 
@@ -7907,7 +8048,7 @@ export default function App() {
      * nothing is wrong and is still wrong.
      */
     const exclude = new Set([
-      ...(frozen?.ruledOut ?? [...library, ...wishlist, ...hidden]),
+      ...(frozen?.ruledOut ?? ruledOutIds),
       ...rankingSignals.map((row) => row.game.id),
     ]);
     if (!geniusIsPersonalized) {
@@ -7929,9 +8070,7 @@ export default function App() {
     answerList,
     geniusIsPersonalized,
     frozen,
-    library,
-    wishlist,
-    hidden,
+    ruledOutIds,
     passesChips,
   ]);
 
@@ -8008,7 +8147,7 @@ export default function App() {
      */
     if (!taste || (taste.positives === 0 && (taste.said?.yes ?? 0) === 0)) return null;
     const ruledOut = [
-      ...(frozen?.ruledOut ?? [...library, ...wishlist, ...hidden]),
+      ...(frozen?.ruledOut ?? ruledOutIds),
       ...rankingSignals.map((row) => row.game.id),
     ];
     const known = new Map(rateable.map((game) => [game.id, game]));
@@ -8061,9 +8200,7 @@ export default function App() {
     rateable,
     frozen,
     rankingSignals,
-    library,
-    wishlist,
-    hidden,
+    ruledOutIds,
     filters.newOnly,
     filters.genre,
     filters.kidFriendly,
@@ -8502,6 +8639,7 @@ export default function App() {
       if (filters.owned === 'owned' && !library.has(game.id)) return false;
       if (filters.owned === 'unowned' && library.has(game.id)) return false;
       if (filters.wishlist && !wishlist.has(game.id)) return false;
+      if (filters.collection === 'backlog' && !backlog.has(game.id)) return false;
       if (filters.sale && !(byTitle.get(game.title)?.price?.discountPercent > 0)) return false;
       if (filters.atFloor) {
         const entry = byTitle.get(game.title);
@@ -8558,7 +8696,7 @@ export default function App() {
       if (filters.sort === 'buy') return buyScoreOf(a) - buyScoreOf(b);
       return discountOf(b) - discountOf(a);
     });
-  }, [pool, searchScores, searching, filters, wishlist, library, hidden, byTitle, geniusPicks, openedAt]);
+  }, [pool, searchScores, searching, filters, wishlist, library, hidden, backlog, byTitle, geniusPicks, openedAt]);
 
   // Cards are added as you reach them rather than all at once; a different
   // filter, sort or collection is a different list, so it starts over.
@@ -9478,6 +9616,8 @@ export default function App() {
           onOpenAlerts={() => setAlertsOpen(true)}
           onToggleWishlist={() => toggleWishlist(activeGame.id)}
           onToggleOwned={() => toggleOwned(activeGame.id)}
+          playState={backlog.get(activeGame.id) ?? null}
+          onSetPlayState={(state) => setPlayState(activeGame.id, state)}
           onClose={() => setActiveGameId(null)}
         />
       )}

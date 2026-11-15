@@ -153,11 +153,46 @@ export function featuresOf(game, only = null) {
  */
 export const SIGNAL_WEIGHTS = {
   liked: 1,
+  finished: 0.95,
+  playing: 0.85,
   owned: 0.8,
   wishlisted: 0.6,
-  disliked: -1,
   hidden: -0.45,
+  bounced: -0.7,
+  disliked: -1,
 };
+
+/*
+ * Where the three play states sit, and why.
+ *
+ * The app knew what somebody wanted and what they had bought, and nothing
+ * about what they actually played. That is the gap: a shelf records a
+ * purchase, and finishing a game is twenty hours of a person voting with the
+ * only currency that cannot be faked. Owning is the weakest of the three and
+ * was carrying all of it alone.
+ *
+ * Finished sits just under a thumbs up rather than above it. Both are strong,
+ * but a thumbs up is the one signal that means exactly what it says, and
+ * somebody who finished a game and then thumbed it down has said something
+ * specific that behaviour should not overrule. Playing goes above owned for
+ * the same reason owned goes above wishlisted: starting a game is a choice
+ * made after buying it.
+ *
+ * Bounced off is a real no and a softer one than a thumbs down. Giving up on
+ * a game says it did not fit, but it also happens for reasons that are not
+ * taste at all: it was too long, or too hard, or life happened at chapter
+ * three. A thumbs down has no such excuse, so it stays the heavier of the
+ * two. It is still well clear of hiding, which costs a glance.
+ *
+ * These five numbers are reasoned rather than measured, and that is worth
+ * saying plainly. The holdout harness scores picks against games a profile
+ * had not seen; it has no record of anybody playing anything, so there is
+ * nothing in it to fit these against. The same is already true of dislikes,
+ * where the negatives are games passed over rather than games anybody
+ * refused. What the harness can do is confirm they change nothing for a
+ * profile that has no play states, and test/genius-backlog.test.mjs pins
+ * that, so this cannot quietly move the existing numbers.
+ */
 
 /** Keeps one enthusiastic evening from rewriting the whole profile. */
 const SMOOTHING = 2.5;
