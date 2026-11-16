@@ -194,7 +194,14 @@ const COLLECTION_BLURBS = {
   // can see. This one is just a count: how many people have rated a
   // recent release, which is the closest thing the store publishes to
   // how many are playing it.
-  trending: 'Out recently and being rated the most right now, counted from the store\'s own ratings.',
+  /*
+   * Rewritten with the shelf. The old line described a vote-count ranking,
+   * which is the thing that put the same blockbuster on the opening screen
+   * every day, so leaving it would have been the app explaining a rule it
+   * no longer follows.
+   */
+  trending:
+    'What the press is writing about, what just landed and what is nearly here. Ranked by what is happening rather than by how many people own it, so one big release cannot sit here for a month.',
 };
 
 const SORTS = [
@@ -7590,8 +7597,22 @@ export default function App() {
     '/api/upcoming',
     (briefing.open && briefing.tab === 'upcoming') ||
       savedReleases.size > 0 ||
-      filters.collection === 'soon' ||
-      filters.collection === 'trending',
+      filters.collection === 'soon',
+  );
+
+  /*
+   * Trending is its own endpoint now, blended on the server.
+   *
+   * It used to be the calendar's recent releases sorted by vote count,
+   * which is why the opening screen showed Call of Duty every single day:
+   * 734,343 ratings against 64,488 for the next game, so a popularity
+   * ranking never moved. The server now mixes the press, the calendar and
+   * what is still to come, because counting thirteen matched stories on a
+   * phone would mean sending it three hundred.
+   */
+  const trending = useDeferredEndpoint(
+    '/api/trending',
+    filters.collection === 'trending',
   );
 
   const releaseChanges = useMemo(
@@ -8512,12 +8533,17 @@ export default function App() {
    * shelf this is meant to replace.
    */
   const trendingGames = useMemo(() => {
-    const rows = upcoming.data?.recent ?? [];
+    const rows = trending.data?.games ?? [];
     return rows
-      .filter((row) => row?.id && row?.title && (row.votes ?? 0) > 0)
-      .sort((a, b) => (b.votes ?? 0) - (a.votes ?? 0))
-      .map((row) => storeRowAsGame(upcomingAsStoreRow(row), 'upcoming'));
-  }, [upcoming.data]);
+      .filter((row) => row?.id && row?.title)
+      .map((row) => ({
+        ...storeRowAsGame(upcomingAsStoreRow(row), 'upcoming'),
+        // Why it is here, in the shelf's own words: "3 stories this week",
+        // "Out tomorrow", "Out 6 days ago". A shelf about right now owes the
+        // reader the reason, or it is just another list of games.
+        trendingWhy: row.trendingWhy ?? null,
+      }));
+  }, [trending.data]);
 
   /**
    * Is a search running that the release calendar should answer too?
@@ -9748,7 +9774,14 @@ export default function App() {
                 live={byTitle.get(game.title) ?? game.storeLive}
                 wishlisted={wishlist.has(game.id)}
                 owned={library.has(game.id)}
-                reason={filters.collection === 'genius' ? geniusReasons.get(game.id) : undefined}
+                reason={
+                  filters.collection === 'genius'
+                    ? geniusReasons.get(game.id)
+                    : // Trending says why each game is on it, which is the
+                      // whole difference between this shelf and a list of
+                      // games that happen to be new.
+                      (game.trendingWhy ?? undefined)
+                }
                 saving={savingsById.get(game.id)}
                 onToggleWishlist={() => saveGame(game, 'wishlist')}
                 onOpen={() => openGame(game)}
