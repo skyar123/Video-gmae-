@@ -194,8 +194,6 @@ export function questsFor({
       id: 'judge-owned',
       title: 'Say what you made of something you own',
       detail: `${ownedUnsaid} ${ownedUnsaid === 1 ? 'game is' : 'games are'} on your shelf with nothing said about ${ownedUnsaid === 1 ? 'it' : 'them'}. Owning a game is the weakest thing you can tell the model; a thumb is the strongest.`,
-      need: Math.min(3, ownedUnsaid),
-      now: 0,
       worth: 5,
     });
   }
@@ -206,8 +204,6 @@ export function questsFor({
       title: playing === 1 ? 'Finish what you started' : `Finish one of your ${playing}`,
       detail:
         'Finishing counts nearly as much as a thumbs up, because it is twenty hours of agreeing with a choice.',
-      need: 1,
-      now: 0,
       worth: 4,
     });
   }
@@ -223,8 +219,6 @@ export function questsFor({
       id: `explore-${blank.features?.[0] ?? blank.phrase}`,
       title: `Decide how you feel about ${blank.phrase}`,
       detail: `${blank.games} ${blank.games === 1 ? 'game' : 'games'} here and the model has nothing on it either way, so it is guessing for all of them.`,
-      need: 1,
-      now: 0,
       worth: 3,
     });
   }
@@ -235,8 +229,6 @@ export function questsFor({
       title: 'Record your first finish',
       detail:
         'The app knows what you want and what you own, and nothing about what you have actually played.',
-      need: 1,
-      now: 0,
       worth: 3,
     });
   }
@@ -247,8 +239,6 @@ export function questsFor({
       title: 'Tell it about three games',
       detail:
         'Until then the picks are simply the best reviewed, which is a list of good games rather than a list for you.',
-      need: 3,
-      now: said,
       worth: 6,
     });
   }
@@ -260,11 +250,39 @@ export function questsFor({
       id: 'coverage',
       title: 'Form an opinion on a tenth of the catalogue',
       detail: `${said} of ${total} so far. Every one of them sharpens what the other ${total - said} are ranked against.`,
-      need: Math.ceil(total / 10),
-      now: said,
       worth: 1,
     });
   }
 
   return quests.sort((a, b) => b.worth - a.worth);
 }
+
+/**
+ * Which quests have just been finished.
+ *
+ * A quest here clears by disappearing: "say what you made of something you
+ * own" exists while an unjudged game is on the shelf and is gone once there
+ * is not one. That is self-maintaining and completely silent, which makes
+ * it a to-do list rather than anything worth doing.
+ *
+ * So the ids that were open last time are remembered, and anything missing
+ * from the current set has been done. The reader gets told once.
+ *
+ * Deliberately not a score, a streak or a running total. It is an
+ * acknowledgement that a specific thing happened, and the thing that
+ * happened is that the picks got better.
+ */
+export function justFinished(openNow, openBefore = []) {
+  const now = new Set(openNow.map((quest) => quest.id));
+  return openBefore.filter((id) => !now.has(id));
+}
+
+/**
+ * What to remember for next time.
+ *
+ * Only the ids currently open. Storing the finished ones too would mean a
+ * quest that comes back, which they do, could never be celebrated twice:
+ * somebody who judges every owned game and then buys three more has done
+ * the thing again and it counted again.
+ */
+export const questsToRemember = (open) => open.map((quest) => quest.id);

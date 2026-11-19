@@ -215,3 +215,37 @@ test('coverage is honest about the denominator', () => {
   assert.equal(coverageFor(900, 500).share, 1);
   assert.equal(coverageFor(5, 0).share, 0);
 });
+
+test('finishing a quest is noticed, once', async () => {
+  const { justFinished, questsToRemember } = await import('../src/progress.js');
+
+  const before = ['judge-owned', 'first-finish'];
+  const open = [{ id: 'first-finish' }, { id: 'coverage' }];
+  assert.deepEqual(justFinished(open, before), ['judge-owned']);
+
+  // And not again on the next look, because what is remembered is what is
+  // open rather than what was done.
+  const remembered = questsToRemember(open);
+  assert.deepEqual(justFinished(open, remembered), []);
+});
+
+test('a quest that comes back can be finished again', async () => {
+  /*
+   * Judging every game you own clears that quest; buying three more brings
+   * it back, and doing it again is doing it again. Remembering the finished
+   * ids rather than the open ones would have silently swallowed that.
+   */
+  const { justFinished, questsToRemember } = await import('../src/progress.js');
+  let remembered = questsToRemember([{ id: 'judge-owned' }]);
+  assert.deepEqual(justFinished([], remembered), ['judge-owned']);
+
+  remembered = questsToRemember([{ id: 'judge-owned' }]);
+  assert.deepEqual(justFinished([], remembered), ['judge-owned'], 'the second time went unnoticed');
+});
+
+test('nothing is claimed finished on a first visit', async () => {
+  const { justFinished } = await import('../src/progress.js');
+  // No memory yet is not the same as having done everything.
+  assert.deepEqual(justFinished([{ id: 'judge-owned' }], []), []);
+  assert.deepEqual(justFinished([], []), []);
+});

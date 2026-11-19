@@ -54,7 +54,15 @@ import {
   X,
 } from 'lucide-react';
 import { starterPicks } from './recommend.js';
-import { coverageFor, questsFor, rankFor, statsFor, titleFor } from './progress.js';
+import {
+  coverageFor,
+  justFinished,
+  questsFor,
+  questsToRemember,
+  rankFor,
+  statsFor,
+  titleFor,
+} from './progress.js';
 import { foldStories } from './story-fold.js';
 import { markRead, parseRead } from './read-state.js';
 import { rankAcrossChannels } from './feed-rank.js';
@@ -446,6 +454,8 @@ const ANSWERS_KEY = 'featureAnswers';
  */
 const AUDIENCE_KEY = 'audience';
 const BACKLOG_KEY = 'backlog';
+/* Which quests were open last time, so a finished one can be noticed once. */
+const QUESTS_KEY = 'questsOpen';
 const PLAY_STATES = ['playing', 'finished', 'bounced'];
 
 /** Store-mirror ids are numeric; prefixing keeps them out of the catalog's namespace. */
@@ -4609,6 +4619,21 @@ function Verdict({ verdict, onRate, size = 'md' }) {
  * picks better, which is the only reward this app has to offer and happens
  * to be a real one.
  */
+/**
+ * What a finished quest actually got the reader.
+ *
+ * Each one names the thing that improved rather than congratulating them.
+ * "Nice work" is the app being pleased with itself; "the model knows what
+ * you make of your own shelf now" is the reason the quest existed.
+ */
+const QUEST_DONE_WORDS = {
+  'judge-owned': 'Your shelf is on the record now, so your picks stop guessing about games you already have.',
+  'finish-playing': 'Finished. That counts nearly as much as a thumbs up, and it will not be suggested back to you.',
+  'first-finish': 'First finish recorded. The app knows what you played now, not just what you bought.',
+  'first-words': 'That is enough to work from. Your picks are yours rather than simply the best reviewed.',
+  coverage: 'A tenth of the catalogue has your opinion on it. That is a lot to rank the rest against.',
+};
+
 function CharacterSheet({ rank, title, stats, quests, coverage, onClose, onTune, onGo }) {
   return (
     <ModalSheet labelledBy="sheet-title" onClose={onClose}>
@@ -7711,6 +7736,7 @@ export default function App() {
   const [geniusOpen, setGeniusOpen] = useState(false);
   const [questionsOpen, setQuestionsOpen] = useState(false);
   const [sheetOpenCharacter, setSheetOpenCharacter] = useState(false);
+  const [questDone, setQuestDone] = useState(null);
   /*
    * One clock for the session.
    *
@@ -8540,6 +8566,34 @@ export default function App() {
       }).slice(0, 4),
     [signals, backlog, library, wishlist, ratings, questions],
   );
+
+  /*
+   * A quest clears by disappearing, which is tidy and completely silent.
+   * This is the half that says so: the ids open last time are kept, and
+   * anything gone since has been done.
+   *
+   * Only ever one message, and only for something the reader did. Nothing
+   * fires on a first visit, where there is no memory to compare against and
+   * an empty set would otherwise read as having finished everything.
+   */
+  useEffect(() => {
+    let before = [];
+    try {
+      const raw = JSON.parse(localStorage.getItem(QUESTS_KEY) ?? 'null');
+      before = Array.isArray(raw) ? raw.filter((id) => typeof id === 'string') : [];
+    } catch {
+      before = [];
+    }
+    const done = before.length > 0 ? justFinished(quests, before) : [];
+    try {
+      localStorage.setItem(QUESTS_KEY, JSON.stringify(questsToRemember(quests)));
+    } catch {
+      // Without storage a finished quest simply goes unremarked.
+    }
+    // eslint-disable-next-line react/set-state-in-effect
+    if (done.length > 0) setQuestDone(done[0]);
+  }, [quests]);
+
 
   /**
    * The profile and what to leave out, as one string.
@@ -9977,14 +10031,31 @@ export default function App() {
               {/* The faster way out of a cold start, and the place a reader
                   is actually looking at it. Rating a dozen games one at a
                   time works and takes a dozen games. */}
-              <button
-                type="button"
-                onClick={() => setQuestionsOpen(true)}
-                className="mt-2.5 inline-flex items-center gap-2 rounded-full bg-indigo-600 px-3.5 py-1.5 text-xs font-semibold text-white transition-transform duration-200 ease-spring active:scale-95 hover:bg-indigo-500"
-              >
-                <Sparkles className="h-3.5 w-3.5" />
-                Answer a few questions instead
-              </button>
+              <div className="mt-2.5 flex flex-wrap gap-2">
+                <button
+                  type="button"
+                  onClick={() => setQuestionsOpen(true)}
+                  className="inline-flex items-center gap-2 rounded-full bg-indigo-600 px-3.5 py-1.5 text-xs font-semibold text-white transition-transform duration-200 ease-spring active:scale-95 hover:bg-indigo-500"
+                >
+                  <Sparkles className="h-3.5 w-3.5" />
+                  Answer a few questions instead
+                </button>
+                {/*
+                  * Reachable before there is anything on it, which is the
+                  * whole point of the quests: the reader with nothing rated
+                  * is the one who most needs telling what would help. It was
+                  * only on the personalized panel, so the one person it was
+                  * written for could not get to it.
+                  */}
+                <button
+                  type="button"
+                  onClick={() => setSheetOpenCharacter(true)}
+                  className="inline-flex items-center gap-2 rounded-full bg-white/70 dark:bg-slate-900/50 px-3.5 py-1.5 text-xs font-semibold text-indigo-700 dark:text-indigo-300 transition-transform duration-200 ease-spring active:scale-95 hover:bg-white"
+                >
+                  <Gamepad2 className="h-3.5 w-3.5" />
+                  {character.title}
+                </button>
+              </div>
             </div>
           )}
 
@@ -10090,6 +10161,29 @@ export default function App() {
       )}
 
       {alertsOpen && <AlertsSheet alerts={alerts} onClose={() => setAlertsOpen(false)} />}
+
+      {/*
+        * A finished quest, said once and quietly.
+        *
+        * Not a modal and not a sound. The reader was in the middle of doing
+        * something when this became true, and interrupting them to award a
+        * point for the thing they chose to do would be the app taking
+        * credit for it. It sits above the nav, says what changed, and goes
+        * when tapped.
+        */}
+      {questDone && (
+        <button
+          type="button"
+          onClick={() => setQuestDone(null)}
+          className="animate-rise-in fixed inset-x-3 bottom-[calc(3.5rem+var(--inset-bottom)+0.75rem)] z-40 flex items-center gap-2.5 rounded-2xl bg-slate-900 dark:bg-slate-100 px-4 py-3 text-left shadow-2xl sm:inset-x-auto sm:right-4 sm:bottom-4 sm:max-w-sm"
+        >
+          <CircleCheck className="h-5 w-5 shrink-0 text-emerald-400 dark:text-emerald-600" />
+          <span className="flex-1 text-sm font-medium leading-snug text-white dark:text-slate-900">
+            {QUEST_DONE_WORDS[questDone] ?? 'That is one fewer gap in your picks.'}
+          </span>
+          <X className="h-4 w-4 shrink-0 text-white/50 dark:text-slate-900/50" />
+        </button>
+      )}
 
       {sheetOpenCharacter && (
         <CharacterSheet
