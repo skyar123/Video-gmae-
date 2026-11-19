@@ -70,6 +70,7 @@ const next = catalog.map((entry) => {
       'storeRelease',
       'plusIncluded',
       'storeArt',
+      'storePlatforms',
       'storeStars',
       'storeVotes',
     ]) {
@@ -116,6 +117,12 @@ const next = catalog.map((entry) => {
      * out of five from a different audience; averaging any of them together
      * would produce a number that is nobody's opinion.
      */
+    /*
+     * Which consoles the store lists it on, for the 74 write-ups where
+     * nobody has checked how the upgrade is sold. Carried as a plain fact
+     * about the listing; what it is not is a claim about the terms.
+     */
+    storePlatforms: Array.isArray(row.platforms) && row.platforms.length ? row.platforms : null,
     storeStars: Number.isFinite(row.stars) ? row.stars : null,
     storeVotes: Number.isFinite(row.votes) ? row.votes : null,
   };

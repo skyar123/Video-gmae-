@@ -848,10 +848,33 @@ function useScrollCollapse(threshold = 120) {
  * Small presentational pieces
  * ------------------------------------------------------------------ */
 
-function UpgradeBadge({ value, className = '' }) {
-  // The mirror does not say how a game on both consoles is sold, so an entry
-  // built from it can have nothing here. An empty pill is worse than none.
-  if (!value) return null;
+function UpgradeBadge({ value, listedOn = null, className = '' }) {
+  /*
+   * What the store lists, when nobody has checked how it is sold.
+   *
+   * 74 of the write-ups have no upgrade path, and this app exists to answer
+   * that question, so a blank was the worst possible answer. Every one of
+   * them is on a store listing that covers PS4 and PS5.
+   *
+   * What it is NOT is a claim that the upgrade is free, or that one purchase
+   * covers both. Those are commercial terms that publishers change and that
+   * differ by region, which is why the upgrade field is hand-checked in the
+   * first place, and inferring one from a platform array would be turning a
+   * fact into a guarantee. So it says what the store says, worded as the
+   * listing rather than as a promise, and styled apart from the checked
+   * badges so the two are not read as the same kind of claim.
+   */
+  if (!value) {
+    if (!listedOn || listedOn.length < 2) return null;
+    return (
+      <span
+        title="What the PlayStation Store lists. How the upgrade is sold has not been checked for this one."
+        className={`rounded px-1.5 py-0.5 text-[11px] font-medium text-slate-500 dark:text-slate-400 ring-1 ring-inset ring-slate-300 dark:ring-slate-600 ${className}`}
+      >
+        Listed on {listedOn.join(' & ')}
+      </span>
+    );
+  }
   return (
     <span
       className={`rounded px-1.5 py-0.5 text-[11px] font-semibold ring-1 ring-inset ${
@@ -1764,7 +1787,11 @@ function GameModal({
           )}
 
           <div className="mt-4 flex flex-wrap items-center gap-2">
-            <UpgradeBadge value={game.ps5Upgrade} className="whitespace-nowrap" />
+            <UpgradeBadge
+              value={game.ps5Upgrade}
+              listedOn={game.storePlatforms}
+              className="whitespace-nowrap"
+            />
             <RatingChips ratings={ratings} size="lg" stars={game.storeStars} votes={game.storeVotes} />
           </div>
 

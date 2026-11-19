@@ -125,3 +125,32 @@ test('the store join did not attach the wrong game', () => {
   }
   assert.ok(checked > 300, `only ${checked} write-ups are joined to the store`);
 });
+
+test('the store listing is never dressed up as a checked upgrade path', () => {
+  /*
+   * This app exists to answer "can I play it on a PS5", and 74 write-ups had
+   * no answer. Every one of them is on a listing covering both consoles, so
+   * the store can say something useful.
+   *
+   * What it cannot say is that the upgrade is free or that one purchase
+   * covers both. Those are commercial terms, publishers change them and they
+   * differ by region, which is exactly why the upgrade field is hand-checked.
+   * So a derived listing must never be written into the field that the
+   * filters and the badges treat as checked.
+   */
+  const upgrades = new Set(catalog.map((game) => game.ps5Upgrade).filter(Boolean));
+  for (const value of upgrades) {
+    assert.ok(
+      !/^Listed on/i.test(value),
+      `"${value}" is the store's listing being passed off as a checked upgrade path`,
+    );
+  }
+
+  for (const game of catalog) {
+    if (!game.storePlatforms) continue;
+    assert.ok(Array.isArray(game.storePlatforms), `${game.title} has a bad platform list`);
+    for (const platform of game.storePlatforms) {
+      assert.match(platform, /^PS[0-9]$|^PSVR/i, `${game.title} lists platform "${platform}"`);
+    }
+  }
+});
