@@ -10309,6 +10309,30 @@ export default function App() {
             </button>
           )}
 
+          {/*
+            * Character creation, where a new player actually meets it.
+            *
+            * The class picker lived inside a sheet behind a button on a
+            * panel that only appears once you are already personalized,
+            * which is three doors away from the one person it is for. A
+            * game asks who you are on the way in.
+            *
+            * Shown only until a class is chosen, and only on For you, so it
+            * is a beginning rather than a thing to dismiss forever.
+            */}
+          {filters.collection === 'genius' && !heroClass && !searching && (
+            <div className="mb-3 pixel-box bg-white dark:bg-slate-900 p-4 text-indigo-600 dark:text-indigo-400">
+              <p className="pixel text-sm font-black text-slate-900 dark:text-slate-50">
+                Who are you?
+              </p>
+              <p className="mt-1 text-xs leading-relaxed text-slate-500 dark:text-slate-400">
+                Pick a class and the picks below change to match. It is a shortcut past the cold
+                start, it locks nothing, and you can change it any time.
+              </p>
+              <ClassPicker chosen={heroClass} onPick={pickClass} />
+            </div>
+          )}
+
           {filters.collection === 'genius' && !geniusIsPersonalized && (
             <div className="mb-3 rounded-lg bg-indigo-50 dark:bg-indigo-950/40 px-3 py-2.5">
               <p className="flex items-start gap-2 text-sm leading-relaxed text-indigo-700 dark:text-indigo-300">
