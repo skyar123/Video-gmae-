@@ -2896,6 +2896,31 @@ function EmptyState({ filters, personalized, wishlistEmpty, status, onClear, onS
     );
   }
 
+  /*
+   * A shelf nobody has filled yet is not a filter problem.
+   *
+   * The Played shelf starts empty for everybody, and the general message
+   * told the reader "no games match these filters" under a button offering
+   * to clear filters that were never set, which does nothing. A new shelf
+   * that looks broken on the one visit where it is guaranteed to be empty
+   * is a bad first impression of the whole feature.
+   */
+  if (filters.collection === 'backlog' && !filters.q.trim()) {
+    return (
+      <div className="py-20 text-center text-slate-500 dark:text-slate-400">
+        <CirclePlay className="mx-auto mb-3 h-8 w-8 text-sky-300" />
+        <p className="text-lg text-slate-700 dark:text-slate-200">
+          Nothing recorded as played yet.
+        </p>
+        <p className="mx-auto mt-2 max-w-sm text-sm leading-relaxed">
+          Open any game and say whether you are playing it, finished it, or gave up on it.
+          Finishing one counts nearly as much as a thumbs up, and giving up is the only way to
+          tell the picks that something was not for you after all.
+        </p>
+      </div>
+    );
+  }
+
   // Name the thing that actually emptied the list. Searching a word nothing
   // matches used to be reported as "no games matching those filters", followed
   // by a tip about PS5-only titles being hidden, which was both the wrong
