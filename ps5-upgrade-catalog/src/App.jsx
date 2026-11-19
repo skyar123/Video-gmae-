@@ -54,6 +54,7 @@ import {
   X,
 } from 'lucide-react';
 import { starterPicks } from './recommend.js';
+import { coverageFor, questsFor, rankFor, statsFor, titleFor } from './progress.js';
 import { foldStories } from './story-fold.js';
 import { markRead, parseRead } from './read-state.js';
 import { rankAcrossChannels } from './feed-rank.js';
@@ -4595,6 +4596,141 @@ function Verdict({ verdict, onRate, size = 'md' }) {
 }
 
 /**
+ * The reader, as a character sheet.
+ *
+ * Asked for as gamification and RPG-like fun. The easy version of that is
+ * points for opening the app and a streak that punishes you for having a
+ * life, which is a slot machine with a games catalogue attached and would
+ * make this worse at the thing it is for.
+ *
+ * So nothing here is invented. The rank counts opinions the reader actually
+ * recorded, the stats are the feature weights the recommender already ranks
+ * on, and the quests are the gaps in that profile. Finishing one makes the
+ * picks better, which is the only reward this app has to offer and happens
+ * to be a real one.
+ */
+function CharacterSheet({ rank, title, stats, quests, coverage, onClose, onTune, onGo }) {
+  return (
+    <ModalSheet labelledBy="sheet-title" onClose={onClose}>
+      <div className="p-6 sm:p-8">
+        <p className="text-xs font-semibold uppercase tracking-wider text-indigo-500">
+          {rank.said} {rank.said === 1 ? 'opinion' : 'opinions'} recorded
+        </p>
+        <h2 id="sheet-title" className="mt-1 pr-10 text-2xl font-bold text-slate-900 dark:text-slate-50">
+          {title}
+        </h2>
+
+        {/* A bar that means a specific thing: how far to the next rank. At
+            the top rank there is no next, and it reads as full rather than
+            inventing somewhere else to go. */}
+        <div className="mt-4">
+          <div className="h-2 overflow-hidden rounded-full bg-slate-200 dark:bg-slate-700">
+            <div
+              className="h-full rounded-full bg-gradient-to-r from-indigo-500 to-violet-500 transition-[width] duration-700 ease-swift"
+              style={{ width: `${Math.round(rank.through * 100)}%` }}
+            />
+          </div>
+          <p className="mt-1.5 text-xs text-slate-500 dark:text-slate-400">
+            {rank.next
+              ? `${rank.toNext} more to ${rank.next.name}`
+              : 'Nothing left to climb. The picks are as sharp as this app can make them.'}
+          </p>
+        </div>
+
+        {stats.length === 0 ? (
+          <p className="mt-6 rounded-xl bg-slate-100 dark:bg-slate-800/60 px-4 py-3 text-sm leading-relaxed text-slate-600 dark:text-slate-300">
+            Nothing on the sheet yet, because nothing has been said yet. Rate a few games, or
+            answer some questions, and this fills with what the model works out about you.
+          </p>
+        ) : (
+          <div className="mt-6 space-y-4">
+            {stats.map((group) => (
+              <div key={group.id}>
+                <p className="text-xs font-semibold uppercase tracking-wider text-slate-400 dark:text-slate-500">
+                  {group.label}
+                </p>
+                <div className="mt-1.5 space-y-1.5">
+                  {group.entries.map((entry) => (
+                    <div key={entry.feature} className="flex items-center gap-2">
+                      {/* The weight, drawn to scale. These are the numbers the
+                          ranking actually uses, not a score made up for the
+                          sheet, so a short bar means the model is unsure. */}
+                      <div className="h-1.5 w-20 shrink-0 overflow-hidden rounded-full bg-slate-200 dark:bg-slate-700">
+                        <div
+                          className="h-full rounded-full bg-indigo-500"
+                          style={{ width: `${Math.round(Math.min(1, entry.weight) * 100)}%` }}
+                        />
+                      </div>
+                      {/* Wrapping rather than truncating: "disabled and
+                          neurodivergent characters" is the whole point of
+                          that stat and it does not fit on one line. */}
+                      <span className="text-sm leading-snug text-slate-700 dark:text-slate-200">
+                        {entry.phrase}
+                      </span>
+                    </div>
+                  ))}
+                </div>
+              </div>
+            ))}
+          </div>
+        )}
+
+        {quests.length > 0 && (
+          <>
+            <h3 className="mt-8 text-sm font-semibold uppercase tracking-wider text-slate-500 dark:text-slate-400">
+              Worth doing next
+            </h3>
+            <ul className="mt-3 space-y-2.5">
+              {quests.map((quest) => (
+                <li
+                  key={quest.id}
+                  className="rounded-xl border border-slate-200 dark:border-slate-700 px-3.5 py-3"
+                >
+                  <p className="text-sm font-semibold text-slate-900 dark:text-slate-50">
+                    {quest.title}
+                  </p>
+                  <p className="mt-0.5 text-xs leading-relaxed text-slate-500 dark:text-slate-400">
+                    {quest.detail}
+                  </p>
+                </li>
+              ))}
+            </ul>
+          </>
+        )}
+
+        <div className="mt-6 flex flex-wrap gap-2">
+          <button
+            type="button"
+            onClick={onTune}
+            className="inline-flex items-center gap-2 rounded-full bg-indigo-600 px-4 py-2 text-sm font-semibold text-white transition-transform duration-200 ease-spring active:scale-95 hover:bg-indigo-500"
+          >
+            <Sparkles className="h-4 w-4" />
+            Answer a few questions
+          </button>
+          <button
+            type="button"
+            onClick={onGo}
+            className="inline-flex items-center gap-2 rounded-full bg-slate-100 dark:bg-slate-800 px-4 py-2 text-sm font-semibold text-slate-700 dark:text-slate-200 transition-transform duration-200 ease-spring active:scale-95 hover:bg-slate-200"
+          >
+            See your picks
+          </button>
+        </div>
+
+        <p className="mt-5 text-xs leading-relaxed text-slate-400 dark:text-slate-500">
+          {coverage.total > 0 && (
+            <>
+              You have said something about {coverage.said} of {coverage.total} written-up games.{' '}
+            </>
+          )}
+          Nothing here counts time spent or visits made. It counts what you told it, because that
+          is the only thing it actually knows.
+        </p>
+      </div>
+    </ModalSheet>
+  );
+}
+
+/**
  * Being asked, instead of only being watched.
  *
  * Asked for directly: the For you section should "give you an option to
@@ -5069,6 +5205,8 @@ function GeniusPanel({
   unseenAnswers,
   answered,
   onTune,
+  onSheet,
+  characterTitle,
   onRefresh,
   ratings,
   saved,
@@ -5104,16 +5242,28 @@ function GeniusPanel({
 
       {/* Beside the count, because this is where a reader decides the list
           is not quite right about them. */}
-      <button
-        type="button"
-        onClick={onTune}
-        className="mb-3 inline-flex items-center gap-2 rounded-full bg-indigo-50 dark:bg-indigo-950/50 px-3.5 py-1.5 text-xs font-semibold text-indigo-700 dark:text-indigo-300 transition-transform duration-200 ease-spring active:scale-95 hover:bg-indigo-100 dark:hover:bg-indigo-900/60"
-      >
-        <Sparkles className="h-3.5 w-3.5" />
-        {answered > 0
-          ? `Tune your picks · ${answered} ${answered === 1 ? 'answer' : 'answers'}`
-          : 'Tune your picks with a few questions'}
-      </button>
+      <div className="mb-3 flex flex-wrap gap-2">
+        <button
+          type="button"
+          onClick={onTune}
+          className="inline-flex items-center gap-2 rounded-full bg-indigo-50 dark:bg-indigo-950/50 px-3.5 py-1.5 text-xs font-semibold text-indigo-700 dark:text-indigo-300 transition-transform duration-200 ease-spring active:scale-95 hover:bg-indigo-100 dark:hover:bg-indigo-900/60"
+        >
+          <Sparkles className="h-3.5 w-3.5" />
+          {answered > 0
+            ? `Tune your picks · ${answered} ${answered === 1 ? 'answer' : 'answers'}`
+            : 'Tune your picks with a few questions'}
+        </button>
+        {/* What the app thinks it knows about you, which is the other half
+            of the same question and the place the quests live. */}
+        <button
+          type="button"
+          onClick={onSheet}
+          className="inline-flex items-center gap-2 rounded-full bg-slate-100 dark:bg-slate-800 px-3.5 py-1.5 text-xs font-semibold text-slate-600 dark:text-slate-300 transition-transform duration-200 ease-spring active:scale-95 hover:bg-slate-200"
+        >
+          <Gamepad2 className="h-3.5 w-3.5" />
+          {characterTitle}
+        </button>
+      </div>
 
       <p className="mb-3 text-xs font-medium text-slate-400 dark:text-slate-500">
         {mirror.status === 'loading'
@@ -7560,6 +7710,7 @@ export default function App() {
   const [activeStoreGame, setActiveStoreGame] = useState(null);
   const [geniusOpen, setGeniusOpen] = useState(false);
   const [questionsOpen, setQuestionsOpen] = useState(false);
+  const [sheetOpenCharacter, setSheetOpenCharacter] = useState(false);
   /*
    * One clock for the session.
    *
@@ -8342,6 +8493,25 @@ export default function App() {
     return [...byPhrase.values()];
   }, [answerList]);
 
+  /*
+   * The character sheet, assembled from what the app already knows.
+   *
+   * Nothing new is stored for this and nothing new is counted. The rank is
+   * the number of signals the recommender is already working from, the
+   * stats are its own weights, and the quests are the gaps the guided
+   * questions already look for.
+   */
+  const character = useMemo(() => {
+    const rank = rankFor(signals.length);
+    const taste = geniusResult.taste;
+    return {
+      rank,
+      title: titleFor(taste, rank.name),
+      stats: statsFor(taste),
+      coverage: coverageFor(signals.length, gamesData.length),
+    };
+  }, [signals, geniusResult.taste]);
+
   const questions = useMemo(
     () =>
       questionsFor(gamesData, geniusResult.taste, {
@@ -8349,6 +8519,26 @@ export default function App() {
         asked: new Set(Object.keys(featureAnswers)),
       }),
     [geniusResult.taste, featureAnswers],
+  );
+
+  /*
+   * After `questions` on purpose: a quest to decide how you feel about a
+   * kind of game is the same gap the guided questions look for, so it reads
+   * that list rather than working it out a second time and risking two
+   * answers to one question.
+   */
+  const quests = useMemo(
+    () =>
+      questsFor({
+        signals,
+        backlog,
+        library,
+        wishlist,
+        ratings,
+        catalog: gamesData,
+        blankKinds: questions,
+      }).slice(0, 4),
+    [signals, backlog, library, wishlist, ratings, questions],
   );
 
   /**
@@ -9667,6 +9857,8 @@ export default function App() {
               unseenAnswers={unseenAnswers}
               answered={answeredChips.length}
               onTune={() => setQuestionsOpen(true)}
+              onSheet={() => setSheetOpenCharacter(true)}
+              characterTitle={character.title}
               onRefresh={refreshPicks}
               ratings={ratings}
               saved={storeSaved}
@@ -9898,6 +10090,25 @@ export default function App() {
       )}
 
       {alertsOpen && <AlertsSheet alerts={alerts} onClose={() => setAlertsOpen(false)} />}
+
+      {sheetOpenCharacter && (
+        <CharacterSheet
+          rank={character.rank}
+          title={character.title}
+          stats={character.stats}
+          quests={quests}
+          coverage={character.coverage}
+          onTune={() => {
+            setSheetOpenCharacter(false);
+            setQuestionsOpen(true);
+          }}
+          onGo={() => {
+            setSheetOpenCharacter(false);
+            set('collection', 'genius');
+          }}
+          onClose={() => setSheetOpenCharacter(false)}
+        />
+      )}
 
       {questionsOpen && (
         <GuidedQuestions

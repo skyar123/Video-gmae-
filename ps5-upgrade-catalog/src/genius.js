@@ -760,7 +760,7 @@ export function describeFeature(feature) {
  * as their own taste, so it is preferred whenever one is among the reasons
  * the game actually scored on.
  */
-const SAYING_IT = {
+export const SAYING_IT = {
   tag: 3,
   rep: 3,
   genre: 3,
@@ -786,7 +786,7 @@ const SAYING_IT = {
  * and release decades describe most of the catalog, so offering one as the
  * reason for a pick is a claim to insight the model does not have.
  */
-const WORTH_SAYING = 1.2;
+export const WORTH_SAYING = 1.2;
 
 /**
  * Whether the model has anything particular to say about this pick.
