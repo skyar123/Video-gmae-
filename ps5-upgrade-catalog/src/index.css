@@ -206,3 +206,61 @@
     transition-duration: 0.01ms !important;
   }
 }
+
+/* ------------------------------------------------------------------ *
+ * The 8-bit layer
+ *
+ * Only the RPG surfaces use this, and it is CSS rather than a webfont on
+ * purpose. A pixel typeface is another request on a page that already
+ * works offline, and the chunky look comes mostly from the edges anyway:
+ * hard shadows with no blur, square corners, stepped bars, and nothing
+ * antialiased into a gradient.
+ * ------------------------------------------------------------------ */
+
+.pixel {
+  font-family: ui-monospace, 'SFMono-Regular', 'Cascadia Mono', 'Liberation Mono', Menlo, monospace;
+  letter-spacing: 0.06em;
+  font-variant-ligatures: none;
+  text-transform: uppercase;
+}
+
+/* A border drawn the way a sprite would be: square, thick, and offset by a
+   hard shadow rather than a soft one. */
+.pixel-box {
+  border: 3px solid currentColor;
+  border-radius: 0;
+  box-shadow: 4px 4px 0 0 currentColor;
+}
+
+.pixel-box-sm {
+  border: 2px solid currentColor;
+  border-radius: 0;
+  box-shadow: 3px 3px 0 0 currentColor;
+}
+
+/* An XP bar that fills in blocks instead of sliding. The repeating gradient
+   is the notches; the width is the real fraction. */
+.pixel-bar {
+  image-rendering: pixelated;
+  background-image: repeating-linear-gradient(
+    90deg,
+    currentColor 0 10px,
+    transparent 10px 13px
+  );
+}
+
+/* Level-up: three hard steps, no easing, because a sprite does not ease. */
+@keyframes pixel-pop {
+  0% { transform: scale(0.6); }
+  40% { transform: scale(1.15); }
+  70% { transform: scale(0.95); }
+  100% { transform: scale(1); }
+}
+
+.animate-pixel-pop {
+  animation: pixel-pop 420ms steps(4, end) both;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .animate-pixel-pop { animation: none; }
+}

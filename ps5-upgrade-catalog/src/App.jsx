@@ -55,6 +55,16 @@ import {
 } from 'lucide-react';
 import { starterPicks } from './recommend.js';
 import {
+  answersForClass,
+  CLASSES,
+  classFor,
+  levelFromXp,
+  statsFrom,
+  TIER_ORDER,
+  trophiesFrom,
+  xpFrom,
+} from './rpg.js';
+import {
   coverageFor,
   justFinished,
   questsFor,
@@ -68,6 +78,7 @@ import { markRead, parseRead } from './read-state.js';
 import { rankAcrossChannels } from './feed-rank.js';
 import {
   geniusPicks as geniusPicksFor,
+  featuresOf,
   unify,
   explain,
   packTaste,
@@ -456,6 +467,9 @@ const AUDIENCE_KEY = 'audience';
 const BACKLOG_KEY = 'backlog';
 /* Which quests were open last time, so a finished one can be noticed once. */
 const QUESTS_KEY = 'questsOpen';
+/* The class, and the last level seen, so a level-up can be noticed once. */
+const CLASS_KEY = 'heroClass';
+const LEVEL_KEY = 'heroLevel';
 const PLAY_STATES = ['playing', 'finished', 'bounced'];
 
 /** Store-mirror ids are numeric; prefixing keeps them out of the catalog's namespace. */
@@ -4657,6 +4671,118 @@ function Verdict({ verdict, onRate, size = 'md' }) {
   );
 }
 
+const TIER_LOOK = {
+  bronze: 'text-amber-700 dark:text-amber-500',
+  silver: 'text-slate-500 dark:text-slate-300',
+  gold: 'text-yellow-600 dark:text-yellow-400',
+  platinum: 'text-cyan-600 dark:text-cyan-300',
+};
+
+/**
+ * Choosing who you are, once, at the start.
+ *
+ * Not decoration. Each class is recorded as answers about features the
+ * recommender already scores on, the same shape the guided questions
+ * produce, so a Hearthkeeper really does get cosier picks from the next
+ * screen. Nothing is locked by it and it can be changed whenever.
+ */
+function ClassPicker({ chosen, onPick }) {
+  return (
+    <div className="mt-5">
+      <p className="pixel text-xs font-bold text-indigo-500">Choose your class</p>
+      <div className="mt-3 grid grid-cols-1 gap-2 sm:grid-cols-2">
+        {CLASSES.map((entry) => {
+          const on = entry.id === chosen;
+          return (
+            <button
+              key={entry.id}
+              type="button"
+              onClick={() => onPick(entry.id)}
+              aria-pressed={on}
+              className={`pixel-box-sm flex items-start gap-3 p-3 text-left transition-transform duration-150 active:translate-x-[2px] active:translate-y-[2px] ${
+                on
+                  ? 'text-indigo-600 dark:text-indigo-400 bg-indigo-50 dark:bg-indigo-950/50'
+                  : 'text-slate-300 dark:text-slate-600 hover:text-slate-400'
+              }`}
+            >
+              <span className="text-xl leading-none" aria-hidden="true">
+                {entry.sigil}
+              </span>
+              <span className="min-w-0">
+                <span
+                  className={`pixel block text-[11px] font-bold ${
+                    on ? 'text-indigo-700 dark:text-indigo-300' : 'text-slate-700 dark:text-slate-200'
+                  }`}
+                >
+                  {entry.name}
+                </span>
+                <span className="mt-0.5 block text-xs leading-snug text-slate-500 dark:text-slate-400">
+                  {entry.blurb}
+                </span>
+              </span>
+            </button>
+          );
+        })}
+      </div>
+      <p className="mt-2 text-xs leading-relaxed text-slate-400 dark:text-slate-500">
+        A class is a statement about what you like, recorded the same way the questions are. It
+        changes your picks straight away, locks nothing, and you can change it whenever.
+      </p>
+    </div>
+  );
+}
+
+/** The trophy case: everything won, and everything still out there. */
+function TrophyCase({ trophies }) {
+  const byTier = TIER_ORDER.map((tier) => ({
+    tier,
+    items: trophies.filter((trophy) => trophy.tier === tier),
+  })).filter((group) => group.items.length > 0);
+
+  return (
+    <div className="mt-6">
+      <p className="pixel text-xs font-bold text-slate-500 dark:text-slate-400">
+        Trophies {trophies.filter((t) => t.won).length}/{trophies.length}
+      </p>
+      <div className="mt-3 space-y-4">
+        {byTier.map((group) => (
+          <div key={group.tier}>
+            <p className={`pixel text-[10px] font-bold ${TIER_LOOK[group.tier]}`}>{group.tier}</p>
+            <div className="mt-1.5 grid grid-cols-1 gap-1.5 sm:grid-cols-2">
+              {group.items.map((trophy) => (
+                <div
+                  key={trophy.id}
+                  className={`flex items-start gap-2 px-2 py-1.5 ${
+                    trophy.won ? '' : 'opacity-40'
+                  }`}
+                  title={trophy.detail}
+                >
+                  <span
+                    className={`pixel mt-px text-[13px] leading-none ${TIER_LOOK[trophy.tier]}`}
+                    aria-hidden="true"
+                  >
+                    {trophy.won ? '\u25C6' : '\u25C7'}
+                  </span>
+                  <span className="min-w-0">
+                    <span className="pixel block text-[10px] font-bold text-slate-800 dark:text-slate-100">
+                      {trophy.name}
+                    </span>
+                    {/* Locked trophies say what they want. A row of question
+                        marks is a tease rather than a goal. */}
+                    <span className="block text-xs leading-snug text-slate-500 dark:text-slate-400">
+                      {trophy.detail}
+                    </span>
+                  </span>
+                </div>
+              ))}
+            </div>
+          </div>
+        ))}
+      </div>
+    </div>
+  );
+}
+
 /**
  * The reader, as a character sheet.
  *
@@ -4678,6 +4804,23 @@ function Verdict({ verdict, onRate, size = 'md' }) {
  * "Nice work" is the app being pleased with itself; "the model knows what
  * you make of your own shelf now" is the reason the quest existed.
  */
+/**
+ * What each level actually bought the reader.
+ *
+ * Tied to the thing that improved rather than to the number. A level is
+ * worth announcing because the picks genuinely changed, and saying so beats
+ * "level 4!" on its own.
+ */
+const LEVEL_WORDS = [
+  '',
+  '',
+  'Enough to work from. Your picks are yours now rather than simply the best reviewed.',
+  'The model has a shape to your taste and has started ruling things out.',
+  'It can tell your genres apart now, not just your favourites.',
+  'Breadth is showing. The picks are reaching past the obvious.',
+  'It knows what you avoid as well as what you choose.',
+];
+
 const QUEST_DONE_WORDS = {
   'judge-owned': 'Your shelf is on the record now, so your picks stop guessing about games you already have.',
   'finish-playing': 'Finished. That counts nearly as much as a thumbs up, and it will not be suggested back to you.',
@@ -4686,31 +4829,52 @@ const QUEST_DONE_WORDS = {
   coverage: 'A tenth of the catalogue has your opinion on it. That is a lot to rank the rest against.',
 };
 
-function CharacterSheet({ rank, title, stats, quests, coverage, onClose, onTune, onGo }) {
+function CharacterSheet({
+  rank,
+  title,
+  stats,
+  quests,
+  coverage,
+  hero,
+  trophies,
+  chosenClass,
+  onPickClass,
+  onClose,
+  onTune,
+  onGo,
+}) {
+  const sigil = classFor(chosenClass)?.sigil ?? '\u2728';
   return (
     <ModalSheet labelledBy="sheet-title" onClose={onClose}>
       <div className="p-6 sm:p-8">
-        <p className="text-xs font-semibold uppercase tracking-wider text-indigo-500">
-          {rank.said} {rank.said === 1 ? 'opinion' : 'opinions'} recorded
-        </p>
-        <h2 id="sheet-title" className="mt-1 pr-10 text-2xl font-bold text-slate-900 dark:text-slate-50">
-          {title}
-        </h2>
+        {/* The nameplate. Level first and large, because that is the number
+            somebody opens this to see. */}
+        <div className="flex items-start gap-3">
+          <div className="pixel-box animate-pixel-pop flex h-16 w-16 shrink-0 flex-col items-center justify-center text-indigo-600 dark:text-indigo-400">
+            <span className="pixel text-[9px] font-bold leading-none opacity-70">LV</span>
+            <span className="pixel text-2xl font-black leading-none">{hero.level}</span>
+          </div>
+          <div className="min-w-0 flex-1 pr-8">
+            <h2 id="sheet-title" className="pixel text-base font-black leading-tight text-slate-900 dark:text-slate-50">
+              {sigil} {title}
+            </h2>
+            <p className="mt-1 text-xs text-slate-500 dark:text-slate-400">
+              {hero.xp.toLocaleString()} XP from {rank.said}{' '}
+              {rank.said === 1 ? 'thing' : 'things'} you have told it
+            </p>
+          </div>
+        </div>
 
-        {/* A bar that means a specific thing: how far to the next rank. At
-            the top rank there is no next, and it reads as full rather than
-            inventing somewhere else to go. */}
-        <div className="mt-4">
-          <div className="h-2 overflow-hidden rounded-full bg-slate-200 dark:bg-slate-700">
+        {/* The XP bar, stepped rather than smooth. */}
+        <div className="mt-4 text-indigo-500">
+          <div className="pixel-box-sm h-5 w-full overflow-hidden bg-slate-100 dark:bg-slate-800 p-[2px]">
             <div
-              className="h-full rounded-full bg-gradient-to-r from-indigo-500 to-violet-500 transition-[width] duration-700 ease-swift"
-              style={{ width: `${Math.round(rank.through * 100)}%` }}
+              className="pixel-bar h-full transition-[width] duration-700 ease-swift"
+              style={{ width: `${Math.max(2, Math.round(hero.through * 100))}%` }}
             />
           </div>
-          <p className="mt-1.5 text-xs text-slate-500 dark:text-slate-400">
-            {rank.next
-              ? `${rank.toNext} more to ${rank.next.name}`
-              : 'Nothing left to climb. The picks are as sharp as this app can make them.'}
+          <p className="pixel mt-1.5 text-[10px] text-slate-500 dark:text-slate-400">
+            {hero.into.toLocaleString()} / {hero.need.toLocaleString()} to level {hero.level + 1}
           </p>
         </div>
 
@@ -4774,6 +4938,10 @@ function CharacterSheet({ rank, title, stats, quests, coverage, onClose, onTune,
             </ul>
           </>
         )}
+
+        <TrophyCase trophies={trophies} />
+
+        <ClassPicker chosen={chosenClass} onPick={onPickClass} />
 
         <div className="mt-6 flex flex-wrap gap-2">
           <button
@@ -7789,6 +7957,14 @@ export default function App() {
   const [questionsOpen, setQuestionsOpen] = useState(false);
   const [sheetOpenCharacter, setSheetOpenCharacter] = useState(false);
   const [questDone, setQuestDone] = useState(null);
+  const [leveledTo, setLeveledTo] = useState(null);
+  const [heroClass, setHeroClass] = useState(() => {
+    try {
+      return classFor(localStorage.getItem(CLASS_KEY))?.id ?? null;
+    } catch {
+      return null;
+    }
+  });
   /*
    * One clock for the session.
    *
@@ -8579,6 +8755,69 @@ export default function App() {
    * stats are its own weights, and the quests are the gaps the guided
    * questions already look for.
    */
+  /*
+   * The hero, recomputed from everything already recorded.
+   *
+   * Nothing is incremented and nothing is stored, which is what makes a
+   * reader who has used this for months arrive at level six rather than
+   * level one, and what makes undoing a rating take its points back.
+   */
+  const hero = useMemo(() => {
+    const features = new Set();
+    for (const row of signals) for (const feature of featuresOf(row.game)) features.add(feature);
+    const xp = xpFrom({ ratings, library, wishlist, backlog, answers: featureAnswers, features });
+    const level = levelFromXp(xp);
+    const stats = statsFrom({
+      ratings,
+      library,
+      wishlist,
+      backlog,
+      answers: featureAnswers,
+      features,
+      level: level.level,
+    });
+    return { ...level, trophies: trophiesFrom(stats) };
+  }, [signals, ratings, library, wishlist, backlog, featureAnswers]);
+
+  /* A level-up, noticed once, by remembering the last level seen. */
+  useEffect(() => {
+    let before = 0;
+    try {
+      before = Number(localStorage.getItem(LEVEL_KEY)) || 0;
+    } catch {
+      before = 0;
+    }
+    try {
+      localStorage.setItem(LEVEL_KEY, String(hero.level));
+    } catch {
+      // Without storage a level-up simply goes unremarked.
+    }
+    // Nothing on a first visit: an unknown previous level is not level zero.
+    // eslint-disable-next-line react/set-state-in-effect
+    if (before > 0 && hero.level > before) setLeveledTo(hero.level);
+  }, [hero.level]);
+
+  const pickClass = useCallback(
+    (id) => {
+      setHeroClass(id);
+      try {
+        localStorage.setItem(CLASS_KEY, id);
+      } catch {
+        // The choice lasts for this visit only.
+      }
+      /*
+       * Recorded as taste, not as a costume. A class grants answers about
+       * the same features the guided questions write, so the picks move
+       * immediately; without this the choice would be decoration and the
+       * screen would be claiming otherwise.
+       */
+      for (const answer of answersForClass(id)) {
+        answerFeature([answer.feature], answer.verdict);
+      }
+    },
+    [answerFeature],
+  );
+
   const character = useMemo(() => {
     const rank = rankFor(signals.length);
     const taste = geniusResult.taste;
@@ -10223,6 +10462,32 @@ export default function App() {
         * credit for it. It sits above the nav, says what changed, and goes
         * when tapped.
         */}
+      {/*
+        * Level up. The one moment in this app that is allowed to be loud,
+        * and even then it is a card above the nav rather than anything that
+        * takes the screen: the reader was in the middle of rating something
+        * when it happened.
+        */}
+      {leveledTo && (
+        <button
+          type="button"
+          onClick={() => setLeveledTo(null)}
+          className="animate-rise-in fixed inset-x-3 bottom-[calc(3.5rem+var(--inset-bottom)+0.75rem)] z-40 flex items-center gap-3 bg-indigo-600 px-4 py-3 text-left text-white shadow-2xl sm:inset-x-auto sm:right-4 sm:bottom-4 sm:max-w-sm pixel-box"
+        >
+          <span className="animate-pixel-pop pixel text-2xl font-black leading-none">
+            {leveledTo}
+          </span>
+          <span className="flex-1">
+            <span className="pixel block text-[11px] font-black">Level up</span>
+            <span className="mt-0.5 block text-xs leading-snug text-white/80">
+              {LEVEL_WORDS[Math.min(leveledTo, LEVEL_WORDS.length - 1)] ??
+                'Your picks know you a little better.'}
+            </span>
+          </span>
+          <X className="h-4 w-4 shrink-0 text-white/50" />
+        </button>
+      )}
+
       {questDone && (
         <button
           type="button"
@@ -10244,6 +10509,10 @@ export default function App() {
           stats={character.stats}
           quests={quests}
           coverage={character.coverage}
+          hero={hero}
+          trophies={hero.trophies}
+          chosenClass={heroClass}
+          onPickClass={pickClass}
           onTune={() => {
             setSheetOpenCharacter(false);
             setQuestionsOpen(true);
