@@ -23,25 +23,56 @@
  */
 import { readFileSync, writeFileSync } from 'node:fs';
 import { normalizeTitle } from '../src/genius.js';
+import { baseTitle, fold } from '../api/search.mjs';
 
 const catalogPath = new URL('../src/games.json', import.meta.url);
 const catalog = JSON.parse(readFileSync(catalogPath));
 const rows = JSON.parse(readFileSync(new URL('../api/store-index.json', import.meta.url)));
 
 const byTitle = new Map();
+// A second, looser index, consulted only when the strict one misses.
+const byLoose = new Map();
 for (const row of rows) {
   const key = normalizeTitle(row.name);
   if (key && !byTitle.has(key)) byTitle.set(key, row);
+  /*
+   * The same spellings the app's own search already reconciles.
+   *
+   * normalizeTitle is strict, and a shop does not name things the way a
+   * write-up does: it sells "Ghost of Yōtei™ Complete Edition", "Tchia
+   * (PS4 & PS5)" and "Spirit of the North: Enhanced Edition". baseTitle
+   * exists precisely to take the edition suffix, the platform tag and the
+   * licensor off, and fold flattens the accents, so a join that ignored
+   * both was weaker than the matching everywhere else in this app.
+   *
+   * Six write-ups were failing on that alone, every one of them with real
+   * PlayStation key art waiting in the mirror, and one of them was a game
+   * sitting in somebody's wishlist showing a purple rectangle.
+   */
+  for (const loose of new Set([fold(row.name), baseTitle(row.name)])) {
+    if (loose && !byLoose.has(loose)) byLoose.set(loose, row);
+  }
 }
 
 let joined = 0;
 let changed = 0;
 const next = catalog.map((entry) => {
-  const row = byTitle.get(normalizeTitle(entry.title));
+  const row =
+    byTitle.get(normalizeTitle(entry.title)) ??
+    byLoose.get(fold(entry.title)) ??
+    byLoose.get(baseTitle(entry.title));
   if (!row) {
     // Nothing to add, and anything baked before must go if the match is gone.
     const rest = { ...entry };
-    for (const key of ['storeId', 'storeGenres', 'storeRelease', 'plusIncluded', 'storeArt']) {
+    for (const key of [
+      'storeId',
+      'storeGenres',
+      'storeRelease',
+      'plusIncluded',
+      'storeArt',
+      'storeStars',
+      'storeVotes',
+    ]) {
       if (key in rest) {
         delete rest[key];
         changed += 1;
@@ -70,6 +101,23 @@ const next = catalog.map((entry) => {
      * draw it on first paint, with no request at all.
      */
     storeArt: row.art ?? null,
+    /*
+     * And what PlayStation players think of it.
+     *
+     * Exactly the same hole as the art, one field over. A write-up's score
+     * comes from Steam, so 225 of the 506 show no rating at all, and they
+     * are the same games for the same reason: Astro Bot, Demon's Souls,
+     * Gran Turismo 7, Ghost of Yotei. The mirror has a star rating and a
+     * vote count for 220 of them, and the one for Ghost of Yotei is 4.78
+     * from 98,014 people.
+     *
+     * Kept under its own name and on its own scale. A critic score is out
+     * of 100, a Steam percentage is a share of reviews, and this is stars
+     * out of five from a different audience; averaging any of them together
+     * would produce a number that is nobody's opinion.
+     */
+    storeStars: Number.isFinite(row.stars) ? row.stars : null,
+    storeVotes: Number.isFinite(row.votes) ? row.votes : null,
   };
   if (JSON.stringify(baked) !== JSON.stringify(entry)) changed += 1;
   return baked;

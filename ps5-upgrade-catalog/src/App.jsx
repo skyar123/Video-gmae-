@@ -1057,10 +1057,26 @@ function scoreTone(value) {
  * Critic score and player score side by side. Both are omitted rather than
  * guessed when the storefront has no figure.
  */
-function RatingChips({ ratings, size = 'sm' }) {
+function RatingChips({ ratings, size = 'sm', stars = null, votes = null }) {
   const critic = ratings?.critic ?? null;
   const user = ratings?.user ?? null;
-  if (critic == null && user == null) return null;
+  /*
+   * PlayStation's own stars, for the games Steam cannot answer for.
+   *
+   * Both numbers above come from Valve, so a PlayStation exclusive showed
+   * no rating whatsoever: 225 of the 506 write-ups, and the same 225 that
+   * had no key art, for the same reason. Astro Bot, Demon's Souls, Gran
+   * Turismo 7 and Ghost of Yotei are among the best regarded games this
+   * app lists and every one of them was blank.
+   *
+   * Shown only when there is nothing better, and never merged with the
+   * other two. It is a different audience on a different scale, so it is
+   * labelled as what it is rather than converted into a percentage that
+   * would read like a critic score and would not be one.
+   */
+  const psStars = Number.isFinite(stars) && stars > 0 ? stars : null;
+  const showStars = critic == null && user == null && psStars != null;
+  if (critic == null && user == null && !showStars) return null;
 
   const pad = size === 'lg' ? 'px-2.5 py-1 text-sm' : 'px-1.5 py-0.5 text-[11px]';
   return (
@@ -1074,6 +1090,20 @@ function RatingChips({ ratings, size = 'sm' }) {
           {critic}
           <span className={`font-normal opacity-70 ${size === 'lg' ? '' : 'hidden sm:inline'}`}>
             critics
+          </span>
+        </span>
+      )}
+      {showStars && (
+        <span
+          title={`${(votes ?? 0).toLocaleString()} PlayStation Store ratings`}
+          className={`inline-flex items-center gap-1 rounded-md font-semibold ring-1 ring-inset ${pad} ${scoreTone(
+            (psStars / 5) * 100,
+          )}`}
+        >
+          <Star className="h-3.5 w-3.5" aria-hidden="true" />
+          {psStars.toFixed(1)}
+          <span className={`font-normal opacity-70 ${size === 'lg' ? '' : 'hidden sm:inline'}`}>
+            on PS
           </span>
         </span>
       )}
@@ -1724,7 +1754,7 @@ function GameModal({
 
           <div className="mt-4 flex flex-wrap items-center gap-2">
             <UpgradeBadge value={game.ps5Upgrade} className="whitespace-nowrap" />
-            <RatingChips ratings={ratings} size="lg" />
+            <RatingChips ratings={ratings} size="lg" stars={game.storeStars} votes={game.storeVotes} />
           </div>
 
           <div className="mt-6 rounded-xl border border-slate-100 dark:border-slate-800 bg-slate-50 dark:bg-slate-950 p-4">
