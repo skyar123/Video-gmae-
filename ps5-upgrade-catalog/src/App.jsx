@@ -58,6 +58,8 @@ import {
   answersForClass,
   CLASSES,
   classFor,
+  codexFrom,
+  codexProgress,
   levelFromXp,
   statsFrom,
   TIER_ORDER,
@@ -4732,6 +4734,65 @@ function ClassPicker({ chosen, onPick }) {
   );
 }
 
+/**
+ * The codex: every kind of game there is, and which you have met.
+ *
+ * Thirty-one entries read from the catalogue itself, so a genre added to a
+ * write-up tomorrow becomes a new thing to find without anybody updating a
+ * list. An entry is met by saying something about a game of that kind,
+ * which makes this a record of where the reader has been rather than a
+ * list to grind: scrolling past a Watercolor game discovers nothing,
+ * because the app cannot tell scrolling from staring out of the window.
+ */
+function Codex({ codex, progress }) {
+  return (
+    <div className="mt-6">
+      <p className="pixel text-xs font-bold text-slate-500 dark:text-slate-400">
+        Codex {progress.found}/{progress.total}
+      </p>
+      <div className="mt-3 space-y-3">
+        {codex.map((kind) => (
+          <div key={kind.id}>
+            <p className="pixel text-[10px] font-bold text-slate-400 dark:text-slate-500">
+              {kind.label} {kind.entries.filter((e) => e.found).length}/{kind.entries.length}
+            </p>
+            <div className="mt-1.5 flex flex-wrap gap-1.5">
+              {kind.entries.map((entry) => (
+                <span
+                  key={entry.value}
+                  title={
+                    entry.found
+                      ? `${entry.count} ${entry.count === 1 ? 'game' : 'games'} on the record`
+                      : 'Not met yet. Say something about one and it fills in.'
+                  }
+                  className={`pixel px-2 py-1 text-[10px] font-bold ${
+                    entry.found
+                      ? entry.weight > 0
+                        ? 'bg-indigo-600 text-white'
+                        : 'bg-slate-700 dark:bg-slate-600 text-white'
+                      : 'bg-slate-100 dark:bg-slate-800 text-slate-300 dark:text-slate-600'
+                  }`}
+                >
+                  {/* An unmet entry still shows its name. A row of question
+                      marks is a tease; a name is a thing to go and find. */}
+                  {entry.value}
+                  {entry.found && entry.count > 1 && (
+                    <span className="ml-1 opacity-60">{entry.count}</span>
+                  )}
+                </span>
+              ))}
+            </div>
+          </div>
+        ))}
+      </div>
+      <p className="mt-2 text-xs leading-relaxed text-slate-400 dark:text-slate-500">
+        Filled in by saying something about a game of that kind. Lit means you go towards them,
+        dark means you have met them and were not won over.
+      </p>
+    </div>
+  );
+}
+
 /** The trophy case: everything won, and everything still out there. */
 function TrophyCase({ trophies }) {
   const byTier = TIER_ORDER.map((tier) => ({
@@ -4837,6 +4898,8 @@ function CharacterSheet({
   coverage,
   hero,
   trophies,
+  codex,
+  codexAt,
   chosenClass,
   onPickClass,
   onClose,
@@ -4938,6 +5001,8 @@ function CharacterSheet({
             </ul>
           </>
         )}
+
+        <Codex codex={codex} progress={codexAt} />
 
         <TrophyCase trophies={trophies} />
 
@@ -8776,8 +8841,18 @@ export default function App() {
       features,
       level: level.level,
     });
-    return { ...level, trophies: trophiesFrom(stats) };
-  }, [signals, ratings, library, wishlist, backlog, featureAnswers]);
+    const codex = codexFrom({
+      catalog: gamesData,
+      signals,
+      weights: geniusResult.taste?.weights ?? new Map(),
+    });
+    return {
+      ...level,
+      trophies: trophiesFrom(stats),
+      codex,
+      codexAt: codexProgress(codex),
+    };
+  }, [signals, ratings, library, wishlist, backlog, featureAnswers, geniusResult.taste]);
 
   /* A level-up, noticed once, by remembering the last level seen. */
   useEffect(() => {
@@ -10535,6 +10610,8 @@ export default function App() {
           coverage={character.coverage}
           hero={hero}
           trophies={hero.trophies}
+          codex={hero.codex}
+          codexAt={hero.codexAt}
           chosenClass={heroClass}
           onPickClass={pickClass}
           onTune={() => {

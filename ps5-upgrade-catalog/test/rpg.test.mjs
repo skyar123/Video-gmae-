@@ -198,3 +198,73 @@ test('the counts a trophy is judged on come from one place', () => {
   assert.equal(stats.disliked, 1);
   assert.equal(stats.said, 5);
 });
+
+test('the codex is a record of where you have been', async () => {
+  const { codexFrom, codexProgress } = await import('../src/rpg.js');
+  const catalog = [
+    { id: 'a', genre: 'Metroidvania', artStyle: 'Pixel Art', protagonist: 'Custom' },
+    { id: 'b', genre: 'Life Sim', artStyle: 'Watercolor', protagonist: 'Female' },
+    { id: 'c', genre: 'Horror', artStyle: 'Photorealistic', protagonist: 'Male' },
+  ];
+
+  const nothing = codexFrom({ catalog });
+  assert.equal(codexProgress(nothing).found, 0, 'something was discovered from nothing');
+  assert.equal(codexProgress(nothing).total, 9, 'the codex is not built from the catalogue');
+
+  const some = codexFrom({ catalog, signals: [{ game: catalog[0], kind: 'liked' }] });
+  const genres = some.find((kind) => kind.id === 'genre').entries;
+  assert.equal(genres.find((e) => e.value === 'Metroidvania').found, true);
+  assert.equal(genres.find((e) => e.value === 'Horror').found, false, 'an unmet genre was found');
+  assert.equal(codexProgress(some).found, 3, 'one game should discover its genre, art and lead');
+});
+
+test('trying something and disliking it still counts as having met it', async () => {
+  /*
+   * A codex records where somebody went, not what they enjoyed. Putting a
+   * game down after an hour is more contact with a genre than never opening
+   * one, so it is found; whether it was liked is a separate column.
+   */
+  const { codexFrom } = await import('../src/rpg.js');
+  const catalog = [{ id: 'a', genre: 'Horror', artStyle: '3D', protagonist: 'Male' }];
+  const codex = codexFrom({ catalog, signals: [{ game: catalog[0], kind: 'bounced' }] });
+  const horror = codex.find((k) => k.id === 'genre').entries[0];
+  assert.equal(horror.found, true, 'giving up on a genre left it undiscovered');
+  assert.equal(horror.count, 1);
+  assert.equal(horror.liked, 0, 'a game put down was counted as one sought out');
+});
+
+test('a codex entry cannot be filled by looking at it', async () => {
+  /*
+   * The thing that would make the whole collection worthless. Only signals
+   * the reader chose to record reach this; there is no input for a game
+   * scrolled past, because the app cannot tell scrolling from staring out
+   * of the window.
+   */
+  const { codexFrom, codexProgress } = await import('../src/rpg.js');
+  const catalog = Array.from({ length: 40 }, (_, i) => ({
+    id: `g${i}`,
+    genre: `Genre ${i}`,
+    artStyle: `Art ${i}`,
+    protagonist: 'Custom',
+  }));
+  // A reader who has opened the app a thousand times and said nothing.
+  assert.equal(codexProgress(codexFrom({ catalog, signals: [] })).found, 0);
+});
+
+test('codex progress never claims more than exists', async () => {
+  const { codexFrom, codexProgress } = await import('../src/rpg.js');
+  const catalog = [{ id: 'a', genre: 'RPG', artStyle: '3D', protagonist: 'Custom' }];
+  // The same game said five ways is still one genre discovered.
+  const codex = codexFrom({
+    catalog,
+    signals: [
+      { game: catalog[0], kind: 'liked' },
+      { game: catalog[0], kind: 'owned' },
+      { game: catalog[0], kind: 'finished' },
+    ],
+  });
+  const progress = codexProgress(codex);
+  assert.equal(progress.found, 3);
+  assert.equal(progress.total, 3);
+  assert.ok(progress.share <= 1);
+});

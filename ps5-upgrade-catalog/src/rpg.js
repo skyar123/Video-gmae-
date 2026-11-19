@@ -334,3 +334,103 @@ export function statsFrom({
     level,
   };
 }
+
+/* ------------------------------------------------------------------ *
+ * The codex
+ * ------------------------------------------------------------------ */
+
+/**
+ * Every kind of game there is to discover, and which you have met.
+ *
+ * A bestiary, built from the catalogue rather than invented: sixteen
+ * genres, ten art styles and five kinds of lead, thirty-one entries in all,
+ * and a real set to complete. An entry is discovered by saying something
+ * about a game of that kind, which means the collection is a record of
+ * where the reader has actually been rather than a list of things to grind.
+ *
+ * Deliberately not completable by browsing. Scrolling past a Watercolor
+ * game does not discover Watercolor, because the app cannot tell scrolling
+ * from looking out of the window, and a codex that filled itself in while
+ * nobody was looking would be worth nothing to complete.
+ */
+export const CODEX_KINDS = [
+  { id: 'genre', label: 'Genres', field: 'genre', prefix: 'genre:' },
+  { id: 'art', label: 'Art styles', field: 'artStyle', prefix: 'art:' },
+  { id: 'lead', label: 'Leads', field: 'protagonist', prefix: 'lead:' },
+];
+
+/**
+ * What exists to be found, from the catalogue itself.
+ *
+ * Read from the data rather than listed here, so a genre added to a
+ * write-up tomorrow becomes a thing to discover without anybody
+ * remembering to update a constant.
+ */
+export function codexShape(catalog = []) {
+  const shape = new Map(CODEX_KINDS.map((kind) => [kind.id, new Set()]));
+  for (const game of catalog) {
+    for (const kind of CODEX_KINDS) {
+      const value = game?.[kind.field];
+      if (value) shape.get(kind.id).add(value);
+    }
+  }
+  return CODEX_KINDS.map((kind) => ({
+    ...kind,
+    values: [...shape.get(kind.id)].sort(),
+  }));
+}
+
+/**
+ * The codex as it stands: what has been met, how often, and how it went.
+ *
+ * `weights` is the taste model's own opinion, so an entry can say more than
+ * "found": it can say whether this is something the reader seeks out or
+ * puts down. A discovered entry nobody liked is still discovered, which is
+ * the honest reading of having tried something.
+ */
+export function codexFrom({ catalog = [], signals = [], weights = new Map() } = {}) {
+  const met = new Map();
+  for (const row of signals) {
+    const positive = (SEEKING[row.kind] ?? 0) > 0;
+    for (const kind of CODEX_KINDS) {
+      const value = row.game?.[kind.field];
+      if (!value) continue;
+      const key = `${kind.id}:${value}`;
+      const seen = met.get(key) ?? { count: 0, liked: 0 };
+      seen.count += 1;
+      if (positive) seen.liked += 1;
+      met.set(key, seen);
+    }
+  }
+
+  return codexShape(catalog).map((kind) => ({
+    id: kind.id,
+    label: kind.label,
+    entries: kind.values.map((value) => {
+      const seen = met.get(`${kind.id}:${value}`) ?? null;
+      return {
+        value,
+        found: Boolean(seen),
+        count: seen?.count ?? 0,
+        liked: seen?.liked ?? 0,
+        weight: weights.get(`${kind.prefix}${value}`) ?? 0,
+      };
+    }),
+  }));
+}
+
+/** Which signal kinds mean the reader went towards a game rather than away. */
+const SEEKING = { liked: 1, finished: 1, playing: 1, owned: 1, wishlisted: 1 };
+
+/** Found and total, for a progress line that is not a lie. */
+export function codexProgress(codex) {
+  let found = 0;
+  let total = 0;
+  for (const kind of codex) {
+    for (const entry of kind.entries) {
+      total += 1;
+      if (entry.found) found += 1;
+    }
+  }
+  return { found, total, share: total ? found / total : 0 };
+}
