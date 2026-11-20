@@ -3959,7 +3959,15 @@ function BottomBar({ view, collection, onView, onBriefing, onForYou, canSurprise
   return (
     <nav
       aria-label="Sections"
-      className="touch-only fixed inset-x-0 bottom-0 z-30 border-t border-slate-200 dark:border-slate-700 bg-white/90 dark:bg-slate-900/90 pb-[var(--inset-bottom)] backdrop-blur"
+      /*
+       * Above the drawers, not under them.
+       *
+       * The news drawer is a full-screen overlay at z-40 and this sat at
+       * z-30, so opening Goss took the navigation off the screen entirely
+       * and the only way back was the drawer's own close button. Reported
+       * as the nav bar disappearing, which is exactly what it did.
+       */
+      className="touch-only fixed inset-x-0 bottom-0 z-50 border-t border-slate-200 dark:border-slate-700 bg-white/90 dark:bg-slate-900/90 pb-[var(--inset-bottom)] backdrop-blur"
     >
       <div className="flex">
         {items.map((item) => (
@@ -7831,7 +7839,9 @@ function BriefingDrawer({
         onClick={onClose}
         className="absolute inset-0 animate-fade-in bg-slate-900/40 backdrop-blur-sm"
       />
-      <aside className="relative flex h-full w-full max-w-md animate-slide-in flex-col border-l border-slate-200 dark:border-slate-700 bg-slate-50 dark:bg-slate-950 pt-[var(--inset-top)] shadow-2xl sm:max-w-lg lg:max-w-2xl">
+      {/* pb-nav so the last story is not sitting under the navigation,
+          which now stays on top of this rather than being covered by it. */}
+      <aside className="pb-nav relative flex h-full w-full max-w-md animate-slide-in flex-col border-l border-slate-200 dark:border-slate-700 bg-slate-50 dark:bg-slate-950 pt-[var(--inset-top)] shadow-2xl sm:max-w-lg lg:max-w-2xl">
         <header className="flex items-center gap-2 border-b border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-900 px-3 py-2.5">
           <div className="flex flex-1 gap-1">
             {[
@@ -9831,6 +9841,29 @@ export default function App() {
                 onChange={(event) => set('q', event.target.value)}
               />
             </div>
+
+            {/*
+              * The level, in the header, on every screen.
+              *
+              * This lived as a grey pill on the For you shelf labelled with
+              * the reader's title, "Adept of a woman in the lead", which
+              * says nothing about levels and is on one tab out of four.
+              * Reported as not being able to find it anywhere, which was
+              * fair: nothing on screen suggested there was anything to find.
+              *
+              * A number in a box is the thing people look for, so that is
+              * what it shows.
+              */}
+            <button
+              type="button"
+              onClick={() => setSheetOpenCharacter(true)}
+              aria-label={`Level ${hero.level}. Your character sheet, trophies and codex`}
+              title={`Level ${hero.level}`}
+              className="pixel-box-sm inline-flex h-11 shrink-0 items-center gap-1 bg-white dark:bg-slate-900 px-2 text-indigo-600 dark:text-indigo-400 transition-transform duration-150 active:translate-x-[2px] active:translate-y-[2px] sm:h-9"
+            >
+              <span className="pixel text-[9px] font-bold leading-none opacity-70">LV</span>
+              <span className="pixel text-sm font-black leading-none">{hero.level}</span>
+            </button>
 
             <button
               type="button"
