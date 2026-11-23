@@ -2417,7 +2417,7 @@ function AudiencePicker({ value, onChange }) {
               onClick={() => onChange(audience.id)}
               aria-pressed={on}
               title={audience.hint}
-              className={`inline-flex items-center gap-1.5 rounded-full px-3 py-1.5 text-xs font-semibold transition-transform duration-200 ease-spring active:scale-95 ${
+              className={`inline-flex h-9 items-center gap-1.5 rounded-full px-3 text-xs font-semibold transition-transform duration-200 ease-spring active:scale-95 sm:h-7 ${
                 on
                   ? 'bg-emerald-600 text-white'
                   : 'bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-300 hover:bg-slate-200'
@@ -2990,7 +2990,7 @@ function EmptyState({ filters, personalized, wishlistEmpty, status, onClear, onS
         <button
           type="button"
           onClick={onClear}
-          className="font-medium text-indigo-600 dark:text-indigo-300 hover:underline"
+          className="inline-flex min-h-[2.75rem] items-center px-3 font-medium text-indigo-600 dark:text-indigo-300 hover:underline"
         >
           {searching ? 'Clear search and filters' : 'Clear all filters'}
         </button>
@@ -3121,7 +3121,7 @@ function WatchPanel({ game, favourites, onToggleFavourite }) {
             type="button"
             onClick={() => setLensValue(entry.value)}
             aria-pressed={lensValue === entry.value}
-            className={`shrink-0 rounded-full px-2.5 py-1 text-xs font-medium transition-all duration-200 ease-spring active:scale-95 ${
+            className={`h-9 shrink-0 rounded-full px-3 text-xs font-medium transition-all duration-200 ease-spring active:scale-95 sm:h-7 ${
               lensValue === entry.value
                 ? 'bg-violet-600 text-white'
                 : 'bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-300 hover:bg-slate-200'
@@ -3711,7 +3711,7 @@ function FeedSlide({
           onClick={dismissHint}
           // Up by the dots it belongs to. Down at the bottom right it sat on
           // top of the heart, and a long title reached it too.
-          className="absolute right-4 top-8 z-10 flex items-center gap-1.5 rounded-full bg-black/55 px-3 py-1.5 text-xs font-semibold text-white backdrop-blur"
+          className="absolute right-4 top-8 z-10 flex h-9 items-center gap-1.5 rounded-full bg-black/55 px-3 text-xs font-semibold text-white backdrop-blur sm:h-7"
         >
           {gallery.length - 1} more <ArrowUpRight className="h-3.5 w-3.5 rotate-45" />
         </button>
@@ -5305,7 +5305,7 @@ function GeniusSheet({
         <button
           type="button"
           onClick={onTune}
-          className="mt-4 inline-flex items-center gap-2 rounded-full bg-indigo-50 dark:bg-indigo-950/50 px-3.5 py-1.5 text-xs font-semibold text-indigo-700 dark:text-indigo-300 transition-transform duration-200 ease-spring active:scale-95 hover:bg-indigo-100 dark:hover:bg-indigo-900/60"
+          className="mt-4 inline-flex h-9 items-center gap-2 rounded-full bg-indigo-50 dark:bg-indigo-950/50 px-3.5 text-xs font-semibold sm:h-7 text-indigo-700 dark:text-indigo-300 transition-transform duration-200 ease-spring active:scale-95 hover:bg-indigo-100 dark:hover:bg-indigo-900/60"
         >
           <Sparkles className="h-3.5 w-3.5" />
           {answered > 0
@@ -5319,7 +5319,7 @@ function GeniusSheet({
           <button
             type="button"
             onClick={onRefresh}
-            className="mt-4 inline-flex items-center gap-2 rounded-full bg-indigo-600 px-3.5 py-1.5 text-xs font-semibold text-white transition-transform duration-200 ease-spring active:scale-95 hover:bg-indigo-500"
+            className="mt-4 inline-flex h-9 items-center gap-2 rounded-full bg-indigo-600 px-3.5 text-xs font-semibold text-white sm:h-7 transition-transform duration-200 ease-spring active:scale-95 hover:bg-indigo-500"
           >
             <Sparkles className="h-3.5 w-3.5" />
             {unseenAnswers === 1
@@ -5549,7 +5549,7 @@ function GeniusPanel({
         <button
           type="button"
           onClick={onRefresh}
-          className="mb-3 inline-flex items-center gap-2 rounded-full bg-indigo-600 px-3.5 py-1.5 text-xs font-semibold text-white transition-transform duration-200 ease-spring active:scale-95 hover:bg-indigo-500"
+          className="mb-3 inline-flex h-9 items-center gap-2 rounded-full bg-indigo-600 px-3.5 text-xs font-semibold text-white sm:h-7 transition-transform duration-200 ease-spring active:scale-95 hover:bg-indigo-500"
         >
           <Sparkles className="h-3.5 w-3.5" />
           {unseenAnswers === 1
@@ -5564,7 +5564,7 @@ function GeniusPanel({
         <button
           type="button"
           onClick={onTune}
-          className="inline-flex items-center gap-2 rounded-full bg-indigo-50 dark:bg-indigo-950/50 px-3.5 py-1.5 text-xs font-semibold text-indigo-700 dark:text-indigo-300 transition-transform duration-200 ease-spring active:scale-95 hover:bg-indigo-100 dark:hover:bg-indigo-900/60"
+          className="inline-flex h-9 items-center gap-2 rounded-full bg-indigo-50 dark:bg-indigo-950/50 px-3.5 text-xs font-semibold sm:h-7 text-indigo-700 dark:text-indigo-300 transition-transform duration-200 ease-spring active:scale-95 hover:bg-indigo-100 dark:hover:bg-indigo-900/60"
         >
           <Sparkles className="h-3.5 w-3.5" />
           {answered > 0
@@ -5576,7 +5576,7 @@ function GeniusPanel({
         <button
           type="button"
           onClick={onSheet}
-          className="inline-flex items-center gap-2 rounded-full bg-slate-100 dark:bg-slate-800 px-3.5 py-1.5 text-xs font-semibold text-slate-600 dark:text-slate-300 transition-transform duration-200 ease-spring active:scale-95 hover:bg-slate-200"
+          className="inline-flex h-9 items-center gap-2 rounded-full bg-slate-100 dark:bg-slate-800 px-3.5 text-xs font-semibold sm:h-7 text-slate-600 dark:text-slate-300 transition-transform duration-200 ease-spring active:scale-95 hover:bg-slate-200"
         >
           <Gamepad2 className="h-3.5 w-3.5" />
           {characterTitle}
@@ -6222,7 +6222,14 @@ function PlusThisMonth({ now, onSearch }) {
                 <button
                   type="button"
                   onClick={() => onSearch(name)}
-                  className="text-left underline decoration-dotted underline-offset-4 hover:decoration-solid"
+                  /*
+                   * Padding cancelled by an equal negative margin: the hit
+                   * area grows to something a thumb can find while the
+                   * sentence these sit inside does not move a pixel. Giving
+                   * them a height instead would turn a flowing line of game
+                   * names into a column of blocks.
+                   */
+                  className="-my-2.5 py-2.5 text-left underline decoration-dotted underline-offset-4 hover:decoration-solid"
                 >
                   {name}
                 </button>
@@ -6250,7 +6257,7 @@ function PlusThisMonth({ now, onSearch }) {
               href={link}
               target="_blank"
               rel="noreferrer"
-              className="inline-flex items-center gap-1 text-xs font-semibold text-indigo-600 hover:underline dark:text-indigo-300"
+              className="-my-2.5 inline-flex items-center gap-1 py-2.5 text-xs font-semibold text-indigo-600 hover:underline dark:text-indigo-300"
             >
               PlayStation Blog <ExternalLink className="h-3 w-3" />
             </a>
@@ -6482,6 +6489,17 @@ function StorePanel({ query, curatedFirst = [], curatedReason, curatedByName, sa
         * more. Reported as the game not being there at all, which is what
         * an answer below the fold is.
         */}
+      {/*
+        * Tall enough for a thumb.
+        *
+        * These rendered at 24px, roughly half what a finger needs, and that
+        * is fine with a mouse so it never showed up: every sweep of this app
+        * had been run in a browser reporting itself as a pointer device,
+        * which is also the layout it was then being shown. Twenty-six fiddly
+        * targets on the busiest shelf in the app, and thirty-four on PS Plus.
+        *
+        * Back to the compact size on a pointer, where small is correct.
+        */}
       {!(nothingFound && query) && (
       <div className="no-scrollbar mb-3 flex gap-1.5 overflow-x-auto pb-0.5">
         {[
@@ -6493,7 +6511,7 @@ function StorePanel({ query, curatedFirst = [], curatedReason, curatedByName, sa
             type="button"
             onClick={() => setSort(value)}
             aria-pressed={sort === value}
-            className={`shrink-0 rounded-full px-2.5 py-1 text-xs font-medium transition-all duration-200 ease-spring active:scale-95 ${
+            className={`h-9 shrink-0 rounded-full px-3 text-xs font-medium transition-all duration-200 ease-spring active:scale-95 sm:h-7 ${
               sort === value
                 ? 'bg-slate-900 text-white dark:bg-slate-100 dark:text-slate-900'
                 : 'bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-300 hover:bg-slate-200'
@@ -6507,7 +6525,7 @@ function StorePanel({ query, curatedFirst = [], curatedReason, curatedByName, sa
           type="button"
           onClick={() => setGenre('')}
           aria-pressed={genre === ''}
-          className={`shrink-0 rounded-full px-2.5 py-1 text-xs font-medium transition-all duration-200 ease-spring active:scale-95 ${
+          className={`h-9 shrink-0 rounded-full px-3 text-xs font-medium transition-all duration-200 ease-spring active:scale-95 sm:h-7 ${
             genre === '' ? 'bg-slate-900 text-white dark:bg-slate-100 dark:text-slate-900' : 'bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-300 hover:bg-slate-200'
           }`}
         >
@@ -6519,7 +6537,7 @@ function StorePanel({ query, curatedFirst = [], curatedReason, curatedByName, sa
             type="button"
             onClick={() => setGenre(entry.genre === genre ? '' : entry.genre)}
             aria-pressed={genre === entry.genre}
-            className={`inline-flex shrink-0 items-center gap-1.5 rounded-full px-2.5 py-1 text-xs font-medium transition-all duration-200 ease-spring active:scale-95 ${
+            className={`inline-flex h-9 shrink-0 items-center gap-1.5 rounded-full px-3 text-xs font-medium transition-all duration-200 ease-spring active:scale-95 sm:h-7 ${
               genre === entry.genre
                 ? 'bg-slate-900 text-white dark:bg-slate-100 dark:text-slate-900'
                 : 'bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-300 hover:bg-slate-200'
@@ -7023,7 +7041,7 @@ function GossCard({
                     type="button"
                     onClick={() => setShowAlso((open) => !open)}
                     aria-expanded={showAlso}
-                    className="inline-flex items-center gap-1 rounded-full bg-amber-50 dark:bg-amber-950/60 py-1 pl-2.5 pr-2 text-[11px] font-semibold text-amber-700 dark:text-amber-300 transition-colors hover:bg-amber-100 dark:hover:bg-amber-900/60"
+                    className="inline-flex h-9 items-center gap-1 rounded-full bg-amber-50 dark:bg-amber-950/60 pl-2.5 pr-2 text-[11px] font-semibold text-amber-700 dark:text-amber-300 transition-colors hover:bg-amber-100 dark:hover:bg-amber-900/60 sm:h-7"
                   >
                     {showAlso
                       ? 'Hide the rest'
@@ -7101,7 +7119,7 @@ function GossCard({
                      invisible layer across the whole card to make all of it
                      clickable. Without lifting out of that, this button is
                      under it and cannot be pressed at all. */
-                  className="relative z-10 mt-2 inline-flex max-w-full items-center gap-1.5 rounded-full bg-slate-100 dark:bg-slate-800 py-1 pl-2.5 pr-3 text-[11px] font-semibold text-slate-700 dark:text-slate-200 transition-colors hover:bg-slate-200 dark:hover:bg-slate-700"
+                  className="relative z-10 mt-2 inline-flex h-9 max-w-full items-center gap-1.5 rounded-full bg-slate-100 dark:bg-slate-800 pl-2.5 pr-3 text-[11px] font-semibold text-slate-700 dark:text-slate-200 transition-colors hover:bg-slate-200 dark:hover:bg-slate-700 sm:h-7"
                 >
                   <Gamepad2 className="h-3 w-3 shrink-0 text-indigo-500" />
                   <span className="truncate">{burst.game.name}</span>
@@ -7387,7 +7405,7 @@ function GossPanel({
             type="button"
             onClick={() => setOrder(value)}
             aria-pressed={order === value}
-            className={`inline-flex flex-1 items-center justify-center gap-1.5 rounded-full px-3 py-1.5 text-xs font-bold transition-all duration-200 ease-spring active:scale-95 ${
+            className={`inline-flex h-9 flex-1 items-center justify-center gap-1.5 rounded-full px-3 text-xs font-bold transition-all duration-200 ease-spring active:scale-95 sm:h-7 ${
               order === value
                 ? 'bg-slate-900 text-white dark:bg-slate-100 dark:text-slate-900'
                 : 'bg-white dark:bg-slate-900 text-slate-600 dark:text-slate-300 ring-1 ring-inset ring-slate-200 dark:ring-slate-700 hover:bg-slate-100'
@@ -7406,7 +7424,7 @@ function GossPanel({
             type="button"
             onClick={() => setKind(value)}
             aria-pressed={kind === value}
-            className={`shrink-0 rounded-full px-2.5 py-1 text-xs font-medium transition-all duration-200 ease-spring active:scale-95 ${
+            className={`h-9 shrink-0 rounded-full px-3 text-xs font-medium transition-all duration-200 ease-spring active:scale-95 sm:h-7 ${
               kind === value
                 ? 'bg-slate-900 text-white dark:bg-slate-100 dark:text-slate-900'
                 : 'bg-white dark:bg-slate-900 text-slate-600 dark:text-slate-300 ring-1 ring-inset ring-slate-200 dark:ring-slate-700 hover:bg-slate-100'
@@ -7426,7 +7444,7 @@ function GossPanel({
             type="button"
             onClick={() => setTone('all')}
             aria-pressed={tone === 'all'}
-            className={`shrink-0 rounded-full px-2.5 py-1 text-xs font-medium transition-all duration-200 ease-spring active:scale-95 ${
+            className={`h-9 shrink-0 rounded-full px-3 text-xs font-medium transition-all duration-200 ease-spring active:scale-95 sm:h-7 ${
               tone === 'all'
                 ? 'bg-indigo-600 text-white'
                 : 'bg-white dark:bg-slate-900 text-slate-500 dark:text-slate-400 ring-1 ring-inset ring-slate-200 dark:ring-slate-700 hover:bg-slate-100'
@@ -7440,7 +7458,7 @@ function GossPanel({
               type="button"
               onClick={() => setTone(tone === value ? 'all' : value)}
               aria-pressed={tone === value}
-              className={`shrink-0 rounded-full px-2.5 py-1 text-xs font-medium transition-all duration-200 ease-spring active:scale-95 ${
+              className={`h-9 shrink-0 rounded-full px-3 text-xs font-medium transition-all duration-200 ease-spring active:scale-95 sm:h-7 ${
                 tone === value
                   ? 'bg-indigo-600 text-white'
                   : 'bg-white dark:bg-slate-900 text-slate-500 dark:text-slate-400 ring-1 ring-inset ring-slate-200 dark:ring-slate-700 hover:bg-slate-100'
@@ -7546,7 +7564,7 @@ function UpcomingPanel({
             type="button"
             onClick={() => setWhen(value)}
             aria-pressed={when === value}
-            className={`inline-flex shrink-0 items-center gap-1.5 rounded-full px-2.5 py-1 text-xs font-medium transition-all duration-200 ease-spring active:scale-95 ${
+            className={`inline-flex h-9 shrink-0 items-center gap-1.5 rounded-full px-3 text-xs font-medium transition-all duration-200 ease-spring active:scale-95 sm:h-7 ${
               when === value
                 ? 'bg-slate-900 text-white dark:bg-slate-100 dark:text-slate-900'
                 : 'bg-white dark:bg-slate-900 text-slate-600 dark:text-slate-300 ring-1 ring-inset ring-slate-200 dark:ring-slate-700 hover:bg-slate-100'
@@ -7931,7 +7949,7 @@ function TogglePill({ active, onClick, icon: Icon, label, count, tone, ariaLabel
       onClick={onClick}
       aria-label={ariaLabel}
       aria-pressed={active}
-      className={`inline-flex items-center gap-1.5 rounded-full px-2.5 py-1 text-xs font-medium transition-all duration-200 ease-spring active:scale-95 ${
+      className={`inline-flex h-9 items-center gap-1.5 rounded-full px-3 text-xs font-medium transition-all duration-200 ease-spring active:scale-95 sm:h-7 ${
         active ? `${tone} text-white` : 'bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-300 hover:bg-slate-200'
       }`}
     >
@@ -10458,7 +10476,7 @@ export default function App() {
                 <button
                   type="button"
                   onClick={() => setQuestionsOpen(true)}
-                  className="inline-flex items-center gap-2 rounded-full bg-indigo-600 px-3.5 py-1.5 text-xs font-semibold text-white transition-transform duration-200 ease-spring active:scale-95 hover:bg-indigo-500"
+                  className="inline-flex h-9 items-center gap-2 rounded-full bg-indigo-600 px-3.5 text-xs font-semibold text-white sm:h-7 transition-transform duration-200 ease-spring active:scale-95 hover:bg-indigo-500"
                 >
                   <Sparkles className="h-3.5 w-3.5" />
                   Answer a few questions instead
@@ -10473,7 +10491,7 @@ export default function App() {
                 <button
                   type="button"
                   onClick={() => setSheetOpenCharacter(true)}
-                  className="inline-flex items-center gap-2 rounded-full bg-white/70 dark:bg-slate-900/50 px-3.5 py-1.5 text-xs font-semibold text-indigo-700 dark:text-indigo-300 transition-transform duration-200 ease-spring active:scale-95 hover:bg-white"
+                  className="inline-flex h-9 items-center gap-2 rounded-full bg-white/70 dark:bg-slate-900/50 px-3.5 text-xs font-semibold sm:h-7 text-indigo-700 dark:text-indigo-300 transition-transform duration-200 ease-spring active:scale-95 hover:bg-white"
                 >
                   <Gamepad2 className="h-3.5 w-3.5" />
                   {character.title}
@@ -10796,7 +10814,7 @@ function LiveStatus({ status, progress, updatedAt, onRefresh }) {
     <button
       type="button"
       onClick={onRefresh}
-      className="inline-flex items-center gap-2 text-sm text-slate-500 dark:text-slate-400 transition-colors hover:text-slate-800"
+      className="-my-2 inline-flex items-center gap-2 py-2 text-sm text-slate-500 dark:text-slate-400 transition-colors hover:text-slate-800"
     >
       <RefreshCw className="h-4 w-4" />
       Prices updated{' '}

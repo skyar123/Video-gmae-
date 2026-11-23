@@ -16,7 +16,8 @@
     "icon": "node scripts/icon/render.mjs",
     "bake:developers": "node scripts/bake-developers.mjs",
     "sweep:developers": "node scripts/sweep-developers.mjs",
-    "bake:igdb": "node scripts/bake-igdb.mjs"
+    "bake:igdb": "node scripts/bake-igdb.mjs",
+    "check:touch": "vite build && node scripts/touch-check.mjs"
   },
   "dependencies": {
     "@netlify/blobs": "^11.0.3",
