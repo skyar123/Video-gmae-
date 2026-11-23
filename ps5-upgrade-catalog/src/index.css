@@ -261,6 +261,30 @@
   animation: pixel-pop 420ms steps(4, end) both;
 }
 
+/* A point gain, rising off the badge the way a hit number does in an RPG.
+   Stepped, not eased, for the same reason as the pop above. */
+/* It rises, but only a little. The badge sits twelve pixels from the top of
+   the screen, so the twenty-pixel rise this first had ran the number off the
+   top edge of the phone and the gain was never actually read. */
+@keyframes pixel-float {
+  0% { transform: translate(-50%, calc(-50% + 6px)); opacity: 0; }
+  25% { transform: translate(-50%, -50%); opacity: 1; }
+  100% { transform: translate(-50%, calc(-50% - 10px)); opacity: 0; }
+}
+
+.animate-pixel-float {
+  animation: pixel-float 1200ms steps(6, end) both;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  /* Still said, just not thrown. It is removed on a timer either way. */
+  .animate-pixel-float {
+    animation: none;
+    transform: translate(-50%, -50%);
+    opacity: 1;
+  }
+}
+
 @media (prefers-reduced-motion: reduce) {
   .animate-pixel-pop { animation: none; }
 }

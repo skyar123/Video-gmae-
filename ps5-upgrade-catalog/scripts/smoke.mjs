@@ -1540,10 +1540,95 @@ failures += await forYouIsAGridYouCanTune();
 failures += await nothingTooOldReachesAChild();
 failures += await theWishlistShowsTheWishlist();
 
+/*
+ * Does earning a point say so?
+ *
+ * The levels and the trophies were all computed correctly and shown on a
+ * sheet nobody opened, which was reported as not being able to find any of
+ * it. A level costs 100 * level^1.45, so between level-ups the total moves
+ * in silence unless the badge says otherwise. This is that saying-so: the
+ * badge shows the gain, then goes back to the level, and the bar across its
+ * foot sits further along than it did.
+ */
+async function pointsLandWhereYouCanSeeThem() {
+  const label = 'Earning a point says so';
+  const page = await browser.newPage({ viewport: { width: 430, height: 1200 } });
+  const problems = [];
+  page.on('pageerror', (error) => problems.push(String(error).slice(0, 110)));
+  let note = '';
+  try {
+    await page.goto(`${BASE}/`, { waitUntil: 'domcontentloaded' });
+    await page.evaluate(() => localStorage.clear());
+    await page.goto(`${BASE}/?view=all`, { waitUntil: 'domcontentloaded' });
+    await page.waitForTimeout(3500);
+
+    const badge = () =>
+      page.evaluate(() => {
+        const node = [...document.querySelectorAll('button')].find((n) =>
+          /^Level /.test(n.getAttribute('aria-label') || ''),
+        );
+        if (!node) return null;
+        const bar = node.querySelector('.pixel-bar');
+        return {
+          label: node.getAttribute('aria-label'),
+          width: bar ? Number.parseFloat(bar.style.width) : null,
+        };
+      });
+
+    const before = await badge();
+    if (!before) {
+      problems.push('no level badge in the header, so there is nothing to find');
+    }
+
+    const heart = page.locator('button[aria-label^="Add "][aria-label*="wishlist"]').first();
+    await heart.waitFor({ timeout: 20000 });
+    await heart.click();
+    await page.waitForTimeout(350);
+
+    const gain = await page.evaluate(() => {
+      const node = document.querySelector('.animate-pixel-float');
+      return node ? node.textContent.trim() : null;
+    });
+    if (!/^\+[1-9]\d*$/.test(gain || '')) {
+      problems.push(`the badge showed ${JSON.stringify(gain)} instead of a gain`);
+    }
+
+    const after = await badge();
+    if (before && after && !(after.width > before.width)) {
+      problems.push(`the bar stayed at ${before.width}% after earning ${gain}`);
+    }
+
+    // It is a flourish, not a thing to dismiss: it has to take itself away.
+    await page.waitForTimeout(1600);
+    const lingering = await page.locator('.animate-pixel-float').count();
+    if (lingering > 0) problems.push('the gain never left the badge');
+    const back = await page.evaluate(() => {
+      const node = [...document.querySelectorAll('button')].find((n) =>
+        /^Level /.test(n.getAttribute('aria-label') || ''),
+      );
+      return node ? node.innerText.replace(/\s+/g, ' ').trim() : '';
+    });
+    if (!/LV/.test(back)) problems.push(`the badge reads ${JSON.stringify(back)}, not the level`);
+
+    note = `${gain}, bar ${before?.width ?? '?'}% to ${after?.width ?? '?'}%`;
+    console.log(
+      `${problems.length ? 'FAIL' : ' ok '} ${label.padEnd(32)} ${note}`,
+    );
+  } catch (error) {
+    problems.push(String(error).slice(0, 110));
+    console.log(`FAIL ${label.padEnd(32)} ${String(error).slice(0, 60)}`);
+  }
+  await page.close();
+  if (problems.length > 0) fail(label, problems.join('; '));
+  return problems.length > 0 ? 1 : 0;
+}
+
+failures += await pointsLandWhereYouCanSeeThem();
+
 await browser.close();
 stop();
 
-const total = SURFACES.length + 14;
+const total = SURFACES.length + 15;
 if (failures > 0) {
   // Named, not just counted, so the last line of a truncated log still says
   // what to go and look at.

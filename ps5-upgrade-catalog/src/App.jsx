@@ -8051,6 +8051,7 @@ export default function App() {
   const [sheetOpenCharacter, setSheetOpenCharacter] = useState(false);
   const [questDone, setQuestDone] = useState(null);
   const [leveledTo, setLeveledTo] = useState(null);
+  const [xpPop, setXpPop] = useState(null);
   const [heroClass, setHeroClass] = useState(() => {
     try {
       return classFor(localStorage.getItem(CLASS_KEY))?.id ?? null;
@@ -8899,6 +8900,37 @@ export default function App() {
     // eslint-disable-next-line react/set-state-in-effect
     if (before > 0 && hero.level > before) setLeveledTo(hero.level);
   }, [hero.level]);
+
+  /*
+   * Points, as they land.
+   *
+   * A level costs 100 * level^1.45, so the second one is a hundred points
+   * away: four rated games with nothing said in between. The level-up card
+   * is the big moment and it should stay rare, but between those the total
+   * was moving in silence, and the moving total is the half of this that was
+   * asked for and could not be seen.
+   *
+   * Only gains pop. Taking a game back off the wishlist really does take its
+   * points back and the badge will show the smaller number, but flashing a
+   * penalty at somebody for changing their mind would be a worse app.
+   */
+  const seenXp = useRef(null);
+  useEffect(() => {
+    const before = seenXp.current;
+    seenXp.current = hero.xp;
+    // The first reading is the total they arrived with, not a thing just
+    // earned, so a reload must not replay the whole history at them.
+    if (before === null || hero.xp <= before) return undefined;
+    // eslint-disable-next-line react/set-state-in-effect
+    setXpPop({ gained: hero.xp - before, at: Date.now() });
+    return undefined;
+  }, [hero.xp]);
+
+  useEffect(() => {
+    if (!xpPop) return undefined;
+    const timer = setTimeout(() => setXpPop(null), 1200);
+    return () => clearTimeout(timer);
+  }, [xpPop]);
 
   const pickClass = useCallback(
     (id) => {
@@ -9872,16 +9904,53 @@ export default function App() {
               * A number in a box is the thing people look for, so that is
               * what it shows.
               */}
-            <button
-              type="button"
-              onClick={() => setSheetOpenCharacter(true)}
-              aria-label={`Level ${hero.level}. Your character sheet, trophies and codex`}
-              title={`Level ${hero.level}`}
-              className="pixel-box-sm inline-flex h-11 shrink-0 items-center gap-1 bg-white dark:bg-slate-900 px-2 text-indigo-600 dark:text-indigo-400 transition-transform duration-150 active:translate-x-[2px] active:translate-y-[2px] sm:h-9"
-            >
-              <span className="pixel text-[9px] font-bold leading-none opacity-70">LV</span>
-              <span className="pixel text-sm font-black leading-none">{hero.level}</span>
-            </button>
+            <span className="relative shrink-0">
+              <button
+                type="button"
+                onClick={() => setSheetOpenCharacter(true)}
+                aria-label={`Level ${hero.level}, ${Math.round(hero.through * 100)}% of the way to the next. Your character sheet, trophies and codex`}
+                title={`Level ${hero.level} \u00b7 ${hero.into}/${hero.need} XP`}
+                className="pixel-box-sm relative inline-flex h-11 shrink-0 items-center gap-1 overflow-hidden bg-white dark:bg-slate-900 px-2 text-indigo-600 dark:text-indigo-400 transition-transform duration-150 active:translate-x-[2px] active:translate-y-[2px] sm:h-9"
+              >
+                {/* Out of the way while the gain is showing. Sliding a
+                    green number over the top of the level left half a digit
+                    visible behind it, which reads as a rendering fault
+                    rather than as a reward. */}
+                <span
+                  className={`pixel text-[9px] font-bold leading-none transition-opacity duration-150 ${xpPop ? 'opacity-0' : 'opacity-70'}`}
+                >
+                  LV
+                </span>
+                <span
+                  className={`pixel text-sm font-black leading-none transition-opacity duration-150 ${xpPop ? 'opacity-0' : 'opacity-100'}`}
+                >
+                  {hero.level}
+                </span>
+                {/* How far into this level. The number alone says where you
+                    got to; this says how far there is left to go, which is
+                    the part that makes the next rating feel worth doing. */}
+                <span
+                  aria-hidden="true"
+                  className="pointer-events-none absolute inset-x-0 bottom-0 h-[3px] bg-slate-200 dark:bg-slate-700"
+                >
+                  <span
+                    className="pixel-bar block h-full text-indigo-500 dark:text-indigo-400"
+                    style={{ width: `${Math.max(2, Math.round(hero.through * 100))}%` }}
+                  />
+                </span>
+              </button>
+              {xpPop && (
+                /* key on the timestamp so a second gain restarts the
+                   animation instead of inheriting a finished one. */
+                <span
+                  key={xpPop.at}
+                  aria-hidden="true"
+                  className="animate-pixel-float pixel pointer-events-none absolute left-1/2 top-1/2 whitespace-nowrap text-[10px] font-black text-emerald-600 dark:text-emerald-400"
+                >
+                  +{xpPop.gained}
+                </span>
+              )}
+            </span>
 
             <button
               type="button"
