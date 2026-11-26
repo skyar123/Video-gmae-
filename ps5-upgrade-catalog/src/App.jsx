@@ -94,6 +94,7 @@ import { conceptFor, matchesConcept } from '../api/concepts.mjs';
 import { AUDIENCES, audienceFor, parentFlags, plainDescriptors, suitsAudience, whyNot } from '../api/family.mjs';
 import { priceStanding } from '../api/standing.mjs';
 import gamesData from './games.json';
+import { playsOnPortal, PORTAL_CAVEAT } from './portal.js';
 import { evictStoreRows } from './store-cache.js';
 import creatorsData from './creators.json';
 
@@ -305,6 +306,9 @@ const DEFAULT_FILTERS = {
   noPurchases: false,
   newOnly: false,
   owned: 'any',
+  // Playing on a PlayStation Portal with no console behind it, which puts
+  // every PS4 game out of reach. Off unless the reader says otherwise.
+  portal: false,
   view: 'grid',
   // PS5-only titles are out of the default view: this is a PS4 upgrade
   // catalog first, and they need different hardware.
@@ -362,13 +366,33 @@ const savedAudience = () => {
   }
 };
 
+/*
+ * Which hardware they have, remembered, for the same reason as the above.
+ *
+ * Somebody whose only console is a Portal does not stop owning a Portal
+ * between visits, and the cost of forgetting is a catalogue two thirds full
+ * of games they cannot play.
+ */
+const savedPortal = () => {
+  try {
+    return localStorage.getItem(PORTAL_KEY) === '1';
+  } catch {
+    return false;
+  }
+};
+
 function readFiltersFromUrl() {
   if (typeof window === 'undefined') return DEFAULT_FILTERS;
   const params = new URLSearchParams(window.location.search);
   // One opening for everybody. Trending asks nothing of the reader, so
   // the cold and warm split the previous opener needed is gone with it.
   if ([...params].length === 0)
-    return { ...OPENING_FILTERS, region: savedRegion(), audience: savedAudience() };
+    return {
+      ...OPENING_FILTERS,
+      region: savedRegion(),
+      audience: savedAudience(),
+      portal: savedPortal(),
+    };
   const value = (key, fallback) => params.get(key) ?? fallback;
   return {
     q: value('q', ''),
@@ -397,6 +421,9 @@ function readFiltersFromUrl() {
     noPurchases: params.get('nomtx') === '1',
     newOnly: params.get('new') === '1',
     owned: value('owned', 'any'),
+    // An explicit ?portal= wins, so a link can turn it off; otherwise the
+    // remembered answer stands, the same way the audience does.
+    portal: params.has('portal') ? params.get('portal') === '1' : savedPortal(),
     view: params.get('mode') === 'feed' ? 'feed' : 'grid',
   };
 }
@@ -438,6 +465,7 @@ function writeFiltersToUrl(filters, drawer) {
   if (filters.noPurchases) params.set('nomtx', '1');
   if (filters.newOnly) params.set('new', '1');
   if (filters.owned !== 'any') params.set('owned', filters.owned);
+  if (filters.portal) params.set('portal', '1');
   if (filters.view === 'feed') params.set('mode', 'feed');
   if (drawer?.open) params.set('read', drawer.tab);
   const query = params.toString();
@@ -466,6 +494,8 @@ const ANSWERS_KEY = 'featureAnswers';
  * purchase as though it were an opinion.
  */
 const AUDIENCE_KEY = 'audience';
+/* Which hardware the reader actually has. A fact about them, not a mood. */
+const PORTAL_KEY = 'portal';
 const BACKLOG_KEY = 'backlog';
 /* Which quests were open last time, so a finished one can be noticed once. */
 const QUESTS_KEY = 'questsOpen';
@@ -6103,12 +6133,12 @@ function storeRowAsLive(row) {
 }
 
 /** Query state for the mirror, kept out of the component that renders it. */
-function useStoreSearch({ active, q, genre, sort, plusOnly = false, familyOnly = false, audience = 'all', noPurchases = false, newOnly = false }) {
+function useStoreSearch({ active, q, genre, sort, platform = '', plusOnly = false, familyOnly = false, audience = 'all', noPurchases = false, newOnly = false }) {
   const [state, setState] = useState({ status: 'idle', games: [], total: 0, page: 0 });
   const request = useRef(0);
   // Everything that decides which games belong in the list, as against which
   // of them match what has been typed.
-  const shape = `${genre}|${sort}|${plusOnly}|${familyOnly}|${audience}|${noPurchases}|${newOnly}`;
+  const shape = `${genre}|${sort}|${platform}|${plusOnly}|${familyOnly}|${audience}|${noPurchases}|${newOnly}`;
   const lastShape = useRef(shape);
 
   useEffect(() => {
@@ -6118,6 +6148,7 @@ function useStoreSearch({ active, q, genre, sort, plusOnly = false, familyOnly =
     if (q) params.set('q', q);
     if (genre) params.set('genre', genre);
     if (sort) params.set('sort', sort);
+    if (platform) params.set('platform', platform);
     if (plusOnly) params.set('plus', '1');
     if (familyOnly) params.set('family', '1');
     if (audience && audience !== 'all') params.set('audience', audience);
@@ -6152,13 +6183,14 @@ function useStoreSearch({ active, q, genre, sort, plusOnly = false, familyOnly =
     }, q ? 220 : 0);
 
     return () => clearTimeout(timer);
-  }, [active, q, genre, sort, plusOnly, familyOnly, audience, noPurchases, newOnly, shape]);
+  }, [active, q, genre, sort, platform, plusOnly, familyOnly, audience, noPurchases, newOnly, shape]);
 
   const more = useCallback(async () => {
     const params = new URLSearchParams();
     if (q) params.set('q', q);
     if (genre) params.set('genre', genre);
     if (sort) params.set('sort', sort);
+    if (platform) params.set('platform', platform);
     if (plusOnly) params.set('plus', '1');
     if (familyOnly) params.set('family', '1');
     if (audience && audience !== 'all') params.set('audience', audience);
@@ -6176,7 +6208,7 @@ function useStoreSearch({ active, q, genre, sort, plusOnly = false, familyOnly =
     } catch {
       // A failed "load more" leaves what is already on screen alone.
     }
-  }, [q, genre, sort, plusOnly, familyOnly, audience, noPurchases, newOnly, state.page]);
+  }, [q, genre, sort, platform, plusOnly, familyOnly, audience, noPurchases, newOnly, state.page]);
 
   return { ...state, more };
 }
@@ -6268,8 +6300,8 @@ function PlusThisMonth({ now, onSearch }) {
   );
 }
 
-function StoreFeed({ query, curatedFirst = [], curatedReason, curatedByName, saved, plusOnly = false, familyOnly = false, audience = 'all', noPurchases = false, newOnly = false, muted, onToggleMuted, onOpenCurated, onOpenStore }) {
-  const results = useStoreSearch({ active: true, q: query, genre: '', sort: 'rating', plusOnly, familyOnly, audience, noPurchases, newOnly });
+function StoreFeed({ query, curatedFirst = [], curatedReason, curatedByName, saved, platform = '', plusOnly = false, familyOnly = false, audience = 'all', noPurchases = false, newOnly = false, muted, onToggleMuted, onOpenCurated, onOpenStore }) {
+  const results = useStoreSearch({ active: true, q: query, genre: '', sort: 'rating', platform, plusOnly, familyOnly, audience, noPurchases, newOnly });
   const [sentinel, setSentinel] = useState(null);
   const loadMore = results.more;
   const hasMore = results.games.length < results.total;
@@ -6336,7 +6368,7 @@ function StoreFeed({ query, curatedFirst = [], curatedReason, curatedByName, sav
   );
 }
 
-function StorePanel({ query, curatedFirst = [], curatedReason, curatedByName, saved, plusOnly = false, familyOnly = false, audience = 'all', noPurchases = false, newOnly = false, onOpenCurated, onOpenStore, onSearch }) {
+function StorePanel({ query, curatedFirst = [], curatedReason, curatedByName, saved, platform = '', plusOnly = false, familyOnly = false, audience = 'all', noPurchases = false, newOnly = false, onOpenCurated, onOpenStore, onSearch }) {
   const [genre, setGenre] = useState('');
   const [sort, setSort] = useState('rating');
   const [facets, setFacets] = useState({ genres: [], size: 0 });
@@ -6354,7 +6386,7 @@ function StorePanel({ query, curatedFirst = [], curatedReason, curatedByName, sa
     };
   }, []);
 
-  const results = useStoreSearch({ active: true, q: query, genre, sort, plusOnly, familyOnly, audience, noPurchases, newOnly });
+  const results = useStoreSearch({ active: true, q: query, genre, sort, platform, plusOnly, familyOnly, audience, noPurchases, newOnly });
 
   /** Settled on nothing, as opposed to not having answered yet. */
   const nothingFound =
@@ -8220,6 +8252,7 @@ export default function App() {
     try {
       localStorage.setItem('region', filters.region);
       localStorage.setItem(AUDIENCE_KEY, filters.audience);
+      localStorage.setItem(PORTAL_KEY, filters.portal ? '1' : '0');
     } catch {
       // A browser refusing storage just means the region resets next visit.
     }
@@ -8706,9 +8739,17 @@ export default function App() {
       if (filters.kidFriendly && !isKidFriendly(game.ageRating)) return false;
       if (filters.noPurchases && (!game.ageRating || hasInGamePurchases(game.ageRating)))
         return false;
+      /*
+       * A Portal on its own streams PS5 games and nothing else, so a PS4
+       * game is not a worse option here, it is an impossible one. This gate
+       * is the one the recommender's picks pass through, so it has to be
+       * here as well as on the shelf, or For You keeps offering games the
+       * reader cannot start.
+       */
+      if (filters.portal && !playsOnPortal(game)) return false;
       return true;
     },
-    [filters.kidFriendly, filters.noPurchases],
+    [filters.kidFriendly, filters.noPurchases, filters.portal],
   );
 
   /**
@@ -9465,6 +9506,19 @@ export default function App() {
    * back in front of the store results, which is also the right order: a game
    * with a full write-up is a better answer than a store row.
    */
+  /*
+   * The written-up games shown ahead of the store's own results.
+   *
+   * These are handed to the shelf as a separate list, so every filter the
+   * shelf applies has to be applied to them too or they walk straight past
+   * it. That is how Dead Cells, Moonlighter, Celeste and Rayman Legends
+   * stayed on the PS Plus shelf for a reader who cannot run any of them.
+   */
+  const portalOnly = useCallback(
+    (list) => (filters.portal ? list.filter((game) => playsOnPortal(game)) : list),
+    [filters.portal],
+  );
+
   const curatedOnlyMatches = useMemo(() => {
     // From any shelf now, because a search is answered from everywhere.
     if (filters.collection !== 'all' && !searching) return [];
@@ -9547,6 +9601,17 @@ export default function App() {
        * Everything below this line is a way of narrowing a shelf, and a
        * search is not a shelf.
        */
+      /*
+       * Above the search, unlike every other narrowing filter.
+       *
+       * This is not a way of narrowing a shelf, it is a fact about what the
+       * reader can start. Searching "hollow knight" on a Portal with no
+       * console should not surface a game that will never run on it, and the
+       * first version of this sat below the early return and did exactly
+       * that: nine PS4 games across the PS Plus shelf and a search.
+       */
+      if (filters.portal && !playsOnPortal(game)) return false;
+
       if (searching) return searchScores ? searchScores.has(game.id) : true;
 
       if (isGenius && !geniusRank.has(game.id)) return false;
@@ -9758,6 +9823,21 @@ export default function App() {
     [catalogPool],
   );
 
+  /*
+   * Counted over the write-ups, like every other chip here.
+   *
+   * It is the smaller of the two numbers in the app and the honest one to
+   * put on this chip: the store mirror's 6,870 PS5 rows are what the shelf
+   * will show, but the mirror is paged by the server and that total is not
+   * something the device holds. A chip promising 6,870 beside a shelf
+   * counting 164 would be the app contradicting itself, which is the exact
+   * fault the store count line downstairs already had to be fixed for.
+   */
+  const portalCount = useMemo(
+    () => catalogPool.filter((game) => playsOnPortal(game)).length,
+    [catalogPool],
+  );
+
   const noPurchasesCount = useMemo(
     () =>
       catalogPool.filter((game) => game.ageRating && !hasInGamePurchases(game.ageRating)).length,
@@ -9824,6 +9904,7 @@ export default function App() {
       add('protagonist', filters.protagonist, () => set('protagonist', 'All'));
     if (filters.artStyle !== 'All') add('art', filters.artStyle, () => set('artStyle', 'All'));
     if (filters.upgrade !== 'All') add('upgrade', filters.upgrade, () => set('upgrade', 'All'));
+    if (filters.portal) add('portal', 'On a PS Portal', () => set('portal', false));
     if (filters.sale) add('sale', 'On sale', () => set('sale', false));
     if (filters.atFloor) add('floor', 'At its lowest', () => set('atFloor', false));
     if (filters.kidFriendly) add('kids', 'Kid friendly', () => set('kidFriendly', false));
@@ -10171,6 +10252,35 @@ export default function App() {
                   value={filters.audience}
                   onChange={(id) => set('audience', id)}
                 />
+
+                {/*
+                  * Hardware, not taste, which is why it sits beside who is
+                  * playing rather than among the moods below. Both answer the
+                  * same question: what can actually be started here.
+                  */}
+                <div className="w-full">
+                  <p className="mb-1.5 text-xs font-semibold uppercase tracking-wider text-slate-400 dark:text-slate-500">
+                    How you play
+                  </p>
+                  <TogglePill
+                    active={filters.portal}
+                    onClick={() => set('portal', !filters.portal)}
+                    icon={Smartphone}
+                    label="On a PS Portal"
+                    count={filters.portal ? undefined : portalCount}
+                    tone="bg-indigo-600"
+                    ariaLabel={
+                      filters.portal
+                        ? 'Showing only games a PlayStation Portal can stream. Tap to show everything.'
+                        : 'Show only games a PlayStation Portal can stream on its own.'
+                    }
+                  />
+                  {filters.portal && (
+                    <p className="mt-1.5 text-xs leading-relaxed text-slate-500 dark:text-slate-400">
+                      {PORTAL_CAVEAT}
+                    </p>
+                  )}
+                </div>
                 <TogglePill
                   active={filters.sale}
                   onClick={() => set('sale', !filters.sale)}
@@ -10356,9 +10466,10 @@ export default function App() {
           {storePaged ? (
             <StoreFeed
               query={deferredQuery.trim()}
-              curatedFirst={
-                filters.collection === 'plus' && !searching ? curatedPlusGames : curatedOnlyMatches
-              }
+              curatedFirst={portalOnly(
+                filters.collection === 'plus' && !searching ? curatedPlusGames : curatedOnlyMatches,
+              )}
+              platform={filters.portal ? 'PS5' : ''}
               plusOnly={filters.collection === 'plus' && !searching}
               familyOnly={filters.kidFriendly && !searching}
               audience={filters.audience}
@@ -10470,9 +10581,10 @@ export default function App() {
           ) : storePaged ? (
             <StorePanel
               query={deferredQuery.trim()}
-              curatedFirst={
-                filters.collection === 'plus' && !searching ? curatedPlusGames : curatedOnlyMatches
-              }
+              curatedFirst={portalOnly(
+                filters.collection === 'plus' && !searching ? curatedPlusGames : curatedOnlyMatches,
+              )}
+              platform={filters.portal ? 'PS5' : ''}
               plusOnly={filters.collection === 'plus' && !searching}
               familyOnly={filters.kidFriendly && !searching}
               audience={filters.audience}

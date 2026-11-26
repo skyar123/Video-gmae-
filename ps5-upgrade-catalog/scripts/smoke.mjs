@@ -1693,10 +1693,119 @@ async function aWriteUpFilterNarrowsTheShelf() {
 
 failures += await aWriteUpFilterNarrowsTheShelf();
 
+/*
+ * A PlayStation Portal with no console behind it.
+ *
+ * It is a streaming handheld, and Sony's FAQ is flat about what it streams:
+ * "currently only select PS5 games are available to stream on PlayStation
+ * Portal". So a PS4 game is not a worse option for this reader, it is one
+ * they can never start, and 2,332 of the mirror's games plus 342 of the 506
+ * write-ups are exactly that.
+ *
+ * Both directions matter and the second is the one that would quietly ruin
+ * it: hiding games they can actually play is worse than the original
+ * problem. Hollow Knight is backwards compatible, which means a PS4 game
+ * running on PS5 hardware, which the Portal never touches. Returnal is PS5
+ * only and has to survive.
+ */
+async function aPortalOnlySeesWhatItCanStream() {
+  const label = 'A Portal sees only what it streams';
+  const page = await browser.newPage({ viewport: { width: 430, height: 1200 } });
+  const problems = [];
+  page.on('pageerror', (error) => problems.push(String(error).slice(0, 110)));
+  let note = '';
+  const shown = async (query) => {
+    await page.goto(`${BASE}/${query}`, { waitUntil: 'domcontentloaded' });
+    await page.waitForTimeout(3800);
+    return page.evaluate(() =>
+      [...document.querySelectorAll('main h2, main h3, section h2, section h3')]
+        .map((n) => n.textContent.trim())
+        .filter(Boolean),
+    );
+  };
+  /*
+   * Exactly the title, not a prefix of it.
+   *
+   * The first version matched on substring and reported a failure for
+   * "Hollow Knight" when the only thing on screen was "Hollow Knight:
+   * Silksong", which is PS5 and is supposed to survive. The check was
+   * wrong, not the filter.
+   */
+  const has = (list, title) =>
+    list.some((name) => name.trim().toLowerCase() === title.toLowerCase());
+  try {
+    /*
+     * Controls say portal=0 rather than leaving it off.
+     *
+     * The setting is remembered on purpose: somebody whose only console is a
+     * Portal does not stop owning one between visits, so a URL with no
+     * portal= falls back to the stored answer. That means a control written
+     * as "just don't pass it" inherits portal=1 from the case before it and
+     * silently tests nothing. This cost a round of chasing a filter bug that
+     * was the test's own doing.
+     */
+    const open = await shown('?mode=grid&portal=0&q=hollow+knight');
+    if (!has(open, 'Hollow Knight')) {
+      problems.push('Hollow Knight is not findable even with the filter off');
+    }
+
+    for (const ps4 of ['hollow+knight', 'celeste', 'dead+cells']) {
+      const list = await shown(`?mode=grid&portal=1&q=${ps4}`);
+      const name = ps4.replace('+', ' ');
+      if (has(list, name)) problems.push(`${name} is PS4 only and still on screen`);
+    }
+
+    // And the half that matters more: a PS5 game must survive. Silksong is
+    // the sharpest version of it, sharing a name with a game that must go.
+    const kept = await shown('?mode=grid&portal=1&q=returnal');
+    if (!has(kept, 'Returnal')) problems.push('Returnal is PS5 only and was hidden');
+    const sibling = await shown('?mode=grid&portal=1&q=hollow+knight');
+    if (!has(sibling, 'Hollow Knight: Silksong')) {
+      problems.push('Hollow Knight: Silksong is PS5 and was hidden with its PS4 namesake');
+    }
+
+    const shelf = await shown('?mode=grid&portal=1&view=all');
+    if (shelf.length === 0) problems.push('the shelf came back empty with a Portal');
+
+    /*
+     * A write-up genre, because it is what exercises the shelf itself.
+     *
+     * All and every search are drawn from the store mirror, which is asked
+     * for PS5 rows by the server, and the written-up games shown alongside
+     * them are filtered as a separate list. Both of those can be right while
+     * the shelf's own filter is missing entirely: removing it changed
+     * nothing here until this case existed. Curated is drawn from the
+     * write-ups on the device, so it is what proves it. Curated was tried
+     * first and is no good: it renders in lazy chunks and Hollow Knight
+     * never reaches the screen, so the case passed without testing a thing.
+     */
+    const metroidOpen = await shown('?mode=grid&portal=0&view=all&genre=Metroidvania');
+    if (!has(metroidOpen, 'Hollow Knight')) {
+      problems.push('Hollow Knight is not under Metroidvania, so this proves nothing');
+    }
+    const metroid = await shown('?mode=grid&portal=1&view=all&genre=Metroidvania');
+    if (has(metroid, 'Hollow Knight')) {
+      problems.push('Hollow Knight is PS4 only and still on the Metroidvania shelf');
+    }
+    if (metroid.length === 0) problems.push('the Metroidvania shelf came back empty');
+
+    note = `${shelf.length} on the shelf, PS4 hidden, PS5 kept`;
+    console.log(`${problems.length ? 'FAIL' : ' ok '} ${label.padEnd(32)} ${note}`);
+  } catch (error) {
+    problems.push(String(error).slice(0, 110));
+    console.log(`FAIL ${label.padEnd(32)} ${String(error).slice(0, 60)}`);
+  }
+  await page.close();
+  if (problems.length > 0) fail(label, problems.join('; '));
+  return problems.length > 0 ? 1 : 0;
+}
+
+failures += await aPortalOnlySeesWhatItCanStream();
+
 await browser.close();
 stop();
 
-const total = SURFACES.length + 16;
+const total = SURFACES.length + 17;
 if (failures > 0) {
   // Named, not just counted, so the last line of a truncated log still says
   // what to go and look at.
