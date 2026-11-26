@@ -1625,10 +1625,78 @@ async function pointsLandWhereYouCanSeeThem() {
 
 failures += await pointsLandWhereYouCanSeeThem();
 
+/*
+ * Does a filter the store cannot answer still do something?
+ *
+ * Art style, protagonist, upgrade type and the catalogue's own genres are
+ * hand-written fields. The store mirror has none of them, so they were
+ * handed to the shelf and dropped: the select moved, the URL gained
+ * `&art=2D`, and the same 9,222 games stayed on screen, on a cold load as
+ * well as a live one. Reported as the filters not doing anything.
+ *
+ * The shelf becomes the write-ups while one of these is set. This checks
+ * the shelf actually moved, not merely that the URL did.
+ */
+async function aWriteUpFilterNarrowsTheShelf() {
+  const label = 'Write-up filters narrow the shelf';
+  const page = await browser.newPage({ viewport: { width: 430, height: 1200 } });
+  const problems = [];
+  page.on('pageerror', (error) => problems.push(String(error).slice(0, 110)));
+  let note = '';
+  const titles = async (query) => {
+    await page.goto(`${BASE}/${query}`, { waitUntil: 'domcontentloaded' });
+    await page.waitForTimeout(3500);
+    return page.evaluate(() =>
+      [...document.querySelectorAll('main h2, main h3, section h2, section h3')]
+        .map((n) => n.textContent.trim())
+        .filter(Boolean),
+    );
+  };
+  try {
+    const plain = await titles('?view=all');
+    if (plain.length === 0) problems.push('the unfiltered shelf came back empty');
+
+    for (const [query, field] of [
+      ['?view=all&art=Pixel+Art', 'art style'],
+      ['?view=all&protagonist=Female', 'who you play'],
+      ['?view=all&genre=Metroidvania', 'the kind of game'],
+    ]) {
+      const narrowed = await titles(query);
+      if (narrowed.length === 0) {
+        problems.push(`${field} emptied the shelf`);
+        continue;
+      }
+      // Same games in the same order means the filter was dropped.
+      if (narrowed[0] === plain[0] && narrowed[1] === plain[1]) {
+        problems.push(`${field} left the shelf exactly as it was`);
+      }
+      const said = await page.evaluate(() =>
+        document.body.innerText.includes('only in the write-ups'),
+      );
+      if (!said) problems.push(`${field} narrowed the shelf without saying why`);
+    }
+
+    // And clearing it puts the mirror back, rather than stranding the
+    // reader on the written-up games.
+    const back = await titles('?view=all');
+    if (back[0] !== plain[0]) problems.push('clearing the filter did not restore the shelf');
+    note = `${plain.length} unfiltered, narrows and restores`;
+    console.log(`${problems.length ? 'FAIL' : ' ok '} ${label.padEnd(32)} ${note}`);
+  } catch (error) {
+    problems.push(String(error).slice(0, 110));
+    console.log(`FAIL ${label.padEnd(32)} ${String(error).slice(0, 60)}`);
+  }
+  await page.close();
+  if (problems.length > 0) fail(label, problems.join('; '));
+  return problems.length > 0 ? 1 : 0;
+}
+
+failures += await aWriteUpFilterNarrowsTheShelf();
+
 await browser.close();
 stop();
 
-const total = SURFACES.length + 15;
+const total = SURFACES.length + 16;
 if (failures > 0) {
   // Named, not just counted, so the last line of a truncated log still says
   // what to go and look at.

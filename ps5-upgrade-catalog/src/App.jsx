@@ -9375,9 +9375,42 @@ export default function App() {
    * reader back on the shelf they were on with the chips they had set,
    * and nothing they chose was thrown away to answer one question.
    */
+  /*
+   * Four of the filters ask something only the write-ups can answer.
+   *
+   * Art style, protagonist, upgrade type and the catalogue's own genres
+   * come from the hand-written entries. The store mirror of 9,222 games
+   * carries none of those fields, and its genre vocabulary meets the
+   * catalogue's in three values out of sixteen, so there is no version of
+   * "show me the pixel-art ones" the mirror could answer even in principle.
+   *
+   * They were being handed to the shelf and quietly dropped. The select
+   * moved, the URL gained `&art=2D`, and the same 9,222 games stayed on
+   * screen, cold load included. Reported as the filters not doing
+   * anything, which is exactly what they were doing.
+   *
+   * So the shelf becomes the write-ups while one of these is set, which is
+   * the only honest answer and the same thing the wishlist and library
+   * filters already do a line below.
+   */
+  const writeUpOnly =
+    filters.genre !== 'All' ||
+    filters.protagonist !== 'All' ||
+    filters.artStyle !== 'All' ||
+    filters.upgrade !== 'All';
+
+  /** Said in the reader's words, not the field names, and only when set. */
+  const writeUpFields = [
+    filters.genre !== 'All' && 'the kind of game',
+    filters.protagonist !== 'All' && 'who you play',
+    filters.artStyle !== 'All' && 'art style',
+    filters.upgrade !== 'All' && 'upgrade type',
+  ].filter(Boolean);
+
   const storePaged =
     searching ||
     ((filters.collection === 'all' || filters.collection === 'plus') &&
+      !writeUpOnly &&
       !filters.wishlist &&
       filters.owned === 'any');
 
@@ -10246,6 +10279,29 @@ export default function App() {
                     )}
                   </div>
                 </SheetGroup>
+
+                {/*
+                  * A way to say "done", asked for directly.
+                  *
+                  * The request was a button in case the filters did not
+                  * apply on their own. The reason they were not applying is
+                  * fixed above, so this is no longer the only way to get a
+                  * result out of the sheet. It stays because on a phone the
+                  * sheet covers the shelf it is filtering: you change
+                  * something, you cannot see what happened, and a count you
+                  * can read before you close is the confirmation the sheet
+                  * itself was in the way of.
+                  */}
+                <button
+                  type="button"
+                  onClick={() => setSheetOpen(false)}
+                  className="inline-flex h-11 w-full items-center justify-center gap-2 rounded-xl bg-indigo-600 px-4 text-sm font-semibold text-white transition-transform duration-200 ease-spring active:scale-[0.99] hover:bg-indigo-700"
+                >
+                  <Check className="h-4 w-4 shrink-0" />
+                  {storePaged
+                    ? 'Show results'
+                    : `Show ${filteredGames.length} ${filteredGames.length === 1 ? 'game' : 'games'}`}
+                </button>
               </div>
             </div>
           )}
@@ -10458,6 +10514,24 @@ export default function App() {
             )}
             {COLLECTION_BLURBS[filters.collection] &&
               ` · ${COLLECTION_BLURBS[filters.collection]}`}
+            {/* Why the shelf just went from thousands to hundreds. Without
+                this the filter looks like it broke the app rather than like
+                it asked a question the store mirror cannot answer. */}
+            {writeUpOnly && !searching && (
+              <span className="mt-1 block">
+                {/* Built first, capitalised after. Capitalising only the
+                    one-field case left "who you play and art style are"
+                    opening the sentence in lower case. */}
+                {(() => {
+                  const named =
+                    writeUpFields.length === 1
+                      ? `${writeUpFields[0]} is`
+                      : `${writeUpFields.slice(0, -1).join(', ')} and ${writeUpFields.at(-1)} are`;
+                  return `${named[0].toUpperCase()}${named.slice(1)}`;
+                })()}{' '}
+                only in the write-ups, so the store mirror sits this one out.
+              </span>
+            )}
           </p>
 
           {wishlistDrops.length > 0 && !filters.wishlist && (
