@@ -416,11 +416,34 @@ export const storeSize = async () => (await index()).length;
 export const storePlusCount = async () => {
   // Both numbers come from the same place the rows do, so the diagnostic and
   // the badges can never disagree about what has been found.
-  const rows = Object.values(await plusIndex());
+  const plus = await plusIndex();
+  const rows = Object.values(plus);
+  const mirror = await index();
+
+  /*
+   * And how many of those a PlayStation Portal could actually start.
+   *
+   * A Portal with no console behind it streams PS5 games and nothing else,
+   * so for that reader the useful number is not how much Plus covers, it is
+   * how much of it they can play. Counted here rather than on the device
+   * because the mirror is paged by the server and the device never holds
+   * enough of it to count anything.
+   *
+   * Joined through the mirror rather than the Plus rows: the scan records
+   * whether a game is included and which tier covers it, and knows nothing
+   * about platforms. The mirror is where that lives.
+   */
+  let includedPs5 = 0;
+  for (const row of mirror) {
+    if (!plus[row.id]?.included) continue;
+    if ((row.platforms ?? []).includes('PS5')) includedPs5 += 1;
+  }
+
   return {
     included: rows.filter((row) => row.included).length,
+    includedPs5,
     rated: rows.filter((row) => row.ageRating).length,
     checked: rows.length,
-    of: (await index()).length,
+    of: mirror.length,
   };
 };

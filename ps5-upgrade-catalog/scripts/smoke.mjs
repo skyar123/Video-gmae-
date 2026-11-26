@@ -1802,10 +1802,74 @@ async function aPortalOnlySeesWhatItCanStream() {
 
 failures += await aPortalOnlySeesWhatItCanStream();
 
+/*
+ * Where the app opens for somebody whose only console is a Portal.
+ *
+ * Trending is the right first screen for most people and the wrong one for
+ * them: it is games in the news, which is mostly games they would have to buy
+ * before finding out whether the thing even streams. The subscription they
+ * already pay for covers a few hundred they can start immediately, and until
+ * now nothing in the app used that.
+ *
+ * Its own context on purpose. The Portal setting is remembered in
+ * localStorage, every other check in this file shares one browser context,
+ * and leaking it would quietly filter PS4 games out of their shelves.
+ */
+async function aPortalOpensOnWhatItCanPlay() {
+  const label = 'A Portal opens on what it plays';
+  const context = await browser.newContext({ viewport: { width: 430, height: 1200 } });
+  const page = await context.newPage();
+  const problems = [];
+  page.on('pageerror', (error) => problems.push(String(error).slice(0, 110)));
+  let note = '';
+  try {
+    // A reader who has never said anything still gets the news.
+    await page.goto(`${BASE}/`, { waitUntil: 'domcontentloaded' });
+    await page.waitForTimeout(4000);
+    const plain = await page.evaluate(() => window.location.search);
+    if (!/view=trending/.test(plain)) {
+      problems.push(`a plain launch opened on ${plain || 'nothing'}, not trending`);
+    }
+
+    // Then they say they are on a Portal, and come back later to a bare link.
+    await page.goto(`${BASE}/?mode=grid&view=all&portal=1`, { waitUntil: 'domcontentloaded' });
+    await page.waitForTimeout(3000);
+    await page.goto(`${BASE}/`, { waitUntil: 'domcontentloaded' });
+    await page.waitForTimeout(5000);
+
+    const after = await page.evaluate(() => ({
+      url: window.location.search,
+      text: document.body.innerText,
+      cards: document.querySelectorAll('main h2, main h3, section h2, section h3').length,
+    }));
+    if (!/view=plus/.test(after.url)) {
+      problems.push(`a Portal opened on ${after.url || 'nothing'}, not the Plus catalogue`);
+    }
+    if (!/portal=1/.test(after.url)) problems.push('the Portal setting was not remembered');
+    if (!/streamable to a Portal/.test(after.text)) {
+      problems.push('the shelf did not say these are the ones it can stream');
+    }
+    if (after.cards === 0) problems.push('it opened on an empty shelf');
+
+    const count = (after.text.match(/([\d,]+) included with your Plus/) ?? [])[1];
+    if (!count) problems.push('no count of what is included');
+    note = `${count ?? '?'} included and streamable, ${after.cards} on screen`;
+    console.log(`${problems.length ? 'FAIL' : ' ok '} ${label.padEnd(32)} ${note}`);
+  } catch (error) {
+    problems.push(String(error).slice(0, 110));
+    console.log(`FAIL ${label.padEnd(32)} ${String(error).slice(0, 60)}`);
+  }
+  await context.close();
+  if (problems.length > 0) fail(label, problems.join('; '));
+  return problems.length > 0 ? 1 : 0;
+}
+
+failures += await aPortalOpensOnWhatItCanPlay();
+
 await browser.close();
 stop();
 
-const total = SURFACES.length + 17;
+const total = SURFACES.length + 18;
 if (failures > 0) {
   // Named, not just counted, so the last line of a truncated log still says
   // what to go and look at.

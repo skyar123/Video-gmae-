@@ -386,13 +386,26 @@ function readFiltersFromUrl() {
   const params = new URLSearchParams(window.location.search);
   // One opening for everybody. Trending asks nothing of the reader, so
   // the cold and warm split the previous opener needed is gone with it.
-  if ([...params].length === 0)
+  if ([...params].length === 0) {
+    const portal = savedPortal();
     return {
       ...OPENING_FILTERS,
+      /*
+       * Trending is the right opening for most people and the wrong one for
+       * a reader whose only console is a Portal. It is games in the news,
+       * and for them that is mostly games they would have to buy before
+       * finding out whether they stream at all.
+       *
+       * The subscription they already pay for covers 169 games they can
+       * start this second. That is a better first screen than news, and it
+       * is the one thing the app knows about them that nothing else uses.
+       */
+      ...(portal ? { collection: 'plus', view: 'grid' } : {}),
       region: savedRegion(),
       audience: savedAudience(),
-      portal: savedPortal(),
+      portal,
     };
+  }
   const value = (key, fallback) => params.get(key) ?? fallback;
   return {
     q: value('q', ''),
@@ -6231,7 +6244,7 @@ function useStoreSearch({ active, q, genre, sort, platform = '', plusOnly = fals
  * that announces them. Shown only when that post could actually be read: a
  * panel whose whole job is to say "this one is free" has no business guessing.
  */
-function PlusThisMonth({ now, onSearch }) {
+function PlusThisMonth({ now, onSearch, portal = false }) {
   const monthly = now?.monthly;
   const catalog = now?.catalog;
   if (!monthly && !catalog) return null;
@@ -6295,6 +6308,25 @@ function PlusThisMonth({ now, onSearch }) {
             </a>
           )}
         </div>
+        {/*
+          * The one caveat this panel needs on a Portal.
+          *
+          * The shelf under it promises there is nothing to buy and nothing
+          * to install, and the monthly games sit above that line while not
+          * all of them stream: December's Amnesia: The Bunker is a PS4 game.
+          * Saying which would mean naming platforms for three titles that
+          * arrive as text from a blog post, two of which are not in the
+          * mirror at all, and unknown is not a yes anywhere else in this
+          * app. So it says the true thing it can say about all of them.
+          *
+          * Not dropped, because claiming is still worth doing: a claimed
+          * game is kept for good, whatever you end up playing it on.
+          */}
+        {portal && (
+          <p className="mt-2 text-[11px] leading-relaxed text-indigo-700/80 dark:text-indigo-300/80">
+            Claiming these keeps them for good, but not all of them stream to a Portal.
+          </p>
+        )}
       </div>
     </div>
   );
@@ -6457,12 +6489,29 @@ function StorePanel({ query, curatedFirst = [], curatedReason, curatedByName, sa
 
   return (
     <>
-      {plusOnly && <PlusThisMonth now={facets.plusNow} onSearch={onSearch} />}
+      {plusOnly && (
+        <PlusThisMonth now={facets.plusNow} onSearch={onSearch} portal={platform === 'PS5'} />
+      )}
       <p className="mb-3 text-xs font-medium text-slate-400 dark:text-slate-500">
         {plusOnly ? (
           <>
-            {(results.total + curatedFirst.length).toLocaleString()} covered so far ·{' '}
-            {COLLECTION_BLURBS.plus}
+            {(results.total + curatedFirst.length).toLocaleString()}{' '}
+            {/*
+              * Said differently to somebody who cannot buy a disc.
+              *
+              * "Covered by your subscription" is the useful fact for most
+              * readers. For one playing on a Portal it is only half of it:
+              * the other half is that these are the games they can start
+              * without buying anything first, which is the whole question
+              * they opened the app to ask.
+              *
+              * Today nothing but a Portal asks the mirror for PS5 rows, so
+              * the platform is the signal. If that stops being true this
+              * needs its own prop rather than a guess.
+              */}
+            {platform === 'PS5'
+              ? 'included with your Plus and streamable to a Portal, so there is nothing to buy and nothing to install.'
+              : `covered so far · ${COLLECTION_BLURBS.plus}`}
           </>
         ) : publisherSearched ? (
           <>
@@ -8128,6 +8177,9 @@ export default function App() {
   // few hundred bytes, not the 2.7MB index, and costs nothing idle.
   const [storeSize, setStoreSize] = useState(null);
   const [storePlus, setStorePlus] = useState(0);
+  /* The part of it a Portal could start. Smaller, and the one that matters
+     to a reader with no console. */
+  const [storePlusPs5, setStorePlusPs5] = useState(0);
   useEffect(() => {
     let live = true;
     fetch('/api/store?facets=1')
@@ -8136,6 +8188,8 @@ export default function App() {
         if (!live) return;
         if (typeof payload.size === 'number') setStoreSize(payload.size);
         if (typeof payload.plus?.included === 'number') setStorePlus(payload.plus.included);
+        if (typeof payload.plus?.includedPs5 === 'number')
+          setStorePlusPs5(payload.plus.includedPs5);
 
       })
       .catch(() => {});
@@ -9869,7 +9923,13 @@ export default function App() {
       // Both ends of the same question. The overlap is small while the scan
       // is early, and a chip that undercounts is worse than one that is a
       // little generous about a game appearing on both lists.
-      plus: plusCount + storePlus,
+      //
+      // On a Portal it counts the streamable half instead. A chip promising
+      // 188 over a shelf that can only ever show 169 is the app telling the
+      // reader about games it is itself refusing to list.
+      plus: filters.portal
+        ? curatedPlusGames.filter((game) => playsOnPortal(game)).length + storePlusPs5
+        : plusCount + storePlus,
       genius: geniusPicks.length,
     };
     const counts = {};
@@ -9882,7 +9942,19 @@ export default function App() {
             : catalogPool.length;
     }
     return counts;
-  }, [catalogPool, saleCount, plusCount, storePlus, geniusPicks, storeSize, upcomingGames, trendingGames]);
+  }, [
+    catalogPool,
+    saleCount,
+    plusCount,
+    curatedPlusGames,
+    filters.portal,
+    storePlus,
+    storePlusPs5,
+    geniusPicks,
+    storeSize,
+    upcomingGames,
+    trendingGames,
+  ]);
 
   const activeGame = activeGameId ? gamesData.find((game) => game.id === activeGameId) : null;
 
