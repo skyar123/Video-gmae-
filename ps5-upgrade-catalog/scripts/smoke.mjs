@@ -1866,10 +1866,78 @@ async function aPortalOpensOnWhatItCanPlay() {
 
 failures += await aPortalOpensOnWhatItCanPlay();
 
+/*
+ * Getting out of a search.
+ *
+ * Two things were wrong and they compounded. There was no clear button, on
+ * the phone at least: `type="search"` gets a cancel cross on desktop Safari
+ * and nothing on iOS, so clearing meant holding backspace. And the query
+ * survived a change of shelf, so tapping Deals after searching a game gave
+ * the deals on that one game under a chip saying 93, with no way back except
+ * the backspace key. Reported as the search bar not clearing itself and as
+ * the app needing far too many presses.
+ */
+async function aSearchLetsYouOut() {
+  const label = 'A search clears itself';
+  const page = await browser.newPage({ viewport: { width: 430, height: 1200 } });
+  const problems = [];
+  page.on('pageerror', (error) => problems.push(String(error).slice(0, 110)));
+  let note = '';
+  const query = () => page.inputValue('input[type="search"]');
+  try {
+    await page.goto(`${BASE}/?view=all&portal=0`, { waitUntil: 'domcontentloaded' });
+    await page.waitForTimeout(3500);
+
+    const clear = page.locator('button[aria-label="Clear the search"]');
+    if ((await clear.count()) !== 0) problems.push('a clear button shows with nothing typed');
+
+    await page.fill('input[type="search"]', 'hollow knight');
+    await page.waitForTimeout(2500);
+    if ((await clear.count()) === 0) {
+      problems.push('no way to clear a search but the backspace key');
+    } else {
+      await clear.first().click();
+      await page.waitForTimeout(1200);
+      if ((await query()) !== '') problems.push('the clear button left the text behind');
+    }
+
+    // And leaving by the other door: a shelf is not a search.
+    await page.fill('input[type="search"]', 'hollow knight');
+    await page.waitForTimeout(2500);
+    const deals = page.locator('button').filter({ hasText: /^Deals/ }).first();
+    await deals.click();
+    await page.waitForTimeout(2500);
+    const left = await query();
+    if (left !== '') problems.push(`changing shelf kept the search as ${JSON.stringify(left)}`);
+    const url = await page.evaluate(() => window.location.search);
+    if (!/view=deals/.test(url)) problems.push(`tapping Deals landed on ${url || 'nothing'}`);
+    if (/[?&]q=/.test(url)) problems.push(`the query stayed in the url: ${url}`);
+
+    // The same question asked twice is what made two filter places confusing.
+    const onSale = await page.evaluate(
+      () =>
+        [...document.querySelectorAll('button')].filter((n) => /^On sale/.test(n.textContent.trim()))
+          .length,
+    );
+    if (onSale > 0) problems.push('the On sale pill is still offered on the Deals shelf');
+
+    note = 'clear button works, a shelf ends the search';
+    console.log(`${problems.length ? 'FAIL' : ' ok '} ${label.padEnd(32)} ${note}`);
+  } catch (error) {
+    problems.push(String(error).slice(0, 110));
+    console.log(`FAIL ${label.padEnd(32)} ${String(error).slice(0, 60)}`);
+  }
+  await page.close();
+  if (problems.length > 0) fail(label, problems.join('; '));
+  return problems.length > 0 ? 1 : 0;
+}
+
+failures += await aSearchLetsYouOut();
+
 await browser.close();
 stop();
 
-const total = SURFACES.length + 18;
+const total = SURFACES.length + 19;
 if (failures > 0) {
   // Named, not just counted, so the last line of a truncated log still says
   // what to go and look at.

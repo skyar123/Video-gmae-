@@ -6307,26 +6307,29 @@ function PlusThisMonth({ now, onSearch, portal = false }) {
               PlayStation Blog <ExternalLink className="h-3 w-3" />
             </a>
           )}
+          {/*
+            * The one caveat this panel needs on a Portal.
+            *
+            * The shelf under it promises there is nothing to buy and nothing
+            * to install, and the monthly games sit above that line while not
+            * all of them stream: December's Amnesia: The Bunker is a PS4
+            * game. Saying which would mean naming platforms for three titles
+            * that arrive as text from a blog post, two of which are not in
+            * the mirror at all, and unknown is not a yes anywhere else here.
+            * Not dropped either, because claiming is still worth doing: a
+            * claimed game is kept for good whatever you play it on.
+            *
+            * Inside this column, not beside it. The first version of this
+            * was a sibling of the column in a flex row, so it took a share
+            * of the width and squeezed the headings down to one word per
+            * line, with the caveat printed across them.
+            */}
+          {portal && (
+            <p className="text-[11px] leading-relaxed text-indigo-700/80 dark:text-indigo-300/80">
+              Claiming these keeps them for good, but not all of them stream to a Portal.
+            </p>
+          )}
         </div>
-        {/*
-          * The one caveat this panel needs on a Portal.
-          *
-          * The shelf under it promises there is nothing to buy and nothing
-          * to install, and the monthly games sit above that line while not
-          * all of them stream: December's Amnesia: The Bunker is a PS4 game.
-          * Saying which would mean naming platforms for three titles that
-          * arrive as text from a blog post, two of which are not in the
-          * mirror at all, and unknown is not a yes anywhere else in this
-          * app. So it says the true thing it can say about all of them.
-          *
-          * Not dropped, because claiming is still worth doing: a claimed
-          * game is kept for good, whatever you end up playing it on.
-          */}
-        {portal && (
-          <p className="mt-2 text-[11px] leading-relaxed text-indigo-700/80 dark:text-indigo-300/80">
-            Claiming these keeps them for good, but not all of them stream to a Portal.
-          </p>
-        )}
       </div>
     </div>
   );
@@ -8292,8 +8295,31 @@ export default function App() {
          * in, the chip, the phone's bottom bar and a bookmarked URL, and the
          * first two both used to land in the feed.
          */
-        if (key === 'collection' && value === 'genius') {
-          return { ...previous, collection: 'genius', view: 'grid' };
+        /*
+         * Changing shelf ends the search.
+         *
+         * This file already says it elsewhere: a search is a question about
+         * the whole catalogue, and everything else is a way of narrowing a
+         * shelf. What it did not do is act on that when you left. The query
+         * survived the move, so searching a game and then tapping Deals gave
+         * you the deals on that one game, under a chip saying 93, and the
+         * only way out was to delete the text by hand.
+         *
+         * Reported as the search bar not clearing itself, and as the app
+         * needing far too many presses. Both are this.
+         */
+        if (key === 'collection') {
+          return {
+            ...previous,
+            collection: value,
+            q: '',
+            // For you is a grid by whichever route you reach it. The app
+            // opens in the feed and every other shelf inherits that happily;
+            // a feed of recommendations is a worse version of the same list,
+            // one per screen. Done here because there are three ways in: the
+            // chip, the phone's bottom bar and a bookmarked URL.
+            ...(value === 'genius' ? { view: 'grid' } : {}),
+          };
         }
         return { ...previous, [key]: value };
       }),
@@ -10072,10 +10098,29 @@ export default function App() {
                    would go unused by anyone not told they exist. */
                 placeholder="Search games, studios, horror…"
                 enterKeyHint="search"
-                className="w-full rounded-full border border-slate-300 dark:border-slate-600 bg-white dark:bg-slate-900 py-2 pl-8 pr-3 text-base outline-none transition-all duration-200 focus:border-indigo-500 focus:ring-2 focus:ring-indigo-500 sm:py-1.5 sm:text-sm"
+                className="w-full rounded-full border border-slate-300 dark:border-slate-600 bg-white dark:bg-slate-900 py-2 pl-8 pr-10 text-base outline-none transition-all duration-200 focus:border-indigo-500 focus:ring-2 focus:ring-indigo-500 sm:py-1.5 sm:text-sm"
                 value={filters.q}
                 onChange={(event) => set('q', event.target.value)}
               />
+              {/*
+                * Its own clear button, because the native one is not there.
+                *
+                * `type="search"` gets a cancel cross on desktop Safari and
+                * nothing at all on iOS, which is the phone this is used on.
+                * So clearing a search meant holding backspace, and the app
+                * was reported as needing far too many presses. The native
+                * one is hidden in index.css so the two never both appear.
+                */}
+              {filters.q && (
+                <button
+                  type="button"
+                  onClick={() => set('q', '')}
+                  aria-label="Clear the search"
+                  className="absolute right-1 top-1/2 inline-flex h-9 w-9 -translate-y-1/2 items-center justify-center rounded-full text-slate-400 transition-colors hover:text-slate-700 dark:text-slate-500 dark:hover:text-slate-200"
+                >
+                  <X className="h-4 w-4" />
+                </button>
+              )}
             </div>
 
             {/*
@@ -10353,14 +10398,26 @@ export default function App() {
                     </p>
                   )}
                 </div>
-                <TogglePill
-                  active={filters.sale}
-                  onClick={() => set('sale', !filters.sale)}
-                  icon={BadgePercent}
-                  label="On sale"
-                  count={saleCount}
-                  tone="bg-rose-600"
-                />
+                {/*
+                  * Not while the Deals shelf is open, because it is the same
+                  * question asked twice.
+                  *
+                  * Deals is a shelf and On sale is a way of narrowing one, so
+                  * the pill earns its place next to PS Plus or For you. Next
+                  * to Deals it is a control that cannot change anything, and
+                  * having two places to filter where one of them does nothing
+                  * is exactly what was reported as confusing.
+                  */}
+                {filters.collection !== 'deals' && (
+                  <TogglePill
+                    active={filters.sale}
+                    onClick={() => set('sale', !filters.sale)}
+                    icon={BadgePercent}
+                    label="On sale"
+                    count={saleCount}
+                    tone="bg-rose-600"
+                  />
+                )}
                 <TogglePill
                   active={filters.atFloor}
                   onClick={() => set('atFloor', !filters.atFloor)}
