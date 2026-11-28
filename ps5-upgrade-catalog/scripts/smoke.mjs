@@ -163,7 +163,15 @@ if (!(await ready())) {
   process.exit(1);
 }
 
-const browser = await chromium.launch();
+/*
+ * Launched the way a phone behaves: nothing with sound plays without a tap.
+ *
+ * The default here allows it, which is how a feed that opened unmuted could
+ * sit paused on every trailer in front of a reader while every check passed.
+ */
+const browser = await chromium.launch({
+  args: ['--autoplay-policy=document-user-activation-required'],
+});
 /*
  * What failed, and why, kept until the end.
  *
@@ -1671,7 +1679,7 @@ async function aWriteUpFilterNarrowsTheShelf() {
         problems.push(`${field} left the shelf exactly as it was`);
       }
       const said = await page.evaluate(() =>
-        document.body.innerText.includes('only in the write-ups'),
+        document.body.innerText.includes('not something the store mirror records'),
       );
       if (!said) problems.push(`${field} narrowed the shelf without saying why`);
     }
@@ -1934,10 +1942,132 @@ async function aSearchLetsYouOut() {
 
 failures += await aSearchLetsYouOut();
 
+/*
+ * The trailers play, and they start quiet.
+ *
+ * Sound in the feed used to be remembered across visits, and that broke
+ * autoplay outright for anybody who had ever turned it on: a phone refuses
+ * to start a video with sound unless a tap asked for it, so the feed opened
+ * with every trailer paused on its first frame and nothing saying why.
+ * Reported as videos often not playing, and separately as it needing to
+ * start muted. One bug.
+ */
+async function theFeedStartsQuietAndPlays() {
+  const label = 'The feed starts quiet and plays';
+  const context = await browser.newContext({ viewport: { width: 430, height: 1200 } });
+  const page = await context.newPage();
+  const problems = [];
+  page.on('pageerror', (error) => problems.push(String(error).slice(0, 110)));
+  let note = '';
+  try {
+    // The state that used to break it: sound left on by an earlier visit.
+    await page.addInitScript(() => {
+      try {
+        localStorage.setItem('feedMuted', '0');
+      } catch {
+        // nothing to restore
+      }
+    });
+    await page.goto(`${BASE}/?mode=feed&view=trending`, { waitUntil: 'domcontentloaded' });
+
+    let seen = [];
+    for (let attempt = 0; attempt < 8; attempt += 1) {
+      await page.waitForTimeout(2500);
+      seen = await page.evaluate(() =>
+        [...document.querySelectorAll('video')].map((video) => ({
+          muted: video.muted,
+          paused: video.paused,
+        })),
+      );
+      if (seen.length > 0) break;
+    }
+
+    if (seen.length === 0) {
+      problems.push('no trailer mounted in 20s, so this proves nothing');
+    } else {
+      const loud = seen.filter((video) => !video.muted).length;
+      if (loud > 0) problems.push(`${loud} trailer(s) started with sound, which a phone will not play`);
+      const stuck = seen.filter((video) => video.paused).length;
+      if (stuck > 0) problems.push(`${stuck} trailer(s) mounted and never played`);
+    }
+    note = `${seen.length} mounted, all muted and running`;
+    console.log(`${problems.length ? 'FAIL' : ' ok '} ${label.padEnd(32)} ${note}`);
+  } catch (error) {
+    problems.push(String(error).slice(0, 110));
+    console.log(`FAIL ${label.padEnd(32)} ${String(error).slice(0, 60)}`);
+  }
+  await context.close();
+  if (problems.length > 0) fail(label, problems.join('; '));
+  return problems.length > 0 ? 1 : 0;
+}
+
+/*
+ * The pills in the sheet change the shelf you are looking at.
+ *
+ * On sale and At its lowest are facts about a price, and prices are read per
+ * game on the device rather than held by the mirror, so on the main shelf
+ * both pills sat there doing nothing. Reported as picking Deals in the sheet
+ * while the bar said All and only the bar being obeyed.
+ *
+ * And PS Plus was a shelf you went to rather than a question you could ask,
+ * so "which of these is already free for me" could not be put to For you or
+ * to a search at all.
+ */
+async function theSheetPillsNarrowTheShelf() {
+  const label = 'The sheet pills narrow the shelf';
+  const page = await browser.newPage({ viewport: { width: 430, height: 1200 } });
+  const problems = [];
+  page.on('pageerror', (error) => problems.push(String(error).slice(0, 110)));
+  let note = '';
+  const titles = async (query) => {
+    await page.goto(`${BASE}/${query}`, { waitUntil: 'domcontentloaded' });
+    await page.waitForTimeout(4000);
+    return page.evaluate(() =>
+      [...document.querySelectorAll('main h2, main h3, section h2, section h3')]
+        .map((n) => n.textContent.trim())
+        .filter(Boolean),
+    );
+  };
+  const same = (a, b) => a.length === b.length && a.every((name, i) => name === b[i]);
+  try {
+    const plain = await titles('?mode=grid&view=all&portal=0');
+    if (plain.length === 0) problems.push('the main shelf came back empty');
+
+    const onSale = await titles('?mode=grid&view=all&portal=0&sale=1');
+    if (same(onSale, plain)) problems.push('On sale left the main shelf exactly as it was');
+
+    const onPlus = await titles('?mode=grid&view=all&portal=0&plus=1');
+    if (same(onPlus, plain)) problems.push('On PS Plus left the main shelf exactly as it was');
+    if (onPlus.length === 0) problems.push('On PS Plus emptied the shelf');
+
+    // The point of it being a filter and not a shelf.
+    const picks = await titles('?mode=grid&view=genius&portal=0');
+    const picksOnPlus = await titles('?mode=grid&view=genius&portal=0&plus=1');
+    if (same(picksOnPlus, picks)) problems.push('On PS Plus did nothing to For you');
+
+    // And it is a fact about the reader, so it outlasts a search.
+    const found = await titles('?mode=grid&view=all&portal=0&q=horizon');
+    const foundOnPlus = await titles('?mode=grid&view=all&portal=0&plus=1&q=horizon');
+    if (same(foundOnPlus, found)) problems.push('On PS Plus stepped aside for a search');
+
+    note = `${plain.length} plain, ${onSale.length} on sale, ${onPlus.length} on plus`;
+    console.log(`${problems.length ? 'FAIL' : ' ok '} ${label.padEnd(32)} ${note}`);
+  } catch (error) {
+    problems.push(String(error).slice(0, 110));
+    console.log(`FAIL ${label.padEnd(32)} ${String(error).slice(0, 60)}`);
+  }
+  await page.close();
+  if (problems.length > 0) fail(label, problems.join('; '));
+  return problems.length > 0 ? 1 : 0;
+}
+
+failures += await theFeedStartsQuietAndPlays();
+failures += await theSheetPillsNarrowTheShelf();
+
 await browser.close();
 stop();
 
-const total = SURFACES.length + 19;
+const total = SURFACES.length + 21;
 if (failures > 0) {
   // Named, not just counted, so the last line of a truncated log still says
   // what to go and look at.

@@ -306,6 +306,16 @@ const DEFAULT_FILTERS = {
   noPurchases: false,
   newOnly: false,
   owned: 'any',
+  /*
+   * Covered by the subscription, as a filter rather than a shelf.
+   *
+   * PS Plus was only ever a place you went, so "which of these is already
+   * free for me" could not be asked of For you, of a search, or of any other
+   * shelf. For somebody paying for Premium that is the question they open
+   * the app with, and the only answer was to leave whatever they were
+   * looking at and go to the PS Plus shelf instead.
+   */
+  plusOnly: false,
   // Playing on a PlayStation Portal with no console behind it, which puts
   // every PS4 game out of reach. Off unless the reader says otherwise.
   portal: false,
@@ -434,6 +444,7 @@ function readFiltersFromUrl() {
     noPurchases: params.get('nomtx') === '1',
     newOnly: params.get('new') === '1',
     owned: value('owned', 'any'),
+    plusOnly: params.get('plus') === '1',
     // An explicit ?portal= wins, so a link can turn it off; otherwise the
     // remembered answer stands, the same way the audience does.
     portal: params.has('portal') ? params.get('portal') === '1' : savedPortal(),
@@ -478,6 +489,7 @@ function writeFiltersToUrl(filters, drawer) {
   if (filters.noPurchases) params.set('nomtx', '1');
   if (filters.newOnly) params.set('new', '1');
   if (filters.owned !== 'any') params.set('owned', filters.owned);
+  if (filters.plusOnly) params.set('plus', '1');
   if (filters.portal) params.set('portal', '1');
   if (filters.view === 'feed') params.set('mode', 'feed');
   if (drawer?.open) params.set('read', drawer.tab);
@@ -4147,20 +4159,22 @@ function useTheme() {
   return [choice, set];
 }
 
-const FEED_MUTED_KEY = 'feedMuted';
-
-/**
- * Sound in the feed, remembered. Muted to start with, because a page that
- * makes noise on open is a page you close; once you have asked for sound it
- * should stay on across slides and across visits.
+/*
+ * Sound in the feed starts off, every visit, and is not remembered.
+ *
+ * It used to be remembered across visits, and that one line quietly broke
+ * autoplay for anybody who had ever turned sound on. A phone refuses to
+ * start a video with sound unless a tap asked for it, so a visit that opened
+ * unmuted opened with every trailer frozen on its first frame, paused, with
+ * nothing on screen explaining why. Measured both ways against a browser set
+ * to refuse: muted reached 0.47s of playback, unmuted sat at 0.00 and paused.
+ *
+ * So the two complaints behind this, that videos often do not play and that
+ * it should start muted, were the same bug. Sound still stays on across
+ * slides once asked for, because that is component state and costs nothing;
+ * it just does not survive a reload, where there is no tap to justify it.
  */
-const readFeedMuted = () => {
-  try {
-    return localStorage.getItem(FEED_MUTED_KEY) !== '0';
-  } catch {
-    return true;
-  }
-};
+const FEED_STARTS_MUTED = true;
 
 const ALERT_TOKEN_KEY = 'alertToken';
 
@@ -8154,18 +8168,12 @@ export default function App() {
   const [openedAt] = useState(() => Date.now());
   const [alertsOpen, setAlertsOpen] = useState(false);
   const [theme, setTheme] = useTheme();
-  const [feedMuted, setFeedMuted] = useState(readFeedMuted);
+  const [feedMuted, setFeedMuted] = useState(FEED_STARTS_MUTED);
 
   const toggleFeedMuted = useCallback(() => {
-    setFeedMuted((previous) => {
-      const next = !previous;
-      try {
-        localStorage.setItem(FEED_MUTED_KEY, next ? '1' : '0');
-      } catch {
-        // A browser refusing storage just means sound resets next visit.
-      }
-      return next;
-    });
+    // Not written down anywhere: see FEED_STARTS_MUTED. A remembered unmute
+    // is what stopped the trailers playing at all.
+    setFeedMuted((previous) => !previous);
   }, []);
   const [wishlistPrices, setWishlistPrices] = useState(readWishlistPrices);
   const [sheetOpen, setSheetOpen] = useState(false);
@@ -9518,7 +9526,22 @@ export default function App() {
     filters.genre !== 'All' ||
     filters.protagonist !== 'All' ||
     filters.artStyle !== 'All' ||
-    filters.upgrade !== 'All';
+    filters.upgrade !== 'All' ||
+    /*
+     * On sale and At its lowest belong here too, for a different reason.
+     *
+     * Those are facts about a price, and prices are not in the mirror: they
+     * are read per game on the device and cached. So the mirror cannot be
+     * asked for the discounted ones any more than it can be asked for the
+     * pixel-art ones, and both pills sat on the main shelf doing nothing at
+     * all. Reported exactly that way: Deals picked in the sheet while the
+     * bar said All, and only the bar was obeyed.
+     *
+     * The Deals chip always worked because it is not a mirror shelf, which
+     * is what made one of the two look broken while the other did not.
+     */
+    filters.sale ||
+    filters.atFloor;
 
   /** Said in the reader's words, not the field names, and only when set. */
   const writeUpFields = [
@@ -9526,6 +9549,8 @@ export default function App() {
     filters.protagonist !== 'All' && 'who you play',
     filters.artStyle !== 'All' && 'art style',
     filters.upgrade !== 'All' && 'upgrade type',
+    filters.sale && 'being on sale',
+    filters.atFloor && 'being at its lowest',
   ].filter(Boolean);
 
   const storePaged =
@@ -9691,6 +9716,22 @@ export default function App() {
        * that: nine PS4 games across the PS Plus shelf and a search.
        */
       if (filters.portal && !playsOnPortal(game)) return false;
+
+      /*
+       * And the subscription, for the same reason, above the search.
+       *
+       * The line this file draws is between facts about the reader and ways
+       * of narrowing a shelf. Who is playing and what they can stream are
+       * facts, and survive a search; on sale and at its lowest are shelf
+       * narrowings, and step aside for one. What is already covered by the
+       * subscription is a fact of the same kind: searching a title does not
+       * make somebody stop paying for Plus, and for a reader who opened the
+       * app to find something free tonight it is the whole question.
+       *
+       * If it empties a search the empty state already offers to clear the
+       * search and the filters together, which is the way back out.
+       */
+      if (filters.plusOnly && !byTitle.get(game.title)?.price?.plus?.included) return false;
 
       if (searching) return searchScores ? searchScores.has(game.id) : true;
 
@@ -10005,6 +10046,7 @@ export default function App() {
     if (filters.portal) add('portal', 'On a PS Portal', () => set('portal', false));
     if (filters.sale) add('sale', 'On sale', () => set('sale', false));
     if (filters.atFloor) add('floor', 'At its lowest', () => set('atFloor', false));
+    if (filters.plusOnly) add('plus', 'On PS Plus', () => set('plusOnly', false));
     if (filters.kidFriendly) add('kids', 'Kid friendly', () => set('kidFriendly', false));
     if (filters.noPurchases)
       add('nomtx', 'No in-game purchases', () => set('noPurchases', false));
@@ -10054,6 +10096,7 @@ export default function App() {
     Boolean(filters.q) ||
     filters.sale ||
     filters.atFloor ||
+    filters.plusOnly ||
     filters.wishlist ||
     filters.kidFriendly ||
     filters.owned !== 'any' ||
@@ -10408,6 +10451,27 @@ export default function App() {
                   * having two places to filter where one of them does nothing
                   * is exactly what was reported as confusing.
                   */}
+                {/*
+                  * Not on the PS Plus shelf, where it is the shelf, for the
+                  * same reason On sale is not offered on Deals: a control
+                  * that cannot change what is on screen is the thing that
+                  * made having two places to filter confusing.
+                  */}
+                {filters.collection !== 'plus' && (
+                  <TogglePill
+                    active={filters.plusOnly}
+                    onClick={() => set('plusOnly', !filters.plusOnly)}
+                    icon={Sparkles}
+                    label="On PS Plus"
+                    count={plusCount}
+                    tone="bg-indigo-600"
+                    ariaLabel={
+                      filters.plusOnly
+                        ? 'Showing only games your PlayStation Plus already covers. Tap to show everything.'
+                        : 'Show only games your PlayStation Plus already covers, so there is nothing to buy.'
+                    }
+                  />
+                )}
                 {filters.collection !== 'deals' && (
                   <TogglePill
                     active={filters.sale}
@@ -10599,7 +10663,7 @@ export default function App() {
                 filters.collection === 'plus' && !searching ? curatedPlusGames : curatedOnlyMatches,
               )}
               platform={filters.portal ? 'PS5' : ''}
-              plusOnly={filters.collection === 'plus' && !searching}
+              plusOnly={(filters.collection === 'plus' && !searching) || filters.plusOnly}
               familyOnly={filters.kidFriendly && !searching}
               audience={filters.audience}
               noPurchases={filters.noPurchases && !searching}
@@ -10714,7 +10778,7 @@ export default function App() {
                 filters.collection === 'plus' && !searching ? curatedPlusGames : curatedOnlyMatches,
               )}
               platform={filters.portal ? 'PS5' : ''}
-              plusOnly={filters.collection === 'plus' && !searching}
+              plusOnly={(filters.collection === 'plus' && !searching) || filters.plusOnly}
               familyOnly={filters.kidFriendly && !searching}
               audience={filters.audience}
               noPurchases={filters.noPurchases && !searching}
@@ -10770,7 +10834,7 @@ export default function App() {
                       : `${writeUpFields.slice(0, -1).join(', ')} and ${writeUpFields.at(-1)} are`;
                   return `${named[0].toUpperCase()}${named.slice(1)}`;
                 })()}{' '}
-                only in the write-ups, so the store mirror sits this one out.
+                not something the store mirror records, so this is the written-up games.
               </span>
             )}
           </p>
