@@ -1,0 +1,288 @@
+/**
+ * Recorded price history.
+ *
+ * Nobody publishes a price history feed we can use, so the app keeps its own:
+ * every time a chunk of the catalog is resolved, the day's price is appended
+ * if it differs from the last recorded one. Storing only changes keeps a
+ * year of history per game down to a few hundred bytes.
+ *
+ * History is stored per chunk and per region, matching how the catalog is
+ * requested — a request reads and writes exactly one blob, and two instances
+ * racing on the same chunk on the same day write the same value anyway.
+ *
+ * On Netlify this is Netlify Blobs. Elsewhere (local dev) it falls back to a
+ * gitignored JSON file, so the feature is developable without the platform.
+ */
+
+import { formatMoney } from './steam.mjs';
+
+const STORE_NAME = 'price-history';
+const LOCAL_FILE = new URL('../.price-history.local.json', import.meta.url);
+/** Keep history bounded: a change a week for four years is still under this. */
+const MAX_POINTS = 250;
+
+let storePromise;
+
+/** Netlify Blobs when the platform provides it, otherwise null. */
+async function getBlobStore() {
+  if (storePromise === undefined) {
+    storePromise = (async () => {
+      try {
+        const { getStore } = await import('@netlify/blobs');
+        return getStore({ name: STORE_NAME, consistency: 'strong' });
+      } catch {
+        return null;
+      }
+    })();
+  }
+  return storePromise;
+}
+
+async function readLocalFile() {
+  const read = await readLocalFileStrict();
+  return read.ok ? read.value : {};
+}
+
+/**
+ * The local fallback, with the same distinction readBlob makes.
+ *
+ * A file that is not there yet is an empty history and perfectly fine. A file
+ * that is there and will not parse is a failure, and answering {} to that is
+ * how a caller comes to write its own partial state over everything in it.
+ */
+async function readLocalFileStrict() {
+  try {
+    const { readFile } = await import('node:fs/promises');
+    return { ok: true, value: JSON.parse(await readFile(LOCAL_FILE, 'utf8')) };
+  } catch (error) {
+    if (error?.code === 'ENOENT') return { ok: true, value: {} };
+    return { ok: false, error: String(error?.message ?? error).slice(0, 200) };
+  }
+}
+
+async function writeLocalFile(all) {
+  try {
+    const { writeFile } = await import('node:fs/promises');
+    await writeFile(LOCAL_FILE, JSON.stringify(all), 'utf8');
+  } catch {
+    // A read-only or missing filesystem just means no local history.
+  }
+}
+
+const keyFor = (chunk, countryCode) => `${countryCode}/chunk-${chunk}`;
+
+/** Read one JSON blob, falling back to the local file off-platform. */
+/**
+ * A read that says whether it worked.
+ *
+ * loadBlob answers {} both for a key that is not there and for a read that
+ * failed, and the difference matters to anything that then writes the key
+ * back. The PS Plus scan reads the whole index, adds to it and saves it: with
+ * the two cases indistinguishable, one failed read turns into a write that
+ * replaces the index with whatever that run happened to collect. It is the
+ * same trap the video pool fell into, where a rebuild read the pool as empty
+ * and wrote three channels over thirty-four.
+ *
+ * The live site showed what that looks like. The index read as empty for a
+ * few hours: the PS Plus collection lost its store half, and the age ratings
+ * with it, which took the kid-friendly filter too. The stored data turned out
+ * to be fine and came back by itself, so this was a read outage rather than a
+ * loss. It was only ever one scan away from being a real one, though. Any run
+ * during that window would have written its couple of hundred findings over
+ * all 1,941 games, and nothing would have brought those back.
+ *
+ * So: { ok: false } for a read that threw, { ok: true, value: null } for a
+ * key that genuinely is not there, and a caller that is about to overwrite
+ * what it read can tell them apart.
+ */
+export async function readBlob(key) {
+  const store = await getBlobStore();
+  if (store) {
+    try {
+      return { ok: true, value: (await store.get(key, { type: 'json' })) ?? null };
+    } catch (error) {
+      return { ok: false, value: null, error: String(error?.message ?? error).slice(0, 200) };
+    }
+  }
+
+  const read = await readLocalFileStrict();
+  if (!read.ok) return { ok: false, value: null, error: read.error };
+  return { ok: true, value: read.value[key] ?? null };
+}
+
+export async function loadBlob(key) {
+  const store = await getBlobStore();
+  if (store) {
+    try {
+      return (await store.get(key, { type: 'json' })) ?? {};
+    } catch {
+      return {};
+    }
+  }
+  const all = await readLocalFile();
+  return all[key] ?? {};
+}
+
+/**
+ * Serialises local writes.
+ *
+ * Netlify Blobs stores each key separately, so a write there touches nothing
+ * else. The local fallback keeps every key in one file, which means a write is
+ * read-modify-write over shared state, and that was only ever safe because
+ * chunks used to be requested one after another. They are now requested six at
+ * a time, and six readers of the same file each writing their own key back
+ * meant the last one won and silently dropped the other five: a local history
+ * file came back holding chunks 17 to 19 and nothing else.
+ */
+let localWrites = Promise.resolve();
+
+/** Write one JSON blob. Never throws: this data is always an enhancement. */
+/**
+ * A write that says whether it worked.
+ *
+ * saveBlob swallows the error, which is right for a caller that cannot do
+ * anything about it, and wrong for one that needs to know. A scan whose
+ * writes are all failing looks exactly like a scan that is not running: both
+ * leave the stored numbers where they were, and there is no way to tell them
+ * apart afterwards. The same blind spot on the read side cost the PS Plus
+ * index, so the write side gets the same treatment rather than waiting its
+ * turn.
+ */
+export async function writeBlob(key, data) {
+  const store = await getBlobStore();
+  if (store) {
+    try {
+      await store.setJSON(key, data);
+      return { ok: true };
+    } catch (error) {
+      return { ok: false, error: String(error?.message ?? error).slice(0, 200) };
+    }
+  }
+
+  await saveBlob(key, data);
+  return { ok: true };
+}
+
+export async function saveBlob(key, data) {
+  const store = await getBlobStore();
+  if (store) {
+    try {
+      await store.setJSON(key, data);
+    } catch {
+      // Losing one update is not worth failing a request over.
+    }
+    return;
+  }
+
+  // Queued, and re-read inside the queue, so concurrent writers merge rather
+  // than overwrite each other.
+  localWrites = localWrites.then(async () => {
+    const read = await readLocalFileStrict();
+    // Every key shares one file here, so merging into a file that will not
+    // parse would drop every other key in it. On Netlify each key stands
+    // alone and this cannot arise; locally it is the same trap one level
+    // down, so a write waits for a file that can be read rather than
+    // quietly becoming the only thing left in it.
+    if (!read.ok) return;
+    const all = read.value;
+    all[key] = data;
+    await writeLocalFile(all);
+  }).catch(() => {});
+  return localWrites;
+}
+
+export const loadChunk = (chunk, countryCode) => loadBlob(keyFor(chunk, countryCode));
+const saveChunk = (chunk, countryCode, data) => saveBlob(keyFor(chunk, countryCode), data);
+
+const today = (now = new Date()) => now.toISOString().slice(0, 10);
+
+/**
+ * Append today's price for each game when it differs from the last recorded
+ * point, then hand back a summary per game id. Points are `{d, f, i, p}`:
+ * date, final cents, initial cents, discount percent.
+ */
+export async function recordAndSummarize(chunk, countryCode, games, now = new Date()) {
+  const history = await loadChunk(chunk, countryCode);
+  const stamp = today(now);
+  let changed = false;
+
+  for (const game of games) {
+    if (!game.id || !game.matched || !game.price || game.price.isFree) continue;
+    const { final, initial, discountPercent, currency } = game.price;
+    if (typeof final !== 'number') continue;
+
+    const entry = history[game.id] ?? (history[game.id] = { currency, points: [] });
+    entry.currency = currency ?? entry.currency;
+    // Kept so a backtest can replay the predictor exactly as it ran, rather
+    // than replaying it blind to the game's age.
+    if (game.releaseDate && !entry.releaseDate) entry.releaseDate = game.releaseDate;
+    const last = entry.points[entry.points.length - 1];
+
+    if (!last || last.f !== final || last.p !== (discountPercent || 0)) {
+      entry.points.push({ d: stamp, f: final, i: initial ?? final, p: discountPercent || 0 });
+      if (entry.points.length > MAX_POINTS) entry.points.splice(0, entry.points.length - MAX_POINTS);
+      changed = true;
+    } else if (last.d !== stamp) {
+      // Same price as last time: move the marker so "observed since" stays true
+      // without storing a point for every unchanged day.
+      last.seen = stamp;
+      changed = true;
+    }
+  }
+
+  if (changed) await saveChunk(chunk, countryCode, history);
+
+  const summaries = {};
+  for (const game of games) {
+    if (game.id && history[game.id]) summaries[game.id] = summarize(history[game.id], now);
+  }
+  return summaries;
+}
+
+const daysBetween = (a, b) => Math.round((a - b) / 86400000);
+
+/** Turn a stored series into the shape the predictor and the UI want. */
+export function summarize(entry, now = new Date()) {
+  const points = entry?.points ?? [];
+  if (points.length === 0) return null;
+
+  const currency = entry.currency || 'USD';
+  const first = points[0];
+  const last = points[points.length - 1];
+  const lastSeen = last.seen || last.d;
+
+  let lowest = points[0];
+  for (const point of points) if (point.f < lowest.f) lowest = point;
+
+  const salePoints = points.filter((point) => point.p > 0);
+  const gaps = [];
+  for (let i = 1; i < salePoints.length; i += 1) {
+    gaps.push(daysBetween(new Date(salePoints[i].d), new Date(salePoints[i - 1].d)));
+  }
+  const positiveGaps = gaps.filter((gap) => gap > 0);
+
+  // The deepest cut ever recorded is the one piece of hard evidence we have
+  // about how far this particular game is willing to fall.
+  const deepestDiscount = points.reduce((deepest, point) => Math.max(deepest, point.p ?? 0), 0);
+
+  return {
+    observedDays: daysBetween(new Date(lastSeen), new Date(first.d)),
+    since: first.d,
+    saleCount: salePoints.length,
+    deepestDiscount,
+    lowest: {
+      final: lowest.f,
+      formatted: formatMoney(lowest.f, currency),
+      date: lowest.d,
+      discountPercent: lowest.p,
+    },
+    daysSinceLastSale: salePoints.length
+      ? daysBetween(now, new Date(salePoints[salePoints.length - 1].d))
+      : null,
+    meanDaysBetweenSales: positiveGaps.length
+      ? Math.round(positiveGaps.reduce((sum, gap) => sum + gap, 0) / positiveGaps.length)
+      : null,
+    // A trimmed series for sparklines, oldest first.
+    points: points.slice(-24).map((point) => ({ date: point.d, final: point.f, discount: point.p })),
+  };
+}

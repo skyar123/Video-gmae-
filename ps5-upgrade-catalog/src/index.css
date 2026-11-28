@@ -1,0 +1,324 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  :root {
+    /* Measured from the control bar so the feed can size a slide to exactly
+       one screen minus the bar, whatever height the bar currently is. */
+    --bar-height: 52px;
+
+    /* The notch and the home indicator, named once. On anything that has no
+       insets these are 0, so the same rules hold everywhere. */
+    --inset-top: env(safe-area-inset-top, 0px);
+    --inset-bottom: env(safe-area-inset-bottom, 0px);
+    --inset-left: env(safe-area-inset-left, 0px);
+    --inset-right: env(safe-area-inset-right, 0px);
+  }
+
+  html {
+    -webkit-tap-highlight-color: transparent;
+    scroll-behavior: smooth;
+    /* Safari inflates text on rotate unless told not to. */
+    -webkit-text-size-adjust: 100%;
+  }
+
+  body {
+    /* Stops the page rubber-banding behind the header on iOS, and stops a
+       downward flick at the top from triggering Safari's pull-to-refresh. */
+    overscroll-behavior-y: none;
+  }
+
+  /* Every control is a tap target, never a text selection or a callout. Text
+     itself stays selectable. */
+  button,
+  [role='button'],
+  a,
+  summary {
+    touch-action: manipulation;
+    -webkit-touch-callout: none;
+  }
+
+  button,
+  [role='button'] {
+    -webkit-user-select: none;
+    user-select: none;
+  }
+
+  /* iOS zooms the whole page when a field under 16px takes focus, and never
+     zooms back out. Fields are 16px on touch screens for that reason alone. */
+  @media (pointer: coarse) {
+    input,
+    select,
+    textarea {
+      font-size: 16px;
+    }
+  }
+
+  /* Safari draws its own inner shadow and rounding on form fields. */
+  input[type='search'] {
+    -webkit-appearance: none;
+    appearance: none;
+  }
+
+  input[type='search']::-webkit-search-decoration,
+  input[type='search']::-webkit-search-cancel-button {
+    -webkit-appearance: none;
+  }
+}
+
+@layer utilities {
+  /* The feed's scrollbar is noise; the snap points are the affordance. */
+  .no-scrollbar {
+    scrollbar-width: none;
+    -ms-overflow-style: none;
+  }
+  .no-scrollbar::-webkit-scrollbar {
+    display: none;
+  }
+
+  /* Momentum scrolling on iOS, and a hard stop at the ends of the feed. */
+  .feed-scroll {
+    -webkit-overflow-scrolling: touch;
+    overscroll-behavior-y: contain;
+    scroll-snap-type: y mandatory;
+  }
+
+  .feed-slide {
+    scroll-snap-align: center;
+    scroll-snap-stop: always;
+  }
+
+  /* The page gutter, widened by the notch when the phone is on its side.
+     max() rather than addition: on a portrait phone the inset is 0 and the
+     gutter is exactly what it always was. */
+  .gutter {
+    padding-left: max(0.75rem, var(--inset-left));
+    padding-right: max(0.75rem, var(--inset-right));
+  }
+
+  @media (min-width: 640px) {
+    .gutter {
+      padding-left: max(1.5rem, var(--inset-left));
+      padding-right: max(1.5rem, var(--inset-right));
+    }
+  }
+
+  /* Clears the home indicator, plus whatever spacing the caller wanted. */
+  .pb-safe {
+    padding-bottom: calc(2.5rem + var(--inset-bottom));
+  }
+
+  /* Clears the bottom navigation, which only exists on a touch screen. */
+  .pb-nav {
+    padding-bottom: 2.5rem;
+  }
+
+  @media (pointer: coarse) {
+    .pb-nav {
+      padding-bottom: calc(5rem + var(--inset-bottom));
+    }
+  }
+
+  /*
+   * Skip the rendering work for cards that are off screen.
+   *
+   * The library became the whole store, and the store grid appends pages
+   * without ever dropping them: sixty flicks reached 32,687 DOM nodes, 3,553
+   * cards and 1,080 images, by which point a single scroll took 376ms, and
+   * there are 8,885 games to keep going through. This leaves the nodes where
+   * they are and tells the browser not to lay out or paint any card that is
+   * not near the viewport, which is the part that was costing the time.
+   *
+   * The intrinsic size is a card's real height at the two-column phone
+   * width, so the scrollbar and any jump-to-position stay honest while the
+   * contents are skipped.
+   */
+  .card-skip {
+    content-visibility: auto;
+    contain-intrinsic-size: auto 320px;
+  }
+
+  /* A tap target you can actually hit, without forcing the visual size up. */
+  .tap {
+    min-width: 44px;
+    min-height: 44px;
+  }
+
+  /* Momentum inside a panel, without the page scrolling behind it. */
+  .panel-scroll {
+    -webkit-overflow-scrolling: touch;
+    overscroll-behavior: contain;
+  }
+
+  /* Some choices follow the input device, not the window width. A phone held
+     sideways is 844px wide and still has no cursor, so hover rails and hit
+     targets have to key off the pointer rather than a breakpoint. Neither
+     class sets a display; each only takes one away. */
+  @media (pointer: coarse) {
+    .pointer-only {
+      display: none !important;
+    }
+  }
+
+  @media (pointer: fine) {
+    .touch-only {
+      display: none !important;
+    }
+  }
+}
+
+/* The feed is edge to edge, so its controls float over the art rather than
+   sitting on a band above it. A soft scrim keeps them legible against a bright
+   screenshot without drawing a hard line across the picture. */
+.feed-header {
+  background: linear-gradient(to bottom, rgb(2 6 23 / 0.55), rgb(2 6 23 / 0));
+}
+
+.feed-header input {
+  background-color: rgb(255 255 255 / 0.12);
+  border-color: rgb(255 255 255 / 0.25);
+  color: #fff;
+}
+
+.feed-header input::placeholder {
+  color: rgb(255 255 255 / 0.7);
+}
+
+.feed-header svg {
+  color: rgb(255 255 255 / 0.85);
+}
+
+/* Respect the visitor's motion preference for every transition here. */
+@media (prefers-reduced-motion: reduce) {
+  html {
+    scroll-behavior: auto;
+  }
+
+  .feed-scroll {
+    scroll-snap-type: none;
+  }
+
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    transition-duration: 0.01ms !important;
+  }
+}
+
+/* ------------------------------------------------------------------ *
+ * The 8-bit layer
+ *
+ * Only the RPG surfaces use this, and it is CSS rather than a webfont on
+ * purpose. A pixel typeface is another request on a page that already
+ * works offline, and the chunky look comes mostly from the edges anyway:
+ * hard shadows with no blur, square corners, stepped bars, and nothing
+ * antialiased into a gradient.
+ * ------------------------------------------------------------------ */
+
+.pixel {
+  font-family: ui-monospace, 'SFMono-Regular', 'Cascadia Mono', 'Liberation Mono', Menlo, monospace;
+  letter-spacing: 0.06em;
+  font-variant-ligatures: none;
+  text-transform: uppercase;
+}
+
+/* A border drawn the way a sprite would be: square, thick, and offset by a
+   hard shadow rather than a soft one. */
+.pixel-box {
+  border: 3px solid currentColor;
+  border-radius: 0;
+  box-shadow: 4px 4px 0 0 currentColor;
+}
+
+.pixel-box-sm {
+  border: 2px solid currentColor;
+  border-radius: 0;
+  box-shadow: 3px 3px 0 0 currentColor;
+}
+
+/* An XP bar that fills in blocks instead of sliding. The repeating gradient
+   is the notches; the width is the real fraction. */
+.pixel-bar {
+  image-rendering: pixelated;
+  background-image: repeating-linear-gradient(
+    90deg,
+    currentColor 0 10px,
+    transparent 10px 13px
+  );
+}
+
+/* Level-up: three hard steps, no easing, because a sprite does not ease. */
+@keyframes pixel-pop {
+  0% { transform: scale(0.6); }
+  40% { transform: scale(1.15); }
+  70% { transform: scale(0.95); }
+  100% { transform: scale(1); }
+}
+
+.animate-pixel-pop {
+  animation: pixel-pop 420ms steps(4, end) both;
+}
+
+/* A point gain, rising off the badge the way a hit number does in an RPG.
+   Stepped, not eased, for the same reason as the pop above. */
+/* It rises, but only a little. The badge sits twelve pixels from the top of
+   the screen, so the twenty-pixel rise this first had ran the number off the
+   top edge of the phone and the gain was never actually read. */
+@keyframes pixel-float {
+  0% { transform: translate(-50%, calc(-50% + 6px)); opacity: 0; }
+  25% { transform: translate(-50%, -50%); opacity: 1; }
+  100% { transform: translate(-50%, calc(-50% - 10px)); opacity: 0; }
+}
+
+.animate-pixel-float {
+  animation: pixel-float 1200ms steps(6, end) both;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  /* Still said, just not thrown. It is removed on a timer either way. */
+  .animate-pixel-float {
+    animation: none;
+    transform: translate(-50%, -50%);
+    opacity: 1;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .animate-pixel-pop { animation: none; }
+}
+
+/* The search field brings its own clear button, so the browser's is hidden.
+   Safari draws one on a desktop and none on iOS, which is where this is
+   actually used, and two crosses side by side is worse than either. */
+input[type='search']::-webkit-search-cancel-button,
+input[type='search']::-webkit-search-decoration {
+  -webkit-appearance: none;
+  appearance: none;
+}
+
+/*
+ * A long press on a phone should not start selecting text.
+ *
+ * Pressing and holding a card picked out its title, which brings up iOS's
+ * own edit menu over the app. That menu is modal: taps go to it rather than
+ * to the page, and with nothing on screen saying so the app looks frozen.
+ * Reported exactly that way, with the menu visible in the screenshot.
+ *
+ * Touch only, so selecting and copying still works with a mouse, and inputs
+ * keep their own selection or you could not edit what you had typed.
+ */
+@media (hover: none) and (pointer: coarse) {
+  body {
+    -webkit-user-select: none;
+    user-select: none;
+  }
+
+  input,
+  textarea,
+  [contenteditable='true'] {
+    -webkit-user-select: text;
+    user-select: text;
+  }
+}
